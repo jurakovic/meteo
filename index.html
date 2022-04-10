@@ -73,21 +73,58 @@
 		<tr><td align="center"><img src="https://www.idokep.eu/terkep/eu/radar.gif" alt="Idokep radar" border="0" /></td></tr>
 
 		<tr><td align="center"><a href="https://en.sat24.com/en" target="_blank" rel="nofollow">Sat24.com</a></td></tr>
-		<tr><td align="center"><img src='https://api.sat24.com/animated/EU/visual/3/Central%20European%20Standard%20Time/8076857' /></td></tr>
+		<tr><td align="center"><img src="" id="sat24" /></td></tr>
 
 		<tr><td align="center"><a href="https://meteo.hr/podaci.php?section=podaci_mjerenja&param=radari&el=kompozit&acto=anim" target="_blank" rel="nofollow">Državni hidrometeorološki zavod</a></td></tr>
 		<tr><td align="center"><img src="https://vrijeme.hr/radari/anim_kompozit1.png" alt="Radar DHMZ" border="0" id="meteohr" /></td></tr>
 	</table>
 	<script type="text/javascript">
-		var image = document.getElementById("meteohr");
+		var meteohrImage = document.getElementById("meteohr");
+		var sat24Image = document.getElementById("sat24");
+
 		var currentImg = 1;
 
-		function changeImgSrc() {
+		var innitialDate = getInitialDate();
+		var currentDate = new Date(innitialDate);
+		var maxDate = new Date(innitialDate);
+		maxDate.setMinutes(maxDate.getMinutes() + 90);
+
+		function changeMeteoHrImgSrc() {
 			if (++currentImg > 25) currentImg = 1;
-			image.src = "https://vrijeme.hr/radari/anim_kompozit" + currentImg + ".png";
+			meteohrImage.src = "https://vrijeme.hr/radari/anim_kompozit" + currentImg + ".png";
 		}
 
-		setInterval(changeImgSrc, 700);
+		function getInitialDate() {
+			var date = new Date();
+			var diff = date.getMinutes() % 10 < 3 ? 100 : 90;
+			date.setMinutes((Math.floor(date.getMinutes() / 10) * 10) - diff);
+			date.setSeconds(0);
+			return date;
+		}
+
+		function dateToString() {
+			var ret = ""
+				+ currentDate.getUTCFullYear().toString()
+				+ (currentDate.getUTCMonth() + 1).toString().padStart(2, '0')
+				+ currentDate.getUTCDate().toString().padStart(2, '0')
+				+ currentDate.getUTCHours().toString().padStart(2, '0')
+				+ currentDate.getUTCMinutes().toString().padStart(2, '0');
+
+			return ret;
+		}
+
+		function changeSat24ImgSrc() {
+			currentDate.setMinutes(currentDate.getMinutes() + 10);
+			if (currentDate > maxDate) currentDate = new Date(innitialDate);
+
+			sat24Image.src = "https://en.sat24.com/image?type=infraPolair&region=eu&timestamp=" + dateToString();
+		}
+
+		changeMeteoHrImgSrc();
+		changeSat24ImgSrc();
+
+		setInterval(changeMeteoHrImgSrc, 700);
+		setInterval(changeSat24ImgSrc, 700);
 	</script>
 	<img src="https://bit.ly/radari-counter" style="width:1px;height:1px;float:right" />
 </body>
