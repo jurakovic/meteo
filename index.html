@@ -8,11 +8,11 @@
 		body {
 			background-color: #212f45;
 		}
-		
+
 		h2, a {
 			color: white;
 		}
-		
+
 		table {
 			width: 100%;
 			max-width: 876px;
@@ -62,7 +62,7 @@
 
 		<tr><td align="center"><a href="https://www.windy.com/-Radar-lightning-radar?radar,45.799,15.937,8" target="_blank" rel="nofollow">Windy</a></td></tr>
 		<tr><td align="center"><div><iframe src="https://embed.windy.com/embed2.html?lat=45.798&lon=15.936&zoom=8&level=surface&overlay=radar&menu=&message=true&marker=&calendar=&pressure=&type=map&location=coordinates&detail=&detailLat=45.798&detailLon=15.936&metricWind=m%2Fs&metricTemp=%C2%B0C&radarRange=-1" frameborder="0"></iframe></div></td></tr>
-	
+
 		<!--
 		<tr><td align="center"><a href="https://www.idokep.hu/adria" target="_blank" rel="nofollow">Idokep Radar Adria</a></td></tr>
 		<tr><td align="center"><video width="850" muted="" autoplay="" loop="" controls=""><source type="video/mp4" src="https://www.idokep.hu/idokepradar/public_radar_adria.mp4"></video></td></tr>
@@ -71,12 +71,23 @@
 		<tr><td align="center"><a href="https://www.idokep.hu/adria" target="_blank" rel="nofollow">Idokep.hu</a></td></tr>
 		<tr><td align="center"><img src="https://www.idokep.eu/terkep/eu/radar.gif" alt="Idokep radar" border="0" /></td></tr>
 
-		<tr><td align="center"><a href="http://en.sat24.com/en" target="_blank" rel="nofollow">Sat24.com</a></td></tr>
+		<tr><td align="center"><a href="https://en.sat24.com/en" target="_blank" rel="nofollow">Sat24.com</a></td></tr>
 		<tr><td align="center"><img src='https://api.sat24.com/animated/EU/visual/3/Central%20European%20Standard%20Time/8076857' /></td></tr>
 
-		<tr><td align="center"><a href="http://meteo.hr/naslovnica_radarska-slika.php?tab=radari&idr=kompozit&param=anim" target="_blank" rel="nofollow">Državni hidrometeorološki zavod</a></td></tr>
-		<tr><td align="center"><img src="http://vrijeme.hr/kompozit-anim.gif?nocache" alt="Radar DHMZ" border="0" /></td></tr>
+		<tr><td align="center"><a href="https://meteo.hr/podaci.php?section=podaci_mjerenja&param=radari&el=kompozit&acto=anim" target="_blank" rel="nofollow">Državni hidrometeorološki zavod</a></td></tr>
+		<tr><td align="center"><img src="https://vrijeme.hr/radari/anim_kompozit1.png" alt="Radar DHMZ" border="0" id="meteohr" /></td></tr>
 	</table>
+	<script type="text/javascript">
+		var image = document.getElementById("meteohr");
+		var currentImg = 1;
+
+		function changeImgSrc() {
+			if (++currentImg > 25) currentImg = 1;
+			image.src = "https://vrijeme.hr/radari/anim_kompozit" + currentImg + ".png";
+		}
+
+		setInterval(changeImgSrc, 700);
+	</script>
 	<img src="https://bit.ly/radari-counter" style="width:1px;height:1px;float:right" />
 </body>
 </html>
