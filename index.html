@@ -72,41 +72,15 @@
 		<tr><td align="center"><a href="https://www.idokep.hu/adria" target="_blank" rel="nofollow">Idokep.hu</a></td></tr>
 		<tr><td align="center"><img src="https://www.idokep.eu/terkep/eu/radar.gif" alt="Idokep radar" border="0" /></td></tr>
 
-		<tr><td align="center"><a href="https://en.sat24.com/en" target="_blank" rel="nofollow">Sat24.com</a></td></tr>
-		<tr><td align="center"><img src="" id="sat24" /></td></tr>
+		<tr><td align="center"><a href="https://en.sat24.com/en/eu/infraPolair" target="_blank" rel="nofollow">Sat24.com | Infrared</a></td></tr>
+		<tr><td align="center"><img src="https://api.sat24.com/animated/HU/infraPolair/3/Central%20European%20Standard%20Time/2104306" /></td></tr>
+
+		<tr><td align="center"><a href="https://en.sat24.com/en/eu/visual" target="_blank" rel="nofollow">Sat24.com | Visual</a></td></tr>
+		<tr><td align="center"><img src="https://api.sat24.com/animated/EU/visual/3/Central%20European%20Standard%20Time/8076857" /></td></tr>
 
 		<tr><td align="center"><a href="https://meteo.hr/podaci.php?section=podaci_mjerenja&param=radari&el=kompozit&acto=anim" target="_blank" rel="nofollow">Državni hidrometeorološki zavod</a></td></tr>
-		<tr><td align="center"><img src="https://vrijeme.hr/kompozit-stat.png" alt="Radar DHMZ" border="0" id="meteohr" /></td></tr>
+		<tr><td align="center"><img src="https://vrijeme.hr/kompozit-stat.png" alt="Radar DHMZ" border="0" /></td></tr>
 	</table>
-	<script type="text/javascript">
-		function getLastDate() {
-			var date = new Date();
-			var diff = date.getMinutes() % 10 <= 5 ? 10 : 0;
-			date.setMinutes((Math.floor(date.getMinutes() / 10) * 10) - diff);
-			date.setSeconds(0);
-			return date;
-		}
-
-		function dateToString() {
-			var date = getLastDate();
-
-			var ret = ""
-				+ date.getUTCFullYear().toString()
-				+ (date.getUTCMonth() + 1).toString().padStart(2, '0')
-				+ date.getUTCDate().toString().padStart(2, '0')
-				+ date.getUTCHours().toString().padStart(2, '0')
-				+ date.getUTCMinutes().toString().padStart(2, '0');
-
-			return ret;
-		}
-
-		function setSat24ImgSrc() {
-			var sat24Image = document.getElementById("sat24");
-			sat24Image.src = "https://en.sat24.com/image?type=infraPolair&region=eu&timestamp=" + dateToString();
-		}
-
-		setSat24ImgSrc();
-	</script>
 	<img src="https://bit.ly/radari-counter" style="width:1px;height:1px;float:right" />
 </body>
 </html>
