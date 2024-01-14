@@ -11,6 +11,7 @@
 	<style>
 		body {
 			background-color: #212f45;
+			font-family: monospace;
 		}
 
 		h2, a, td {
@@ -54,6 +55,35 @@
 		.sp {
 			height: 10px;
 		}
+
+		.collapsible {
+			margin-top: 10px;
+			font-family: inherit;
+			color: white;
+			background-color: #485871;
+			cursor: pointer;
+			width: 98%;
+			height: 24px;
+			border: none;
+			outline: none;
+		}
+
+		.collapsible:hover {
+			background-color: #5F6F89;
+		}
+
+		.content {
+			padding: 10px;
+			max-height: 0;
+			max-width: 850px;
+			overflow: hidden;
+			transition: max-height 0.2s ease-out;
+		}
+
+		.content p {
+			text-align: left;
+		}
+
 	</style>
 </head>
 <body>
@@ -61,19 +91,88 @@
 	<hr>
 
 	<table border="0" align="center" cellpadding="0" cellspacing="0">
-		<tr><td align="center"><a href="https://www.neverin.hr/radar/" target="_blank" rel="nofollow">Neverin.hr | Radar Hrvatska</a></td></tr>
+		<tr><td align="center">
+			<button type="button" class="collapsible">Linkovi</button>
+			<div class="content">
+				<p>
+				  <a href="https://meteo.hr" target="_blank" rel="nofollow">DHMZ</a>
+				| <a href="https://pljusak.com/karta.php" target="_blank" rel="nofollow">Pljusak</a>
+				| <a href="https://www.crometeo.hr/forum/index.php" target="_blank" rel="nofollow">Crometeo forum</a>
+				| <a href="https://www.yr.no/en/details/table/2-3186886/Croatia/City%20of%20Zagreb/Zagreb" target="_blank" rel="nofollow">Yr.no</a>
+				| <a href="https://www.windy.com/-Radar-lightning-radar?radar,45.799,15.937,8" target="_blank" rel="nofollow">Windy</a>
+				| <a href="https://meteoalarm.org/en/live/region/HR" target="_blank" rel="nofollow">Meteoalarm</a>
+				| <a href="https://www.meteoadriatic.net/" target="_blank" rel="nofollow">MeteoAdriatic</a>
+				| <a href="https://www.eswd.eu/" target="_blank" rel="nofollow">ESWD</a>
+				</p>
+				<hr>
+				<p>Neverin
+					| <a href="https://www.neverin.hr/" target="_blank" rel="nofollow">Karta</a>
+					| <a href="https://www.neverin.hr/prognoza/" target="_blank" rel="nofollow">Prognoza</a>
+					| <a href="https://www.neverin.hr/radar/" target="_blank" rel="nofollow">Radar</a>
+					| <a href="https://www.neverin.hr/satelit/" target="_blank" rel="nofollow">Satelit</a>
+				</p>
+				<p>sat24.com | Satelit i radar
+					| <a href="https://www.sat24.com/en-gb/continent/eu/hd#selectedLayer=euRadarSat" target="_blank" rel="nofollow">Europa</a>
+					| <a href="https://www.sat24.com/en-gb/country/hr/hd#selectedLayer=euRadarSat" target="_blank" rel="nofollow">Hrvatska</a>
+				</p>
+				<p>Meteoradar | Radar
+					| <a href="https://www.meteoradar.co.uk/en-gb/continent/eu/hd" target="_blank" rel="nofollow">Europa</a>
+					| <a href="https://www.meteoradar.co.uk/en-gb/country/hr/hd" target="_blank" rel="nofollow">Hrvatska</a>
+				</p>
+				<p>Meteox | Temperatura
+					| <a href="https://www.meteox.com/en-gb/continent/eu" target="_blank" rel="nofollow">Europa</a>
+					| <a href="https://www.meteox.com/en-gb/country/hr#selectedLayer=temperature" target="_blank" rel="nofollow">Hrvatska</a>
+				</p>
+				<!--
+				<p>Meteoradar (beta.drops.live) | Radar
+					| <a href="https://www.meteoradar.co.uk/en-gb/continent/eu/hd" target="_blank" rel="nofollow">Europa</a>
+					| <a href="https://www.meteoradar.co.uk/en-gb/country/hr/hd" target="_blank" rel="nofollow">Hrvatska</a>
+				</p>
+				-->
+				<p>I'm Weather | Satelit i radar
+					| <a href="https://imweather.com/?model=nowcast&run=&member=&element=radsat&level=&lat=47.5000&lng=17.5000&z=4.20" target="_blank" rel="nofollow">Europa</a>
+					| <a href="https://imweather.com/?model=nowcast&run=&member=&element=radsat&level=&lat=45.0000&lng=17.0000&z=6.00" target="_blank" rel="nofollow">Hrvatska</a>
+				</p>
+				<p>meteoblue | Radar
+					| <a href="https://www.meteoblue.com/en/weather/maps/croatia_croatia_3202326#map=radar~radarMapEU~none~none~none&coords=4.2/47.5/17.5" target="_blank" rel="nofollow">Europa</a>
+					| <a href="https://www.meteoblue.com/en/weather/maps/croatia_croatia_3202326#map=radar~radarMapEU~none~none~none&coords=6/45/17" target="_blank" rel="nofollow">Hrvatska</a>
+				</p>
+				<p>Blitzortung.org
+					| <a href="https://map.blitzortung.org/#4.2/47.5/17.5" target="_blank" rel="nofollow">Europa</a>
+					| <a href="https://map.blitzortung.org/#6/45/17" target="_blank" rel="nofollow">Hrvatska</a>
+				</p>
+				<hr>
+			</div>
+			<script>
+			var coll = document.getElementsByClassName("collapsible");
+			var i;
+			for (i = 0; i < coll.length; i++) {
+			  coll[i].addEventListener("click", function() {
+				this.classList.toggle("active");
+				var content = this.nextElementSibling;
+				if (content.style.maxHeight){
+					content.style.maxHeight = null;
+				} else {
+					content.style.maxHeight = content.scrollHeight + "px";
+				}
+			  });
+			}
+			</script>
+		</td></tr>
+
+		<tr><td align="center"><a href="https://www.neverin.hr/radar/" target="_blank" rel="nofollow">Neverin.hr | Radar | Hrvatska</a></td></tr>
 		<tr><td align="center"><img src="https://maps.neverin.hr/radar/anim_hr.webp" alt="Neverin radar Hrvatska" border="0" /></td></tr>
 		<tr class="sp"></tr>
 
-		<tr><td align="center"><a href="https://www.neverin.hr/satelit/" target="_blank" rel="nofollow">Neverin.hr | Satelit Hrvatska</a></td></tr>
+		<tr><td align="center"><a href="https://www.neverin.hr/satelit/" target="_blank" rel="nofollow">Neverin.hr | Satelit | Hrvatska</a></td></tr>
 		<tr><td align="center"><img src="https://maps.neverin.hr/sat/anim_vis_hr.webp" alt="Neverin satelit Hrvatska" border="0" /></td></tr>
 		<tr class="sp"></tr>
 
-		<tr><td align="center"><a href="https://www.neverin.hr/radar/" target="_blank" rel="nofollow">Neverin.hr | Radar Europa</a></td></tr>
+		<tr><td align="center"><a href="https://www.neverin.hr/radar/" target="_blank" rel="nofollow">Neverin.hr | Radar | Europa</a></td></tr>
 		<tr><td align="center"><img src="https://maps.neverin.hr/radar/anim_eu.webp" alt="Neverin radar Europa" border="0" /></td></tr>
 		<tr class="sp"></tr>
 
-		<tr><td align="center"><a href="https://www.neverin.hr/satelit/" target="_blank" rel="nofollow">Neverin.hr | Satelit Europa</a></td></tr>
+		<tr><td align="center"><a href="https://www.neverin.hr/satelit/" target="_blank" rel="nofollow">Neverin.hr | Satelit | Europa</a></td></tr>
 		<tr><td align="center"><img src="https://maps.neverin.hr/sat/anim_vis_eu.webp" alt="Neverin satelit Europa" border="0" /></td></tr>
 		<tr class="sp"></tr>
 
@@ -107,42 +206,6 @@
 
 		<tr><td align="center"><a href="https://en.sat24.com/en/eu/visual" target="_blank" rel="nofollow">Sat24.com | Visual</a></td></tr>
 		<tr><td align="center"><img src="https://api.sat24.com/animated/EU/visual/3/Central%20European%20Standard%20Time/8076857" /></td></tr>
-		<tr class="sp"></tr>
-
-		imaju bijeli okvir
-		<tr><td align="center"><a href="https://www.sat24.com/en-gb/continent/eu/hd" target="_blank" rel="nofollow">Sat24.com | Europa Satelit</a> (<a href="https://widgets.meteox.com/en-GB/country/hr" target="_blank" rel="nofollow">meteox.com</a>)</td></tr>
-		<tr><td align="center"><div class="if"><iframe src="https://widgets.meteox.com/en-GB/widgets/radar/country/hr/satellite?z=4" frameborder="0" style="border:0;width:100%;"></iframe></div></td></tr>
-		<tr class="sp"></tr>
-
-		<tr><td align="center"><a href="https://www.sat24.com/en-gb/country/hr/hd" target="_blank" rel="nofollow">Sat24.com | Hrvatska Satelit</a> (<a href="https://widgets.meteox.com/en-GB/country/hr" target="_blank" rel="nofollow">meteox.com</a>)</td></tr>
-		<tr><td align="center"><div class="if"><iframe src="https://widgets.meteox.com/en-GB/widgets/radar/country/hr/satellite?z=6.5" frameborder="0" style="border:0;width:100%;"></iframe></div></td></tr>
-		<tr class="sp"></tr>
-
-		<tr><td align="center"><a href="https://www.sat24.com/en-gb/continent/eu/hd#selectedLayer=euRadarSat" target="_blank" rel="nofollow">Sat24.com | Europa Radar</a> (<a href="https://widgets.meteox.com/en-GB/country/hr" target="_blank" rel="nofollow">meteox.com</a>)</td></tr>
-		<tr><td align="center"><div class="if"><iframe src="https://widgets.meteox.com/en-GB/widgets/radar/country/hr/rain?z=4" frameborder="0" style="border:0;width:100%;"></iframe></div></td></tr>
-		<tr class="sp"></tr>
-
-		<tr><td align="center"><a href="https://www.sat24.com/en-gb/country/hr/hd#selectedLayer=euRadarSat" target="_blank" rel="nofollow">Sat24.com | Hrvatska Radar</a> (<a href="https://widgets.meteox.com/en-GB/country/hr" target="_blank" rel="nofollow">meteox.com</a>)</td></tr>
-		<tr><td align="center"><div class="if"><iframe src="https://widgets.meteox.com/en-GB/widgets/radar/country/hr/rain?z=6.5" frameborder="0" style="border:0;width:100%;"></iframe></div></td></tr>
-		<tr class="sp"></tr>
-		-->
-
-		<!--
-		privremeno onemogućeno, todo...
-		<tr><td align="center"><a href="https://imweather.com/?model=nowcast&run=&member=&element=satellite&level=undefined&lat=48.0000&lng=17.0000&z=2.00" target="_blank" rel="nofollow">I'm Weather | Europa Satelit</a> (<a href="https://www.sat24.com/en-gb/continent/eu/hd" target="_blank" rel="nofollow">Sat24.com</a>)</td></tr>
-		<tr><td align="center"><div class="if"><iframe src="https://imweather.com/widget/map?lat=48.0&lng=17.0&z=2.0&model=nowcast&element=satellite" frameborder="0" style="border:0;width:100%;"></iframe></div></td></tr>
-		<tr class="sp"></tr>
-
-		<tr><td align="center"><a href="https://imweather.com/?model=nowcast&run=&member=&element=satellite&level=undefined&lat=44.3000&lng=16.0000&z=4.50" target="_blank" rel="nofollow">I'm Weather | Hrvatska Satelit</a> (<a href="https://www.sat24.com/en-gb/country/hr/hd" target="_blank" rel="nofollow">Sat24.com</a>)</td></tr>
-		<tr><td align="center"><div class="if"><iframe src="https://imweather.com/widget/map?lat=44.3&lng=16.0&z=4.5&model=nowcast&element=satellite" frameborder="0" style="border:0;width:100%;"></iframe></div></td></tr>
-		<tr class="sp"></tr>
-
-		<tr><td align="center"><a href="https://imweather.com/?model=nowcast&run=&member=&element=radar_obs&level=undefined&lat=48.0000&lng=17.0000&z=2.00" target="_blank" rel="nofollow">I'm Weather | Europa Radar</a> (<a href="https://www.sat24.com/en-gb/continent/eu/hd#selectedLayer=euRadarSat" target="_blank" rel="nofollow">Sat24.com</a>)</td></tr>
-		<tr><td align="center"><div class="if"><iframe src="https://imweather.com/widget/map?lat=46.0&lng=17.0&z=2.0&model=nowcast&element=radar_obs" frameborder="0" style="border:0;width:100%;"></iframe></div></td></tr>
-		<tr class="sp"></tr>
-
-		<tr><td align="center"><a href="https://imweather.com/?model=nowcast&run=&member=&element=radar_obs&level=undefined&lat=44.3000&lng=16.0000&z=4.50" target="_blank" rel="nofollow">I'm Weather | Hrvatska Radar</a> (<a href="https://www.sat24.com/en-gb/country/hr/hd#selectedLayer=euRadarSat" target="_blank" rel="nofollow">Sat24.com</a>)</td></tr>
-		<tr><td align="center"><div class="if"><iframe src="https://imweather.com/widget/map?lat=44.0&lng=16.0&z=4.5&model=nowcast&element=radar_obs" frameborder="0" style="border:0;width:100%;"></iframe></div></td></tr>
 		<tr class="sp"></tr>
 		-->
 
