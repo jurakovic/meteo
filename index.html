@@ -56,27 +56,29 @@
 		}
 
 		.collapsible {
-			background-color: #777;
-			color: white;
+			margin-top: 10px;
 			cursor: pointer;
-			padding: 18px;
 			width: 100%;
+			max-width: 850px;
 			border: none;
-			text-align: left;
 			outline: none;
-			font-size: 15px;
+			font-size: 17px;
 		}
 
-		.active, .collapsible:hover {
+		.collapsible:hover {
 			background-color: #555;
 		}
 
 		.content {
 			padding: 0 18px;
 			max-height: 0;
+			max-width: 850px;
 			overflow: hidden;
 			transition: max-height 0.2s ease-out;
-			background-color: #f1f1f1;
+		}
+
+		.content p {
+			text-align: left;
 		}
 
 	</style>
@@ -195,26 +197,25 @@
 		<tr><td align="center"><img src="https://vrijeme.hr/anim_uljenje.gif" alt="Radar DHMZ | Uljenje" border="0" /></td></tr>
 		
 		<tr><td align="center">
-			<h2>Animated Collapsibles</h2>
-
-			<p>A Collapsible:</p>
-			<button class="collapsible">Open Collapsible</button>
+			<button type="button" class="collapsible">Linkovi</button>
 			<div class="content">
-				<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+				<p>Lorem ipsum dolor sit amet 1, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+				<p>Lorem ipsum dolor sit amet 2, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+				<hr>
+				<p>Lorem ipsum dolor sit amet 3, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
 			</div>
 			</table>
 			<script>
 			var coll = document.getElementsByClassName("collapsible");
 			var i;
-
 			for (i = 0; i < coll.length; i++) {
 			  coll[i].addEventListener("click", function() {
 				this.classList.toggle("active");
 				var content = this.nextElementSibling;
 				if (content.style.maxHeight){
-				  content.style.maxHeight = null;
+					content.style.maxHeight = null;
 				} else {
-				  content.style.maxHeight = content.scrollHeight + "px";
+					content.style.maxHeight = content.scrollHeight + "px";
 				} 
 			  });
 			}
