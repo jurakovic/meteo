@@ -12,7 +12,7 @@
 	<title>Meteo radari</title>
 </head>
 <body>
-	<h2 align="center">Meteo radari (beta)</h2>
+	<h2 align="center">Meteo radari</h2>
 	<hr>
 
 	<table border="0" align="center" cellpadding="0" cellspacing="0">
@@ -20,21 +20,6 @@
 			<td align="center">
 				<button type="button" class="collapsible">Linkovi</button>
 				<div class="content" data-include-html="/_includes/links.html"></div>
-				<script>
-					var coll = document.getElementsByClassName("collapsible");
-					var i;
-					for (i = 0; i < coll.length; i++) {
-						coll[i].addEventListener("click", function () {
-							this.classList.toggle("active");
-							var content = this.nextElementSibling;
-							if (content.style.maxHeight) {
-								content.style.maxHeight = null;
-							} else {
-								content.style.maxHeight = content.scrollHeight + "px";
-							}
-						});
-					}
-				</script>
 			</td>
 		</tr>
 
