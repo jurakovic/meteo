@@ -25,13 +25,15 @@ async function build() {
 	//return;
 
     // Read and inline CSS
-    const css = await fs.readFile(path.join(srcDir, '_assets/css', 'styles.css'), 'utf-8');
+    const _css = await fs.readFile(path.join(srcDir, '_assets/css', 'styles.css'), 'utf-8');
+	const css = prependCharacterToLines(_css, '\t', 2);
 
 	//console.log(css);
 	//return;
 
     // Read and inline JavaScript
-    const js = await fs.readFile(path.join(srcDir, '_assets/js', 'include.js'), 'utf-8');
+    const _js = await fs.readFile(path.join(srcDir, '_assets/js', 'include.js'), 'utf-8');
+	const js = prependCharacterToLines(_js, '\t', 2);
 
 	//console.log(js);
 	//return;
@@ -41,13 +43,16 @@ async function build() {
         let html = await fs.readFile(filePath, 'utf-8');
 
         // Inline CSS and JavaScript
-        html = html.replace('<link rel="stylesheet" href="/_assets/css/styles.css">', `<style>${css}</style>`);
-        html = html.replace('<script src="/_assets/js/include.js" defer></script>', `<script>${js}</script>`);
+        html = html.replace('<link rel="stylesheet" href="/_assets/css/styles.css">', `<style>${css}\t</style>`);
+        html = html.replace('<script src="/_assets/js/include.js" defer></script>', `<script>${js}\t</script>`);
         html = html.replace('href="/_assets/img', `href="/img`);
         html = html.replace(`document.addEventListener('DOMContentLoaded', includeHTML);`, `//document.addEventListener('DOMContentLoaded', includeHTML);`);
 
         // Inline components
-        html = await inlineComponents(html);
+        //html = await inlineComponents(html);
+		const _links = await fs.readFile(path.join(srcDir, '_includes', 'links.html'), 'utf-8');
+		const links = prependCharacterToLines(_links, '\t', 4);
+		html = html.replace('<div class="content" data-include-html="/_includes/links.html"></div>', `<div class="content">${links}</div>`);
 
         // Write to build directory
         const relativePath = path.relative(srcDir, filePath);
@@ -61,7 +66,8 @@ async function build() {
         let match;
         while ((match = componentRegex.exec(html)) !== null) {
             const componentPath = path.join(srcDir, match[1]);
-            const componentContent = await fs.readFile(componentPath, 'utf-8');
+            const _componentContent = await fs.readFile(componentPath, 'utf-8');
+            const componentContent = prependCharacterToLines(_componentContent, '\t', 4);
             html = html.replace(match[0], componentContent);
         }
         return html;
@@ -72,10 +78,20 @@ async function build() {
     await processHTML(path.join(srcDir, 'extras', 'index.html'));
 }
 
+function prependCharacterToLines(inputString, char, num) {
+    // Split the input string into an array of lines
+    const lines = inputString.split('\r\n');
+
+    // Prepend each line with the character repeated 'num' times
+    //const prependedLines = lines.map(line => char.repeat(num) + line);
+    const prependedLines = lines.map(line => (line.length > 0 ? char.repeat(num) + line : line));
+
+    // Join the array of lines back into a single string
+    return prependedLines.join('\r\n');
+}
+
 build().then(() => {
     console.log('Build completed.');
 }).catch(err => {
     console.error('Error during build:', err);
 });
-
-
