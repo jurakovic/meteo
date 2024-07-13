@@ -51,8 +51,8 @@ async function build() {
         // Inline components
         //html = await inlineComponents(html);
 		const _links = await fs.readFile(path.join(srcDir, '_includes', 'links.html'), 'utf-8');
-		const links = prependCharacterToLines(_links, '\t', 4);
-		html = html.replace('<div class="content" data-include-html="/_includes/links.html"></div>', `<div class="content">${links}</div>`);
+		const links = prependCharacterToLines(_links, '\t', 5);
+		html = html.replace('<div class="content" data-include-html="/_includes/links.html"></div>', `<div class="content">${links}\t\t\t\t</div>`);
 
         // Write to build directory
         const relativePath = path.relative(srcDir, filePath);
