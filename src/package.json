@@ -11,7 +11,6 @@
   "description": "",
   "dependencies": {
     "fs-extra": "^11.2.0",
-    "html-format": "^1.1.7",
     "path": "^0.12.7"
   }
 }
