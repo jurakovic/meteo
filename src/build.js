@@ -2,6 +2,7 @@ console.log("foo");
 
 const fs = require('fs-extra');
 const path = require('path');
+const format = require('html-format');
 
 console.log(__dirname);
 
@@ -48,6 +49,7 @@ async function build() {
 
         // Inline components
         html = await inlineComponents(html);
+        html = format(html);
 
         // Write to build directory
         const relativePath = path.relative(srcDir, filePath);
