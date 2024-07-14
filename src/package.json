@@ -1,16 +1,11 @@
 {
-  "name": "app",
-  "version": "1.0.0",
-  "main": "build.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "description": "",
-  "dependencies": {
-    "fs-extra": "^11.2.0",
-    "path": "^0.12.7"
-  }
+    "name": "meteo",
+    "version": "1.0.0",
+    "main": "build.js",
+    "author": "jurakovic",
+    "homepage": "https://github.com/jurakovic/meteo",
+    "dependencies": {
+        "fs-extra": "^11.2.0",
+        "path": "^0.12.7"
+    }
 }
