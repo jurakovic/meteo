@@ -29,9 +29,9 @@ async function build() {
 		html = html.replace('href="/_assets/img', `href="/img`);
 		html = html.replace(`document.addEventListener('DOMContentLoaded', includeHTML);`, `//document.addEventListener('DOMContentLoaded', includeHTML);`); // comment out not needed js in standalone html
 
-		let links = await fs.readFile(path.join(srcDir, '_includes', 'links.html'), 'utf-8');
+		let links = await fs.readFile(path.join(srcDir, '_components', 'links.html'), 'utf-8');
 		links = prependTabs(links, 5);
-		html = html.replace('<div class="content" data-include-html="/_includes/links.html"></div>', `<div class="content">${links}\t\t\t\t</div>`);
+		html = html.replace('<div class="content" data-include-html="/_components/links.html"></div>', `<div class="content">${links}\t\t\t\t</div>`);
 
 		// Write to build directory
 		const relativePath = path.relative(srcDir, filePath);
