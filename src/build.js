@@ -24,16 +24,16 @@ async function build() {
 	const processHTML = async (filePath) => {
 		let html = await fs.readFile(filePath, 'utf-8');
 
-		html = html.replace('<link rel="stylesheet" href="/_assets/css/styles.css">', `<style>${css}\t</style>`);
-		html = html.replace('<script src="/_assets/js/include.js" defer></script>', `<script>${js}\t</script>`);
-		html = html.replace('href="/_assets/img', `href="/img`);
-		html = html.replace(`document.addEventListener('DOMContentLoaded', includeHTML);`, `//document.addEventListener('DOMContentLoaded', includeHTML);`); // comment out not needed js in standalone html
-		html = html.replace('<!--<img src="https://bit', '<img src="https://bit');
-		html = html.replace('right" />-->', 'right" />');
+		html = html.replaceAll('<link rel="stylesheet" href="/_assets/css/styles.css">', `<style>${css}\t</style>`);
+		html = html.replaceAll('<script src="/_assets/js/include.js" defer></script>', `<script>${js}\t</script>`);
+		html = html.replaceAll('href="/_assets/img', `href="/img`);
+		html = html.replaceAll(`document.addEventListener('DOMContentLoaded', includeHTML);`, `//document.addEventListener('DOMContentLoaded', includeHTML);`); // comment out not needed js in standalone html
+		html = html.replaceAll('<!--<img src="https://bit', '<img src="https://bit');
+		html = html.replaceAll('right" />-->', 'right" />');
 
 		let links = await fs.readFile(path.join(srcDir, '_components', 'links.html'), 'utf-8');
 		links = prependTabs(links, 5);
-		html = html.replace('<div class="content" data-include-html="/_components/links.html"></div>', `<div class="content">${links}\t\t\t\t</div>`);
+		html = html.replaceAll('<div class="content" data-include-html="/_components/links.html"></div>', `<div class="content">${links}\t\t\t\t</div>`);
 
 		// Write to build directory
 		const relativePath = path.relative(srcDir, filePath);
