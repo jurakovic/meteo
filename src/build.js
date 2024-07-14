@@ -28,6 +28,8 @@ async function build() {
 		html = html.replace('<script src="/_assets/js/include.js" defer></script>', `<script>${js}\t</script>`);
 		html = html.replace('href="/_assets/img', `href="/img`);
 		html = html.replace(`document.addEventListener('DOMContentLoaded', includeHTML);`, `//document.addEventListener('DOMContentLoaded', includeHTML);`); // comment out not needed js in standalone html
+		html = html.replace('<!--<img src="https://bit', '<img src="https://bit');
+		html = html.replace('right" />-->', 'right" />');
 
 		let links = await fs.readFile(path.join(srcDir, '_components', 'links.html'), 'utf-8');
 		links = prependTabs(links, 5);

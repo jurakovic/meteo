@@ -23,7 +23,6 @@ cd meteo
 docker run -it --rm -v "$(pwd):/app" node:22-slim bash
 
 cd /app/src
-
 npm install
 npm run build
 ```
