@@ -26,7 +26,7 @@ async function build() {
 
 		html = html.replaceAll('<link rel="stylesheet" href="/_assets/css/styles.css">', `<style>${css}\t</style>`);
 		html = html.replaceAll('<script src="/_assets/js/include.js" defer></script>', `<script>${js}\t</script>`);
-		html = html.replaceAll('href="/_assets/img', `href="/img`);
+		html = html.replaceAll('href="/_assets/img', `href="/meteo/img`);
 		html = html.replaceAll(`document.addEventListener('DOMContentLoaded', includeHTML);`, `//document.addEventListener('DOMContentLoaded', includeHTML);`); // comment out not needed js in standalone html
 		html = html.replaceAll('<!--<img src="https://bit', '<img src="https://bit');
 		html = html.replaceAll('right" />-->', 'right" />');
