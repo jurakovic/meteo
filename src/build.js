@@ -3,7 +3,7 @@ const fs = require('fs-extra');
 const path = require('path');
 
 const srcDir = __dirname; // src
-const buildDir = path.join(__dirname, '../publish');
+const buildDir = path.join(__dirname, '../docs');
 
 async function build() {
 	// Clean build directory
