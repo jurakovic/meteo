@@ -1,25 +1,59 @@
 
-#const fs = require('fs-extra');
-#const path = require('path');
-#
-#const srcDir = __dirname; // src
-#const buildDir = path.join(__dirname, '../docs');
+function main() {
+  srcDir="$(pwd)"
+  buildDir="$(dirname $srcDir)/docs"
 
-srcDir="$(pwd)"
-buildDir="$(dirname $srcDir)/docs"
+  rm -rf "$buildDir"
+  mkdir -p "$buildDir"
 
-#echo "$srcDir"
-#echo "$buildDir"
+  css=$(cat "$srcDir/_assets/css/styles.css")
+  css=$(prependTabs "$css" 2)
+  #echo -e "$css"
 
-#read -p "Press any key to continue..." -n1 -s; echo
 
-#async function build() {
-#	// Clean build directory
-#	await fs.emptyDir(buildDir);
+  mapfile -t files < <(find . -wholename "*.html" -type f -not -path "*/_components/*")
+  for file in "${files[@]}"; do
+    processHtml "$file" "$css"
+  done
 
-rm -rf "$buildDir"
-mkdir -p "$buildDir"
+  echo "Build completed"
+}
 
+
+
+function processHtml() {
+  file=$1
+  css=$2
+  #echo "$file"
+  publishFile="$buildDir/${file:2}"
+  #echo "$publishFile"
+  html=$(cat "$file")
+
+  html="$(echo "$html" | sed "s/<link rel=\"stylesheet\" href=\"\/_assets\/css\/styles.css\">/<style>$(echo -e \"$css\")\t<\/style>/g")"
+
+  html="$(echo "$html" | sed 's/"\/_assets/"https:\/\/raw.githubusercontent.com\/jurakovic\/meteo\/main\/src\/_assets/g')"
+  html="$(echo "$html" | sed 's/"\/_components/"https:\/\/raw.githubusercontent.com\/jurakovic\/meteo\/main\/src\/_components/g')"
+  mkdir -p "$(dirname $publishFile)"
+  echo -e "$html" > "$publishFile"
+}
+
+function prependTabs() {
+  local str="$1"
+  local num="$2"
+  local char="\t"
+
+  # Create a string with the character repeated 'num' times
+  local prefix=$(printf "%${num}s" | tr ' ' "$char")
+
+  # Read the input string line by line
+  while IFS= read -r line; do
+      if [ -n "$line" ]; then
+          echo "$prefix$line"
+      else
+          echo "$line"
+      fi
+  done <<< "$str"
+}
 
 
 #	// Copy images to build directory
@@ -63,17 +97,7 @@ mkdir -p "$buildDir"
 #	await processHTML(path.join(srcDir, 'extras', 'index.html'));
 #}
 
-mapfile -t files < <(find . -wholename "*.html" -type f -not -path "*/_components/*")
-for file in "${files[@]}"; do
-  #echo "$file"
-  publishFile="$buildDir/${file:2}"
-  #echo "$publishFile"
-  html=$(cat "$file")
-  html="$(echo "$html" | sed 's/"\/_assets/"https:\/\/raw.githubusercontent.com\/jurakovic\/meteo\/main\/src\/_assets/g')"
-  html="$(echo "$html" | sed 's/"\/_components/"https:\/\/raw.githubusercontent.com\/jurakovic\/meteo\/main\/src\/_components/g')"
-  mkdir -p "$(dirname $publishFile)"
-  echo -e "$html" > "$publishFile"
-done
+
 
 
 #function prependTabs(inputString, num) {
@@ -85,8 +109,9 @@ done
 #build().then(() => {
 #	console.log('Build completed.');
 
-echo "Build completed"
-
 #}).catch(err => {
 #	console.error('Error during build:', err);
 #});
+
+
+main
