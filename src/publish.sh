@@ -8,8 +8,8 @@
 srcDir="$(pwd)"
 buildDir="$(dirname $srcDir)/docs"
 
-echo "$srcDir"
-echo "$buildDir"
+#echo "$srcDir"
+#echo "$buildDir"
 
 #read -p "Press any key to continue..." -n1 -s; echo
 
@@ -18,14 +18,14 @@ echo "$buildDir"
 #	await fs.emptyDir(buildDir);
 
 rm -rf "$buildDir"
-mkdir "$buildDir"
+mkdir -p "$buildDir"
 
 
 
 #	// Copy images to build directory
 #	await fs.copy(path.join(__dirname, '_assets/img'), path.join(buildDir, 'img'));
 
-cp -r "$srcDir/_assets/img" "$buildDir/img/"
+#cp -r "$srcDir/_assets/img" "$buildDir/img/"
 
 #	// Read and inline CSS
 #	let css = await fs.readFile(path.join(srcDir, '_assets/css', 'styles.css'), 'utf-8');
@@ -34,7 +34,8 @@ cp -r "$srcDir/_assets/img" "$buildDir/img/"
 #	// Read and inline JavaScript
 #	let js = await fs.readFile(path.join(srcDir, '_assets/js', 'include.js'), 'utf-8');
 #	js = prependTabs(js, 2);
-#
+
+
 #	// Process HTML files
 #	const processHTML = async (filePath) => {
 #		let html = await fs.readFile(filePath, 'utf-8');
@@ -61,7 +62,20 @@ cp -r "$srcDir/_assets/img" "$buildDir/img/"
 #	await processHTML(path.join(srcDir, 'index.html'));
 #	await processHTML(path.join(srcDir, 'extras', 'index.html'));
 #}
-#
+
+mapfile -t files < <(find . -wholename "*.html" -type f -not -path "*/_components/*")
+for file in "${files[@]}"; do
+  #echo "$file"
+  publishFile="$buildDir/${file:2}"
+  #echo "$publishFile"
+  html=$(cat "$file")
+  html="$(echo "$html" | sed 's/"\/_assets/"https:\/\/raw.githubusercontent.com\/jurakovic\/meteo\/main\/src\/_assets/g')"
+  html="$(echo "$html" | sed 's/"\/_components/"https:\/\/raw.githubusercontent.com\/jurakovic\/meteo\/main\/src\/_components/g')"
+  mkdir -p "$(dirname $publishFile)"
+  echo -e "$html" > "$publishFile"
+done
+
+
 #function prependTabs(inputString, num) {
 #	const lines = inputString.split('\r\n');
 #	const prependedLines = lines.map(line => (line.length > 0 ? '\t'.repeat(num) + line : line));
