@@ -1,7 +1,7 @@
 
 function main() {
   srcDir="$(pwd)"
-  buildDir="$(dirname $srcDir)/docs"
+  buildDir="$(dirname "$srcDir")/docs"
 
   rm -rf "$buildDir"
   mkdir -p "$buildDir"
@@ -33,7 +33,7 @@ function processHtml() {
 
   html="$(echo "$html" | sed 's/"\/_assets/"https:\/\/raw.githubusercontent.com\/jurakovic\/meteo\/main\/src\/_assets/g')"
   html="$(echo "$html" | sed 's/"\/_components/"https:\/\/raw.githubusercontent.com\/jurakovic\/meteo\/main\/src\/_components/g')"
-  mkdir -p "$(dirname $publishFile)"
+  mkdir -p "$(dirname "$publishFile")"
   echo -e "$html" > "$publishFile"
 }
 
