@@ -10,7 +10,7 @@ function Main {
 	Write-Output "$buildDir"
 
 	#  rm -rf "$buildDir"
-	Remove-Item -Path "$buildDir" -Recurse -Force
+	Remove-Item -Path "$buildDir" -Recurse -Force -ErrorAction SilentlyContinue
 
 	#  mkdir -p "$buildDir"
 	New-Item -ItemType Directory -Path "$buildDir" -Force > $null
@@ -33,7 +33,8 @@ function Main {
 
     # Print each file path
     foreach ($file in $files) {
-        ProcessHtml $file.FullName $css
+        $relativePath = $file.FullName.Substring($srcDir.Length).TrimStart('\')
+        ProcessHtml $buildDir $relativePath $css
     }
 
 
@@ -49,20 +50,25 @@ function ProcessHtml() {
 #  file=$1
 #  css=$2
     param (
+        [string]$buildDir,
         [string]$file,
         [string]$css
     )
 #  #echo "$file"
     Write-Output $file
 #  publishFile="$buildDir/${file:2}"
+    $publishFile = "$buildDir\$file"
 #  #echo "$publishFile"
+    Write-Output $publishFile
 #  html=$(cat "$file")
+    $html = Get-Content "$file" -Raw -Encoding "utf8"
 #
 #  html="$(echo "$html" | sed "s/<link rel=\"stylesheet\" href=\"\/_assets\/css\/styles.css\">/<style>$(echo -e \"$css\")\t<\/style>/g")"
 #
 #  html="$(echo "$html" | sed 's/"\/_assets/"https:\/\/raw.githubusercontent.com\/jurakovic\/meteo\/main\/src\/_assets/g')"
 #  html="$(echo "$html" | sed 's/"\/_components/"https:\/\/raw.githubusercontent.com\/jurakovic\/meteo\/main\/src\/_components/g')"
 #  mkdir -p "$(dirname $publishFile)"
+    New-Item -ItemType Directory -Path "$(Split-Path -Path $publishFile)" -Force > $null
 #  echo -e "$html" > "$publishFile"
 }
 #
