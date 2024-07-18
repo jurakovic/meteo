@@ -22,24 +22,38 @@ function Main {
 	$css = Prepend-Tabs -str $css -num 2
 	#  #echo -e "$css"
 	#Write-Output "$css"
-}
 
-#
-#
 #  mapfile -t files < <(find . -wholename "*.html" -type f -not -path "*/_components/*")
 #  for file in "${files[@]}"; do
 #    processHtml "$file" "$css"
 #  done
+
+    # Find all .html files excluding those in _components directories
+    $files = Get-ChildItem -Path $directory -Recurse -Filter *.html | Where-Object { $_.FullName -notmatch "\\_components\\" }
+
+    # Print each file path
+    foreach ($file in $files) {
+        ProcessHtml $file.FullName $css
+    }
+
+
+
 #
 #  echo "Build completed"
 #}
+}
 #
 #
 #
-#function processHtml() {
+function ProcessHtml() {
 #  file=$1
 #  css=$2
+    param (
+        [string]$file,
+        [string]$css
+    )
 #  #echo "$file"
+    Write-Output $file
 #  publishFile="$buildDir/${file:2}"
 #  #echo "$publishFile"
 #  html=$(cat "$file")
@@ -50,7 +64,7 @@ function Main {
 #  html="$(echo "$html" | sed 's/"\/_components/"https:\/\/raw.githubusercontent.com\/jurakovic\/meteo\/main\/src\/_components/g')"
 #  mkdir -p "$(dirname $publishFile)"
 #  echo -e "$html" > "$publishFile"
-#}
+}
 #
 #function prependTabs() {
 #  local str="$1"
