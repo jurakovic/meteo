@@ -1,18 +1,29 @@
 
-$currentDirectoryPath = (Get-Location).Path
-Write-Output $currentDirectoryPath
-
-
 #function main() {
-#  srcDir="$(pwd)"
-#  buildDir="$(dirname $srcDir)/docs"
-#
-#  rm -rf "$buildDir"
-#  mkdir -p "$buildDir"
-#
-#  css=$(cat "$srcDir/_assets/css/styles.css")
-#  css=$(prependTabs "$css" 2)
-#  #echo -e "$css"
+function Main {
+	#  srcDir="$(pwd)"
+	$srcDir = (Get-Location).Path
+	#  buildDir="$(dirname $srcDir)/docs"
+	$buildDir = "$(Split-Path (Get-Location).Path -Parent)\docs"
+
+	Write-Output "$srcDir"
+	Write-Output "$buildDir"
+
+	#  rm -rf "$buildDir"
+	Remove-Item -Path "$buildDir" -Recurse -Force
+
+	#  mkdir -p "$buildDir"
+	New-Item -ItemType Directory -Path "$buildDir" -Force > $null
+
+	#  css=$(cat "$srcDir/_assets/css/styles.css")
+	$css = Get-Content "$srcDir\_assets\css\styles.css" -Raw -Encoding "utf8"
+	#Write-Output "$css"
+	#  css=$(prependTabs "$css" 2)
+	$css = Prepend-Tabs -str $css -num 2
+	#  #echo -e "$css"
+	#Write-Output "$css"
+}
+
 #
 #
 #  mapfile -t files < <(find . -wholename "*.html" -type f -not -path "*/_components/*")
@@ -60,62 +71,32 @@ Write-Output $currentDirectoryPath
 #}
 
 
-#	// Copy images to build directory
-#	await fs.copy(path.join(__dirname, '_assets/img'), path.join(buildDir, 'img'));
+function Prepend-Tabs {
+    param (
+        [string]$str,
+        [int]$num
+    )
 
-#cp -r "$srcDir/_assets/img" "$buildDir/img/"
+    # Define the character to prepend (tab character)
+    $char = "`t"
 
-#	// Read and inline CSS
-#	let css = await fs.readFile(path.join(srcDir, '_assets/css', 'styles.css'), 'utf-8');
-#	css = prependTabs(css, 2);
-#
-#	// Read and inline JavaScript
-#	let js = await fs.readFile(path.join(srcDir, '_assets/js', 'include.js'), 'utf-8');
-#	js = prependTabs(js, 2);
+    # Create a string with the character repeated 'num' times
+    $prefix = ($char * $num)
 
+    # Initialize an array to hold the processed lines
+    $output = @()
 
-#	// Process HTML files
-#	const processHTML = async (filePath) => {
-#		let html = await fs.readFile(filePath, 'utf-8');
-#
-#		html = html.replaceAll('<link rel="stylesheet" href="/_assets/css/styles.css">', `<style>${css}\t</style>`);
-#		html = html.replaceAll('<script src="/_assets/js/include.js" defer></script>', `<script>${js}\t</script>`);
-#		html = html.replaceAll('href="/_assets/img', `href="/meteo/img`);
-#		html = html.replaceAll(`document.addEventListener('DOMContentLoaded', includeHTML);`, `//document.addEventListener('DOMContentLoaded', includeHTML);`); // comment out not needed js in standalone html
-#		html = html.replaceAll('<!--<img src="https://bit', '<img src="https://bit');
-#		html = html.replaceAll('right" />-->', 'right" />');
-#
-#		let links = await fs.readFile(path.join(srcDir, '_components', 'links.html'), 'utf-8');
-#		links = prependTabs(links, 5);
-#		html = html.replaceAll('<div class="content" data-include-html="/_components/links.html"></div>', `<div class="content">${links}\t\t\t\t</div>`);
-#
-#		// Write to build directory
-#		const relativePath = path.relative(srcDir, filePath);
-#		const buildFilePath = path.join(buildDir, relativePath);
-#		await fs.ensureDir(path.dirname(buildFilePath));
-#		await fs.writeFile(buildFilePath, html);
-#	};
-#
-#	// Process each HTML file
-#	await processHTML(path.join(srcDir, 'index.html'));
-#	await processHTML(path.join(srcDir, 'extras', 'index.html'));
-#}
+    # Split the input string into lines and process each line
+    $str -split "`n" | ForEach-Object {
+        if ($_ -ne "") {
+            $output += "$prefix$_"
+        } else {
+            $output += "$_"
+        }
+    }
 
+    # Join the array into a single string with newline separators and return
+    return $output -join "`r`n"
+}
 
-
-
-#function prependTabs(inputString, num) {
-#	const lines = inputString.split('\r\n');
-#	const prependedLines = lines.map(line => (line.length > 0 ? '\t'.repeat(num) + line : line));
-#	return prependedLines.join('\r\n');
-#}
-#
-#build().then(() => {
-#	console.log('Build completed.');
-
-#}).catch(err => {
-#	console.error('Error during build:', err);
-#});
-
-
-main
+Main
