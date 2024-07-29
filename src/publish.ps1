@@ -17,9 +17,11 @@ function Main {
 
 	#  css=$(cat "$srcDir/_assets/css/styles.css")
 	$css = Get-Content "$srcDir\_assets\css\styles.css" -Raw -Encoding "utf8"
+	#Write-Output $css | Set-Content -Path "$srcDir\_assets\css\styles1.css"
 	#Write-Output "$css"
 	#  css=$(prependTabs "$css" 2)
 	$css = Prepend-Tabs -str $css -num 2
+	#Write-Output $css | Set-Content -Path "$srcDir\_assets\css\styles2.css"
 	#  #echo -e "$css"
 	#Write-Output "$css"
 
@@ -64,12 +66,17 @@ function ProcessHtml() {
     $html = Get-Content "$file" -Raw -Encoding "utf8"
 #
 #  html="$(echo "$html" | sed "s/<link rel=\"stylesheet\" href=\"\/_assets\/css\/styles.css\">/<style>$(echo -e \"$css\")\t<\/style>/g")"
-#
+    $html = $html.Replace('<link rel="stylesheet" href="/_assets/css/styles.css">', "<style>$css`t</style>")
+    #Write-Output $html
 #  html="$(echo "$html" | sed 's/"\/_assets/"https:\/\/raw.githubusercontent.com\/jurakovic\/meteo\/main\/src\/_assets/g')"
+    $html = $html.Replace('"/_assets', '"https://raw.githubusercontent.com/jurakovic/meteo/main/src/_assets')
 #  html="$(echo "$html" | sed 's/"\/_components/"https:\/\/raw.githubusercontent.com\/jurakovic\/meteo\/main\/src\/_components/g')"
+    $html = $html.Replace('"/_components', '"https://raw.githubusercontent.com/jurakovic/meteo/main/src/_components')
 #  mkdir -p "$(dirname $publishFile)"
-    New-Item -ItemType Directory -Path "$(Split-Path -Path $publishFile)" -Force > $null
+    #New-Item -ItemType Directory -Path "$(Split-Path -Path $publishFile)" -Force > $null
+    mkdir -Force "$(Split-Path -Path $publishFile)" | Out-Null
 #  echo -e "$html" > "$publishFile"
+    Write-Output $html | Set-Content -NoNewline -Path "$publishFile" -Encoding "utf8"
 }
 #
 #function prependTabs() {
@@ -107,7 +114,7 @@ function Prepend-Tabs {
     $output = @()
 
     # Split the input string into lines and process each line
-    $str -split "`n" | ForEach-Object {
+    $str -split "`r`n" | ForEach-Object {
         if ($_ -ne "") {
             $output += "$prefix$_"
         } else {
