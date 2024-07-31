@@ -31,6 +31,12 @@ function Main {
 	$js = Get-Content "$srcDir\_assets\js\include.js" -Raw -Encoding "utf8"
 	$js = Prepend-Tabs -str $js -num 2
 
+     #let links = await fs.readFile(path.join(srcDir, '_components', 'links.html'), 'utf-8');
+	#links = prependTabs(links, 5);
+    $links = Get-Content "$srcDir\_components\links.html" -Raw -Encoding "utf8"
+	$links = Prepend-Tabs -str $links -num 5
+
+
 #  mapfile -t files < <(find . -wholename "*.html" -type f -not -path "*/_components/*")
 #  for file in "${files[@]}"; do
 #    processHtml "$file" "$css"
@@ -42,7 +48,7 @@ function Main {
     # Print each file path
     foreach ($file in $files) {
         $relativePath = $file.FullName.Substring($srcDir.Length).TrimStart('\')
-        ProcessHtml $buildDir $relativePath $css $js
+        ProcessHtml $buildDir $relativePath $css $js $links
     }
 
 
@@ -61,7 +67,8 @@ function ProcessHtml() {
         [string]$buildDir,
         [string]$file,
         [string]$css,
-        [string]$js
+        [string]$js,
+        [string]$links
     )
 #  #echo "$file"
     Write-Output $file
@@ -72,12 +79,10 @@ function ProcessHtml() {
 #  html=$(cat "$file")
     $html = Get-Content "$file" -Raw -Encoding "utf8"
 #
-    #let links = await fs.readFile(path.join(srcDir, '_components', 'links.html'), 'utf-8');
-	#links = prependTabs(links, 5);
+
 	#html = html.replaceAll('<div class="content" data-include-html="/_components/links.html"></div>', `<div class="content">${links}\t\t\t\t</div>`);
-    $links = Get-Content "$srcDir\_components\links.html" -Raw -Encoding "utf8"
-	$links = Prepend-Tabs -str $links -num 5
     $html = $html.Replace('<div class="content" data-include-html="/_components/links.html"></div>', "<div class=""content"">$links`t`t`t`t</div>")
+
 
 #  html="$(echo "$html" | sed "s/<link rel=\"stylesheet\" href=\"\/_assets\/css\/styles.css\">/<style>$(echo -e \"$css\")\t<\/style>/g")"
     $html = $html.Replace('<link rel="stylesheet" href="/_assets/css/styles.css">', "<style>$css`t</style>")
