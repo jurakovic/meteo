@@ -25,6 +25,12 @@ function Main {
 	#  #echo -e "$css"
 	#Write-Output "$css"
 
+	#let js = await fs.readFile(path.join(srcDir, '_assets/js', 'include.js'), 'utf-8');
+	#js = prependTabs(js, 2);
+
+	$js = Get-Content "$srcDir\_assets\js\include.js" -Raw -Encoding "utf8"
+	$js = Prepend-Tabs -str $js -num 2
+
 #  mapfile -t files < <(find . -wholename "*.html" -type f -not -path "*/_components/*")
 #  for file in "${files[@]}"; do
 #    processHtml "$file" "$css"
@@ -36,7 +42,7 @@ function Main {
     # Print each file path
     foreach ($file in $files) {
         $relativePath = $file.FullName.Substring($srcDir.Length).TrimStart('\')
-        ProcessHtml $buildDir $relativePath $css
+        ProcessHtml $buildDir $relativePath $css $js
     }
 
 
@@ -54,7 +60,8 @@ function ProcessHtml() {
     param (
         [string]$buildDir,
         [string]$file,
-        [string]$css
+        [string]$css,
+        [string]$js
     )
 #  #echo "$file"
     Write-Output $file
@@ -67,6 +74,8 @@ function ProcessHtml() {
 #
 #  html="$(echo "$html" | sed "s/<link rel=\"stylesheet\" href=\"\/_assets\/css\/styles.css\">/<style>$(echo -e \"$css\")\t<\/style>/g")"
     $html = $html.Replace('<link rel="stylesheet" href="/_assets/css/styles.css">', "<style>$css`t</style>")
+    #html = html.replaceAll('<script src="/_assets/js/include.js" defer></script>', `<script>${js}\t</script>`);
+    $html = $html.Replace('<script src="/_assets/js/include.js" defer></script>', "<script>$js`t</script>")
     #Write-Output $html
 #  html="$(echo "$html" | sed 's/"\/_assets/"https:\/\/raw.githubusercontent.com\/jurakovic\/meteo\/main\/src\/_assets/g')"
     $html = $html.Replace('"/_assets', '"https://raw.githubusercontent.com/jurakovic/meteo/main/src/_assets')
