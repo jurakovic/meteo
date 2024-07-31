@@ -72,6 +72,13 @@ function ProcessHtml() {
 #  html=$(cat "$file")
     $html = Get-Content "$file" -Raw -Encoding "utf8"
 #
+    #let links = await fs.readFile(path.join(srcDir, '_components', 'links.html'), 'utf-8');
+	#links = prependTabs(links, 5);
+	#html = html.replaceAll('<div class="content" data-include-html="/_components/links.html"></div>', `<div class="content">${links}\t\t\t\t</div>`);
+    $links = Get-Content "$srcDir\_components\links.html" -Raw -Encoding "utf8"
+	$links = Prepend-Tabs -str $links -num 5
+    $html = $html.Replace('<div class="content" data-include-html="/_components/links.html"></div>', "<div class=""content"">$links`t`t`t`t</div>")
+
 #  html="$(echo "$html" | sed "s/<link rel=\"stylesheet\" href=\"\/_assets\/css\/styles.css\">/<style>$(echo -e \"$css\")\t<\/style>/g")"
     $html = $html.Replace('<link rel="stylesheet" href="/_assets/css/styles.css">', "<style>$css`t</style>")
     #html = html.replaceAll('<script src="/_assets/js/include.js" defer></script>', `<script>${js}\t</script>`);
@@ -81,6 +88,17 @@ function ProcessHtml() {
     $html = $html.Replace('"/_assets', '"https://raw.githubusercontent.com/jurakovic/meteo/main/src/_assets')
 #  html="$(echo "$html" | sed 's/"\/_components/"https:\/\/raw.githubusercontent.com\/jurakovic\/meteo\/main\/src\/_components/g')"
     $html = $html.Replace('"/_components', '"https://raw.githubusercontent.com/jurakovic/meteo/main/src/_components')
+
+    #html = html.replaceAll(`document.addEventListener('DOMContentLoaded', includeHTML);`, `//document.addEventListener('DOMContentLoaded', includeHTML);`); // comment out not needed js in standalone html
+    $html = $html.Replace("document.addEventListener('DOMContentLoaded', includeHTML);", "//document.addEventListener('DOMContentLoaded', includeHTML);")
+
+    #html = html.replaceAll('<!--<img src="https://bit', '<img src="https://bit');
+    $html = $html.Replace('<!--<img src="https://bit', '<img src="https://bit')
+
+    #html = html.replaceAll('right" />-->', 'right" />');
+    $html = $html.Replace('right" />-->', 'right" />')
+
+
 #  mkdir -p "$(dirname $publishFile)"
     #New-Item -ItemType Directory -Path "$(Split-Path -Path $publishFile)" -Force > $null
     mkdir -Force "$(Split-Path -Path $publishFile)" | Out-Null
