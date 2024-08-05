@@ -15,6 +15,8 @@ function Main {
 	#  mkdir -p "$buildDir"
 	New-Item -ItemType Directory -Path "$buildDir" -Force > $null
 
+	Copy-Item -Path "$srcDir\_assets\img\" -Destination "$buildDir\img\" -Recurse
+
 	#  css=$(cat "$srcDir/_assets/css/styles.css")
 	$css = Get-Content "$srcDir\_assets\css\styles.css" -Raw -Encoding "utf8"
 	#Write-Output $css | Set-Content -Path "$srcDir\_assets\css\styles1.css"
@@ -83,6 +85,8 @@ function ProcessHtml() {
 	#html = html.replaceAll('<div class="content" data-include-html="/_components/links.html"></div>', `<div class="content">${links}\t\t\t\t</div>`);
     $html = $html.Replace('<div class="content" data-include-html="/_components/links.html"></div>', "<div class=""content"">$links`t`t`t`t</div>")
 
+    #html = html.replaceAll('href="/_assets/img', `href="/meteo/img`);
+    $html = $html.Replace('href="/_assets/img', 'href="/meteo/img')
 
 #  html="$(echo "$html" | sed "s/<link rel=\"stylesheet\" href=\"\/_assets\/css\/styles.css\">/<style>$(echo -e \"$css\")\t<\/style>/g")"
     $html = $html.Replace('<link rel="stylesheet" href="/_assets/css/styles.css">', "<style>$css`t</style>")
@@ -90,7 +94,7 @@ function ProcessHtml() {
     $html = $html.Replace('<script src="/_assets/js/include.js" defer></script>', "<script>$js`t</script>")
     #Write-Output $html
 #  html="$(echo "$html" | sed 's/"\/_assets/"https:\/\/raw.githubusercontent.com\/jurakovic\/meteo\/main\/src\/_assets/g')"
-    $html = $html.Replace('"/_assets', '"https://raw.githubusercontent.com/jurakovic/meteo/main/src/_assets')
+    #$html = $html.Replace('"/_assets', '"https://raw.githubusercontent.com/jurakovic/meteo/main/src/_assets')
 #  html="$(echo "$html" | sed 's/"\/_components/"https:\/\/raw.githubusercontent.com\/jurakovic\/meteo\/main\/src\/_components/g')"
     $html = $html.Replace('"/_components', '"https://raw.githubusercontent.com/jurakovic/meteo/main/src/_components')
 
