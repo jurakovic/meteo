@@ -16,7 +16,7 @@ Two main folders:
 
 [docs](./docs)
 - contains build output
-- it is source for GitHub Pages publish
+- source for GitHub Pages publish
 
 ### Commands
 
