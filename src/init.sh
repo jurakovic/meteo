@@ -10,3 +10,9 @@ powershell.exe -ExecutionPolicy ByPass -File 'publish.ps1'
 
 # Revert back to the original PowerShell Execution Policy
 #if [ ! $originalPolicy = 'Unrestricted' ]; then powershell.exe -Command "Set-ExecutionPolicy $originalPolicy -Scope CurrentUser -Force"; fi;
+
+mapfile -t files < <(find ../docs -type f -iwholename "*.html")
+for file in "${files[@]}"; do
+  sed -i '1s/^\xEF\xBB\xBF//' "$file"
+  unix2dos -q "$file"
+done
