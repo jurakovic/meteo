@@ -3,9 +3,6 @@ function Main {
 	$srcDir = (Get-Location).Path
 	$buildDir = "$(Split-Path (Get-Location).Path -Parent)\docs"
 
-	Write-Output "$srcDir"
-	Write-Output "$buildDir"
-
 	# Clean build directory
 	Remove-Item -Path "$buildDir" -Recurse -Force -ErrorAction SilentlyContinue
 
@@ -45,9 +42,7 @@ function ProcessHtml() {
 		[string]$links
 	)
 
-	Write-Output $file
 	$publishFile = "$buildDir\$file"
-	Write-Output $publishFile
 
 	$html = Get-Content "$file" -Raw -Encoding "utf8"
 	$html = $html.Replace('<div class="content" data-include-html="/_components/links.html"></div>', "<div class=""content"">$links`t`t`t`t</div>")
