@@ -1,8 +1,26 @@
 
+# Meteo radari
+
+A compilation of Croatia and Europe weather radar and satellite images
+
 <https://jurakovic.github.io/meteo/>
 
 * * *
 
-GitHub Pages site is published from `/docs` dir.
+### Commands
 
-> It must be `/docs` (or `/ (root)`) because of *Publishing from a branch* limitation. More details in GitHub [docs](https://docs.github.com/en/pages/getting-started-with-github-pages/configuring-a-publishing-source-for-your-github-pages-site#publishing-from-a-branch).
+#### Run from src
+
+```bash
+cd src
+docker run -d -p 8080:80 --name meteo -v "$(pwd):/usr/share/nginx/html" nginx
+```
+
+Open <http://localhost:8080>
+
+#### Build
+
+```bash
+cd src
+./build.sh
+```
