@@ -2,6 +2,9 @@
 body {
 	background-color: #212f45;
 	font-family: monospace;
+	min-height: 100vh;
+	margin: 0px;
+	padding: 0px;
 }
 
 h2, a, td {
@@ -81,3 +84,13 @@ iframe, video {
 	.content p {
 		text-align: left;
 	}
+
+footer {
+	position: sticky;
+	top: 100%;
+	background: #485871;
+	color: white;
+	text-align: center;
+	padding: 8px;
+	margin-top: 8px;
+}
