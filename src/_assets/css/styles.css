@@ -7,6 +7,10 @@ body {
 	padding: 0px;
 }
 
+.container {
+	margin: 8px;
+}
+
 h2, a, td {
 	color: white;
 }
