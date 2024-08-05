@@ -1,11 +1,22 @@
 
-# Meteo radari
+A compilation of Croatia and Europe weather radar and satellite images.
 
-A compilation of Croatia and Europe weather radar and satellite images
-
-<https://jurakovic.github.io/meteo/>
+Available at <https://jurakovic.github.io/meteo/>.
 
 * * *
+
+### Overview
+
+Two main folders:
+
+[src](./src)
+- contains source files for site build
+- no particular framework is used, just some plain html, js and css
+	- all *build* magic is done in [build.ps1](./src/build.ps1) script
+
+[docs](./docs)
+- contains build output
+- it is source for GitHub Pages publish
 
 ### Commands
 
