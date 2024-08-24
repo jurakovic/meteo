@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="hr-HR">
 <head>
 	<meta name="viewport" content="width=device-width, initial-scale=1" />
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
@@ -8,10 +8,25 @@
 	<link rel="icon" type="image/png" sizes="192x192" href="/meteo/img/android-chrome-192x192.png">
 	<link rel="apple-touch-icon" sizes="180x180" href="/meteo/img/apple-touch-icon.png">
 	<title>Meteo radari</title>
+	<meta property="og:title" content="Meteo radari">
+	<meta property="og:locale" content="hr_HR">
+	<meta name="description" content="Meteo radari i satelitske snimke Hrvatske i Europe">
+	<meta property="og:description" content="Meteo radari i satelitske snimke Hrvatske i Europe">
+	<link rel="canonical" href="https://jurakovic.github.io/meteo/">
+	<meta property="og:url" content="https://jurakovic.github.io/meteo/">
+	<meta property="og:site_name" content="Meteo radari">
+	<meta property="og:type" content="website">
 	<style>
 		body {
 			background-color: #212f45;
 			font-family: monospace;
+			min-height: 100vh;
+			margin: 0px;
+			padding: 0px;
+		}
+
+		.container {
+			margin: 8px;
 		}
 
 		h2, a, td {
@@ -91,6 +106,16 @@
 			.content p {
 				text-align: left;
 			}
+
+		footer {
+			position: sticky;
+			top: 100%;
+			background: #485871;
+			color: white;
+			text-align: center;
+			padding: 8px;
+			margin-top: 8px;
+		}
 	</style>
 	<script>
 		function includeHTML() {
@@ -132,27 +157,34 @@
 		//document.addEventListener('DOMContentLoaded', includeHTML);
 		document.addEventListener('DOMContentLoaded', addCollapsibleClickEventListener);
 	</script>
+	<script async src="https://www.googletagmanager.com/gtag/js?id=G-233EMZJM16"></script>
+	<script>
+		window.dataLayer = window.dataLayer || [];
+		function gtag() { dataLayer.push(arguments); }
+		gtag('js', new Date());
+		gtag('config', 'G-233EMZJM16');
+	</script>
 </head>
 <body>
-	<h2 align="center">Meteo radari</h2>
-	<hr>
-
-	<table border="0" align="center" cellpadding="0" cellspacing="0">
-		<tr>
-			<td align="center">
-				<button type="button" class="collapsible">Linkovi</button>
-				<div class="content">
+	<div class="container">
+		<h2 align="center">Meteo radari</h2>
+		<hr>
+		<table border="0" align="center" cellpadding="0" cellspacing="0">
+			<tr>
+				<td align="center">
+					<button type="button" class="collapsible">Linkovi</button>
+					<div class="content">
 					<p>
 						<a href="https://meteo.hr" target="_blank" rel="nofollow">DHMZ</a>
-						| <a href="https://www.neverin.hr/prognoza/" target="_blank" rel="nofollow">Neverin</a>
-						| <a href="https://pljusak.com/karta.php" target="_blank" rel="nofollow">Pljusak</a>
-						| <a href="https://www.crometeo.hr/forum/index.php" target="_blank" rel="nofollow">Crometeo forum</a>
-						| <a href="https://www.yr.no/en/details/table/2-3186886/Croatia/City%20of%20Zagreb/Zagreb" target="_blank" rel="nofollow">Yr.no</a>
-						| <a href="https://www.windy.com/-Radar-lightning-radar?radar,45.799,15.937,8" target="_blank" rel="nofollow">Windy</a>
-						| <a href="https://www.meteoadriatic.net/" target="_blank" rel="nofollow">MeteoAdriatic</a>
-						| <a href="https://meteoalarm.org/en/live/region/HR" target="_blank" rel="nofollow">Meteoalarm</a>
-						| <a href="https://www.estofex.org/" target="_blank" rel="nofollow">ESTOFEX</a>
-						| <a href="https://www.eswd.eu/" target="_blank" rel="nofollow">ESWD</a>
+						· <a href="https://www.neverin.hr/prognoza/" target="_blank" rel="nofollow">Neverin</a>
+						· <a href="https://pljusak.com/karta.php" target="_blank" rel="nofollow">Pljusak</a>
+						· <a href="https://www.crometeo.hr/forum/index.php" target="_blank" rel="nofollow">Crometeo forum</a>
+						· <a href="https://www.yr.no/en/details/table/2-3186886/Croatia/City%20of%20Zagreb/Zagreb" target="_blank" rel="nofollow">Yr.no</a>
+						· <a href="https://www.windy.com/-Radar-lightning-radar?radar,45.799,15.937,8" target="_blank" rel="nofollow">Windy</a>
+						· <a href="https://www.meteoadriatic.net/" target="_blank" rel="nofollow">MeteoAdriatic</a>
+						· <a href="https://meteoalarm.org/en/live/region/HR" target="_blank" rel="nofollow">Meteoalarm</a>
+						· <a href="https://www.estofex.org/" target="_blank" rel="nofollow">ESTOFEX</a>
+						· <a href="https://www.eswd.eu/" target="_blank" rel="nofollow">ESWD</a>
 					</p>
 					<hr>
 					<!--
@@ -220,16 +252,22 @@
 					<hr>
 					<p>
 						<a href="https://spaceweather.com" target="_blank" rel="nofollow">SpaceWeather.com</a>
-						| <a href="https://www.spaceweatherlive.com/en.html" target="_blank" rel="nofollow">SpaceWeatherLive.com</a>
-						| <a href="https://www.swpc.noaa.gov/products/aurora-30-minute-forecast" target="_blank" rel="nofollow">Aurora Forecast</a>
-						| <a href="https://www.heavens-above.com/?lat=45.8&lng=16&loc=Zagreb&alt=122&tz=CET" target="_blank" rel="nofollow">Heavens-Above</a>
+						· <a href="https://www.spaceweatherlive.com/en.html" target="_blank" rel="nofollow">SpaceWeatherLive.com</a>
+						· <a href="https://www.swpc.noaa.gov/products/aurora-30-minute-forecast" target="_blank" rel="nofollow">Aurora Forecast</a>
+						· <a href="https://www.heavens-above.com/?lat=45.8&lng=16&loc=Zagreb&alt=122&tz=CET" target="_blank" rel="nofollow">Heavens-Above</a>
 					</p>
 					<hr>
 				</div>
-			</td>
-		</tr>
+				</td>
+			</tr>
 
-		<tr><td align="center">todo</td></tr>
-	</table>
+			<tr><td align="center">todo</td></tr>
+		</table>
+	</div>
+	<footer>
+		<a href="https://jurakovic.github.io/">Index</a>
+		·
+		<a href="https://github.com/jurakovic/meteo">GitHub</a>
+	</footer>
 </body>
 </html>
