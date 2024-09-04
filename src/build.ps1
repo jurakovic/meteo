@@ -20,7 +20,7 @@ function Main {
 	$js = Prepend-Tabs -str $js -num 2
 
 	$links = Get-Content "$srcDir\_components\links.html" -Raw -Encoding "utf8"
-	$links = Prepend-Tabs -str $links -num 5
+	$links = Prepend-Tabs -str $links -num 6
 
 	# Find all .html files excluding those in _components directories
 	$files = Get-ChildItem -Path $directory -Recurse -Filter *.html | Where-Object { $_.FullName -notmatch "\\_components\\" }
@@ -45,7 +45,7 @@ function ProcessHtml() {
 	$publishFile = "$buildDir\$file"
 
 	$html = Get-Content "$file" -Raw -Encoding "utf8"
-	$html = $html.Replace('<div class="content" data-include-html="/_components/links.html"></div>', "<div class=""content"">$links`t`t`t`t</div>")
+	$html = $html.Replace('<div id="links" data-include-html="/_components/links.html"></div>', "<div id=""links"">$links`t`t`t`t`t</div>")
 	$html = $html.Replace('href="/_assets/img', 'href="/meteo/img')
 	$html = $html.Replace('<link rel="stylesheet" href="/_assets/css/styles.css">', "<style>$css`t</style>")
 	$html = $html.Replace('<script src="/_assets/js/include.js" defer></script>', "<script>$js`t</script>")

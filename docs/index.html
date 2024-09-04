@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="hr-HR">
+<html lang="hr-HR" id="top">
 <head>
 	<meta name="viewport" content="width=device-width, initial-scale=1" />
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
@@ -17,6 +17,10 @@
 	<meta property="og:site_name" content="Meteo radari">
 	<meta property="og:type" content="website">
 	<style>
+		html {
+			scroll-behavior: smooth;
+		}
+
 		body {
 			background-color: #212f45;
 			font-family: monospace;
@@ -85,6 +89,7 @@
 			font-family: inherit;
 			color: white;
 			background-color: #485871;
+			align-content: center;
 			cursor: pointer;
 			width: 100%;
 			height: 24px;
@@ -94,17 +99,6 @@
 
 			.collapsible:hover {
 				background-color: #5F6F89;
-			}
-
-		.content {
-			padding: 2px;
-			max-height: 0;
-			overflow: hidden;
-			transition: max-height 0.2s ease-out;
-		}
-
-			.content p {
-				text-align: left;
 			}
 
 		footer {
@@ -138,24 +132,7 @@
 			});
 		}
 
-		function addCollapsibleClickEventListener() {
-			var coll = document.getElementsByClassName("collapsible");
-			var i;
-			for (i = 0; i < coll.length; i++) {
-				coll[i].addEventListener("click", function () {
-					this.classList.toggle("active");
-					var content = this.nextElementSibling;
-					if (content.style.maxHeight) {
-						content.style.maxHeight = null;
-					} else {
-						content.style.maxHeight = content.scrollHeight + "px";
-					}
-				});
-			}
-		}
-
 		//document.addEventListener('DOMContentLoaded', includeHTML);
-		document.addEventListener('DOMContentLoaded', addCollapsibleClickEventListener);
 	</script>
 	<script async src="https://www.googletagmanager.com/gtag/js?id=G-233EMZJM16"></script>
 	<script>
@@ -170,96 +147,7 @@
 		<h2 align="center">Meteo radari</h2>
 		<hr>
 		<table border="0" align="center" cellpadding="0" cellspacing="0">
-			<tr>
-				<td align="center">
-					<button type="button" class="collapsible">Linkovi</button>
-					<div class="content">
-					<p>
-						<a href="https://meteo.hr" target="_blank" rel="nofollow">DHMZ</a>
-						· <a href="https://www.neverin.hr/prognoza/" target="_blank" rel="nofollow">Neverin</a>
-						· <a href="https://pljusak.com/karta.php" target="_blank" rel="nofollow">Pljusak</a>
-						· <a href="https://www.crometeo.hr/forum/index.php" target="_blank" rel="nofollow">Crometeo forum</a>
-						· <a href="https://www.yr.no/en/details/table/2-3186886/Croatia/City%20of%20Zagreb/Zagreb" target="_blank" rel="nofollow">Yr.no</a>
-						· <a href="https://www.windy.com/-Radar-lightning-radar?radar,45.799,15.937,8" target="_blank" rel="nofollow">Windy</a>
-						· <a href="https://www.meteoadriatic.net/" target="_blank" rel="nofollow">MeteoAdriatic</a>
-						· <a href="https://meteoalarm.org/en/live/region/HR" target="_blank" rel="nofollow">Meteoalarm</a>
-						· <a href="https://www.estofex.org/" target="_blank" rel="nofollow">ESTOFEX</a>
-						· <a href="https://www.eswd.eu/" target="_blank" rel="nofollow">ESWD</a>
-					</p>
-					<hr>
-					<!--
-					<p>
-						Neverin
-						| <a href="https://www.neverin.hr/" target="_blank" rel="nofollow">Karta</a>
-						| <a href="https://www.neverin.hr/prognoza/" target="_blank" rel="nofollow">Prognoza</a>
-						| <a href="https://www.neverin.hr/radar/" target="_blank" rel="nofollow">Radar</a>
-						| <a href="https://www.neverin.hr/satelit/" target="_blank" rel="nofollow">Satelit</a>
-					</p>
-					-->
-					<p>
-						Sat24.com
-						| Satelit i radar
-						| <a href="https://www.sat24.com/en-gb/continent/eu/hd#selectedLayer=euRadarSat" target="_blank" rel="nofollow">Europa</a>
-						| <a href="https://www.sat24.com/en-gb/country/hr/hd#selectedLayer=euRadarSat" target="_blank" rel="nofollow">Hrvatska</a>
-					</p>
-					<p>
-						Meteoradar
-						| Radar
-						| <a href="https://www.meteoradar.co.uk/en-gb/continent/eu/hd" target="_blank" rel="nofollow">Europa</a>
-						| <a href="https://www.meteoradar.co.uk/en-gb/country/hr/hd" target="_blank" rel="nofollow">Hrvatska</a>
-					</p>
-					<p>
-						Meteox
-						| Temperatura
-						| <a href="https://www.meteox.com/en-gb/continent/eu" target="_blank" rel="nofollow">Europa</a>
-						| <a href="https://www.meteox.com/en-gb/country/hr#selectedLayer=temperatureDays" target="_blank" rel="nofollow">Hrvatska</a>
-					</p>
-					<p>
-						I'm Weather
-						| Satelit i radar
-						| <a href="https://imweather.com/?model=nowcast&run=&member=&element=radsat&level=&lat=47.5000&lng=17.5000&z=4.20" target="_blank" rel="nofollow">Europa</a>
-						| <a href="https://imweather.com/?model=nowcast&run=&member=&element=radsat&level=&lat=45.0000&lng=17.0000&z=6.00" target="_blank" rel="nofollow">Hrvatska</a>
-					</p>
-					<p>
-						meteoblue
-						| Radar
-						| <a href="https://www.meteoblue.com/en/weather/maps/croatia_croatia_3202326#map=radar~radarMapEU~none~none~none&coords=4.2/47.5/17.5" target="_blank" rel="nofollow">Europa</a>
-						| <a href="https://www.meteoblue.com/en/weather/maps/croatia_croatia_3202326#map=radar~radarMapEU~none~none~none&coords=6/45/17" target="_blank" rel="nofollow">Hrvatska</a>
-						| Satelit
-						| <a href="https://www.meteoblue.com/en/weather/maps/croatia_croatia_3202326#map=satellite~sat~none~none~none&coords=4.2/47.5/17.5" target="_blank" rel="nofollow">Europa</a>
-						| <a href="https://www.meteoblue.com/en/weather/maps/croatia_croatia_3202326#map=satellite~sat~none~none~none&coords=6/45/17" target="_blank" rel="nofollow">Hrvatska</a>
-					</p>
-					<p>
-						Weather&Radar
-						| Satelit i radar
-						| <a href="https://www.vrijemeradar.hr/vremenski-radar/zagreb/18138691?center=44,16&placemark=45.8144,15.978&zoom=5&layer=wr" target="_blank" rel="nofollow">Europa</a>
-						| Temperatura
-						| <a href="https://www.vrijemeradar.hr/vremenski-radar/zagreb/18138691?center=44,16&placemark=45.8144,15.978&zoom=5&layer=tr" target="_blank" rel="nofollow">Europa</a>
-					</p>
-					<p>
-						Időkép
-						| Satelit
-						| <a href="https://www.idokep.hu/muhold#europa" target="_blank" rel="nofollow">Europa</a>
-						| Radar
-						| <a href="https://www.idokep.eu/ceu/radar" target="_blank" rel="nofollow">S/I Europa</a>
-						| <a href="https://www.idokep.eu/adria" target="_blank" rel="nofollow">Jadran</a>
-					</p>
-					<p>
-						Blitzortung.org
-						| <a href="https://map.blitzortung.org/#4.2/47.5/17.5" target="_blank" rel="nofollow">Europa</a>
-						| <a href="https://map.blitzortung.org/#6/45/17" target="_blank" rel="nofollow">Hrvatska</a>
-					</p>
-					<hr>
-					<p>
-						<a href="https://spaceweather.com" target="_blank" rel="nofollow">SpaceWeather.com</a>
-						· <a href="https://www.spaceweatherlive.com/en.html" target="_blank" rel="nofollow">SpaceWeatherLive.com</a>
-						· <a href="https://www.swpc.noaa.gov/products/aurora-30-minute-forecast" target="_blank" rel="nofollow">Aurora Forecast</a>
-						· <a href="https://www.heavens-above.com/?lat=45.8&lng=16&loc=Zagreb&alt=122&tz=CET" target="_blank" rel="nofollow">Heavens-Above</a>
-					</p>
-					<hr>
-				</div>
-				</td>
-			</tr>
+			<tr><td align="center"><a href="#links"><div class="collapsible">Linkovi</div></a></td></tr>
 			<tr class="sp"></tr>
 
 			<tr><td align="center"><a href="https://www.neverin.hr/radar/" target="_blank" rel="nofollow">Neverin | Radar | Hrvatska</a></td></tr>
@@ -341,11 +229,105 @@
 
 			<tr><td align="center"><a href="https://meteo.hr/podaci.php?section=podaci_mjerenja&param=radari&el=uljenje&acto=anim" target="_blank" rel="nofollow">DHMZ | MRC Uljenje</a></td></tr>
 			<tr><td align="center"><img src="https://vrijeme.hr/anim_uljenje.gif" alt="DHMZ Radar Uljenje" border="0" /></td></tr>
+			<tr class="sp"></tr>
+			<tr><td align="center"><hr></td></tr>
+
+			<tr><td align="center">Linkovi</td></tr>
+			<tr>
+				<td align="left">
+					<div id="links">
+						<p>
+							<a href="https://meteo.hr" target="_blank" rel="nofollow">DHMZ</a>
+							· <a href="https://www.neverin.hr/prognoza/" target="_blank" rel="nofollow">Neverin</a>
+							· <a href="https://pljusak.com/karta.php" target="_blank" rel="nofollow">Pljusak</a>
+							· <a href="https://www.crometeo.hr/forum/index.php" target="_blank" rel="nofollow">Crometeo forum</a>
+							· <a href="https://www.yr.no/en/details/table/2-3186886/Croatia/City%20of%20Zagreb/Zagreb" target="_blank" rel="nofollow">Yr.no</a>
+							· <a href="https://www.windy.com/-Radar-lightning-radar?radar,45.799,15.937,8" target="_blank" rel="nofollow">Windy</a>
+							· <a href="https://www.meteoadriatic.net/" target="_blank" rel="nofollow">MeteoAdriatic</a>
+							· <a href="https://meteoalarm.org/en/live/region/HR" target="_blank" rel="nofollow">Meteoalarm</a>
+							· <a href="https://www.estofex.org/" target="_blank" rel="nofollow">ESTOFEX</a>
+							· <a href="https://www.eswd.eu/" target="_blank" rel="nofollow">ESWD</a>
+						</p>
+						<hr>
+						<!--
+						<p>
+							Neverin
+							| <a href="https://www.neverin.hr/" target="_blank" rel="nofollow">Karta</a>
+							| <a href="https://www.neverin.hr/prognoza/" target="_blank" rel="nofollow">Prognoza</a>
+							| <a href="https://www.neverin.hr/radar/" target="_blank" rel="nofollow">Radar</a>
+							| <a href="https://www.neverin.hr/satelit/" target="_blank" rel="nofollow">Satelit</a>
+						</p>
+						-->
+						<p>
+							Sat24.com
+							| Satelit i radar
+							| <a href="https://www.sat24.com/en-gb/continent/eu/hd#selectedLayer=euRadarSat" target="_blank" rel="nofollow">Europa</a>
+							| <a href="https://www.sat24.com/en-gb/country/hr/hd#selectedLayer=euRadarSat" target="_blank" rel="nofollow">Hrvatska</a>
+						</p>
+						<p>
+							Meteoradar
+							| Radar
+							| <a href="https://www.meteoradar.co.uk/en-gb/continent/eu/hd" target="_blank" rel="nofollow">Europa</a>
+							| <a href="https://www.meteoradar.co.uk/en-gb/country/hr/hd" target="_blank" rel="nofollow">Hrvatska</a>
+						</p>
+						<p>
+							Meteox
+							| Temperatura
+							| <a href="https://www.meteox.com/en-gb/continent/eu" target="_blank" rel="nofollow">Europa</a>
+							| <a href="https://www.meteox.com/en-gb/country/hr#selectedLayer=temperatureDays" target="_blank" rel="nofollow">Hrvatska</a>
+						</p>
+						<p>
+							I'm Weather
+							| Satelit i radar
+							| <a href="https://imweather.com/?model=nowcast&run=&member=&element=radsat&level=&lat=47.5000&lng=17.5000&z=4.20" target="_blank" rel="nofollow">Europa</a>
+							| <a href="https://imweather.com/?model=nowcast&run=&member=&element=radsat&level=&lat=45.0000&lng=17.0000&z=6.00" target="_blank" rel="nofollow">Hrvatska</a>
+						</p>
+						<p>
+							meteoblue
+							| Radar
+							| <a href="https://www.meteoblue.com/en/weather/maps/croatia_croatia_3202326#map=radar~radarMapEU~none~none~none&coords=4.2/47.5/17.5" target="_blank" rel="nofollow">Europa</a>
+							| <a href="https://www.meteoblue.com/en/weather/maps/croatia_croatia_3202326#map=radar~radarMapEU~none~none~none&coords=6/45/17" target="_blank" rel="nofollow">Hrvatska</a>
+							| Satelit
+							| <a href="https://www.meteoblue.com/en/weather/maps/croatia_croatia_3202326#map=satellite~sat~none~none~none&coords=4.2/47.5/17.5" target="_blank" rel="nofollow">Europa</a>
+							| <a href="https://www.meteoblue.com/en/weather/maps/croatia_croatia_3202326#map=satellite~sat~none~none~none&coords=6/45/17" target="_blank" rel="nofollow">Hrvatska</a>
+						</p>
+						<p>
+							Weather&Radar
+							| Satelit i radar
+							| <a href="https://www.vrijemeradar.hr/vremenski-radar/zagreb/18138691?center=44,16&placemark=45.8144,15.978&zoom=5&layer=wr" target="_blank" rel="nofollow">Europa</a>
+							| Temperatura
+							| <a href="https://www.vrijemeradar.hr/vremenski-radar/zagreb/18138691?center=44,16&placemark=45.8144,15.978&zoom=5&layer=tr" target="_blank" rel="nofollow">Europa</a>
+						</p>
+						<p>
+							Időkép
+							| Satelit
+							| <a href="https://www.idokep.hu/muhold#europa" target="_blank" rel="nofollow">Europa</a>
+							| Radar
+							| <a href="https://www.idokep.eu/ceu/radar" target="_blank" rel="nofollow">S/I Europa</a>
+							| <a href="https://www.idokep.eu/adria" target="_blank" rel="nofollow">Jadran</a>
+						</p>
+						<p>
+							Blitzortung.org
+							| <a href="https://map.blitzortung.org/#4.2/47.5/17.5" target="_blank" rel="nofollow">Europa</a>
+							| <a href="https://map.blitzortung.org/#6/45/17" target="_blank" rel="nofollow">Hrvatska</a>
+						</p>
+						<hr>
+						<p>
+							<a href="https://spaceweather.com" target="_blank" rel="nofollow">SpaceWeather.com</a>
+							· <a href="https://www.spaceweatherlive.com/en.html" target="_blank" rel="nofollow">SpaceWeatherLive.com</a>
+							· <a href="https://www.swpc.noaa.gov/products/aurora-30-minute-forecast" target="_blank" rel="nofollow">Aurora Forecast</a>
+							· <a href="https://www.heavens-above.com/?lat=45.8&lng=16&loc=Zagreb&alt=122&tz=CET" target="_blank" rel="nofollow">Heavens-Above</a>
+						</p>
+					</div>
+				</td>
+			</tr>
 		</table>
 		<img src="https://bit.ly/radari-counter" style="width:1px;height:1px;float:right" />
 	</div>
 	<footer>
 		<a href="https://jurakovic.github.io/">Index</a>
+		·
+		<a href="#top">Povratak na vrh</a>
 		·
 		<a href="https://github.com/jurakovic/meteo">GitHub</a>
 	</footer>
