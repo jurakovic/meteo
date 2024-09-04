@@ -1,4 +1,8 @@
 
+html {
+	scroll-behavior: smooth;
+}
+
 body {
 	background-color: #212f45;
 	font-family: monospace;
@@ -67,6 +71,7 @@ iframe, video {
 	font-family: inherit;
 	color: white;
 	background-color: #485871;
+	align-content: center;
 	cursor: pointer;
 	width: 100%;
 	height: 24px;
@@ -76,17 +81,6 @@ iframe, video {
 
 	.collapsible:hover {
 		background-color: #5F6F89;
-	}
-
-.content {
-	padding: 2px;
-	max-height: 0;
-	overflow: hidden;
-	transition: max-height 0.2s ease-out;
-}
-
-	.content p {
-		text-align: left;
 	}
 
 footer {
