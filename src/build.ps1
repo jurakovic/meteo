@@ -16,8 +16,8 @@ function Main {
 	$css = Prepend-Tabs -str $css -num 2
 
 	# Read and inline JavaScript
-	$js = Get-Content "$srcDir\_assets\js\include.js" -Raw -Encoding "utf8"
-	$js = Prepend-Tabs -str $js -num 2
+	#$js = Get-Content "$srcDir\_assets\js\include.js" -Raw -Encoding "utf8"
+	#$js = Prepend-Tabs -str $js -num 2
 
 	$links = Get-Content "$srcDir\_components\links.html" -Raw -Encoding "utf8"
 	$links = Prepend-Tabs -str $links -num 6
@@ -48,7 +48,8 @@ function ProcessHtml() {
 	$html = $html.Replace('<div id="links" data-include-html="/_components/links.html"></div>', "<div id=""links"">$links`t`t`t`t`t</div>")
 	$html = $html.Replace('href="/_assets/img', 'href="/meteo/img')
 	$html = $html.Replace('<link rel="stylesheet" href="/_assets/css/styles.css">', "<style>$css`t</style>")
-	$html = $html.Replace('<script src="/_assets/js/include.js" defer></script>', "<script>$js`t</script>")
+	#$html = $html.Replace('<script src="/_assets/js/include.js" defer></script>', "<script>$js`t</script>")
+	$html = $html.Replace("<script src=""/_assets/js/include.js"" defer></script>`r`n", "")
 	$html = $html.Replace('"/_components', '"https://raw.githubusercontent.com/jurakovic/meteo/main/src/_components')
 	$html = $html.Replace("document.addEventListener('DOMContentLoaded', includeHTML);", "//document.addEventListener('DOMContentLoaded', includeHTML);")
 	$html = $html.Replace('<!--<img src="https://bit', '<img src="https://bit')
