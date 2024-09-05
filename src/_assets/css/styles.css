@@ -86,15 +86,18 @@ iframe, video {
 .links {
 	font-size: 14px;
 	display: grid;
-	grid-template-columns: 25% 50% 25%;
-	gap: 2px;
+	grid-template-columns: 20% 60% 20%;
+	gap: 0;
 }
 
 	.links .item {
-		background-color: #485871;
 		padding: 5px;
-		margin: 2px;
+		margin: 0 2px;
 	}
+
+		.links .item:not(:last-child) {
+			border-right: 1px solid white;
+		}
 
 	.links p {
 		margin-top: 0px;
@@ -107,6 +110,7 @@ iframe, video {
 
 		.links .item {
 			margin: 5px 0;
+			border-right: none !important;
 		}
 }
 
