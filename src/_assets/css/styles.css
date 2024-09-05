@@ -83,6 +83,39 @@ iframe, video {
 		background-color: #5F6F89;
 	}
 
+.links {
+	font-size: 14px;
+	/*display: flex;
+	justify-content: space-between;
+	flex-wrap: wrap;*/
+	display: grid;
+	/*grid-template-columns: repeat(3, 1fr);*/
+	grid-template-columns: 25% 50% 25%;
+	gap: 2px;
+}
+
+	.links .item {
+		background-color: #485871;
+		padding: 5px;
+		margin: 2px;
+		/*flex: 1 1 200px;*/
+	}
+
+	.links p {
+		margin-top: 0px;
+	}
+
+@media (max-width: 800px) {
+	.links {
+		/*flex-direction: column;*/
+		grid-template-columns: 1fr;
+	}
+
+		.links .item {
+			margin: 5px 0;
+		}
+}
+
 footer {
 	position: sticky;
 	top: 100%;
