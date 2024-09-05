@@ -85,11 +85,7 @@ iframe, video {
 
 .links {
 	font-size: 14px;
-	/*display: flex;
-	justify-content: space-between;
-	flex-wrap: wrap;*/
 	display: grid;
-	/*grid-template-columns: repeat(3, 1fr);*/
 	grid-template-columns: 25% 50% 25%;
 	gap: 2px;
 }
@@ -98,7 +94,6 @@ iframe, video {
 		background-color: #485871;
 		padding: 5px;
 		margin: 2px;
-		/*flex: 1 1 200px;*/
 	}
 
 	.links p {
@@ -107,7 +102,6 @@ iframe, video {
 
 @media (max-width: 800px) {
 	.links {
-		/*flex-direction: column;*/
 		grid-template-columns: 1fr;
 	}
 
