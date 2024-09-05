@@ -45,7 +45,7 @@ function ProcessHtml() {
 	$publishFile = "$buildDir\$file"
 
 	$html = Get-Content "$file" -Raw -Encoding "utf8"
-	$html = $html.Replace('<div id="links" data-include-html="/_components/links.html"></div>', "<div id=""links"">$links`t`t`t`t`t</div>")
+	$html = $html.Replace('<div id="links" class="links" data-include-html="/_components/links.html"></div>', "<div id=""links"" class=""links"">$links`t`t`t`t`t</div>")
 	$html = $html.Replace('href="/_assets/img', 'href="/meteo/img')
 	$html = $html.Replace('<link rel="stylesheet" href="/_assets/css/styles.css">', "<style>$css`t</style>")
 	#$html = $html.Replace('<script src="/_assets/js/include.js" defer></script>', "<script>$js`t</script>")
