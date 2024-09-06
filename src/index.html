@@ -17,6 +17,7 @@
 	<meta property="og:site_name" content="Meteo radari">
 	<meta property="og:type" content="website">
 	<link rel="stylesheet" href="/_assets/css/styles.css">
+	<script src="/_assets/js/main.js" defer></script>
 	<script src="/_assets/js/include.js" defer></script>
 	<script async src="https://www.googletagmanager.com/gtag/js?id=G-233EMZJM16"></script>
 	<script>
@@ -31,12 +32,7 @@
 		<h2 align="center">Meteo radari</h2>
 		<hr>
 		<table border="0" align="center" cellpadding="0" cellspacing="0">
-			<tr>
-				<td align="center">
-					<button type="button" class="collapsible">Linkovi</button>
-					<div class="content" data-include-html="/_components/links.html"></div>
-				</td>
-			</tr>
+			<tr><td align="center"><button type="button" class="links-btn" onclick="scrollToElement('links')">Linkovi</button></td></tr>
 			<tr class="sp"></tr>
 
 			<tr><td align="center"><a href="https://www.neverin.hr/radar/" target="_blank" rel="nofollow">Neverin | Radar | Hrvatska</a></td></tr>
@@ -118,11 +114,22 @@
 
 			<tr><td align="center"><a href="https://meteo.hr/podaci.php?section=podaci_mjerenja&param=radari&el=uljenje&acto=anim" target="_blank" rel="nofollow">DHMZ | MRC Uljenje</a></td></tr>
 			<tr><td align="center"><img src="https://vrijeme.hr/anim_uljenje.gif" alt="DHMZ Radar Uljenje" border="0" /></td></tr>
+			<tr class="sp"></tr>
+			<tr><td align="center"><hr></td></tr>
+
+			<tr><td align="center" id="links">Linkovi</td></tr>
+			<tr>
+				<td align="left">
+					<div class="links" data-include-html="/_components/links.html"></div>
+				</td>
+			</tr>
 		</table>
 		<!--<img src="https://bit.ly/radari-counter" style="width:1px;height:1px;float:right" />-->
 	</div>
 	<footer>
 		<a href="https://jurakovic.github.io/">Index</a>
+		·
+		<a onclick="scrollToTop()" style="cursor: pointer"><u>Povratak na vrh</u></a>
 		·
 		<a href="https://github.com/jurakovic/meteo">GitHub</a>
 	</footer>

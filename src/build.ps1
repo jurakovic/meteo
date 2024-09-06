@@ -16,11 +16,11 @@ function Main {
 	$css = Prepend-Tabs -str $css -num 2
 
 	# Read and inline JavaScript
-	$js = Get-Content "$srcDir\_assets\js\include.js" -Raw -Encoding "utf8"
+	$js = Get-Content "$srcDir\_assets\js\main.js" -Raw -Encoding "utf8"
 	$js = Prepend-Tabs -str $js -num 2
 
 	$links = Get-Content "$srcDir\_components\links.html" -Raw -Encoding "utf8"
-	$links = Prepend-Tabs -str $links -num 5
+	$links = Prepend-Tabs -str $links -num 6
 
 	# Find all .html files excluding those in _components directories
 	$files = Get-ChildItem -Path $directory -Recurse -Filter *.html | Where-Object { $_.FullName -notmatch "\\_components\\" }
@@ -45,12 +45,12 @@ function ProcessHtml() {
 	$publishFile = "$buildDir\$file"
 
 	$html = Get-Content "$file" -Raw -Encoding "utf8"
-	$html = $html.Replace('<div class="content" data-include-html="/_components/links.html"></div>', "<div class=""content"">$links`t`t`t`t</div>")
+	$html = $html.Replace('<div class="links" data-include-html="/_components/links.html"></div>', "<div class=""links"">$links`t`t`t`t`t</div>")
 	$html = $html.Replace('href="/_assets/img', 'href="/meteo/img')
 	$html = $html.Replace('<link rel="stylesheet" href="/_assets/css/styles.css">', "<style>$css`t</style>")
-	$html = $html.Replace('<script src="/_assets/js/include.js" defer></script>', "<script>$js`t</script>")
-	$html = $html.Replace('"/_components', '"https://raw.githubusercontent.com/jurakovic/meteo/main/src/_components')
-	$html = $html.Replace("document.addEventListener('DOMContentLoaded', includeHTML);", "//document.addEventListener('DOMContentLoaded', includeHTML);")
+	$html = $html.Replace("<script src=""/_assets/js/main.js"" defer></script>", "<script>$js`t</script>")
+	$html = $html.Replace("<script src=""/_assets/js/include.js"" defer></script>`r`n`t", "") # removing this block
+	#$html = $html.Replace('"/_components', '"https://raw.githubusercontent.com/jurakovic/meteo/main/src/_components')
 	$html = $html.Replace('<!--<img src="https://bit', '<img src="https://bit')
 	$html = $html.Replace('right" />-->', 'right" />')
 

@@ -62,11 +62,12 @@ iframe, video {
 	height: 10px;
 }
 
-.collapsible {
+.links-btn {
 	margin-top: 10px;
 	font-family: inherit;
 	color: white;
 	background-color: #485871;
+	align-content: center;
 	cursor: pointer;
 	width: 100%;
 	height: 24px;
@@ -74,20 +75,40 @@ iframe, video {
 	outline: none;
 }
 
-	.collapsible:hover {
+	.links-btn:hover {
 		background-color: #5F6F89;
 	}
 
-.content {
-	padding: 2px;
-	max-height: 0;
-	overflow: hidden;
-	transition: max-height 0.2s ease-out;
+.links {
+	font-size: 14px;
+	display: grid;
+	grid-template-columns: 25% 50% 25%;
+	gap: 0;
 }
 
-	.content p {
-		text-align: left;
+	.links .item {
+		padding: 5px;
+		margin: 0 2px;
 	}
+
+		.links .item:not(:last-child) {
+			border-right: 1px solid white;
+		}
+
+	.links p {
+		margin-top: 0px;
+	}
+
+@media (max-width: 800px) {
+	.links {
+		grid-template-columns: 1fr;
+	}
+
+		.links .item {
+			margin: 5px 0;
+			border-right: none !important;
+		}
+}
 
 footer {
 	position: sticky;
