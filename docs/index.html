@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="hr-HR" id="top">
+<html lang="hr-HR">
 <head>
 	<meta name="viewport" content="width=device-width, initial-scale=1" />
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
@@ -142,7 +142,46 @@
 			margin-top: 8px;
 		}
 	</style>
-		<script async src="https://www.googletagmanager.com/gtag/js?id=G-233EMZJM16"></script>
+	<script>
+		function scrollToTop() {
+			window.scrollTo({
+				top: 0,
+				behavior: 'smooth'
+			});
+		}
+
+		function scrollToElement(id) {
+			const element = document.getElementById(id);
+			if (element) {
+				element.scrollIntoView({
+					behavior: 'smooth'
+				});
+			}
+		}
+
+		function includeHTML() {
+			const elements = document.querySelectorAll('[data-include-html]');
+			elements.forEach(element => {
+				const file = element.getAttribute('data-include-html');
+				if (file) {
+					fetch(file)
+						.then(response => {
+							if (!response.ok) throw new Error('Network response was not ok');
+							return response.text();
+						})
+						.then(data => {
+							element.innerHTML = data;
+							element.removeAttribute('data-include-html');
+							includeHTML(); // Recursive call to handle nested includes
+						})
+						.catch(error => console.error('Error fetching HTML fragment:', error));
+				}
+			});
+		}
+
+		//document.addEventListener('DOMContentLoaded', includeHTML);
+	</script>
+	<script async src="https://www.googletagmanager.com/gtag/js?id=G-233EMZJM16"></script>
 	<script>
 		window.dataLayer = window.dataLayer || [];
 		function gtag() { dataLayer.push(arguments); }
@@ -155,7 +194,7 @@
 		<h2 align="center">Meteo radari</h2>
 		<hr>
 		<table border="0" align="center" cellpadding="0" cellspacing="0">
-			<tr><td align="center"><a href="#links" style="text-decoration: none"><div class="links-scroll">Linkovi</div></a></td></tr>
+			<tr><td align="center"><button type="button" class="links-scroll" onclick="scrollToElement('links')">Linkovi</button></td></tr>
 			<tr class="sp"></tr>
 
 			<tr><td align="center"><a href="https://www.neverin.hr/radar/" target="_blank" rel="nofollow">Neverin | Radar | Hrvatska</a></td></tr>
@@ -341,7 +380,7 @@
 	<footer>
 		<a href="https://jurakovic.github.io/">Index</a>
 		·
-		<a href="#top">Povratak na vrh</a>
+		<a onclick="scrollToTop()" style="cursor: pointer"><u>Povratak na vrh</u></a>
 		·
 		<a href="https://github.com/jurakovic/meteo">GitHub</a>
 	</footer>
