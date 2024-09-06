@@ -48,6 +48,7 @@ function ProcessHtml() {
 	$html = $html.Replace('<div class="links" data-include-html="/_components/links.html"></div>', "<div class=""links"">$links`t`t`t`t`t</div>")
 	$html = $html.Replace('href="/_assets/img', 'href="/meteo/img')
 	$html = $html.Replace('href="/extras/index.html', 'href="/meteo/extras/')
+	$html = $html.Replace('href="/"', 'href="/meteo/"')
 	$html = $html.Replace('<link rel="stylesheet" href="/_assets/css/styles.css">', "<style>$css`t</style>")
 	$html = $html.Replace("<script src=""/_assets/js/main.js"" defer></script>", "<script>$js`t</script>")
 	$html = $html.Replace("<script src=""/_assets/js/include.js"" defer></script>`r`n`t", "") # removing this block
