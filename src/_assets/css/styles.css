@@ -1,8 +1,4 @@
 
-html {
-	scroll-behavior: smooth;
-}
-
 body {
 	background-color: #212f45;
 	font-family: monospace;
@@ -66,7 +62,7 @@ iframe, video {
 	height: 10px;
 }
 
-.links-scroll {
+.links-btn {
 	margin-top: 10px;
 	font-family: inherit;
 	color: white;
@@ -79,7 +75,7 @@ iframe, video {
 	outline: none;
 }
 
-	.links-scroll:hover {
+	.links-btn:hover {
 		background-color: #5F6F89;
 	}
 
