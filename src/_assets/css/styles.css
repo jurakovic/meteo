@@ -93,12 +93,6 @@ iframe, video {
 			background-color: #5F6F89;
 		}
 
-@media (max-width: 800px) {
-	.buttons {
-		grid-template-columns: 1fr;
-	}
-}
-
 .links {
 	font-size: 14px;
 	display: grid;
