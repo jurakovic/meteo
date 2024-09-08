@@ -71,8 +71,8 @@ iframe, video {
 
 .buttons {
 	display: grid;
-	grid-template-columns: 50% 50%;
-	gap: 5px;
+	grid-template-columns: 49.5% 49.5%;
+	gap: 1%;
 }
 
 	.buttons .btn {
