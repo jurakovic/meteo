@@ -73,11 +73,13 @@ iframe, video {
 	display: grid;
 	grid-template-columns: 49.5% 49.5%;
 	gap: 1%;
+	font-size: 13px;
 }
 
 	.buttons .btn {
 		margin-top: 10px;
 		margin-bottom: 5px;
+		font-size: 13px;
 		font-family: inherit;
 		color: white;
 		background-color: #485871;
