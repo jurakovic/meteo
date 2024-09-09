@@ -99,12 +99,14 @@ iframe, video {
 .slideshow-container {
 	position: relative;
 	display: flex;
+	justify-content: center;
 }
 
 .mySlides1,
 .mySlides2,
 .mySlides3,
-.mySlides4 {
+.mySlides4,
+.mySlides5 {
 	display: none;
 }
 
