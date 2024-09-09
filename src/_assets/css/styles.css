@@ -106,7 +106,8 @@ iframe, video {
 .mySlides2,
 .mySlides3,
 .mySlides4,
-.mySlides5 {
+.mySlides5,
+.mySlides6 {
 	display: none;
 }
 
@@ -154,12 +155,12 @@ iframe, video {
 
 .fade {
 	animation-name: fade;
-	animation-duration: 0.5s;
+	animation-duration: 1s;
 }
 
 @keyframes fade {
 	from {
-		opacity: .4
+		opacity: .6
 	}
 
 	to {
