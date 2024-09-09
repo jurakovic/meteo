@@ -113,20 +113,18 @@ iframe, video {
 .prev, .next {
 	cursor: pointer;
 	position: absolute;
-	top: 50%;
-	width: auto;
-	margin-top: -22px;
+	top: 40%;
 	padding: 16px;
-	color: white;
+	opacity: 0.7;
 	font-weight: bold;
-	font-size: 18px;
+	font-size: 36px;
 	transition: 0.6s ease;
-	border-radius: 0 3px 3px 0;
 	user-select: none;
 }
+
 .prev {
 	left: 0;
-	border-radius: 3px 0 0 3px;
+	border-radius: 0 3px 3px 0;
 }
 
 /* Position the "next button" to the right */
@@ -152,6 +150,14 @@ iframe, video {
 
 	to {
 		opacity: 1
+	}
+}
+
+@media (max-width: 800px) {
+	.prev, .next {
+		top: 40%;
+		padding: 12px;
+		font-size: 20px;
 	}
 }
 
