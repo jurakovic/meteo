@@ -117,12 +117,15 @@
 		.slideshow-container {
 			position: relative;
 			display: flex;
+			justify-content: center;
 		}
 
 		.mySlides1,
 		.mySlides2,
 		.mySlides3,
-		.mySlides4 {
+		.mySlides4,
+		.mySlides5,
+		.mySlides6 {
 			display: none;
 		}
 
@@ -170,12 +173,12 @@
 
 		.fade {
 			animation-name: fade;
-			animation-duration: 0.5s;
+			animation-duration: 1s;
 		}
 
 		@keyframes fade {
 			from {
-				opacity: .4
+				opacity: .6
 			}
 
 			to {
@@ -248,8 +251,8 @@
 			}
 		}
 
-		let slideIndex = [1, 1, 1, 1];
-		let slideId = ["mySlides1", "mySlides2", "mySlides3", "mySlides4"]
+		let slideIndex = [2, 2, 2, 2, 1, 1];
+		let slideId = ["mySlides1", "mySlides2", "mySlides3", "mySlides4", "mySlides5", "mySlides6"]
 
 		function plusSlides(n, no) {
 			showSlides(slideIndex[no] += n, no);
@@ -265,6 +268,15 @@
 			}
 			x[slideIndex[no] - 1].style.display = "block";
 		}
+
+		window.addEventListener('load', function() {
+			const lazyImages = document.querySelectorAll('img.lazy');
+
+			lazyImages.forEach(img => {
+				img.src = img.getAttribute('data-src');
+				img.classList.remove('lazy');
+			});
+		});
 	</script>
 	<script async src="https://www.googletagmanager.com/gtag/js?id=G-233EMZJM16"></script>
 	<script>
