@@ -113,6 +113,7 @@ iframe, video {
 	bottom: 0;
 	width: 15%;
 	padding: 16px;
+	color: transparent;
 	opacity: 0.7;
 	font-weight: bold;
 	font-size: 36px;
@@ -128,6 +129,7 @@ iframe, video {
 
 	.prev:hover {
 		background-image: linear-gradient(to left, transparent, rgba(0,0,0,0.6));
+		color: white;
 	}
 
 .next {
@@ -138,11 +140,12 @@ iframe, video {
 
 	.next:hover {
 		background-image: linear-gradient(to right, transparent, rgba(0,0,0,0.6));
+		color: white;
 	}
 
 .fade {
 	animation-name: fade;
-	animation-duration: 1.5s;
+	animation-duration: 0.5s;
 }
 
 @keyframes fade {
