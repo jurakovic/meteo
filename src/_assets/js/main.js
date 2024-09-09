@@ -32,3 +32,12 @@ function showSlides(n, no) {
 	}
 	x[slideIndex[no] - 1].style.display = "block";
 }
+
+window.addEventListener('load', function() {
+	const lazyImages = document.querySelectorAll('img.lazy');
+
+	lazyImages.forEach(img => {
+		img.src = img.getAttribute('data-src');
+		img.classList.remove('lazy');
+	});
+});
