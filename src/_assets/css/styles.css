@@ -101,8 +101,12 @@ iframe, video {
 	display: flex;
 }
 
-.mySlides {
+.mySlides1, .mySlides2 {
 	display: none;
+}
+
+.init-slide {
+	display: block;
 }
 
 .prev, .next {
