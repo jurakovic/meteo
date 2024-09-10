@@ -97,26 +97,19 @@ iframe, video {
 			background-color: #5F6F89;
 		}
 
-.slideshow-container {
+.slideshow {
 	position: relative;
 	display: flex;
 	justify-content: center;
 }
 
-.mySlides1,
-.mySlides2,
-.mySlides3,
-.mySlides4,
-.mySlides5,
-.mySlides6,
-.mySlides7,
-.mySlides8 {
+.slide {
 	display: none;
 }
 
-.init-slide {
-	display: block;
-}
+	.slide.active {
+		display: block;
+	}
 
 .prev, .next {
 	cursor: pointer;

@@ -15,22 +15,18 @@ function scrollToElement(id) {
 	}
 }
 
-let slideIndex = [2, 2, 2, 2, 1, 1, 1, 1];
-let slideId = ["mySlides1", "mySlides2", "mySlides3", "mySlides4", "mySlides5", "mySlides6", "mySlides7", "mySlides8"]
+let slidePage = [2, 2, 2, 2, 1, 1, 1, 1];
 
-function plusSlides(n, no) {
-	showSlides(slideIndex[no] += n, no);
+function plusSlides(n, slideshowId) {
+	showSlides(slidePage[slideshowId - 1] += n, slideshowId);
 }
 
-function showSlides(n, no) {
-	let i;
-	let x = document.getElementsByClassName(slideId[no]);
-	if (n > x.length) { slideIndex[no] = 1 }
-	if (n < 1) { slideIndex[no] = x.length }
-	for (i = 0; i < x.length; i++) {
-		x[i].style.display = "none";
-	}
-	x[slideIndex[no] - 1].style.display = "block";
+function showSlides(n, slideshowId) {
+	const slides = document.querySelectorAll(`.slideshow[data-slideshow-id="${slideshowId}"] .slide`);
+	if (n > slides.length) { slidePage[slideshowId - 1] = 1; }
+	if (n < 1) { slidePage[slideshowId - 1] = slides.length; }
+	slides.forEach(slide => slide.classList.remove('active'));
+	slides[slidePage[slideshowId - 1] - 1].classList.add('active');
 }
 
 window.addEventListener('load', function() {
