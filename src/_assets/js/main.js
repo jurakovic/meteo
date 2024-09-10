@@ -17,11 +17,11 @@ function scrollToElement(id) {
 
 let slidePage = [2, 2, 2, 2, 1, 1, 1, 1];
 
-function plusSlides(n, slideshowId) {
-	showSlides(slidePage[slideshowId - 1] += n, slideshowId);
+function plusSlides(slideshowId, n) {
+	showSlides(slideshowId, slidePage[slideshowId - 1] += n);
 }
 
-function showSlides(n, slideshowId) {
+function showSlides(slideshowId, n) {
 	const slides = document.querySelectorAll(`.slideshow[data-slideshow-id="${slideshowId}"] .slide`);
 	if (n > slides.length) { slidePage[slideshowId - 1] = 1; }
 	if (n < 1) { slidePage[slideshowId - 1] = slides.length; }
