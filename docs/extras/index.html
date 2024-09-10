@@ -43,6 +43,7 @@
 			max-width: 100%;
 			height: auto;
 			display: block;
+			border: 0;
 		}
 
 		.if1 {
@@ -114,24 +115,19 @@
 					background-color: #5F6F89;
 				}
 
-		.slideshow-container {
+		.slideshow {
 			position: relative;
 			display: flex;
 			justify-content: center;
 		}
 
-		.mySlides1,
-		.mySlides2,
-		.mySlides3,
-		.mySlides4,
-		.mySlides5,
-		.mySlides6 {
+		.slide {
 			display: none;
 		}
 
-		.init-slide {
-			display: block;
-		}
+			.slide.active {
+				display: block;
+			}
 
 		.prev, .next {
 			cursor: pointer;
@@ -251,22 +247,18 @@
 			}
 		}
 
-		let slideIndex = [2, 2, 2, 2, 1, 1];
-		let slideId = ["mySlides1", "mySlides2", "mySlides3", "mySlides4", "mySlides5", "mySlides6"]
+		let slidePage = [2, 2, 2, 2, 1, 1, 1, 1];
 
-		function plusSlides(n, no) {
-			showSlides(slideIndex[no] += n, no);
+		function plusSlides(n, slideshowId) {
+			showSlides(slidePage[slideshowId - 1] += n, slideshowId);
 		}
 
-		function showSlides(n, no) {
-			let i;
-			let x = document.getElementsByClassName(slideId[no]);
-			if (n > x.length) { slideIndex[no] = 1 }
-			if (n < 1) { slideIndex[no] = x.length }
-			for (i = 0; i < x.length; i++) {
-				x[i].style.display = "none";
-			}
-			x[slideIndex[no] - 1].style.display = "block";
+		function showSlides(n, slideshowId) {
+			const slides = document.querySelectorAll(`.slideshow[data-slideshow-id="${slideshowId}"] .slide`);
+			if (n > slides.length) { slidePage[slideshowId - 1] = 1; }
+			if (n < 1) { slidePage[slideshowId - 1] = slides.length; }
+			slides.forEach(slide => slide.classList.remove('active'));
+			slides[slidePage[slideshowId - 1] - 1].classList.add('active');
 		}
 
 		window.addEventListener('load', function() {
@@ -301,60 +293,108 @@
 			</tr>
 			<tr class="sp"></tr>
 
-			<tr><td align="center"><a href="https://www.meteociel.fr/observations-meteo/satellite.php?mode=animation-infrarouge-colorise" target="_blank" rel="nofollow">Meteociel.fr | Radar</a></td></tr>
-			<tr><td align="center"><img src="https://neige.meteociel.fr/satellite/anim_ir_color.gif" alt="Meteociel.fr Radar" border="0" /></td></tr>
+			<tr>
+				<td align="center">
+					<a href="https://www.idokep.hu/muhold" target="_blank" rel="nofollow">Időkép | Satelit | Europa</a>
+					<div class="vid1"><video muted="" autoplay="" loop="" controls=""><source type="video/mp4" src="https://www.idokep.hu/radar/sat-eu.mp4"></video></div>
+				</td>
+			</tr>
 			<tr class="sp"></tr>
 
-			<tr><td align="center"><a href="https://www.idokep.hu/muhold" target="_blank" rel="nofollow">Időkép | Satelit | Europa</a></td></tr>
-			<tr><td align="center"><div class="vid1"><video muted="" autoplay="" loop="" controls=""><source type="video/mp4" src="https://www.idokep.hu/radar/sat-eu.mp4"></video></div></td></tr>
+			<tr>
+				<td align="center">
+					<a href="https://www.idokep.eu/ceu/radar" target="_blank" rel="nofollow">Időkép | Radar | Europa</a>
+					<img src="https://www.idokep.eu/terkep/eu/radar.gif" alt="Idokep radar Europa" />
+				</td>
+			</tr>
 			<tr class="sp"></tr>
 
-			<tr><td align="center"><a href="https://www.idokep.eu/ceu/radar" target="_blank" rel="nofollow">Időkép | Radar | Europa</a></td></tr>
-			<tr><td align="center"><img src="https://www.idokep.eu/terkep/eu/radar.gif" alt="Idokep radar Europa" border="0" /></td></tr>
+			<tr>
+				<td align="center">
+					<a href="https://www.idokep.eu/adria" target="_blank" rel="nofollow">Időkép | Radar | Hrvatska</a>
+					<div class="vid2"><video muted="" autoplay="" loop="" controls=""><source type="video/mp4" src="https://www.idokep.hu/idokepradar/public_radar_adria.mp4"></video></div>
+				</td>
+			</tr>
 			<tr class="sp"></tr>
 
-			<tr><td align="center"><a href="https://www.idokep.eu/adria" target="_blank" rel="nofollow">Időkép | Radar | Hrvatska</a></td></tr>
-			<tr><td align="center"><div class="vid2"><video muted="" autoplay="" loop="" controls=""><source type="video/mp4" src="https://www.idokep.hu/idokepradar/public_radar_adria.mp4"></video></div></td></tr>
+			<tr>
+				<td align="center">
+					<a href="https://www.blitzortung.org/en/historical_maps.php?map=10" target="_blank" rel="nofollow">Blitzortung.org | Munje</a>
+					<img src="https://www.blitzortung.org/Images/image_b_eu.png" alt="Blitzortung.org Munje" />
+				</td>
+			</tr>
 			<tr class="sp"></tr>
 
-			<tr><td align="center"><a href="https://www.blitzortung.org/en/historical_maps.php?map=10" target="_blank" rel="nofollow">Blitzortung.org | Munje</a></td></tr>
-			<tr><td align="center"><img src="https://www.blitzortung.org/Images/image_b_eu.png" alt="Blitzortung.org Munje" border="0" /></td></tr>
+			<tr>
+				<td align="center">
+					<a href="https://www.wetterzentrale.de/en/topkarten.php?map=17&model=ico&var=5&run=6&time=0&lid=OP&h=1&mv=0&tr=1" target="_blank" rel="nofollow">Wetterzentrale | Temperatura </a>
+					<img src="https://www.wetterzentrale.de/en/create_gif.php?model=ICO&member=OP&var=5&map=IT&run=06&speed=250&times=0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47" alt="Wetterzentrale Temperatura" />
+				</td>
+			</tr>
 			<tr class="sp"></tr>
 
-			<tr><td align="center"><a href="https://www.wetterzentrale.de/en/topkarten.php?map=17&model=ico&var=5&run=6&time=0&lid=OP&h=1&mv=0&tr=1" target="_blank" rel="nofollow">Wetterzentrale | Temperatura </a></td></tr>
-			<tr><td align="center"><img src="https://www.wetterzentrale.de/en/create_gif.php?model=ICO&member=OP&var=5&map=IT&run=06&speed=250&times=0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47" alt="Wetterzentrale Temperatura" border="0" /></td></tr>
+			<tr>
+				<td align="center">
+					<a href="https://meteo.hr/prognoze.php?section=prognoze_model&param=web_fronte_sutra12" target="_blank" rel="nofollow">DHMZ | Sinoptička karta</a>
+					<img src="https://prognoza.hr/web_fronte_sutra12.jpg" alt="DHMZ Sinoptička karta" />
+				</td>
+			</tr>
 			<tr class="sp"></tr>
 
-			<tr><td align="center"><a href="https://meteo.hr/prognoze.php?section=prognoze_model&param=web_fronte_sutra12" target="_blank" rel="nofollow">DHMZ | Sinoptička karta</a></td></tr>
-			<tr><td align="center"><img src="https://prognoza.hr/web_fronte_sutra12.jpg" alt="DHMZ Sinoptička karta" border="0" /></td></tr>
+			<tr>
+				<td align="center">
+					<a href="https://www.chmi.cz/aktualni-situace/aktualni-stav-pocasi/evropa/synopticka-situace" target="_blank" rel="nofollow">ČHMÚ | Sinoptička karta</a>
+					<img src="https://www.chmi.cz/files/portal/docs/meteo/om/evropa/analyza.gif" alt="ČHMÚ Sinoptička karta" />
+				</td>
+			</tr>
 			<tr class="sp"></tr>
 
-			<tr><td align="center"><a href="https://www.chmi.cz/aktualni-situace/aktualni-stav-pocasi/evropa/synopticka-situace" target="_blank" rel="nofollow">ČHMÚ | Sinoptička karta</a></td></tr>
-			<tr><td align="center"><img src="https://www.chmi.cz/files/portal/docs/meteo/om/evropa/analyza.gif" alt="ČHMÚ Sinoptička karta" border="0" /></td></tr>
+			<tr>
+				<td align="center">
+					<a href="https://meteo.hr/podaci.php?section=podaci_mjerenja&param=radari&el=puntijarka&acto=anim" target="_blank" rel="nofollow">DHMZ | MRC Puntijarka</a>
+					<img src="https://vrijeme.hr/anim_puntijarka.gif" alt="DHMZ Radar Puntijarka" />
+				</td>
+			</tr>
 			<tr class="sp"></tr>
 
-			<tr><td align="center"><a href="https://meteo.hr/podaci.php?section=podaci_mjerenja&param=radari&el=puntijarka&acto=anim" target="_blank" rel="nofollow">DHMZ | MRC Puntijarka</a></td></tr>
-			<tr><td align="center"><img src="https://vrijeme.hr/anim_puntijarka.gif" alt="DHMZ Radar Puntijarka" border="0" /></td></tr>
+			<tr>
+				<td align="center">
+					<a href="https://meteo.hr/podaci.php?section=podaci_mjerenja&param=radari&el=bilogora&acto=anim" target="_blank" rel="nofollow">DHMZ | MRC Bilogora</a>
+					<img src="https://vrijeme.hr/anim_bilogora.gif" alt="DHMZ Radar Bilogora" />
+				</td>
+			</tr>
 			<tr class="sp"></tr>
 
-			<tr><td align="center"><a href="https://meteo.hr/podaci.php?section=podaci_mjerenja&param=radari&el=bilogora&acto=anim" target="_blank" rel="nofollow">DHMZ | MRC Bilogora</a></td></tr>
-			<tr><td align="center"><img src="https://vrijeme.hr/anim_bilogora.gif" alt="DHMZ Radar Bilogora" border="0" /></td></tr>
+			<tr>
+				<td align="center">
+					<a href="https://meteo.hr/podaci.php?section=podaci_mjerenja&param=radari&el=gradiste&acto=anim" target="_blank" rel="nofollow">DHMZ | MRC Gradište</a>
+					<img src="https://vrijeme.hr/anim_gradiste.gif" alt="DHMZ Radar Gradište" />
+				</td>
+			</tr>
 			<tr class="sp"></tr>
 
-			<tr><td align="center"><a href="https://meteo.hr/podaci.php?section=podaci_mjerenja&param=radari&el=gradiste&acto=anim" target="_blank" rel="nofollow">DHMZ | MRC Gradište</a></td></tr>
-			<tr><td align="center"><img src="https://vrijeme.hr/anim_gradiste.gif" alt="DHMZ Radar Gradište" border="0" /></td></tr>
+			<tr>
+				<td align="center">
+					<a href="https://meteo.hr/podaci.php?section=podaci_mjerenja&param=radari&el=goli&acto=anim" target="_blank" rel="nofollow">DHMZ | MRC Goli</a>
+					<img src="https://vrijeme.hr/anim_goli.gif" alt="DHMZ Radar Goli" />
+				</td>
+			</tr>
 			<tr class="sp"></tr>
 
-			<tr><td align="center"><a href="https://meteo.hr/podaci.php?section=podaci_mjerenja&param=radari&el=goli&acto=anim" target="_blank" rel="nofollow">DHMZ | MRC Goli</a></td></tr>
-			<tr><td align="center"><img src="https://vrijeme.hr/anim_goli.gif" alt="DHMZ Radar Goli" border="0" /></td></tr>
+			<tr>
+				<td align="center">
+					<a href="https://meteo.hr/podaci.php?section=podaci_mjerenja&param=radari&el=debeljak&acto=anim" target="_blank" rel="nofollow">DHMZ | MRC Debeljak</a>
+					<img src="https://vrijeme.hr/anim_debeljak.gif" alt="DHMZ Radar Debeljak" />
+				</td>
+			</tr>
 			<tr class="sp"></tr>
 
-			<tr><td align="center"><a href="https://meteo.hr/podaci.php?section=podaci_mjerenja&param=radari&el=debeljak&acto=anim" target="_blank" rel="nofollow">DHMZ | MRC Debeljak</a></td></tr>
-			<tr><td align="center"><img src="https://vrijeme.hr/anim_debeljak.gif" alt="DHMZ Radar Debeljak" border="0" /></td></tr>
-			<tr class="sp"></tr>
-
-			<tr><td align="center"><a href="https://meteo.hr/podaci.php?section=podaci_mjerenja&param=radari&el=uljenje&acto=anim" target="_blank" rel="nofollow">DHMZ | MRC Uljenje</a></td></tr>
-			<tr><td align="center"><img src="https://vrijeme.hr/anim_uljenje.gif" alt="DHMZ Radar Uljenje" border="0" /></td></tr>
+			<tr>
+				<td align="center">
+					<a href="https://meteo.hr/podaci.php?section=podaci_mjerenja&param=radari&el=uljenje&acto=anim" target="_blank" rel="nofollow">DHMZ | MRC Uljenje</a>
+					<img src="https://vrijeme.hr/anim_uljenje.gif" alt="DHMZ Radar Uljenje" />
+				</td>
+			</tr>
 			<tr class="sp"></tr>
 
 			<tr><td align="center"><hr></td></tr>
