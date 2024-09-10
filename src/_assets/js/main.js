@@ -15,8 +15,8 @@ function scrollToElement(id) {
 	}
 }
 
-let slideIndex = [2, 2, 2, 2, 1, 1, 1];
-let slideId = ["mySlides1", "mySlides2", "mySlides3", "mySlides4", "mySlides5", "mySlides6", "mySlides7"]
+let slideIndex = [2, 2, 2, 2, 1, 1, 1, 1];
+let slideId = ["mySlides1", "mySlides2", "mySlides3", "mySlides4", "mySlides5", "mySlides6", "mySlides7", "mySlides8"]
 
 function plusSlides(n, no) {
 	showSlides(slideIndex[no] += n, no);
