@@ -130,7 +130,6 @@ iframe, video {
 .prev {
 	left: 0;
 	text-align: left;
-	border-radius: 0 3px 3px 0;
 }
 
 	.prev:hover {
@@ -141,7 +140,6 @@ iframe, video {
 .next {
 	right: 0;
 	text-align: right;
-	border-radius: 3px 0 0 3px;
 }
 
 	.next:hover {
