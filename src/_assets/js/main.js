@@ -14,3 +14,26 @@ function scrollToElement(id) {
 		});
 	}
 }
+
+let slidePage = [2, 2, 2, 2, 1, 1, 1, 1];
+
+function plusSlides(slideshowId, n) {
+	showSlides(slideshowId, slidePage[slideshowId - 1] += n);
+}
+
+function showSlides(slideshowId, n) {
+	const slides = document.querySelectorAll(`.slideshow[data-slideshow-id="${slideshowId}"] .slide`);
+	if (n > slides.length) { slidePage[slideshowId - 1] = 1; }
+	if (n < 1) { slidePage[slideshowId - 1] = slides.length; }
+	slides.forEach(slide => slide.classList.remove('active'));
+	slides[slidePage[slideshowId - 1] - 1].classList.add('active');
+}
+
+window.addEventListener('load', function() {
+	const lazyImages = document.querySelectorAll('img.lazy');
+
+	lazyImages.forEach(img => {
+		img.src = img.getAttribute('data-src');
+		img.classList.remove('lazy');
+	});
+});

@@ -35,13 +35,15 @@
 
 		table {
 			width: 100%;
-			max-width: 876px;
+			max-width: 875px;
 			height: auto;
 		}
 
 		img {
 			max-width: 100%;
 			height: auto;
+			display: block;
+			border: 0;
 		}
 
 		.if1 {
@@ -113,6 +115,78 @@
 					background-color: #5F6F89;
 				}
 
+		.slideshow {
+			position: relative;
+			display: flex;
+			justify-content: center;
+		}
+
+		.slide {
+			display: none;
+		}
+
+			.slide.active {
+				display: block;
+			}
+
+		.prev, .next {
+			cursor: pointer;
+			position: absolute;
+			align-content: center;
+			top: 0;
+			bottom: 0;
+			width: 15%;
+			padding: 16px;
+			color: transparent;
+			opacity: 0.7;
+			font-weight: bold;
+			font-size: 36px;
+			transition: 0.6s ease;
+			user-select: none;
+		}
+
+		.prev {
+			left: 0;
+			text-align: left;
+		}
+
+			.prev:hover {
+				background-image: linear-gradient(to left, transparent, rgba(0,0,0,0.6));
+				color: white;
+			}
+
+		.next {
+			right: 0;
+			text-align: right;
+		}
+
+			.next:hover {
+				background-image: linear-gradient(to right, transparent, rgba(0,0,0,0.6));
+				color: white;
+			}
+
+		.fade {
+			animation-name: fade;
+			animation-duration: 1s;
+		}
+
+		@keyframes fade {
+			from {
+				opacity: .6
+			}
+
+			to {
+				opacity: 1
+			}
+		}
+
+		@media (max-width: 800px) {
+			.prev, .next {
+				padding: 12px;
+				font-size: 20px;
+			}
+		}
+
 		.links {
 			font-size: 14px;
 			display: grid;
@@ -170,6 +244,29 @@
 				});
 			}
 		}
+
+		let slidePage = [2, 2, 2, 2, 1, 1, 1, 1];
+
+		function plusSlides(slideshowId, n) {
+			showSlides(slideshowId, slidePage[slideshowId - 1] += n);
+		}
+
+		function showSlides(slideshowId, n) {
+			const slides = document.querySelectorAll(`.slideshow[data-slideshow-id="${slideshowId}"] .slide`);
+			if (n > slides.length) { slidePage[slideshowId - 1] = 1; }
+			if (n < 1) { slidePage[slideshowId - 1] = slides.length; }
+			slides.forEach(slide => slide.classList.remove('active'));
+			slides[slidePage[slideshowId - 1] - 1].classList.add('active');
+		}
+
+		window.addEventListener('load', function() {
+			const lazyImages = document.querySelectorAll('img.lazy');
+
+			lazyImages.forEach(img => {
+				img.src = img.getAttribute('data-src');
+				img.classList.remove('lazy');
+			});
+		});
 	</script>
 	<script async src="https://www.googletagmanager.com/gtag/js?id=G-233EMZJM16"></script>
 	<script>
@@ -194,52 +291,204 @@
 			</tr>
 			<tr class="sp"></tr>
 
-			<tr><td align="center"><a href="https://www.neverin.hr/radar/" target="_blank" rel="nofollow">Neverin | Radar | Hrvatska</a></td></tr>
-			<tr><td align="center"><img src="https://maps.neverin.hr/radar/anim_hr.webp" alt="Neverin Radar Hrvatska" border="0" /></td></tr>
+			<tr>
+				<td align="center">
+					<a href="https://www.neverin.hr/radar/" target="_blank" rel="nofollow">Neverin | Radar | Hrvatska</a>
+					<div class="slideshow" data-slideshow-id="1">
+						<div class="slide fade">
+							<img data-src="https://maps.neverin.hr/radar/latest_hr.webp" alt="Neverin Radar Hrvatska" class="lazy" />
+						</div>
+						<div class="slide fade active">
+							<img src="https://maps.neverin.hr/radar/anim_hr.webp" alt="Neverin Radar Hrvatska" />
+						</div>
+						<div class="slide fade">
+							<img data-src="https://maps.neverin.hr/radar/anim_hr_6h.webp" alt="Neverin Radar Hrvatska" class="lazy" />
+						</div>
+						<a class="prev" onclick="plusSlides(1, -1)">&#10094;</a>
+						<a class="next" onclick="plusSlides(1, 1)">&#10095;</a>
+					</div>
+				</td>
+			</tr>
 			<tr class="sp"></tr>
 
-			<tr><td align="center"><a href="https://www.neverin.hr/satelit/" target="_blank" rel="nofollow">Neverin | Satelit | Hrvatska</a></td></tr>
-			<tr><td align="center"><img src="https://maps.neverin.hr/sat/anim_vis_hr.webp" alt="Neverin Satelit Hrvatska" border="0" /></td></tr>
+			<tr>
+				<td align="center">
+					<a href="https://www.neverin.hr/satelit/" target="_blank" rel="nofollow">Neverin | Satelit | Hrvatska</a>
+					<div class="slideshow" data-slideshow-id="2">
+						<div class="slide fade">
+							<img data-src="https://maps.neverin.hr/sat/latest_vis_hr.webp" alt="Neverin Satelit Hrvatska" class="lazy" />
+						</div>
+						<div class="slide fade active">
+							<img src="https://maps.neverin.hr/sat/anim_vis_hr.webp" alt="Neverin Satelit Hrvatska" />
+						</div>
+						<div class="slide fade">
+							<img data-src="https://maps.neverin.hr/sat/anim_vis_hr_6h.webp" alt="Neverin Satelit Hrvatska" class="lazy" />
+						</div>
+						<a class="prev" onclick="plusSlides(2, -1)">&#10094;</a>
+						<a class="next" onclick="plusSlides(2, 1)">&#10095;</a>
+					</div>
+				</td>
+			</tr>
 			<tr class="sp"></tr>
 
-			<tr><td align="center"><a href="https://www.neverin.hr/radar/" target="_blank" rel="nofollow">Neverin | Radar | Europa</a></td></tr>
-			<tr><td align="center"><img src="https://maps.neverin.hr/radar/anim_eu.webp" alt="Neverin Radar Europa" border="0" /></td></tr>
+			<tr>
+				<td align="center">
+					<a href="https://www.neverin.hr/radar/" target="_blank" rel="nofollow">Neverin | Radar | Europa</a>
+					<div class="slideshow" data-slideshow-id="3">
+						<div class="slide fade">
+							<img data-src="https://maps.neverin.hr/radar/latest_eu.webp" alt="Neverin Radar Europa" class="lazy" />
+						</div>
+						<div class="slide fade active">
+							<img src="https://maps.neverin.hr/radar/anim_eu.webp" alt="Neverin Radar Europa" />
+						</div>
+						<div class="slide fade">
+							<img data-src="https://maps.neverin.hr/radar/anim_eu_6h.webp" alt="Neverin Radar Europa" class="lazy" />
+						</div>
+						<a class="prev" onclick="plusSlides(3, -1)">&#10094;</a>
+						<a class="next" onclick="plusSlides(3, 1)">&#10095;</a>
+					</div>
+				</td>
+			</tr>
 			<tr class="sp"></tr>
 
-			<tr><td align="center"><a href="https://www.neverin.hr/satelit/" target="_blank" rel="nofollow">Neverin | Satelit | Europa</a></td></tr>
-			<tr><td align="center"><img src="https://maps.neverin.hr/sat/anim_vis_eu.webp" alt="Neverin Satelit Europa" border="0" /></td></tr>
+			<tr>
+				<td align="center">
+					<a href="https://www.neverin.hr/satelit/" target="_blank" rel="nofollow">Neverin | Satelit | Europa</a>
+					<div class="slideshow" data-slideshow-id="4">
+						<div class="slide fade">
+							<img data-src="https://maps.neverin.hr/sat/latest_vis_eu.webp" alt="Neverin Satelit Europa" class="lazy" />
+						</div>
+						<div class="slide fade active">
+							<img src="https://maps.neverin.hr/sat/anim_vis_eu.webp" alt="Neverin Satelit Europa" />
+						</div>
+						<div class="slide fade">
+							<img data-src="https://maps.neverin.hr/sat/anim_vis_eu_6h.webp" alt="Neverin Satelit Europa" class="lazy" />
+						</div>
+						<a class="prev" onclick="plusSlides(4, -1)">&#10094;</a>
+						<a class="next" onclick="plusSlides(4, 1)">&#10095;</a>
+					</div>
+				</td>
+			</tr>
 			<tr class="sp"></tr>
 
-			<tr><td align="center"><a href="https://meteo.arso.gov.si/met/sl/weather/observ/radar/" target="_blank" rel="nofollow">meteo.si</a></td></tr>
-			<tr><td align="center"><img src="https://meteo.arso.gov.si/uploads/probase/www/observ/radar/si0-rm-anim.gif?nocache" alt="ARSO Radar" border="0" /></td></tr>
+			<tr>
+				<td align="center">
+					<a href="https://meteo.arso.gov.si/met/sl/weather/observ/radar/" target="_blank" rel="nofollow">meteo.si</a>
+					<div class="slideshow" data-slideshow-id="6" style="max-width: 821px;">
+						<div class="slide fade active">
+							<img src="https://meteo.arso.gov.si/uploads/probase/www/observ/radar/si0-rm-anim.gif?nocache" alt="ARSO Radar" />
+						</div>
+						<div class="slide fade">
+							<img data-src="https://meteo.arso.gov.si/uploads/probase/www/observ/radar/si0-rm.gif?nocache" alt="ARSO Radar" class="lazy" />
+						</div>
+						<a class="prev" onclick="plusSlides(6, -1)">&#10094;</a>
+						<a class="next" onclick="plusSlides(6, 1)">&#10095;</a>
+					</div>
+				</td>
+			</tr>
 			<tr class="sp"></tr>
 
-			<tr><td align="center"><a href="https://www.windy.com/-Radar-lightning-radar?radar,45.799,15.937,8" target="_blank" rel="nofollow">Windy</a></td></tr>
-			<tr><td align="center"><div class="if1"><iframe loading="lazy" src="https://embed.windy.com/embed2.html?lat=45.798&lon=15.936&zoom=8&level=surface&overlay=radar&menu=&message=true&marker=&calendar=&pressure=&type=map&location=coordinates&detail=&detailLat=45.798&detailLon=15.936&metricWind=m%2Fs&metricTemp=%C2%B0C&radarRange=-1" frameborder="0"></iframe></div></td></tr>
+			<tr>
+				<td align="center">
+					<a href="https://www.windy.com/-Radar-lightning-radar?radar,45.799,15.937,8" target="_blank" rel="nofollow">Windy</a>
+					<div class="if1">
+						<iframe loading="lazy" src="https://embed.windy.com/embed2.html?lat=45.798&lon=15.936&zoom=8&level=surface&overlay=radar&menu=&message=true&marker=&calendar=&pressure=&type=map&location=coordinates&detail=&detailLat=45.798&detailLon=15.936&metricWind=m%2Fs&metricTemp=%C2%B0C&radarRange=-1" frameborder="0"></iframe>
+					</div>
+				</td>
+			</tr>
 			<tr class="sp"></tr>
 
-			<tr><td align="center"><a href="https://www.eumetnet.eu/activities/observations-programme/current-activities/opera-radar-animation/" target="_blank" rel="nofollow">EUMETNET</a></td></tr>
-			<tr><td align="center"><div class="if2"><iframe loading="lazy" src="https://cdn.fmi.fi/demos/eumetnet-web-site-radar-animator/" frameborder="0" scrolling="no"></iframe></div></td></tr>
+			<tr>
+				<td align="center">
+					<a href="https://www.eumetnet.eu/activities/observations-programme/current-activities/opera-radar-animation/" target="_blank" rel="nofollow">EUMETNET</a>
+					<div class="if2">
+						<iframe loading="lazy" src="https://cdn.fmi.fi/demos/eumetnet-web-site-radar-animator/" frameborder="0" scrolling="no"></iframe>
+					</div>
+				</td>
+			</tr>
 			<tr class="sp"></tr>
 
-			<tr><td align="center"><a href="https://www.meteociel.fr/observations-meteo/satellite.php" target="_blank" rel="nofollow">Meteociel.fr | Satelit</a></td></tr>
-			<tr><td align="center"><img src="https://neige.meteociel.fr/satellite/anim_ir.gif" alt="Meteociel.fr Satelit" border="0" /></td></tr>
+			<tr>
+				<td align="center">
+					<a href="https://www.meteociel.fr/observations-meteo/satellite.php" target="_blank" rel="nofollow">Meteociel.fr | Satelit</a>
+					<div class="slideshow" data-slideshow-id="5" style="max-width: 768px;">
+						<div class="slide fade active">
+							<img src="https://neige.meteociel.fr/satellite/anim_ir.gif" alt="Meteociel.fr Satelit" />
+						</div>
+						<div class="slide fade">
+							<img data-src="https://neige.meteociel.fr/satellite/latest-ir.gif" alt="Meteociel.fr Satelit" class="lazy" />
+						</div>
+						<a class="prev" onclick="plusSlides(5, -1)">&#10094;</a>
+						<a class="next" onclick="plusSlides(5, 1)">&#10095;</a>
+					</div>
+				</td>
+			</tr>
 			<tr class="sp"></tr>
 
-			<tr><td align="center"><a href="https://www.meteociel.fr/observations-meteo/temperatures.php?region=it" target="_blank" rel="nofollow">Meteociel.fr | Temperatura </a></td></tr>
-			<tr><td align="center"><img src="https://www.meteociel.fr/cartes_obs/temp_it.png" alt="Meteociel.fr Temperatura" border="0" /></td></tr>
+			<tr>
+				<td align="center">
+					<a href="https://www.meteociel.fr/observations-meteo/satellite.php?mode=animation-infrarouge-colorise" target="_blank" rel="nofollow">Meteociel.fr | Radar</a>
+					<div class="slideshow" data-slideshow-id="8" style="max-width: 768px;">
+						<div class="slide fade active">
+							<img data-src="https://neige.meteociel.fr/satellite/anim_ir_color.gif" alt="Meteociel.fr Radar" class="lazy" />
+						</div>
+						<div class="slide fade">
+							<img src="https://neige.meteociel.fr/satellite/latest-ir-color.gif" alt="Meteociel.fr Radar" />
+						</div>
+						<a class="prev" onclick="plusSlides(8, -1)">&#10094;</a>
+						<a class="next" onclick="plusSlides(8, 1)">&#10095;</a>
+					</div>
+				</td>
+			</tr>
 			<tr class="sp"></tr>
 
-			<tr><td align="center"><a href="https://meteo.hr/podaci.php?section=podaci_mjerenja&param=radari&el=kompozit&acto=anim" target="_blank" rel="nofollow">DHMZ | kompozit</a></td></tr>
-			<tr><td align="center"><img src="https://vrijeme.hr/anim_kompozit.gif" alt="DHMZ Radar kompozit" border="0" /></td></tr>
+			<tr>
+				<td align="center">
+					<a href="https://www.meteociel.fr/observations-meteo/temperatures.php?region=it" target="_blank" rel="nofollow">Meteociel.fr | Temperatura </a>
+					<img src="https://www.meteociel.fr/cartes_obs/temp_it.png" alt="Meteociel.fr Temperatura" />
+				</td>
+			</tr>
 			<tr class="sp"></tr>
 
-			<tr><td align="center"><a href="https://www.istramet.hr/radari-munja/" target="_blank" rel="nofollow">Istramet | Munje</a></td></tr>
-			<tr><td align="center"><img src="https://www.istramet.hr/wp-content/themes/istramet/img/munje_hr.png" alt="Istramet Munje" border="0" /></td></tr>
+			<tr>
+				<td align="center">
+					<a href="https://meteo.hr/podaci.php?section=podaci_mjerenja&param=radari&el=kompozit&acto=anim" target="_blank" rel="nofollow">DHMZ | kompozit</a>
+					<div class="slideshow" data-slideshow-id="7" style="max-width: 720px;">
+						<div class="slide fade active">
+							<img src="https://vrijeme.hr/anim_kompozit.gif" alt="DHMZ Radar kompozit" />
+						</div>
+						<div class="slide fade">
+							<img data-src="https://vrijeme.hr/kompozit-stat.png" alt="DHMZ Radar kompozit" class="lazy" />
+						</div>
+						<a class="prev" onclick="plusSlides(7, -1)">&#10094;</a>
+						<a class="next" onclick="plusSlides(7, 1)">&#10095;</a>
+					</div>
+				</td>
+			</tr>
 			<tr class="sp"></tr>
 
-			<tr><td align="center"><a href="https://www.neverin.hr/kamere/" target="_blank" rel="nofollow">Neverin | Kamera | Zagreb-Remetinečki rotor</a></td></tr>
-			<tr><td align="center"><img src="https://webcams.neverin.hr/7332072588/latest.jpg" alt="Neverin Kamera Rotor" border="0" /></td></tr>
+			<tr>
+				<td align="center">
+					<a href="https://www.istramet.hr/radari-munja/" target="_blank" rel="nofollow">Istramet | Munje</a>
+					<img src="https://www.istramet.hr/wp-content/themes/istramet/img/munje_hr.png" alt="Istramet Munje" />
+				</td>
+			</tr>
+			<tr class="sp"></tr>
+
+			<tr>
+				<td align="center">
+					<a href="https://www.neverin.hr/kamere/" target="_blank" rel="nofollow">Neverin | Kamera | Zagreb-Remetinečki rotor</a>
+					<img src="https://webcams.neverin.hr/7332072588/latest.jpg" alt="Neverin Kamera Rotor" />
+				</td>
+			</tr>
+			<tr class="sp"></tr>
+
+			<tr>
+				<td align="center">
+					<a href="https://www.meteoblue.com/en/weather/week/zagreb_croatia_3186886" target="_blank" rel="nofollow">meteoblue | Prognoza | Zagreb</a>
+					<img src="https://my.meteoblue.com/images/meteogram?temperature_units=C&windspeed_units=kmh&precipitation_units=mm&darkmode=true&iso2=hr&lat=45.8144&lon=15.978&asl=135&tz=Europe%2FZagreb&dpi=72&apikey=jhMJTOUVRNvs25m4&lang=en&location_name=Zagreb&sig=9f25f63e492378fa1a97510d2a290acd" alt="meteoblue Prognoza Zagreb" />
+				</td>
+			</tr>
 			<tr class="sp"></tr>
 
 			<tr><td align="center"><hr></td></tr>
