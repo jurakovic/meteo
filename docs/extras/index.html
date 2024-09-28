@@ -245,7 +245,7 @@
 			}
 		}
 
-		let slidePage = [2, 2, 2, 2, 1, 1, 1, 1];
+		let slidePage = [2, 2, 2, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1];
 
 		function plusSlides(slideshowId, n) {
 			showSlides(slideshowId, slidePage[slideshowId - 1] += n);
@@ -302,15 +302,7 @@
 			<tr>
 				<td align="center">
 					<a href="https://www.idokep.eu/ceu/radar" target="_blank" rel="nofollow">Időkép | Radar | Europa</a>
-					<img src="https://www.idokep.eu/terkep/eu/radar.gif" alt="Idokep radar Europa" />
-				</td>
-			</tr>
-			<tr class="sp"></tr>
-
-			<tr>
-				<td align="center">
-					<a href="https://www.idokep.eu/adria" target="_blank" rel="nofollow">Időkép | Radar | Hrvatska</a>
-					<div class="vid2"><video muted="" autoplay="" loop="" controls=""><source type="video/mp4" src="https://www.idokep.hu/idokepradar/public_radar_adria.mp4"></video></div>
+					<img src="https://www.idokep.eu/terkep/eu/radar.gif" />
 				</td>
 			</tr>
 			<tr class="sp"></tr>
@@ -318,7 +310,7 @@
 			<tr>
 				<td align="center">
 					<a href="https://www.blitzortung.org/en/historical_maps.php?map=10" target="_blank" rel="nofollow">Blitzortung.org | Munje</a>
-					<img src="https://www.blitzortung.org/Images/image_b_eu.png" alt="Blitzortung.org Munje" />
+					<img src="https://www.blitzortung.org/Images/image_b_eu.png" />
 				</td>
 			</tr>
 			<tr class="sp"></tr>
@@ -333,16 +325,16 @@
 
 			<tr>
 				<td align="center">
-					<a href="https://meteo.hr/prognoze.php?section=prognoze_model&param=web_fronte_sutra12" target="_blank" rel="nofollow">DHMZ | Sinoptička karta</a>
-					<img src="https://prognoza.hr/web_fronte_sutra12.jpg" alt="DHMZ Sinoptička karta" />
+					<a href="https://www.chmi.cz/aktualni-situace/aktualni-stav-pocasi/evropa/synopticka-situace" target="_blank" rel="nofollow">ČHMÚ | Sinoptička karta</a>
+					<img src="https://www.chmi.cz/files/portal/docs/meteo/om/evropa/analyza.gif" />
 				</td>
 			</tr>
 			<tr class="sp"></tr>
 
 			<tr>
 				<td align="center">
-					<a href="https://www.chmi.cz/aktualni-situace/aktualni-stav-pocasi/evropa/synopticka-situace" target="_blank" rel="nofollow">ČHMÚ | Sinoptička karta</a>
-					<img src="https://www.chmi.cz/files/portal/docs/meteo/om/evropa/analyza.gif" alt="ČHMÚ Sinoptička karta" />
+					<a href="https://meteo.hr/prognoze.php?section=prognoze_model&param=web_fronte_sutra12" target="_blank" rel="nofollow">DHMZ | Sinoptička karta</a>
+					<img src="https://prognoza.hr/web_fronte_sutra12.jpg" />
 				</td>
 			</tr>
 			<tr class="sp"></tr>
@@ -350,15 +342,16 @@
 			<tr>
 				<td align="center">
 					<a href="https://meteo.hr/podaci.php?section=podaci_mjerenja&param=radari&el=puntijarka&acto=anim" target="_blank" rel="nofollow">DHMZ | MRC Puntijarka</a>
-					<img src="https://vrijeme.hr/anim_puntijarka.gif" alt="DHMZ Radar Puntijarka" />
-				</td>
-			</tr>
-			<tr class="sp"></tr>
-
-			<tr>
-				<td align="center">
-					<a href="https://meteo.hr/podaci.php?section=podaci_mjerenja&param=radari&el=bilogora&acto=anim" target="_blank" rel="nofollow">DHMZ | MRC Bilogora</a>
-					<img src="https://vrijeme.hr/anim_bilogora.gif" alt="DHMZ Radar Bilogora" />
+					<div class="slideshow" data-slideshow-id="8" style="max-width: 720px;">
+						<div class="slide fade active">
+							<img src="https://vrijeme.hr/anim_puntijarka.gif" />
+						</div>
+						<div class="slide fade">
+							<img data-src="https://vrijeme.hr/puntijarka-stat.png" class="lazy" />
+						</div>
+						<a class="prev" onclick="plusSlides(8, -1)">&#10094;</a>
+						<a class="next" onclick="plusSlides(8, 1)">&#10095;</a>
+					</div>
 				</td>
 			</tr>
 			<tr class="sp"></tr>
@@ -366,7 +359,16 @@
 			<tr>
 				<td align="center">
 					<a href="https://meteo.hr/podaci.php?section=podaci_mjerenja&param=radari&el=gradiste&acto=anim" target="_blank" rel="nofollow">DHMZ | MRC Gradište</a>
-					<img src="https://vrijeme.hr/anim_gradiste.gif" alt="DHMZ Radar Gradište" />
+					<div class="slideshow" data-slideshow-id="10" style="max-width: 720px;">
+						<div class="slide fade active">
+							<img src="https://vrijeme.hr/anim_gradiste.gif" />
+						</div>
+						<div class="slide fade">
+							<img data-src="https://vrijeme.hr/gradiste-stat.png" class="lazy" />
+						</div>
+						<a class="prev" onclick="plusSlides(10, -1)">&#10094;</a>
+						<a class="next" onclick="plusSlides(10, 1)">&#10095;</a>
+					</div>
 				</td>
 			</tr>
 			<tr class="sp"></tr>
@@ -374,7 +376,16 @@
 			<tr>
 				<td align="center">
 					<a href="https://meteo.hr/podaci.php?section=podaci_mjerenja&param=radari&el=goli&acto=anim" target="_blank" rel="nofollow">DHMZ | MRC Goli</a>
-					<img src="https://vrijeme.hr/anim_goli.gif" alt="DHMZ Radar Goli" />
+					<div class="slideshow" data-slideshow-id="11" style="max-width: 720px;">
+						<div class="slide fade active">
+							<img src="https://vrijeme.hr/anim_goli.gif" />
+						</div>
+						<div class="slide fade">
+							<img data-src="https://vrijeme.hr/goli-stat.png" class="lazy" />
+						</div>
+						<a class="prev" onclick="plusSlides(11, -1)">&#10094;</a>
+						<a class="next" onclick="plusSlides(11, 1)">&#10095;</a>
+					</div>
 				</td>
 			</tr>
 			<tr class="sp"></tr>
@@ -382,7 +393,16 @@
 			<tr>
 				<td align="center">
 					<a href="https://meteo.hr/podaci.php?section=podaci_mjerenja&param=radari&el=debeljak&acto=anim" target="_blank" rel="nofollow">DHMZ | MRC Debeljak</a>
-					<img src="https://vrijeme.hr/anim_debeljak.gif" alt="DHMZ Radar Debeljak" />
+					<div class="slideshow" data-slideshow-id="12" style="max-width: 720px;">
+						<div class="slide fade active">
+							<img src="https://vrijeme.hr/anim_debeljak.gif" />
+						</div>
+						<div class="slide fade">
+							<img data-src="https://vrijeme.hr/debeljak-stat.png" class="lazy" />
+						</div>
+						<a class="prev" onclick="plusSlides(12, -1)">&#10094;</a>
+						<a class="next" onclick="plusSlides(12, 1)">&#10095;</a>
+					</div>
 				</td>
 			</tr>
 			<tr class="sp"></tr>
@@ -390,7 +410,16 @@
 			<tr>
 				<td align="center">
 					<a href="https://meteo.hr/podaci.php?section=podaci_mjerenja&param=radari&el=uljenje&acto=anim" target="_blank" rel="nofollow">DHMZ | MRC Uljenje</a>
-					<img src="https://vrijeme.hr/anim_uljenje.gif" alt="DHMZ Radar Uljenje" />
+					<div class="slideshow" data-slideshow-id="13" style="max-width: 720px;">
+						<div class="slide fade active">
+							<img src="https://vrijeme.hr/anim_uljenje.gif" />
+						</div>
+						<div class="slide fade">
+							<img data-src="https://vrijeme.hr/uljenje-stat.png" class="lazy" />
+						</div>
+						<a class="prev" onclick="plusSlides(13, -1)">&#10094;</a>
+						<a class="next" onclick="plusSlides(13, 1)">&#10095;</a>
+					</div>
 				</td>
 			</tr>
 			<tr class="sp"></tr>
@@ -409,16 +438,19 @@
 							<p><a href="https://www.istramet.hr/" target="_blank" rel="nofollow">Istramet</a></p>
 							<p><a href="https://www.crometeo.hr/forum/index.php" target="_blank" rel="nofollow">Crometeo forum</a></p>
 							<p><a href="https://www.meteoadriatic.net" target=" rel="nofollow">MeteoAdriatic</a></p>
+							<p><a href="https://meteoalarm.org/en/live/region/HR" target="_blank" rel="nofollow">Meteoalarm</a></p>
+							<br />
+							<p><a href="https://www.yr.no/en/details/table/2-3186886/Croatia/City%20of%20Zagreb/Zagreb" target="_blank" rel="nofollow">Yr.no</a></p>
+							<p><a href="https://www.windy.com/-Radar-lightning-radar?radar,45.799,15.937,8" target="_blank" rel="nofollow">Windy</a></p>
+							<p><a href="https://zoom.earth" target="_blank" rel="nofollow">Zoom Earth</a></p>
 							<p><a href="https://meteo.arso.gov.si" target="_blank" rel="nofollow">meteo.si</a></p>
 							<p><a href="https://www.wetterzentrale.de/en/" target="_blank" rel="nofollow">Wetterzentrale</a></p>
 							<p><a href="https://www.meteociel.fr" target="_blank" rel="nofollow">Meteociel.fr</a></p>
-							<p><a href="https://www.yr.no/en/details/table/2-3186886/Croatia/City%20of%20Zagreb/Zagreb" target="_blank" rel="nofollow">Yr.no</a></p>
-							<p><a href="https://www.windy.com/-Radar-lightning-radar?radar,45.799,15.937,8" target="_blank" rel="nofollow">Windy</a></p>
-							<p><a href="https://www.wxcharts.com" target="_blank" rel="nofollow">WXCharts</a></p>
+							<br />
+							<p><a href="https://www.estofex.org" target="_blank" rel="nofollow">ESTOFEX</a></p>
 							<p><a href="https://www.eswd.eu" target="_blank" rel="nofollow">ESWD</a></p>
 							<p><a href="https://www.ecmwf.int" target="_blank" rel="nofollow">ECMWF</a></p>
-							<p><a href="https://www.estofex.org" target="_blank" rel="nofollow">ESTOFEX</a></p>
-							<p><a href="https://meteoalarm.org/en/live/region/HR" target="_blank" rel="nofollow">Meteoalarm</a></p>
+							<p><a href="https://www.wxcharts.com" target="_blank" rel="nofollow">WXCharts</a></p>
 						</div>
 
 						<div class="item">
@@ -433,6 +465,8 @@
 								<br />Munje&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 								<a href="https://www.neverin.hr/munje/" target="_blank" rel="nofollow">Hrvatska</a>
 								<a href="https://www.neverin.hr/munje/#:~:text=Pojava%20munja%20Europa" target="_blank" rel="nofollow">Europa</a>
+								<br />Prognoza&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+								<a href="https://www.neverin.hr/prognoza/zagreb/" target="_blank" rel="nofollow">Zagreb</a>
 							</p>
 							<p>
 								<b>Sat24.com</b>
@@ -466,6 +500,8 @@
 								<br />Satelit&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 								<a href="https://www.meteoblue.com/en/weather/maps/croatia_croatia_3202326#map=satellite~sat~none~none~none&coords=6/45/17" target="_blank" rel="nofollow">Hrvatska</a>
 								<a href="https://www.meteoblue.com/en/weather/maps/croatia_croatia_3202326#map=satellite~sat~none~none~none&coords=4.2/47.5/17.5" target="_blank" rel="nofollow">Europa</a>
+								<br />Prognoza&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+								<a href="https://www.meteoblue.com/en/weather/week/zagreb_croatia_3186886" target="_blank" rel="nofollow">Zagreb</a>
 							</p>
 							<p>
 								<b>Weather&Radar</b>
@@ -498,6 +534,10 @@
 							</p>
 							<p>
 								<b>Wetterzentrale</b>
+								<br />Satelit&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+								<a href="https://www.wetterzentrale.de/en/reanalysis.php?map=1&model=sat&var=404&nmaps=32" target="_blank" rel="nofollow">Europa</a>
+								<br />Prognoza&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+								<a href="https://www.wetterzentrale.de/en/show_diagrams.php?geoid=54032&model=ico&var=93&run=6&lid=OP&bw=1" target="_blank" rel="nofollow">Zagreb</a>
 								<br />Temperatura&nbsp;&nbsp;&nbsp;&nbsp;
 								<a href="https://www.wetterzentrale.de/en/topkarten.php?map=17&model=ico&var=5&run=6&time=0&lid=OP&h=1&mv=0&tr=1" target="_blank" rel="nofollow">Hrvatska</a>
 								<a href="https://www.wetterzentrale.de/en/topkarten.php?map=1&model=ico&var=5&time=0&run=6&lid=OP&h=1&mv=0&tr=1" target="_blank" rel="nofollow">Europa</a>

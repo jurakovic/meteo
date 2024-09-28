@@ -56,6 +56,16 @@ function ProcessHtml() {
 	$html = $html.Replace('<!--<img src="https://bit', '<img src="https://bit')
 	$html = $html.Replace('right" />-->', 'right" />')
 
+	#remove comments
+	$html = [regex]::Replace($html, '(?s)<!--.*?-->', '')
+
+	#trim whitespace
+	$html = $html -split "`r`n" | ForEach-Object { $_.TrimEnd() }
+	$html = $html -join "`r`n"
+
+	#remove consecutive empty lines
+	$html = [regex]::Replace($html, "(`r`n){3,}", "`r`n`r`n")
+
 	mkdir -Force "$(Split-Path -Path $publishFile)" | Out-Null
 	Write-Output $html | Set-Content -NoNewline -Path "$publishFile" -Encoding "utf8"
 }
