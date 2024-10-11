@@ -137,6 +137,10 @@ iframe, video {
 		color: white;
 	}
 
+	.prev.shorter {
+		top: 0.4em;
+	}
+
 .next {
 	right: 0;
 	text-align: right;
@@ -145,6 +149,10 @@ iframe, video {
 	.next:hover {
 		background-image: linear-gradient(to right, transparent, rgba(0,0,0,0.6));
 		color: white;
+	}
+
+	.next.shorter {
+		top: 0.4em;
 	}
 
 .fade {
@@ -167,12 +175,16 @@ iframe, video {
 		padding: 12px;
 		font-size: 20px;
 	}
+
+		.prev.shorter, .next.shorter {
+			top: 0.72em;
+		}
 }
 
 .links {
 	font-size: 14px;
 	display: grid;
-	grid-template-columns: 25% 50% 25%;
+	grid-template-columns: 25% 45% 30%;
 	gap: 0;
 }
 
@@ -208,4 +220,20 @@ footer {
 	text-align: center;
 	padding: 8px;
 	margin-top: 8px;
+}
+
+.progress-container {
+	width: 100%;
+	height: 2px;
+	position: fixed;
+	bottom: 0;
+	left: 0;
+	z-index: 1000;
+}
+
+.progress-bar {
+	height: 100%;
+	width: 0;
+	background-color: #4caf50;
+	transition: width 0.3s ease-in-out;
 }

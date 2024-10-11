@@ -37,3 +37,39 @@ window.addEventListener('load', function() {
 		img.classList.remove('lazy');
 	});
 });
+
+
+function showProgress() {
+	// Get all images on the page
+	const images = document.querySelectorAll('img');
+	const progressBar = document.getElementsByClassName('progress-bar')[0];
+	let imagesLoaded = 0;
+
+	// Update progress bar
+	const updateProgress = () => {
+		const percent = (imagesLoaded / images.length) * 100;
+		progressBar.style.width = percent + '%';
+
+		// Hide the progress bar when all images are loaded
+		if (imagesLoaded === images.length) {
+			setTimeout(() => {
+				document.getElementsByClassName('progress-container')[0].style.display = 'none';
+			}, 500); // Hide after a short delay
+		}
+	};
+
+	// Attach load and error events to each image
+	images.forEach((img) => {
+		img.addEventListener('load', () => {
+			imagesLoaded++;
+			updateProgress();
+		});
+
+		img.addEventListener('error', () => {
+			imagesLoaded++; // Count error images as "loaded" to avoid getting stuck
+			updateProgress();
+		});
+	});
+}
+
+document.addEventListener('DOMContentLoaded', showProgress);
