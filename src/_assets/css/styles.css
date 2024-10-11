@@ -175,7 +175,7 @@ iframe, video {
 .links {
 	font-size: 14px;
 	display: grid;
-	grid-template-columns: 25% 50% 25%;
+	grid-template-columns: 25% 45% 30%;
 	gap: 0;
 }
 
