@@ -130,7 +130,6 @@ iframe, video {
 .prev {
 	left: 0;
 	text-align: left;
-	top: 0.4em;
 }
 
 	.prev:hover {
@@ -138,15 +137,22 @@ iframe, video {
 		color: white;
 	}
 
+	.prev.shorter {
+		top: 0.4em;
+	}
+
 .next {
 	right: 0;
 	text-align: right;
-	top: 0.4em;
 }
 
 	.next:hover {
 		background-image: linear-gradient(to right, transparent, rgba(0,0,0,0.6));
 		color: white;
+	}
+
+	.next.shorter {
+		top: 0.4em;
 	}
 
 .fade {
@@ -168,8 +174,11 @@ iframe, video {
 	.prev, .next {
 		padding: 12px;
 		font-size: 20px;
-		top: 0.72em;
 	}
+
+		.prev.shorter, .next.shorter {
+			top: 0.72em;
+		}
 }
 
 .links {
