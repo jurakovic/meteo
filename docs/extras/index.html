@@ -242,7 +242,6 @@
 
 		.progress-container {
 			width: 100%;
-			background-color: #f3f3f3;
 			height: 2px;
 			position: fixed;
 			bottom: 0;
@@ -312,7 +311,7 @@
 				if (imagesLoaded === images.length) {
 					setTimeout(() => {
 						document.getElementsByClassName('progress-container')[0].style.display = 'none';
-					}, 250); // Hide after a short delay
+					}, 500); // Hide after a short delay
 				}
 			};
 

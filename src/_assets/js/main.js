@@ -54,7 +54,7 @@ function showProgress() {
 		if (imagesLoaded === images.length) {
 			setTimeout(() => {
 				document.getElementsByClassName('progress-container')[0].style.display = 'none';
-			}, 250); // Hide after a short delay
+			}, 500); // Hide after a short delay
 		}
 	};
 
