@@ -227,4 +227,5 @@ footer {
 	height: 100%;
 	width: 0;
 	background-color: #4caf50;
+	transition: width 0.3s ease-in-out;
 }
