@@ -24,19 +24,21 @@ document.addEventListener('DOMContentLoaded', includeHTML);
 document.addEventListener('DOMContentLoaded', () => {
 	// Get all images on the page
 	const images = document.querySelectorAll('img');
-	const progressBar = document.getElementById('progress-bar');
+	console.log(images.length);
+	const progressBar = document.getElementsByClassName('progress-bar')[0];
 	let imagesLoaded = 0;
 
 	// Update progress bar
 	const updateProgress = () => {
 		const percent = (imagesLoaded / images.length) * 100;
 		progressBar.style.width = percent + '%';
+		console.log(imagesLoaded);
 
 		// Hide the progress bar when all images are loaded
 		if (imagesLoaded === images.length) {
 			setTimeout(() => {
-				document.getElementById('progress-container').style.display = 'none';
-			}, 1000); // Hide after a short delay
+				document.getElementsByClassName('progress-container')[0].style.display = 'none';
+			}, 250); // Hide after a short delay
 		}
 	};
 
