@@ -7,6 +7,23 @@ body {
 	padding: 0px;
 }
 
+#progress-container {
+	width: 100%;
+	background-color: #f3f3f3;
+	border: 1px solid #ccc;
+	height: 20px;
+	margin: 20px 0;
+	/*position: fixed;*/
+	top: 0;
+	left: 0;
+}
+
+#progress-bar {
+	height: 100%;
+	width: 0;
+	background-color: #4caf50;
+}
+
 .container {
 	margin: 8px;
 }
