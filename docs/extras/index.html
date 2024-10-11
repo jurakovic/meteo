@@ -148,7 +148,6 @@
 		.prev {
 			left: 0;
 			text-align: left;
-			top: 0.4em;
 		}
 
 			.prev:hover {
@@ -156,15 +155,22 @@
 				color: white;
 			}
 
+			.prev.shorter {
+				top: 0.4em;
+			}
+
 		.next {
 			right: 0;
 			text-align: right;
-			top: 0.4em;
 		}
 
 			.next:hover {
 				background-image: linear-gradient(to right, transparent, rgba(0,0,0,0.6));
 				color: white;
+			}
+
+			.next.shorter {
+				top: 0.4em;
 			}
 
 		.fade {
@@ -186,8 +192,11 @@
 			.prev, .next {
 				padding: 12px;
 				font-size: 20px;
-				top: 0.72em;
 			}
+
+				.prev.shorter, .next.shorter {
+					top: 0.72em;
+				}
 		}
 
 		.links {
@@ -230,6 +239,23 @@
 			padding: 8px;
 			margin-top: 8px;
 		}
+
+		.progress-container {
+			width: 100%;
+			background-color: #f3f3f3;
+			height: 2px;
+			position: fixed;
+			bottom: 0;
+			left: 0;
+			z-index: 1000;
+		}
+
+		.progress-bar {
+			height: 100%;
+			width: 0;
+			background-color: #4caf50;
+			transition: width 0.3s ease-in-out;
+		}
 	</style>
 	<script>
 		function scrollToTop() {
@@ -270,6 +296,41 @@
 				img.classList.remove('lazy');
 			});
 		});
+
+		function showProgress() {
+			// Get all images on the page
+			const images = document.querySelectorAll('img');
+			const progressBar = document.getElementsByClassName('progress-bar')[0];
+			let imagesLoaded = 0;
+
+			// Update progress bar
+			const updateProgress = () => {
+				const percent = (imagesLoaded / images.length) * 100;
+				progressBar.style.width = percent + '%';
+
+				// Hide the progress bar when all images are loaded
+				if (imagesLoaded === images.length) {
+					setTimeout(() => {
+						document.getElementsByClassName('progress-container')[0].style.display = 'none';
+					}, 250); // Hide after a short delay
+				}
+			};
+
+			// Attach load and error events to each image
+			images.forEach((img) => {
+				img.addEventListener('load', () => {
+					imagesLoaded++;
+					updateProgress();
+				});
+
+				img.addEventListener('error', () => {
+					imagesLoaded++; // Count error images as "loaded" to avoid getting stuck
+					updateProgress();
+				});
+			});
+		}
+
+		document.addEventListener('DOMContentLoaded', showProgress);
 	</script>
 	<script async src="https://www.googletagmanager.com/gtag/js?id=G-233EMZJM16"></script>
 	<script>
@@ -578,6 +639,9 @@
 				</td>
 			</tr>
 		</table>
+		<div class="progress-container">
+			<div class="progress-bar"></div>
+		</div>
 	</div>
 	<footer>
 		<a onclick="scrollToTop()" style="cursor: pointer"><u>Povratak na vrh</u></a>
