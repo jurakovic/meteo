@@ -11,22 +11,6 @@ body {
 	margin: 8px;
 }
 
-.progress-container {
-	width: 100%;
-	background-color: #f3f3f3;
-	height: 2px;
-	position: fixed;
-	bottom: 0;
-	left: 0;
-	z-index: 1000;
-}
-
-.progress-bar {
-	height: 100%;
-	width: 0;
-	background-color: #4caf50;
-}
-
 h2, a, td {
 	color: white;
 }
@@ -227,4 +211,20 @@ footer {
 	text-align: center;
 	padding: 8px;
 	margin-top: 8px;
+}
+
+.progress-container {
+	width: 100%;
+	background-color: #f3f3f3;
+	height: 2px;
+	position: fixed;
+	bottom: 0;
+	left: 0;
+	z-index: 1000;
+}
+
+.progress-bar {
+	height: 100%;
+	width: 0;
+	background-color: #4caf50;
 }

@@ -19,12 +19,9 @@ function includeHTML() {
 	});
 }
 
-document.addEventListener('DOMContentLoaded', includeHTML);
-
-document.addEventListener('DOMContentLoaded', () => {
+function showProgress() {
 	// Get all images on the page
 	const images = document.querySelectorAll('img');
-	console.log(images.length);
 	const progressBar = document.getElementsByClassName('progress-bar')[0];
 	let imagesLoaded = 0;
 
@@ -32,7 +29,6 @@ document.addEventListener('DOMContentLoaded', () => {
 	const updateProgress = () => {
 		const percent = (imagesLoaded / images.length) * 100;
 		progressBar.style.width = percent + '%';
-		console.log(imagesLoaded);
 
 		// Hide the progress bar when all images are loaded
 		if (imagesLoaded === images.length) {
@@ -54,4 +50,7 @@ document.addEventListener('DOMContentLoaded', () => {
 			updateProgress();
 		});
 	});
-});
+}
+
+document.addEventListener('DOMContentLoaded', includeHTML);
+document.addEventListener('DOMContentLoaded', showProgress);
