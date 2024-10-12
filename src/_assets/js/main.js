@@ -69,6 +69,10 @@ function showProgress() {
 			imagesLoaded++; // Count error images as "loaded" to avoid getting stuck
 			updateProgress();
 		});
+
+		if (img.complete) {
+			img.dispatchEvent(new Event('load')); // Manually trigger 'load' if already loaded
+		}
 	});
 }
 
