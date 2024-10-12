@@ -60,20 +60,15 @@ function showProgress() {
 
 	// Attach load and error events to each image
 	images.forEach((img) => {
-		if (img.complete) {
+		img.addEventListener('load', () => {
 			imagesLoaded++;
 			updateProgress();
-		} else {
-			img.addEventListener('load', () => {
-				imagesLoaded++;
-				updateProgress();
-			});
+		});
 
-			img.addEventListener('error', () => {
-				imagesLoaded++;
-				updateProgress();
-			});
-		}
+		img.addEventListener('error', () => {
+			imagesLoaded++; // Count error images as "loaded" to avoid getting stuck
+			updateProgress();
+		});
 	});
 }
 
