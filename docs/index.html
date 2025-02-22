@@ -39,6 +39,10 @@
 			height: auto;
 		}
 
+		.placeholder {
+			background-color: #202c40;
+		}
+
 		img {
 			max-width: 100%;
 			height: auto;
@@ -362,7 +366,7 @@
 			<tr>
 				<td align="center">
 					<a href="https://www.neverin.hr/radar/" target="_blank" rel="nofollow">Neverin | Radar | Hrvatska</a>
-					<div class="slideshow" data-slideshow-id="1">
+					<div class="slideshow placeholder" data-slideshow-id="1" style="aspect-ratio: 7 / 5;">
 						<div class="slide fade">
 							<img data-src="https://maps.neverin.hr/radar/latest_hr.webp" class="lazy" />
 						</div>
@@ -382,7 +386,7 @@
 			<tr>
 				<td align="center">
 					<a href="https://www.neverin.hr/satelit/" target="_blank" rel="nofollow">Neverin | Satelit | Hrvatska</a>
-					<div class="slideshow" data-slideshow-id="2">
+					<div class="slideshow placeholder" data-slideshow-id="2" style="aspect-ratio: 7 / 5;">
 						<div class="slide fade">
 							<img data-src="https://maps.neverin.hr/sat/latest_vis_hr.webp" class="lazy" />
 						</div>
@@ -402,7 +406,7 @@
 			<tr>
 				<td align="center">
 					<a href="https://www.neverin.hr/radar/" target="_blank" rel="nofollow">Neverin | Radar | Europa</a>
-					<div class="slideshow" data-slideshow-id="3">
+					<div class="slideshow placeholder" data-slideshow-id="3" style="aspect-ratio: 7 / 5;">
 						<div class="slide fade">
 							<img data-src="https://maps.neverin.hr/radar/latest_eu.webp" class="lazy" />
 						</div>
@@ -422,7 +426,7 @@
 			<tr>
 				<td align="center">
 					<a href="https://www.neverin.hr/satelit/" target="_blank" rel="nofollow">Neverin | Satelit | Europa</a>
-					<div class="slideshow" data-slideshow-id="4">
+					<div class="slideshow placeholder" data-slideshow-id="4" style="aspect-ratio: 7 / 5;">
 						<div class="slide fade">
 							<img data-src="https://maps.neverin.hr/sat/latest_vis_eu.webp" class="lazy" />
 						</div>
@@ -442,7 +446,7 @@
 			<tr>
 				<td align="center">
 					<a href="https://www.windy.com/-Radar-lightning-radar?radar,45.799,15.937,8" target="_blank" rel="nofollow">Windy</a>
-					<div class="if1">
+					<div class="if1 placeholder">
 						<iframe loading="lazy" src="https://embed.windy.com/embed2.html?lat=45.798&lon=15.936&zoom=8&level=surface&overlay=radar&menu=&message=true&marker=&calendar=&pressure=&type=map&location=coordinates&detail=&detailLat=45.798&detailLon=15.936&metricWind=m%2Fs&metricTemp=%C2%B0C&radarRange=-1" frameborder="0"></iframe>
 					</div>
 				</td>
@@ -452,7 +456,7 @@
 			<tr>
 				<td align="center">
 					<a href="https://meteo.hr/podaci.php?section=podaci_mjerenja&param=radari&el=kompozit&acto=anim" target="_blank" rel="nofollow">DHMZ | kompozit</a>
-					<div class="slideshow" data-slideshow-id="7" style="max-width: 720px;">
+					<div class="slideshow placeholder" data-slideshow-id="7" style="max-width: 720px;">
 						<div class="slide fade active">
 							<img src="https://vrijeme.hr/anim_kompozit.gif" />
 						</div>
@@ -469,7 +473,7 @@
 			<tr>
 				<td align="center">
 					<a href="https://meteo.arso.gov.si/met/sl/weather/observ/radar/" target="_blank" rel="nofollow">meteo.si</a>
-					<div class="slideshow" data-slideshow-id="6" style="max-width: 821px;">
+					<div class="slideshow placeholder" data-slideshow-id="6" style="max-width: 821px;">
 						<div class="slide fade active">
 							<img src="https://meteo.arso.gov.si/uploads/probase/www/observ/radar/si0-rm-anim.gif?nocache" />
 						</div>
@@ -486,7 +490,7 @@
 			<tr>
 				<td align="center">
 					<a href="https://www.eumetnet.eu/activities/observations-programme/current-activities/opera-radar-animation/" target="_blank" rel="nofollow">EUMETNET</a>
-					<div class="if2">
+					<div class="if2 placeholder">
 						<iframe loading="lazy" src="https://cdn.fmi.fi/demos/eumetnet-web-site-radar-animator/" frameborder="0" scrolling="no"></iframe>
 					</div>
 				</td>
@@ -496,7 +500,7 @@
 			<tr>
 				<td align="center">
 					<a href="https://www.meteociel.fr/observations-meteo/satellite.php" target="_blank" rel="nofollow">Meteociel.fr | Satelit</a>
-					<div class="slideshow" data-slideshow-id="5" style="max-width: 768px;">
+					<div class="slideshow placeholder" data-slideshow-id="5" style="max-width: 768px;">
 						<div class="slide fade active">
 							<img src="https://neige.meteociel.fr/satellite/anim_ir.gif" />
 						</div>
@@ -513,7 +517,9 @@
 			<tr>
 				<td align="center">
 					<a href="https://www.meteociel.fr/observations-meteo/temperatures.php?region=it" target="_blank" rel="nofollow">Meteociel.fr | Temperatura </a>
-					<img src="https://www.meteociel.fr/cartes_obs/temp_it.png" />
+					<div class="placeholder" style="max-width: 768px;">
+						<img src="https://www.meteociel.fr/cartes_obs/temp_it.png" />
+					</div>
 				</td>
 			</tr>
 			<tr class="sp"></tr>
@@ -521,7 +527,9 @@
 			<tr>
 				<td align="center">
 					<a href="https://www.istramet.hr/radari-munja/" target="_blank" rel="nofollow">Istramet | Munje</a>
-					<img src="https://www.istramet.hr/wp-content/themes/istramet/img/munje_hr.png" />
+					<div class="placeholder" style="max-width: 804px;">
+						<img src="https://www.istramet.hr/wp-content/themes/istramet/img/munje_hr.png" />
+					</div>
 				</td>
 			</tr>
 			<tr class="sp"></tr>
@@ -529,7 +537,9 @@
 			<tr>
 				<td align="center">
 					<a href="https://www.neverin.hr/kamere/" target="_blank" rel="nofollow">Neverin | Kamera | Zagreb-Remetinečki rotor</a>
-					<img src="https://webcams.neverin.hr/7332072588/latest.jpg" />
+					<div class="placeholder">
+						<img src="https://webcams.neverin.hr/7332072588/latest.jpg" />
+					</div>
 				</td>
 			</tr>
 			<tr class="sp"></tr>
@@ -539,19 +549,27 @@
 					<div class="slideshow" data-slideshow-id="14">
 						<div class="slide fade active">
 							<a href="https://www.meteoblue.com/en/weather/week/zagreb_croatia_3186886" target="_blank" rel="nofollow">meteoblue | Prognoza | Zagreb</a>
-							<img src="https://my.meteoblue.com/images/meteogram?temperature_units=C&windspeed_units=kmh&precipitation_units=mm&darkmode=true&iso2=hr&lat=45.8144&lon=15.978&asl=135&tz=Europe%2FZagreb&dpi=72&apikey=jhMJTOUVRNvs25m4&lang=en&location_name=Zagreb&sig=9f25f63e492378fa1a97510d2a290acd" />
+							<div class="placeholder">
+								<img src="https://my.meteoblue.com/images/meteogram?temperature_units=C&windspeed_units=kmh&precipitation_units=mm&darkmode=true&iso2=hr&lat=45.8144&lon=15.978&asl=135&tz=Europe%2FZagreb&dpi=72&apikey=jhMJTOUVRNvs25m4&lang=en&location_name=Zagreb&sig=9f25f63e492378fa1a97510d2a290acd" />
+							</div>
 						</div>
 						<div class="slide fade">
 							<a href="https://www.meteoblue.com/en/weather/week/split_croatia_3190261" target="_blank" rel="nofollow">meteoblue | Prognoza | Split</a>
-							<img src="https://my.meteoblue.com/images/meteogram?temperature_units=C&windspeed_units=kmh&precipitation_units=mm&darkmode=true&iso2=hr&lat=43.5089&lon=16.4391&asl=12&tz=Europe%2FZagreb&dpi=72&apikey=jhMJTOUVRNvs25m4&lang=en&location_name=Split&sig=52d3eea0042ccfccd932445f3ff1a158" />
+							<div class="placeholder">
+								<img src="https://my.meteoblue.com/images/meteogram?temperature_units=C&windspeed_units=kmh&precipitation_units=mm&darkmode=true&iso2=hr&lat=43.5089&lon=16.4391&asl=12&tz=Europe%2FZagreb&dpi=72&apikey=jhMJTOUVRNvs25m4&lang=en&location_name=Split&sig=52d3eea0042ccfccd932445f3ff1a158" />
+							</div>
 						</div>
 						<div class="slide fade">
 							<a href="https://www.meteoblue.com/en/weather/week/rijeka_croatia_3191648" target="_blank" rel="nofollow">meteoblue | Prognoza | Rijeka</a>
-							<img src="https://my.meteoblue.com/images/meteogram?temperature_units=C&windspeed_units=kmh&precipitation_units=mm&darkmode=true&iso2=hr&lat=45.3267&lon=14.4424&asl=12&tz=Europe%2FZagreb&dpi=72&apikey=jhMJTOUVRNvs25m4&lang=en&location_name=Rijeka&sig=67a56b4147ade3e713667e2451e5a94a" />
+							<div class="placeholder">
+								<img src="https://my.meteoblue.com/images/meteogram?temperature_units=C&windspeed_units=kmh&precipitation_units=mm&darkmode=true&iso2=hr&lat=45.3267&lon=14.4424&asl=12&tz=Europe%2FZagreb&dpi=72&apikey=jhMJTOUVRNvs25m4&lang=en&location_name=Rijeka&sig=67a56b4147ade3e713667e2451e5a94a" />
+							</div>
 						</div>
 						<div class="slide fade">
 							<a href="https://www.meteoblue.com/en/weather/week/osijek_croatia_3193935" target="_blank" rel="nofollow">meteoblue | Prognoza | Osijek</a>
-							<img src="https://my.meteoblue.com/images/meteogram?temperature_units=C&windspeed_units=kmh&precipitation_units=mm&darkmode=true&iso2=hr&lat=45.5511&lon=18.6939&asl=87&tz=Europe%2FZagreb&dpi=72&apikey=jhMJTOUVRNvs25m4&lang=en&location_name=Osijek&sig=9c848ca560bfeec99a8f8d812b50e4c8" />
+							<div class="placeholder">
+								<img src="https://my.meteoblue.com/images/meteogram?temperature_units=C&windspeed_units=kmh&precipitation_units=mm&darkmode=true&iso2=hr&lat=45.5511&lon=18.6939&asl=87&tz=Europe%2FZagreb&dpi=72&apikey=jhMJTOUVRNvs25m4&lang=en&location_name=Osijek&sig=9c848ca560bfeec99a8f8d812b50e4c8" />
+							</div>
 						</div>
 						<a class="prev shorter" onclick="plusSlides(14, -1)">&#10094;</a>
 						<a class="next shorter" onclick="plusSlides(14, 1)">&#10095;</a>
