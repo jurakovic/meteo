@@ -21,6 +21,10 @@ table {
 	height: auto;
 }
 
+.placeholder {
+	background-color: #202c40;
+}
+
 img {
 	max-width: 100%;
 	height: auto;
