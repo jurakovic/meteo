@@ -19,23 +19,21 @@ function includeHTML() {
 	});
 }
 
-function addCollapsibleClickEventListener() {
+async function addCollapsibleClickEventListener() {
 	var coll = document.getElementsByClassName("collapsible");
 	var i;
 	for (i = 0; i < coll.length; i++) {
 		coll[i].addEventListener("click", function () {
-			//console.log(this.classList);
-			//this.classList.toggle("active");
-			//var content = this.nextElementSibling;
-			//console.log(this.nextElementSibling);
 			var content = document.getElementsByClassName("links")[0];
-			//console.log(content);
-			//console.log(content.style.maxHeight);
 			if (content.style.maxHeight) {
 				content.style.maxHeight = null;
 			} else {
 				content.style.maxHeight = content.scrollHeight + "px";
 			}
+			//await new Promise(resolve => setTimeout(resolve, 500));
+			scrollToElement('links');
+			//let yOffset = content.getBoundingClientRect().top + window.scrollY - 20; // 20px extra margin
+			//window.scrollTo({ top: yOffset, behavior: "smooth" });
 		});
 	}
 }
