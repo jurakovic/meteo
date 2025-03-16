@@ -13,12 +13,6 @@ function scrollToElement(id) {
             behavior: 'smooth',
             block: 'start'
         });
-        //var scrollDiv = element.offsetTop;
-        //window.scrollTo({
-        //    top: scrollDiv,
-        //    behavior: 'smooth',
-        //    block: "start"
-        //});
     }
 }
 
