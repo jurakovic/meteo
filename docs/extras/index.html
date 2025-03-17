@@ -203,11 +203,31 @@
 				}
 		}
 
+		.collapsible {
+			margin-top: 10px;
+			margin-bottom: 4px;
+			font-family: inherit;
+			color: white;
+			background-color: #485871;
+			cursor: pointer;
+			width: 100%;
+			height: 24px;
+			border: none;
+			outline: none;
+		}
+
+			.collapsible:hover {
+				background-color: #5F6F89;
+			}
+
 		.links {
 			font-size: 14px;
 			display: grid;
 			grid-template-columns: 25% 45% 30%;
 			gap: 0;
+			max-height: 0;
+			overflow: hidden;
+			transition: max-height 0.2s ease-out;
 		}
 
 			.links .item {
@@ -221,6 +241,7 @@
 
 			.links p {
 				margin-top: 0px;
+				text-align: left;
 			}
 
 		@media (max-width: 800px) {
@@ -273,7 +294,8 @@
 			const element = document.getElementById(id);
 			if (element) {
 				element.scrollIntoView({
-					behavior: 'smooth'
+					behavior: 'smooth',
+					block: 'start'
 				});
 			}
 		}
@@ -292,7 +314,7 @@
 			slides[slidePage[slideshowId - 1] - 1].classList.add('active');
 		}
 
-		window.addEventListener('load', function() {
+		window.addEventListener('load', function () {
 			const lazyImages = document.querySelectorAll('img.lazy');
 
 			lazyImages.forEach(img => {
@@ -376,7 +398,7 @@
 			<tr>
 				<td align="center">
 					<a href="https://www.idokep.eu/ceu/radar" target="_blank" rel="nofollow">Időkép | Radar | Europa</a>
-					<div class="placeholder" style="max-width: 840px; aspect-ratio: 840 / 600;" >
+					<div class="placeholder" style="max-width: 840px; aspect-ratio: 840 / 600;">
 						<img src="https://www.idokep.eu/terkep/eu/radar.gif" />
 					</div>
 				</td>
@@ -526,8 +548,11 @@
 			<tr class="sp"></tr>
 
 			<tr><td align="center"><hr></td></tr>
-
-			<tr><td align="center" id="links">Linkovi</td></tr>
+			<tr>
+				<td align="center" id="links">
+					<button type="button" class="collapsible">Linkovi</button>
+				</td>
+			</tr>
 			<tr>
 				<td align="left">
 					<div class="links">
