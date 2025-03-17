@@ -16,17 +16,6 @@ function scrollToElement(id) {
 	}
 }
 
-function scrollToLinks() {
-	var content = document.getElementsByClassName("links")[0];
-	if (content.style.maxHeight) {
-		// if already expanded, just scroll to it
-		scrollToElement('links');
-	} else {
-		// if not expanded, this will expand it and scroll to it
-		document.getElementsByClassName('collapsible')[0].click();
-	}
-}
-
 let slidePage = [2, 2, 2, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1];
 
 function plusSlides(slideshowId, n) {
