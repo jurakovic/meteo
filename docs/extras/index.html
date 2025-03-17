@@ -227,7 +227,7 @@
 			gap: 0;
 			max-height: 0;
 			overflow: hidden;
-			transition: max-height 0.2s ease-out;
+			transition: max-height 0.3s ease-out;
 		}
 
 			.links .item {
@@ -394,8 +394,19 @@
 					content.style.maxHeight = content.scrollHeight + "px";
 					this.innerHTML = "Linkovi ▲";
 					setTimeout(() => {
+						// reset smooth scrolling to make it work every time
+						document.documentElement.style.scrollBehavior = "auto";
+						document.body.style.scrollBehavior = "auto";
+
+						// apply smooth scroll
 						scrollToElement('links');
-					}, 210);
+
+						// re-enable smooth scrolling after a short delay
+						setTimeout(() => {
+							document.documentElement.style.scrollBehavior = "smooth";
+							document.body.style.scrollBehavior = "smooth";
+						}, 50);
+					}, 310);
 				}
 			});
 		}

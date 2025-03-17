@@ -30,8 +30,19 @@ async function addCollapsibleClickEventListener() {
 			content.style.maxHeight = content.scrollHeight + "px";
 			this.innerHTML = "Linkovi ▲";
 			setTimeout(() => {
+				// reset smooth scrolling to make it work every time
+				document.documentElement.style.scrollBehavior = "auto";
+				document.body.style.scrollBehavior = "auto";
+
+				// apply smooth scroll
 				scrollToElement('links');
-			}, 210);
+
+				// re-enable smooth scrolling after a short delay
+				setTimeout(() => {
+					document.documentElement.style.scrollBehavior = "smooth";
+					document.body.style.scrollBehavior = "smooth";
+				}, 50);
+			}, 310);
 		}
 	});
 }
