@@ -391,8 +391,10 @@
 					var content = document.getElementsByClassName("links")[0];
 					if (content.style.maxHeight) {
 						content.style.maxHeight = null;
+						this.innerHTML = "Linkovi ▼";
 					} else {
 						content.style.maxHeight = content.scrollHeight + "px";
+						this.innerHTML = "Linkovi ▲";
 						setTimeout(() => {
 							scrollToElement('links');
 						}, 210);
@@ -592,7 +594,7 @@
 			<tr><td align="center"><hr></td></tr>
 			<tr>
 				<td align="center" id="links">
-					<button type="button" class="collapsible">Linkovi</button>
+					<button type="button" class="collapsible">Linkovi ▼</button>
 				</td>
 			</tr>
 			<tr>

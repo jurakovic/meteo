@@ -27,8 +27,10 @@ async function addCollapsibleClickEventListener() {
 			var content = document.getElementsByClassName("links")[0];
 			if (content.style.maxHeight) {
 				content.style.maxHeight = null;
+				this.innerHTML = "Linkovi ▼";
 			} else {
 				content.style.maxHeight = content.scrollHeight + "px";
+				this.innerHTML = "Linkovi ▲";
 				setTimeout(() => {
 					scrollToElement('links');
 				}, 210);
