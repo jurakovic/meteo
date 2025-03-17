@@ -20,23 +20,20 @@ function includeHTML() {
 }
 
 async function addCollapsibleClickEventListener() {
-	var coll = document.getElementsByClassName("collapsible");
-	var i;
-	for (i = 0; i < coll.length; i++) {
-		coll[i].addEventListener("click", function () {
-			var content = document.getElementsByClassName("links")[0];
-			if (content.style.maxHeight) {
-				content.style.maxHeight = null;
-				this.innerHTML = "Linkovi ▼";
-			} else {
-				content.style.maxHeight = content.scrollHeight + "px";
-				this.innerHTML = "Linkovi ▲";
-				setTimeout(() => {
-					scrollToElement('links');
-				}, 210);
-			}
-		});
-	}
+	var coll = document.getElementsByClassName("collapsible")[0];
+	coll.addEventListener("click", function () {
+		var content = document.getElementsByClassName("links")[0];
+		if (content.style.maxHeight) {
+			content.style.maxHeight = null;
+			this.innerHTML = "Linkovi ▼";
+		} else {
+			content.style.maxHeight = content.scrollHeight + "px";
+			this.innerHTML = "Linkovi ▲";
+			setTimeout(() => {
+				scrollToElement('links');
+			}, 210);
+		}
+	});
 }
 
 document.addEventListener('DOMContentLoaded', includeHTML);
