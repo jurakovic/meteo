@@ -300,6 +300,17 @@
 			}
 		}
 
+		function scrollToLinks() {
+			var content = document.getElementsByClassName("links")[0];
+			if (content.style.maxHeight) {
+				// if already expanded, just scroll to it
+				scrollToElement('links');
+			} else {
+				// if not expanded, this will expand it and scroll to it
+				document.getElementsByClassName('collapsible')[0].click();
+			}
+		}
+
 		let slidePage = [2, 2, 2, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1];
 
 		function plusSlides(slideshowId, n) {
@@ -420,7 +431,7 @@
 				<td align="center">
 					<div class="buttons">
 						<a href="/meteo/" style="text-decoration: none"><div class="btn">Početna</div></a>
-						<button type="button" class="btn" onclick="scrollToElement('links')">Linkovi</button>
+						<button type="button" class="btn" onclick="scrollToLinks()">Linkovi</button>
 					</div>
 				</td>
 			</tr>
