@@ -207,6 +207,8 @@ iframe, video {
 	.expandable .arrow {
 		position: absolute;
 		right: 10px;
+		transform: rotate(90deg);
+		display: inline-block;
 	}
 
 .links {
