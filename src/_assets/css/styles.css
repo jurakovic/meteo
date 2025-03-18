@@ -185,7 +185,7 @@ iframe, video {
 		}
 }
 
-.collapsible {
+.expandable {
 	position: relative;
 	justify-content: center;
 	margin-top: 10px;
@@ -200,11 +200,11 @@ iframe, video {
 	outline: none;
 }
 
-	.collapsible:hover {
+	.expandable:hover {
 		background-color: #5F6F89;
 	}
 
-	.collapsible .arrow {
+	.expandable .arrow {
 		position: absolute;
 		right: 10px;
 	}

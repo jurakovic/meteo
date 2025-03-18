@@ -19,9 +19,9 @@ function includeHTML() {
 	});
 }
 
-async function addCollapsibleClickEventListener() {
-	var coll = document.getElementsByClassName("collapsible")[0];
-	coll.addEventListener("click", function () {
+async function addExpandableClickEventListener() {
+	var expandable = document.getElementsByClassName("expandable")[0];
+	expandable.addEventListener("click", function () {
 		let arrow = this.querySelector(".arrow");
 		var content = document.getElementsByClassName("links")[0];
 		if (content.style.maxHeight) {
@@ -51,4 +51,4 @@ async function addCollapsibleClickEventListener() {
 }
 
 document.addEventListener('DOMContentLoaded', includeHTML);
-document.addEventListener('DOMContentLoaded', addCollapsibleClickEventListener);
+document.addEventListener('DOMContentLoaded', addExpandableClickEventListener);
