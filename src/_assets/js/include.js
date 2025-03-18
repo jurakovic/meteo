@@ -22,13 +22,16 @@ function includeHTML() {
 async function addCollapsibleClickEventListener() {
 	var coll = document.getElementsByClassName("collapsible")[0];
 	coll.addEventListener("click", function () {
+		let arrow = this.querySelector(".arrow");
 		var content = document.getElementsByClassName("links")[0];
 		if (content.style.maxHeight) {
 			content.style.maxHeight = null;
-			this.innerHTML = "Linkovi ▼";
+			//this.innerHTML = "Linkovi ▼";
+			arrow.textContent = "▼";
 		} else {
 			content.style.maxHeight = content.scrollHeight + "px";
-			this.innerHTML = "Linkovi ▲";
+			//this.innerHTML = "Linkovi ▲";
+			arrow.textContent = "▲";
 			setTimeout(() => {
 				// reset smooth scrolling to make it work every time
 				document.documentElement.style.scrollBehavior = "auto";

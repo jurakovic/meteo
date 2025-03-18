@@ -204,6 +204,8 @@
 		}
 
 		.collapsible {
+			position: relative;
+			justify-content: center;
 			margin-top: 10px;
 			margin-bottom: 4px;
 			font-family: inherit;
@@ -218,6 +220,11 @@
 
 			.collapsible:hover {
 				background-color: #5F6F89;
+			}
+
+			.collapsible .arrow {
+				position: absolute;
+				right: 10px;
 			}
 
 		.links {
@@ -386,13 +393,16 @@
 		async function addCollapsibleClickEventListener() {
 			var coll = document.getElementsByClassName("collapsible")[0];
 			coll.addEventListener("click", function () {
+				let arrow = this.querySelector(".arrow");
 				var content = document.getElementsByClassName("links")[0];
 				if (content.style.maxHeight) {
 					content.style.maxHeight = null;
-					this.innerHTML = "Linkovi ▼";
+					//this.innerHTML = "Linkovi ▼";
+					arrow.textContent = "▼";
 				} else {
 					content.style.maxHeight = content.scrollHeight + "px";
-					this.innerHTML = "Linkovi ▲";
+					//this.innerHTML = "Linkovi ▲";
+					arrow.textContent = "▲";
 					setTimeout(() => {
 						// reset smooth scrolling to make it work every time
 						document.documentElement.style.scrollBehavior = "auto";
@@ -602,7 +612,10 @@
 			<tr><td align="center"><hr></td></tr>
 			<tr>
 				<td align="center" id="links">
-					<button type="button" class="collapsible">Linkovi ▼</button>
+					<button type="button" class="collapsible">
+						<span class="label">Linkovi</span>
+						<span class="arrow">▼</span>
+					</button>
 				</td>
 			</tr>
 			<tr>

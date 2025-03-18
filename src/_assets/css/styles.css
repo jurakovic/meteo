@@ -186,6 +186,8 @@ iframe, video {
 }
 
 .collapsible {
+	position: relative;
+	justify-content: center;
 	margin-top: 10px;
 	margin-bottom: 4px;
 	font-family: inherit;
@@ -200,6 +202,11 @@ iframe, video {
 
 	.collapsible:hover {
 		background-color: #5F6F89;
+	}
+
+	.collapsible .arrow {
+		position: absolute;
+		right: 10px;
 	}
 
 .links {
