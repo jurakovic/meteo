@@ -186,7 +186,6 @@ iframe, video {
 }
 
 .expandable {
-	position: relative;
 	justify-content: center;
 	margin-top: 10px;
 	margin-bottom: 4px;
@@ -205,8 +204,9 @@ iframe, video {
 	}
 
 	.expandable .arrow {
-		position: absolute;
-		right: 10px;
+		float: right;
+		font-size: 14px;
+		margin-right: 3px;
 	}
 
 .links {
