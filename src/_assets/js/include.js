@@ -26,10 +26,12 @@ async function addExpandableClickEventListener() {
 		var content = document.getElementsByClassName("links")[0];
 		if (content.style.maxHeight) {
 			content.style.maxHeight = null;
-			arrow.textContent = ">";
+			//this.innerHTML = "Linkovi ▼";
+			arrow.textContent = "▼";
 		} else {
 			content.style.maxHeight = content.scrollHeight + "px";
-			arrow.textContent = "<";
+			//this.innerHTML = "Linkovi ▲";
+			arrow.textContent = "▲";
 			setTimeout(() => {
 				// reset smooth scrolling to make it work every time
 				document.documentElement.style.scrollBehavior = "auto";

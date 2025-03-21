@@ -224,9 +224,7 @@
 
 			.expandable .arrow {
 				position: absolute;
-				left: 10px;
-				transform: rotate(90deg);
-				display: inline-block;
+				right: 10px;
 			}
 
 		.links {
@@ -399,10 +397,12 @@
 				var content = document.getElementsByClassName("links")[0];
 				if (content.style.maxHeight) {
 					content.style.maxHeight = null;
-					arrow.textContent = ">";
+					//this.innerHTML = "Linkovi ▼";
+					arrow.textContent = "▼";
 				} else {
 					content.style.maxHeight = content.scrollHeight + "px";
-					arrow.textContent = "<";
+					//this.innerHTML = "Linkovi ▲";
+					arrow.textContent = "▲";
 					setTimeout(() => {
 						// reset smooth scrolling to make it work every time
 						document.documentElement.style.scrollBehavior = "auto";
@@ -613,8 +613,8 @@
 			<tr>
 				<td align="center" id="links">
 					<button type="button" class="expandable">
-						<span class="arrow">></span>
 						<span class="label">Linkovi</span>
+						<span class="arrow">▼</span>
 					</button>
 				</td>
 			</tr>
