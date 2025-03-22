@@ -16,8 +16,10 @@ function Main {
 	$css = Prepend-Tabs -str $css -num 2
 
 	# Read and inline JavaScript
-	$js = Get-Content "$srcDir\_assets\js\main.js" -Raw -Encoding "utf8"
-	$js = Prepend-Tabs -str $js -num 2
+	$mainjs = Get-Content "$srcDir\_assets\js\main.js" -Raw -Encoding "utf8"
+	$mainjs = Prepend-Tabs -str $mainjs -num 2
+	$includejs = Get-Content "$srcDir\_assets\js\include.js" -Raw -Encoding "utf8"
+	$includejs = Prepend-Tabs -str $includejs -num 2
 
 	$links = Get-Content "$srcDir\_components\links.html" -Raw -Encoding "utf8"
 	$links = Prepend-Tabs -str $links -num 6
@@ -28,7 +30,7 @@ function Main {
 	# Print each file path
 	foreach ($file in $files) {
 		$relativePath = $file.FullName.Substring($srcDir.Length).TrimStart('\')
-		ProcessHtml $buildDir $relativePath $css $js $links
+		ProcessHtml $buildDir $relativePath $css $mainjs $includejs $links
 	}
 }
 
@@ -38,7 +40,8 @@ function ProcessHtml() {
 		[string]$buildDir,
 		[string]$file,
 		[string]$css,
-		[string]$js,
+		[string]$mainjs,
+		[string]$includejs,
 		[string]$links
 	)
 
@@ -50,8 +53,9 @@ function ProcessHtml() {
 	$html = $html.Replace('href="/extras/index.html', 'href="/meteo/extras/')
 	$html = $html.Replace('href="/"', 'href="/meteo/"')
 	$html = $html.Replace('<link rel="stylesheet" href="/_assets/css/styles.css">', "<style>$css`t</style>")
-	$html = $html.Replace("<script src=""/_assets/js/main.js"" defer></script>", "<script>$js`t</script>")
-	$html = $html.Replace("<script src=""/_assets/js/include.js"" defer></script>`r`n`t", "") # removing this block
+	$html = $html.Replace("<script src=""/_assets/js/main.js"" defer></script>", "<script>$mainjs`t</script>")
+	$html = $html.Replace("<script src=""/_assets/js/include.js"" defer></script>", "<script>$includejs`t</script>")
+	$html = $html.Replace("document.addEventListener('DOMContentLoaded', includeHTML);", "//document.addEventListener('DOMContentLoaded', includeHTML);")
 	#$html = $html.Replace('"/_components', '"https://raw.githubusercontent.com/jurakovic/meteo/main/src/_components')
 	$html = $html.Replace('<!--<img src="https://bit', '<img src="https://bit')
 	$html = $html.Replace('right" />-->', 'right" />')

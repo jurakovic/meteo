@@ -10,7 +10,8 @@ function scrollToElement(id) {
 	const element = document.getElementById(id);
 	if (element) {
 		element.scrollIntoView({
-			behavior: 'smooth'
+			behavior: 'smooth',
+			block: 'start'
 		});
 	}
 }
@@ -29,7 +30,7 @@ function showSlides(slideshowId, n) {
 	slides[slidePage[slideshowId - 1] - 1].classList.add('active');
 }
 
-window.addEventListener('load', function() {
+window.addEventListener('load', function () {
 	const lazyImages = document.querySelectorAll('img.lazy');
 
 	lazyImages.forEach(img => {
