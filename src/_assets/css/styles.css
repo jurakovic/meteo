@@ -187,24 +187,27 @@ iframe, video {
 
 .dots-container {
 	display: grid;
-	grid-template-columns: 33% 33% 33%;
-	gap: 0;
-	max-height: 0;
+	grid-template-columns: repeat(3, 1fr);
+	gap: 4px;
+	width: 100%;
 	text-align: center;
-	margin-bottom: 10px;
 }
 
 .dot {
-	height: 2px;
-	margin-left: 4px;
-	margin-right: 4px;
+	height: 3px;
 	background-color: #5c5c5c80;
 	transition: background-color 0.3s;
 }
 
 	.dot.active {
-		background-color: #fff;
+		background-color: #c7c7c7;
 	}
+
+@media (max-width: 800px) {
+	.dot {
+		height: 2px;
+	}
+}
 
 
 .expandable {
