@@ -196,10 +196,9 @@ iframe, video {
 
 .dot {
 	height: 2px;
-	margin: 4px;
+	margin-left: 4px;
+	margin-right: 4px;
 	background-color: #5c5c5c80;
-	display: inline-block;
-	cursor: pointer;
 	transition: background-color 0.3s;
 }
 
