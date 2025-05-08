@@ -185,7 +185,7 @@ iframe, video {
 		}
 }
 
-.dots-container {
+.indicators-container {
 	display: grid;
 	grid-template-columns: repeat(3, 1fr);
 	gap: 4px;
@@ -193,18 +193,18 @@ iframe, video {
 	text-align: center;
 }
 
-.dot {
+.indicator {
 	height: 3px;
 	background-color: #5c5c5c80;
 	transition: background-color 0.3s;
 }
 
-	.dot.active {
+	.indicator.active {
 		background-color: #c7c7c7;
 	}
 
 @media (max-width: 800px) {
-	.dot {
+	.indicator {
 		height: 2px;
 	}
 }
