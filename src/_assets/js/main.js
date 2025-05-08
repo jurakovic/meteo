@@ -92,9 +92,7 @@ function showProgress() {
 	});
 }
 
-document.addEventListener('DOMContentLoaded', showProgress);
-
-document.addEventListener('DOMContentLoaded', () => {
+function addSwipeEvents() {
 	const slideshows = document.querySelectorAll('.slideshow');
 
 	slideshows.forEach(slideshow => {
@@ -115,4 +113,7 @@ document.addEventListener('DOMContentLoaded', () => {
 			handleSwipe(slideshowId, startX, endX);
 		});
 	});
-});
+}
+
+document.addEventListener('DOMContentLoaded', showProgress);
+document.addEventListener('DOMContentLoaded', addSwipeEvents);
