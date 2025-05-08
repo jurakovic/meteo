@@ -33,6 +33,19 @@ function showSlides(slideshowId, n) {
 	indicators[slidePage[slideshowId - 1] - 1].classList.add('active');
 }
 
+function handleSwipe(slideshowId, startX, endX) {
+	const threshold = 50;
+	const distance = endX - startX;
+
+	if (Math.abs(distance) > threshold) {
+		if (distance > 0) {
+			plusSlides(slideshowId, -1); // swipe right
+		} else {
+			plusSlides(slideshowId, 1); // swipe left
+		}
+	}
+}
+
 window.addEventListener('load', function () {
 	const lazyImages = document.querySelectorAll('img.lazy');
 
@@ -41,7 +54,6 @@ window.addEventListener('load', function () {
 		img.classList.remove('lazy');
 	});
 });
-
 
 function showProgress() {
 	// Get all images on the page
@@ -81,3 +93,26 @@ function showProgress() {
 }
 
 document.addEventListener('DOMContentLoaded', showProgress);
+
+document.addEventListener('DOMContentLoaded', () => {
+	const slideshows = document.querySelectorAll('.slideshow');
+
+	slideshows.forEach(slideshow => {
+		let startX = 0;
+		let endX = 0;
+		const slideshowId = slideshow.getAttribute('data-slideshow-id');
+
+		// Add touch event listeners
+		slideshow.addEventListener('touchstart', (e) => {
+			startX = e.touches[0].clientX; // Record the starting touch position
+		});
+
+		slideshow.addEventListener('touchmove', (e) => {
+			endX = e.touches[0].clientX; // Update the current touch position
+		});
+
+		slideshow.addEventListener('touchend', () => {
+			handleSwipe(slideshowId, startX, endX);
+		});
+	});
+});
