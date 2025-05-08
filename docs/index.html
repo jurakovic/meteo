@@ -203,6 +203,30 @@
 				}
 		}
 
+		.indicators-container {
+			display: grid;
+			grid-template-columns: repeat(3, 1fr);
+			gap: 4px;
+			width: 100%;
+			margin-top: 1px;
+		}
+
+		.indicator {
+			height: 3px;
+			background-color: #5c5c5c80;
+			transition: background-color 0.3s;
+		}
+
+			.indicator.active {
+				background-color: #c7c7c7;
+			}
+
+		@media (max-width: 800px) {
+			.indicator {
+				height: 2px;
+			}
+		}
+
 		.expandable {
 			position: relative;
 			justify-content: center;
@@ -317,10 +341,13 @@
 
 		function showSlides(slideshowId, n) {
 			const slides = document.querySelectorAll(`.slideshow[data-slideshow-id="${slideshowId}"] .slide`);
+			const indicators = document.querySelectorAll(`.indicators-container[data-slideshow-id="${slideshowId}"] .indicator`);
 			if (n > slides.length) { slidePage[slideshowId - 1] = 1; }
 			if (n < 1) { slidePage[slideshowId - 1] = slides.length; }
 			slides.forEach(slide => slide.classList.remove('active'));
 			slides[slidePage[slideshowId - 1] - 1].classList.add('active');
+			indicators.forEach(indicator => indicator.classList.remove('active'));
+			indicators[slidePage[slideshowId - 1] - 1].classList.add('active');
 		}
 
 		window.addEventListener('load', function () {
@@ -463,6 +490,11 @@
 						<a class="prev" onclick="plusSlides(1, -1)">&#10094;</a>
 						<a class="next" onclick="plusSlides(1, 1)">&#10095;</a>
 					</div>
+					<div class="indicators-container" data-slideshow-id="1">
+						<span class="indicator"></span>
+						<span class="indicator active"></span>
+						<span class="indicator"></span>
+					</div>
 				</td>
 			</tr>
 			<tr class="sp"></tr>
@@ -482,6 +514,11 @@
 						</div>
 						<a class="prev" onclick="plusSlides(2, -1)">&#10094;</a>
 						<a class="next" onclick="plusSlides(2, 1)">&#10095;</a>
+					</div>
+					<div class="indicators-container" data-slideshow-id="2">
+						<span class="indicator"></span>
+						<span class="indicator active"></span>
+						<span class="indicator"></span>
 					</div>
 				</td>
 			</tr>
@@ -503,6 +540,11 @@
 						<a class="prev" onclick="plusSlides(3, -1)">&#10094;</a>
 						<a class="next" onclick="plusSlides(3, 1)">&#10095;</a>
 					</div>
+					<div class="indicators-container" data-slideshow-id="3">
+						<span class="indicator"></span>
+						<span class="indicator active"></span>
+						<span class="indicator"></span>
+					</div>
 				</td>
 			</tr>
 			<tr class="sp"></tr>
@@ -522,6 +564,11 @@
 						</div>
 						<a class="prev" onclick="plusSlides(4, -1)">&#10094;</a>
 						<a class="next" onclick="plusSlides(4, 1)">&#10095;</a>
+					</div>
+					<div class="indicators-container" data-slideshow-id="4">
+						<span class="indicator"></span>
+						<span class="indicator active"></span>
+						<span class="indicator"></span>
 					</div>
 				</td>
 			</tr>
@@ -550,6 +597,10 @@
 						<a class="prev" onclick="plusSlides(7, -1)">&#10094;</a>
 						<a class="next" onclick="plusSlides(7, 1)">&#10095;</a>
 					</div>
+					<div class="indicators-container" data-slideshow-id="7" style="max-width: 720px; grid-template-columns: repeat(2, 1fr);">
+						<span class="indicator active"></span>
+						<span class="indicator"></span>
+					</div>
 				</td>
 			</tr>
 			<tr class="sp"></tr>
@@ -566,6 +617,10 @@
 						</div>
 						<a class="prev" onclick="plusSlides(6, -1)">&#10094;</a>
 						<a class="next" onclick="plusSlides(6, 1)">&#10095;</a>
+					</div>
+					<div class="indicators-container" data-slideshow-id="6" style="max-width: 821px; grid-template-columns: repeat(2, 1fr);">
+						<span class="indicator active"></span>
+						<span class="indicator"></span>
 					</div>
 				</td>
 			</tr>
@@ -593,6 +648,10 @@
 						</div>
 						<a class="prev" onclick="plusSlides(5, -1)">&#10094;</a>
 						<a class="next" onclick="plusSlides(5, 1)">&#10095;</a>
+					</div>
+					<div class="indicators-container" data-slideshow-id="5" style="max-width: 768px; grid-template-columns: repeat(2, 1fr);">
+						<span class="indicator active"></span>
+						<span class="indicator"></span>
 					</div>
 				</td>
 			</tr>
@@ -658,11 +717,16 @@
 						<a class="prev shorter" onclick="plusSlides(14, -1)">&#10094;</a>
 						<a class="next shorter" onclick="plusSlides(14, 1)">&#10095;</a>
 					</div>
+					<div class="indicators-container" data-slideshow-id="14" style="grid-template-columns: repeat(4, 1fr);">
+						<span class="indicator active"></span>
+						<span class="indicator"></span>
+						<span class="indicator"></span>
+						<span class="indicator"></span>
+					</div>
 				</td>
 			</tr>
 			<tr class="sp"></tr>
 
-			<tr><td align="center"><hr></td></tr>
 			<tr>
 				<td align="center" id="links">
 					<button type="button" class="expandable">
