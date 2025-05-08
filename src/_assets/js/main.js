@@ -24,10 +24,13 @@ function plusSlides(slideshowId, n) {
 
 function showSlides(slideshowId, n) {
 	const slides = document.querySelectorAll(`.slideshow[data-slideshow-id="${slideshowId}"] .slide`);
+	const dots = document.querySelectorAll(`.dots-container[data-slideshow-id="${slideshowId}"] .dot`);
 	if (n > slides.length) { slidePage[slideshowId - 1] = 1; }
 	if (n < 1) { slidePage[slideshowId - 1] = slides.length; }
 	slides.forEach(slide => slide.classList.remove('active'));
 	slides[slidePage[slideshowId - 1] - 1].classList.add('active');
+	dots.forEach(dot => dot.classList.remove('active'));
+	dots[slidePage[slideshowId - 1] - 1].classList.add('active');
 }
 
 window.addEventListener('load', function () {

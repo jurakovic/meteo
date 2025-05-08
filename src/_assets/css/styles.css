@@ -185,6 +185,29 @@ iframe, video {
 		}
 }
 
+.dots-container {
+	display: grid;
+	grid-template-columns: 33% 33% 33%;
+	gap: 0;
+	max-height: 0;
+	text-align: center;
+	margin-bottom: 10px;
+}
+
+.dot {
+	height: 2px;
+	margin: 4px;
+	background-color: #5c5c5c80;
+	display: inline-block;
+	cursor: pointer;
+	transition: background-color 0.3s;
+}
+
+	.dot.active {
+		background-color: #fff;
+	}
+
+
 .expandable {
 	position: relative;
 	justify-content: center;
