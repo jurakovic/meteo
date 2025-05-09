@@ -132,8 +132,9 @@ function addSwipeEvents() {
 			}
 		});
 
-		slideshow.addEventListener('mouseup', () => {
+		slideshow.addEventListener('mouseup', (e) => {
 			if (isDragging) {
+				endX = e.clientX;
 				handleSwipe(slideshowId, startX, endX);
 				isDragging = false;
 			}
