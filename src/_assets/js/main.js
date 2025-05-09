@@ -37,18 +37,12 @@ function handleSwipe(slideshowId, startX, endX) {
 	const threshold = 50;
 	const distance = endX - startX;
 
-	console.log(`Swipe detected: startX=${startX}, endX=${endX}, distance=${distance}`);
-
 	if (Math.abs(distance) > threshold) {
 		if (distance > 0) {
-			console.log('Swipe right');
 			plusSlides(slideshowId, -1); // swipe right
 		} else {
-			console.log('Swipe left');
 			plusSlides(slideshowId, 1); // swipe left
 		}
-	} else {
-		console.log('Swipe too short, no action taken');
 	}
 }
 
@@ -130,30 +124,26 @@ function addSwipeEvents() {
 		slideshow.addEventListener('mousedown', (e) => {
 			startX = e.clientX;
 			isDragging = true;
-			console.log(`Mouse down: startX=${startX}`);
 		});
 
 		slideshow.addEventListener('mousemove', (e) => {
-			//if (isDragging) {
+			if (isDragging) {
 				endX = e.clientX;
-				//console.log(`Mouse move: endX=${endX}`);
-			//}
+			}
 		});
 
 		slideshow.addEventListener('mouseup', () => {
-			//if (isDragging) {
-				console.log(`Mouse up: startX=${startX}, endX=${endX}`);
+			if (isDragging) {
 				handleSwipe(slideshowId, startX, endX);
 				isDragging = false;
-			//}
+			}
 		});
 
 		// Handle mouse leaving the slideshow area
 		slideshow.addEventListener('mouseleave', () => {
-			//if (isDragging) {
-				console.log('Mouse left slideshow area');
-				//isDragging = false;
-			//}
+			if (isDragging) {
+				isDragging = false;
+			}
 		});
 	});
 }
