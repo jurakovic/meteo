@@ -350,6 +350,19 @@
 			indicators[slidePage[slideshowId - 1] - 1].classList.add('active');
 		}
 
+		function handleSwipe(slideshowId, startX, endX) {
+			const threshold = 50;
+			const distance = endX - startX;
+
+			if (Math.abs(distance) > threshold) {
+				if (distance > 0) {
+					plusSlides(slideshowId, -1); // swipe right
+				} else {
+					plusSlides(slideshowId, 1); // swipe left
+				}
+			}
+		}
+
 		window.addEventListener('load', function () {
 			const lazyImages = document.querySelectorAll('img.lazy');
 
@@ -396,7 +409,65 @@
 			});
 		}
 
+		function addSwipeEvents() {
+			const slideshows = document.querySelectorAll('.slideshow');
+
+			slideshows.forEach(slideshow => {
+				let startX = 0;
+				let endX = 0;
+				let isDragging = false;
+				const slideshowId = slideshow.getAttribute('data-slideshow-id');
+
+				// Prevent default drag behavior on images
+				const images = slideshow.querySelectorAll('img');
+				images.forEach(img => {
+					img.addEventListener('dragstart', (e) => e.preventDefault());
+				});
+
+				// Touch events for mobile
+				slideshow.addEventListener('touchstart', (e) => {
+					startX = e.touches[0].clientX;
+				});
+
+				slideshow.addEventListener('touchmove', (e) => {
+					endX = e.touches[0].clientX;
+				});
+
+				slideshow.addEventListener('touchend', () => {
+					handleSwipe(slideshowId, startX, endX);
+				});
+
+				// Mouse events for desktop
+				slideshow.addEventListener('mousedown', (e) => {
+					startX = e.clientX;
+					isDragging = true;
+				});
+
+				slideshow.addEventListener('mousemove', (e) => {
+					if (isDragging) {
+						endX = e.clientX;
+					}
+				});
+
+				slideshow.addEventListener('mouseup', (e) => {
+					if (isDragging) {
+						endX = e.clientX;
+						handleSwipe(slideshowId, startX, endX);
+						isDragging = false;
+					}
+				});
+
+				// Handle mouse leaving the slideshow area
+				slideshow.addEventListener('mouseleave', () => {
+					if (isDragging) {
+						isDragging = false;
+					}
+				});
+			});
+		}
+
 		document.addEventListener('DOMContentLoaded', showProgress);
+		document.addEventListener('DOMContentLoaded', addSwipeEvents);
 	</script>
 	<script>
 		function includeHTML() {
