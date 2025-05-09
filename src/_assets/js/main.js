@@ -37,12 +37,18 @@ function handleSwipe(slideshowId, startX, endX) {
 	const threshold = 50;
 	const distance = endX - startX;
 
+	console.log(`Swipe detected: startX=${startX}, endX=${endX}, distance=${distance}`);
+
 	if (Math.abs(distance) > threshold) {
 		if (distance > 0) {
+			console.log('Swipe right');
 			plusSlides(slideshowId, -1); // swipe right
 		} else {
+			console.log('Swipe left');
 			plusSlides(slideshowId, 1); // swipe left
 		}
+	} else {
+		console.log('Swipe too short, no action taken');
 	}
 }
 
@@ -98,19 +104,56 @@ function addSwipeEvents() {
 	slideshows.forEach(slideshow => {
 		let startX = 0;
 		let endX = 0;
+		let isDragging = false;
 		const slideshowId = slideshow.getAttribute('data-slideshow-id');
 
-		// Add touch event listeners
+		// Prevent default drag behavior on images
+		const images = slideshow.querySelectorAll('img');
+		images.forEach(img => {
+			img.addEventListener('dragstart', (e) => e.preventDefault());
+		});
+
+		// Touch events for mobile
 		slideshow.addEventListener('touchstart', (e) => {
-			startX = e.touches[0].clientX; // Record the starting touch position
+			startX = e.touches[0].clientX;
 		});
 
 		slideshow.addEventListener('touchmove', (e) => {
-			endX = e.touches[0].clientX; // Update the current touch position
+			endX = e.touches[0].clientX;
 		});
 
 		slideshow.addEventListener('touchend', () => {
 			handleSwipe(slideshowId, startX, endX);
+		});
+
+		// Mouse events for desktop
+		slideshow.addEventListener('mousedown', (e) => {
+			startX = e.clientX;
+			isDragging = true;
+			console.log(`Mouse down: startX=${startX}`);
+		});
+
+		slideshow.addEventListener('mousemove', (e) => {
+			//if (isDragging) {
+				endX = e.clientX;
+				//console.log(`Mouse move: endX=${endX}`);
+			//}
+		});
+
+		slideshow.addEventListener('mouseup', () => {
+			//if (isDragging) {
+				console.log(`Mouse up: startX=${startX}, endX=${endX}`);
+				handleSwipe(slideshowId, startX, endX);
+				isDragging = false;
+			//}
+		});
+
+		// Handle mouse leaving the slideshow area
+		slideshow.addEventListener('mouseleave', () => {
+			//if (isDragging) {
+				console.log('Mouse left slideshow area');
+				//isDragging = false;
+			//}
 		});
 	});
 }
