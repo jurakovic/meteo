@@ -1,152 +1,173 @@
 
 function scrollToTop() {
-	window.scrollTo({
-		top: 0,
-		behavior: 'smooth'
-	});
+    window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+    });
 }
 
 function scrollToElement(id) {
-	const element = document.getElementById(id);
-	if (element) {
-		element.scrollIntoView({
-			behavior: 'smooth',
-			block: 'start'
-		});
-	}
+    const element = document.getElementById(id);
+    if (element) {
+        element.scrollIntoView({
+            behavior: 'smooth',
+            block: 'start'
+        });
+    }
 }
 
 let slidePage = [2, 2, 2, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1];
 
 function plusSlides(slideshowId, n) {
-	showSlides(slideshowId, slidePage[slideshowId - 1] += n);
+    showSlides(slideshowId, slidePage[slideshowId - 1] += n);
 }
 
 function showSlides(slideshowId, n) {
-	const slides = document.querySelectorAll(`.slideshow[data-slideshow-id="${slideshowId}"] .slide`);
-	const indicators = document.querySelectorAll(`.indicators-container[data-slideshow-id="${slideshowId}"] .indicator`);
-	if (n > slides.length) { slidePage[slideshowId - 1] = 1; }
-	if (n < 1) { slidePage[slideshowId - 1] = slides.length; }
-	slides.forEach(slide => slide.classList.remove('active'));
-	slides[slidePage[slideshowId - 1] - 1].classList.add('active');
-	indicators.forEach(indicator => indicator.classList.remove('active'));
-	indicators[slidePage[slideshowId - 1] - 1].classList.add('active');
+    const slides = document.querySelectorAll(`.slideshow[data-slideshow-id="${slideshowId}"] .slide`);
+    const indicators = document.querySelectorAll(`.indicators-container[data-slideshow-id="${slideshowId}"] .indicator`);
+    if (n > slides.length) { slidePage[slideshowId - 1] = 1; }
+    if (n < 1) { slidePage[slideshowId - 1] = slides.length; }
+    slides.forEach(slide => slide.classList.remove('active'));
+    slides[slidePage[slideshowId - 1] - 1].classList.add('active');
+    indicators.forEach(indicator => indicator.classList.remove('active'));
+    indicators[slidePage[slideshowId - 1] - 1].classList.add('active');
 }
 
 function handleSwipe(slideshowId, startX, endX) {
-	const threshold = 50;
-	const distance = endX - startX;
+    const threshold = 50;
+    const distance = endX - startX;
 
-	if (Math.abs(distance) > threshold) {
-		if (distance > 0) {
-			plusSlides(slideshowId, -1); // swipe right
-		} else {
-			plusSlides(slideshowId, 1); // swipe left
-		}
-	}
+    if (Math.abs(distance) > threshold) {
+        if (distance > 0) {
+            plusSlides(slideshowId, -1); // swipe right
+        } else {
+            plusSlides(slideshowId, 1); // swipe left
+        }
+    }
 }
 
 window.addEventListener('load', function () {
-	const lazyImages = document.querySelectorAll('img.lazy');
+    const lazyImages = document.querySelectorAll('img.lazy');
 
-	lazyImages.forEach(img => {
-		img.src = img.getAttribute('data-src');
-		img.classList.remove('lazy');
-	});
+    lazyImages.forEach(img => {
+        img.src = img.getAttribute('data-src');
+        img.classList.remove('lazy');
+    });
 });
 
 function showProgress() {
-	// Get all images on the page
-	const images = document.querySelectorAll('img');
-	const progressBar = document.getElementsByClassName('progress-bar')[0];
-	let imagesLoaded = 0;
+    // Get all images on the page
+    const images = document.querySelectorAll('img');
+    const progressBar = document.getElementsByClassName('progress-bar')[0];
+    let imagesLoaded = 0;
 
-	// Update progress bar
-	const updateProgress = () => {
-		const percent = (imagesLoaded / images.length) * 100;
-		progressBar.style.width = percent + '%';
+    // Update progress bar
+    const updateProgress = () => {
+        const percent = (imagesLoaded / images.length) * 100;
+        progressBar.style.width = percent + '%';
 
-		// Hide the progress bar when all images are loaded
-		if (imagesLoaded === images.length) {
-			setTimeout(() => {
-				document.getElementsByClassName('progress-container')[0].style.display = 'none';
-			}, 500); // Hide after a short delay
-		}
-	};
+        // Hide the progress bar when all images are loaded
+        if (imagesLoaded === images.length) {
+            setTimeout(() => {
+                document.getElementsByClassName('progress-container')[0].style.display = 'none';
+            }, 500); // Hide after a short delay
+        }
+    };
 
-	// Attach load and error events to each image
-	images.forEach((img) => {
-		img.addEventListener('load', () => {
-			imagesLoaded++;
-			updateProgress();
-		});
+    // Attach load and error events to each image
+    images.forEach((img) => {
+        img.addEventListener('load', () => {
+            imagesLoaded++;
+            updateProgress();
+        });
 
-		img.addEventListener('error', () => {
-			imagesLoaded++; // Count error images as "loaded" to avoid getting stuck
-			updateProgress();
-		});
+        img.addEventListener('error', () => {
+            imagesLoaded++; // Count error images as "loaded" to avoid getting stuck
+            updateProgress();
+        });
 
-		if (img.complete) {
-			img.dispatchEvent(new Event('load')); // Manually trigger 'load' if already loaded
-		}
-	});
+        if (img.complete) {
+            img.dispatchEvent(new Event('load')); // Manually trigger 'load' if already loaded
+        }
+    });
 }
 
 function addSwipeEvents() {
-	const slideshows = document.querySelectorAll('.slideshow');
+    const slideshows = document.querySelectorAll('.slideshow');
 
-	slideshows.forEach(slideshow => {
-		let startX = 0;
-		let endX = 0;
-		let isDragging = false;
-		const slideshowId = slideshow.getAttribute('data-slideshow-id');
+    slideshows.forEach(slideshow => {
+        let startX = 0;
+        let startY = 0;
+        let endX = 0;
+        let endY = 0;
+        let isDragging = false;
+        const slideshowId = slideshow.getAttribute('data-slideshow-id');
 
-		// Prevent default drag behavior on images
-		const images = slideshow.querySelectorAll('img');
-		images.forEach(img => {
-			img.addEventListener('dragstart', (e) => e.preventDefault());
-		});
+        // Prevent default drag behavior on images
+        const images = slideshow.querySelectorAll('img');
+        images.forEach(img => {
+            img.addEventListener('dragstart', (e) => e.preventDefault());
+        });
 
-		// Touch events for mobile
-		slideshow.addEventListener('touchstart', (e) => {
-			startX = e.touches[0].clientX;
-		});
+        // Touch events for mobile
+        slideshow.addEventListener('touchstart', (e) => {
+            startX = e.touches[0].clientX;
+            startY = e.touches[0].clientY;
+        });
 
-		slideshow.addEventListener('touchmove', (e) => {
-			endX = e.touches[0].clientX;
-		});
+        slideshow.addEventListener('touchmove', (e) => {
+            endX = e.touches[0].clientX;
+            endY = e.touches[0].clientY;
+        });
 
-		slideshow.addEventListener('touchend', () => {
-			handleSwipe(slideshowId, startX, endX);
-		});
+        slideshow.addEventListener('touchend', () => {
+            endX = e.clientX;
+            endY = e.clientY;
+            const deltaX = endX - startX;
+            const deltaY = endY - startY;
 
-		// Mouse events for desktop
-		slideshow.addEventListener('mousedown', (e) => {
-			startX = e.clientX;
-			isDragging = true;
-		});
+            // Only trigger swipe if horizontal movement is greater than vertical movement (prevent swipe on scroll up or down)
+            if (Math.abs(deltaX) > Math.abs(deltaY)) {
+                handleSwipe(slideshowId, startX, endX);
+            }
+        });
 
-		slideshow.addEventListener('mousemove', (e) => {
-			if (isDragging) {
-				endX = e.clientX;
-			}
-		});
+        // Mouse events for desktop
+        slideshow.addEventListener('mousedown', (e) => {
+            startX = e.clientX;
+            startY = e.clientY;
+            isDragging = true;
+        });
 
-		slideshow.addEventListener('mouseup', (e) => {
-			if (isDragging) {
-				endX = e.clientX;
-				handleSwipe(slideshowId, startX, endX);
-				isDragging = false;
-			}
-		});
+        slideshow.addEventListener('mousemove', (e) => {
+            if (isDragging) {
+                endX = e.clientX;
+                endY = e.clientY;
+            }
+        });
 
-		// Handle mouse leaving the slideshow area
-		slideshow.addEventListener('mouseleave', () => {
-			if (isDragging) {
-				isDragging = false;
-			}
-		});
-	});
+        slideshow.addEventListener('mouseup', (e) => {
+            if (isDragging) {
+                endX = e.clientX;
+                endY = e.clientY;
+                const deltaX = endX - startX;
+                const deltaY = endY - startY;
+
+                // Only trigger swipe if horizontal movement is greater than vertical movement (prevent swipe on scroll up or down)
+                if (Math.abs(deltaX) > Math.abs(deltaY)) {
+                    handleSwipe(slideshowId, startX, endX);
+                }
+                isDragging = false;
+            }
+        });
+
+        // Handle mouse leaving the slideshow area
+        slideshow.addEventListener('mouseleave', () => {
+            if (isDragging) {
+                isDragging = false;
+            }
+        });
+    });
 }
 
 document.addEventListener('DOMContentLoaded', showProgress);
