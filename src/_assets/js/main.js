@@ -121,8 +121,6 @@ function addSwipeEvents() {
         });
 
         slideshow.addEventListener('touchend', () => {
-            endX = e.clientX;
-            endY = e.clientY;
             const deltaX = endX - startX;
             const deltaY = endY - startY;
 
