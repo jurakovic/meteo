@@ -113,20 +113,28 @@ function addSwipeEvents() {
         slideshow.addEventListener('touchstart', (e) => {
             startX = e.touches[0].clientX;
             startY = e.touches[0].clientY;
+            isDragging = false;
         });
 
         slideshow.addEventListener('touchmove', (e) => {
             endX = e.touches[0].clientX;
             endY = e.touches[0].clientY;
+
+            // If the finger moves horizontally, set isDragging to true
+            if (Math.abs(endX - startX) > Math.abs(endY - startY)) {
+                isDragging = true;
+            }
         });
 
         slideshow.addEventListener('touchend', () => {
-            const deltaX = endX - startX;
-            const deltaY = endY - startY;
+            if (isDragging) {
+                const deltaX = endX - startX;
+                const deltaY = endY - startY;
 
-            // Only trigger swipe if horizontal movement is greater than vertical movement (prevent swipe on scroll up or down)
-            if (Math.abs(deltaX) > Math.abs(deltaY)) {
-                handleSwipe(slideshowId, startX, endX);
+                // Only trigger swipe if horizontal movement is greater than vertical movement (prevent swipe on scroll up or down)
+                if (Math.abs(deltaX) > Math.abs(deltaY)) {
+                    handleSwipe(slideshowId, startX, endX);
+                }
             }
         });
 
