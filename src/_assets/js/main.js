@@ -33,6 +33,19 @@ function showSlides(slideshowId, n) {
 	indicators[slidePage[slideshowId - 1] - 1].classList.add('active');
 }
 
+function handleSwipe(slideshowId, startX, endX) {
+	const threshold = 50;
+	const distance = endX - startX;
+
+	if (Math.abs(distance) > threshold) {
+		if (distance > 0) {
+			plusSlides(slideshowId, -1); // swipe right
+		} else {
+			plusSlides(slideshowId, 1); // swipe left
+		}
+	}
+}
+
 window.addEventListener('load', function () {
 	const lazyImages = document.querySelectorAll('img.lazy');
 
@@ -41,7 +54,6 @@ window.addEventListener('load', function () {
 		img.classList.remove('lazy');
 	});
 });
-
 
 function showProgress() {
 	// Get all images on the page
@@ -80,4 +92,89 @@ function showProgress() {
 	});
 }
 
+function addSwipeEvents() {
+	const slideshows = document.querySelectorAll('.slideshow');
+
+	slideshows.forEach(slideshow => {
+		let startX = 0;
+		let startY = 0;
+		let endX = 0;
+		let endY = 0;
+		let isDragging = false;
+		const slideshowId = slideshow.getAttribute('data-slideshow-id');
+
+		// Prevent default drag behavior on images
+		const images = slideshow.querySelectorAll('img');
+		images.forEach(img => {
+			img.addEventListener('dragstart', (e) => e.preventDefault());
+		});
+
+		// Touch events for mobile
+		slideshow.addEventListener('touchstart', (e) => {
+			startX = e.touches[0].clientX;
+			startY = e.touches[0].clientY;
+			isDragging = false;
+		});
+
+		slideshow.addEventListener('touchmove', (e) => {
+			endX = e.touches[0].clientX;
+			endY = e.touches[0].clientY;
+
+			// If the finger moves horizontally, set isDragging to true
+			if (Math.abs(endX - startX) > Math.abs(endY - startY)) {
+				isDragging = true;
+			}
+		});
+
+		slideshow.addEventListener('touchend', () => {
+			if (isDragging) {
+				const deltaX = endX - startX;
+				const deltaY = endY - startY;
+
+				// Only trigger swipe if horizontal movement is greater than vertical movement (prevent swipe on scroll up or down)
+				if (Math.abs(deltaX) > Math.abs(deltaY)) {
+					handleSwipe(slideshowId, startX, endX);
+				}
+			}
+		});
+
+		// Mouse events for desktop
+		slideshow.addEventListener('mousedown', (e) => {
+			startX = e.clientX;
+			startY = e.clientY;
+			isDragging = true;
+		});
+
+		slideshow.addEventListener('mousemove', (e) => {
+			if (isDragging) {
+				endX = e.clientX;
+				endY = e.clientY;
+			}
+		});
+
+		slideshow.addEventListener('mouseup', (e) => {
+			if (isDragging) {
+				endX = e.clientX;
+				endY = e.clientY;
+				const deltaX = endX - startX;
+				const deltaY = endY - startY;
+
+				// Only trigger swipe if horizontal movement is greater than vertical movement (prevent swipe on scroll up or down)
+				if (Math.abs(deltaX) > Math.abs(deltaY)) {
+					handleSwipe(slideshowId, startX, endX);
+				}
+				isDragging = false;
+			}
+		});
+
+		// Handle mouse leaving the slideshow area
+		slideshow.addEventListener('mouseleave', () => {
+			if (isDragging) {
+				isDragging = false;
+			}
+		});
+	});
+}
+
 document.addEventListener('DOMContentLoaded', showProgress);
+document.addEventListener('DOMContentLoaded', addSwipeEvents);
