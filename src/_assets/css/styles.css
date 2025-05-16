@@ -1,4 +1,4 @@
-		body {
+	body {
 			background-color: #212f45;
 			font-family: monospace;
 			min-height: 100vh;
@@ -207,7 +207,6 @@
 				height: 2px;
 			}
 		}
-
 
 		.expandable {
 			position: relative;

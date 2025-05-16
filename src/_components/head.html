@@ -15,10 +15,14 @@
 	<meta property="og:site_name" content="Meteo radari">
 	<meta property="og:type" content="website">
 	<style>
-		{% include "./_assets/css/styles.css" %}
+	{% include "./_assets/css/styles.css" %}
 	</style>
-	<script src="../_assets/js/main.js" defer></script>
-	<script src="../_assets/js/include.js" defer></script>
+	<script>
+	{% include "./_assets/js/main.js" %}
+	</script>
+	<script>
+	{% include "./_assets/js/include.js" %}
+	</script>
 	<script async src="https://www.googletagmanager.com/gtag/js?id=G-233EMZJM16"></script>
 	<script>
 		window.dataLayer = window.dataLayer || [];
