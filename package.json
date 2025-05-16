@@ -1,27 +1,24 @@
 {
-  "name": "meteo",
-  "version": "1.0.0",
-  "description": "A compilation of Croatia and Europe weather radar and satellite images.",
-  "main": "index.js",
-  "directories": {
-    "doc": "docs"
-  },
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/jurakovic/meteo.git"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/jurakovic/meteo/issues"
-  },
-  "homepage": "https://github.com/jurakovic/meteo#readme",
-  "type": "module",
-  "dependencies": {
-    "@11ty/eleventy": "^3.1.0"
-  }
+    "name": "meteo",
+    "version": "1.0.0",
+    "description": "A compilation of Croatia and Europe weather radar and satellite images.",
+    "main": "index.js",
+    "scripts": {
+        "build": "eleventy"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/jurakovic/meteo.git"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC",
+    "bugs": {
+        "url": "https://github.com/jurakovic/meteo/issues"
+    },
+    "homepage": "https://github.com/jurakovic/meteo#readme",
+    "type": "module",
+    "dependencies": {
+        "@11ty/eleventy": "^3.1.0"
+    }
 }
