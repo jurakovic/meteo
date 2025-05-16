@@ -19,5 +19,6 @@
   "bugs": {
     "url": "https://github.com/jurakovic/meteo/issues"
   },
-  "homepage": "https://github.com/jurakovic/meteo#readme"
+  "homepage": "https://github.com/jurakovic/meteo#readme",
+  "type": "module"
 }
