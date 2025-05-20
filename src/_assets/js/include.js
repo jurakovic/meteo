@@ -50,3 +50,26 @@ async function addExpandableClickEventListener() {
 
 document.addEventListener('DOMContentLoaded', includeHTML);
 document.addEventListener('DOMContentLoaded', addExpandableClickEventListener);
+
+window.addEventListener('load', () => {
+	let iframe = document.getElementById('windyFrame');
+	let url = new URL(iframe.src);
+
+	console.log(window.innerWidth);
+
+	if (window.innerWidth < 800) {
+		url.searchParams.set('zoom', 6);
+		iframe.src = url.toString();
+	}
+
+	iframe = document.getElementById('blitzortungFrame');
+	url = iframe.src;
+	console.log(iframe.src);
+	console.log(url);
+
+	if (window.innerWidth < 800) {
+		url = url.replace('#6/44.5/16.5', '#5/44.5/16.5')
+		console.log(url);
+		iframe.src = url;
+	}
+});
