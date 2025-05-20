@@ -52,22 +52,27 @@ function updateIframeSrc() {
     const windyFrame = document.getElementById('windyFrame');
     const blitzortungFrame = document.getElementById('blitzortungFrame');
 
-    console.log(window.innerWidth);
+    let wurl = windyFrame.src;
+    let burl = blitzortungFrame.src;
 
     if (window.innerWidth < 800) {
-        // set windy iframe
-        let url = new URL(windyFrame.src);
-        url.searchParams.set('zoom', 6);
-        windyFrame.src = url.toString();
-
-        // set blitzortung iframe
-        url = blitzortungFrame.src;
-        url = url.replace('#6/44.5/16.5', '#5/44.5/16.5')
-        console.log(url);
-        blitzortungFrame.src = url;
+        wurl = wurl.replace('&zoom=7', '&zoom=6')
+        burl = burl.replace('#6/', '#5/')
     }
+    else {
+        wurl = wurl.replace('&zoom=6', '&zoom=7')
+        burl = burl.replace('#5/', '#6/')
+    }
+
+    windyFrame.src = wurl;
+    blitzortungFrame.src = burl;
 }
 
 document.addEventListener('DOMContentLoaded', includeHTML);
 document.addEventListener('DOMContentLoaded', addExpandableClickEventListener);
+
 window.addEventListener('load', updateIframeSrc);
+window.addEventListener('resize', () => {
+    clearTimeout(window._resizeTimeout); // Optional: debounce to avoid excessive reloads
+    window._resizeTimeout = setTimeout(updateIframeSrc, 200);
+});
