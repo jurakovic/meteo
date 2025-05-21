@@ -36,21 +36,22 @@ img {
 	position: relative;
 	width: 100%;
 	overflow: hidden;
-	padding-top: 80%;
+	padding-top: 110%;
 }
 
 	.if1 .overlay {
 		position: absolute;
-		top: 13%;
+		top: 10%;
 		left: 0;
 		width: 100%;
-		height: 75%;
+		height: 83%;
 	}
 
 @media (max-width: 800px) {
 	.if1 .overlay {
+		top: 8%;
 		width: 91%;
-		height: 64%;
+		height: 76%;
 	}
 }
 
