@@ -48,5 +48,33 @@ async function addExpandableClickEventListener() {
 	});
 }
 
+let previousWidth = 0;
+
+function updateIframeSrc() {
+	if (window.innerWidth !== previousWidth) {
+		const windyFrame = document.getElementById('windyFrame');
+		const blitzortungFrame = document.getElementById('blitzortungFrame');
+
+		let wurl = windyFrame.getAttribute('data-src');
+		let burl = blitzortungFrame.getAttribute('data-src');
+
+		if (window.innerWidth < 800) {
+			wurl = wurl.replace('&zoom=7', '&zoom=6')
+			burl = burl.replace('#6/', '#5/')
+		}
+
+		windyFrame.src = wurl;
+		blitzortungFrame.src = burl;
+
+		previousWidth = window.innerWidth;
+	}
+}
+
 document.addEventListener('DOMContentLoaded', includeHTML);
 document.addEventListener('DOMContentLoaded', addExpandableClickEventListener);
+document.addEventListener('DOMContentLoaded', updateIframeSrc);
+
+window.addEventListener('resize', () => {
+	clearTimeout(window._resizeTimeout); // Optional: debounce to avoid excessive reloads
+	window._resizeTimeout = setTimeout(updateIframeSrc, 200);
+});

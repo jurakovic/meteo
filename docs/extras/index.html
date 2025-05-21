@@ -54,7 +54,23 @@
 			position: relative;
 			width: 100%;
 			overflow: hidden;
-			padding-top: 80%;
+			padding-top: 110%;
+		}
+
+			.if1 .overlay {
+				position: absolute;
+				top: 10%;
+				left: 0;
+				width: 100%;
+				height: 83%;
+			}
+
+		@media (max-width: 800px) {
+			.if1 .overlay {
+				top: 8%;
+				width: 91%;
+				height: 76%;
+			}
 		}
 
 		.if2 {
@@ -333,7 +349,7 @@
 			}
 		}
 
-		let slidePage = [2, 2, 2, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1];
+		let slidePage = [2, 2, 2, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1];
 
 		function plusSlides(slideshowId, n) {
 			showSlides(slideshowId, slidePage[slideshowId - 1] += n);
@@ -546,8 +562,36 @@
 			});
 		}
 
+		let previousWidth = 0;
+
+		function updateIframeSrc() {
+			if (window.innerWidth !== previousWidth) {
+				const windyFrame = document.getElementById('windyFrame');
+				const blitzortungFrame = document.getElementById('blitzortungFrame');
+
+				let wurl = windyFrame.getAttribute('data-src');
+				let burl = blitzortungFrame.getAttribute('data-src');
+
+				if (window.innerWidth < 800) {
+					wurl = wurl.replace('&zoom=7', '&zoom=6')
+					burl = burl.replace('#6/', '#5/')
+				}
+
+				windyFrame.src = wurl;
+				blitzortungFrame.src = burl;
+
+				previousWidth = window.innerWidth;
+			}
+		}
+
 		//document.addEventListener('DOMContentLoaded', includeHTML);
 		document.addEventListener('DOMContentLoaded', addExpandableClickEventListener);
+		document.addEventListener('DOMContentLoaded', updateIframeSrc);
+
+		window.addEventListener('resize', () => {
+			clearTimeout(window._resizeTimeout); // Optional: debounce to avoid excessive reloads
+			window._resizeTimeout = setTimeout(updateIframeSrc, 200);
+		});
 	</script>
 	<script async src="https://www.googletagmanager.com/gtag/js?id=G-233EMZJM16"></script>
 	<script>
@@ -587,6 +631,16 @@
 					<a href="https://www.idokep.eu/ceu/radar" target="_blank" rel="nofollow">Időkép | Radar | Europa</a>
 					<div class="placeholder" style="max-width: 840px; aspect-ratio: 840 / 600;">
 						<img src="https://www.idokep.eu/terkep/eu/radar.gif" />
+					</div>
+				</td>
+			</tr>
+			<tr class="sp"></tr>
+
+			<tr>
+				<td align="center">
+					<a href="https://www.istramet.hr/radari-munja/" target="_blank" rel="nofollow">Istramet | Munje</a>
+					<div class="placeholder" style="max-width: 804px; aspect-ratio: 804 / 687; ">
+						<img src="https://www.istramet.hr/wp-content/themes/istramet/img/munje_hr.png" />
 					</div>
 				</td>
 			</tr>
@@ -780,17 +834,18 @@
 							<p><a href="https://meteoalarm.org/en/live/region/HR" target="_blank" rel="nofollow">Meteoalarm</a></p>
 							<p><a href="https://nebo.com.hr" target="_blank" rel="nofollow">Nebo.com.hr</a></p>
 							<br />
-							<p><a href="https://www.yr.no/en/details/table/2-3186886/Croatia/City%20of%20Zagreb/Zagreb" target="_blank" rel="nofollow">Yr.no</a></p>
+							<p><a href="https://view.eumetsat.int/productviewer?v=default" target="_blank" rel="nofollow">EUMETView</a></p>
+							<p><a href="https://www.estofex.org" target="_blank" rel="nofollow">ESTOFEX</a></p>
+							<p><a href="https://www.eswd.eu" target="_blank" rel="nofollow">ESWD</a></p>
+							<p><a href="https://charts.ecmwf.int" target="_blank" rel="nofollow">ECMWF</a></p>
+							<p><a href="https://www.wxcharts.com" target="_blank" rel="nofollow">WXCharts</a></p>
+							<br />
 							<p><a href="https://www.windy.com/-Radar-lightning-radar?radar,45.799,15.937,8" target="_blank" rel="nofollow">Windy</a></p>
-							<p><a href="https://zoom.earth" target="_blank" rel="nofollow">Zoom Earth</a></p>
 							<p><a href="https://meteo.arso.gov.si" target="_blank" rel="nofollow">meteo.si</a></p>
 							<p><a href="https://www.wetterzentrale.de/en/" target="_blank" rel="nofollow">Wetterzentrale</a></p>
 							<p><a href="https://www.meteociel.fr" target="_blank" rel="nofollow">Meteociel.fr</a></p>
-							<br />
-							<p><a href="https://www.estofex.org" target="_blank" rel="nofollow">ESTOFEX</a></p>
-							<p><a href="https://www.eswd.eu" target="_blank" rel="nofollow">ESWD</a></p>
-							<p><a href="https://www.ecmwf.int" target="_blank" rel="nofollow">ECMWF</a></p>
-							<p><a href="https://www.wxcharts.com" target="_blank" rel="nofollow">WXCharts</a></p>
+							<p><a href="https://zoom.earth" target="_blank" rel="nofollow">Zoom Earth</a></p>
+							<p><a href="https://www.yr.no/en/details/table/2-3186886/Croatia/City%20of%20Zagreb/Zagreb" target="_blank" rel="nofollow">Yr.no</a></p>
 						</div>
 
 						<div class="item">
@@ -817,14 +872,11 @@
 							<p>
 								<b>Meteoradar</b>
 								<br />Radar&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-								<a href="https://www.meteoradar.co.uk/en-gb/country/hr/hd" target="_blank" rel="nofollow">Hrvatska</a>
-								<a href="https://www.meteoradar.co.uk/en-gb/continent/eu/hd" target="_blank" rel="nofollow">Europa</a>
-							</p>
-							<p>
-								<b>Meteox</b>
+								<a href="https://www.meteoradar.co.uk/en-gb/country/hr" target="_blank" rel="nofollow">Hrvatska</a>
+								<a href="https://www.meteoradar.co.uk/en-gb/continent/eu" target="_blank" rel="nofollow">Europa</a>
 								<br />Temperatura&nbsp;&nbsp;&nbsp;&nbsp;
-								<a href="https://www.meteox.com/en-gb/country/hr#selectedLayer=temperatureDays" target="_blank" rel="nofollow">Hrvatska</a>
-								<a href="https://www.meteox.com/en-gb/continent/eu" target="_blank" rel="nofollow">Europa</a>
+								<a href="https://www.meteoradar.co.uk/en-gb/country/hr/maps/temperature" target="_blank" rel="nofollow">Hrvatska</a>
+								<a href="https://www.meteoradar.co.uk/en-gb/continent/eu/maps/temperature" target="_blank" rel="nofollow">Europa</a>
 							</p>
 							<p>
 								<b>I'm Weather</b>
