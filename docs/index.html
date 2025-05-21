@@ -569,16 +569,12 @@
 				const windyFrame = document.getElementById('windyFrame');
 				const blitzortungFrame = document.getElementById('blitzortungFrame');
 
-				let wurl = windyFrame.src;
-				let burl = blitzortungFrame.src;
+				let wurl = windyFrame.getAttribute('data-src');
+				let burl = blitzortungFrame.getAttribute('data-src');
 
 				if (window.innerWidth < 800) {
 					wurl = wurl.replace('&zoom=7', '&zoom=6')
 					burl = burl.replace('#6/', '#5/')
-				}
-				else {
-					wurl = wurl.replace('&zoom=6', '&zoom=7')
-					burl = burl.replace('#5/', '#6/')
 				}
 
 				windyFrame.src = wurl;
@@ -590,8 +586,8 @@
 
 		//document.addEventListener('DOMContentLoaded', includeHTML);
 		document.addEventListener('DOMContentLoaded', addExpandableClickEventListener);
+		document.addEventListener('DOMContentLoaded', updateIframeSrc);
 
-		window.addEventListener('load', updateIframeSrc);
 		window.addEventListener('resize', () => {
 			clearTimeout(window._resizeTimeout); // Optional: debounce to avoid excessive reloads
 			window._resizeTimeout = setTimeout(updateIframeSrc, 200);
@@ -724,7 +720,7 @@
 				<td align="center">
 					<a href="https://www.windy.com/-Radar-lightning-radar?radar,44.5,16.5,8" target="_blank" rel="nofollow">Windy</a>
 					<div class="if1 placeholder">
-						<iframe id="windyFrame" src="https://embed.windy.com/embed2.html?lat=44.5&lon=16.56&zoom=7&level=surface&overlay=radar&menu=&message=true&marker=&calendar=&pressure=&type=map&location=coordinates&detail=&detailLat=45.798&detailLon=15.936&metricWind=m%2Fs&metricTemp=%C2%B0C&radarRange=-1" frameborder="0"></iframe>
+						<iframe id="windyFrame" loading="lazy" data-src="https://embed.windy.com/embed2.html?lat=44.5&lon=16.56&zoom=7&level=surface&overlay=radar&menu=&message=true&marker=&calendar=&pressure=&type=map&location=coordinates&detail=&detailLat=45.798&detailLon=15.936&metricWind=m%2Fs&metricTemp=%C2%B0C&radarRange=-1" frameborder="0"></iframe>
 						<div class="overlay" />
 					</div>
 				</td>
@@ -777,7 +773,7 @@
 				<td align="center">
 					<a href="https://map.blitzortung.org/#6/44.5/16.5" target="_blank" rel="nofollow">Blitzortung.org | Munje</a>
 					<div class="if1 placeholder">
-						<iframe id="blitzortungFrame" src="https://map.blitzortung.org/index.php?interactive=0&NavigationControl=1&FullScreenControl=0&Cookies=0&InfoDiv=0&MenuButtonDiv=0&ScaleControl=0&CirclesRangeValue=1&LinksCheckboxChecked=0&LinksRangeValue=0&MapStyle=1&MapStyleRangeValue=3&Advertisment=0#6/44.5/16.5" frameborder="0"></iframe>
+						<iframe id="blitzortungFrame" loading="lazy" data-src="https://map.blitzortung.org/index.php?interactive=0&NavigationControl=1&FullScreenControl=0&Cookies=0&InfoDiv=0&MenuButtonDiv=0&ScaleControl=0&CirclesRangeValue=1&LinksCheckboxChecked=0&LinksRangeValue=0&MapStyle=1&MapStyleRangeValue=3&Advertisment=0#6/44.5/16.5" frameborder="0"></iframe>
 					</div>
 				</td>
 			</tr>
