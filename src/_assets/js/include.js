@@ -48,7 +48,7 @@ async function addExpandableClickEventListener() {
 	});
 }
 
-let previousWidth = window.innerWidth;
+let previousWidth = 0;
 
 function updateIframeSrc() {
 	if (window.innerWidth !== previousWidth) {
@@ -59,12 +59,12 @@ function updateIframeSrc() {
 		let burl = blitzortungFrame.src;
 
 		if (window.innerWidth < 800) {
-			wurl = wurl.replace('&zoom=7', '&zoom=5')
-			burl = burl.replace('#6/', '#4/')
+			wurl = wurl.replace('&zoom=7', '&zoom=6')
+			burl = burl.replace('#6/', '#5/')
 		}
 		else {
-			wurl = wurl.replace('&zoom=5', '&zoom=7')
-			burl = burl.replace('#4/', '#6/')
+			wurl = wurl.replace('&zoom=6', '&zoom=7')
+			burl = burl.replace('#5/', '#6/')
 		}
 
 		windyFrame.src = wurl;
