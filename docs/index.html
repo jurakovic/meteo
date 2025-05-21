@@ -546,24 +546,30 @@
 			});
 		}
 
+		let previousWidth = window.innerWidth;
+
 		function updateIframeSrc() {
-			const windyFrame = document.getElementById('windyFrame');
-			const blitzortungFrame = document.getElementById('blitzortungFrame');
+			if (window.innerWidth !== previousWidth) {
+				const windyFrame = document.getElementById('windyFrame');
+				const blitzortungFrame = document.getElementById('blitzortungFrame');
 
-			let wurl = windyFrame.src;
-			let burl = blitzortungFrame.src;
+				let wurl = windyFrame.src;
+				let burl = blitzortungFrame.src;
 
-			if (window.innerWidth < 800) {
-				wurl = wurl.replace('&zoom=7', '&zoom=5')
-				burl = burl.replace('#6/', '#4/')
+				if (window.innerWidth < 800) {
+					wurl = wurl.replace('&zoom=7', '&zoom=5')
+					burl = burl.replace('#6/', '#4/')
+				}
+				else {
+					wurl = wurl.replace('&zoom=5', '&zoom=7')
+					burl = burl.replace('#4/', '#6/')
+				}
+
+				windyFrame.src = wurl;
+				blitzortungFrame.src = burl;
+
+				previousWidth = window.innerWidth;
 			}
-			else {
-				wurl = wurl.replace('&zoom=5', '&zoom=7')
-				burl = burl.replace('#4/', '#6/')
-			}
-
-			windyFrame.src = wurl;
-			blitzortungFrame.src = burl;
 		}
 
 		//document.addEventListener('DOMContentLoaded', includeHTML);
