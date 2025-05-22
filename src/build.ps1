@@ -16,9 +16,9 @@ function Main {
 	$css = Prepend-Tabs -str $css -num 2
 
 	# Read and inline JavaScript
-	$mainjs = Get-Content "$srcDir\_assets\js\main.js" -Raw -Encoding "utf8"
+	$mainjs = Get-Content "$srcDir\_assets\js\main.min.js" -Raw -Encoding "utf8"
 	$mainjs = Prepend-Tabs -str $mainjs -num 2
-	$includejs = Get-Content "$srcDir\_assets\js\include.js" -Raw -Encoding "utf8"
+	$includejs = Get-Content "$srcDir\_assets\js\include.min.js" -Raw -Encoding "utf8"
 	$includejs = Prepend-Tabs -str $includejs -num 2
 
 	$links = Get-Content "$srcDir\_components\links.html" -Raw -Encoding "utf8"
@@ -53,8 +53,8 @@ function ProcessHtml() {
 	$html = $html.Replace('href="/extras/index.html', 'href="/meteo/extras/')
 	$html = $html.Replace('href="/"', 'href="/meteo/"')
 	$html = $html.Replace('<link rel="stylesheet" href="/_assets/css/styles.css">', "<style>$css`t</style>")
-	$html = $html.Replace("<script src=""/_assets/js/main.js"" defer></script>", "<script>$mainjs`t</script>")
-	$html = $html.Replace("<script src=""/_assets/js/include.js"" defer></script>", "<script>$includejs`t</script>")
+	$html = $html.Replace("<script src=""/_assets/js/main.js"" defer></script>", "<script>`r`n$mainjs`t</script>")
+	$html = $html.Replace("<script src=""/_assets/js/include.js"" defer></script>", "<script>`r`n$includejs`t</script>")
 	$html = $html.Replace("document.addEventListener('DOMContentLoaded', includeHTML);", "//document.addEventListener('DOMContentLoaded', includeHTML);")
 	#$html = $html.Replace('"/_components', '"https://raw.githubusercontent.com/jurakovic/meteo/main/src/_components')
 	$html = $html.Replace('<!--<img src="https://bit', '<img src="https://bit')
