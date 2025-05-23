@@ -57,7 +57,7 @@ function ProcessHtml() {
 	$html = $html.Replace("<script src=""/_assets/js/include.js"" defer></script>", "<script></script>")
 	$html = $html.Replace('<!-- gtag -->', $gtag)
 	$html = $html.Replace('<div class="links" data-include-html="/_components/links.c.html"></div>', "<div class=""links"">$links`t`t`t`t`t</div>")
-	$html = $html.Replace('<!--<img src="https://bit', '<img src="https://bit')
+	$html = $html.Replace('<!-- cnt -->', '<img src="https://bit.ly/radari-counter" style="width:1px;height:1px;float:right" />')
 	$html = $html.Replace('right" />-->', 'right" />')
 
 	#remove comments
