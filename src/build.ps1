@@ -19,6 +19,9 @@ function Main {
 	$mainjs = Get-Content "$srcDir\_assets\js\main.min.js" -Raw -Encoding "utf8"
 	$mainjs = Prepend-Tabs -str $mainjs -num 2
 
+	$seo = Get-Content "$srcDir\_components\seo.c.html" -Raw -Encoding "utf8"
+	$seo = Prepend-Tabs -str $seo -num 1
+
 	$gtag = Get-Content "$srcDir\_components\gtag.c.html" -Raw -Encoding "utf8"
 	$gtag = Prepend-Tabs -str $gtag -num 1
 
@@ -31,7 +34,7 @@ function Main {
 	# Print each file path
 	foreach ($file in $files) {
 		$relativePath = $file.FullName.Substring($srcDir.Length).TrimStart('\')
-		ProcessHtml $buildDir $relativePath $css $mainjs $gtag $links
+		ProcessHtml $buildDir $relativePath $css $mainjs $seo $gtag $links
 	}
 }
 
@@ -42,6 +45,7 @@ function ProcessHtml() {
 		[string]$file,
 		[string]$css,
 		[string]$mainjs,
+		[string]$seo,
 		[string]$gtag,
 		[string]$links
 	)
@@ -55,6 +59,7 @@ function ProcessHtml() {
 	$html = $html.Replace('<link rel="stylesheet" href="/_assets/css/styles.css">', "<style>$css`t</style>")
 	$html = $html.Replace("<script src=""/_assets/js/main.js"" defer></script>", "<script>`r`n$mainjs`r`n`t</script>")
 	$html = $html.Replace("<script src=""/_assets/js/include.js"" defer></script>", "<script></script>")
+	$html = $html.Replace('<!-- seo -->', $seo)
 	$html = $html.Replace('<!-- gtag -->', $gtag)
 	$html = $html.Replace('<div class="links" data-include-html="/_components/links.c.html"></div>', "<div class=""links"">$links`t`t`t`t`t</div>")
 	$html = $html.Replace('<!-- cnt -->', '<img src="https://bit.ly/radari-counter" style="width:1px;height:1px;float:right" />')
