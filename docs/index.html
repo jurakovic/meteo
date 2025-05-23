@@ -125,35 +125,40 @@
 			}
 		}
 
-		document.addEventListener('DOMContentLoaded', updateIframeSrc);
+		function hideOverlayOnDoubleTap() {
 
-		window.addEventListener('resize', () => {
-			clearTimeout(window._resizeTimeout); // Optional: debounce to avoid excessive reloads
-			window._resizeTimeout = setTimeout(updateIframeSrc, 200);
-		});
-
-		document.addEventListener('DOMContentLoaded', () => {
 			const overlay = document.querySelector('.if1 .overlay');
 
 			let lastTap = 0;
 
 			overlay.addEventListener('dblclick', () => {
 				overlay.style.display = 'none';
+				console.log("dblclick, hide div");
 			});
 
 			overlay.addEventListener('touchend', (e) => {
 				const currentTime = new Date().getTime();
 				const tapLength = currentTime - lastTap;
+				console.log("touchend");
+				console.log(tapLength);
 
-				if (tapLength < 300 && tapLength > 0) {
+				if (tapLength > 0 && tapLength < 200) {
 					overlay.style.display = 'none';
 					e.preventDefault(); // prevent unintended behavior (e.g. zoom)
+					console.log("hide div");
 				}
 
 				lastTap = currentTime;
 			});
-		});
+		}
 
+		document.addEventListener('DOMContentLoaded', updateIframeSrc);
+		document.addEventListener('DOMContentLoaded', hideOverlayOnDoubleTap);
+
+		window.addEventListener('resize', () => {
+			clearTimeout(window._resizeTimeout); // Optional: debounce to avoid excessive reloads
+			window._resizeTimeout = setTimeout(updateIframeSrc, 200);
+		});
 
 	</script>
 </head>
