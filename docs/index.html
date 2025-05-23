@@ -332,9 +332,39 @@
 		}
 	</style>
 	<script>
-		function scrollToTop(){window.scrollTo({top:0,behavior:"smooth"})}function scrollToElement(e){const t=document.getElementById(e);t&&t.scrollIntoView({behavior:"smooth",block:"start"})}let slidePage=[2,2,2,2,1,1,1,1,1,1,1,1,1,1,1];function plusSlides(e,t){showSlides(e,slidePage[e-1]+=t)}function showSlides(e,t){const s=document.querySelectorAll(`.slideshow[data-slideshow-id="${e}"] .slide`),n=document.querySelectorAll(`.indicators-container[data-slideshow-id="${e}"] .indicator`);t>s.length&&(slidePage[e-1]=1),t<1&&(slidePage[e-1]=s.length),s.forEach((e=>e.classList.remove("active"))),s[slidePage[e-1]-1].classList.add("active"),n.forEach((e=>e.classList.remove("active"))),n[slidePage[e-1]-1].classList.add("active")}function handleSwipe(e,t,s){const n=s-t;Math.abs(n)>50&&plusSlides(e,n>0?-1:1)}function showProgress(){const e=document.querySelectorAll("img"),t=document.getElementsByClassName("progress-bar")[0];let s=0;const n=()=>{const n=s/e.length*100;t.style.width=n+"%",s===e.length&&setTimeout((()=>{document.getElementsByClassName("progress-container")[0].style.display="none"}),500)};e.forEach((e=>{e.addEventListener("load",(()=>{s++,n()})),e.addEventListener("error",(()=>{s++,n()})),e.complete&&e.dispatchEvent(new Event("load"))}))}function addSwipeEvents(){document.querySelectorAll(".slideshow").forEach((e=>{let t=0,s=0,n=0,o=0,a=!1;const d=e.getAttribute("data-slideshow-id");e.querySelectorAll("img").forEach((e=>{e.addEventListener("dragstart",(e=>e.preventDefault()))})),e.addEventListener("touchstart",(e=>{t=e.touches[0].clientX,s=e.touches[0].clientY,a=!1})),e.addEventListener("touchmove",(e=>{n=e.touches[0].clientX,o=e.touches[0].clientY,Math.abs(n-t)>Math.abs(o-s)&&(a=!0)})),e.addEventListener("touchend",(()=>{if(a){const e=n-t,a=o-s;Math.abs(e)>Math.abs(a)&&handleSwipe(d,t,n)}})),e.addEventListener("mousedown",(e=>{t=e.clientX,s=e.clientY,a=!0})),e.addEventListener("mousemove",(e=>{a&&(n=e.clientX,o=e.clientY)})),e.addEventListener("mouseup",(e=>{if(a){n=e.clientX,o=e.clientY;const l=n-t,i=o-s;Math.abs(l)>Math.abs(i)&&handleSwipe(d,t,n),a=!1}})),e.addEventListener("mouseleave",(()=>{a&&(a=!1)}))}))}window.addEventListener("load",(function(){document.querySelectorAll("img.lazy").forEach((e=>{e.src=e.getAttribute("data-src"),e.classList.remove("lazy")}))})),document.addEventListener("DOMContentLoaded",showProgress),document.addEventListener("DOMContentLoaded",addSwipeEvents);	</script>
-	<script>
-		function includeHTML(){document.querySelectorAll("[data-include-html]").forEach((e=>{const t=e.getAttribute("data-include-html");t&&fetch(t).then((e=>{if(!e.ok)throw new Error("Network response was not ok");return e.text()})).then((t=>{e.innerHTML=t,e.removeAttribute("data-include-html"),includeHTML()})).catch((e=>console.error("Error fetching HTML fragment:",e)))}))}async function addExpandableClickEventListener(){document.getElementsByClassName("expandable")[0].addEventListener("click",(function(){let e=this.querySelector(".arrow");var t=document.getElementsByClassName("links")[0];t.style.maxHeight?(t.style.maxHeight=null,e.textContent="▼"):(t.style.maxHeight=t.scrollHeight+"px",e.textContent="▲",setTimeout((()=>{document.documentElement.style.scrollBehavior="auto",document.body.style.scrollBehavior="auto",scrollToElement("links"),setTimeout((()=>{document.documentElement.style.scrollBehavior="smooth",document.body.style.scrollBehavior="smooth"}),50)}),310))}))}let previousWidth=0;function updateIframeSrc(){if(window.innerWidth!==previousWidth){const e=document.getElementById("windyFrame"),t=document.getElementById("blitzortungFrame");let n=e.getAttribute("data-src"),o=t.getAttribute("data-src");window.innerWidth<800&&(n=n.replace("&zoom=7","&zoom=6"),o=o.replace("#6/","#5/")),e.src=n,t.src=o,previousWidth=window.innerWidth}}document.addEventListener("DOMContentLoaded",includeHTML),document.addEventListener("DOMContentLoaded",addExpandableClickEventListener),document.addEventListener("DOMContentLoaded",updateIframeSrc),window.addEventListener("resize",(()=>{clearTimeout(window._resizeTimeout),window._resizeTimeout=setTimeout(updateIframeSrc,200)}));	</script>
+		function scrollToTop(){window.scrollTo({top:0,behavior:"smooth"})}function scrollToElement(e){const t=document.getElementById(e)
+		;t&&t.scrollIntoView({behavior:"smooth",block:"start"})}async function addExpandableClickEventListener(){
+		document.getElementsByClassName("expandable")[0].addEventListener("click",(function(){let e=this.querySelector(".arrow")
+		;var t=document.getElementsByClassName("links")[0];t.style.maxHeight?(t.style.maxHeight=null,
+		e.textContent="▼"):(t.style.maxHeight=t.scrollHeight+"px",e.textContent="▲",setTimeout((()=>{
+		document.documentElement.style.scrollBehavior="auto",document.body.style.scrollBehavior="auto",scrollToElement("links"),setTimeout((()=>{
+		document.documentElement.style.scrollBehavior="smooth",document.body.style.scrollBehavior="smooth"}),50)}),310))}))}
+		let slidePage=[2,2,2,2,1,1,1,1,1,1,1,1,1,1,1];function plusSlides(e,t){showSlides(e,slidePage[e-1]+=t)}function showSlides(e,t){
+		const n=document.querySelectorAll(`.slideshow[data-slideshow-id="${e}"] .slide`),o=document.querySelectorAll(`.indicators-container[data-slideshow-id="${e}"] .indicator`)
+		;t>n.length&&(slidePage[e-1]=1),t<1&&(slidePage[e-1]=n.length),n.forEach((e=>e.classList.remove("active"))),
+		n[slidePage[e-1]-1].classList.add("active"),o.forEach((e=>e.classList.remove("active"))),o[slidePage[e-1]-1].classList.add("active")}
+		function handleSwipe(e,t,n){const o=n-t;Math.abs(o)>50&&plusSlides(e,o>0?-1:1)}function showProgress(){
+		const e=document.querySelectorAll("img"),t=document.getElementsByClassName("progress-bar")[0];let n=0;const o=()=>{const o=n/e.length*100
+		;t.style.width=o+"%",n===e.length&&setTimeout((()=>{document.getElementsByClassName("progress-container")[0].style.display="none"}),500)}
+		;e.forEach((e=>{e.addEventListener("load",(()=>{n++,o()})),e.addEventListener("error",(()=>{n++,o()})),
+		e.complete&&e.dispatchEvent(new Event("load"))}))}function addSwipeEvents(){document.querySelectorAll(".slideshow").forEach((e=>{
+		let t=0,n=0,o=0,s=0,d=!1;const i=e.getAttribute("data-slideshow-id");e.querySelectorAll("img").forEach((e=>{
+		e.addEventListener("dragstart",(e=>e.preventDefault()))})),e.addEventListener("touchstart",(e=>{t=e.touches[0].clientX,
+		n=e.touches[0].clientY,d=!1})),e.addEventListener("touchmove",(e=>{o=e.touches[0].clientX,s=e.touches[0].clientY,
+		Math.abs(o-t)>Math.abs(s-n)&&(d=!0)})),e.addEventListener("touchend",(()=>{if(d){const e=o-t,d=s-n
+		;Math.abs(e)>Math.abs(d)&&handleSwipe(i,t,o)}})),e.addEventListener("mousedown",(e=>{t=e.clientX,n=e.clientY,d=!0})),
+		e.addEventListener("mousemove",(e=>{d&&(o=e.clientX,s=e.clientY)})),e.addEventListener("mouseup",(e=>{if(d){o=e.clientX,s=e.clientY
+		;const a=o-t,l=s-n;Math.abs(a)>Math.abs(l)&&handleSwipe(i,t,o),d=!1}})),e.addEventListener("mouseleave",(()=>{d&&(d=!1)}))}))}
+		window.addEventListener("load",(function(){document.querySelectorAll("img.lazy").forEach((e=>{e.src=e.getAttribute("data-src"),
+		e.classList.remove("lazy")}))}));let previousWidth=0;function updateIframeSrc(){if(window.innerWidth!==previousWidth){
+		const e=document.getElementById("windyFrame"),t=document.getElementById("blitzortungFrame")
+		;let n=e.getAttribute("data-src"),o=t.getAttribute("data-src");window.innerWidth<800&&(n=n.replace("&zoom=7","&zoom=6"),
+		o=o.replace("#6/","#5/")),e.src=n,t.src=o,previousWidth=window.innerWidth}}document.addEventListener("DOMContentLoaded",showProgress),
+		document.addEventListener("DOMContentLoaded",updateIframeSrc),document.addEventListener("DOMContentLoaded",addExpandableClickEventListener),
+		document.addEventListener("DOMContentLoaded",addSwipeEvents),window.addEventListener("resize",(()=>{clearTimeout(window._resizeTimeout),
+		window._resizeTimeout=setTimeout(updateIframeSrc,200)}));
+	</script>
+	<script></script>
 	<script async src="https://www.googletagmanager.com/gtag/js?id=G-233EMZJM16"></script>
 	<script>
 		window.dataLayer = window.dataLayer || [];
@@ -794,6 +824,7 @@
 		<div class="progress-container">
 			<div class="progress-bar"></div>
 		</div>
+		<img src="https://bit.ly/radari-counter" style="width:1px;height:1px;float:right" />
 	</div>
 	<footer>
 		<a onclick="scrollToTop()" style="cursor: pointer"><u>Povratak na vrh</u></a>

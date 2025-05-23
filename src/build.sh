@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# fix min.js line ending after terser processing
+unix2dos -q "./_assets/js/main.min.js"
+
 # powershell better handles multiline string..
 powershell.exe -ExecutionPolicy ByPass -File 'build.ps1'
 
