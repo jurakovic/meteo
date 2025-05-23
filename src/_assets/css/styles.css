@@ -36,7 +36,7 @@ img {
 	position: relative;
 	width: 100%;
 	overflow: hidden;
-	padding-top: 110%;
+	padding-top: 100%;
 }
 
 	.if1 .overlay {
@@ -48,11 +48,15 @@ img {
 	}
 
 @media (max-width: 800px) {
-	.if1 .overlay {
-		top: 8%;
-		width: 91%;
-		height: 76%;
+	.if1 {
+		padding-top: 110%;
 	}
+
+		.if1 .overlay {
+			top: 8%;
+			width: 91%;
+			height: 76%;
+		}
 }
 
 .if2 {
