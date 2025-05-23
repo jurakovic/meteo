@@ -1,5 +1,5 @@
 
-## meteo
+# meteo
 
 A compilation of Croatia and Europe weather radar and satellite images.
 
@@ -14,7 +14,7 @@ Two main folders:
 [`src`](./src)
 - contains source files for site build
 - no particular framework is used, only vanilla HTML, CSS, and JavaScript
-	- all *build magic* is done in [`build.sh`](./src/build.sh) and [`build.ps1`](./src/build.ps1) scripts
+	- all build *magic* is done in [`build.sh`](./src/build.sh) and [`build.ps1`](./src/build.ps1) scripts
 
 [`docs`](./docs)
 - contains build output
@@ -36,9 +36,9 @@ Open <http://localhost:8080>
 docker run -it --rm --entrypoint sh -v "$(pwd):/meteo" node:22-alpine
 
 # inside container
-cd meteo
+cd meteo/src/_assets/js
 npm install terser -g
-terser src/_assets/js/main.js --compress --mangle -o src/_assets/js/main.min.js --format max_line_len=140
+terser main.js --compress --mangle -o main.min.js --format max_line_len=140
 ```
 
 #### Build
