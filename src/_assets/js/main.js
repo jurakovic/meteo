@@ -62,19 +62,6 @@ function showSlides(slideshowId, n) {
 	indicators[slidePage[slideshowId - 1] - 1].classList.add('active');
 }
 
-function handleSwipe(slideshowId, startX, endX) {
-	const threshold = 50;
-	const distance = endX - startX;
-
-	if (Math.abs(distance) > threshold) {
-		if (distance > 0) {
-			plusSlides(slideshowId, -1); // swipe right
-		} else {
-			plusSlides(slideshowId, 1); // swipe left
-		}
-	}
-}
-
 window.addEventListener('load', function () {
 	const lazyImages = document.querySelectorAll('img.lazy');
 
@@ -119,6 +106,19 @@ function showProgress() {
 			img.dispatchEvent(new Event('load')); // Manually trigger 'load' if already loaded
 		}
 	});
+}
+
+function handleSwipe(slideshowId, startX, endX) {
+	const threshold = 50;
+	const distance = endX - startX;
+
+	if (Math.abs(distance) > threshold) {
+		if (distance > 0) {
+			plusSlides(slideshowId, -1); // swipe right
+		} else {
+			plusSlides(slideshowId, 1); // swipe left
+		}
+	}
 }
 
 function addSwipeEvents() {
