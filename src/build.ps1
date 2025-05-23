@@ -22,7 +22,7 @@ function Main {
 	$gtag = Get-Content "$srcDir\_components\gtag.c.html" -Raw -Encoding "utf8"
 	$gtag = Prepend-Tabs -str $gtag -num 1
 
-	$links = Get-Content "$srcDir\_components\links.html" -Raw -Encoding "utf8"
+	$links = Get-Content "$srcDir\_components\links.c.html" -Raw -Encoding "utf8"
 	$links = Prepend-Tabs -str $links -num 6
 
 	# Find all .html files excluding those in _components directories
@@ -56,7 +56,7 @@ function ProcessHtml() {
 	$html = $html.Replace("<script src=""/_assets/js/main.js"" defer></script>", "<script>`r`n$mainjs`r`n`t</script>")
 	$html = $html.Replace("<script src=""/_assets/js/include.js"" defer></script>", "<script></script>")
 	$html = $html.Replace('<!-- gtag -->', $gtag)
-	$html = $html.Replace('<div class="links" data-include-html="/_components/links.html"></div>', "<div class=""links"">$links`t`t`t`t`t</div>")
+	$html = $html.Replace('<div class="links" data-include-html="/_components/links.c.html"></div>', "<div class=""links"">$links`t`t`t`t`t</div>")
 	$html = $html.Replace('<!--<img src="https://bit', '<img src="https://bit')
 	$html = $html.Replace('right" />-->', 'right" />')
 
