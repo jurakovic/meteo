@@ -227,12 +227,94 @@ function updateIframeSrc() {
 	}
 }
 
+function hideOverlayOnDoubleTap() {
+	const overlays = document.querySelectorAll('.if1 .overlay');
+
+	overlays.forEach((overlay) => {
+		let lastTap = 0;
+
+		overlay.addEventListener('dblclick', () => {
+			overlay.style.display = 'none';
+		});
+
+		overlay.addEventListener('touchend', (e) => {
+			const currentTime = new Date().getTime();
+			const tapLength = currentTime - lastTap;
+
+			if (tapLength > 0 && tapLength < 200) {
+				overlay.style.display = 'none';
+				e.preventDefault(); // prevent unintended behavior (e.g. zoom)
+			}
+
+			lastTap = currentTime;
+		});
+
+		const hint = overlay.querySelector('.hint');
+
+		let startY = 0;
+		let startX = 0;
+
+		overlay.addEventListener('touchstart', (e) => {
+			if (e.touches.length === 1) {
+				startX = e.touches[0].clientX;
+				startY = e.touches[0].clientY;
+			}
+		});
+
+		overlay.addEventListener('touchend', (e) => {
+			if (!hint) return;
+
+			const endX = e.changedTouches[0].clientX;
+			const endY = e.changedTouches[0].clientY;
+
+			const deltaX = Math.abs(endX - startX);
+			const deltaY = Math.abs(endY - startY);
+
+			// If finger moved more than 10px, treat it as a scroll
+			if (deltaX < 10 && deltaY < 10) {
+				hint.style.opacity = '0.6';
+				clearTimeout(hint._hideTimer);
+				hint._hideTimer = setTimeout(() => {
+					hint.style.removeProperty('opacity');
+				}, 2000);
+			}
+		});
+	});
+}
+
+function updateHintText() {
+	const isMobile = window.innerWidth < 800;
+	document.querySelectorAll('.hint').forEach(hint => {
+		hint.textContent = isMobile
+			? "Dodirni dvaput za interaktivnu kartu"
+			: "Dvostruki klik za interaktivnu kartu";
+	});
+}
+
+/*
 document.addEventListener('DOMContentLoaded', showProgress);
 document.addEventListener('DOMContentLoaded', updateIframeSrc);
 document.addEventListener('DOMContentLoaded', addExpandableClickEventListener);
 document.addEventListener('DOMContentLoaded', addSwipeEvents);
+document.addEventListener('DOMContentLoaded', updateIframeSrc);
+document.addEventListener('DOMContentLoaded', hideOverlayOnDoubleTap);
+document.addEventListener('DOMContentLoaded', updateHintText);
+*/
+
+document.addEventListener('DOMContentLoaded', () => {
+	showProgress();
+	addExpandableClickEventListener();
+	addSwipeEvents();
+	updateIframeSrc();
+	hideOverlayOnDoubleTap();
+	updateHintText();
+});
+
 
 window.addEventListener('resize', () => {
 	clearTimeout(window._resizeTimeout); // Optional: debounce to avoid excessive reloads
-	window._resizeTimeout = setTimeout(updateIframeSrc, 200);
+	window._resizeTimeout = setTimeout(() => {
+		updateIframeSrc();
+		updateHintText();
+	}, 200);
 });
