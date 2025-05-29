@@ -192,7 +192,7 @@
 						hint.style.opacity = '0.6';
 						clearTimeout(hint._hideTimer);
 						hint._hideTimer = setTimeout(() => {
-							hint.style.opacity = '0';
+							hint.style.removeProperty('opacity');
 						}, 2000);
 					}
 				});
