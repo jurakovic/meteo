@@ -291,16 +291,6 @@ function updateHintText() {
 	});
 }
 
-/*
-document.addEventListener('DOMContentLoaded', showProgress);
-document.addEventListener('DOMContentLoaded', updateIframeSrc);
-document.addEventListener('DOMContentLoaded', addExpandableClickEventListener);
-document.addEventListener('DOMContentLoaded', addSwipeEvents);
-document.addEventListener('DOMContentLoaded', updateIframeSrc);
-document.addEventListener('DOMContentLoaded', hideOverlayOnDoubleTap);
-document.addEventListener('DOMContentLoaded', updateHintText);
-*/
-
 document.addEventListener('DOMContentLoaded', () => {
 	showProgress();
 	addExpandableClickEventListener();
