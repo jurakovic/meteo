@@ -45,6 +45,12 @@
 			padding-top: 100%;
 		}
 
+		@media (max-width: 800px) {
+			.if1 {
+				padding-top: 110%;
+			}
+		}
+
 		.overlay {
 			position: absolute;
 			top: 0;
@@ -59,22 +65,23 @@
 				transition: opacity 0.3s ease;
 				pointer-events: none;
 				position: absolute;
-				top: 10%;
+				top: 5%;
 				transform: translateX(-50%);
 				background-color: black;
 				padding: 6px 12px;
 				white-space: nowrap;
 			}
 
+			@media (max-width: 800px) {
+				.overlay .hint {
+					top: 10%;
+				}
+			}
+
 			.overlay:hover .hint {
 				opacity: 0.6;
 			}
 
-		@media (max-width: 800px) {
-			.if1 {
-				padding-top: 110%;
-			}
-		}
 
 		.if2 {
 			position: relative;
@@ -138,17 +145,13 @@
 		}
 
 		function hideOverlayOnDoubleTap() {
-
 			const overlays = document.querySelectorAll('.if1 .overlay');
-			console.log(overlays);
 
 			overlays.forEach((overlay) => {
-				console.log("aaa");
 				let lastTap = 0;
 
 				overlay.addEventListener('dblclick', () => {
 					overlay.style.display = 'none';
-					console.log("dblclick, hide div");
 				});
 
 				overlay.addEventListener('touchend', (e) => {
@@ -160,7 +163,6 @@
 					if (tapLength > 0 && tapLength < 200) {
 						overlay.style.display = 'none';
 						e.preventDefault(); // prevent unintended behavior (e.g. zoom)
-						console.log("hide div");
 					}
 
 					lastTap = currentTime;
