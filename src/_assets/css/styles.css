@@ -36,23 +36,43 @@ img {
 	position: relative;
 	width: 100%;
 	overflow: hidden;
-	padding-top: 110%;
+	padding-top: 100%;
 }
 
-	.if1 .overlay {
+@media (max-width: 800px) {
+	.if1 {
+		padding-top: 110%;
+	}
+}
+
+.overlay {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+}
+
+	.overlay .hint {
+		opacity: 0;
+		transition: opacity 0.3s ease;
+		pointer-events: none;
 		position: absolute;
-		top: 10%;
-		left: 0;
-		width: 100%;
-		height: 83%;
+		top: 5%;
+		transform: translateX(-50%);
+		background-color: black;
+		padding: 6px 12px;
+		white-space: nowrap;
 	}
 
 @media (max-width: 800px) {
-	.if1 .overlay {
-		top: 8%;
-		width: 91%;
-		height: 76%;
+	.overlay .hint {
+		top: 10%;
 	}
+}
+
+.overlay:hover .hint {
+	opacity: 0.6;
 }
 
 .if2 {
@@ -224,7 +244,6 @@ iframe, video {
 		height: 2px;
 	}
 }
-
 
 .expandable {
 	position: relative;

@@ -16,6 +16,35 @@ function scrollToElement(id) {
 	}
 }
 
+async function addExpandableClickEventListener() {
+	var expandable = document.getElementsByClassName("expandable")[0];
+	expandable.addEventListener("click", function () {
+		let arrow = this.querySelector(".arrow");
+		var content = document.getElementsByClassName("links")[0];
+		if (content.style.maxHeight) {
+			content.style.maxHeight = null;
+			arrow.textContent = "▼";
+		} else {
+			content.style.maxHeight = content.scrollHeight + "px";
+			arrow.textContent = "▲";
+			setTimeout(() => {
+				// reset smooth scrolling to make it work every time
+				document.documentElement.style.scrollBehavior = "auto";
+				document.body.style.scrollBehavior = "auto";
+
+				// apply smooth scroll
+				scrollToElement('links');
+
+				// re-enable smooth scrolling after a short delay
+				setTimeout(() => {
+					document.documentElement.style.scrollBehavior = "smooth";
+					document.body.style.scrollBehavior = "smooth";
+				}, 50);
+			}, 310);
+		}
+	});
+}
+
 let slidePage = [2, 2, 2, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1];
 
 function plusSlides(slideshowId, n) {
@@ -31,19 +60,6 @@ function showSlides(slideshowId, n) {
 	slides[slidePage[slideshowId - 1] - 1].classList.add('active');
 	indicators.forEach(indicator => indicator.classList.remove('active'));
 	indicators[slidePage[slideshowId - 1] - 1].classList.add('active');
-}
-
-function handleSwipe(slideshowId, startX, endX) {
-	const threshold = 50;
-	const distance = endX - startX;
-
-	if (Math.abs(distance) > threshold) {
-		if (distance > 0) {
-			plusSlides(slideshowId, -1); // swipe right
-		} else {
-			plusSlides(slideshowId, 1); // swipe left
-		}
-	}
 }
 
 window.addEventListener('load', function () {
@@ -90,6 +106,19 @@ function showProgress() {
 			img.dispatchEvent(new Event('load')); // Manually trigger 'load' if already loaded
 		}
 	});
+}
+
+function handleSwipe(slideshowId, startX, endX) {
+	const threshold = 50;
+	const distance = endX - startX;
+
+	if (Math.abs(distance) > threshold) {
+		if (distance > 0) {
+			plusSlides(slideshowId, -1); // swipe right
+		} else {
+			plusSlides(slideshowId, 1); // swipe left
+		}
+	}
 }
 
 function addSwipeEvents() {
@@ -176,5 +205,106 @@ function addSwipeEvents() {
 	});
 }
 
-document.addEventListener('DOMContentLoaded', showProgress);
-document.addEventListener('DOMContentLoaded', addSwipeEvents);
+let previousWidth = 0;
+
+function updateIframeSrc() {
+	if (window.innerWidth !== previousWidth) {
+		const windyFrame = document.getElementById('windyFrame');
+		const blitzortungFrame = document.getElementById('blitzortungFrame');
+
+		let wurl = windyFrame.getAttribute('data-src');
+		let burl = blitzortungFrame.getAttribute('data-src');
+
+		if (window.innerWidth < 800) {
+			wurl = wurl.replace('&zoom=7', '&zoom=6')
+			burl = burl.replace('#6/', '#5/')
+		}
+
+		windyFrame.src = wurl;
+		blitzortungFrame.src = burl;
+
+		previousWidth = window.innerWidth;
+	}
+}
+
+function hideOverlayOnDoubleTap() {
+	const overlays = document.querySelectorAll('.if1 .overlay');
+
+	overlays.forEach((overlay) => {
+		let lastTap = 0;
+
+		overlay.addEventListener('dblclick', () => {
+			overlay.style.display = 'none';
+		});
+
+		overlay.addEventListener('touchend', (e) => {
+			const currentTime = new Date().getTime();
+			const tapLength = currentTime - lastTap;
+
+			if (tapLength > 0 && tapLength < 200) {
+				overlay.style.display = 'none';
+				e.preventDefault(); // prevent unintended behavior (e.g. zoom)
+			}
+
+			lastTap = currentTime;
+		});
+
+		const hint = overlay.querySelector('.hint');
+
+		let startY = 0;
+		let startX = 0;
+
+		overlay.addEventListener('touchstart', (e) => {
+			if (e.touches.length === 1) {
+				startX = e.touches[0].clientX;
+				startY = e.touches[0].clientY;
+			}
+		});
+
+		overlay.addEventListener('touchend', (e) => {
+			if (!hint) return;
+
+			const endX = e.changedTouches[0].clientX;
+			const endY = e.changedTouches[0].clientY;
+
+			const deltaX = Math.abs(endX - startX);
+			const deltaY = Math.abs(endY - startY);
+
+			// If finger moved more than 10px, treat it as a scroll
+			if (deltaX < 10 && deltaY < 10) {
+				hint.style.opacity = '0.6';
+				clearTimeout(hint._hideTimer);
+				hint._hideTimer = setTimeout(() => {
+					hint.style.removeProperty('opacity');
+				}, 2000);
+			}
+		});
+	});
+}
+
+function updateHintText() {
+	const isMobile = window.innerWidth < 800;
+	document.querySelectorAll('.hint').forEach(hint => {
+		hint.textContent = isMobile
+			? "Dodirni dvaput za interaktivnu kartu"
+			: "Dvostruki klik za interaktivnu kartu";
+	});
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+	showProgress();
+	addExpandableClickEventListener();
+	addSwipeEvents();
+	updateIframeSrc();
+	hideOverlayOnDoubleTap();
+	updateHintText();
+});
+
+
+window.addEventListener('resize', () => {
+	clearTimeout(window._resizeTimeout); // Optional: debounce to avoid excessive reloads
+	window._resizeTimeout = setTimeout(() => {
+		updateIframeSrc();
+		updateHintText();
+	}, 200);
+});
