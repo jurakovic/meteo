@@ -20,10 +20,10 @@ function Main {
 	$mainjs = Prepend-Tabs -str $mainjs -num 2
 
 	$seo = Get-Content "$srcDir\_components\seo.c.html" -Raw -Encoding "utf8"
-	$seo = Prepend-Tabs -str $seo -num 1
+	$seo = Prepend-Tabs -str $seo -num 1 -skip 0
 
 	$gtag = Get-Content "$srcDir\_components\gtag.c.html" -Raw -Encoding "utf8"
-	$gtag = Prepend-Tabs -str $gtag -num 1
+	$gtag = Prepend-Tabs -str $gtag -num 1 -skip 0
 
 	$links = Get-Content "$srcDir\_components\links.c.html" -Raw -Encoding "utf8"
 	$links = Prepend-Tabs -str $links -num 6
@@ -58,7 +58,7 @@ function ProcessHtml() {
 	$html = $html.Replace('href="/"', 'href="/meteo/"')
 	$html = $html.Replace('<link rel="stylesheet" href="/_assets/css/styles.css">', "<style>$css`t</style>")
 	$html = $html.Replace("<script src=""/_assets/js/main.js"" defer></script>", "<script>`r`n$mainjs`r`n`t</script>")
-	$html = $html.Replace("<script src=""/_assets/js/include.js"" defer></script>", "<script></script>")
+	$html = $html.Replace("<script src=""/_assets/js/include.js"" defer></script>", "")
 	$html = $html.Replace('<!-- seo -->', $seo)
 	$html = $html.Replace('<!-- gtag -->', $gtag)
 	$html = $html.Replace('<div class="links" data-include-html="/_components/links.c.html"></div>', "<div class=""links"">$links`t`t`t`t`t</div>")
@@ -74,6 +74,7 @@ function ProcessHtml() {
 
 	#remove consecutive empty lines
 	$html = [regex]::Replace($html, "(`r`n){3,}", "`r`n`r`n")
+	$html = [regex]::Replace($html, "</script>`r`n`r`n", "</script>`r`n") # after minified main.js
 
 	mkdir -Force "$(Split-Path -Path $publishFile)" | Out-Null
 	Write-Output $html | Set-Content -NoNewline -Path "$publishFile" -Encoding "utf8"
@@ -82,7 +83,8 @@ function ProcessHtml() {
 function Prepend-Tabs {
 	param (
 		[string]$str,
-		[int]$num
+		[int]$num,
+		[int]$skip = -1  # Default: do not skip any line
 	)
 
 	# Define the character to prepend (tab character)
@@ -91,15 +93,24 @@ function Prepend-Tabs {
 	# Create a string with the character repeated 'num' times
 	$prefix = ($char * $num)
 
+	# One tab less for 'skip' line (index)
+	$prefix0 = ($char * ($num - 1))
+
 	# Initialize an array to hold the processed lines
 	$output = @()
 
 	# Split the input string into lines and process each line
-	$str -split "`r`n" | ForEach-Object {
-		if ($_ -ne "") {
-			$output += "$prefix$_"
+	$lines = $str -split "`r`n"
+	for ($i = 0; $i -lt $lines.Length; $i++) {
+		$line = $lines[$i]
+		if ($line -ne "") {
+			if ($i -eq $skip) {
+				$output += "$prefix0$line"
+			} else {
+				$output += "$prefix$line"
+			}
 		} else {
-			$output += "$_"
+			$output += $line
 		}
 	}
 
