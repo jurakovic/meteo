@@ -36,9 +36,11 @@ Open <http://localhost:8080>
 docker run -it --rm --entrypoint sh -v "$(pwd):/meteo" node:22-alpine
 
 # inside container
-cd meteo/src/_assets/js
 npm install terser -g
-terser main.js --compress --mangle -o main.min.js --format max_line_len=140
+npm install clean-css-cli -g
+cd meteo/src/_assets
+terser js/main.js --compress --mangle -o js/main.min.js --format max_line_len=140
+cleancss --format 'wrapAt:140' -o css/styles.min.css css/styles.css
 ```
 
 #### Build

@@ -12,7 +12,7 @@ function Main {
 	Copy-Item -Path "$srcDir\_assets\img\" -Destination "$buildDir\img\" -Recurse
 
 	# Read and inline CSS
-	$css = Get-Content "$srcDir\_assets\css\styles.css" -Raw -Encoding "utf8"
+	$css = Get-Content "$srcDir\_assets\css\styles.min.css" -Raw -Encoding "utf8"
 	$css = Prepend-Tabs -str $css -num 2
 
 	# Read and inline JavaScript
@@ -56,7 +56,7 @@ function ProcessHtml() {
 	$html = $html.Replace('href="/_assets/img', 'href="/meteo/img')
 	$html = $html.Replace('href="/extras/index.html', 'href="/meteo/extras/')
 	$html = $html.Replace('href="/"', 'href="/meteo/"')
-	$html = $html.Replace('<link rel="stylesheet" href="/_assets/css/styles.css">', "<style>$css`t</style>")
+	$html = $html.Replace('<link rel="stylesheet" href="/_assets/css/styles.css">', "<style>`r`n$css`r`n`t</style>")
 	$html = $html.Replace("<script src=""/_assets/js/main.js"" defer></script>", "<script>`r`n$mainjs`r`n`t</script>")
 	$html = $html.Replace("<script src=""/_assets/js/include.js"" defer></script>", "")
 	$html = $html.Replace('<!-- seo -->', $seo)
