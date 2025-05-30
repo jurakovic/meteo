@@ -30,7 +30,9 @@ docker run -d -p 8080:80 --name meteo -v "$(pwd)/src:/usr/share/nginx/html" ngin
 
 Open <http://localhost:8080>
 
-#### Minify JS
+#### Minify JS and CSS
+
+> [`terser`](https://www.npmjs.com/package/terser), [`clean-css-cli`](https://www.npmjs.com/package/clean-css-cli)
 
 ```bash
 docker run -it --rm --entrypoint sh -v "$(pwd):/meteo" node:22-alpine

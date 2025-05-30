@@ -8,5 +8,8 @@ end_of_line = crlf
 insert_final_newline = true
 trim_trailing_whitespace = true
 
+[*.md]
+end_of_line = lf
+
 [*.c.html]
 insert_final_newline = false
