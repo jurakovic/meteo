@@ -107,6 +107,13 @@ iframe, video {
 	border: none;
 }
 
+.scaled-iframe {
+	transform: scale(0.5);
+	width: calc(100% / 0.5);
+	height: calc(100% / 0.5);
+	transform-origin: 0 0;
+}
+
 .sp {
 	height: 10px;
 }
