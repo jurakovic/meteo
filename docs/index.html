@@ -31,12 +31,29 @@
 			background-color: #202c40;
 		}
 
+		.title-bar {
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+			max-width: 100%;
+		}
+
+			.title-bar a {
+				flex: 1;
+				text-align: center;
+			}
+
+		.pagination-label {
+			flex: 0 0 auto;
+		}
+
 		img {
 			max-width: 100%;
 			height: auto;
 			display: block;
 			border: 0;
 		}
+
 		.sp {
 			height: 10px;
 		}
@@ -163,10 +180,17 @@
 			const indicators = document.querySelectorAll(`.indicators-container[data-slideshow-id="${slideshowId}"] .indicator`);
 			if (n > slides.length) { slidePage[slideshowId - 1] = 1; }
 			if (n < 1) { slidePage[slideshowId - 1] = slides.length; }
+
+			// Update slides and indicators
 			slides.forEach(slide => slide.classList.remove('active'));
 			slides[slidePage[slideshowId - 1] - 1].classList.add('active');
 			indicators.forEach(indicator => indicator.classList.remove('active'));
 			indicators[slidePage[slideshowId - 1] - 1].classList.add('active');
+
+			// Update pagination label
+			const label = document.querySelector(`.pagination-label[data-slideshow-id="${slideshowId}"]`);
+			if (label)
+				label.textContent = `${slidePage[slideshowId - 1]}/${slides.length}`;
 		}
 
 		window.addEventListener('load', function () {
@@ -288,7 +312,10 @@
 		<table border="0" align="center" cellpadding="0" cellspacing="0">
 			<tr>
 				<td align="center">
-					<a href="https://www.neverin.hr/radar/" target="_blank" rel="nofollow">Neverin | Radar | Hrvatska</a>
+					<div class="title-bar">
+						<a href="https://www.neverin.hr/radar/" target="_blank" rel="nofollow">Neverin | Radar | Hrvatska</a>
+						<span class="pagination-label" data-slideshow-id="1">2/3</span>
+					</div>
 					<div class="slideshow placeholder" data-slideshow-id="1" style="aspect-ratio: 875 / 625;">
 						<div class="slide fade">
 							<img data-src="https://maps.neverin.hr/radar/latest_hr.webp" class="lazy" />
