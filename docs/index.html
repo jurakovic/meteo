@@ -60,7 +60,7 @@
 		e.textContent="▼"):(t.style.maxHeight=t.scrollHeight+"px",e.textContent="▲",setTimeout((()=>{
 		document.documentElement.style.scrollBehavior="auto",document.body.style.scrollBehavior="auto",scrollToElement("links"),setTimeout((()=>{
 		document.documentElement.style.scrollBehavior="smooth",document.body.style.scrollBehavior="smooth"}),50)}),310))}))}
-		let slidePage=[2,2,2,2,1,1,1,1,1,1,1,1,1,1,1];function plusSlides(e,t){showSlides(e,slidePage[e-1]+=t)}function showSlides(e,t){
+		let slidePage=[2,2,2,2,1,1,1,1,1,1,1,1,1,1,1,1];function plusSlides(e,t){showSlides(e,slidePage[e-1]+=t)}function showSlides(e,t){
 		const n=document.querySelectorAll(`.slideshow[data-slideshow-id="${e}"] .slide`),o=document.querySelectorAll(`.indicators-container[data-slideshow-id="${e}"] .indicator`)
 		;t>n.length&&(slidePage[e-1]=1),t<1&&(slidePage[e-1]=n.length),n.forEach((e=>e.classList.remove("active"))),
 		n[slidePage[e-1]-1].classList.add("active"),o.forEach((e=>e.classList.remove("active"))),o[slidePage[e-1]-1].classList.add("active")}
@@ -69,28 +69,35 @@
 		document.getElementsByClassName("progress-container")[0].style.display="none"}),500)};e.forEach((e=>{e.addEventListener("load",(()=>{n++,o()
 		})),e.addEventListener("error",(()=>{n++,o()})),e.complete&&e.dispatchEvent(new Event("load"))}))}function handleSwipe(e,t,n){const o=n-t
 		;Math.abs(o)>50&&plusSlides(e,o>0?-1:1)}function addSwipeEvents(){document.querySelectorAll(".slideshow").forEach((e=>{
-		let t=0,n=0,o=0,i=0,s=!1;const a=e.getAttribute("data-slideshow-id");e.querySelectorAll("img").forEach((e=>{
+		let t=0,n=0,o=0,s=0,i=!1;const a=e.getAttribute("data-slideshow-id");e.querySelectorAll("img").forEach((e=>{
 		e.addEventListener("dragstart",(e=>e.preventDefault()))})),e.addEventListener("touchstart",(e=>{t=e.touches[0].clientX,
-		n=e.touches[0].clientY,s=!1})),e.addEventListener("touchmove",(e=>{o=e.touches[0].clientX,i=e.touches[0].clientY,
-		Math.abs(o-t)>Math.abs(i-n)&&(s=!0)})),e.addEventListener("touchend",(()=>{if(s){const e=o-t,s=i-n
-		;Math.abs(e)>Math.abs(s)&&handleSwipe(a,t,o)}})),e.addEventListener("mousedown",(e=>{t=e.clientX,n=e.clientY,s=!0})),
-		e.addEventListener("mousemove",(e=>{s&&(o=e.clientX,i=e.clientY)})),e.addEventListener("mouseup",(e=>{if(s){o=e.clientX,i=e.clientY
-		;const l=o-t,d=i-n;Math.abs(l)>Math.abs(d)&&handleSwipe(a,t,o),s=!1}})),e.addEventListener("mouseleave",(()=>{s&&(s=!1)}))}))}
+		n=e.touches[0].clientY,i=!1})),e.addEventListener("touchmove",(e=>{o=e.touches[0].clientX,s=e.touches[0].clientY,
+		Math.abs(o-t)>Math.abs(s-n)&&(i=!0)})),e.addEventListener("touchend",(()=>{if(i){const e=o-t,i=s-n
+		;Math.abs(e)>Math.abs(i)&&handleSwipe(a,t,o)}})),e.addEventListener("mousedown",(e=>{t=e.clientX,n=e.clientY,i=!0})),
+		e.addEventListener("mousemove",(e=>{i&&(o=e.clientX,s=e.clientY)})),e.addEventListener("mouseup",(e=>{if(i){o=e.clientX,s=e.clientY
+		;const l=o-t,r=s-n;Math.abs(l)>Math.abs(r)&&handleSwipe(a,t,o),i=!1}})),e.addEventListener("mouseleave",(()=>{i&&(i=!1)}))}))}
 		window.addEventListener("load",(function(){document.querySelectorAll("img.lazy").forEach((e=>{e.src=e.getAttribute("data-src"),
 		e.classList.remove("lazy")}))}));let previousWidth=0;function updateIframeSrc(){if(window.innerWidth!==previousWidth){
 		const e=document.getElementById("windyFrame"),t=document.getElementById("blitzortungFrame")
 		;let n=e.getAttribute("data-src"),o=t.getAttribute("data-src");window.innerWidth<800&&(n=n.replace("&zoom=7","&zoom=6"),
 		o=o.replace("#6/","#5/")),e.src=n,t.src=o,previousWidth=window.innerWidth}}function hideOverlayOnDoubleTap(){
 		document.querySelectorAll(".if1 .overlay").forEach((e=>{let t=0;e.addEventListener("dblclick",(()=>{e.style.display="none"})),
-		e.addEventListener("touchend",(n=>{const o=(new Date).getTime(),i=o-t;i>0&&i<200&&(e.style.display="none",n.preventDefault()),t=o}))
-		;const n=e.querySelector(".hint");let o=0,i=0;e.addEventListener("touchstart",(e=>{1===e.touches.length&&(i=e.touches[0].clientX,
+		e.addEventListener("touchend",(n=>{const o=(new Date).getTime(),s=o-t;s>0&&s<200&&(e.style.display="none",n.preventDefault()),t=o}))
+		;const n=e.querySelector(".hint");let o=0,s=0;e.addEventListener("touchstart",(e=>{1===e.touches.length&&(s=e.touches[0].clientX,
 		o=e.touches[0].clientY)})),e.addEventListener("touchend",(e=>{if(!n)return
-		;const t=e.changedTouches[0].clientX,s=e.changedTouches[0].clientY,a=Math.abs(t-i),l=Math.abs(s-o);a<10&&l<10&&(n.style.opacity="0.6",
+		;const t=e.changedTouches[0].clientX,i=e.changedTouches[0].clientY,a=Math.abs(t-s),l=Math.abs(i-o);a<10&&l<10&&(n.style.opacity="0.6",
 		clearTimeout(n._hideTimer),n._hideTimer=setTimeout((()=>{n.style.removeProperty("opacity")}),2e3))}))}))}function updateHintText(){
 		const e=window.innerWidth<800;document.querySelectorAll(".hint").forEach((t=>{
-		t.textContent=e?"Dodirni dvaput za interaktivnu kartu":"Dvostruki klik za interaktivnu kartu"}))}
+		t.textContent=e?"Dodirni dvaput za interaktivnu kartu":"Dvostruki klik za interaktivnu kartu"}))}function setEsslImgSrc(){
+		let[e,t]=GetLastInit(),n=`https://www.stormforecast.eu/map_images/models/archamos/${e.slice(0,6)}/${e}/combi_paramcombi24_${e}_${t}.png`
+		;console.log("ESSL Image Source: "+n);document.getElementById("essl").src=n}function GetLastInit(){let e=new Date
+		;return e.getUTCHours()>=18?e.setUTCHours(12,0,0,0):e.getUTCHours()>=6&&e.setUTCHours(0,0,0,0),[DTGFromDateInHours(e),EndValue(e)]}
+		function DTGFromDateInHours(e){
+		return result=e.getUTCFullYear().toString()+pad(e.getUTCMonth()+1,2)+pad(e.getUTCDate(),2)+pad(e.getUTCHours(),2),result}
+		function EndValue(e){return result=e.getUTCFullYear().toString()+pad(e.getUTCMonth()+1,2)+pad(e.getUTCDate()+3,2)+pad(e.getUTCMonth()+1,2),
+		result}function pad(e,t,n){return n=n||"0",(e+="").length>=t?e:new Array(t-e.length+1).join(n)+e}
 		document.addEventListener("DOMContentLoaded",(()=>{showProgress(),addExpandableClickEventListener(),addSwipeEvents(),updateIframeSrc(),
-		hideOverlayOnDoubleTap(),updateHintText()})),window.addEventListener("resize",(()=>{clearTimeout(window._resizeTimeout),
+		hideOverlayOnDoubleTap(),updateHintText(),setEsslImgSrc()})),window.addEventListener("resize",(()=>{clearTimeout(window._resizeTimeout),
 		window._resizeTimeout=setTimeout((()=>{updateIframeSrc(),updateHintText()}),200)}));
 	</script>
 	<script async src="https://www.googletagmanager.com/gtag/js?id=G-233EMZJM16"></script>
@@ -286,9 +293,24 @@
 
 			<tr>
 				<td align="center">
-					<a href="https://www.stormforecast.eu" target="_blank" rel="nofollow">ESSL | Prognoza nevremena</a>
-					<div class="placeholder" style="aspect-ratio: 900 / 600;">
-						<img src="https://weather.essl.org/storm/map_images/models/archamos/latest.png" />
+					<a href="https://www.stormforecast.eu" target="_blank" rel="nofollow">ESSL</a>
+					<div class="slideshow" data-slideshow-id="16">
+						<div class="slide fade active">
+							<div class="placeholder" style="aspect-ratio: 900 / 600;">
+								<img src="https://weather.essl.org/storm/map_images/models/archamos/latest.png" />
+							</div>
+						</div>
+						<div class="slide fade">
+							<div class="placeholder" style="aspect-ratio: 900 / 600;">
+								<img id="essl" data-src="..." />
+							</div>
+						</div>
+						<a class="prev" onclick="plusSlides(16, -1)">&#10094;</a>
+						<a class="next" onclick="plusSlides(16, 1)">&#10095;</a>
+					</div>
+					<div class="indicators-container" data-slideshow-id="16" style="grid-template-columns: repeat(2, 1fr);">
+						<span class="indicator active"></span>
+						<span class="indicator"></span>
 					</div>
 				</td>
 			</tr>

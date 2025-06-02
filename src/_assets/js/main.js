@@ -291,6 +291,50 @@ function updateHintText() {
 	});
 }
 
+function setEsslImgSrc() {
+	// src: https://www.stormforecast.eu/storm_script_2.js
+	let [dtg, end] = GetLastInit();
+	let esslSrc = `https://www.stormforecast.eu/map_images/models/archamos/${dtg.slice(0, 6)}/${dtg}/combi_paramcombi24_${dtg}_${end}.png`;
+	console.log("ESSL Image Source: " + esslSrc);
+
+	const esslImg = document.getElementById('essl');
+	esslImg.src = esslSrc;
+}
+
+function GetLastInit() {
+	let dt = new Date();
+	let buffer = 6;
+	let h1 = 0 + buffer;
+	let h2 = 12 + buffer;
+
+	if (dt.getUTCHours() >= h2) {
+		dt.setUTCHours(12, 0, 0, 0);
+	}
+	else if (dt.getUTCHours() >= h1) {
+		dt.setUTCHours(0, 0, 0, 0);
+	}
+
+	let dtg = DTGFromDateInHours(dt);
+	let end = EndValue(dt);
+	return [dtg, end];
+};
+
+function DTGFromDateInHours(mydate) {
+	result = mydate.getUTCFullYear().toString() + pad(mydate.getUTCMonth() + 1, 2) + pad(mydate.getUTCDate(), 2) + pad(mydate.getUTCHours(), 2);
+	return result;
+};
+
+function EndValue(mydate) {
+	result = mydate.getUTCFullYear().toString() + pad(mydate.getUTCMonth() + 1, 2) + pad(mydate.getUTCDate() + 3, 2) + pad(mydate.getUTCMonth() + 1, 2);
+	return result;
+};
+
+function pad(n, width, z) {
+	z = z || '0';
+	n = n + '';
+	return n.length >= width ? n : new Array(width - n.length + 1).join(z) + n;
+};
+
 document.addEventListener('DOMContentLoaded', () => {
 	showProgress();
 	addExpandableClickEventListener();
@@ -298,8 +342,8 @@ document.addEventListener('DOMContentLoaded', () => {
 	updateIframeSrc();
 	hideOverlayOnDoubleTap();
 	updateHintText();
+	setEsslImgSrc();
 });
-
 
 window.addEventListener('resize', () => {
 	clearTimeout(window._resizeTimeout); // Optional: debounce to avoid excessive reloads
