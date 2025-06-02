@@ -45,7 +45,7 @@ async function addExpandableClickEventListener() {
 	});
 }
 
-let slidePage = [2, 2, 2, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1];
+let slidePage = [2, 2, 2, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1];
 
 function plusSlides(slideshowId, n) {
 	showSlides(slideshowId, slidePage[slideshowId - 1] += n);
