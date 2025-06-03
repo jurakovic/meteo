@@ -304,14 +304,14 @@ function setEsslImgSrc() {
 function GetLastInit() {
 	let dt = new Date();
 	let buffer = 12;
-	let h1 = 0 + buffer;
-	let h2 = 12 + buffer;
+	let h0 = 0 + buffer;
+	let h12 = 12 + buffer;
 
-	if (dt.getUTCHours() >= h2 || dt.getUTCHours() < buffer) {
+	if (dt.getUTCHours() >= h12 || dt.getUTCHours() < h0) {
 		dt.setUTCHours(12, 0, 0, 0);
 		dt.setDate(dt.getDate() - 1);
 	}
-	else if (dt.getUTCHours() >= h1 && dt.getUTCHours() < 12 + buffer) {
+	else if (dt.getUTCHours() >= h0 && dt.getUTCHours() < h12) {
 		dt.setUTCHours(0, 0, 0, 0);
 	}
 
