@@ -99,6 +99,7 @@ function showProgress() {
 
 		img.addEventListener('error', () => {
 			imagesLoaded++; // Count error images as "loaded" to avoid getting stuck
+			img.removeAttribute('src'); // Remove src to prevent broken image icon
 			updateProgress();
 		});
 
@@ -300,6 +301,12 @@ function setEsslImgSrc() {
 
 	const esslImg = document.getElementById('essl');
 	esslImg.src = esslSrc;
+
+	esslImg.addEventListener('error', () => {
+		var dateSpan = document.createElement('span')
+		dateSpan.innerHTML = "Nema prognoze za traženi period";
+		esslImg.parentNode.appendChild(dateSpan);
+	});
 }
 
 function GetLastInit() {
