@@ -295,7 +295,8 @@ function setEsslImgSrc() {
 	// src: https://www.stormforecast.eu/storm_script_2.js
 	let [dtg, end] = GetLastInit();
 	let esslSrc = `https://www.stormforecast.eu/map_images/models/archamos/${dtg.slice(0, 6)}/${dtg}/combi_paramcombi24_${dtg}_${end}.png`;
-	console.log("ESSL Image Source: " + esslSrc);
+	//console.log("old: https://www.stormforecast.eu/map_images/models/archamos/202506/2025060300/combi_paramcombi24_2025060300_2025060506.png");
+	//console.log("new: " + esslSrc);
 
 	const esslImg = document.getElementById('essl');
 	esslImg.src = esslSrc;
@@ -303,20 +304,35 @@ function setEsslImgSrc() {
 
 function GetLastInit() {
 	let dt = new Date();
-	let buffer = 12;
-	let h0 = 0 + buffer;
-	let h12 = 12 + buffer;
+	let dte = new Date();
+	let difftime = 10;
+	let h0 = 0 + difftime;
+	let h12 = (12 + difftime) % 24;
 
 	if (dt.getUTCHours() >= h12 || dt.getUTCHours() < h0) {
+		console.log("d1");
 		dt.setUTCHours(12, 0, 0, 0);
 		dt.setDate(dt.getDate() - 1);
+		dte = new Date(dt.getTime());
+		dte.setDate(dte.getDate() + 3);
 	}
 	else if (dt.getUTCHours() >= h0 && dt.getUTCHours() < h12) {
+		console.log("d2");
 		dt.setUTCHours(0, 0, 0, 0);
+		dte = new Date(dt.getTime());
+		dte.setDate(dte.getDate() + 2);
 	}
 
+	console.log(dt);
+	console.log(dte);
+	console.log(h0);
+	console.log(h12);
+
 	let dtg = DTGFromDateInHours(dt);
-	let end = EndValue(dt);
+	let end = EndValue(dte);
+	//let end = DTGFromDateInHours(dte);
+	console.log(dtg);
+	console.log(end);
 	return [dtg, end];
 };
 
@@ -326,7 +342,7 @@ function DTGFromDateInHours(mydate) {
 };
 
 function EndValue(mydate) {
-	result = mydate.getUTCFullYear().toString() + pad(mydate.getUTCMonth() + 1, 2) + pad(mydate.getUTCDate() + 3, 2) + pad(mydate.getUTCMonth() + 1, 2);
+	result = mydate.getUTCFullYear().toString() + pad(mydate.getUTCMonth() + 1, 2) + pad(mydate.getUTCDate(), 2) + pad(mydate.getUTCMonth() + 1, 2);
 	return result;
 };
 
