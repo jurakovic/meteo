@@ -61,41 +61,45 @@
 		document.documentElement.style.scrollBehavior="auto",document.body.style.scrollBehavior="auto",scrollToElement("links"),setTimeout((()=>{
 		document.documentElement.style.scrollBehavior="smooth",document.body.style.scrollBehavior="smooth"}),50)}),310))}))}
 		let slidePage=[2,2,2,2,1,1,1,1,1,1,1,1,1,1,1,1];function plusSlides(e,t){showSlides(e,slidePage[e-1]+=t)}function showSlides(e,t){
-		const n=document.querySelectorAll(`.slideshow[data-slideshow-id="${e}"] .slide`),o=document.querySelectorAll(`.indicators-container[data-slideshow-id="${e}"] .indicator`)
-		;t>n.length&&(slidePage[e-1]=1),t<1&&(slidePage[e-1]=n.length),n.forEach((e=>e.classList.remove("active"))),
-		n[slidePage[e-1]-1].classList.add("active"),o.forEach((e=>e.classList.remove("active"))),o[slidePage[e-1]-1].classList.add("active")}
-		function showProgress(){const e=document.querySelectorAll("img"),t=document.getElementsByClassName("progress-bar")[0];let n=0;const o=()=>{
-		const o=n/e.length*100;t.style.width=o+"%",n===e.length&&setTimeout((()=>{
-		document.getElementsByClassName("progress-container")[0].style.display="none"}),500)};e.forEach((e=>{e.addEventListener("load",(()=>{n++,o()
-		})),e.addEventListener("error",(()=>{n++,o()})),e.complete&&e.dispatchEvent(new Event("load"))}))}function handleSwipe(e,t,n){const o=n-t
-		;Math.abs(o)>50&&plusSlides(e,o>0?-1:1)}function addSwipeEvents(){document.querySelectorAll(".slideshow").forEach((e=>{
-		let t=0,n=0,o=0,s=0,i=!1;const a=e.getAttribute("data-slideshow-id");e.querySelectorAll("img").forEach((e=>{
+		const o=document.querySelectorAll(`.slideshow[data-slideshow-id="${e}"] .slide`),n=document.querySelectorAll(`.indicators-container[data-slideshow-id="${e}"] .indicator`)
+		;t>o.length&&(slidePage[e-1]=1),t<1&&(slidePage[e-1]=o.length),o.forEach((e=>e.classList.remove("active"))),
+		o[slidePage[e-1]-1].classList.add("active"),n.forEach((e=>e.classList.remove("active"))),n[slidePage[e-1]-1].classList.add("active")}
+		function showProgress(){const e=document.querySelectorAll("img"),t=document.getElementsByClassName("progress-bar")[0];let o=0;const n=()=>{
+		const n=o/e.length*100;t.style.width=n+"%",o===e.length&&setTimeout((()=>{
+		document.getElementsByClassName("progress-container")[0].style.display="none"}),500)};e.forEach((e=>{e.addEventListener("load",(()=>{o++,n()
+		})),e.addEventListener("error",(()=>{o++,n()})),e.complete&&e.dispatchEvent(new Event("load"))}))}function handleSwipe(e,t,o){const n=o-t
+		;Math.abs(n)>50&&plusSlides(e,n>0?-1:1)}function addSwipeEvents(){document.querySelectorAll(".slideshow").forEach((e=>{
+		let t=0,o=0,n=0,s=0,l=!1;const a=e.getAttribute("data-slideshow-id");e.querySelectorAll("img").forEach((e=>{
 		e.addEventListener("dragstart",(e=>e.preventDefault()))})),e.addEventListener("touchstart",(e=>{t=e.touches[0].clientX,
-		n=e.touches[0].clientY,i=!1})),e.addEventListener("touchmove",(e=>{o=e.touches[0].clientX,s=e.touches[0].clientY,
-		Math.abs(o-t)>Math.abs(s-n)&&(i=!0)})),e.addEventListener("touchend",(()=>{if(i){const e=o-t,i=s-n
-		;Math.abs(e)>Math.abs(i)&&handleSwipe(a,t,o)}})),e.addEventListener("mousedown",(e=>{t=e.clientX,n=e.clientY,i=!0})),
-		e.addEventListener("mousemove",(e=>{i&&(o=e.clientX,s=e.clientY)})),e.addEventListener("mouseup",(e=>{if(i){o=e.clientX,s=e.clientY
-		;const l=o-t,r=s-n;Math.abs(l)>Math.abs(r)&&handleSwipe(a,t,o),i=!1}})),e.addEventListener("mouseleave",(()=>{i&&(i=!1)}))}))}
+		o=e.touches[0].clientY,l=!1})),e.addEventListener("touchmove",(e=>{n=e.touches[0].clientX,s=e.touches[0].clientY,
+		Math.abs(n-t)>Math.abs(s-o)&&(l=!0)})),e.addEventListener("touchend",(()=>{if(l){const e=n-t,l=s-o
+		;Math.abs(e)>Math.abs(l)&&handleSwipe(a,t,n)}})),e.addEventListener("mousedown",(e=>{t=e.clientX,o=e.clientY,l=!0})),
+		e.addEventListener("mousemove",(e=>{l&&(n=e.clientX,s=e.clientY)})),e.addEventListener("mouseup",(e=>{if(l){n=e.clientX,s=e.clientY
+		;const i=n-t,r=s-o;Math.abs(i)>Math.abs(r)&&handleSwipe(a,t,n),l=!1}})),e.addEventListener("mouseleave",(()=>{l&&(l=!1)}))}))}
 		window.addEventListener("load",(function(){document.querySelectorAll("img.lazy").forEach((e=>{e.src=e.getAttribute("data-src"),
 		e.classList.remove("lazy")}))}));let previousWidth=0;function updateIframeSrc(){if(window.innerWidth!==previousWidth){
 		const e=document.getElementById("windyFrame"),t=document.getElementById("blitzortungFrame")
-		;let n=e.getAttribute("data-src"),o=t.getAttribute("data-src");window.innerWidth<800&&(n=n.replace("&zoom=7","&zoom=6"),
-		o=o.replace("#6/","#5/")),e.src=n,t.src=o,previousWidth=window.innerWidth}}function hideOverlayOnDoubleTap(){
+		;let o=e.getAttribute("data-src"),n=t.getAttribute("data-src");window.innerWidth<800&&(o=o.replace("&zoom=7","&zoom=6"),
+		n=n.replace("#6/","#5/")),e.src=o,t.src=n,previousWidth=window.innerWidth}}function hideOverlayOnDoubleTap(){
 		document.querySelectorAll(".if1 .overlay").forEach((e=>{let t=0;e.addEventListener("dblclick",(()=>{e.style.display="none"})),
-		e.addEventListener("touchend",(n=>{const o=(new Date).getTime(),s=o-t;s>0&&s<200&&(e.style.display="none",n.preventDefault()),t=o}))
-		;const n=e.querySelector(".hint");let o=0,s=0;e.addEventListener("touchstart",(e=>{1===e.touches.length&&(s=e.touches[0].clientX,
-		o=e.touches[0].clientY)})),e.addEventListener("touchend",(e=>{if(!n)return
-		;const t=e.changedTouches[0].clientX,i=e.changedTouches[0].clientY,a=Math.abs(t-s),l=Math.abs(i-o);a<10&&l<10&&(n.style.opacity="0.6",
-		clearTimeout(n._hideTimer),n._hideTimer=setTimeout((()=>{n.style.removeProperty("opacity")}),2e3))}))}))}function updateHintText(){
+		e.addEventListener("touchend",(o=>{const n=(new Date).getTime(),s=n-t;s>0&&s<200&&(e.style.display="none",o.preventDefault()),t=n}))
+		;const o=e.querySelector(".hint");let n=0,s=0;e.addEventListener("touchstart",(e=>{1===e.touches.length&&(s=e.touches[0].clientX,
+		n=e.touches[0].clientY)})),e.addEventListener("touchend",(e=>{if(!o)return
+		;const t=e.changedTouches[0].clientX,l=e.changedTouches[0].clientY,a=Math.abs(t-s),i=Math.abs(l-n);a<10&&i<10&&(o.style.opacity="0.6",
+		clearTimeout(o._hideTimer),o._hideTimer=setTimeout((()=>{o.style.removeProperty("opacity")}),2e3))}))}))}function updateHintText(){
 		const e=window.innerWidth<800;document.querySelectorAll(".hint").forEach((t=>{
 		t.textContent=e?"Dodirni dvaput za interaktivnu kartu":"Dvostruki klik za interaktivnu kartu"}))}function setEsslImgSrc(){
-		let[e,t]=GetLastInit(),n=`https://www.stormforecast.eu/map_images/models/archamos/${e.slice(0,6)}/${e}/combi_paramcombi24_${e}_${t}.png`
-		;console.log("ESSL Image Source: "+n);document.getElementById("essl").src=n}function GetLastInit(){let e=new Date
-		;return e.getUTCHours()>=18?e.setUTCHours(12,0,0,0):e.getUTCHours()>=6&&e.setUTCHours(0,0,0,0),[DTGFromDateInHours(e),EndValue(e)]}
-		function DTGFromDateInHours(e){
+		let[e,t]=GetLastInit(),o=`https://www.stormforecast.eu/map_images/models/archamos/${e.slice(0,6)}/${e}/combi_paramcombi24_${e}_${t}.png`
+		;console.log("old: https://www.stormforecast.eu/map_images/models/archamos/202506/2025060312/combi_paramcombi24_2025060312_2025060606.png"),
+		console.log("new: "+o);document.getElementById("essl").src=o}function GetLastInit(){let e=new Date,t=new Date
+		;e.getUTCHours()>=20?(console.log("d1"),e.setUTCHours(12,0,0,0),t=new Date(e.getTime()),
+		t.setDate(t.getDate()+3)):e.getUTCHours()>=12&&e.getUTCHours()<20?(console.log("d2"),e.setUTCHours(0,0,0,0),t=new Date(e.getTime()),
+		t.setDate(t.getDate()+2)):e.getUTCHours()<12&&(console.log("d3"),e.setUTCHours(12,0,0,0),e.setDate(e.getDate()-1),t=new Date(e.getTime()),
+		t.setDate(t.getDate()+3)),console.log(e),console.log(t),console.log(12),console.log(20);let o=DTGFromDateInHours(e),n=EndValue(t)
+		;return console.log(o),console.log(n),[o,n]}function DTGFromDateInHours(e){
 		return result=e.getUTCFullYear().toString()+pad(e.getUTCMonth()+1,2)+pad(e.getUTCDate(),2)+pad(e.getUTCHours(),2),result}
-		function EndValue(e){return result=e.getUTCFullYear().toString()+pad(e.getUTCMonth()+1,2)+pad(e.getUTCDate()+3,2)+pad(e.getUTCMonth()+1,2),
-		result}function pad(e,t,n){return n=n||"0",(e+="").length>=t?e:new Array(t-e.length+1).join(n)+e}
+		function EndValue(e){return result=e.getUTCFullYear().toString()+pad(e.getUTCMonth()+1,2)+pad(e.getUTCDate(),2)+"06",result}
+		function pad(e,t,o){return o=o||"0",(e+="").length>=t?e:new Array(t-e.length+1).join(o)+e}
 		document.addEventListener("DOMContentLoaded",(()=>{showProgress(),addExpandableClickEventListener(),addSwipeEvents(),updateIframeSrc(),
 		hideOverlayOnDoubleTap(),updateHintText(),setEsslImgSrc()})),window.addEventListener("resize",(()=>{clearTimeout(window._resizeTimeout),
 		window._resizeTimeout=setTimeout((()=>{updateIframeSrc(),updateHintText()}),200)}));
@@ -294,16 +298,12 @@
 			<tr>
 				<td align="center">
 					<a href="https://www.stormforecast.eu" target="_blank" rel="nofollow">ESSL</a>
-					<div class="slideshow" data-slideshow-id="16">
+					<div class="slideshow placeholder" data-slideshow-id="16" style="aspect-ratio: 900 / 600;">
 						<div class="slide fade active">
-							<div class="placeholder" style="aspect-ratio: 900 / 600;">
-								<img src="https://weather.essl.org/storm/map_images/models/archamos/latest.png" />
-							</div>
+							<img src="https://weather.essl.org/storm/map_images/models/archamos/latest.png" />
 						</div>
 						<div class="slide fade">
-							<div class="placeholder" style="aspect-ratio: 900 / 600;">
-								<img id="essl" data-src="..." />
-							</div>
+							<img id="essl" data-src="..." />
 						</div>
 						<a class="prev" onclick="plusSlides(16, -1)">&#10094;</a>
 						<a class="next" onclick="plusSlides(16, 1)">&#10095;</a>
