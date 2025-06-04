@@ -94,9 +94,9 @@
 		console.log("new: "+o);const n=document.getElementById("essl");n.src=o,n.addEventListener("error",(()=>{var e=document.createElement("span")
 		;e.innerHTML="Nema prognoze za traženi period",n.parentNode.appendChild(e)}))}function GetLastInit(){let e=new Date,t=new Date
 		;e.getUTCHours()>=20?(console.log("d1"),e.setUTCHours(12,0,0,0),t=new Date(e.getTime()),
-		t.setDate(t.getDate()+3)):e.getUTCHours()>=12&&e.getUTCHours()<20?(console.log("d2"),e.setUTCHours(0,0,0,0),t=new Date(e.getTime()),
-		t.setDate(t.getDate()+2)):e.getUTCHours()<12&&(console.log("d3"),e.setUTCHours(12,0,0,0),e.setDate(e.getDate()-1),t=new Date(e.getTime()),
-		t.setDate(t.getDate()+3)),console.log(e),console.log(t),console.log(12),console.log(20);let o=DTGFromDateInHours(e),n=EndValue(t)
+		t.setDate(t.getDate()+3)):e.getUTCHours()>=10&&e.getUTCHours()<20?(console.log("d2"),e.setUTCHours(0,0,0,0),t=new Date(e.getTime()),
+		t.setDate(t.getDate()+2)):e.getUTCHours()<10&&(console.log("d3"),e.setUTCHours(12,0,0,0),e.setDate(e.getDate()-1),t=new Date(e.getTime()),
+		t.setDate(t.getDate()+3)),console.log(e),console.log(t),console.log(10),console.log(20);let o=DTGFromDateInHours(e),n=EndValue(t)
 		;return console.log(o),console.log(n),[o,n]}function DTGFromDateInHours(e){
 		return result=e.getUTCFullYear().toString()+pad(e.getUTCMonth()+1,2)+pad(e.getUTCDate(),2)+pad(e.getUTCHours(),2),result}
 		function EndValue(e){return result=e.getUTCFullYear().toString()+pad(e.getUTCMonth()+1,2)+pad(e.getUTCDate(),2)+"06",result}

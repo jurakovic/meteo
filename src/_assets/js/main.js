@@ -313,8 +313,8 @@ function GetLastInit() {
 	let dt = new Date();
 	let dte = new Date();
 	//let difftime = 10;
-	let h0 = 12;
-	let h12 = 20;
+	let h0 = 0 + 10;
+	let h12 = 12 + 8;
 
 	if (dt.getUTCHours() >= h12) { // h >= 20
 		console.log("d1");
@@ -323,14 +323,14 @@ function GetLastInit() {
 		dte = new Date(dt.getTime());
 		dte.setDate(dte.getDate() + 3);
 	}
-	else if (dt.getUTCHours() >= h0 && dt.getUTCHours() < h12) { // h >= 12 && h < 20
+	else if (dt.getUTCHours() >= h0 && dt.getUTCHours() < h12) { // h >= 10 && h < 20
 		console.log("d2");
 		dt.setUTCHours(0, 0, 0, 0);
 		//dt.setDate(dt.getDate() - 1);
 		dte = new Date(dt.getTime());
 		dte.setDate(dte.getDate() + 2);
 	}
-	else if (dt.getUTCHours() < h0) { // h < 12
+	else if (dt.getUTCHours() < h0) { // h < 10
 		console.log("d3");
 		dt.setUTCHours(12, 0, 0, 0);
 		dt.setDate(dt.getDate() - 1);
