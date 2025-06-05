@@ -99,6 +99,7 @@ function showProgress() {
 
 		img.addEventListener('error', () => {
 			imagesLoaded++; // Count error images as "loaded" to avoid getting stuck
+			dlog(`Error loading image: ${img.src}`);
 			img.removeAttribute('src'); // Remove src to prevent broken image icon
 			updateProgress();
 		});
@@ -296,58 +297,50 @@ function setEsslImgSrc() {
 	// src: https://www.stormforecast.eu/storm_script_2.js
 	let [dtg, end] = GetLastInit();
 	let esslSrc = `https://www.stormforecast.eu/map_images/models/archamos/${dtg.slice(0, 6)}/${dtg}/combi_paramcombi24_${dtg}_${end}.png`;
-	console.log("old: https://www.stormforecast.eu/map_images/models/archamos/202506/2025060312/combi_paramcombi24_2025060312_2025060606.png");
-	console.log("new: " + esslSrc);
 
 	const esslImg = document.getElementById('essl');
 	esslImg.src = esslSrc;
 
 	esslImg.addEventListener('error', () => {
-		var dateSpan = document.createElement('span')
-		dateSpan.innerHTML = "Nema prognoze za traženi period";
-		esslImg.parentNode.appendChild(dateSpan);
+		var noForecast = document.createElement('span')
+		noForecast.innerHTML = "Nema prognoze za traženi period";
+		esslImg.parentNode.appendChild(noForecast);
 	});
 }
 
 function GetLastInit() {
 	let dt = new Date();
 	let dte = new Date();
-	//let difftime = 10;
 	let h0 = 0 + 10;
 	let h12 = 12 + 8;
 
 	if (dt.getUTCHours() >= h12) { // h >= 20
-		console.log("d1");
+		dlog("b1: dt.getUTCHours() >= " + h12);
 		dt.setUTCHours(12, 0, 0, 0);
-		//dt.setDate(dt.getDate() - 1);
 		dte = new Date(dt.getTime());
 		dte.setDate(dte.getDate() + 3);
 	}
 	else if (dt.getUTCHours() >= h0 && dt.getUTCHours() < h12) { // h >= 10 && h < 20
-		console.log("d2");
+		dlog("b2: dt.getUTCHours() >= " + h0 + " && dt.getUTCHours() < " + h12);
 		dt.setUTCHours(0, 0, 0, 0);
-		//dt.setDate(dt.getDate() - 1);
 		dte = new Date(dt.getTime());
 		dte.setDate(dte.getDate() + 2);
 	}
 	else if (dt.getUTCHours() < h0) { // h < 10
-		console.log("d3");
+		dlog("b3: dt.getUTCHours() < " + h0);
 		dt.setUTCHours(12, 0, 0, 0);
 		dt.setDate(dt.getDate() - 1);
 		dte = new Date(dt.getTime());
 		dte.setDate(dte.getDate() + 3);
 	}
 
-	console.log(dt);
-	console.log(dte);
-	console.log(h0);
-	console.log(h12);
-
 	let dtg = DTGFromDateInHours(dt);
 	let end = EndValue(dte);
-	//let end = DTGFromDateInHours(dte);
-	console.log(dtg);
-	console.log(end);
+
+	dlog("dt:  " + dt);
+	dlog("dte: " + dte);
+	dlog("dtg: " + dtg);
+	dlog("end: " + end);
 	return [dtg, end];
 };
 
@@ -366,6 +359,22 @@ function pad(n, width, z) {
 	n = n + '';
 	return n.length >= width ? n : new Array(width - n.length + 1).join(z) + n;
 };
+
+let isDebugEnabled = false;
+
+function getUrlParameter(name) {
+	const urlParams = new URLSearchParams(window.location.search);
+	return urlParams.get(name);
+}
+
+if (getUrlParameter('debug') === '1') {
+	isDebugEnabled = true;
+}
+
+function dlog(...args) {
+	if (isDebugEnabled)
+		console.log(...args);
+}
 
 document.addEventListener('DOMContentLoaded', () => {
 	showProgress();
