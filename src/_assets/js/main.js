@@ -213,59 +213,31 @@ function updateIframeSrc() {
 	if (window.innerWidth !== previousWidth) {
 		previousWidth = window.innerWidth;
 
-		let minWidth = 800; // Set the minimum width for the iframes to update
+		function updateIframeSrcInternal(iframe, zoomOld, zoomNew) {
+			dlog(`Updating iframe src for ${iframe.id}`);
+
+			if (iframe) {
+				let url = iframe.getAttribute('data-src');
+
+				if (window.innerWidth < 800)
+					url = url.replace(zoomOld, zoomNew)
+
+				iframe.src = url;
+			}
+			else {
+				dlog(`${iframe} not found, skipping updateIframeSrc for ${iframeId}`);
+			}
+		}
 
 		const windyFrame = document.getElementById('windyFrame');
-		if (windyFrame) {
-			let url = windyFrame.getAttribute('data-src');
-
-			if (window.innerWidth < minWidth)
-				url = url.replace('&zoom=7', '&zoom=6')
-
-			windyFrame.src = url;
-		}
-		else {
-			dlog("windyFrame not found, skipping updateIframeSrc for windyFrame.");
-		}
-
 		const blitzortungFrame = document.getElementById('blitzortungFrame');
-		if (blitzortungFrame) {
-			let url = blitzortungFrame.getAttribute('data-src');
-
-			if (window.innerWidth < minWidth)
-				url = url.replace('#6/', '#5/')
-
-			blitzortungFrame.src = url;
-		}
-		else {
-			dlog("blitzortungFrame not found, skipping updateIframeSrc for blitzortungFrame.");
-		}
-
 		const weatherAndRadarFrame = document.getElementById('weatherAndRadarFrame');
-		if (weatherAndRadarFrame) {
-			let url = weatherAndRadarFrame.getAttribute('data-src');
-
-			if (window.innerWidth < minWidth)
-				url = url.replace('&zoom=7.2', '&zoom=6.8')
-
-			weatherAndRadarFrame.src = url;
-		}
-		else {
-			dlog("weatherAndRadarFrame not found, skipping updateIframeSrc for weatherAndRadarFrame.");
-		}
-
 		const rainViewerFrame = document.getElementById('rainViewerFrame');
-		if (rainViewerFrame) {
-			let url = rainViewerFrame.getAttribute('data-src');
 
-			if (window.innerWidth < minWidth)
-				url = url.replace(',6.3&', ',6.1&')
-
-			rainViewerFrame.src = url;
-		}
-		else {
-			dlog("rainViewerFrame not found, skipping updateIframeSrc for rainViewerFrame.");
-		}
+		updateIframeSrcInternal(windyFrame, '&zoom=7', '&zoom=6');
+		updateIframeSrcInternal(blitzortungFrame, '#6/', '#5/');
+		updateIframeSrcInternal(weatherAndRadarFrame, '&zoom=7.2', '&zoom=6.8');
+		updateIframeSrcInternal(rainViewerFrame, ',6.3&', ',6.1&');
 	}
 }
 
