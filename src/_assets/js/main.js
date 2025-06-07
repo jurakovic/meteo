@@ -56,10 +56,17 @@ function showSlides(slideshowId, n) {
 	const indicators = document.querySelectorAll(`.indicators-container[data-slideshow-id="${slideshowId}"] .indicator`);
 	if (n > slides.length) { slidePage[slideshowId - 1] = 1; }
 	if (n < 1) { slidePage[slideshowId - 1] = slides.length; }
+
+	// Update slides and indicators
 	slides.forEach(slide => slide.classList.remove('active'));
 	slides[slidePage[slideshowId - 1] - 1].classList.add('active');
 	indicators.forEach(indicator => indicator.classList.remove('active'));
 	indicators[slidePage[slideshowId - 1] - 1].classList.add('active');
+
+	// Update pagination label
+	const label = document.querySelector(`.pagination-label[data-slideshow-id="${slideshowId}"]`);
+	if (label)
+		label.textContent = `${slidePage[slideshowId - 1]}/${slides.length}`;
 }
 
 window.addEventListener('load', function () {

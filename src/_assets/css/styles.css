@@ -25,6 +25,22 @@ table {
 	background-color: #202c40;
 }
 
+.title-bar {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	max-width: 100%;
+}
+
+	.title-bar a {
+		flex: 1;
+		text-align: center;
+	}
+
+.pagination-label {
+	flex: 0 0 auto;
+}
+
 img {
 	max-width: 100%;
 	height: auto;
