@@ -213,17 +213,21 @@ function updateIframeSrc() {
 	if (window.innerWidth !== previousWidth) {
 		const windyFrame = document.getElementById('windyFrame');
 		const blitzortungFrame = document.getElementById('blitzortungFrame');
-
+		const weatherAndRadarFrame = document.getElementById('weatherAndRadarFrame');
+		
 		let wurl = windyFrame.getAttribute('data-src');
 		let burl = blitzortungFrame.getAttribute('data-src');
+		let rurl = weatherAndRadarFrame.getAttribute('data-src');
 
 		if (window.innerWidth < 800) {
 			wurl = wurl.replace('&zoom=7', '&zoom=6')
 			burl = burl.replace('#6/', '#5/')
+			rurl = rurl.replace('&zoom=7.2', '&zoom=6.8')
 		}
 
 		windyFrame.src = wurl;
 		blitzortungFrame.src = burl;
+		weatherAndRadarFrame.src = rurl;
 
 		previousWidth = window.innerWidth;
 	}

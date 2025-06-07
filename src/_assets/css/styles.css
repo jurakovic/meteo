@@ -108,10 +108,15 @@ iframe, video {
 }
 
 .scaled-iframe {
-	transform: scale(0.5);
-	width: calc(100% / 0.5);
-	height: calc(100% / 0.5);
-	transform-origin: 0 0;
+}
+
+@media (max-width: 800px) {
+	.scaled-iframe {
+		transform: scale(0.6);
+		width: calc(100% / 0.6);
+		height: calc(100% / 0.6);
+		transform-origin: 0 0;
+	}
 }
 
 .sp {
