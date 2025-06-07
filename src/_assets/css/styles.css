@@ -108,6 +108,10 @@ iframe, video {
 }
 
 .scaled-iframe {
+	transform: scale(0.9);
+	width: calc(100% / 0.9);
+	height: calc(100% / 0.9);
+	transform-origin: 0 0;
 }
 
 @media (max-width: 800px) {

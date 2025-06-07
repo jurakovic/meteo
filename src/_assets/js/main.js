@@ -217,12 +217,12 @@ function updateIframeSrc() {
 
 		const windyFrame = document.getElementById('windyFrame');
 		if (windyFrame) {
-			let wurl = windyFrame.getAttribute('data-src');
+			let url = windyFrame.getAttribute('data-src');
 
 			if (window.innerWidth < minWidth)
-				wurl = wurl.replace('&zoom=7', '&zoom=6')
+				url = url.replace('&zoom=7', '&zoom=6')
 
-			windyFrame.src = wurl;
+			windyFrame.src = url;
 		}
 		else {
 			dlog("windyFrame not found, skipping updateIframeSrc for windyFrame.");
@@ -230,12 +230,12 @@ function updateIframeSrc() {
 
 		const blitzortungFrame = document.getElementById('blitzortungFrame');
 		if (blitzortungFrame) {
-			let burl = blitzortungFrame.getAttribute('data-src');
+			let url = blitzortungFrame.getAttribute('data-src');
 
 			if (window.innerWidth < minWidth)
-				burl = burl.replace('#6/', '#5/')
+				url = url.replace('#6/', '#5/')
 
-			blitzortungFrame.src = burl;
+			blitzortungFrame.src = url;
 		}
 		else {
 			dlog("blitzortungFrame not found, skipping updateIframeSrc for blitzortungFrame.");
@@ -243,15 +243,28 @@ function updateIframeSrc() {
 
 		const weatherAndRadarFrame = document.getElementById('weatherAndRadarFrame');
 		if (weatherAndRadarFrame) {
-			let rurl = weatherAndRadarFrame.getAttribute('data-src');
+			let url = weatherAndRadarFrame.getAttribute('data-src');
 
 			if (window.innerWidth < minWidth)
-				rurl = rurl.replace('&zoom=7.2', '&zoom=6.8')
+				url = url.replace('&zoom=7.2', '&zoom=6.8')
 
-			weatherAndRadarFrame.src = rurl;
+			weatherAndRadarFrame.src = url;
 		}
 		else {
 			dlog("weatherAndRadarFrame not found, skipping updateIframeSrc for weatherAndRadarFrame.");
+		}
+
+		const rainViewerFrame = document.getElementById('rainViewerFrame');
+		if (rainViewerFrame) {
+			let url = rainViewerFrame.getAttribute('data-src');
+
+			if (window.innerWidth < minWidth)
+				url = url.replace(',6.3&', ',6.1&')
+
+			rainViewerFrame.src = url;
+		}
+		else {
+			dlog("rainViewerFrame not found, skipping updateIframeSrc for rainViewerFrame.");
 		}
 	}
 }
