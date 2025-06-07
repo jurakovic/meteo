@@ -45,7 +45,7 @@ async function addExpandableClickEventListener() {
 	});
 }
 
-let slidePage = [2, 2, 2, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1];
+let slidePage = [2, 2, 2, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1];
 
 function plusSlides(slideshowId, n) {
 	showSlides(slideshowId, slidePage[slideshowId - 1] += n);
@@ -99,6 +99,8 @@ function showProgress() {
 
 		img.addEventListener('error', () => {
 			imagesLoaded++; // Count error images as "loaded" to avoid getting stuck
+			dlog(`Error loading image: ${img.src}`);
+			img.removeAttribute('src'); // Remove src to prevent broken image icon
 			updateProgress();
 		});
 
@@ -291,6 +293,89 @@ function updateHintText() {
 	});
 }
 
+function setEsslImgSrc() {
+	// src: https://www.stormforecast.eu/storm_script_2.js
+	let [dtg, end] = GetLastInit();
+	let esslSrc = `https://www.stormforecast.eu/map_images/models/archamos/${dtg.slice(0, 6)}/${dtg}/combi_paramcombi24_${dtg}_${end}.png`;
+
+	const esslImg = document.getElementById('essl');
+	esslImg.src = esslSrc;
+
+	esslImg.addEventListener('error', () => {
+		var noForecast = document.createElement('span')
+		noForecast.innerHTML = "Nema prognoze za traženi period";
+		esslImg.parentNode.appendChild(noForecast);
+	});
+}
+
+function GetLastInit() {
+	let dt = new Date();
+	let dte = new Date();
+	let h0 = 0 + 10;
+	let h12 = 12 + 8;
+
+	if (dt.getUTCHours() >= h12) { // h >= 20
+		dlog("b1: dt.getUTCHours() >= " + h12);
+		dt.setUTCHours(12, 0, 0, 0);
+		dte = new Date(dt.getTime());
+		dte.setDate(dte.getDate() + 3);
+	}
+	else if (dt.getUTCHours() >= h0 && dt.getUTCHours() < h12) { // h >= 10 && h < 20
+		dlog("b2: dt.getUTCHours() >= " + h0 + " && dt.getUTCHours() < " + h12);
+		dt.setUTCHours(0, 0, 0, 0);
+		dte = new Date(dt.getTime());
+		dte.setDate(dte.getDate() + 2);
+	}
+	else if (dt.getUTCHours() < h0) { // h < 10
+		dlog("b3: dt.getUTCHours() < " + h0);
+		dt.setUTCHours(12, 0, 0, 0);
+		dt.setDate(dt.getDate() - 1);
+		dte = new Date(dt.getTime());
+		dte.setDate(dte.getDate() + 3);
+	}
+
+	let dtg = DTGFromDateInHours(dt);
+	let end = EndValue(dte);
+
+	dlog("dt:  " + dt);
+	dlog("dte: " + dte);
+	dlog("dtg: " + dtg);
+	dlog("end: " + end);
+	return [dtg, end];
+};
+
+function DTGFromDateInHours(mydate) {
+	result = mydate.getUTCFullYear().toString() + pad(mydate.getUTCMonth() + 1, 2) + pad(mydate.getUTCDate(), 2) + pad(mydate.getUTCHours(), 2);
+	return result;
+};
+
+function EndValue(mydate) {
+	result = mydate.getUTCFullYear().toString() + pad(mydate.getUTCMonth() + 1, 2) + pad(mydate.getUTCDate(), 2) + "06";
+	return result;
+};
+
+function pad(n, width, z) {
+	z = z || '0';
+	n = n + '';
+	return n.length >= width ? n : new Array(width - n.length + 1).join(z) + n;
+};
+
+let isDebugEnabled = false;
+
+function getUrlParameter(name) {
+	const urlParams = new URLSearchParams(window.location.search);
+	return urlParams.get(name);
+}
+
+if (getUrlParameter('debug') === '1') {
+	isDebugEnabled = true;
+}
+
+function dlog(...args) {
+	if (isDebugEnabled)
+		console.log(...args);
+}
+
 document.addEventListener('DOMContentLoaded', () => {
 	showProgress();
 	addExpandableClickEventListener();
@@ -298,8 +383,8 @@ document.addEventListener('DOMContentLoaded', () => {
 	updateIframeSrc();
 	hideOverlayOnDoubleTap();
 	updateHintText();
+	setEsslImgSrc();
 });
-
 
 window.addEventListener('resize', () => {
 	clearTimeout(window._resizeTimeout); // Optional: debounce to avoid excessive reloads
