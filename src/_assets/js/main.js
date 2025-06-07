@@ -305,13 +305,9 @@ function setEsslImgSrc(retryCount = 0) {
 		dt.setUTCDate(parseInt(dtg.slice(6, 8)));
 		dt.setUTCHours(parseInt(dtg.slice(8, 10)));
 
-		// Subtract 12 hours × retry count
 		dt.setHours(dt.getHours() - (12 * retryCount));
-
-		// Get new DTG without recalculating through GetLastInit
 		dtg = DTGFromDateInHours(dt);
 
-		// Calculate new end date (3 days from dt)
 		let dte = new Date(dt.getTime());
 		dte.setDate(dte.getDate() + 3);
 		end = EndValue(dte);
@@ -320,33 +316,29 @@ function setEsslImgSrc(retryCount = 0) {
 	let esslSrc = `https://www.stormforecast.eu/map_images/models/archamos/${dtg.slice(0, 6)}/${dtg}/combi_paramcombi24_${dtg}_${end}.png`;
 	const esslImg = document.getElementById('essl');
 
-	// Remove any existing error listeners
-	const oldImg = esslImg.cloneNode(true);
-	esslImg.parentNode.replaceChild(oldImg, esslImg);
+	// Remove any existing error message
+	const prevError = esslImg.parentNode.querySelector('span');
+	if (prevError) {
+		prevError.remove();
+	}
 
-	// Create one-time error handler
-	oldImg.addEventListener('error', function errorHandler() {
+	function errorHandler() {
 		if (retryCount < 3) {
 			dlog(`Image load failed, retry attempt ${retryCount + 1} with dtg: ${dtg}`);
-			// Remove previous error message if exists
-			const prevError = this.parentNode.querySelector('span');
-			if (prevError) {
-				prevError.remove();
-			}
-			// Remove this error handler
-			this.removeEventListener('error', errorHandler);
-			// Retry with incremented counter
+			esslImg.removeEventListener('error', errorHandler);
 			setEsslImgSrc(retryCount + 1);
 		} else {
 			dlog('Image load failed after 3 attempts');
 			const noForecast = document.createElement('span');
 			noForecast.innerHTML = "Nema prognoze za traženi period";
-			this.parentNode.appendChild(noForecast);
-			oldImg.removeAttribute('src'); // Remove src to prevent broken image icon
+			esslImg.parentNode.appendChild(noForecast);
+			esslImg.removeAttribute('src');
 		}
-	});
+	}
 
-	oldImg.src = esslSrc;
+	esslImg.removeEventListener('error', errorHandler);
+	esslImg.addEventListener('error', errorHandler);
+	esslImg.src = esslSrc;
 }
 
 function GetLastInit() {
