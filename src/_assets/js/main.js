@@ -211,25 +211,48 @@ let previousWidth = 0;
 
 function updateIframeSrc() {
 	if (window.innerWidth !== previousWidth) {
-		const windyFrame = document.getElementById('windyFrame');
-		const blitzortungFrame = document.getElementById('blitzortungFrame');
-		const weatherAndRadarFrame = document.getElementById('weatherAndRadarFrame');
-		
-		let wurl = windyFrame.getAttribute('data-src');
-		let burl = blitzortungFrame.getAttribute('data-src');
-		let rurl = weatherAndRadarFrame.getAttribute('data-src');
+		previousWidth = window.innerWidth;
 
-		if (window.innerWidth < 800) {
-			wurl = wurl.replace('&zoom=7', '&zoom=6')
-			burl = burl.replace('#6/', '#5/')
-			rurl = rurl.replace('&zoom=7.2', '&zoom=6.8')
+		let minWidth = 800; // Set the minimum width for the iframes to update
+
+		const windyFrame = document.getElementById('windyFrame');
+		if (windyFrame) {
+			let wurl = windyFrame.getAttribute('data-src');
+
+			if (window.innerWidth < minWidth)
+				wurl = wurl.replace('&zoom=7', '&zoom=6')
+
+			windyFrame.src = wurl;
+		}
+		else {
+			dlog("windyFrame not found, skipping updateIframeSrc for windyFrame.");
 		}
 
-		windyFrame.src = wurl;
-		blitzortungFrame.src = burl;
-		weatherAndRadarFrame.src = rurl;
+		const blitzortungFrame = document.getElementById('blitzortungFrame');
+		if (blitzortungFrame) {
+			let burl = blitzortungFrame.getAttribute('data-src');
 
-		previousWidth = window.innerWidth;
+			if (window.innerWidth < minWidth)
+				burl = burl.replace('#6/', '#5/')
+
+			blitzortungFrame.src = burl;
+		}
+		else {
+			dlog("blitzortungFrame not found, skipping updateIframeSrc for blitzortungFrame.");
+		}
+
+		const weatherAndRadarFrame = document.getElementById('weatherAndRadarFrame');
+		if (weatherAndRadarFrame) {
+			let rurl = weatherAndRadarFrame.getAttribute('data-src');
+
+			if (window.innerWidth < minWidth)
+				rurl = rurl.replace('&zoom=7.2', '&zoom=6.8')
+
+			weatherAndRadarFrame.src = rurl;
+		}
+		else {
+			dlog("weatherAndRadarFrame not found, skipping updateIframeSrc for weatherAndRadarFrame.");
+		}
 	}
 }
 
@@ -298,12 +321,16 @@ function updateHintText() {
 }
 
 function setEsslImgSrc() {
+	const esslImg = document.getElementById('essl');
+
+	if (!esslImg) {
+		dlog("essl img not found, skipping setEsslImgSrc");
+		return;
+	}
+
 	// src: https://www.stormforecast.eu/storm_script_2.js
 	let [dtg, end] = GetLastInit();
-	let esslSrc = `https://www.stormforecast.eu/map_images/models/archamos/${dtg.slice(0, 6)}/${dtg}/combi_paramcombi24_${dtg}_${end}.png`;
-
-	const esslImg = document.getElementById('essl');
-	esslImg.src = esslSrc;
+	esslImg.src = `https://www.stormforecast.eu/map_images/models/archamos/${dtg.slice(0, 6)}/${dtg}/combi_paramcombi24_${dtg}_${end}.png`;
 
 	esslImg.addEventListener('error', () => {
 		var noForecast = document.createElement('span')
