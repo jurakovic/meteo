@@ -214,7 +214,7 @@ function updateIframeSrc() {
 		previousWidth = window.innerWidth;
 
 		function updateIframeSrcInternal(iframe, zoomOld, zoomNew) {
-			dlog(`Updating iframe src for ${iframe.id}`);
+			dlog(`Updating iframe src for ${iframe}`);
 
 			if (iframe) {
 				let url = iframe.getAttribute('data-src');
@@ -225,7 +225,7 @@ function updateIframeSrc() {
 				iframe.src = url;
 			}
 			else {
-				dlog(`${iframe} not found, skipping updateIframeSrc for ${iframeId}`);
+				dlog(`${iframe} not found, skipping updateIframeSrc for ${iframe}`);
 			}
 		}
 
