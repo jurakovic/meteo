@@ -62,12 +62,12 @@ img {
 		transform: translateX(-50%);
 		background-color: black;
 		padding: 6px 12px;
-		min-width: 65%;
 	}
 
 @media (max-width: 800px) {
 	.overlay .hint {
 		top: 10%;
+		min-width: 65%;
 	}
 }
 
