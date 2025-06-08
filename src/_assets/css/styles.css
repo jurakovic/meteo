@@ -62,7 +62,7 @@ img {
 		transform: translateX(-50%);
 		background-color: black;
 		padding: 6px 12px;
-		white-space: nowrap;
+		min-width: 65%;
 	}
 
 @media (max-width: 800px) {
