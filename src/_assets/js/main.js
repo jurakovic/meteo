@@ -233,11 +233,13 @@ function updateIframeSrc() {
 		const blitzortungFrame = document.getElementById('blitzortungFrame');
 		const weatherAndRadarFrame = document.getElementById('weatherAndRadarFrame');
 		const rainViewerFrame = document.getElementById('rainViewerFrame');
+		const ventusskyFrame = document.getElementById('ventusskyFrame');
 
 		updateIframeSrcInternal(windyFrame, '&zoom=7', '&zoom=6');
 		updateIframeSrcInternal(blitzortungFrame, '#6/', '#5/');
 		updateIframeSrcInternal(weatherAndRadarFrame, '&zoom=7.2', '&zoom=6.8');
 		updateIframeSrcInternal(rainViewerFrame, ',6.3&', ',5.8&');
+		updateIframeSrcInternal(ventusskyFrame, ';6&', ';6&');
 	}
 }
 
