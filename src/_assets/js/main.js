@@ -237,7 +237,7 @@ function updateIframeSrc() {
 		updateIframeSrcInternal(windyFrame, '&zoom=7', '&zoom=6');
 		updateIframeSrcInternal(blitzortungFrame, '#6/', '#5/');
 		updateIframeSrcInternal(weatherAndRadarFrame, '&zoom=7.2', '&zoom=6.8');
-		updateIframeSrcInternal(rainViewerFrame, ',6.3&', ',6.0&');
+		updateIframeSrcInternal(rainViewerFrame, ',6.3&', ',5.8&');
 	}
 }
 
