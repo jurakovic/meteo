@@ -90,9 +90,9 @@
 		;const t=e.changedTouches[0].clientX,a=e.changedTouches[0].clientY,r=Math.abs(t-s),i=Math.abs(a-o);r<10&&i<10&&(n.style.opacity="0.6",
 		clearTimeout(n._hideTimer),n._hideTimer=setTimeout((()=>{n.style.removeProperty("opacity")}),2e3))}))}))}function updateHintText(){
 		const e=window.innerWidth<800;document.querySelectorAll(".hint").forEach((t=>{
-		t.textContent=e?"Dodirni dvaput za interaktivnu kartu":"Dvostruki klik za interaktivnu kartu"}))}function setEsslImgSrc(e=1){
-		const t=document.getElementById("essl");if(!t)return void dlog("essl img not found, skipping setEsslImgSrc");let n=GetLastInit()
-		;e>1&&n.setUTCHours(n.getUTCHours()-12*e)
+		t.textContent=e?"Dodirni dvaput za pristup interaktivnoj karti":"Dvostruki klik za pristup interaktivnoj karti"}))}
+		function setEsslImgSrc(e=1){const t=document.getElementById("essl");if(!t)return void dlog("essl img not found, skipping setEsslImgSrc")
+		;let n=GetLastInit();e>1&&n.setUTCHours(n.getUTCHours()-12*e)
 		;let o=new Date(Date.UTC(n.getUTCFullYear(),n.getUTCMonth(),n.getUTCDate()+(12===n.getUTCHours()?3:2),0,0,0,0)),s=DTGFromDateInHours(n),a=EndValue(o)
 		;dlog("dtg: "+s),dlog("end: "+a)
 		;let r=`https://www.stormforecast.eu/map_images/models/archamos/${s.slice(0,6)}/${s}/combi_paramcombi24_${s}_${a}.png`;function i(){
@@ -239,7 +239,7 @@
 					<div class="if1 placeholder">
 						<iframe id="windyFrame" loading="lazy" data-src="https://embed.windy.com/embed2.html?lat=44.5&lon=16.56&zoom=7&level=surface&overlay=radar&menu=&message=true&marker=&calendar=&pressure=&type=map&location=coordinates&detail=&detailLat=45.798&detailLon=15.936&metricWind=m%2Fs&metricTemp=%C2%B0C&radarRange=-1" frameborder="0"></iframe>
 						<div class="overlay">
-							<span class="hint">Dvostruki klik za interaktivnu kartu</span>
+							<span class="hint">Dvostruki klik za pristup interaktivnoj karti</span>
 						</div>
 					</div>
 				</td>
@@ -299,7 +299,7 @@
 					<div class="if1 placeholder">
 						<iframe id="blitzortungFrame" loading="lazy" data-src="https://map.blitzortung.org/index.php?interactive=1&NavigationControl=1&FullScreenControl=0&Cookies=0&InfoDiv=0&MenuButtonDiv=0&ScaleControl=0&CirclesRangeValue=1&LinksCheckboxChecked=0&LinksRangeValue=0&MapStyle=1&MapStyleRangeValue=3&Advertisment=0#6/44.5/16.5" frameborder="0"></iframe>
 						<div class="overlay">
-							<span class="hint">Dvostruki klik za interaktivnu kartu</span>
+							<span class="hint">Dvostruki klik za pristup interaktivnoj karti</span>
 						</div>
 					</div>
 				</td>

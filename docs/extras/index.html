@@ -90,9 +90,9 @@
 		;const t=e.changedTouches[0].clientX,a=e.changedTouches[0].clientY,r=Math.abs(t-s),i=Math.abs(a-o);r<10&&i<10&&(n.style.opacity="0.6",
 		clearTimeout(n._hideTimer),n._hideTimer=setTimeout((()=>{n.style.removeProperty("opacity")}),2e3))}))}))}function updateHintText(){
 		const e=window.innerWidth<800;document.querySelectorAll(".hint").forEach((t=>{
-		t.textContent=e?"Dodirni dvaput za interaktivnu kartu":"Dvostruki klik za interaktivnu kartu"}))}function setEsslImgSrc(e=1){
-		const t=document.getElementById("essl");if(!t)return void dlog("essl img not found, skipping setEsslImgSrc");let n=GetLastInit()
-		;e>1&&n.setUTCHours(n.getUTCHours()-12*e)
+		t.textContent=e?"Dodirni dvaput za pristup interaktivnoj karti":"Dvostruki klik za pristup interaktivnoj karti"}))}
+		function setEsslImgSrc(e=1){const t=document.getElementById("essl");if(!t)return void dlog("essl img not found, skipping setEsslImgSrc")
+		;let n=GetLastInit();e>1&&n.setUTCHours(n.getUTCHours()-12*e)
 		;let o=new Date(Date.UTC(n.getUTCFullYear(),n.getUTCMonth(),n.getUTCDate()+(12===n.getUTCHours()?3:2),0,0,0,0)),s=DTGFromDateInHours(n),a=EndValue(o)
 		;dlog("dtg: "+s),dlog("end: "+a)
 		;let r=`https://www.stormforecast.eu/map_images/models/archamos/${s.slice(0,6)}/${s}/combi_paramcombi24_${s}_${a}.png`;function i(){
@@ -139,7 +139,7 @@
 					<div class="if1 placeholder">
 						<iframe id="weatherAndRadarFrame" class="scaled-iframe" loading="lazy" data-src="https://radar.wo-cloud.com/pwa/?center=44.5,16.5&zoom=7.2&tz=Europe/Zagreb&tf=HH:mm&tempunit=celsius&windunit=kph&showShareButton=false&lang=en-US&placemarkName=Zagreb&desktop=true&fadeTop=true" frameborder="0"></iframe>
 						<div class="overlay">
-							<span class="hint">Dvostruki klik za interaktivnu kartu</span>
+							<span class="hint">Dvostruki klik za pristup interaktivnoj karti</span>
 						</div>
 					</div>
 				</td>
@@ -152,7 +152,7 @@
 					<div class="if1 placeholder">
 						<iframe id="rainViewerFrame" class="scaled-iframe" loading="lazy" data-src="https://www.rainviewer.com/map.html?loc=44.8,16.5,6.3&oCS=1&c=1&lm=1&layer=radar&sm=1&sn=2" frameborder="0"></iframe>
 						<div class="overlay">
-							<span class="hint">Dvostruki klik za interaktivnu kartu</span>
+							<span class="hint">Dvostruki klik za pristup interaktivnoj karti</span>
 						</div>
 					</div>
 				</td>
@@ -165,7 +165,7 @@
 					<div class="if1 placeholder">
 						<iframe id="ventusskyFrame" class="scaled-iframe" loading="lazy" data-src="https://embed.ventusky.com/?p=44.5;16.5;6&l=radar" frameborder="0"></iframe>
 						<div class="overlay">
-							<span class="hint">Dvostruki klik za interaktivnu kartu</span>
+							<span class="hint">Dvostruki klik za pristup interaktivnoj karti</span>
 						</div>
 					</div>
 				</td>

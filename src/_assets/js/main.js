@@ -302,8 +302,8 @@ function updateHintText() {
 	const isMobile = window.innerWidth < 800;
 	document.querySelectorAll('.hint').forEach(hint => {
 		hint.textContent = isMobile
-			? "Dodirni dvaput za interaktivnu kartu"
-			: "Dvostruki klik za interaktivnu kartu";
+			? "Dodirni dvaput za pristup interaktivnoj karti"
+			: "Dvostruki klik za pristup interaktivnoj karti";
 	});
 }
 
