@@ -25,6 +25,26 @@ table {
 	background-color: #202c40;
 }
 
+.radartitle {
+	position: relative;
+	max-width: 100%;
+}
+
+	.radartitle .center {
+		transform: translateX(-50%);
+		left: 50%;
+	}
+
+	.radartitle .left {
+		position: absolute;
+		left: 0;
+	}
+
+	.radartitle .right {
+		position: absolute;
+		right: 0;
+	}
+
 img {
 	max-width: 100%;
 	height: auto;

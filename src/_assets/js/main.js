@@ -212,36 +212,31 @@ let previousWidth = 0;
 function updateIframeSrc() {
 	if (window.innerWidth !== previousWidth) {
 		previousWidth = window.innerWidth;
-
-		function updateIframeSrcInternal(iframe, zoomOld, zoomNew) {
-			dlog(`Updating iframe src for ${iframe}`);
-
-			if (iframe) {
-				let url = iframe.getAttribute('data-src');
-
-				if (window.innerWidth < 800)
-					url = url.replace(zoomOld, zoomNew)
-
-				iframe.src = url;
-			}
-			else {
-				dlog(`${iframe} not found, skipping updateIframeSrc for ${iframe}`);
-			}
-		}
-
-		const windyFrame = document.getElementById('windyFrame');
-		const blitzortungFrame = document.getElementById('blitzortungFrame');
-		const weatherAndRadarFrame = document.getElementById('weatherAndRadarFrame');
-		const rainViewerFrame = document.getElementById('rainViewerFrame');
-		const ventusskyFrame = document.getElementById('ventusskyFrame');
-
-		updateIframeSrcInternal(windyFrame, '&zoom=7', '&zoom=6');
-		updateIframeSrcInternal(blitzortungFrame, '#6/', '#5/');
-		updateIframeSrcInternal(weatherAndRadarFrame, '&zoom=7.2', '&zoom=6.8');
-		updateIframeSrcInternal(rainViewerFrame, ',6.3&', ',5.8&');
-		updateIframeSrcInternal(ventusskyFrame, ';6&', ';6&');
+		setIframeSrc('windyFrame', '&zoom=7', '&zoom=6');
+		setIframeSrc('blitzortungFrame', '#6/', '#5/');
+		setIframeSrc('weatherAndRadarFrame', '&zoom=7.2', '&zoom=6.8');
+		setIframeSrc('rainViewerFrame', ',6.3&', ',5.8&');
+		setIframeSrc('ventusskyFrame', ';6&', ';6&');
 	}
 }
+
+function setIframeSrc(iframeId, zoomOld, zoomNew) {
+	dlog(`Updating iframe src for ${iframeId}`);
+
+	const iframe = document.getElementById(iframeId);
+	if (iframe) {
+		let url = iframe.getAttribute('data-src');
+
+		if (window.innerWidth < 800)
+			url = url.replace(zoomOld, zoomNew)
+
+		iframe.src = url;
+	}
+	else {
+		dlog(`${iframe} not found, skipping updateIframeSrc for ${iframe}`);
+	}
+}
+
 
 function hideOverlayOnDoubleTap() {
 	const overlays = document.querySelectorAll('.if1 .overlay');
@@ -305,6 +300,25 @@ function updateHintText() {
 			? "Dvostruki dodir za pristup interaktivnoj karti"
 			: "Dvostruki klik za pristup interaktivnoj karti";
 	});
+}
+
+function disableIframe(frameId) {
+	const frame = document.getElementById(frameId);
+	let parentElement = frame.parentElement;
+	let overlay = parentElement.querySelector('.overlay');
+	overlay.removeAttribute('style');
+
+	const resetFrame = document.getElementById('reset' + String(frameId).charAt(0).toUpperCase() + String(frameId).slice(1));
+	resetFrame.removeAttribute('onclick');
+	resetFrame.addEventListener('click', () => {
+		resetIframe(frameId);
+	});
+	resetFrame.textContent = '[reset]';
+}
+
+function resetIframe(frameId) {
+	dlog(`Resetting iframe: ${frameId}`);
+	setIframeSrc('windyFrame', '&zoom=7', '&zoom=6');
 }
 
 function setEsslImgSrc(tryCount = 1) {
