@@ -31,10 +31,13 @@
 
 			<tr>
 				<td align="center">
-					<a href="https://www.vrijemeradar.hr/vremenski-radar/zagreb/18138691?center=44.5,16.5&zoom=7&layer=wr&tz=Europe%2FZagreb" target="_blank" rel="nofollow">Weather & Radar</a>
+					<div class="radartitle">
+						<a class="center" href="https://www.vrijemeradar.hr/vremenski-radar/zagreb/18138691?center=44.5,16.5&zoom=7&layer=wr&tz=Europe%2FZagreb" target="_blank" rel="nofollow">Weather & Radar</a>
+						<a class="right" id="resetWeatherAndRadarFrame" href="javascript:void(0)" onclick="restoreOverlay('weatherAndRadar')" style="display:none">[X]</a>
+					</div>
 					<div class="if1 placeholder">
 						<iframe id="weatherAndRadar" class="scaled-iframe" loading="lazy" data-src="https://radar.wo-cloud.com/pwa/?center=44.5,16.5&zoom=7.2&tz=Europe/Zagreb&tf=HH:mm&tempunit=celsius&windunit=kph&showShareButton=false&lang=en-US&placemarkName=Zagreb&desktop=true&fadeTop=true" frameborder="0"></iframe>
-						<div class="overlay">
+						<div class="overlay" id="overlayWeatherAndRadarFrame">
 							<span class="hint">Dvostruki klik za pristup interaktivnoj karti</span>
 						</div>
 					</div>
@@ -44,10 +47,13 @@
 
 			<tr>
 				<td align="center">
-					<a href="https://www.rainviewer.com/map.html?loc=44.5,16.5,6&oCS=1&c=1&lm=1&layer=radar&sm=1&sn=2" target="_blank" rel="nofollow">Rain Viewer</a>
+					<div class="radartitle">
+						<a class="center" href="https://www.rainviewer.com/map.html?loc=44.5,16.5,6&oCS=1&c=1&lm=1&layer=radar&sm=1&sn=2" target="_blank" rel="nofollow">Rain Viewer</a>
+						<a class="right" id="resetRainViewerFrame" href="javascript:void(0)" onclick="restoreOverlay('windy')" style="display:none">[X]</a>
+					</div>
 					<div class="if1 placeholder">
 						<iframe id="rainViewer" class="scaled-iframe" loading="lazy" data-src="https://www.rainviewer.com/map.html?loc=44.8,16.5,6.3&oCS=1&c=1&lm=1&layer=radar&sm=1&sn=2" frameborder="0"></iframe>
-						<div class="overlay">
+						<div class="overlay" id="overlayRainViewerFrame">
 							<span class="hint">Dvostruki klik za pristup interaktivnoj karti</span>
 						</div>
 					</div>
@@ -57,10 +63,13 @@
 
 			<tr>
 				<td align="center">
-					<a href="https://www.ventusky.com/?p=44.5;16.5;6&l=radar" target="_blank" rel="nofollow">Ventussky</a>
+					<div class="radartitle">
+						<a class="center" href="https://www.ventusky.com/?p=44.5;16.5;6&l=radar" target="_blank" rel="nofollow">Ventussky</a>
+						<a class="right" id="resetVentusskyFrame" href="javascript:void(0)" onclick="restoreOverlay('windy')" style="display:none">[X]</a>
+					</div>
 					<div class="if1 placeholder">
 						<iframe id="ventussky" class="scaled-iframe" loading="lazy" data-src="https://embed.ventusky.com/?p=44.5;16.5;6&l=radar" frameborder="0"></iframe>
-						<div class="overlay">
+						<div class="overlay" id="overlayVentusskyFrame">
 							<span class="hint">Dvostruki klik za pristup interaktivnoj karti</span>
 						</div>
 					</div>

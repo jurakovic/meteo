@@ -320,6 +320,7 @@ function updateHintText() {
 }
 
 function restoreOverlay(frameId) {
+	dlog(`restoreOverlay: ${frameId}`);
 	const frame = document.getElementById(frameId);
 	let parentElement = frame.parentElement;
 	let overlay = parentElement.querySelector('.overlay');
@@ -339,7 +340,7 @@ function setResetButtonToExit(resetFrame) {
 		e.stopPropagation(); // Stop event bubbling
 		restoreOverlay(getFrameIdFromResetButtonId(newResetFrame.id));
 	});
-	newResetFrame.textContent = '[izlaz]';
+	newResetFrame.textContent = '[X]';
 }
 
 function setResetButtonToReset(resetFrame) {
@@ -351,7 +352,7 @@ function setResetButtonToReset(resetFrame) {
 		e.stopPropagation(); // Stop event bubbling
 		resetIframe(getFrameIdFromResetButtonId(newResetFrame.id));
 	});
-	newResetFrame.textContent = '[reset]';
+	newResetFrame.textContent = '[R]';
 }
 
 function resetIframe(frameId) {
@@ -372,7 +373,8 @@ function getResetButtonFromOverlayId(overlayId) {
 }
 
 function getFrameIdFromResetButtonId(resetFrameId) {
-	return resetFrameId.toLowerCase().replace('reset', '').replace('frame', '');
+	let name = resetFrameId.replace('reset', '').replace('Frame', '');
+	return String(name).charAt(0).toLowerCase() + String(name).slice(1);
 }
 
 function setEsslImgSrc(tryCount = 1) {
