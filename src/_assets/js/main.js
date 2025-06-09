@@ -210,20 +210,20 @@ function addSwipeEvents() {
 let previousWidth = 0;
 
 let zoomMap = new Map();
-zoomMap.set('windyFrame', [ '&zoom=7', '&zoom=6' ]);
-zoomMap.set('blitzortungFrame', [ '#6/', '#5/' ]);
-zoomMap.set('weatherAndRadarFrame', [ '&zoom=7.2', '&zoom=6.8' ]);
-zoomMap.set('rainViewerFrame', [ ',6.3&', ',5.8&' ]);
-zoomMap.set('ventusskyFrame', [ ';6&', ';6&' ]);
+zoomMap.set('windy', [ '&zoom=7', '&zoom=6' ]);
+zoomMap.set('blitzortung', [ '#6/', '#5/' ]);
+zoomMap.set('weatherAndRadar', [ '&zoom=7.2', '&zoom=6.8' ]);
+zoomMap.set('rainViewer', [ ',6.3&', ',5.8&' ]);
+zoomMap.set('ventussky', [ ';6&', ';6&' ]);
 
 function updateIframeSrc() {
 	if (window.innerWidth !== previousWidth) {
 		previousWidth = window.innerWidth;
-		setIframeSrc('windyFrame');
-		setIframeSrc('blitzortungFrame');
-		setIframeSrc('weatherAndRadarFrame');
-		setIframeSrc('rainViewerFrame');
-		setIframeSrc('ventusskyFrame');
+		setIframeSrc('windy');
+		setIframeSrc('blitzortung');
+		setIframeSrc('weatherAndRadar');
+		setIframeSrc('rainViewer');
+		setIframeSrc('ventussky');
 	}
 }
 
@@ -239,7 +239,7 @@ function setIframeSrc(iframeId) {
 		let url = iframe.getAttribute('data-src');
 
 		if (window.innerWidth < 800)
-			url = url.replace(zoomOld, zoomNew)
+			url = url.replace(zoomOld, zoomNew);
 
 		iframe.src = url;
 	}
@@ -256,6 +256,9 @@ function hideOverlayOnDoubleTap() {
 
 		overlay.addEventListener('dblclick', () => {
 			overlay.style.display = 'none';
+			let resetFrame = document.getElementById('reset' + overlay.id.replace('overlay', 'reset'));
+			resetFrame.removeAttribute('style');
+			setResetButtonToExit(resetFrame);
 		});
 
 		overlay.addEventListener('touchend', (e) => {
@@ -264,6 +267,10 @@ function hideOverlayOnDoubleTap() {
 
 			if (tapLength > 0 && tapLength < 200) {
 				overlay.style.display = 'none';
+				console.log('touchend');
+				let resetFrame = document.getElementById(overlay.id.replace('overlay', 'reset'));
+				resetFrame.removeAttribute('style');
+				setResetButtonToExit(resetFrame);
 				e.preventDefault(); // prevent unintended behavior (e.g. zoom)
 			}
 
@@ -318,24 +325,39 @@ function addOverlay(frameId) {
 	let overlay = parentElement.querySelector('.overlay');
 	overlay.removeAttribute('style');
 
-	const resetFrame = document.getElementById('reset' + String(frameId).charAt(0).toUpperCase() + String(frameId).slice(1));
-	resetFrame.removeAttribute('onclick');
-	resetFrame.addEventListener('click', () => {
-		resetIframe(frameId);
-	});
-	resetFrame.textContent = '[reset]';
+	const resetFrame = document.getElementById('reset' + String(frameId).charAt(0).toUpperCase() + String(frameId).slice(1) + 'Frame');
+	setResetButtonToReset(resetFrame);
 }
 
 function resetIframe(frameId) {
 	dlog(`Resetting iframe: ${frameId}`);
 	setIframeSrc(frameId);
 
-	const resetFrame = document.getElementById('reset' + String(frameId).charAt(0).toUpperCase() + String(frameId).slice(1));
+	const resetFrame = document.getElementById('reset' + String(frameId).charAt(0).toUpperCase() + String(frameId).slice(1) + 'Frame');
+	resetFrame.style.display = 'none';
+	setResetButtonToExit(resetFrame);
+}
+
+function setResetButtonToExit(resetFrame) {
+	console.log('setResetButtonToExit');
+	console.log(resetFrame);
 	resetFrame.removeAttribute('onclick');
+	resetFrame.removeEventListener('click', resetIframe);
 	resetFrame.addEventListener('click', () => {
-		resetIframe(frameId);
+		addOverlay(resetFrame.id.toLowerCase().replace('reset', '').replace('frame', ''));
 	});
 	resetFrame.textContent = '[izlaz]';
+}
+
+function setResetButtonToReset(resetFrame) {
+	console.log('setResetButtonToReset');
+	console.log(resetFrame);
+	resetFrame.removeAttribute('onclick');
+	resetFrame.removeEventListener('click', addOverlay);
+	resetFrame.addEventListener('click', () => {
+		resetIframe(resetFrame.id.toLowerCase().replace('reset', '').replace('frame', ''));
+	});
+	resetFrame.textContent = '[reset]';
 }
 
 function setEsslImgSrc(tryCount = 1) {
