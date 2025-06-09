@@ -209,22 +209,33 @@ function addSwipeEvents() {
 
 let previousWidth = 0;
 
+let zoomMap = new Map();
+zoomMap.set('windyFrame', [ '&zoom=7', '&zoom=6' ]);
+zoomMap.set('blitzortungFrame', [ '#6/', '#5/' ]);
+zoomMap.set('weatherAndRadarFrame', [ '&zoom=7.2', '&zoom=6.8' ]);
+zoomMap.set('rainViewerFrame', [ ',6.3&', ',5.8&' ]);
+zoomMap.set('ventusskyFrame', [ ';6&', ';6&' ]);
+
 function updateIframeSrc() {
 	if (window.innerWidth !== previousWidth) {
 		previousWidth = window.innerWidth;
-		setIframeSrc('windyFrame', '&zoom=7', '&zoom=6');
-		setIframeSrc('blitzortungFrame', '#6/', '#5/');
-		setIframeSrc('weatherAndRadarFrame', '&zoom=7.2', '&zoom=6.8');
-		setIframeSrc('rainViewerFrame', ',6.3&', ',5.8&');
-		setIframeSrc('ventusskyFrame', ';6&', ';6&');
+		setIframeSrc('windyFrame');
+		setIframeSrc('blitzortungFrame');
+		setIframeSrc('weatherAndRadarFrame');
+		setIframeSrc('rainViewerFrame');
+		setIframeSrc('ventusskyFrame');
 	}
 }
 
-function setIframeSrc(iframeId, zoomOld, zoomNew) {
+function setIframeSrc(iframeId) {
 	dlog(`Updating iframe src for ${iframeId}`);
 
 	const iframe = document.getElementById(iframeId);
 	if (iframe) {
+		let values = zoomMap.get(iframeId);
+		let zoomOld = values[0];
+		let zoomNew = values[1];
+
 		let url = iframe.getAttribute('data-src');
 
 		if (window.innerWidth < 800)
@@ -236,7 +247,6 @@ function setIframeSrc(iframeId, zoomOld, zoomNew) {
 		dlog(`${iframe} not found, skipping updateIframeSrc for ${iframe}`);
 	}
 }
-
 
 function hideOverlayOnDoubleTap() {
 	const overlays = document.querySelectorAll('.if1 .overlay');
@@ -302,7 +312,7 @@ function updateHintText() {
 	});
 }
 
-function disableIframe(frameId) {
+function addOverlay(frameId) {
 	const frame = document.getElementById(frameId);
 	let parentElement = frame.parentElement;
 	let overlay = parentElement.querySelector('.overlay');
@@ -318,7 +328,14 @@ function disableIframe(frameId) {
 
 function resetIframe(frameId) {
 	dlog(`Resetting iframe: ${frameId}`);
-	setIframeSrc('windyFrame', '&zoom=7', '&zoom=6');
+	setIframeSrc(frameId);
+
+	const resetFrame = document.getElementById('reset' + String(frameId).charAt(0).toUpperCase() + String(frameId).slice(1));
+	resetFrame.removeAttribute('onclick');
+	resetFrame.addEventListener('click', () => {
+		resetIframe(frameId);
+	});
+	resetFrame.textContent = '[izlaz]';
 }
 
 function setEsslImgSrc(tryCount = 1) {
