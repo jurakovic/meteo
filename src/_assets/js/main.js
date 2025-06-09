@@ -267,10 +267,10 @@ function hideOverlayOnDoubleTap() {
 
 			if (tapLength > 0 && tapLength < 200) {
 				overlay.style.display = 'none';
-				console.log('touchend');
 				let resetFrame = document.getElementById(overlay.id.replace('overlay', 'reset'));
 				resetFrame.removeAttribute('style');
 				setResetButtonToExit(resetFrame);
+
 				e.preventDefault(); // prevent unintended behavior (e.g. zoom)
 			}
 
@@ -339,25 +339,25 @@ function resetIframe(frameId) {
 }
 
 function setResetButtonToExit(resetFrame) {
-	console.log('setResetButtonToExit');
-	console.log(resetFrame);
-	resetFrame.removeAttribute('onclick');
-	resetFrame.removeEventListener('click', resetIframe);
-	resetFrame.addEventListener('click', () => {
-		addOverlay(resetFrame.id.toLowerCase().replace('reset', '').replace('frame', ''));
+	dlog(`setResetButtonToExit: ${resetFrame.id}`);
+	const newResetFrame = resetFrame.cloneNode(true);
+	resetFrame.parentNode.replaceChild(newResetFrame, resetFrame);
+
+	newResetFrame.addEventListener('click', () => {
+		addOverlay(newResetFrame.id.toLowerCase().replace('reset', '').replace('frame', ''));
 	});
-	resetFrame.textContent = '[izlaz]';
+	newResetFrame.textContent = '[izlaz]';
 }
 
 function setResetButtonToReset(resetFrame) {
-	console.log('setResetButtonToReset');
-	console.log(resetFrame);
-	resetFrame.removeAttribute('onclick');
-	resetFrame.removeEventListener('click', addOverlay);
-	resetFrame.addEventListener('click', () => {
-		resetIframe(resetFrame.id.toLowerCase().replace('reset', '').replace('frame', ''));
+	dlog(`setResetButtonToReset: ${resetFrame.id}`);
+	const newResetFrame = resetFrame.cloneNode(true);
+	resetFrame.parentNode.replaceChild(newResetFrame, resetFrame);
+
+	newResetFrame.addEventListener('click', () => {
+		resetIframe(newResetFrame.id.toLowerCase().replace('reset', '').replace('frame', ''));
 	});
-	resetFrame.textContent = '[reset]';
+	newResetFrame.textContent = '[reset]';
 }
 
 function setEsslImgSrc(tryCount = 1) {
