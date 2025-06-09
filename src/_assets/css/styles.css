@@ -43,6 +43,7 @@ table {
 	.radartitle .right {
 		position: absolute;
 		right: 0;
+		text-decoration: none;
 	}
 
 img {
