@@ -244,7 +244,7 @@ function setIframeSrc(iframeId) {
 		iframe.src = url;
 	}
 	else {
-		dlog(`${iframe} not found, skipping updateIframeSrc for ${iframe}`);
+		dlog(`${iframeId} not found, skipping updateIframeSrc for ${iframeId}`);
 	}
 }
 
@@ -256,7 +256,7 @@ function hideOverlayOnDoubleTap() {
 
 		overlay.addEventListener('dblclick', () => {
 			overlay.style.display = 'none';
-			let resetFrame = document.getElementById('reset' + overlay.id.replace('overlay', 'reset'));
+			let resetFrame = getResetButtonFromOverlayId(overlay.id);
 			resetFrame.removeAttribute('style');
 			setResetButtonToExit(resetFrame);
 		});
@@ -267,7 +267,7 @@ function hideOverlayOnDoubleTap() {
 
 			if (tapLength > 0 && tapLength < 200) {
 				overlay.style.display = 'none';
-				let resetFrame = document.getElementById(overlay.id.replace('overlay', 'reset'));
+				let resetFrame = getResetButtonFromOverlayId(overlay.id);
 				resetFrame.removeAttribute('style');
 				setResetButtonToExit(resetFrame);
 
@@ -319,32 +319,25 @@ function updateHintText() {
 	});
 }
 
-function addOverlay(frameId) {
+function restoreOverlay(frameId) {
 	const frame = document.getElementById(frameId);
 	let parentElement = frame.parentElement;
 	let overlay = parentElement.querySelector('.overlay');
 	overlay.removeAttribute('style');
 
-	const resetFrame = document.getElementById('reset' + String(frameId).charAt(0).toUpperCase() + String(frameId).slice(1) + 'Frame');
+	const resetFrame = getResetButtonFromFrameId(frameId);
 	setResetButtonToReset(resetFrame);
-}
-
-function resetIframe(frameId) {
-	dlog(`Resetting iframe: ${frameId}`);
-	setIframeSrc(frameId);
-
-	const resetFrame = document.getElementById('reset' + String(frameId).charAt(0).toUpperCase() + String(frameId).slice(1) + 'Frame');
-	resetFrame.style.display = 'none';
-	setResetButtonToExit(resetFrame);
 }
 
 function setResetButtonToExit(resetFrame) {
 	dlog(`setResetButtonToExit: ${resetFrame.id}`);
+	resetFrame.removeAttribute('onclick'); // remove html onclick attribute
 	const newResetFrame = resetFrame.cloneNode(true);
 	resetFrame.parentNode.replaceChild(newResetFrame, resetFrame);
 
-	newResetFrame.addEventListener('click', () => {
-		addOverlay(newResetFrame.id.toLowerCase().replace('reset', '').replace('frame', ''));
+	newResetFrame.addEventListener('click', (e) => {
+		e.stopPropagation(); // Stop event bubbling
+		restoreOverlay(getFrameIdFromResetButtonId(newResetFrame.id));
 	});
 	newResetFrame.textContent = '[izlaz]';
 }
@@ -354,10 +347,32 @@ function setResetButtonToReset(resetFrame) {
 	const newResetFrame = resetFrame.cloneNode(true);
 	resetFrame.parentNode.replaceChild(newResetFrame, resetFrame);
 
-	newResetFrame.addEventListener('click', () => {
-		resetIframe(newResetFrame.id.toLowerCase().replace('reset', '').replace('frame', ''));
+	newResetFrame.addEventListener('click', (e) => {
+		e.stopPropagation(); // Stop event bubbling
+		resetIframe(getFrameIdFromResetButtonId(newResetFrame.id));
 	});
 	newResetFrame.textContent = '[reset]';
+}
+
+function resetIframe(frameId) {
+	dlog(`Resetting iframe: ${frameId}`);
+	setIframeSrc(frameId);
+
+	const resetFrame = getResetButtonFromFrameId(frameId);
+	resetFrame.style.display = 'none';
+	setResetButtonToExit(resetFrame);
+}
+
+function getResetButtonFromFrameId(frameId) {
+	return document.getElementById('reset' + String(frameId).charAt(0).toUpperCase() + String(frameId).slice(1) + 'Frame');
+}
+
+function getResetButtonFromOverlayId(overlayId) {
+	return document.getElementById(overlayId.replace('overlay', 'reset'));
+}
+
+function getFrameIdFromResetButtonId(resetFrameId) {
+	return resetFrameId.toLowerCase().replace('reset', '').replace('frame', '');
 }
 
 function setEsslImgSrc(tryCount = 1) {
