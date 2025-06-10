@@ -25,6 +25,31 @@ table {
 	background-color: #202c40;
 }
 
+.radartitle {
+	position: relative;
+	max-width: 100%;
+}
+
+	.radartitle .center {
+		transform: translateX(-50%);
+		left: 50%;
+	}
+
+	.radartitle .left {
+		position: absolute;
+		left: 0;
+	}
+
+	.radartitle .right {
+		position: absolute;
+		right: 0;
+		text-decoration: none;
+	}
+
+		.radartitle .right:hover {
+			cursor: pointer;
+		}
+
 img {
 	max-width: 100%;
 	height: auto;
@@ -62,12 +87,12 @@ img {
 		transform: translateX(-50%);
 		background-color: black;
 		padding: 6px 12px;
-		white-space: nowrap;
 	}
 
 @media (max-width: 800px) {
 	.overlay .hint {
 		top: 10%;
+		min-width: 65%;
 	}
 }
 
@@ -105,6 +130,22 @@ iframe, video {
 	width: 100%;
 	height: 100%;
 	border: none;
+}
+
+.scaled-iframe {
+	transform: scale(0.9);
+	width: calc(100% / 0.9);
+	height: calc(100% / 0.9);
+	transform-origin: 0 0;
+}
+
+@media (max-width: 800px) {
+	.scaled-iframe {
+		transform: scale(0.6);
+		width: calc(100% / 0.6);
+		height: calc(100% / 0.6);
+		transform-origin: 0 0;
+	}
 }
 
 .sp {

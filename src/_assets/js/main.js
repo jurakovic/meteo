@@ -209,23 +209,42 @@ function addSwipeEvents() {
 
 let previousWidth = 0;
 
+let zoomMap = new Map();
+zoomMap.set('windy', [ '&zoom=7', '&zoom=6' ]);
+zoomMap.set('blitzortung', [ '#6/', '#5/' ]);
+zoomMap.set('weatherAndRadar', [ '&zoom=7.2', '&zoom=6.8' ]);
+zoomMap.set('rainViewer', [ ',6.3&', ',5.8&' ]);
+zoomMap.set('ventussky', [ ';6&', ';6&' ]);
+
 function updateIframeSrc() {
 	if (window.innerWidth !== previousWidth) {
-		const windyFrame = document.getElementById('windyFrame');
-		const blitzortungFrame = document.getElementById('blitzortungFrame');
-
-		let wurl = windyFrame.getAttribute('data-src');
-		let burl = blitzortungFrame.getAttribute('data-src');
-
-		if (window.innerWidth < 800) {
-			wurl = wurl.replace('&zoom=7', '&zoom=6')
-			burl = burl.replace('#6/', '#5/')
-		}
-
-		windyFrame.src = wurl;
-		blitzortungFrame.src = burl;
-
 		previousWidth = window.innerWidth;
+		setIframeSrc('windy');
+		setIframeSrc('blitzortung');
+		setIframeSrc('weatherAndRadar');
+		setIframeSrc('rainViewer');
+		setIframeSrc('ventussky');
+	}
+}
+
+function setIframeSrc(iframeId) {
+	dlog(`Updating iframe src for ${iframeId}`);
+
+	const iframe = document.getElementById(iframeId);
+	if (iframe) {
+		let values = zoomMap.get(iframeId);
+		let zoomOld = values[0];
+		let zoomNew = values[1];
+
+		let url = iframe.getAttribute('data-src');
+
+		if (window.innerWidth < 800)
+			url = url.replace(zoomOld, zoomNew);
+
+		iframe.src = url;
+	}
+	else {
+		dlog(`${iframeId} not found, skipping updateIframeSrc for ${iframeId}`);
 	}
 }
 
@@ -237,6 +256,9 @@ function hideOverlayOnDoubleTap() {
 
 		overlay.addEventListener('dblclick', () => {
 			overlay.style.display = 'none';
+			let resetFrame = getResetButtonFromOverlayId(overlay.id);
+			resetFrame.removeAttribute('style');
+			setResetButtonToExit(resetFrame);
 		});
 
 		overlay.addEventListener('touchend', (e) => {
@@ -245,6 +267,10 @@ function hideOverlayOnDoubleTap() {
 
 			if (tapLength > 0 && tapLength < 200) {
 				overlay.style.display = 'none';
+				let resetFrame = getResetButtonFromOverlayId(overlay.id);
+				resetFrame.removeAttribute('style');
+				setResetButtonToExit(resetFrame);
+
 				e.preventDefault(); // prevent unintended behavior (e.g. zoom)
 			}
 
@@ -288,60 +314,118 @@ function updateHintText() {
 	const isMobile = window.innerWidth < 800;
 	document.querySelectorAll('.hint').forEach(hint => {
 		hint.textContent = isMobile
-			? "Dodirni dvaput za interaktivnu kartu"
-			: "Dvostruki klik za interaktivnu kartu";
+			? "Dvostruki dodir za pristup interaktivnoj karti"
+			: "Dvostruki klik za pristup interaktivnoj karti";
 	});
 }
 
-function setEsslImgSrc() {
-	// src: https://www.stormforecast.eu/storm_script_2.js
-	let [dtg, end] = GetLastInit();
-	let esslSrc = `https://www.stormforecast.eu/map_images/models/archamos/${dtg.slice(0, 6)}/${dtg}/combi_paramcombi24_${dtg}_${end}.png`;
+function restoreOverlay(frameId) {
+	dlog(`restoreOverlay: ${frameId}`);
+	const frame = document.getElementById(frameId);
+	let parentElement = frame.parentElement;
+	let overlay = parentElement.querySelector('.overlay');
+	overlay.removeAttribute('style');
 
-	const esslImg = document.getElementById('essl');
-	esslImg.src = esslSrc;
+	const resetFrame = getResetButtonFromFrameId(frameId);
+	setResetButtonToReset(resetFrame);
+}
 
-	esslImg.addEventListener('error', () => {
-		var noForecast = document.createElement('span')
-		noForecast.innerHTML = "Nema prognoze za traženi period";
-		esslImg.parentNode.appendChild(noForecast);
+function setResetButtonToExit(resetFrame) {
+	dlog(`setResetButtonToExit: ${resetFrame.id}`);
+	const newResetFrame = resetFrame.cloneNode(true);
+	resetFrame.parentNode.replaceChild(newResetFrame, resetFrame);
+
+	newResetFrame.addEventListener('click', (e) => {
+		e.stopPropagation(); // Stop event bubbling
+		restoreOverlay(getFrameIdFromResetButtonId(newResetFrame.id));
 	});
+	newResetFrame.textContent = '[X]';
+}
+
+function setResetButtonToReset(resetFrame) {
+	dlog(`setResetButtonToReset: ${resetFrame.id}`);
+	const newResetFrame = resetFrame.cloneNode(true);
+	resetFrame.parentNode.replaceChild(newResetFrame, resetFrame);
+
+	newResetFrame.addEventListener('click', (e) => {
+		e.stopPropagation(); // Stop event bubbling
+		resetIframe(getFrameIdFromResetButtonId(newResetFrame.id));
+	});
+	newResetFrame.textContent = '[R]';
+}
+
+function resetIframe(frameId) {
+	dlog(`Resetting iframe: ${frameId}`);
+	setIframeSrc(frameId);
+
+	const resetFrame = getResetButtonFromFrameId(frameId);
+	resetFrame.style.display = 'none';
+	setResetButtonToExit(resetFrame);
+}
+
+function getResetButtonFromFrameId(frameId) {
+	return document.getElementById('reset' + String(frameId).charAt(0).toUpperCase() + String(frameId).slice(1) + 'Frame');
+}
+
+function getResetButtonFromOverlayId(overlayId) {
+	return document.getElementById(overlayId.replace('overlay', 'reset'));
+}
+
+function getFrameIdFromResetButtonId(resetFrameId) {
+	let name = resetFrameId.replace('reset', '').replace('Frame', '');
+	return String(name).charAt(0).toLowerCase() + String(name).slice(1);
+}
+
+function setEsslImgSrc(tryCount = 1) {
+	// src: https://www.stormforecast.eu/storm_script_2.js
+	const esslImg = document.getElementById('essl');
+
+	if (!esslImg) {
+		dlog("essl img not found, skipping setEsslImgSrc");
+		return;
+	}
+
+	let maxTryCount = 4;
+	let dt = GetLastInit();
+
+	if (tryCount > 1)
+		dt.setUTCHours(dt.getUTCHours() - (12 * tryCount));
+
+	let dte = new Date(Date.UTC(dt.getUTCFullYear(), dt.getUTCMonth(), dt.getUTCDate() + (dt.getUTCHours() === 12 ? 3 : 2), 0, 0, 0, 0));
+
+	let dtg = DTGFromDateInHours(dt);
+	let end = EndValue(dte);
+	dlog("dtg: " + dtg);
+	dlog("end: " + end);
+
+	let esslSrc = `https://www.stormforecast.eu/map_images/models/archamos/${dtg.slice(0, 6)}/${dtg}/combi_paramcombi24_${dtg}_${end}.png`;
+	//dlog(esslSrc);
+
+	function errorHandler() {
+		if (tryCount < maxTryCount) {
+			dlog(`Image load failed, try attempt ${tryCount} with dtg: ${dtg}`);
+			esslImg.removeEventListener('error', errorHandler);
+			setEsslImgSrc(tryCount + 1);
+		} else {
+			dlog(`Image load failed after ${maxTryCount} attempts`);
+			const noForecast = document.createElement('span');
+			noForecast.innerHTML = "Nema prognoze za traženi period";
+			esslImg.parentNode.appendChild(noForecast);
+		}
+	}
+
+	esslImg.removeEventListener('error', errorHandler);
+	esslImg.addEventListener('error', errorHandler);
+	esslImg.src = esslSrc;
 }
 
 function GetLastInit() {
 	let dt = new Date();
-	let dte = new Date();
-	let h0 = 0 + 10;
-	let h12 = 12 + 8;
-
-	if (dt.getUTCHours() >= h12) { // h >= 20
-		dlog("b1: dt.getUTCHours() >= " + h12);
-		dt.setUTCHours(12, 0, 0, 0);
-		dte = new Date(dt.getTime());
-		dte.setDate(dte.getDate() + 3);
-	}
-	else if (dt.getUTCHours() >= h0 && dt.getUTCHours() < h12) { // h >= 10 && h < 20
-		dlog("b2: dt.getUTCHours() >= " + h0 + " && dt.getUTCHours() < " + h12);
-		dt.setUTCHours(0, 0, 0, 0);
-		dte = new Date(dt.getTime());
-		dte.setDate(dte.getDate() + 2);
-	}
-	else if (dt.getUTCHours() < h0) { // h < 10
-		dlog("b3: dt.getUTCHours() < " + h0);
-		dt.setUTCHours(12, 0, 0, 0);
-		dt.setDate(dt.getDate() - 1);
-		dte = new Date(dt.getTime());
-		dte.setDate(dte.getDate() + 3);
-	}
-
-	let dtg = DTGFromDateInHours(dt);
-	let end = EndValue(dte);
-
-	dlog("dt:  " + dt);
-	dlog("dte: " + dte);
-	dlog("dtg: " + dtg);
-	dlog("end: " + end);
-	return [dtg, end];
+	// normalize date to last 12h or 00h
+	dt = new Date(Date.UTC(dt.getUTCFullYear(), dt.getUTCMonth(), dt.getUTCDate(), (dt.getUTCHours() >= 12 ? 12 : 0), 0, 0, 0));
+	// try first with previous calculation time
+	dt.setUTCHours(dt.getUTCHours() - 12);
+	return dt;
 };
 
 function DTGFromDateInHours(mydate) {
