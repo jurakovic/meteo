@@ -46,6 +46,10 @@ table {
 		text-decoration: none;
 	}
 
+		.radartitle .right:hover {
+			cursor: pointer;
+		}
+
 img {
 	max-width: 100%;
 	height: auto;
