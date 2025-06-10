@@ -332,7 +332,6 @@ function restoreOverlay(frameId) {
 
 function setResetButtonToExit(resetFrame) {
 	dlog(`setResetButtonToExit: ${resetFrame.id}`);
-	resetFrame.removeAttribute('onclick'); // remove html onclick attribute
 	const newResetFrame = resetFrame.cloneNode(true);
 	resetFrame.parentNode.replaceChild(newResetFrame, resetFrame);
 
