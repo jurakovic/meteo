@@ -36,24 +36,24 @@
 		position:relative;width:100%;overflow:hidden;padding-top:87%}iframe,video{position:absolute;top:0;left:0;bottom:0;right:0;width:100%;height:
 		100%;border:none}.scaled-iframe{transform:scale(.9);width:calc(100% / .9);height:calc(100% / .9);transform-origin:0 0}
 		@media (max-width:800px){.scaled-iframe{transform:scale(.6);width:calc(100% / .6);height:calc(100% / .6);transform-origin:0 0}}.sp{height:
-		10px}.buttons{display:grid;grid-template-columns:49.5% 49.5%;gap:1%;font-size:13px}.buttons .btn{margin-top:10px;margin-bottom:5px;font-size
-		:13px;font-family:inherit;color:#fff;background-color:#485871;align-content:center;cursor:pointer;width:100%;height:24px;border:none;outline
-		:0}.buttons .btn:hover{background-color:#5f6f89}.slideshow{position:relative;display:flex;justify-content:center}.slide{display:none}
-		.slide.active{display:block}.next,.prev{cursor:pointer;position:absolute;align-content:center;top:0;bottom:0;width:15%;padding:16px;color:
-		transparent;opacity:.7;font-weight:700;font-size:36px;transition:.6s ease;user-select:none}.prev{left:0;text-align:left}.prev:hover{
-		background-image:linear-gradient(to left,transparent,rgba(0,0,0,.6));color:#fff}.prev.shorter{top:.4em}.next{right:0;text-align:right}
-		.next:hover{background-image:linear-gradient(to right,transparent,rgba(0,0,0,.6));color:#fff}.next.shorter{top:.4em}.fade{animation-name:
-		fade;animation-duration:1s}@keyframes fade{from{opacity:.6}to{opacity:1}}@media (max-width:800px){.next,.prev{padding:12px;font-size:20px}
-		.next.shorter,.prev.shorter{top:.72em}}.indicators-container{display:grid;grid-template-columns:repeat(3,1fr);gap:4px;width:100%;margin-top:
-		1px}.indicator{height:3px;background-color:#5c5c5c80;transition:background-color .3s}.indicator.active{background-color:#c7c7c7}
-		@media (max-width:800px){.indicator{height:2px}}.expandable{position:relative;justify-content:center;margin-top:10px;margin-bottom:4px;
-		font-family:inherit;color:#fff;background-color:#485871;cursor:pointer;width:100%;height:24px;border:none;outline:0}.expandable:hover{
-		background-color:#5f6f89}.expandable .arrow{position:absolute;right:10px;top:2px;font-size:14px}.links{font-size:14px;display:grid;
-		grid-template-columns:25% 45% 30%;gap:0;max-height:0;overflow:hidden;transition:max-height .3s ease-out}.links .item{padding:5px;margin:0
-		2px}.links .item:not(:last-child){border-right:1px solid #fff}.links p{margin-top:0;text-align:left}@media (max-width:800px){.links{
-		grid-template-columns:1fr}.links .item{margin:5px 0;border-right:none!important}}footer{position:sticky;top:100%;background:#485871;color:
-		#fff;text-align:center;padding:8px;margin-top:8px}.progress-container{position:fixed;left:0;bottom:0;width:100%;height:2px;z-index:1000;
-		background-color:#5c5c5c80}.progress-bar{width:0;height:100%;background-color:#4caf50;transition:width .3s ease-in-out}
+		12px}.sp30{height:28px}.buttons{display:grid;grid-template-columns:49.5% 49.5%;gap:1%;font-size:13px}.buttons .btn{margin-top:10px;
+		margin-bottom:5px;font-size:13px;font-family:inherit;color:#fff;background-color:#485871;align-content:center;cursor:pointer;width:100%;
+		height:24px;border:none;outline:0}.buttons .btn:hover{background-color:#5f6f89}.slideshow{position:relative;display:flex;justify-content:
+		center}.slide{display:none}.slide.active{display:block}.next,.prev{cursor:pointer;position:absolute;align-content:center;top:0;bottom:0;
+		width:15%;padding:16px;color:transparent;opacity:.7;font-weight:700;font-size:36px;transition:.6s ease;user-select:none}.prev{left:0;
+		text-align:left}.prev:hover{background-image:linear-gradient(to left,transparent,rgba(0,0,0,.6));color:#fff}.prev.shorter{top:.4em}.next{
+		right:0;text-align:right}.next:hover{background-image:linear-gradient(to right,transparent,rgba(0,0,0,.6));color:#fff}.next.shorter{top:.4em
+		}.fade{animation-name:fade;animation-duration:1s}@keyframes fade{from{opacity:.6}to{opacity:1}}@media (max-width:800px){.next,.prev{padding:
+		12px;font-size:20px}.next.shorter,.prev.shorter{top:.72em}}.indicators-container{display:grid;grid-template-columns:repeat(3,1fr);gap:4px;
+		width:100%;margin-top:1px}.indicator{height:4px;background-color:#5c5c5c80;transition:background-color .3s}.indicator.active{
+		background-color:#c7c7c7}@media (max-width:800px){.indicator{height:2px}}.expandable{position:relative;justify-content:center;margin-top:
+		10px;margin-bottom:4px;font-family:inherit;color:#fff;background-color:#485871;cursor:pointer;width:100%;height:24px;border:none;outline:0}
+		.expandable:hover{background-color:#5f6f89}.expandable .arrow{position:absolute;right:10px;top:2px;font-size:14px}.links{font-size:14px;
+		display:grid;grid-template-columns:25% 45% 30%;gap:0;max-height:0;overflow:hidden;transition:max-height .3s ease-out}.links .item{padding:
+		5px;margin:0 2px}.links .item:not(:last-child){border-right:1px solid #fff}.links p{margin-top:0;text-align:left}@media (max-width:800px){
+		.links{grid-template-columns:1fr}.links .item{margin:5px 0;border-right:none!important}}footer{position:sticky;top:100%;background:#485871;
+		color:#fff;text-align:center;padding:8px;margin-top:8px}.progress-container{position:fixed;left:0;bottom:0;width:100%;height:2px;z-index:
+		1000;background-color:#5c5c5c80}.progress-bar{width:0;height:100%;background-color:#4caf50;transition:width .3s ease-in-out}
 	</style>
 	<script>
 		function scrollToTop(){window.scrollTo({top:0,behavior:"smooth"})}function scrollToElement(e){const t=document.getElementById(e)
@@ -173,7 +173,20 @@
 					</div>
 				</td>
 			</tr>
-			<tr class="sp"></tr>
+			<tr>
+				<td align="left">
+					<br /><b>></b>
+					<a href="https://www.windy.com/-Weather-radar-radar?radar,44.5,16.5,7" target="_blank" rel="nofollow">Windy</a>
+					<a href="https://zoom.earth/maps/radar/#view=44.5,16.5,7z" target="_blank" rel="nofollow">Zoom Earth</a>
+
+					<a href="https://www.meteoblue.com/en/weather/maps/croatia_croatia_3202326#map=radar~radarMapEU~none~none~none&coords=6/44.5/16.5" target="_blank" rel="nofollow">meteoblue</a>
+					<a href="https://www.rainviewer.com/map.html?loc=44.5,16.5,6&oCS=1&c=5&lm=1&layer=radar&sm=1&sn=2&ts=1" target="_blank" rel="nofollow">Rain Viewer</a>
+					<a href="https://www.ventusky.com/?p=44.5;16.5;6&l=radar&w=off" target="_blank" rel="nofollow">Ventussky</a>
+					<a href="https://www.vrijemeradar.hr/vremenski-radar/zagreb/18138691?center=44.5,16.5&zoom=7&layer=wr&tz=Europe%2FZagreb" target="_blank" rel="nofollow">W&R</a>
+
+				</td>
+			</tr>
+			<tr class="sp30"></tr>
 
 			<tr>
 				<td align="center">
@@ -198,7 +211,16 @@
 					</div>
 				</td>
 			</tr>
-			<tr class="sp"></tr>
+			<tr>
+				<td align="left">
+					<br /><b>></b>
+					<a href="https://www.windy.com/-Satellite-satellite?satellite,44.5,16.5,7" target="_blank" rel="nofollow">Windy</a>
+					<a href="https://zoom.earth/maps/satellite/#view=44.5,16.5,7z" target="_blank" rel="nofollow">Zoom Earth</a>
+					<a href="https://www.meteoblue.com/en/weather/maps/croatia_croatia_3202326#map=satellite~radar~none~none~none&coords=6/44.5/16.5" target="_blank" rel="nofollow">meteoblue</a>
+					<a href="https://www.ventusky.com/?p=44.5;16.5;6&l=satellite&w=off" target="_blank" rel="nofollow">Ventussky</a>
+				</td>
+			</tr>
+			<tr class="sp30"></tr>
 
 			<tr>
 				<td align="center">
@@ -223,7 +245,18 @@
 					</div>
 				</td>
 			</tr>
-			<tr class="sp"></tr>
+			<tr>
+				<td align="left">
+					<br /><b>></b>
+					<a href="https://www.windy.com/-Weather-radar-radar?radar,47.5,17.5,5" target="_blank" rel="nofollow">Windy</a>
+					<a href="https://zoom.earth/maps/radar/#view=47.5,17.5,5z" target="_blank" rel="nofollow">Zoom Earth</a>
+					<a href="https://www.meteoblue.com/en/weather/maps/croatia_croatia_3202326#map=radar~radarMapEU~none~none~none&coords=4/47.5/17.5" target="_blank" rel="nofollow">meteoblue</a>
+					<a href="https://www.rainviewer.com/map.html?loc=47.5,17.5,4&oCS=1&c=5&lm=1&layer=radar&sm=1&sn=2&ts=1" target="_blank" rel="nofollow">Rain Viewer</a>
+					<a href="https://www.ventusky.com/?p=47.5;17.5;4&l=radar&w=off" target="_blank" rel="nofollow">Ventussky</a>
+					<a href="https://www.vrijemeradar.hr/vremenski-radar/zagreb/18138691?center=47.5,17.5&zoom=5&layer=wr&tz=Europe%2FZagreb" target="_blank" rel="nofollow">W&R</a>
+				</td>
+			</tr>
+			<tr class="sp30"></tr>
 
 			<tr>
 				<td align="center">
@@ -248,12 +281,21 @@
 					</div>
 				</td>
 			</tr>
-			<tr class="sp"></tr>
+			<tr>
+				<td align="left">
+					<br /><b>></b>
+					<a href="https://www.windy.com/-Satellite-satellite?satellite,47.5,17.5,5" target="_blank" rel="nofollow">Windy</a>
+					<a href="https://zoom.earth/maps/satellite/#view=47.5,17.5,5z" target="_blank" rel="nofollow">Zoom Earth</a>
+					<a href="https://www.meteoblue.com/en/weather/maps/croatia_croatia_3202326#map=satellite~radar~none~none~none&coords=4/47.5/17.5" target="_blank" rel="nofollow">meteoblue</a>
+					<a href="https://www.ventusky.com/?p=47.5;17.5;4&l=satellite&w=off" target="_blank" rel="nofollow">Ventussky</a>
+				</td>
+			</tr>
+			<tr class="sp30"></tr>
 
 			<tr>
 				<td align="center">
 					<div class="radartitle">
-						<a class="center" href="https://www.windy.com/-Radar-lightning-radar?radar,44.5,16.5,8" target="_blank" rel="nofollow">Windy</a>
+						<a class="center" href="https://www.windy.com/-Radar-lightning-radar?radar,44.5,16.5,7" target="_blank" rel="nofollow">Windy</a>
 						<a class="right" id="resetWindyFrame" style="display:none">[X]</a>
 					</div>
 					<div class="if1 placeholder">
@@ -311,12 +353,24 @@
 					</div>
 				</td>
 			</tr>
-			<tr class="sp"></tr>
+			<tr>
+				<td align="center">
+					<div style="max-width: 768px; text-align:left">
+						<br /><b>></b>
+						<a href="https://www.windy.com/-Temperature-temp?temp,44.5,16.5,7" target="_blank" rel="nofollow">Windy</a>
+						<a href="https://zoom.earth/maps/temperature/#view=44.5,16.5,7z/model=icon" target="_blank" rel="nofollow">Zoom Earth</a>
+						<a href="https://www.meteoblue.com/en/weather/maps/croatia_croatia_3202326#map=temperature~daily-max~auto~2%20m%20above%20gnd~none&coords=6/44.5/16.5" target="_blank" rel="nofollow">meteoblue</a>
+						<a href="https://www.ventusky.com/?p=44.49;16.50;6&l=temperature-2m&w=off" target="_blank" rel="nofollow">Ventussky</a>
+						<a href="https://www.vrijemeradar.hr/vremenski-radar/zagreb/18138691?center=44.5,16.5&zoom=7&layer=tr&tz=Europe%2FZagreb" target="_blank" rel="nofollow">W&R</a>
+					</div>
+				</td>
+			</tr>
+			<tr class="sp30"></tr>
 
 			<tr>
 				<td align="center">
 					<div class="radartitle">
-						<a class="center" href="https://map.blitzortung.org/#6/44.5/16.5" target="_blank" rel="nofollow">Blitzortung.org</a>
+						<a class="center" href="https://map.blitzortung.org/#6/44.5/16.5" target="_blank" rel="nofollow">Blitzortung.org</a> // <a href="https://www.lightningmaps.org/?lang=en#m=sen;t=3;s=200;o=0;b=;ts=0;z=7;y=44.5;x=16.5;d=4;dl=6;dc=0;" target="_blank" rel="nofollow">LightningMaps.org</a>
 						<a class="right" id="resetBlitzortungFrame" style="display:none">[X]</a>
 					</div>
 					<div class="if1 placeholder">
@@ -460,11 +514,11 @@
 							<p><a href="https://charts.ecmwf.int" target="_blank" rel="nofollow">ECMWF</a></p>
 							<p><a href="https://www.wxcharts.com" target="_blank" rel="nofollow">WXCharts</a></p>
 							<br />
-							<p><a href="https://www.windy.com/-Radar-lightning-radar?radar,45.799,15.937,8" target="_blank" rel="nofollow">Windy</a></p>
+							<p><a href="https://www.windy.com/-Radar-lightning-radar?radar,44.5,16.5,7" target="_blank" rel="nofollow">Windy</a></p>
 							<p><a href="https://meteo.arso.gov.si" target="_blank" rel="nofollow">meteo.si</a></p>
 							<p><a href="https://www.wetterzentrale.de/en/" target="_blank" rel="nofollow">Wetterzentrale</a></p>
 							<p><a href="https://www.meteociel.fr" target="_blank" rel="nofollow">Meteociel.fr</a></p>
-							<p><a href="https://zoom.earth" target="_blank" rel="nofollow">Zoom Earth</a></p>
+							<p><a href="https://zoom.earth/maps/radar/#view=44.5,16.5,7z" target="_blank" rel="nofollow">Zoom Earth</a></p>
 							<p><a href="https://www.yr.no/en/details/table/2-3186886/Croatia/City%20of%20Zagreb/Zagreb" target="_blank" rel="nofollow">Yr.no</a></p>
 						</div>
 
@@ -501,16 +555,16 @@
 							<p>
 								<b>I'm Weather</b>
 								<br />Satelit i radar
-								<a href="https://imweather.com/?model=nowcast&run=&member=&element=radsat&level=&lat=45.0000&lng=17.0000&z=6.00" target="_blank" rel="nofollow">Hrvatska</a>
+								<a href="https://imweather.com/?model=nowcast&run=&member=&element=radsat&level=&lat=44.5000&lng=16.5000&z=6.00" target="_blank" rel="nofollow">Hrvatska</a>
 								<a href="https://imweather.com/?model=nowcast&run=&member=&element=radsat&level=&lat=47.5000&lng=17.5000&z=4.20" target="_blank" rel="nofollow">Europa</a>
 							</p>
 							<p>
 								<b>meteoblue</b>
 								<br />Radar&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-								<a href="https://www.meteoblue.com/en/weather/maps/croatia_croatia_3202326#map=radar~radarMapEU~none~none~none&coords=6/45/17" target="_blank" rel="nofollow">Hrvatska</a>
+								<a href="https://www.meteoblue.com/en/weather/maps/croatia_croatia_3202326#map=radar~radarMapEU~none~none~none&coords=6/44.5/16.5" target="_blank" rel="nofollow">Hrvatska</a>
 								<a href="https://www.meteoblue.com/en/weather/maps/croatia_croatia_3202326#map=radar~radarMapEU~none~none~none&coords=4.2/47.5/17.5" target="_blank" rel="nofollow">Europa</a>
 								<br />Satelit&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-								<a href="https://www.meteoblue.com/en/weather/maps/croatia_croatia_3202326#map=satellite~sat~none~none~none&coords=6/45/17" target="_blank" rel="nofollow">Hrvatska</a>
+								<a href="https://www.meteoblue.com/en/weather/maps/croatia_croatia_3202326#map=satellite~sat~none~none~none&coords=6/44.5/16.5" target="_blank" rel="nofollow">Hrvatska</a>
 								<a href="https://www.meteoblue.com/en/weather/maps/croatia_croatia_3202326#map=satellite~sat~none~none~none&coords=4.2/47.5/17.5" target="_blank" rel="nofollow">Europa</a>
 								<br />Prognoza&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 								<a href="https://www.meteoblue.com/en/weather/week/zagreb_croatia_3186886" target="_blank" rel="nofollow">Zagreb</a>
@@ -518,9 +572,11 @@
 							<p>
 								<b>Weather&Radar</b>
 								<br />Satelit i radar
-								<a href="https://www.vrijemeradar.hr/vremenski-radar/zagreb/18138691?center=44,16&placemark=45.8144,15.978&zoom=5&layer=wr" target="_blank" rel="nofollow">Europa</a>
+								<a href="https://www.vrijemeradar.hr/vremenski-radar/zagreb/18138691?center=44.5,16.5&zoom=7&layer=wr&tz=Europe%2FZagreb" target="_blank" rel="nofollow">Hrvatska</a>
+								<a href="https://www.vrijemeradar.hr/vremenski-radar/zagreb/18138691?center=47.5,15.5&zoom=5&layer=wr&tz=Europe%2FZagreb" target="_blank" rel="nofollow">Europa</a>
 								<br />Temperatura&nbsp;&nbsp;&nbsp;&nbsp;
-								<a href="https://www.vrijemeradar.hr/vremenski-radar/zagreb/18138691?center=44,16&placemark=45.8144,15.978&zoom=5&layer=tr" target="_blank" rel="nofollow">Europa</a>
+								<a href="https://www.vrijemeradar.hr/vremenski-radar/zagreb/18138691?center=44.5,16.5&zoom=7&layer=tr&tz=Europe%2FZagreb" target="_blank" rel="nofollow">Hrvatska</a>
+								<a href="https://www.vrijemeradar.hr/vremenski-radar/zagreb/18138691?center=47.5,15.5&zoom=5&layer=tr&tz=Europe%2FZagreb" target="_blank" rel="nofollow">Europa</a>
 							</p>
 							<p>
 								<b>Időkép</b>
@@ -533,14 +589,14 @@
 							<p>
 								<b>Blitzortung.org</b>
 								<br />Munje&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-								<a href="https://map.blitzortung.org/#6.5/45/16" target="_blank" rel="nofollow">Hrvatska</a>
+								<a href="https://map.blitzortung.org/#6.5/44.5/16.5" target="_blank" rel="nofollow">Hrvatska</a>
 								<a href="https://map.blitzortung.org/#4.2/47.5/17.5" target="_blank" rel="nofollow">Europa</a>
 								<a href="https://www.blitzortung.org/en/live_lightning_maps.php?map=10" target="_blank" rel="nofollow">Europa</a>
 							</p>
 							<p>
 								<b>LightningMaps.org</b>
 								<br />Munje&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-								<a href="https://www.lightningmaps.org/?lang=en#m=sen;t=3;s=200;o=0;b=0.00;ts=0;z=7;y=45;x=17;d=4;dl=6;dc=0;" target="_blank" rel="nofollow">Hrvatska</a>
+								<a href="https://www.lightningmaps.org/?lang=en#m=sen;t=3;s=200;o=0;b=0.00;ts=0;z=7;y=44.5;x=16.5;d=4;dl=6;dc=0;" target="_blank" rel="nofollow">Hrvatska</a>
 								<a href="https://www.lightningmaps.org/?lang=en#m=sen;t=3;s=200;o=0;b=0.00;ts=0;z=5;y=47.5;x=17.5;d=4;dl=6;dc=0;" target="_blank" rel="nofollow">Europa</a>
 								<a href="https://www.lightningmaps.org/blitzortung/europe/index.php?bo_page=archive&lang=en&bo_map=0&bo_animation=now" target="_blank" rel="nofollow">Europa</a>
 							</p>
