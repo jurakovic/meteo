@@ -271,7 +271,7 @@ iframe, video {
 }
 
 .indicator {
-	height: 3px;
+	height: 4px;
 	background-color: #5c5c5c80;
 	transition: background-color 0.3s;
 }
