@@ -152,6 +152,10 @@ iframe, video {
 	height: 10px;
 }
 
+.sp30 {
+	height: 30px;
+}
+
 .buttons {
 	display: grid;
 	grid-template-columns: 49.5% 49.5%;
@@ -271,7 +275,7 @@ iframe, video {
 }
 
 .indicator {
-	height: 3px;
+	height: 4px;
 	background-color: #5c5c5c80;
 	transition: background-color 0.3s;
 }
