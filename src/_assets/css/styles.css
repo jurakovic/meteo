@@ -151,8 +151,9 @@ iframe, video {
 .links-bottom {
 	font-size: 12px;
 	text-align: left;
-	background-color: #234e6d;
-	padding: 5px 0px;
+	background-color: #0060bf;
+	box-sizing: border-box;
+	padding: 5px 4px;
 }
 
 .sp {
@@ -288,7 +289,7 @@ iframe, video {
 }
 
 	.indicator.active {
-		background-color: #c7c7c7;
+		background-color: white;
 	}
 
 @media (max-width: 800px) {
