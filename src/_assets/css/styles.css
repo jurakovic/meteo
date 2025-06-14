@@ -149,11 +149,16 @@ iframe, video {
 }
 
 .links-bottom {
-	font-size: 12px;
 	text-align: left;
 	background-color: #0060bf;
 	box-sizing: border-box;
 	padding: 5px 4px;
+}
+
+@media (max-width: 800px) {
+	.links-bottom {
+		font-size: 12px;
+	}
 }
 
 .sp {
