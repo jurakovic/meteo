@@ -148,6 +148,13 @@ iframe, video {
 	}
 }
 
+.links-bottom {
+	font-size: 12px;
+	text-align: left;
+	background-color: #234e6d;
+	padding: 5px 0px;
+}
+
 .sp {
 	height: 12px;
 }
