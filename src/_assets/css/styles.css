@@ -15,6 +15,14 @@ h2, a, td {
 	color: white;
 }
 
+a {
+	text-decoration: none;
+}
+
+a:hover {
+	text-decoration: underline;
+}
+
 table {
 	width: 100%;
 	max-width: 875px;
@@ -28,6 +36,9 @@ table {
 .radartitle {
 	position: relative;
 	max-width: 100%;
+	background-color: #1a55af;
+	box-sizing: border-box;
+	padding: 4px 3px;
 }
 
 	.radartitle .center {
@@ -150,7 +161,7 @@ iframe, video {
 
 .links-bottom {
 	text-align: left;
-	background-color: #0060bf;
+	background-color: #9b1f1f;
 	box-sizing: border-box;
 	padding: 5px 4px;
 }
