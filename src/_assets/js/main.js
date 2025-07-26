@@ -385,7 +385,7 @@ function setEsslImgSrc(tryCount = 1) {
 		return;
 	}
 
-	let maxTryCount = 4;
+	let maxTryCount = 5;
 	let dt = GetLastInit();
 
 	if (tryCount > 1)
@@ -423,8 +423,6 @@ function GetLastInit() {
 	let dt = new Date();
 	// normalize date to last 12h or 00h
 	dt = new Date(Date.UTC(dt.getUTCFullYear(), dt.getUTCMonth(), dt.getUTCDate(), (dt.getUTCHours() >= 12 ? 12 : 0), 0, 0, 0));
-	// try first with previous calculation time
-	dt.setUTCHours(dt.getUTCHours() - 12);
 	return dt;
 };
 
