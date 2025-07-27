@@ -38,6 +38,7 @@ table {
 	max-width: 100%;
 	background-color: #1a55af;
 	box-sizing: border-box;
+	height: 23px;
 	padding: 4px 3px;
 }
 
@@ -247,7 +248,7 @@ iframe, video {
 	}
 
 	.prev.shorter {
-		top: 0.4em;
+		top: 23px;
 	}
 
 .next {
@@ -261,7 +262,7 @@ iframe, video {
 	}
 
 	.next.shorter {
-		top: 0.4em;
+		top: 23px;
 	}
 
 .fade {
