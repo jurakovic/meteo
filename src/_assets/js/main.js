@@ -389,7 +389,7 @@ function setEsslImgSrc(tryCount = 1) {
 	let dt = GetLastInit();
 
 	if (tryCount > 1)
-		dt.setUTCHours(dt.getUTCHours() - (12 * tryCount));
+		dt.setUTCHours(dt.getUTCHours() - (12 * (tryCount - 1)));
 
 	let dte = new Date(Date.UTC(dt.getUTCFullYear(), dt.getUTCMonth(), dt.getUTCDate() + (dt.getUTCHours() === 12 ? 3 : 2), 0, 0, 0, 0));
 
