@@ -8,27 +8,17 @@
 	<link rel="icon" type="image/png" sizes="192x192" href="/_assets/img/android-chrome-192x192.png">
 	<link rel="apple-touch-icon" sizes="180x180" href="/_assets/img/apple-touch-icon.png">
 	<title>Meteo radari</title>
-	<meta property="og:title" content="Meteo radari">
-	<meta property="og:locale" content="hr_HR">
-	<meta name="description" content="Meteo radari i satelitske snimke Hrvatske i Europe">
-	<meta property="og:description" content="Meteo radari i satelitske snimke Hrvatske i Europe">
-	<link rel="canonical" href="https://jurakovic.github.io/meteo/">
-	<meta property="og:url" content="https://jurakovic.github.io/meteo/">
-	<meta property="og:site_name" content="Meteo radari">
-	<meta property="og:type" content="website">
+	<!-- seo -->
 	<link rel="stylesheet" href="/_assets/css/styles.css">
 	<script src="/_assets/js/main.js" defer></script>
 	<script src="/_assets/js/include.js" defer></script>
-	<script async src="https://www.googletagmanager.com/gtag/js?id=G-233EMZJM16"></script>
-	<script>
-		window.dataLayer = window.dataLayer || [];
-		function gtag() { dataLayer.push(arguments); }
-		gtag('js', new Date());
-		gtag('config', 'G-233EMZJM16');
-	</script>
+	<!-- gtag -->
 </head>
 <body>
 	<div class="container">
+		<div class="progress-container">
+			<div class="progress-bar"></div>
+		</div>
 		<h2 align="center">Meteo radari</h2>
 		<hr>
 		<table border="0" align="center" cellpadding="0" cellspacing="0">
@@ -44,9 +34,68 @@
 
 			<tr>
 				<td align="center">
-					<a href="https://www.idokep.hu/muhold" target="_blank" rel="nofollow">Időkép | Satelit | Europa</a>
-					<div class="placeholder" style="aspect-ratio: 1070 / 713;">
-						<div class="vid1"><video muted="" autoplay="" loop="" controls=""><source type="video/mp4" src="https://www.idokep.hu/radar/sat-eu.mp4"></video></div>
+					<div class="radartitle">
+						<a class="center" href="https://www.ventusky.com/?p=44.5;16.5;6&l=radar&w=off" target="_blank" rel="nofollow">Ventussky</a>
+						<a class="right" id="resetVentusskyFrame" style="display:none">[X]</a>
+					</div>
+					<div class="if1 placeholder">
+						<iframe id="ventussky" class="scaled-iframe" loading="eager" data-src="https://embed.ventusky.com/?p=44.5;16.5;6&l=radar&w=off" frameborder="0"></iframe>
+						<div class="overlay" id="overlayVentusskyFrame">
+							<span class="hint">Dvostruki klik za pristup interaktivnoj karti</span>
+						</div>
+					</div>
+				</td>
+			</tr>
+			<tr class="sp"></tr>
+
+			<tr>
+				<td align="center">
+					<div class="radartitle">
+						<a class="center" href="https://www.rainviewer.com/map.html?loc=44.5,16.5,6&oCS=1&c=5&lm=1&layer=radar&sm=1&sn=2&ts=1" target="_blank" rel="nofollow">Rain Viewer</a>
+						<a class="right" id="resetRainViewerFrame" style="display:none">[X]</a>
+					</div>
+					<div class="if1 placeholder">
+						<iframe id="rainViewer" class="scaled-iframe" loading="lazy" data-src="https://www.rainviewer.com/map.html?loc=44.8,16.5,6.3&oCS=1&c=5&lm=1&layer=radar&sm=1&sn=2&ts=1" frameborder="0"></iframe>
+						<div class="overlay" id="overlayRainViewerFrame">
+							<span class="hint">Dvostruki klik za pristup interaktivnoj karti</span>
+						</div>
+					</div>
+				</td>
+			</tr>
+			<tr class="sp"></tr>
+
+			<tr>
+				<td align="center">
+					<div class="radartitle">
+						<a class="center" href="https://www.vrijemeradar.hr/vremenski-radar/zagreb/18138691?center=44.5,16.5&zoom=7&layer=wr&tz=Europe%2FZagreb" target="_blank" rel="nofollow">Weather&Radar</a>
+						<a class="right" id="resetWeatherAndRadarFrame" style="display:none">[X]</a>
+					</div>
+					<div class="if1 placeholder">
+						<iframe id="weatherAndRadar" class="scaled-iframe" loading="lazy" data-src="https://radar.wo-cloud.com/pwa/?center=44.5,16.5&zoom=7.2&tz=Europe/Zagreb&tf=HH:mm&tempunit=celsius&windunit=kph&showShareButton=false&lang=en-US&placemarkName=Zagreb&desktop=true&fadeTop=true" frameborder="0"></iframe>
+						<div class="overlay" id="overlayWeatherAndRadarFrame">
+							<span class="hint">Dvostruki klik za pristup interaktivnoj karti</span>
+						</div>
+					</div>
+				</td>
+			</tr>
+			<tr class="sp"></tr>
+
+			<tr>
+				<td align="center">
+					<a href="https://meteo.arso.gov.si/met/sl/weather/observ/radar/" target="_blank" rel="nofollow">meteo.si</a>
+					<div class="slideshow placeholder" data-slideshow-id="6" style="max-width: 821px; aspect-ratio: 821 / 660; ">
+						<div class="slide fade active">
+							<img src="https://meteo.arso.gov.si/uploads/probase/www/observ/radar/si0-rm-anim.gif?nocache" />
+						</div>
+						<div class="slide fade">
+							<img data-src="https://meteo.arso.gov.si/uploads/probase/www/observ/radar/si0-rm.gif?nocache" class="lazy" />
+						</div>
+						<a class="prev" onclick="plusSlides(6, -1)">&#10094;</a>
+						<a class="next" onclick="plusSlides(6, 1)">&#10095;</a>
+					</div>
+					<div class="indicators-container" data-slideshow-id="6" style="max-width: 821px; grid-template-columns: repeat(2, 1fr);">
+						<span class="indicator active"></span>
+						<span class="indicator"></span>
 					</div>
 				</td>
 			</tr>
@@ -62,19 +111,39 @@
 			</tr>
 			<tr class="sp"></tr>
 
-			<!--
 			<tr>
 				<td align="center">
-					<a href="https://www.idokep.eu/adria" target="_blank" rel="nofollow">Időkép | Radar | Hrvatska</a>
-					<div class="vid2"><video muted="" autoplay="" loop="" controls=""><source type="video/mp4" src="https://www.idokep.hu/idokepradar/public_radar_adria.mp4"></video></div>
+					<a href="https://www.idokep.hu/muhold" target="_blank" rel="nofollow">Időkép | Satelit | Europa</a>
+					<div class="placeholder" style="aspect-ratio: 1070 / 713;">
+						<div class="vid1"><video muted="" autoplay="" loop="" controls=""><source type="video/mp4" src="https://www.idokep.hu/radar/sat-eu.mp4"></video></div>
+					</div>
 				</td>
 			</tr>
 			<tr class="sp"></tr>
-			 -->
+
+			<!--
+		<tr>
+			<td align="center">
+				<a href="https://www.idokep.eu/adria" target="_blank" rel="nofollow">Időkép | Radar | Hrvatska</a>
+				<div class="vid2"><video muted="" autoplay="" loop="" controls=""><source type="video/mp4" src="https://www.idokep.hu/idokepradar/public_radar_adria.mp4"></video></div>
+			</td>
+		</tr>
+		<tr class="sp"></tr>
+		 -->
 
 			<tr>
 				<td align="center">
-					<a href="https://www.blitzortung.org/en/historical_maps.php?map=10" target="_blank" rel="nofollow">Blitzortung.org | Munje</a>
+					<a href="https://www.istramet.hr/radari-munja/" target="_blank" rel="nofollow">Istramet | Munje</a>
+					<div class="placeholder" style="max-width: 804px; aspect-ratio: 804 / 687; ">
+						<img src="https://www.istramet.hr/wp-content/themes/istramet/img/munje_hr.png" />
+					</div>
+				</td>
+			</tr>
+			<tr class="sp"></tr>
+
+			<tr>
+				<td align="center">
+					<a href="https://www.blitzortung.org/en/historical_maps.php?map=10" target="_blank" rel="nofollow">Blitzortung.org</a>
 					<div class="placeholder" style="aspect-ratio: 1;">
 						<img src="https://www.blitzortung.org/Images/image_b_eu.png" />
 					</div>
@@ -248,13 +317,10 @@
 			</tr>
 			<tr>
 				<td align="left">
-					<div class="links" data-include-html="/_components/links.html"></div>
+					<div class="links" data-include-html="/_components/links.c.html"></div>
 				</td>
 			</tr>
 		</table>
-		<div class="progress-container">
-			<div class="progress-bar"></div>
-		</div>
 	</div>
 	<footer>
 		<a onclick="scrollToTop()" style="cursor: pointer"><u>Povratak na vrh</u></a>
