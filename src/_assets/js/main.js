@@ -1,4 +1,3 @@
-
 function scrollToTop() {
 	window.scrollTo({
 		top: 0,
@@ -60,6 +59,18 @@ function showSlides(slideshowId, n) {
 	slides[slidePage[slideshowId - 1] - 1].classList.add('active');
 	indicators.forEach(indicator => indicator.classList.remove('active'));
 	indicators[slidePage[slideshowId - 1] - 1].classList.add('active');
+	updateSlideshowWidth(slideshowId);
+}
+
+function updateSlideshowWidth(slideshowId) {
+	if (slideshowId !== 16) return; // for now only essl and estofex have different widths
+
+	const slideshow = document.querySelector(`.slideshow[data-slideshow-id='${slideshowId}']`);
+	const indicatorsContainer = document.querySelector(`.indicators-container[data-slideshow-id='${slideshowId}']`);
+	const activeSlide = slideshow.querySelector('.slide.active .placeholder');
+
+	slideshow.style.maxWidth = activeSlide.style.maxWidth;
+	indicatorsContainer.style.maxWidth = activeSlide.style.maxWidth;
 }
 
 window.addEventListener('load', function () {
