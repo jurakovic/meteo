@@ -66,17 +66,20 @@
 		let slidePage=[2,2,2,2,1,1,1,1,1,1,1,1,1,1,1,1];function plusSlides(e,t){showSlides(e,slidePage[e-1]+=t)}function showSlides(e,t){
 		const o=document.querySelectorAll(`.slideshow[data-slideshow-id="${e}"] .slide`),n=document.querySelectorAll(`.indicators-container[data-slideshow-id="${e}"] .indicator`)
 		;t>o.length&&(slidePage[e-1]=1),t<1&&(slidePage[e-1]=o.length),o.forEach((e=>e.classList.remove("active"))),
-		o[slidePage[e-1]-1].classList.add("active"),n.forEach((e=>e.classList.remove("active"))),n[slidePage[e-1]-1].classList.add("active")}
-		function showProgress(){const e=document.querySelectorAll("img"),t=document.getElementsByClassName("progress-bar")[0];let o=0;const n=()=>{
-		const n=o/e.length*100;t.style.width=n+"%",o===e.length&&setTimeout((()=>{
-		document.getElementsByClassName("progress-container")[0].style.display="none"}),500)};e.forEach((e=>{e.addEventListener("load",(()=>{o++,n()
-		})),e.addEventListener("error",(()=>{o++,dlog(`Error loading image: ${e.src}`),e.removeAttribute("src"),n()})),
-		e.complete&&e.dispatchEvent(new Event("load"))}))}function handleSwipe(e,t,o){const n=o-t;Math.abs(n)>50&&plusSlides(e,n>0?-1:1)}
-		function addSwipeEvents(){document.querySelectorAll(".slideshow").forEach((e=>{let t=0,o=0,n=0,r=0,s=!1
-		;const a=e.getAttribute("data-slideshow-id");e.querySelectorAll("img").forEach((e=>{e.addEventListener("dragstart",(e=>e.preventDefault()))
-		})),e.addEventListener("touchstart",(e=>{t=e.touches[0].clientX,o=e.touches[0].clientY,s=!1})),e.addEventListener("touchmove",(e=>{
-		n=e.touches[0].clientX,r=e.touches[0].clientY,Math.abs(n-t)>Math.abs(r-o)&&(s=!0)})),e.addEventListener("touchend",(()=>{if(s){
-		const e=n-t,s=r-o;Math.abs(e)>Math.abs(s)&&handleSwipe(a,t,n)}})),e.addEventListener("mousedown",(e=>{t=e.clientX,o=e.clientY,s=!0})),
+		o[slidePage[e-1]-1].classList.add("active"),n.forEach((e=>e.classList.remove("active"))),n[slidePage[e-1]-1].classList.add("active"),
+		updateSlideshowWidth(e)}function updateSlideshowWidth(e){if(16!==e)return
+		;const t=document.querySelector(`.slideshow[data-slideshow-id='${e}']`),o=document.querySelector(`.indicators-container[data-slideshow-id='${e}']`),n=t.querySelector(".slide.active .placeholder")
+		;t.style.maxWidth=n.style.maxWidth,o.style.maxWidth=n.style.maxWidth}function showProgress(){
+		const e=document.querySelectorAll("img"),t=document.getElementsByClassName("progress-bar")[0];let o=0;const n=()=>{const n=o/e.length*100
+		;t.style.width=n+"%",o===e.length&&setTimeout((()=>{document.getElementsByClassName("progress-container")[0].style.display="none"}),500)}
+		;e.forEach((e=>{e.addEventListener("load",(()=>{o++,n()})),e.addEventListener("error",(()=>{o++,dlog(`Error loading image: ${e.src}`),
+		e.removeAttribute("src"),n()})),e.complete&&e.dispatchEvent(new Event("load"))}))}function handleSwipe(e,t,o){const n=o-t
+		;Math.abs(n)>50&&plusSlides(e,n>0?-1:1)}function addSwipeEvents(){document.querySelectorAll(".slideshow").forEach((e=>{
+		let t=0,o=0,n=0,r=0,s=!1;const a=e.getAttribute("data-slideshow-id");e.querySelectorAll("img").forEach((e=>{
+		e.addEventListener("dragstart",(e=>e.preventDefault()))})),e.addEventListener("touchstart",(e=>{t=e.touches[0].clientX,
+		o=e.touches[0].clientY,s=!1})),e.addEventListener("touchmove",(e=>{n=e.touches[0].clientX,r=e.touches[0].clientY,
+		Math.abs(n-t)>Math.abs(r-o)&&(s=!0)})),e.addEventListener("touchend",(()=>{if(s){const e=n-t,s=r-o
+		;Math.abs(e)>Math.abs(s)&&handleSwipe(a,t,n)}})),e.addEventListener("mousedown",(e=>{t=e.clientX,o=e.clientY,s=!0})),
 		e.addEventListener("mousemove",(e=>{s&&(n=e.clientX,r=e.clientY)})),e.addEventListener("mouseup",(e=>{if(s){n=e.clientX,r=e.clientY
 		;const i=n-t,l=r-o;Math.abs(i)>Math.abs(l)&&handleSwipe(a,t,n),s=!1}})),e.addEventListener("mouseleave",(()=>{s&&(s=!1)}))}))}
 		window.addEventListener("load",(function(){document.querySelectorAll("img.lazy").forEach((e=>{e.src=e.getAttribute("data-src"),
@@ -107,15 +110,15 @@
 		function getResetButtonFromOverlayId(e){return document.getElementById(e.replace("overlay","reset"))}
 		function getFrameIdFromResetButtonId(e){let t=e.replace("reset","").replace("Frame","")
 		;return String(t).charAt(0).toLowerCase()+String(t).slice(1)}function setEsslImgSrc(e=1){const t=document.getElementById("essl")
-		;if(!t)return void dlog("essl img not found, skipping setEsslImgSrc");let o=GetLastInit();e>1&&o.setUTCHours(o.getUTCHours()-12*e)
+		;if(!t)return void dlog("essl img not found, skipping setEsslImgSrc");let o=GetLastInit();e>1&&o.setUTCHours(o.getUTCHours()-12*(e-1))
 		;let n=new Date(Date.UTC(o.getUTCFullYear(),o.getUTCMonth(),o.getUTCDate()+(12===o.getUTCHours()?3:2),0,0,0,0)),r=DTGFromDateInHours(o),s=EndValue(n)
 		;dlog("dtg: "+r),dlog("end: "+s)
 		;let a=`https://www.stormforecast.eu/map_images/models/archamos/${r.slice(0,6)}/${r}/combi_paramcombi24_${r}_${s}.png`;function i(){
-		if(e<4)dlog(`Image load failed, try attempt ${e} with dtg: ${r}`),t.removeEventListener("error",i),setEsslImgSrc(e+1);else{
-		dlog("Image load failed after 4 attempts");const e=document.createElement("span");e.innerHTML="Nema prognoze za traženi period",
+		if(e<5)dlog(`Image load failed, try attempt ${e} with dtg: ${r}`),t.removeEventListener("error",i),setEsslImgSrc(e+1);else{
+		dlog("Image load failed after 5 attempts");const e=document.createElement("span");e.innerHTML="Nema prognoze za traženi period",
 		t.parentNode.appendChild(e)}}t.removeEventListener("error",i),t.addEventListener("error",i),t.src=a}function GetLastInit(){let e=new Date
-		;return e=new Date(Date.UTC(e.getUTCFullYear(),e.getUTCMonth(),e.getUTCDate(),e.getUTCHours()>=12?12:0,0,0,0)),
-		e.setUTCHours(e.getUTCHours()-12),e}function DTGFromDateInHours(e){
+		;return e=new Date(Date.UTC(e.getUTCFullYear(),e.getUTCMonth(),e.getUTCDate(),e.getUTCHours()>=12?12:0,0,0,0)),e}
+		function DTGFromDateInHours(e){
 		return result=e.getUTCFullYear().toString()+pad(e.getUTCMonth()+1,2)+pad(e.getUTCDate(),2)+pad(e.getUTCHours(),2),result}
 		function EndValue(e){return result=e.getUTCFullYear().toString()+pad(e.getUTCMonth()+1,2)+pad(e.getUTCDate(),2)+"06",result}
 		function pad(e,t,o){return o=o||"0",(e+="").length>=t?e:new Array(t-e.length+1).join(o)+e}zoomMap.set("windy",["&zoom=7","&zoom=6"]),
@@ -334,19 +337,31 @@
 
 			<tr>
 				<td align="center">
-					<a href="https://www.stormforecast.eu" target="_blank" rel="nofollow">ESSL | Prognoza nevremena</a> // <a href="https://www.estofex.org" target="_blank" rel="nofollow">ESTOFEX</a>
-					<div class="slideshow placeholder" data-slideshow-id="16" style="aspect-ratio: 900 / 600;">
+					<div class="slideshow" data-slideshow-id="16">
 						<div class="slide fade active">
-							<img src="https://weather.essl.org/storm/map_images/models/archamos/latest.png" />
+							<a href="https://www.stormforecast.eu" target="_blank" rel="nofollow">ESSL | Prognoza nevremena</a>
+							<div class="placeholder" style="max-width: 900px; aspect-ratio: 900 / 600; ">
+								<img src="https://weather.essl.org/storm/map_images/models/archamos/latest.png" />
+							</div>
 						</div>
 						<div class="slide fade">
-							<img id="essl" />
+							<a href="https://www.stormforecast.eu" target="_blank" rel="nofollow">ESSL | Prognoza nevremena</a>
+							<div class="placeholder" style="max-width: 900px; aspect-ratio: 900 / 600; ">
+								<img id="essl" />
+							</div>
 						</div>
-						<a class="prev" onclick="plusSlides(16, -1)">&#10094;</a>
-						<a class="next" onclick="plusSlides(16, 1)">&#10095;</a>
+						<div class="slide fade">
+							<a href="https://www.estofex.org" target="_blank" rel="nofollow">ESTOFEX | Prognoza nevremena</a>
+							<div class="placeholder" style="max-width: 800px; aspect-ratio: 1;">
+								<img src="https://www.estofex.org/forecasts/tempmap/.png" />
+							</div>
+						</div>
+						<a class="prev shorter" onclick="plusSlides(16, -1)">&#10094;</a>
+						<a class="next shorter" onclick="plusSlides(16, 1)">&#10095;</a>
 					</div>
-					<div class="indicators-container" data-slideshow-id="16" style="grid-template-columns: repeat(2, 1fr);">
+					<div class="indicators-container" data-slideshow-id="16" style="grid-template-columns: repeat(3, 1fr);">
 						<span class="indicator active"></span>
+						<span class="indicator"></span>
 						<span class="indicator"></span>
 					</div>
 				</td>
