@@ -259,6 +259,25 @@ function setIframeSrc(iframeId) {
 	}
 }
 
+function updateMeteoblueImgSrc() {
+	setMeteoblueImgSrc('mbzg');
+}
+
+function setMeteoblueImgSrc(imgId) {
+	dlog(`Updating meteoblue img src for ${imgId}`);
+
+	const img = document.getElementById(imgId);
+	if (img) {
+		let url = img.getAttribute('data-src');
+		let newTs = Math.floor(new Date().getTime()/1000.0).toString();
+		url = url.replace('&ts=1762811837', `&ts=${newTs}`);
+		img.src = url;
+	}
+	//else {
+	//	dlog(`${iframeId} not found, skipping updateIframeSrc for ${iframeId}`);
+	//}
+}
+
 function hideOverlayOnDoubleTap() {
 	const overlays = document.querySelectorAll('.if1 .overlay');
 
@@ -474,6 +493,7 @@ document.addEventListener('DOMContentLoaded', () => {
 	addExpandableClickEventListener();
 	addSwipeEvents();
 	updateIframeSrc();
+	updateMeteoblueImgSrc();
 	hideOverlayOnDoubleTap();
 	updateHintText();
 	setEsslImgSrc();
