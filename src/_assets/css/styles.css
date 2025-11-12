@@ -108,9 +108,11 @@ img {
 }
 
 .if3 {
-	width: 100%;
+	position: relative;
 	overflow: hidden;
-	padding-top: 115%;
+	width: 875px;
+	max-width: 875px;
+	padding-top: 85%;
 }
 
 .vid1 {
