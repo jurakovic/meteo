@@ -113,13 +113,41 @@
 			padding-top: 115%;
 		}
 
+		/* === UPDATED: 4:3 responsive container for meteoblue iframe === */
 		.if3 {
 			position: relative;
-			overflow: hidden;
-			width: 875px;
+			width: 100%;
 			max-width: 875px;
-			padding-top: 85%;
+			aspect-ratio: 4 / 3; /* 4:3 ratio */
+			overflow: hidden;
+			margin: 0 auto;
 		}
+
+		/* Inner wrapper that gets scaled (reuses your scaled-iframe behavior) */
+		.if3-inner {
+			position: absolute;
+			top: 0;
+			left: 0;
+			transform: scale(0.9);
+			transform-origin: 0 0;
+			width: calc(100% / 0.9);
+			height: calc(100% / 0.9);
+		}
+
+			.if3-inner iframe {
+				width: 100%;
+				height: 100%;
+				border: none;
+			}
+
+		@media (max-width: 800px) {
+			.if3-inner {
+				transform: scale(0.6);
+				width: calc(100% / 0.6);
+				height: calc(100% / 0.6);
+			}
+		}
+		/* === END UPDATED if3 section === */
 
 		.vid1 {
 			position: relative;
@@ -146,6 +174,7 @@
 			border: none;
 		}
 
+		/* You can still use .scaled-iframe elsewhere if needed */
 		.scaled-iframe {
 			transform: scale(0.9);
 			width: calc(100% / 0.9);
@@ -194,7 +223,7 @@
 
 		.slideshow {
 			position: relative;
-			display: flex;
+			/*display: flex;*/
 			justify-content: center;
 		}
 
@@ -404,9 +433,22 @@
 				<td align="center">
 					<a href="https://www.neverin.hr/radar/" target="_blank" rel="nofollow">Neverin | Radar | Hrvatska</a>
 					<div class="slideshow placeholder" data-slideshow-id="1" style="aspect-ratio: 880 / 640;">
+						<div class="slide fade">
+							<img data-src="https://maps.neverin.hr/radar/latest_hr.webp" class="lazy" />
+						</div>
 						<div class="slide fade active">
 							<img src="https://maps.neverin.hr/radar/anim_hr.webp" />
 						</div>
+						<div class="slide fade">
+							<img data-src="https://maps.neverin.hr/radar/anim_hr_6h.webp" class="lazy" />
+						</div>
+						<a class="prev" onclick="plusSlides(1, -1)">&#10094;</a>
+						<a class="next" onclick="plusSlides(1, 1)">&#10095;</a>
+					</div>
+					<div class="indicators-container" data-slideshow-id="1">
+						<span class="indicator"></span>
+						<span class="indicator active"></span>
+						<span class="indicator"></span>
 					</div>
 				</td>
 			</tr>
@@ -418,9 +460,35 @@
 						<div class="slide fade active">
 							<a href="https://www.meteoblue.com/en/weather/week/zagreb_croatia_3186886" target="_blank" rel="nofollow">meteoblue | Prognoza | Zagreb</a>
 							<div class="if3 placeholder">
-								<iframe loading="lazy" src="https://www.meteoblue.com/en/weather/widget/meteogram/zagreb_croatia_3186886?geoloc=fixed&temperature_units=CELSIUS&windspeed_units=KILOMETER_PER_HOUR&precipitation_units=MILLIMETER&forecast_days=5&layout=dark&autowidth=auto&user_key=d6c944dcfa23c1de&embed_key=a4c8e80861792d46&sig=b9e5dc2debd7b0ebee1cfa142badc1fc601ae61d0a6b866b54ed49cc7fe3bb16" frameborder="0" scrolling="NO" allowtransparency="true" sandbox="allow-same-origin allow-scripts allow-popups allow-popups-to-escape-sandbox" style="width: 100%;height: 100%;border: 0;overflow: hidden;"></iframe>
+								<iframe loading="lazy" class="scaled-iframe" src="https://www.meteoblue.com/en/weather/widget/meteogram/zagreb_croatia_3186886?geoloc=fixed&temperature_units=CELSIUS&windspeed_units=KILOMETER_PER_HOUR&precipitation_units=MILLIMETER&forecast_days=5&layout=dark&autowidth=auto&user_key=d6c944dcfa23c1de&embed_key=a4c8e80861792d46&sig=b9e5dc2debd7b0ebee1cfa142badc1fc601ae61d0a6b866b54ed49cc7fe3bb16" frameborder="0" scrolling="NO" allowtransparency="true" sandbox="allow-same-origin allow-scripts allow-popups allow-popups-to-escape-sandbox" style="border: 0;"></iframe>
 							</div>
 						</div>
+						<div class="slide fade">
+							<a href="https://www.meteoblue.com/en/weather/week/split_croatia_3190261" target="_blank" rel="nofollow">meteoblue | Prognoza | Split</a>
+							<div class="placeholder" style="aspect-ratio: 1152 / 963;">
+								<img src="https://my.meteoblue.com/images/meteogram?temperature_units=C&windspeed_units=kmh&precipitation_units=mm&darkmode=true&iso2=hr&lat=43.5089&lon=16.4391&asl=12&tz=Europe%2FZagreb&apikey=n4UGDLso3gE6m2YI&lang=en&location_name=Split&format=png&ts=1762812553&download=1&dpi=100&sig=1438eabd8c98592c0490fdd1fea1a688" />
+							</div>
+						</div>
+						<div class="slide fade">
+							<a href="https://www.meteoblue.com/en/weather/week/rijeka_croatia_3191648" target="_blank" rel="nofollow">meteoblue | Prognoza | Rijeka</a>
+							<div class="placeholder" style="aspect-ratio: 1152 / 963;">
+								<img src="https://my.meteoblue.com/images/meteogram?temperature_units=C&windspeed_units=kmh&precipitation_units=mm&darkmode=true&iso2=hr&lat=45.3267&lon=14.4424&asl=12&tz=Europe%2FZagreb&apikey=n4UGDLso3gE6m2YI&lang=en&location_name=Rijeka&format=png&ts=1762812600&download=1&dpi=100&sig=ad820700a18ac7909e1248f6f181fdab" />
+							</div>
+						</div>
+						<div class="slide fade">
+							<a href="https://www.meteoblue.com/en/weather/week/osijek_croatia_3193935" target="_blank" rel="nofollow">meteoblue | Prognoza | Osijek</a>
+							<div class="placeholder" style="aspect-ratio: 1152 / 963;">
+								<img src="https://my.meteoblue.com/images/meteogram?temperature_units=C&windspeed_units=kmh&precipitation_units=mm&darkmode=true&iso2=hr&lat=45.5507&lon=18.6942&asl=87&tz=Europe%2FZagreb&apikey=n4UGDLso3gE6m2YI&lang=en&location_name=Osijek&format=png&ts=1762812636&download=1&dpi=100&sig=b6eb5e00e3d695ed9e9a8b9955509273" />
+							</div>
+						</div>
+						<a class="prev shorter" onclick="plusSlides(14, -1)">&#10094;</a>
+						<a class="next shorter" onclick="plusSlides(14, 1)">&#10095;</a>
+					</div>
+					<div class="indicators-container" data-slideshow-id="14" style="grid-template-columns: repeat(4, 1fr);">
+						<span class="indicator active"></span>
+						<span class="indicator"></span>
+						<span class="indicator"></span>
+						<span class="indicator"></span>
 					</div>
 				</td>
 			</tr>
