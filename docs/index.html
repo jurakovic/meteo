@@ -3,421 +3,141 @@
 <head>
 	<meta name="viewport" content="width=device-width, initial-scale=1" />
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<link rel="icon" type="image/png" sizes="16x16" href="/meteo/img/favicon-16x16.png">
+	<link rel="icon" type="image/png" sizes="32x32" href="/meteo/img/favicon-32x32.png">
+	<link rel="icon" type="image/png" sizes="192x192" href="/meteo/img/android-chrome-192x192.png">
+	<link rel="apple-touch-icon" sizes="180x180" href="/meteo/img/apple-touch-icon.png">
 	<title>Meteo radari</title>
+	<link rel="canonical" href="https://jurakovic.github.io/meteo/">
+	<meta name="description" content="Meteo radari i satelitske snimke Hrvatske i Europe">
+	<meta property="og:title" content="Meteo radari">
+	<meta property="og:type" content="website">
+	<meta property="og:url" content="https://jurakovic.github.io/meteo/">
+	<meta property="og:description" content="Meteo radari i satelitske snimke Hrvatske i Europe">
+	<meta property="og:image" content="https://maps.neverin.hr/radar/anim_hr.webp">
+	<meta property="og:locale" content="hr_HR">
+	<meta itemprop="name" content="Meteo radari">
+	<meta itemprop="description" content="Meteo radari i satelitske snimke Hrvatske i Europe">
+	<meta itemprop="image" content="https://maps.neverin.hr/radar/anim_hr.webp">
+	<meta name="twitter:card" content="summary_large_image">
+	<meta name="twitter:url" content="https://jurakovic.github.io/meteo/">
+	<meta name="twitter:title" content="Meteo radari">
+	<meta name="twitter:description" content="Meteo radari i satelitske snimke Hrvatske i Europe">
+	<meta name="twitter:image" content="https://maps.neverin.hr/radar/anim_hr.webp">
 	<style>
-		body {
-			background-color: #212f45;
-			font-family: monospace;
-			min-height: 100vh;
-			margin: 0px;
-			padding: 0px;
-		}
-
-		.container {
-			margin: 8px;
-		}
-
-		h2, a, td {
-			color: white;
-		}
-
-		table {
-			width: 100%;
-			max-width: 875px;
-			height: auto;
-		}
-
-		.placeholder {
-			background-color: #202c40;
-		}
-
-		.radartitle {
-			position: relative;
-			max-width: 100%;
-		}
-
-			.radartitle .center {
-				transform: translateX(-50%);
-				left: 50%;
-			}
-
-			.radartitle .left {
-				position: absolute;
-				left: 0;
-			}
-
-			.radartitle .right {
-				position: absolute;
-				right: 0;
-				text-decoration: none;
-			}
-
-				.radartitle .right:hover {
-					cursor: pointer;
-				}
-
-		img {
-			max-width: 100%;
-			height: auto;
-			display: block;
-			border: 0;
-		}
-
-		.if1 {
-			position: relative;
-			width: 100%;
-			overflow: hidden;
-			padding-top: 100%;
-		}
-
-		@media (max-width: 800px) {
-			.if1 {
-				padding-top: 110%;
-			}
-		}
-
-		.overlay {
-			position: absolute;
-			top: 0;
-			left: 0;
-			width: 100%;
-			height: 100%;
-		}
-
-			.overlay .hint {
-				opacity: 0;
-				transition: opacity 0.3s ease;
-				pointer-events: none;
-				position: absolute;
-				top: 5%;
-				transform: translateX(-50%);
-				background-color: black;
-				padding: 6px 12px;
-			}
-
-		@media (max-width: 800px) {
-			.overlay .hint {
-				top: 10%;
-				min-width: 65%;
-			}
-		}
-
-		.overlay:hover .hint {
-			opacity: 0.6;
-		}
-
-		.if2 {
-			position: relative;
-			width: 100%;
-			overflow: hidden;
-			padding-top: 115%;
-		}
-
-		/* === UPDATED: 4:3 responsive container for meteoblue iframe === */
-		.if3 {
-			position: relative;
-			width: 100%;
-			max-width: 875px;
-			aspect-ratio: 4 / 3; /* 4:3 ratio */
-			overflow: hidden;
-			margin: 0 auto;
-		}
-
-		/* Inner wrapper that gets scaled (reuses your scaled-iframe behavior) */
-		.if3-inner {
-			position: absolute;
-			top: 0;
-			left: 0;
-			transform: scale(0.9);
-			transform-origin: 0 0;
-			width: calc(100% / 0.9);
-			height: calc(100% / 0.9);
-		}
-
-			.if3-inner iframe {
-				width: 100%;
-				height: 100%;
-				border: none;
-			}
-
-		@media (max-width: 800px) {
-			.if3-inner {
-				transform: scale(0.6);
-				width: calc(100% / 0.6);
-				height: calc(100% / 0.6);
-			}
-		}
-		/* === END UPDATED if3 section === */
-
-		.vid1 {
-			position: relative;
-			width: 100%;
-			overflow: hidden;
-			padding-top: 67%;
-		}
-
-		.vid2 {
-			position: relative;
-			width: 100%;
-			overflow: hidden;
-			padding-top: 87%;
-		}
-
-		iframe, video {
-			position: absolute;
-			top: 0;
-			left: 0;
-			bottom: 0;
-			right: 0;
-			width: 100%;
-			height: 100%;
-			border: none;
-		}
-
-		/* You can still use .scaled-iframe elsewhere if needed */
-		.scaled-iframe {
-			transform: scale(0.9);
-			width: calc(100% / 0.9);
-			height: calc(100% / 0.9);
-			transform-origin: 0 0;
-		}
-
-		@media (max-width: 800px) {
-			.scaled-iframe {
-				transform: scale(0.6);
-				width: calc(100% / 0.6);
-				height: calc(100% / 0.6);
-				transform-origin: 0 0;
-			}
-		}
-
-		.sp {
-			height: 10px;
-		}
-
-		.buttons {
-			display: grid;
-			grid-template-columns: 49.5% 49.5%;
-			gap: 1%;
-			font-size: 13px;
-		}
-
-			.buttons .btn {
-				margin-top: 10px;
-				margin-bottom: 5px;
-				font-size: 13px;
-				font-family: inherit;
-				color: white;
-				background-color: #485871;
-				align-content: center;
-				cursor: pointer;
-				width: 100%;
-				height: 24px;
-				border: none;
-				outline: none;
-			}
-
-				.buttons .btn:hover {
-					background-color: #5F6F89;
-				}
-
-		.slideshow {
-			position: relative;
-			/*display: flex;*/
-			justify-content: center;
-		}
-
-		.slide {
-			display: none;
-		}
-
-			.slide.active {
-				display: block;
-			}
-
-		.prev, .next {
-			cursor: pointer;
-			position: absolute;
-			align-content: center;
-			top: 0;
-			bottom: 0;
-			width: 15%;
-			padding: 16px;
-			color: transparent;
-			opacity: 0.7;
-			font-weight: bold;
-			font-size: 36px;
-			transition: 0.6s ease;
-			user-select: none;
-		}
-
-		.prev {
-			left: 0;
-			text-align: left;
-		}
-
-			.prev:hover {
-				background-image: linear-gradient(to left, transparent, rgba(0,0,0,0.6));
-				color: white;
-			}
-
-			.prev.shorter {
-				top: 0.4em;
-			}
-
-		.next {
-			right: 0;
-			text-align: right;
-		}
-
-			.next:hover {
-				background-image: linear-gradient(to right, transparent, rgba(0,0,0,0.6));
-				color: white;
-			}
-
-			.next.shorter {
-				top: 0.4em;
-			}
-
-		.fade {
-			animation-name: fade;
-			animation-duration: 1s;
-		}
-
-		@keyframes fade {
-			from {
-				opacity: .6
-			}
-
-			to {
-				opacity: 1
-			}
-		}
-
-		@media (max-width: 800px) {
-			.prev, .next {
-				padding: 12px;
-				font-size: 20px;
-			}
-
-				.prev.shorter, .next.shorter {
-					top: 0.72em;
-				}
-		}
-
-		.indicators-container {
-			display: grid;
-			grid-template-columns: repeat(3, 1fr);
-			gap: 4px;
-			width: 100%;
-			margin-top: 1px;
-		}
-
-		.indicator {
-			height: 4px;
-			background-color: #5c5c5c80;
-			transition: background-color 0.3s;
-		}
-
-			.indicator.active {
-				background-color: #c7c7c7;
-			}
-
-		@media (max-width: 800px) {
-			.indicator {
-				height: 2px;
-			}
-		}
-
-		.expandable {
-			position: relative;
-			justify-content: center;
-			margin-top: 10px;
-			margin-bottom: 4px;
-			font-family: inherit;
-			color: white;
-			background-color: #485871;
-			cursor: pointer;
-			width: 100%;
-			height: 24px;
-			border: none;
-			outline: none;
-		}
-
-			.expandable:hover {
-				background-color: #5F6F89;
-			}
-
-			.expandable .arrow {
-				position: absolute;
-				right: 10px;
-				top: 2px;
-				font-size: 14px;
-			}
-
-		.links {
-			font-size: 14px;
-			display: grid;
-			grid-template-columns: 25% 45% 30%;
-			gap: 0;
-			max-height: 0;
-			overflow: hidden;
-			transition: max-height 0.3s ease-out;
-		}
-
-			.links .item {
-				padding: 5px;
-				margin: 0 2px;
-			}
-
-				.links .item:not(:last-child) {
-					border-right: 1px solid white;
-				}
-
-			.links p {
-				margin-top: 0px;
-				text-align: left;
-			}
-
-		@media (max-width: 800px) {
-			.links {
-				grid-template-columns: 1fr;
-			}
-
-				.links .item {
-					margin: 5px 0;
-					border-right: none !important;
-				}
-		}
-
-		footer {
-			position: sticky;
-			top: 100%;
-			background: #485871;
-			color: white;
-			text-align: center;
-			padding: 8px;
-			margin-top: 8px;
-		}
-
-		.progress-container {
-			position: fixed;
-			left: 0;
-			top: 0;
-			width: 100%;
-			height: 3px;
-			z-index: 1000;
-			background-color: #5c5c5c80;
-		}
-
-		.progress-bar {
-			width: 0;
-			height: 100%;
-			background-color: #4caf50;
-			transition: width 0.3s ease-in-out;
-		}
-
+		body{background-color:#212f45;font-family:monospace;min-height:100vh;margin:0;padding:0}.container{margin:8px}a,h2,td{color:#fff}table{width
+		:100%;max-width:875px;height:auto}.placeholder{background-color:#202c40}.radartitle{position:relative;max-width:100%}.radartitle .center{
+		transform:translateX(-50%);left:50%}.radartitle .left{position:absolute;left:0}.radartitle .right{position:absolute;right:0;text-decoration:
+		none}.radartitle .right:hover{cursor:pointer}img{max-width:100%;height:auto;display:block;border:0}.if1{position:relative;width:100%;
+		overflow:hidden;padding-top:100%}@media (max-width:800px){.if1{padding-top:110%}}.overlay{position:absolute;top:0;left:0;width:100%;height:
+		100%}.overlay .hint{opacity:0;transition:opacity .3s ease;pointer-events:none;position:absolute;top:5%;transform:translateX(-50%);
+		background-color:#000;padding:6px 12px}@media (max-width:800px){.overlay .hint{top:10%;min-width:65%}}.overlay:hover .hint{opacity:.6}.if2{
+		position:relative;width:100%;overflow:hidden;padding-top:115%}.if3{position:relative;width:100%;max-width:875px;aspect-ratio:6/5;overflow:
+		hidden;margin:0 auto}@media (max-width:800px){.if3{aspect-ratio:1}}.vid1{position:relative;width:100%;overflow:hidden;padding-top:67%}.vid2{
+		position:relative;width:100%;overflow:hidden;padding-top:87%}iframe,video{position:absolute;top:0;left:0;bottom:0;right:0;width:100%;height:
+		100%;border:none}.scaled-iframe{transform:scale(.9);width:calc(100% / .9);height:calc(100% / .9);transform-origin:0 0}
+		@media (max-width:800px){.scaled-iframe{transform:scale(.6);width:calc(100% / .6);height:calc(100% / .6);transform-origin:0 0}}.sp{height:
+		10px}.buttons{display:grid;grid-template-columns:49.5% 49.5%;gap:1%;font-size:13px}.buttons .btn{margin-top:10px;margin-bottom:5px;font-size
+		:13px;font-family:inherit;color:#fff;background-color:#485871;align-content:center;cursor:pointer;width:100%;height:24px;border:none;outline
+		:0}.buttons .btn:hover{background-color:#5f6f89}.slideshow{position:relative;justify-content:center}.slide{display:none}.slide.active{
+		display:block}.next,.prev{cursor:pointer;position:absolute;align-content:center;top:0;bottom:0;width:15%;padding:16px;color:transparent;
+		opacity:.7;font-weight:700;font-size:36px;transition:.6s ease;user-select:none}.prev{left:0;text-align:left}.prev:hover{background-image:
+		linear-gradient(to left,transparent,rgba(0,0,0,.6));color:#fff}.prev.shorter{top:.4em}.next{right:0;text-align:right}.next:hover{
+		background-image:linear-gradient(to right,transparent,rgba(0,0,0,.6));color:#fff}.next.shorter{top:.4em}.fade{animation-name:fade;
+		animation-duration:1s}@keyframes fade{from{opacity:.6}to{opacity:1}}@media (max-width:800px){.next,.prev{padding:12px;font-size:20px}
+		.next.shorter,.prev.shorter{top:.72em}}.indicators-container{display:grid;grid-template-columns:repeat(3,1fr);gap:4px;width:100%;margin-top:
+		1px}.indicator{height:4px;background-color:#5c5c5c80;transition:background-color .3s}.indicator.active{background-color:#c7c7c7}
+		@media (max-width:800px){.indicator{height:2px}}.expandable{position:relative;justify-content:center;margin-top:10px;margin-bottom:4px;
+		font-family:inherit;color:#fff;background-color:#485871;cursor:pointer;width:100%;height:24px;border:none;outline:0}.expandable:hover{
+		background-color:#5f6f89}.expandable .arrow{position:absolute;right:10px;top:2px;font-size:14px}.links{font-size:14px;display:grid;
+		grid-template-columns:25% 45% 30%;gap:0;max-height:0;overflow:hidden;transition:max-height .3s ease-out}.links .item{padding:5px;margin:0
+		2px}.links .item:not(:last-child){border-right:1px solid #fff}.links p{margin-top:0;text-align:left}@media (max-width:800px){.links{
+		grid-template-columns:1fr}.links .item{margin:5px 0;border-right:none!important}}footer{position:sticky;top:100%;background:#485871;color:
+		#fff;text-align:center;padding:8px;margin-top:8px}.progress-container{position:fixed;left:0;top:0;width:100%;height:3px;z-index:1000;
+		background-color:#5c5c5c80}.progress-bar{width:0;height:100%;background-color:#4caf50;transition:width .3s ease-in-out}
 	</style>
+	<script>
+		function scrollToTop(){window.scrollTo({top:0,behavior:"smooth"})}function scrollToElement(e){const t=document.getElementById(e)
+		;t&&t.scrollIntoView({behavior:"smooth",block:"start"})}async function addExpandableClickEventListener(){
+		document.getElementsByClassName("expandable")[0].addEventListener("click",function(){let e=this.querySelector(".arrow")
+		;var t=document.getElementsByClassName("links")[0];t.style.maxHeight?(t.style.maxHeight=null,
+		e.textContent="▼"):(t.style.maxHeight=t.scrollHeight+"px",e.textContent="▲",setTimeout(()=>{
+		document.documentElement.style.scrollBehavior="auto",document.body.style.scrollBehavior="auto",scrollToElement("links"),setTimeout(()=>{
+		document.documentElement.style.scrollBehavior="smooth",document.body.style.scrollBehavior="smooth"},50)},310))})}
+		let slidePage=[2,2,2,2,1,1,1,1,1,1,1,1,1,1,1,1];function plusSlides(e,t){showSlides(e,slidePage[e-1]+=t)}function showSlides(e,t){
+		const o=document.querySelectorAll(`.slideshow[data-slideshow-id="${e}"] .slide`),n=document.querySelectorAll(`.indicators-container[data-slideshow-id="${e}"] .indicator`)
+		;t>o.length&&(slidePage[e-1]=1),t<1&&(slidePage[e-1]=o.length),o.forEach(e=>e.classList.remove("active")),
+		o[slidePage[e-1]-1].classList.add("active"),n.forEach(e=>e.classList.remove("active")),n[slidePage[e-1]-1].classList.add("active"),
+		updateSlideshowWidth(e)}function updateSlideshowWidth(e){if(16!==e)return
+		;const t=document.querySelector(`.slideshow[data-slideshow-id='${e}']`),o=document.querySelector(`.indicators-container[data-slideshow-id='${e}']`),n=t.querySelector(".slide.active .placeholder")
+		;t.style.maxWidth=n.style.maxWidth,o.style.maxWidth=n.style.maxWidth}function showProgress(){
+		const e=document.querySelectorAll("img"),t=document.getElementsByClassName("progress-bar")[0];let o=0;const n=()=>{const n=o/e.length*100
+		;t.style.width=n+"%",o===e.length&&setTimeout(()=>{document.getElementsByClassName("progress-container")[0].style.display="none"},500)}
+		;e.forEach(e=>{e.addEventListener("load",()=>{o++,n()}),e.addEventListener("error",()=>{o++,dlog(`Error loading image: ${e.src}`),
+		e.removeAttribute("src"),n()}),e.complete&&e.dispatchEvent(new Event("load"))})}function handleSwipe(e,t,o){const n=o-t
+		;Math.abs(n)>50&&plusSlides(e,n>0?-1:1)}function addSwipeEvents(){document.querySelectorAll(".slideshow").forEach(e=>{
+		let t=0,o=0,n=0,r=0,s=!1;const a=e.getAttribute("data-slideshow-id");e.querySelectorAll("img").forEach(e=>{
+		e.addEventListener("dragstart",e=>e.preventDefault())}),e.addEventListener("touchstart",e=>{t=e.touches[0].clientX,o=e.touches[0].clientY,
+		s=!1}),e.addEventListener("touchmove",e=>{n=e.touches[0].clientX,r=e.touches[0].clientY,Math.abs(n-t)>Math.abs(r-o)&&(s=!0)}),
+		e.addEventListener("touchend",()=>{if(s){const e=n-t,s=r-o;Math.abs(e)>Math.abs(s)&&handleSwipe(a,t,n)}}),
+		e.addEventListener("mousedown",e=>{t=e.clientX,o=e.clientY,s=!0}),e.addEventListener("mousemove",e=>{s&&(n=e.clientX,r=e.clientY)}),
+		e.addEventListener("mouseup",e=>{if(s){n=e.clientX,r=e.clientY;const i=n-t,l=r-o;Math.abs(i)>Math.abs(l)&&handleSwipe(a,t,n),s=!1}}),
+		e.addEventListener("mouseleave",()=>{s&&(s=!1)})})}window.addEventListener("load",function(){
+		document.querySelectorAll("img.lazy").forEach(e=>{e.src=e.getAttribute("data-src"),e.classList.remove("lazy")})})
+		;let previousWidth=0,zoomMap=new Map;function updateIframeSrc(){window.innerWidth!==previousWidth&&(previousWidth=window.innerWidth,
+		setIframeSrc("windy"),setIframeSrc("blitzortung"),setIframeSrc("weatherAndRadar"),setIframeSrc("rainViewer"),setIframeSrc("ventussky"),
+		setIframeSrc("meteoblueZg"),setIframeSrc("meteoblueSt"),setIframeSrc("meteoblueRi"),setIframeSrc("meteoblueOs"))}function setIframeSrc(e){
+		dlog(`Updating iframe src for ${e}`);const t=document.getElementById(e);if(t){let o=zoomMap.get(e),n=t.getAttribute("data-src")
+		;if(o&&o.length>0){let e=o[0],t=o[1];window.innerWidth<800&&(n=n.replace(e,t))}t.src=n
+		}else dlog(`${e} not found, skipping updateIframeSrc for ${e}`)}function hideOverlayOnDoubleTap(){
+		document.querySelectorAll(".overlay").forEach(e=>{let t=0;e.addEventListener("dblclick",()=>{e.style.display="none"
+		;let t=getResetButtonFromOverlayId(e.id);t.removeAttribute("style"),setResetButtonToExit(t)}),e.addEventListener("touchend",o=>{
+		const n=(new Date).getTime(),r=n-t;if(r>0&&r<200){e.style.display="none";let t=getResetButtonFromOverlayId(e.id);t.removeAttribute("style"),
+		setResetButtonToExit(t),o.preventDefault()}t=n});const o=e.querySelector(".hint");let n=0,r=0;e.addEventListener("touchstart",e=>{
+		1===e.touches.length&&(r=e.touches[0].clientX,n=e.touches[0].clientY)}),e.addEventListener("touchend",e=>{if(!o)return
+		;const t=e.changedTouches[0].clientX,s=e.changedTouches[0].clientY,a=Math.abs(t-r),i=Math.abs(s-n);a<10&&i<10&&(o.style.opacity="0.6",
+		clearTimeout(o._hideTimer),o._hideTimer=setTimeout(()=>{o.style.removeProperty("opacity")},2e3))})})}function updateHintText(){
+		const e=window.innerWidth<800;document.querySelectorAll(".hint").forEach(t=>{const o="map"==t.getAttribute("data-type")?"karti":"grafici"
+		;t.textContent=e?`Dvostruki dodir za pristup interaktivnoj ${o}`:`Dvostruki klik za pristup interaktivnoj ${o}`})}
+		function restoreOverlay(e){dlog(`restoreOverlay: ${e}`)
+		;document.getElementById(e).parentElement.querySelector(".overlay").removeAttribute("style")
+		;setResetButtonToReset(getResetButtonFromFrameId(e))}function setResetButtonToExit(e){dlog(`setResetButtonToExit: ${e.id}`)
+		;const t=e.cloneNode(!0);e.parentNode.replaceChild(t,e),t.addEventListener("click",e=>{e.stopPropagation(),
+		restoreOverlay(getFrameIdFromResetButtonId(t.id))}),t.textContent="[X]"}function setResetButtonToReset(e){
+		dlog(`setResetButtonToReset: ${e.id}`);const t=e.cloneNode(!0);e.parentNode.replaceChild(t,e),t.addEventListener("click",e=>{
+		e.stopPropagation(),resetIframe(getFrameIdFromResetButtonId(t.id))}),t.textContent="[R]"}function resetIframe(e){
+		dlog(`Resetting iframe: ${e}`),setIframeSrc(e);const t=getResetButtonFromFrameId(e);t.style.display="none",setResetButtonToExit(t)}
+		function getResetButtonFromFrameId(e){return document.getElementById("reset"+String(e).charAt(0).toUpperCase()+String(e).slice(1)+"Frame")}
+		function getResetButtonFromOverlayId(e){return document.getElementById(e.replace("overlay","reset"))}
+		function getFrameIdFromResetButtonId(e){let t=e.replace("reset","").replace("Frame","")
+		;return String(t).charAt(0).toLowerCase()+String(t).slice(1)}function setEsslImgSrc(e=1){const t=document.getElementById("essl")
+		;if(!t)return void dlog("essl img not found, skipping setEsslImgSrc");let o=GetLastInit();e>1&&o.setUTCHours(o.getUTCHours()-12*(e-1))
+		;let n=new Date(Date.UTC(o.getUTCFullYear(),o.getUTCMonth(),o.getUTCDate()+(12===o.getUTCHours()?3:2),0,0,0,0)),r=DTGFromDateInHours(o),s=EndValue(n)
+		;dlog("dtg: "+r),dlog("end: "+s)
+		;let a=`https://www.stormforecast.eu/map_images/models/archamos/${r.slice(0,6)}/${r}/combi_paramcombi24_${r}_${s}.png`;function i(){
+		if(e<5)dlog(`Image load failed, try attempt ${e} with dtg: ${r}`),t.removeEventListener("error",i),setEsslImgSrc(e+1);else{
+		dlog("Image load failed after 5 attempts");const e=document.createElement("span");e.innerHTML="Nema prognoze za traženi period",
+		t.parentNode.appendChild(e)}}t.removeEventListener("error",i),t.addEventListener("error",i),t.src=a}function GetLastInit(){let e=new Date
+		;return e=new Date(Date.UTC(e.getUTCFullYear(),e.getUTCMonth(),e.getUTCDate(),e.getUTCHours()>=12?12:0,0,0,0)),e}
+		function DTGFromDateInHours(e){
+		return result=e.getUTCFullYear().toString()+pad(e.getUTCMonth()+1,2)+pad(e.getUTCDate(),2)+pad(e.getUTCHours(),2),result}
+		function EndValue(e){return result=e.getUTCFullYear().toString()+pad(e.getUTCMonth()+1,2)+pad(e.getUTCDate(),2)+"06",result}
+		function pad(e,t,o){return o=o||"0",(e+="").length>=t?e:new Array(t-e.length+1).join(o)+e}zoomMap.set("windy",["&zoom=7","&zoom=6"]),
+		zoomMap.set("blitzortung",["#6/","#5/"]),zoomMap.set("weatherAndRadar",["&zoom=7.2","&zoom=6.8"]),
+		zoomMap.set("rainViewer",[",6.3&",",5.8&"]),zoomMap.set("ventussky",[";6&",";6&"]);let isDebugEnabled=!1;function getUrlParameter(e){
+		return new URLSearchParams(window.location.search).get(e)}function dlog(...e){isDebugEnabled&&console.log(...e)}
+		"1"===getUrlParameter("debug")&&(isDebugEnabled=!0),document.addEventListener("DOMContentLoaded",()=>{showProgress(),
+		addExpandableClickEventListener(),addSwipeEvents(),updateIframeSrc(),hideOverlayOnDoubleTap(),updateHintText(),setEsslImgSrc()}),
+		window.addEventListener("resize",()=>{clearTimeout(window._resizeTimeout),window._resizeTimeout=setTimeout(()=>{updateIframeSrc(),
+		updateHintText()},200)});
+	</script>
+	<script async src="https://www.googletagmanager.com/gtag/js?id=G-233EMZJM16"></script>
+	<script>
+		window.dataLayer = window.dataLayer || [];
+		function gtag() { dataLayer.push(arguments); }
+		gtag('js', new Date());
+		gtag('config', 'G-233EMZJM16');
+	</script>
 </head>
 <body>
 	<div class="container">
@@ -427,6 +147,14 @@
 		<h2 align="center">Meteo radari</h2>
 		<hr>
 		<table border="0" align="center" cellpadding="0" cellspacing="0">
+			<tr>
+				<td align="center">
+					<div class="buttons">
+						<a href="/meteo/extras/" style="text-decoration: none"><div class="btn">Više</div></a>
+						<button type="button" class="btn" onclick="scrollToElement('links')">Linkovi</button>
+					</div>
+				</td>
+			</tr>
 			<tr class="sp"></tr>
 
 			<tr>
@@ -456,29 +184,281 @@
 
 			<tr>
 				<td align="center">
+					<a href="https://www.neverin.hr/satelit/" target="_blank" rel="nofollow">Neverin | Satelit | Hrvatska</a>
+					<div class="slideshow placeholder" data-slideshow-id="2" style="aspect-ratio: 880 / 640;">
+						<div class="slide fade">
+							<img data-src="https://maps.neverin.hr/sat/latest_vis_hr.webp" class="lazy" />
+						</div>
+						<div class="slide fade active">
+							<img src="https://maps.neverin.hr/sat/anim_vis_hr.webp" />
+						</div>
+						<div class="slide fade">
+							<img data-src="https://maps.neverin.hr/sat/anim_vis_hr_6h.webp" class="lazy" />
+						</div>
+						<a class="prev" onclick="plusSlides(2, -1)">&#10094;</a>
+						<a class="next" onclick="plusSlides(2, 1)">&#10095;</a>
+					</div>
+					<div class="indicators-container" data-slideshow-id="2">
+						<span class="indicator"></span>
+						<span class="indicator active"></span>
+						<span class="indicator"></span>
+					</div>
+				</td>
+			</tr>
+			<tr class="sp"></tr>
+
+			<tr>
+				<td align="center">
+					<a href="https://www.neverin.hr/radar/" target="_blank" rel="nofollow">Neverin | Radar | Europa</a>
+					<div class="slideshow placeholder" data-slideshow-id="3" style="aspect-ratio: 880 / 640;">
+						<div class="slide fade">
+							<img data-src="https://maps.neverin.hr/radar/latest_eu.webp" class="lazy" />
+						</div>
+						<div class="slide fade active">
+							<img src="https://maps.neverin.hr/radar/anim_eu.webp" />
+						</div>
+						<div class="slide fade">
+							<img data-src="https://maps.neverin.hr/radar/anim_eu_6h.webp" class="lazy" />
+						</div>
+						<a class="prev" onclick="plusSlides(3, -1)">&#10094;</a>
+						<a class="next" onclick="plusSlides(3, 1)">&#10095;</a>
+					</div>
+					<div class="indicators-container" data-slideshow-id="3">
+						<span class="indicator"></span>
+						<span class="indicator active"></span>
+						<span class="indicator"></span>
+					</div>
+				</td>
+			</tr>
+			<tr class="sp"></tr>
+
+			<tr>
+				<td align="center">
+					<a href="https://www.neverin.hr/satelit/" target="_blank" rel="nofollow">Neverin | Satelit | Europa</a>
+					<div class="slideshow placeholder" data-slideshow-id="4" style="aspect-ratio: 880 / 640;">
+						<div class="slide fade">
+							<img data-src="https://maps.neverin.hr/sat/latest_vis_eu.webp" class="lazy" />
+						</div>
+						<div class="slide fade active">
+							<img src="https://maps.neverin.hr/sat/anim_vis_eu.webp" />
+						</div>
+						<div class="slide fade">
+							<img data-src="https://maps.neverin.hr/sat/anim_vis_eu_6h.webp" class="lazy" />
+						</div>
+						<a class="prev" onclick="plusSlides(4, -1)">&#10094;</a>
+						<a class="next" onclick="plusSlides(4, 1)">&#10095;</a>
+					</div>
+					<div class="indicators-container" data-slideshow-id="4">
+						<span class="indicator"></span>
+						<span class="indicator active"></span>
+						<span class="indicator"></span>
+					</div>
+				</td>
+			</tr>
+			<tr class="sp"></tr>
+
+			<tr>
+				<td align="center">
+					<div class="radartitle">
+						<a class="center" href="https://www.windy.com/-Radar-lightning-radar?radar,44.5,16.5,7" target="_blank" rel="nofollow">Windy</a>
+						<a class="right" id="resetWindyFrame" style="display:none">[X]</a>
+					</div>
+					<div class="if1 placeholder">
+						<iframe id="windy" loading="lazy" data-src="https://embed.windy.com/embed2.html?lat=44.5&lon=16.56&zoom=7&level=surface&overlay=radar&menu=&message=true&marker=&calendar=&pressure=&type=map&location=coordinates&detail=&detailLat=45.798&detailLon=15.936&metricWind=m%2Fs&metricTemp=%C2%B0C&radarRange=-1" frameborder="0"></iframe>
+						<div class="overlay" id="overlayWindyFrame">
+							<span class="hint" data-type="map">Dvostruki klik za pristup interaktivnoj karti</span>
+						</div>
+					</div>
+				</td>
+			</tr>
+			<tr class="sp"></tr>
+
+			<tr>
+				<td align="center">
+					<a href="https://meteo.hr/podaci.php?section=podaci_mjerenja&param=radari&el=kompozit&acto=anim" target="_blank" rel="nofollow">DHMZ | kompozit</a>
+					<div class="slideshow placeholder" data-slideshow-id="7" style="max-width: 720px; aspect-ratio: 720 / 751;">
+						<div class="slide fade active">
+							<img src="https://vrijeme.hr/anim_kompozit.gif" />
+						</div>
+						<div class="slide fade">
+							<img data-src="https://vrijeme.hr/kompozit-stat.png" class="lazy" />
+						</div>
+						<a class="prev" onclick="plusSlides(7, -1)">&#10094;</a>
+						<a class="next" onclick="plusSlides(7, 1)">&#10095;</a>
+					</div>
+					<div class="indicators-container" data-slideshow-id="7" style="max-width: 720px; grid-template-columns: repeat(2, 1fr);">
+						<span class="indicator active"></span>
+						<span class="indicator"></span>
+					</div>
+				</td>
+			</tr>
+			<tr class="sp"></tr>
+
+			<tr>
+				<td align="center">
+					<div class="slideshow" data-slideshow-id="15" style="max-width: 768px;">
+						<div class="slide fade active">
+							<a href="https://www.meteociel.fr/observations-meteo/temperatures.php?region=it" target="_blank" rel="nofollow">Meteociel.fr | Temperatura </a>
+							<div class="placeholder" style="max-width: 768px; aspect-ratio: 1;">
+								<img src="https://www.meteociel.fr/cartes_obs/temp_it.png" />
+							</div>
+						</div>
+						<div class="slide fade">
+							<a href="https://www.meteociel.fr/observations-meteo/temperatures.php?region=eur2" target="_blank" rel="nofollow">Meteociel.fr | Temperatura </a>
+							<div class="placeholder" style="max-width: 768px; aspect-ratio: 1;">
+								<img data-src="https://www.meteociel.com/cartes_obs/temp_eur2.png" class="lazy" />
+							</div>
+						</div>
+						<a class="prev shorter" onclick="plusSlides(15, -1)">&#10094;</a>
+						<a class="next shorter" onclick="plusSlides(15, 1)">&#10095;</a>
+					</div>
+					<div class="indicators-container" data-slideshow-id="15" style="max-width: 768px; grid-template-columns: repeat(2, 1fr);">
+						<span class="indicator active"></span>
+						<span class="indicator"></span>
+					</div>
+				</td>
+			</tr>
+			<tr class="sp"></tr>
+
+			<tr>
+				<td align="center">
+					<div class="radartitle">
+						<a class="center" href="https://map.blitzortung.org/#6/44.5/16.5" target="_blank" rel="nofollow">Blitzortung.org</a> // <a href="https://www.lightningmaps.org/?lang=en#m=sen;t=3;s=200;o=0;b=;ts=0;z=7;y=44.5;x=16.5;d=4;dl=6;dc=0;" target="_blank" rel="nofollow">LightningMaps.org</a>
+						<a class="right" id="resetBlitzortungFrame" style="display:none">[X]</a>
+					</div>
+					<div class="if1 placeholder">
+						<iframe id="blitzortung" loading="lazy" data-src="https://map.blitzortung.org/index.php?interactive=1&NavigationControl=1&FullScreenControl=0&Cookies=0&InfoDiv=0&MenuButtonDiv=0&ScaleControl=0&CirclesRangeValue=1&LinksCheckboxChecked=0&LinksRangeValue=0&MapStyle=1&MapStyleRangeValue=3&Advertisment=0#6/44.5/16.5" frameborder="0"></iframe>
+						<div class="overlay" id="overlayBlitzortungFrame">
+							<span class="hint" data-type="map">Dvostruki klik za pristup interaktivnoj karti</span>
+						</div>
+					</div>
+				</td>
+			</tr>
+			<tr class="sp"></tr>
+
+			<tr>
+				<td align="center">
+					<div class="slideshow" data-slideshow-id="16">
+						<div class="slide fade active">
+							<a href="https://www.stormforecast.eu" target="_blank" rel="nofollow">ESSL | Prognoza nevremena</a>
+							<div class="placeholder" style="max-width: 900px; aspect-ratio: 900 / 600; ">
+								<img src="https://weather.essl.org/storm/map_images/models/archamos/latest.png" />
+							</div>
+						</div>
+						<div class="slide fade">
+							<a href="https://www.stormforecast.eu" target="_blank" rel="nofollow">ESSL | Prognoza nevremena</a>
+							<div class="placeholder" style="max-width: 900px; aspect-ratio: 900 / 600; ">
+								<img id="essl" />
+							</div>
+						</div>
+						<div class="slide fade">
+							<a href="https://www.estofex.org" target="_blank" rel="nofollow">ESTOFEX | Prognoza nevremena</a>
+							<div class="placeholder" style="max-width: 800px; aspect-ratio: 1;">
+								<img src="https://www.estofex.org/forecasts/tempmap/.png" />
+							</div>
+						</div>
+						<a class="prev shorter" onclick="plusSlides(16, -1)">&#10094;</a>
+						<a class="next shorter" onclick="plusSlides(16, 1)">&#10095;</a>
+					</div>
+					<div class="indicators-container" data-slideshow-id="16" style="grid-template-columns: repeat(3, 1fr);">
+						<span class="indicator active"></span>
+						<span class="indicator"></span>
+						<span class="indicator"></span>
+					</div>
+				</td>
+			</tr>
+			<tr class="sp"></tr>
+
+			<tr>
+				<td align="center">
+					<a href="https://www.eumetnet.eu/observations/opera-radar-animation/" target="_blank" rel="nofollow">EUMETNET</a>
+					<div class="if2 placeholder">
+						<iframe loading="lazy" src="https://cdn.fmi.fi/demos/eumetnet-web-site-radar-animator/" frameborder="0" scrolling="no"></iframe>
+					</div>
+				</td>
+			</tr>
+			<tr class="sp"></tr>
+
+			<tr>
+				<td align="center">
+					<a href="https://www.meteociel.fr/observations-meteo/satellite.php" target="_blank" rel="nofollow">Meteociel.fr | Satelit</a>
+					<div class="slideshow placeholder" data-slideshow-id="5" style="max-width: 768px; aspect-ratio: 1;">
+						<div class="slide fade active">
+							<img src="https://neige.meteociel.fr/satellite/anim_ir.gif" />
+						</div>
+						<div class="slide fade">
+							<img data-src="https://neige.meteociel.fr/satellite/latest-ir.gif" class="lazy" />
+						</div>
+						<a class="prev" onclick="plusSlides(5, -1)">&#10094;</a>
+						<a class="next" onclick="plusSlides(5, 1)">&#10095;</a>
+					</div>
+					<div class="indicators-container" data-slideshow-id="5" style="max-width: 768px; grid-template-columns: repeat(2, 1fr);">
+						<span class="indicator active"></span>
+						<span class="indicator"></span>
+					</div>
+				</td>
+			</tr>
+			<tr class="sp"></tr>
+
+			<tr>
+				<td align="center">
+					<a href="https://www.neverin.hr/kamere/" target="_blank" rel="nofollow">Neverin | Kamera | Zagreb-Remetinečki rotor</a>
+					<div class="placeholder" style="aspect-ratio: 1280 / 720;">
+						<img src="https://webcams.neverin.hr/7332072588/latest.jpg" />
+					</div>
+				</td>
+			</tr>
+			<tr class="sp"></tr>
+
+			<tr>
+				<td align="center">
 					<div class="slideshow" data-slideshow-id="14">
 						<div class="slide fade active">
-							<a href="https://www.meteoblue.com/en/weather/week/zagreb_croatia_3186886" target="_blank" rel="nofollow">meteoblue | Prognoza | Zagreb</a>
+							<div class="radartitle">
+								<a class="center" href="https://www.meteoblue.com/en/weather/week/zagreb_croatia_3186886" target="_blank" rel="nofollow">meteoblue | Prognoza | Zagreb</a>
+								<a class="right" id="resetMeteoblueZgFrame" style="display:none">[X]</a>
+							</div>
 							<div class="if3 placeholder">
-								<iframe loading="lazy" class="scaled-iframe" src="https://www.meteoblue.com/en/weather/widget/meteogram/zagreb_croatia_3186886?geoloc=fixed&temperature_units=CELSIUS&windspeed_units=KILOMETER_PER_HOUR&precipitation_units=MILLIMETER&forecast_days=5&layout=dark&autowidth=auto&user_key=d6c944dcfa23c1de&embed_key=a4c8e80861792d46&sig=b9e5dc2debd7b0ebee1cfa142badc1fc601ae61d0a6b866b54ed49cc7fe3bb16" frameborder="0" scrolling="NO" allowtransparency="true" sandbox="allow-same-origin allow-scripts allow-popups allow-popups-to-escape-sandbox" style="border: 0;"></iframe>
+								<iframe id="meteoblueZg" loading="lazy" class="scaled-iframe" data-src="https://www.meteoblue.com/en/weather/widget/meteogram/zagreb_croatia_3186886?geoloc=fixed&temperature_units=CELSIUS&windspeed_units=KILOMETER_PER_HOUR&precipitation_units=MILLIMETER&forecast_days=5&layout=dark&autowidth=auto&user_key=d6c944dcfa23c1de&embed_key=a4c8e80861792d46&sig=b9e5dc2debd7b0ebee1cfa142badc1fc601ae61d0a6b866b54ed49cc7fe3bb16" frameborder="0" scrolling="NO" allowtransparency="true" sandbox="allow-same-origin allow-scripts allow-popups allow-popups-to-escape-sandbox" style="border: 0;"></iframe>
+								<div class="overlay" id="overlayMeteoblueZgFrame">
+									<span class="hint" data-type="graphic">Dvostruki klik za pristup interaktivnoj grafici</span>
+								</div>
 							</div>
 						</div>
 						<div class="slide fade">
-							<a href="https://www.meteoblue.com/en/weather/week/split_croatia_3190261" target="_blank" rel="nofollow">meteoblue | Prognoza | Split</a>
-							<div class="placeholder" style="aspect-ratio: 1152 / 963;">
-								<img src="https://my.meteoblue.com/images/meteogram?temperature_units=C&windspeed_units=kmh&precipitation_units=mm&darkmode=true&iso2=hr&lat=43.5089&lon=16.4391&asl=12&tz=Europe%2FZagreb&apikey=n4UGDLso3gE6m2YI&lang=en&location_name=Split&format=png&ts=1762812553&download=1&dpi=100&sig=1438eabd8c98592c0490fdd1fea1a688" />
+							<div class="radartitle">
+								<a class="center" href="https://www.meteoblue.com/en/weather/week/split_croatia_3190261" target="_blank" rel="nofollow">meteoblue | Prognoza | Split</a>
+								<a class="right" id="resetMeteoblueStFrame" style="display:none">[X]</a>
+							</div>
+							<div class="if3 placeholder">
+								<iframe id="meteoblueSt" loading="lazy" class="scaled-iframe" data-src="https://www.meteoblue.com/en/weather/widget/meteogram/split_croatia_3190261?geoloc=fixed&temperature_units=CELSIUS&windspeed_units=KILOMETER_PER_HOUR&precipitation_units=MILLIMETER&forecast_days=5&layout=dark&autowidth=auto&user_key=d6c944dcfa23c1de&embed_key=8ccaeab9f63d36ea&sig=84e416503549d427b4828b819e65423881bcb37c65a878bbd69e1078c206e252" frameborder="0" scrolling="NO" allowtransparency="true" sandbox="allow-same-origin allow-scripts allow-popups allow-popups-to-escape-sandbox" style="border: 0;"></iframe>
+								<div class="overlay" id="overlayMeteoblueStFrame">
+									<span class="hint" data-type="graphic">Dvostruki klik za pristup interaktivnoj grafici</span>
+								</div>
 							</div>
 						</div>
 						<div class="slide fade">
-							<a href="https://www.meteoblue.com/en/weather/week/rijeka_croatia_3191648" target="_blank" rel="nofollow">meteoblue | Prognoza | Rijeka</a>
-							<div class="placeholder" style="aspect-ratio: 1152 / 963;">
-								<img src="https://my.meteoblue.com/images/meteogram?temperature_units=C&windspeed_units=kmh&precipitation_units=mm&darkmode=true&iso2=hr&lat=45.3267&lon=14.4424&asl=12&tz=Europe%2FZagreb&apikey=n4UGDLso3gE6m2YI&lang=en&location_name=Rijeka&format=png&ts=1762812600&download=1&dpi=100&sig=ad820700a18ac7909e1248f6f181fdab" />
+							<div class="radartitle">
+								<a class="center" href="https://www.meteoblue.com/en/weather/week/rijeka_croatia_3191648" target="_blank" rel="nofollow">meteoblue | Prognoza | Rijeka</a>
+								<a class="right" id="resetMeteoblueRiFrame" style="display:none">[X]</a>
+							</div>
+							<div class="if3 placeholder">
+								<iframe id="meteoblueRi" loading="lazy" class="scaled-iframe" data-src="https://www.meteoblue.com/en/weather/widget/meteogram/rijeka_croatia_3191648?geoloc=fixed&temperature_units=CELSIUS&windspeed_units=KILOMETER_PER_HOUR&precipitation_units=MILLIMETER&forecast_days=5&layout=dark&autowidth=auto&user_key=d6c944dcfa23c1de&embed_key=9f589d2836e95ef7&sig=beb60bab997ab12c27a10f416692c3d63cfc69ab3256f3845efd149133f5a165" frameborder="0" scrolling="NO" allowtransparency="true" sandbox="allow-same-origin allow-scripts allow-popups allow-popups-to-escape-sandbox" style="border: 0;"></iframe>
+								<div class="overlay" id="overlayMeteoblueRiFrame">
+									<span class="hint" data-type="graphic">Dvostruki klik za pristup interaktivnoj grafici</span>
+								</div>
 							</div>
 						</div>
 						<div class="slide fade">
-							<a href="https://www.meteoblue.com/en/weather/week/osijek_croatia_3193935" target="_blank" rel="nofollow">meteoblue | Prognoza | Osijek</a>
-							<div class="placeholder" style="aspect-ratio: 1152 / 963;">
-								<img src="https://my.meteoblue.com/images/meteogram?temperature_units=C&windspeed_units=kmh&precipitation_units=mm&darkmode=true&iso2=hr&lat=45.5507&lon=18.6942&asl=87&tz=Europe%2FZagreb&apikey=n4UGDLso3gE6m2YI&lang=en&location_name=Osijek&format=png&ts=1762812636&download=1&dpi=100&sig=b6eb5e00e3d695ed9e9a8b9955509273" />
+							<div class="radartitle">
+								<a class="center" href="https://www.meteoblue.com/en/weather/week/osijek_croatia_3193935" target="_blank" rel="nofollow">meteoblue | Prognoza | Osijek</a>
+								<a class="right" id="resetMeteoblueOsFrame" style="display:none">[X]</a>
+							</div>
+							<div class="if3 placeholder">
+								<iframe id="meteoblueOs" loading="lazy" class="scaled-iframe" data-src="https://www.meteoblue.com/en/weather/widget/meteogram/osijek_croatia_3193935?geoloc=fixed&temperature_units=CELSIUS&windspeed_units=KILOMETER_PER_HOUR&precipitation_units=MILLIMETER&forecast_days=5&layout=dark&autowidth=auto&user_key=d6c944dcfa23c1de&embed_key=0ee635437c5c5bd7&sig=d67d7c23ac5b46618e806c8009cd5ff3bea5280d801fc3dd2791b77c8a2c8965" frameborder="0" scrolling="NO" allowtransparency="true" sandbox="allow-same-origin allow-scripts allow-popups allow-popups-to-escape-sandbox" style="border: 0;"></iframe>
+								<div class="overlay" id="overlayMeteoblueOsFrame">
+									<span class="hint" data-type="graphic">Dvostruki klik za pristup interaktivnoj grafici</span>
+								</div>
 							</div>
 						</div>
 						<a class="prev shorter" onclick="plusSlides(14, -1)">&#10094;</a>
@@ -492,8 +472,199 @@
 					</div>
 				</td>
 			</tr>
+
 			<tr class="sp"></tr>
+
+			<tr>
+				<td align="center" id="links">
+					<button type="button" class="expandable">
+						<span>Linkovi</span>
+						<span class="arrow">▼</span>
+					</button>
+				</td>
+			</tr>
+			<tr>
+				<td align="left">
+					<div class="links">
+						<div class="item">
+							<p><a href="https://meteo.hr" target="_blank" rel="nofollow">DHMZ</a></p>
+							<p><a href="https://vrijeme-i-promet.hrt.hr/vrijeme" target="_blank" rel="nofollow">HRT Vrijeme</a></p>
+							<p><a href="https://www.neverin.hr/prognoza/" target="_blank" rel="nofollow">Neverin</a></p>
+							<p><a href="https://pljusak.com/karta.php" target="_blank" rel="nofollow">Pljusak</a></p>
+							<p><a href="https://www.istramet.hr/" target="_blank" rel="nofollow">Istramet</a></p>
+							<p><a href="https://www.crometeo.hr/forum/index.php" target="_blank" rel="nofollow">Crometeo forum</a></p>
+							<p><a href="https://www.meteoadriatic.net" target=" rel="nofollow">MeteoAdriatic</a></p>
+							<p><a href="https://meteoalarm.org/en/live/region/HR" target="_blank" rel="nofollow">Meteoalarm</a></p>
+							<p><a href="https://nebo.com.hr" target="_blank" rel="nofollow">Nebo.com.hr</a></p>
+							<br />
+							<p><a href="https://view.eumetsat.int/productviewer?v=default" target="_blank" rel="nofollow">EUMETView</a></p>
+							<p><a href="https://www.estofex.org" target="_blank" rel="nofollow">ESTOFEX</a></p>
+							<p><a href="https://weather.essl.org/storm/" target="_blank" rel="nofollow">ESSL</a></p>
+							<p><a href="https://www.eswd.eu" target="_blank" rel="nofollow">ESWD</a></p>
+							<p><a href="https://charts.ecmwf.int" target="_blank" rel="nofollow">ECMWF</a></p>
+							<p><a href="https://www.wxcharts.com" target="_blank" rel="nofollow">WXCharts</a></p>
+							<br />
+							<p><a href="https://www.windy.com/-Radar-lightning-radar?radar,44.5,16.5,7" target="_blank" rel="nofollow">Windy</a></p>
+							<p><a href="https://www.rain-alarm.com" target="_blank" rel="nofollow">Rain Alarm</a></p>
+							<p><a href="https://meteo.arso.gov.si" target="_blank" rel="nofollow">meteo.si</a></p>
+							<p><a href="https://www.wetterzentrale.de/en/" target="_blank" rel="nofollow">Wetterzentrale</a></p>
+							<p><a href="https://www.meteociel.fr" target="_blank" rel="nofollow">Meteociel.fr</a></p>
+							<p><a href="https://zoom.earth/maps/radar/#view=44.5,16.5,7z" target="_blank" rel="nofollow">Zoom Earth</a></p>
+							<p><a href="https://www.yr.no/en/details/table/2-3186886/Croatia/City%20of%20Zagreb/Zagreb" target="_blank" rel="nofollow">Yr.no</a></p>
+						</div>
+
+						<div class="item">
+							<p>
+								<b>Neverin</b>
+								<br />Radar&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+								<a href="https://www.neverin.hr/radar/" target="_blank" rel="nofollow">Hrvatska</a>
+								<a href="https://www.neverin.hr/radar/#:~:text=Meteo%20radar%20Europa" target="_blank" rel="nofollow">Europa</a>
+								<br />Satelit&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+								<a href="https://www.neverin.hr/satelit/" target="_blank" rel="nofollow">Hrvatska</a>
+								<a href="https://www.neverin.hr/satelit/#:~:text=Satelitska%20snimka%20Europe" target="_blank" rel="nofollow">Europa</a>
+								<br />Munje&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+								<a href="https://www.neverin.hr/munje/" target="_blank" rel="nofollow">Hrvatska</a>
+								<a href="https://www.neverin.hr/munje/#:~:text=Pojava%20munja%20Europa" target="_blank" rel="nofollow">Europa</a>
+								<br />Prognoza&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+								<a href="https://www.neverin.hr/prognoza/zagreb/" target="_blank" rel="nofollow">Zagreb</a>
+							</p>
+							<p>
+								<b>Zoom Earth</b>
+								<br />Radar&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+								<a href="https://zoom.earth/maps/radar/#view=44.5,16.5,7z" target="_blank" rel="nofollow">Hrvatska</a>
+								<a href="https://zoom.earth/maps/radar/#view=47.5,17.5,5z" target="_blank" rel="nofollow">Europa</a>
+								<br />Satelit&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+								<a href="https://zoom.earth/maps/satellite/#view=44.5,16.5,7z" target="_blank" rel="nofollow">Hrvatska</a>
+								<a href="https://zoom.earth/maps/satellite/#view=47.5,17.5,5z" target="_blank" rel="nofollow">Europa</a>
+								<br />Temperatura&nbsp;&nbsp;&nbsp;&nbsp;
+								<a href="https://zoom.earth/maps/temperature/#view=44.5,16.5,7z/model=icon" target="_blank" rel="nofollow">Hrvatska</a>
+								<a href="https://zoom.earth/maps/temperature/#view=47.5,17.5,5z/model=icon" target="_blank" rel="nofollow">Europa</a>
+							</p>
+							<p>
+								<b>meteoblue</b>
+								<br />Radar&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+								<a href="https://www.meteoblue.com/en/weather/maps/croatia_croatia_3202326#map=radar~radarMapEU~none~none~none&coords=6/44.5/16.5" target="_blank" rel="nofollow">Hrvatska</a>
+								<a href="https://www.meteoblue.com/en/weather/maps/croatia_croatia_3202326#map=radar~radarMapEU~none~none~none&coords=4.2/47.5/17.5" target="_blank" rel="nofollow">Europa</a>
+								<br />Satelit&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+								<a href="https://www.meteoblue.com/en/weather/maps/croatia_croatia_3202326#map=satellite~sat~none~none~none&coords=6/44.5/16.5" target="_blank" rel="nofollow">Hrvatska</a>
+								<a href="https://www.meteoblue.com/en/weather/maps/croatia_croatia_3202326#map=satellite~sat~none~none~none&coords=4.2/47.5/17.5" target="_blank" rel="nofollow">Europa</a>
+								<br />Prognoza&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+								<a href="https://www.meteoblue.com/en/weather/week/zagreb_croatia_3186886" target="_blank" rel="nofollow">Zagreb</a>
+							</p>
+							<p>
+								<b>Weather&Radar</b>
+								<br />Satelit i radar
+								<a href="https://www.vrijemeradar.hr/vremenski-radar/zagreb/18138691?center=44.5,16.5&zoom=7&layer=wr&tz=Europe%2FZagreb" target="_blank" rel="nofollow">Hrvatska</a>
+								<a href="https://www.vrijemeradar.hr/vremenski-radar/zagreb/18138691?center=47.5,15.5&zoom=5&layer=wr&tz=Europe%2FZagreb" target="_blank" rel="nofollow">Europa</a>
+								<br />Temperatura&nbsp;&nbsp;&nbsp;&nbsp;
+								<a href="https://www.vrijemeradar.hr/vremenski-radar/zagreb/18138691?center=44.5,16.5&zoom=7&layer=tr&tz=Europe%2FZagreb" target="_blank" rel="nofollow">Hrvatska</a>
+								<a href="https://www.vrijemeradar.hr/vremenski-radar/zagreb/18138691?center=47.5,15.5&zoom=5&layer=tr&tz=Europe%2FZagreb" target="_blank" rel="nofollow">Europa</a>
+							</p>
+							<p>
+								<b>I'm Weather</b>
+								<br />Satelit i radar
+								<a href="https://imweather.com/?model=nowcast&run=&member=&element=radsat&level=&lat=44.5000&lng=16.5000&z=6.00" target="_blank" rel="nofollow">Hrvatska</a>
+								<a href="https://imweather.com/?model=nowcast&run=&member=&element=radsat&level=&lat=47.5000&lng=17.5000&z=4.20" target="_blank" rel="nofollow">Europa</a>
+							</p>
+							<p>
+								<b>Sat24.com</b>
+								<br />Satelit i radar
+								<a href="https://www.sat24.com/en-gb/country/hr/hd#selectedLayer=euRadarSat" target="_blank" rel="nofollow">Hrvatska</a>
+								<a href="https://www.sat24.com/en-gb/continent/eu/hd#selectedLayer=euRadarSat" target="_blank" rel="nofollow">Europa</a>
+							</p>
+							<p>
+								<b>Meteoradar</b>
+								<br />Radar&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+								<a href="https://www.meteoradar.co.uk/en-gb/country/hr" target="_blank" rel="nofollow">Hrvatska</a>
+								<a href="https://www.meteoradar.co.uk/en-gb/continent/eu" target="_blank" rel="nofollow">Europa</a>
+								<br />Temperatura&nbsp;&nbsp;&nbsp;&nbsp;
+								<a href="https://www.meteoradar.co.uk/en-gb/country/hr/maps/temperature" target="_blank" rel="nofollow">Hrvatska</a>
+								<a href="https://www.meteoradar.co.uk/en-gb/continent/eu/maps/temperature" target="_blank" rel="nofollow">Europa</a>
+							</p>
+							<p>
+								<b>Időkép</b>
+								<br />Satelit&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+								<a href="https://www.idokep.hu/muhold#europa" target="_blank" rel="nofollow">Europa</a>
+								<br />Radar&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+								<a href="https://www.idokep.eu/adria" target="_blank" rel="nofollow">Hrvatska</a>
+								<a href="https://www.idokep.eu/ceu/radar" target="_blank" rel="nofollow">Europa</a>
+							</p>
+							<p>
+								<b>Blitzortung.org</b>
+								<br />Munje&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+								<a href="https://map.blitzortung.org/#6.5/44.5/16.5" target="_blank" rel="nofollow">Hrvatska</a>
+								<a href="https://map.blitzortung.org/#4.2/47.5/17.5" target="_blank" rel="nofollow">Europa</a>
+								<a href="https://www.blitzortung.org/en/live_lightning_maps.php?map=10" target="_blank" rel="nofollow">Europa</a>
+							</p>
+							<p>
+								<b>LightningMaps.org</b>
+								<br />Munje&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+								<a href="https://www.lightningmaps.org/?lang=en#m=sen;t=3;s=200;o=0;b=0.00;ts=0;z=7;y=44.5;x=16.5;d=4;dl=6;dc=0;" target="_blank" rel="nofollow">Hrvatska</a>
+								<a href="https://www.lightningmaps.org/?lang=en#m=sen;t=3;s=200;o=0;b=0.00;ts=0;z=5;y=47.5;x=17.5;d=4;dl=6;dc=0;" target="_blank" rel="nofollow">Europa</a>
+								<a href="https://www.lightningmaps.org/blitzortung/europe/index.php?bo_page=archive&lang=en&bo_map=0&bo_animation=now" target="_blank" rel="nofollow">Europa</a>
+							</p>
+							<p>
+								<b>Wetterzentrale</b>
+								<br />Satelit&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+								<a href="https://www.wetterzentrale.de/en/reanalysis.php?map=1&model=sat&var=404&nmaps=32" target="_blank" rel="nofollow">Europa</a>
+								<br />Prognoza&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+								<a href="https://www.wetterzentrale.de/en/show_diagrams.php?geoid=54032&model=ico&var=93&run=6&lid=OP&bw=1" target="_blank" rel="nofollow">Zagreb</a>
+								<br />Temperatura&nbsp;&nbsp;&nbsp;&nbsp;
+								<a href="https://www.wetterzentrale.de/en/topkarten.php?map=17&model=ico&var=5&run=6&time=0&lid=OP&h=1&mv=0&tr=1" target="_blank" rel="nofollow">Hrvatska</a>
+								<a href="https://www.wetterzentrale.de/en/topkarten.php?map=1&model=ico&var=5&time=0&run=6&lid=OP&h=1&mv=0&tr=1" target="_blank" rel="nofollow">Europa</a>
+							</p>
+							<p>
+								<b>Meteociel.fr</b>
+								<br />Temperatura&nbsp;&nbsp;&nbsp;&nbsp;
+								<a href="https://www.meteociel.fr/observations-meteo/temperatures.php?region=it" target="_blank" rel="nofollow">Hrvatska</a>
+								<a href="https://www.meteociel.fr/observations-meteo/temperatures.php?region=eur2" target="_blank" rel="nofollow">Europa</a>
+							</p>
+							<p>
+								<b>WXCharts</b>
+								<br />Temperatura&nbsp;&nbsp;&nbsp;&nbsp;
+								<a href="https://www.wxcharts.com/?panel=default&model=icon_eu,icon_eu,icon_eu,icon_eu&region=italy&chart=2mtemp,overview,wind10mkph,snowdepth&run=06&step=000&plottype=10&lat=45.813&lon=15.977&skewtstep=0" target="_blank" rel="nofollow">Hrvatska</a>
+								<a href="https://www.wxcharts.com/?panel=default&model=icon_eu,icon_eu,icon_eu,icon_eu&region=europe&chart=2mtemp,overview,wind10mkph,snowdepth&run=06&step=000&plottype=10&lat=45.813&lon=15.977&skewtstep=0" target="_blank" rel="nofollow">Europa</a>
+							</p>
+						</div>
+
+						<div class="item">
+							<p><b>Kvaliteta zraka</b></p>
+							<p><a href="https://meteo.hr/kvaliteta_zraka.php?section=podaci_kz&post=Zagreb%204&id_komp=259&komp=lebdece%20cestice%20(%3C2.5um)" target="_blank" rel="nofollow">DHMZ</a></p>
+							<p><a href="https://iszz.azo.hr/iskzl/" target="_blank" rel="nofollow">MZOZT</a></p>
+							<p><a href="https://www.iqair.com/croatia/zagreb" target="_blank" rel="nofollow">IQAir</a></p>
+							<p><a href="https://www.meteoblue.com/en/weather/outdoorsports/airquality/zagreb_croatia_3186886" target="_blank" rel="nofollow">Meteoblue</a></p>
+							<p><a href="https://weather.com/forecast/air-quality/l/af895d475e97eb1973a3b4f52250c3968596b1ef505137bb1390abcb637e6eee" target="_blank" rel="nofollow">The Weather Channel</a></p>
+							<p><a href="https://airquality.city/hr" target="_blank" rel="nofollow">AirQualityCity</a></p>
+							<br />
+							<p><b>SpaceWeather</b></p>
+							<p><a href="https://spaceweather.com" target="_blank" rel="nofollow">SpaceWeather.com</a></p>
+							<p><a href="https://www.spaceweatherlive.com/en.html" target="_blank" rel="nofollow">SpaceWeatherLive.com</a></p>
+							<p><a href="https://www.swpc.noaa.gov" target="_blank" rel="nofollow">Space Weather Prediction Center</a></p>
+							<p><a href="https://www.swpc.noaa.gov/products/aurora-30-minute-forecast" target="_blank" rel="nofollow">Aurora Forecast</a></p>
+							<p><a href="https://www.heavens-above.com/?lat=45.8&lng=16&loc=Zagreb&alt=122&tz=CET" target="_blank" rel="nofollow">Heavens-Above</a></p>
+							<br />
+							<p><b>Facebook</b></p>
+							<p><a href="https://www.facebook.com/neverinhr" target="_blank" rel="nofollow">Neverin</a></p>
+							<p><a href="https://www.facebook.com/kadcekisa" target="_blank" rel="nofollow">Kad će Kiša</a></p>
+							<p><a href="https://www.facebook.com/crometeo2" target="_blank" rel="nofollow">Crometeo</a></p>
+							<p><a href="https://www.facebook.com/vrijeme.net" target="_blank" rel="nofollow">Vrijeme.net</a></p>
+							<p><a href="https://www.facebook.com/severeweatherEU" target="_blank" rel="nofollow">Severe Weather Europe</a></p>
+							<p><a href="https://www.facebook.com/StormchasersSlovenija" target="_blank" rel="nofollow">Neurje.si</a></p>
+						</div>
+					</div>
+				</td>
+			</tr>
 		</table>
+		<img src="https://bit.ly/radari-counter" style="width:1px;height:1px;float:right" />
 	</div>
+	<footer>
+		<a onclick="scrollToTop()" style="cursor: pointer"><u>Povratak na vrh</u></a>
+		·
+		<a href="/meteo/extras/">Više</a>
+		|
+		<a href="https://jurakovic.github.io">Index</a>
+		·
+		<a href="https://github.com/jurakovic/meteo">GitHub</a>
+	</footer>
 </body>
 </html>
