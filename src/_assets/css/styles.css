@@ -111,9 +111,15 @@ img {
 	position: relative;
 	width: 100%;
 	max-width: 875px;
-	aspect-ratio: 1;
+	aspect-ratio: 6 / 5;
 	overflow: hidden;
 	margin: 0 auto;
+}
+
+@media (max-width: 800px) {
+	.if3 {
+		aspect-ratio: 1;
+	}
 }
 
 /* Inner wrapper that gets scaled (reuses your scaled-iframe behavior) */
