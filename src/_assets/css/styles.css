@@ -109,10 +109,36 @@ img {
 
 .if3 {
 	position: relative;
-	overflow: hidden;
-	width: 875px;
+	width: 100%;
 	max-width: 875px;
-	padding-top: 85%;
+	aspect-ratio: 1;
+	overflow: hidden;
+	margin: 0 auto;
+}
+
+/* Inner wrapper that gets scaled (reuses your scaled-iframe behavior) */
+.if3-inner {
+	position: absolute;
+	top: 0;
+	left: 0;
+	transform: scale(0.9);
+	transform-origin: 0 0;
+	width: calc(100% / 0.9);
+	height: calc(100% / 0.9);
+}
+
+	.if3-inner iframe {
+		width: 100%;
+		height: 100%;
+		border: none;
+	}
+
+@media (max-width: 800px) {
+	.if3-inner {
+		transform: scale(0.6);
+		width: calc(100% / 0.6);
+		height: calc(100% / 0.6);
+	}
 }
 
 .vid1 {
@@ -188,7 +214,7 @@ iframe, video {
 
 .slideshow {
 	position: relative;
-	display: flex;
+	/*display: flex;*/
 	justify-content: center;
 }
 
