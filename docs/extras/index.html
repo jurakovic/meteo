@@ -90,15 +90,15 @@
 		dlog(`Updating iframe src for ${e}`);const t=document.getElementById(e);if(t){let o=zoomMap.get(e),n=t.getAttribute("data-src")
 		;if(o&&o.length>0){let e=o[0],t=o[1];window.innerWidth<800&&(n=n.replace(e,t))}t.src=n
 		}else dlog(`${e} not found, skipping updateIframeSrc for ${e}`)}function hideOverlayOnDoubleTap(){
-		document.querySelectorAll(".overlay").forEach(e=>{let t=0;e.addEventListener("dblclick",()=>{e.style.display="none"
+		document.querySelectorAll(".if1 .overlay").forEach(e=>{let t=0;e.addEventListener("dblclick",()=>{e.style.display="none"
 		;let t=getResetButtonFromOverlayId(e.id);t.removeAttribute("style"),setResetButtonToExit(t)}),e.addEventListener("touchend",o=>{
 		const n=(new Date).getTime(),r=n-t;if(r>0&&r<200){e.style.display="none";let t=getResetButtonFromOverlayId(e.id);t.removeAttribute("style"),
 		setResetButtonToExit(t),o.preventDefault()}t=n});const o=e.querySelector(".hint");let n=0,r=0;e.addEventListener("touchstart",e=>{
 		1===e.touches.length&&(r=e.touches[0].clientX,n=e.touches[0].clientY)}),e.addEventListener("touchend",e=>{if(!o)return
 		;const t=e.changedTouches[0].clientX,s=e.changedTouches[0].clientY,a=Math.abs(t-r),i=Math.abs(s-n);a<10&&i<10&&(o.style.opacity="0.6",
 		clearTimeout(o._hideTimer),o._hideTimer=setTimeout(()=>{o.style.removeProperty("opacity")},2e3))})})}function updateHintText(){
-		const e=window.innerWidth<800;document.querySelectorAll(".hint").forEach(t=>{const o="map"==t.getAttribute("data-type")?"karti":"grafici"
-		;t.textContent=e?`Dvostruki dodir za pristup interaktivnoj ${o}`:`Dvostruki klik za pristup interaktivnoj ${o}`})}
+		const e=window.innerWidth<800;document.querySelectorAll(".hint").forEach(t=>{
+		t.textContent=e?"Dvostruki dodir za pristup interaktivnoj karti":"Dvostruki klik za pristup interaktivnoj karti"})}
 		function restoreOverlay(e){dlog(`restoreOverlay: ${e}`)
 		;document.getElementById(e).parentElement.querySelector(".overlay").removeAttribute("style")
 		;setResetButtonToReset(getResetButtonFromFrameId(e))}function setResetButtonToExit(e){dlog(`setResetButtonToExit: ${e.id}`)
@@ -166,7 +166,7 @@
 					<div class="if1 placeholder">
 						<iframe id="ventussky" class="scaled-iframe" loading="eager" data-src="https://embed.ventusky.com/?p=44.5;16.5;6&l=radar&w=off" frameborder="0"></iframe>
 						<div class="overlay" id="overlayVentusskyFrame">
-							<span class="hint" data-type="map">Dvostruki klik za pristup interaktivnoj karti</span>
+							<span class="hint">Dvostruki klik za pristup interaktivnoj karti</span>
 						</div>
 					</div>
 				</td>
@@ -182,7 +182,7 @@
 					<div class="if1 placeholder">
 						<iframe id="rainViewer" class="scaled-iframe" loading="lazy" data-src="https://www.rainviewer.com/map.html?loc=44.8,16.5,6.3&oCS=1&c=5&lm=1&layer=radar&sm=1&sn=2&ts=1" frameborder="0"></iframe>
 						<div class="overlay" id="overlayRainViewerFrame">
-							<span class="hint" data-type="map">Dvostruki klik za pristup interaktivnoj karti</span>
+							<span class="hint">Dvostruki klik za pristup interaktivnoj karti</span>
 						</div>
 					</div>
 				</td>
@@ -198,7 +198,7 @@
 					<div class="if1 placeholder">
 						<iframe id="weatherAndRadar" class="scaled-iframe" loading="lazy" data-src="https://radar.wo-cloud.com/pwa/?center=44.5,16.5&zoom=7.2&tz=Europe/Zagreb&tf=HH:mm&tempunit=celsius&windunit=kph&showShareButton=false&lang=en-US&placemarkName=Zagreb&desktop=true&fadeTop=true" frameborder="0"></iframe>
 						<div class="overlay" id="overlayWeatherAndRadarFrame">
-							<span class="hint" data-type="map">Dvostruki klik za pristup interaktivnoj karti</span>
+							<span class="hint">Dvostruki klik za pristup interaktivnoj karti</span>
 						</div>
 					</div>
 				</td>
