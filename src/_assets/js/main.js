@@ -330,10 +330,9 @@ function hideOverlayOnDoubleTap() {
 function updateHintText() {
 	const isMobile = window.innerWidth < 800;
 	document.querySelectorAll('.hint').forEach(hint => {
-		const type = hint.getAttribute('data-type') == "map" ? "karti" : "grafici";
 		hint.textContent = isMobile
-			? `Dvostruki dodir za pristup interaktivnoj ${type}`
-			: `Dvostruki klik za pristup interaktivnoj ${type}`;
+			? "Dvostruki dodir za pristup interaktivnoj karti"
+			: "Dvostruki klik za pristup interaktivnoj karti";
 	});
 }
 
