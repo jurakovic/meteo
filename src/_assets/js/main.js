@@ -235,10 +235,6 @@ function updateIframeSrc() {
 		setIframeSrc('weatherAndRadar');
 		setIframeSrc('rainViewer');
 		setIframeSrc('ventussky');
-		setIframeSrc('meteoblueZg');
-		setIframeSrc('meteoblueSt');
-		setIframeSrc('meteoblueRi');
-		setIframeSrc('meteoblueOs');
 	}
 }
 
@@ -248,15 +244,13 @@ function setIframeSrc(iframeId) {
 	const iframe = document.getElementById(iframeId);
 	if (iframe) {
 		let values = zoomMap.get(iframeId);
+		let zoomOld = values[0];
+		let zoomNew = values[1];
+
 		let url = iframe.getAttribute('data-src');
 
-		if (values && values.length > 0) {
-			let zoomOld = values[0];
-			let zoomNew = values[1];
-
-			if (window.innerWidth < 800)
-				url = url.replace(zoomOld, zoomNew);
-		}
+		if (window.innerWidth < 800)
+			url = url.replace(zoomOld, zoomNew);
 
 		iframe.src = url;
 	}
@@ -266,7 +260,7 @@ function setIframeSrc(iframeId) {
 }
 
 function hideOverlayOnDoubleTap() {
-	const overlays = document.querySelectorAll('.overlay');
+	const overlays = document.querySelectorAll('.if1 .overlay');
 
 	overlays.forEach((overlay) => {
 		let lastTap = 0;
