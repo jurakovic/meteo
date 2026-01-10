@@ -44,7 +44,7 @@ async function addExpandableClickEventListener() {
 	});
 }
 
-let slidePage = [2, 2, 2, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1];
+let slidePage = [2, 2, 2, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1];
 
 function plusSlides(slideshowId, n) {
 	showSlides(slideshowId, slidePage[slideshowId - 1] += n);
@@ -63,7 +63,7 @@ function showSlides(slideshowId, n) {
 }
 
 function updateSlideshowWidth(slideshowId) {
-	if (slideshowId !== 16) return; // for now only essl and estofex have different widths
+	if (slideshowId !== 16 && slideshowId !== 17) return; // for now only essl/estofex and chmu have different widths
 
 	const slideshow = document.querySelector(`.slideshow[data-slideshow-id='${slideshowId}']`);
 	const indicatorsContainer = document.querySelector(`.indicators-container[data-slideshow-id='${slideshowId}']`);
