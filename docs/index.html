@@ -32,19 +32,18 @@
 		overflow:hidden;padding-top:100%}@media (max-width:800px){.if1{padding-top:110%}}.overlay{position:absolute;top:0;left:0;width:100%;height:
 		100%}.overlay .hint{opacity:0;transition:opacity .3s ease;pointer-events:none;position:absolute;top:5%;transform:translateX(-50%);
 		background-color:#000;padding:6px 12px}@media (max-width:800px){.overlay .hint{top:10%;min-width:65%}}.overlay:hover .hint{opacity:.6}.if2{
-		position:relative;width:100%;overflow:hidden;padding-top:115%}.if3{position:relative;width:100%;max-width:875px;aspect-ratio:6/5;overflow:
-		hidden;margin:0 auto}@media (max-width:800px){.if3{aspect-ratio:1}}.vid1{position:relative;width:100%;overflow:hidden;padding-top:67%}.vid2{
+		position:relative;width:100%;overflow:hidden;padding-top:115%}.vid1{position:relative;width:100%;overflow:hidden;padding-top:67%}.vid2{
 		position:relative;width:100%;overflow:hidden;padding-top:87%}iframe,video{position:absolute;top:0;left:0;bottom:0;right:0;width:100%;height:
 		100%;border:none}.scaled-iframe{transform:scale(.9);width:calc(100% / .9);height:calc(100% / .9);transform-origin:0 0}
 		@media (max-width:800px){.scaled-iframe{transform:scale(.6);width:calc(100% / .6);height:calc(100% / .6);transform-origin:0 0}}.sp{height:
 		10px}.buttons{display:grid;grid-template-columns:49.5% 49.5%;gap:1%;font-size:13px}.buttons .btn{margin-top:10px;margin-bottom:5px;font-size
 		:13px;font-family:inherit;color:#fff;background-color:#485871;align-content:center;cursor:pointer;width:100%;height:24px;border:none;outline
-		:0}.buttons .btn:hover{background-color:#5f6f89}.slideshow{position:relative;justify-content:center}.slide{display:none}.slide.active{
-		display:block}.next,.prev{cursor:pointer;position:absolute;align-content:center;top:0;bottom:0;width:15%;padding:16px;color:transparent;
-		opacity:.7;font-weight:700;font-size:36px;transition:.6s ease;user-select:none}.prev{left:0;text-align:left}.prev:hover{background-image:
-		linear-gradient(to left,transparent,rgba(0,0,0,.6));color:#fff}.prev.shorter{top:.4em}.next{right:0;text-align:right}.next:hover{
-		background-image:linear-gradient(to right,transparent,rgba(0,0,0,.6));color:#fff}.next.shorter{top:.4em}.fade{animation-name:fade;
-		animation-duration:1s}@keyframes fade{from{opacity:.6}to{opacity:1}}@media (max-width:800px){.next,.prev{padding:12px;font-size:20px}
+		:0}.buttons .btn:hover{background-color:#5f6f89}.slideshow{position:relative;display:flex;justify-content:center}.slide{display:none}
+		.slide.active{display:block}.next,.prev{cursor:pointer;position:absolute;align-content:center;top:0;bottom:0;width:15%;padding:16px;color:
+		transparent;opacity:.7;font-weight:700;font-size:36px;transition:.6s ease;user-select:none}.prev{left:0;text-align:left}.prev:hover{
+		background-image:linear-gradient(to left,transparent,rgba(0,0,0,.6));color:#fff}.prev.shorter{top:.4em}.next{right:0;text-align:right}
+		.next:hover{background-image:linear-gradient(to right,transparent,rgba(0,0,0,.6));color:#fff}.next.shorter{top:.4em}.fade{animation-name:
+		fade;animation-duration:1s}@keyframes fade{from{opacity:.6}to{opacity:1}}@media (max-width:800px){.next,.prev{padding:12px;font-size:20px}
 		.next.shorter,.prev.shorter{top:.72em}}.indicators-container{display:grid;grid-template-columns:repeat(3,1fr);gap:4px;width:100%;margin-top:
 		1px}.indicator{height:4px;background-color:#5c5c5c80;transition:background-color .3s}.indicator.active{background-color:#c7c7c7}
 		@media (max-width:800px){.indicator{height:2px}}.expandable{position:relative;justify-content:center;margin-top:10px;margin-bottom:4px;
@@ -85,10 +84,9 @@
 		e.addEventListener("mouseleave",()=>{s&&(s=!1)})})}window.addEventListener("load",function(){
 		document.querySelectorAll("img.lazy").forEach(e=>{e.src=e.getAttribute("data-src"),e.classList.remove("lazy")})})
 		;let previousWidth=0,zoomMap=new Map;function updateIframeSrc(){window.innerWidth!==previousWidth&&(previousWidth=window.innerWidth,
-		setIframeSrc("windy"),setIframeSrc("blitzortung"),setIframeSrc("weatherAndRadar"),setIframeSrc("rainViewer"),setIframeSrc("ventussky"),
-		setIframeSrc("meteoblueZg"),setIframeSrc("meteoblueSt"),setIframeSrc("meteoblueRi"),setIframeSrc("meteoblueOs"))}function setIframeSrc(e){
-		dlog(`Updating iframe src for ${e}`);const t=document.getElementById(e);if(t){let o=zoomMap.get(e),n=t.getAttribute("data-src")
-		;if(o&&o.length>0){let e=o[0],t=o[1];window.innerWidth<800&&(n=n.replace(e,t))}t.src=n
+		setIframeSrc("windy"),setIframeSrc("blitzortung"),setIframeSrc("weatherAndRadar"),setIframeSrc("rainViewer"),setIframeSrc("ventussky"))}
+		function setIframeSrc(e){dlog(`Updating iframe src for ${e}`);const t=document.getElementById(e);if(t){
+		let o=zoomMap.get(e),n=t.getAttribute("data-src");if(o&&o.length>0){let e=o[0],t=o[1];window.innerWidth<800&&(n=n.replace(e,t))}t.src=n
 		}else dlog(`${e} not found, skipping updateIframeSrc for ${e}`)}function hideOverlayOnDoubleTap(){
 		document.querySelectorAll(".if1 .overlay").forEach(e=>{let t=0;e.addEventListener("dblclick",()=>{e.style.display="none"
 		;let t=getResetButtonFromOverlayId(e.id);t.removeAttribute("style"),setResetButtonToExit(t)}),e.addEventListener("touchend",o=>{
@@ -455,47 +453,12 @@
 
 			<tr>
 				<td align="center">
-					<div class="slideshow" data-slideshow-id="14">
-						<div class="slide fade active">
-							<a href="https://www.meteoblue.com/en/weather/week/zagreb_croatia_3186886" target="_blank" rel="nofollow">meteoblue | Prognoza | Zagreb</a>
-							<div class="if3 placeholder">
-								<iframe id="meteoblueZg" loading="lazy" class="scaled-iframe" data-src="https://www.meteoblue.com/en/weather/widget/meteogram/zagreb_croatia_3186886?geoloc=fixed&temperature_units=CELSIUS&windspeed_units=KILOMETER_PER_HOUR&precipitation_units=MILLIMETER&forecast_days=5&layout=dark&autowidth=auto&user_key=d6c944dcfa23c1de&embed_key=a4c8e80861792d46&sig=b9e5dc2debd7b0ebee1cfa142badc1fc601ae61d0a6b866b54ed49cc7fe3bb16" frameborder="0" scrolling="NO" allowtransparency="true" sandbox="allow-same-origin allow-scripts allow-popups allow-popups-to-escape-sandbox" style="border: 0;"></iframe>
-								<div class="overlay"></div>
-							</div>
-						</div>
-						<div class="slide fade">
-							<a href="https://www.meteoblue.com/en/weather/week/split_croatia_3190261" target="_blank" rel="nofollow">meteoblue | Prognoza | Split</a>
-							<div class="if3 placeholder">
-								<iframe id="meteoblueSt" loading="lazy" class="scaled-iframe" data-src="https://www.meteoblue.com/en/weather/widget/meteogram/split_croatia_3190261?geoloc=fixed&temperature_units=CELSIUS&windspeed_units=KILOMETER_PER_HOUR&precipitation_units=MILLIMETER&forecast_days=5&layout=dark&autowidth=auto&user_key=d6c944dcfa23c1de&embed_key=8ccaeab9f63d36ea&sig=84e416503549d427b4828b819e65423881bcb37c65a878bbd69e1078c206e252" frameborder="0" scrolling="NO" allowtransparency="true" sandbox="allow-same-origin allow-scripts allow-popups allow-popups-to-escape-sandbox" style="border: 0;"></iframe>
-								<div class="overlay"></div>
-							</div>
-						</div>
-						<div class="slide fade">
-							<a href="https://www.meteoblue.com/en/weather/week/rijeka_croatia_3191648" target="_blank" rel="nofollow">meteoblue | Prognoza | Rijeka</a>
-							<div class="if3 placeholder">
-								<iframe id="meteoblueRi" loading="lazy" class="scaled-iframe" data-src="https://www.meteoblue.com/en/weather/widget/meteogram/rijeka_croatia_3191648?geoloc=fixed&temperature_units=CELSIUS&windspeed_units=KILOMETER_PER_HOUR&precipitation_units=MILLIMETER&forecast_days=5&layout=dark&autowidth=auto&user_key=d6c944dcfa23c1de&embed_key=9f589d2836e95ef7&sig=beb60bab997ab12c27a10f416692c3d63cfc69ab3256f3845efd149133f5a165" frameborder="0" scrolling="NO" allowtransparency="true" sandbox="allow-same-origin allow-scripts allow-popups allow-popups-to-escape-sandbox" style="border: 0;"></iframe>
-								<div class="overlay"></div>
-							</div>
-						</div>
-						<div class="slide fade">
-							<a href="https://www.meteoblue.com/en/weather/week/osijek_croatia_3193935" target="_blank" rel="nofollow">meteoblue | Prognoza | Osijek</a>
-							<div class="if3 placeholder">
-								<iframe id="meteoblueOs" loading="lazy" class="scaled-iframe" data-src="https://www.meteoblue.com/en/weather/widget/meteogram/osijek_croatia_3193935?geoloc=fixed&temperature_units=CELSIUS&windspeed_units=KILOMETER_PER_HOUR&precipitation_units=MILLIMETER&forecast_days=5&layout=dark&autowidth=auto&user_key=d6c944dcfa23c1de&embed_key=0ee635437c5c5bd7&sig=d67d7c23ac5b46618e806c8009cd5ff3bea5280d801fc3dd2791b77c8a2c8965" frameborder="0" scrolling="NO" allowtransparency="true" sandbox="allow-same-origin allow-scripts allow-popups allow-popups-to-escape-sandbox" style="border: 0;"></iframe>
-								<div class="overlay"></div>
-							</div>
-						</div>
-						<a class="prev shorter" onclick="plusSlides(14, -1)">&#10094;</a>
-						<a class="next shorter" onclick="plusSlides(14, 1)">&#10095;</a>
-					</div>
-					<div class="indicators-container" data-slideshow-id="14" style="grid-template-columns: repeat(4, 1fr);">
-						<span class="indicator active"></span>
-						<span class="indicator"></span>
-						<span class="indicator"></span>
-						<span class="indicator"></span>
+					<a href="https://www.meteoblue.com/en/weather/week/zagreb_croatia_3186886" target="_blank" rel="nofollow">meteoblue | Prognoza | Zagreb</a>
+					<div class="placeholder" style="aspect-ratio: 1152 / 963;">
+						<img src="https://my.meteoblue.com/images/meteogram_extended?lat=45.8144&lon=15.978&asl=135&tz=Europe%2FZagreb&darkmode=true&apikey=F9hJLNsK5U67uTMI&format=png&dpi=100&lang=en&temperature_units=C&precipitation_units=mm&windspeed_units=kmh&location_name=Zagreb&sig=1a99fc7e362afe2f025bd760cad320fa35829523d04e071608f2b7dfaae9424b" />
 					</div>
 				</td>
 			</tr>
-
 			<tr class="sp"></tr>
 
 			<tr>

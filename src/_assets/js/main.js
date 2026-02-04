@@ -235,10 +235,6 @@ function updateIframeSrc() {
 		setIframeSrc('weatherAndRadar');
 		setIframeSrc('rainViewer');
 		setIframeSrc('ventussky');
-		setIframeSrc('meteoblueZg');
-		setIframeSrc('meteoblueSt');
-		setIframeSrc('meteoblueRi');
-		setIframeSrc('meteoblueOs');
 	}
 }
 
