@@ -222,45 +222,18 @@ function addSwipeEvents() {
 
 let previousWidth = 0;
 
-let zoomMap = new Map();
-zoomMap.set('windy', [ '&zoom=7', '&zoom=6' ]);
-zoomMap.set('blitzortung', [ '#6/', '#5/' ]);
-zoomMap.set('weatherAndRadar', [ '&zoom=7.2', '&zoom=6.8' ]);
-zoomMap.set('rainViewer', [ ',6.3&', ',5.8&' ]);
-zoomMap.set('ventussky', [ ';6&', ';6&' ]);
-
 function updateIframeSrc() {
-	if (window.innerWidth !== previousWidth) {
-		previousWidth = window.innerWidth;
-		setIframeSrc('windy');
-		setIframeSrc('blitzortung');
-		setIframeSrc('weatherAndRadar');
-		setIframeSrc('rainViewer');
-		setIframeSrc('ventussky');
-	}
+	if (window.innerWidth === previousWidth) return;
+	previousWidth = window.innerWidth;
+	document.querySelectorAll('iframe[data-zoom-desktop]').forEach(iframe => setIframeSrc(iframe));
 }
 
-function setIframeSrc(iframeId) {
-	dlog(`Updating iframe src for ${iframeId}`);
-
-	const iframe = document.getElementById(iframeId);
-	if (iframe) {
-		let values = zoomMap.get(iframeId);
-		let url = iframe.getAttribute('data-src');
-
-		if (values && values.length > 0) {
-			let zoomOld = values[0];
-			let zoomNew = values[1];
-
-			if (window.innerWidth < 800)
-				url = url.replace(zoomOld, zoomNew);
-		}
-
-		iframe.src = url;
-	}
-	else {
-		dlog(`${iframeId} not found, skipping updateIframeSrc for ${iframeId}`);
-	}
+function setIframeSrc(iframe) {
+	dlog(`Updating iframe src for ${iframe.id}`);
+	let url = iframe.getAttribute('data-src');
+	if (window.innerWidth < 800)
+		url = url.replace(iframe.getAttribute('data-zoom-desktop'), iframe.getAttribute('data-zoom-mobile'));
+	iframe.src = url;
 }
 
 function hideOverlayOnDoubleTap() {
@@ -371,7 +344,7 @@ function setResetButtonToReset(resetFrame) {
 
 function resetIframe(frameId) {
 	dlog(`Resetting iframe: ${frameId}`);
-	setIframeSrc(frameId);
+	setIframeSrc(document.getElementById(frameId));
 
 	const resetFrame = getResetButtonFromFrameId(frameId);
 	resetFrame.style.display = 'none';
