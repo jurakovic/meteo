@@ -66,35 +66,35 @@
 		const o=document.querySelector(`.slideshow[data-slideshow-id="${e}"]`);showSlides(o,parseInt(o.getAttribute("data-current-slide"))+t)}
 		function showSlides(e,t){
 		const o=e.getAttribute("data-slideshow-id"),n=e.querySelectorAll(".slide"),r=document.querySelectorAll(`.indicators-container[data-slideshow-id="${o}"] .indicator`)
-		;let s=t;s>n.length&&(s=1),s<1&&(s=n.length),e.setAttribute("data-current-slide",s),n.forEach(e=>e.classList.remove("active")),
-		n[s-1].classList.add("active"),r.forEach(e=>e.classList.remove("active")),r[s-1].classList.add("active"),updateSlideshowWidth(e)}
+		;let i=t;i>n.length&&(i=1),i<1&&(i=n.length),e.setAttribute("data-current-slide",i),n.forEach(e=>e.classList.remove("active")),
+		n[i-1].classList.add("active"),r.forEach(e=>e.classList.remove("active")),r[i-1].classList.add("active"),updateSlideshowWidth(e)}
 		function updateSlideshowWidth(e){if(!e.hasAttribute("data-dynamic-width"))return
 		;const t=e.getAttribute("data-slideshow-id"),o=document.querySelector(`.indicators-container[data-slideshow-id='${t}']`),n=e.querySelector(".slide.active .placeholder")
 		;e.style.maxWidth=n.style.maxWidth,o.style.maxWidth=n.style.maxWidth}function showProgress(){
 		const e=document.querySelectorAll("img"),t=document.querySelector(".progress-bar");let o=0;const n=()=>{const n=o/e.length*100
 		;t.style.width=n+"%",o===e.length&&setTimeout(()=>{document.querySelector(".progress-container").style.display="none"},500)};e.forEach(e=>{
 		e.addEventListener("load",()=>{o++,n()}),e.addEventListener("error",()=>{o++,dlog(`Error loading image: ${e.src}`),e.removeAttribute("src"),
-		n()}),e.complete&&e.dispatchEvent(new Event("load"))})}function handleSwipe(e,t,o){const n=o-t;Math.abs(n)>50&&plusSlides(e,n>0?-1:1)}
-		function addSwipeEvents(){document.querySelectorAll(".slideshow").forEach(e=>{let t=0,o=0,n=0,r=0,s=!1
-		;const i=parseInt(e.getAttribute("data-slideshow-id"));e.querySelectorAll("img").forEach(e=>{
+		n()}),e.complete&&e.dispatchEvent(new Event("load"))})}function handleSwipe(e,t,o){const n=o-t;if(Math.abs(n)>50){
+		const t=parseInt(e.getAttribute("data-current-slide"));showSlides(e,t+(n>0?-1:1))}}function addSwipeEvents(){
+		document.querySelectorAll(".slideshow").forEach(e=>{let t=0,o=0,n=0,r=0,i=!1;e.querySelectorAll("img").forEach(e=>{
 		e.addEventListener("dragstart",e=>e.preventDefault())}),e.addEventListener("touchstart",e=>{t=e.touches[0].clientX,o=e.touches[0].clientY,
-		s=!1}),e.addEventListener("touchmove",e=>{n=e.touches[0].clientX,r=e.touches[0].clientY,Math.abs(n-t)>Math.abs(r-o)&&(s=!0)}),
-		e.addEventListener("touchend",()=>{if(s){const e=n-t,s=r-o;Math.abs(e)>Math.abs(s)&&handleSwipe(i,t,n)}}),
-		e.addEventListener("mousedown",e=>{t=e.clientX,o=e.clientY,s=!0}),e.addEventListener("mousemove",e=>{s&&(n=e.clientX,r=e.clientY)}),
-		e.addEventListener("mouseup",e=>{if(s){n=e.clientX,r=e.clientY;const a=n-t,d=r-o;Math.abs(a)>Math.abs(d)&&handleSwipe(i,t,n),s=!1}}),
-		e.addEventListener("mouseleave",()=>{s&&(s=!1)})})}window.addEventListener("load",function(){
-		document.querySelectorAll("img.lazy").forEach(e=>{e.src=e.getAttribute("data-src"),e.classList.remove("lazy")})})
-		;let previousWidth=0,zoomMap=new Map;function updateIframeSrc(){window.innerWidth!==previousWidth&&(previousWidth=window.innerWidth,
-		setIframeSrc("windy"),setIframeSrc("blitzortung"),setIframeSrc("weatherAndRadar"),setIframeSrc("rainViewer"),setIframeSrc("ventussky"))}
-		function setIframeSrc(e){dlog(`Updating iframe src for ${e}`);const t=document.getElementById(e);if(t){
-		let o=zoomMap.get(e),n=t.getAttribute("data-src");if(o&&o.length>0){let e=o[0],t=o[1];window.innerWidth<800&&(n=n.replace(e,t))}t.src=n
-		}else dlog(`${e} not found, skipping updateIframeSrc for ${e}`)}function hideOverlayOnDoubleTap(){
-		document.querySelectorAll(".if1 .overlay").forEach(e=>{let t=0;e.addEventListener("dblclick",()=>{e.style.display="none"
-		;let t=getResetButtonFromOverlayId(e.id);t.removeAttribute("style"),setResetButtonToExit(t)}),e.addEventListener("touchend",o=>{
-		const n=(new Date).getTime(),r=n-t;if(r>0&&r<200){e.style.display="none";let t=getResetButtonFromOverlayId(e.id);t.removeAttribute("style"),
-		setResetButtonToExit(t),o.preventDefault()}t=n});const o=e.querySelector(".hint");let n=0,r=0;e.addEventListener("touchstart",e=>{
-		1===e.touches.length&&(r=e.touches[0].clientX,n=e.touches[0].clientY)}),e.addEventListener("touchend",e=>{if(!o)return
-		;const t=e.changedTouches[0].clientX,s=e.changedTouches[0].clientY,i=Math.abs(t-r),a=Math.abs(s-n);i<10&&a<10&&(o.style.opacity="0.6",
+		i=!1}),e.addEventListener("touchmove",e=>{n=e.touches[0].clientX,r=e.touches[0].clientY,Math.abs(n-t)>Math.abs(r-o)&&(i=!0)}),
+		e.addEventListener("touchend",()=>{if(i){const i=n-t,s=r-o;Math.abs(i)>Math.abs(s)&&handleSwipe(e,t,n)}}),
+		e.addEventListener("mousedown",e=>{t=e.clientX,o=e.clientY,i=!0}),e.addEventListener("mousemove",e=>{i&&(n=e.clientX,r=e.clientY)}),
+		e.addEventListener("mouseup",s=>{if(i){n=s.clientX,r=s.clientY;const a=n-t,d=r-o;Math.abs(a)>Math.abs(d)&&handleSwipe(e,t,n),i=!1}}),
+		e.addEventListener("mouseleave",()=>{i&&(i=!1)})})}window.addEventListener("load",function(){
+		document.querySelectorAll("img.lazy").forEach(e=>{e.src=e.getAttribute("data-src"),e.classList.remove("lazy")})});let previousWidth=0
+		;function updateIframeSrc(){window.innerWidth!==previousWidth&&(previousWidth=window.innerWidth,
+		document.querySelectorAll("iframe[data-zoom-desktop]").forEach(e=>setIframeSrc(e)))}function setIframeSrc(e){
+		dlog(`Updating iframe src for ${e.id}`);let t=e.getAttribute("data-src")
+		;window.innerWidth<800&&(t=t.replace(e.getAttribute("data-zoom-desktop"),e.getAttribute("data-zoom-mobile"))),e.src=t}
+		function hideOverlayOnDoubleTap(){document.querySelectorAll(".if1 .overlay").forEach(e=>{let t=0;e.addEventListener("dblclick",()=>{
+		e.style.display="none";let t=getResetButtonFromOverlayId(e.id);t.removeAttribute("style"),setResetButtonToExit(t)}),
+		e.addEventListener("touchend",o=>{const n=(new Date).getTime(),r=n-t;if(r>0&&r<200){e.style.display="none"
+		;let t=getResetButtonFromOverlayId(e.id);t.removeAttribute("style"),setResetButtonToExit(t),o.preventDefault()}t=n})
+		;const o=e.querySelector(".hint");let n=0,r=0;e.addEventListener("touchstart",e=>{1===e.touches.length&&(r=e.touches[0].clientX,
+		n=e.touches[0].clientY)}),e.addEventListener("touchend",e=>{if(!o)return
+		;const t=e.changedTouches[0].clientX,i=e.changedTouches[0].clientY,s=Math.abs(t-r),a=Math.abs(i-n);s<10&&a<10&&(o.style.opacity="0.6",
 		clearTimeout(o._hideTimer),o._hideTimer=setTimeout(()=>{o.style.removeProperty("opacity")},2e3))})})}function updateHintText(){
 		const e=window.innerWidth<800;document.querySelectorAll(".hint").forEach(t=>{
 		t.textContent=e?"Dvostruki dodir za pristup interaktivnoj karti":"Dvostruki klik za pristup interaktivnoj karti"})}
@@ -105,29 +105,25 @@
 		restoreOverlay(getFrameIdFromResetButtonId(t.id))}),t.textContent="[X]"}function setResetButtonToReset(e){
 		dlog(`setResetButtonToReset: ${e.id}`);const t=e.cloneNode(!0);e.parentNode.replaceChild(t,e),t.addEventListener("click",e=>{
 		e.stopPropagation(),resetIframe(getFrameIdFromResetButtonId(t.id))}),t.textContent="[R]"}function resetIframe(e){
-		dlog(`Resetting iframe: ${e}`),setIframeSrc(e);const t=getResetButtonFromFrameId(e);t.style.display="none",setResetButtonToExit(t)}
-		function getResetButtonFromFrameId(e){return document.querySelector(`a[data-frame-id="${e}"]`)}function getResetButtonFromOverlayId(e){
-		return getResetButtonFromFrameId(document.getElementById(e).getAttribute("data-frame-id"))}function getFrameIdFromResetButtonId(e){
-		return document.getElementById(e).getAttribute("data-frame-id")}function setEsslImgSrc(e=1){const t=document.getElementById("essl")
-		;if(!t)return void dlog("essl img not found, skipping setEsslImgSrc");let o=GetLastInit();e>1&&o.setUTCHours(o.getUTCHours()-12*(e-1))
-		;let n=new Date(Date.UTC(o.getUTCFullYear(),o.getUTCMonth(),o.getUTCDate()+(12===o.getUTCHours()?3:2),0,0,0,0)),r=DTGFromDateInHours(o),s=EndValue(n)
-		;dlog("dtg: "+r),dlog("end: "+s)
-		;let i=`https://www.stormforecast.eu/map_images/models/archamos/${r.slice(0,6)}/${r}/combi_paramcombi24_${r}_${s}.png`;function a(){
+		dlog(`Resetting iframe: ${e}`),setIframeSrc(document.getElementById(e));const t=getResetButtonFromFrameId(e);t.style.display="none",
+		setResetButtonToExit(t)}function getResetButtonFromFrameId(e){return document.querySelector(`a[data-frame-id="${e}"]`)}
+		function getResetButtonFromOverlayId(e){return getResetButtonFromFrameId(document.getElementById(e).getAttribute("data-frame-id"))}
+		function getFrameIdFromResetButtonId(e){return document.getElementById(e).getAttribute("data-frame-id")}function setEsslImgSrc(e=1){
+		const t=document.getElementById("essl");if(!t)return void dlog("essl img not found, skipping setEsslImgSrc");let o=GetLastInit()
+		;e>1&&o.setUTCHours(o.getUTCHours()-12*(e-1))
+		;let n=new Date(Date.UTC(o.getUTCFullYear(),o.getUTCMonth(),o.getUTCDate()+(12===o.getUTCHours()?3:2),0,0,0,0)),r=DTGFromDateInHours(o),i=EndValue(n)
+		;dlog("dtg: "+r),dlog("end: "+i)
+		;let s=`https://www.stormforecast.eu/map_images/models/archamos/${r.slice(0,6)}/${r}/combi_paramcombi24_${r}_${i}.png`;function a(){
 		if(e<5)dlog(`Image load failed, try attempt ${e} with dtg: ${r}`),t.removeEventListener("error",a),setEsslImgSrc(e+1);else{
 		dlog("Image load failed after 5 attempts");const e=document.createElement("span");e.innerHTML="Nema prognoze za traženi period",
-		t.parentNode.appendChild(e)}}t.removeEventListener("error",a),t.addEventListener("error",a),t.src=i}function GetLastInit(){let e=new Date
+		t.parentNode.appendChild(e)}}t.removeEventListener("error",a),t.addEventListener("error",a),t.src=s}function GetLastInit(){let e=new Date
 		;return e=new Date(Date.UTC(e.getUTCFullYear(),e.getUTCMonth(),e.getUTCDate(),e.getUTCHours()>=12?12:0,0,0,0)),e}
-		function DTGFromDateInHours(e){
-		return result=e.getUTCFullYear().toString()+pad(e.getUTCMonth()+1,2)+pad(e.getUTCDate(),2)+pad(e.getUTCHours(),2),result}
-		function EndValue(e){return result=e.getUTCFullYear().toString()+pad(e.getUTCMonth()+1,2)+pad(e.getUTCDate(),2)+"06",result}
-		function pad(e,t,o){return o=o||"0",(e+="").length>=t?e:new Array(t-e.length+1).join(o)+e}zoomMap.set("windy",["&zoom=7","&zoom=6"]),
-		zoomMap.set("blitzortung",["#6/","#5/"]),zoomMap.set("weatherAndRadar",["&zoom=7.2","&zoom=6.8"]),
-		zoomMap.set("rainViewer",[",6.3&",",5.8&"]),zoomMap.set("ventussky",[";6&",";6&"]);let isDebugEnabled=!1;function getUrlParameter(e){
-		return new URLSearchParams(window.location.search).get(e)}function dlog(...e){isDebugEnabled&&console.log(...e)}
-		"1"===getUrlParameter("debug")&&(isDebugEnabled=!0),document.addEventListener("DOMContentLoaded",()=>{showProgress(),
-		addExpandableClickEventListener(),addSwipeEvents(),updateIframeSrc(),hideOverlayOnDoubleTap(),updateHintText(),setEsslImgSrc()}),
-		window.addEventListener("resize",()=>{clearTimeout(window._resizeTimeout),window._resizeTimeout=setTimeout(()=>{updateIframeSrc(),
-		updateHintText()},200)});
+		function DTGFromDateInHours(e){return e.getUTCFullYear().toString()+pad(e.getUTCMonth()+1,2)+pad(e.getUTCDate(),2)+pad(e.getUTCHours(),2)}
+		function EndValue(e){return e.getUTCFullYear().toString()+pad(e.getUTCMonth()+1,2)+pad(e.getUTCDate(),2)+"06"}function pad(e,t,o){
+		return String(e).padStart(t,o||"0")}const isDebugEnabled="1"===new URLSearchParams(window.location.search).get("debug");function dlog(...e){
+		isDebugEnabled&&console.log(...e)}document.addEventListener("DOMContentLoaded",()=>{showProgress(),addExpandableClickEventListener(),
+		addSwipeEvents(),updateIframeSrc(),hideOverlayOnDoubleTap(),updateHintText(),setEsslImgSrc()}),window.addEventListener("resize",()=>{
+		clearTimeout(window._resizeTimeout),window._resizeTimeout=setTimeout(()=>{updateIframeSrc(),updateHintText()},200)});
 	</script>
 	<script async src="https://www.googletagmanager.com/gtag/js?id=G-233EMZJM16"></script>
 	<script>
@@ -162,7 +158,7 @@
 						<a class="right" id="resetVentusskyFrame" data-frame-id="ventussky" style="display:none">[X]</a>
 					</div>
 					<div class="if1 placeholder">
-						<iframe id="ventussky" class="scaled-iframe" loading="eager" data-src="https://embed.ventusky.com/?p=44.5;16.5;6&l=radar&w=off" frameborder="0"></iframe>
+						<iframe id="ventussky" class="scaled-iframe" loading="eager" data-src="https://embed.ventusky.com/?p=44.5;16.5;6&l=radar&w=off" data-zoom-desktop=";6&" data-zoom-mobile=";6&" frameborder="0"></iframe>
 						<div class="overlay" id="overlayVentusskyFrame" data-frame-id="ventussky">
 							<span class="hint">Dvostruki klik za pristup interaktivnoj karti</span>
 						</div>
@@ -178,7 +174,7 @@
 						<a class="right" id="resetRainViewerFrame" data-frame-id="rainViewer" style="display:none">[X]</a>
 					</div>
 					<div class="if1 placeholder">
-						<iframe id="rainViewer" class="scaled-iframe" loading="lazy" data-src="https://www.rainviewer.com/map.html?loc=44.8,16.5,6.3&oCS=1&c=5&lm=1&layer=radar&sm=1&sn=2&ts=1" frameborder="0"></iframe>
+						<iframe id="rainViewer" class="scaled-iframe" loading="lazy" data-src="https://www.rainviewer.com/map.html?loc=44.8,16.5,6.3&oCS=1&c=5&lm=1&layer=radar&sm=1&sn=2&ts=1" data-zoom-desktop=",6.3&" data-zoom-mobile=",5.8&" frameborder="0"></iframe>
 						<div class="overlay" id="overlayRainViewerFrame" data-frame-id="rainViewer">
 							<span class="hint">Dvostruki klik za pristup interaktivnoj karti</span>
 						</div>
@@ -194,7 +190,7 @@
 						<a class="right" id="resetWeatherAndRadarFrame" data-frame-id="weatherAndRadar" style="display:none">[X]</a>
 					</div>
 					<div class="if1 placeholder">
-						<iframe id="weatherAndRadar" class="scaled-iframe" loading="lazy" data-src="https://radar.wo-cloud.com/pwa/?center=44.5,16.5&zoom=7.2&tz=Europe/Zagreb&tf=HH:mm&tempunit=celsius&windunit=kph&showShareButton=false&lang=en-US&placemarkName=Zagreb&desktop=true&fadeTop=true" frameborder="0"></iframe>
+						<iframe id="weatherAndRadar" class="scaled-iframe" loading="lazy" data-src="https://radar.wo-cloud.com/pwa/?center=44.5,16.5&zoom=7.2&tz=Europe/Zagreb&tf=HH:mm&tempunit=celsius&windunit=kph&showShareButton=false&lang=en-US&placemarkName=Zagreb&desktop=true&fadeTop=true" data-zoom-desktop="&zoom=7.2" data-zoom-mobile="&zoom=6.8" frameborder="0"></iframe>
 						<div class="overlay" id="overlayWeatherAndRadarFrame" data-frame-id="weatherAndRadar">
 							<span class="hint">Dvostruki klik za pristup interaktivnoj karti</span>
 						</div>
