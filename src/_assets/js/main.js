@@ -46,12 +46,11 @@ async function addExpandableClickEventListener() {
 
 function plusSlides(slideshowId, n) {
 	const slideshow = document.querySelector(`.slideshow[data-slideshow-id="${slideshowId}"]`);
-	const current = parseInt(slideshow.getAttribute('data-current-slide'));
-	showSlides(slideshowId, current + n);
+	showSlides(slideshow, parseInt(slideshow.getAttribute('data-current-slide')) + n);
 }
 
-function showSlides(slideshowId, n) {
-	const slideshow = document.querySelector(`.slideshow[data-slideshow-id="${slideshowId}"]`);
+function showSlides(slideshow, n) {
+	const slideshowId = slideshow.getAttribute('data-slideshow-id');
 	const slides = slideshow.querySelectorAll('.slide');
 	const indicators = document.querySelectorAll(`.indicators-container[data-slideshow-id="${slideshowId}"] .indicator`);
 	let current = n;
@@ -66,7 +65,7 @@ function showSlides(slideshowId, n) {
 }
 
 function updateSlideshowWidth(slideshowId) {
-	if (slideshowId !== 16 && slideshowId !== 17) return; // for now only essl/estofex and chmu have different widths
+	if (slideshowId !== '16' && slideshowId !== '17') return; // for now only essl/estofex and chmu have different widths
 
 	const slideshow = document.querySelector(`.slideshow[data-slideshow-id='${slideshowId}']`);
 	const indicatorsContainer = document.querySelector(`.indicators-container[data-slideshow-id='${slideshowId}']`);
