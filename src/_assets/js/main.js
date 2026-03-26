@@ -123,16 +123,12 @@ function showProgress() {
 	});
 }
 
-function handleSwipe(slideshowId, startX, endX) {
+function handleSwipe(slideshow, startX, endX) {
 	const threshold = 50;
 	const distance = endX - startX;
-
 	if (Math.abs(distance) > threshold) {
-		if (distance > 0) {
-			plusSlides(slideshowId, -1); // swipe right
-		} else {
-			plusSlides(slideshowId, 1); // swipe left
-		}
+		const current = parseInt(slideshow.getAttribute('data-current-slide'));
+		showSlides(slideshow, current + (distance > 0 ? -1 : 1));
 	}
 }
 
@@ -145,7 +141,6 @@ function addSwipeEvents() {
 		let endX = 0;
 		let endY = 0;
 		let isDragging = false;
-		const slideshowId = parseInt(slideshow.getAttribute('data-slideshow-id'));
 
 		// Prevent default drag behavior on images
 		const images = slideshow.querySelectorAll('img');
@@ -177,7 +172,7 @@ function addSwipeEvents() {
 
 				// Only trigger swipe if horizontal movement is greater than vertical movement (prevent swipe on scroll up or down)
 				if (Math.abs(deltaX) > Math.abs(deltaY)) {
-					handleSwipe(slideshowId, startX, endX);
+					handleSwipe(slideshow, startX, endX);
 				}
 			}
 		});
@@ -205,7 +200,7 @@ function addSwipeEvents() {
 
 				// Only trigger swipe if horizontal movement is greater than vertical movement (prevent swipe on scroll up or down)
 				if (Math.abs(deltaX) > Math.abs(deltaY)) {
-					handleSwipe(slideshowId, startX, endX);
+					handleSwipe(slideshow, startX, endX);
 				}
 				isDragging = false;
 			}
