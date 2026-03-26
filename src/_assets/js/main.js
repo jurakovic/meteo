@@ -236,6 +236,8 @@ function switchIframeZoom(frameId, btn) {
 	setIframeSrc(iframe);
 	btn.setAttribute('data-mode', newMode);
 	btn.textContent = newMode === 'hr' ? '[HR]' : '[EU]';
+	const resetBtn = getResetButtonFromFrameId(frameId);
+	if (resetBtn.textContent === '[R]') resetBtn.style.display = 'none';
 }
 
 function hideOverlayOnDoubleTap() {
