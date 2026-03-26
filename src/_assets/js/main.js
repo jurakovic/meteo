@@ -226,9 +226,28 @@ function updateIframeSrc() {
 function setIframeSrc(iframe) {
 	dlog(`Updating iframe src for ${iframe.id}`);
 	let url = iframe.getAttribute('data-src');
-	if (window.innerWidth < 800)
+	const mode = iframe.getAttribute('data-zoom-mode');
+	if (mode === 'eu') {
+		url = url.replace(iframe.getAttribute('data-zoom-desktop'), iframe.getAttribute('data-zoom-eu'));
+	} else if (window.innerWidth < 800) {
 		url = url.replace(iframe.getAttribute('data-zoom-desktop'), iframe.getAttribute('data-zoom-mobile'));
+	}
 	iframe.src = url;
+}
+
+function switchIframeZoom(frameId, btn) {
+	const mode = btn.getAttribute('data-mode');
+	const iframe = document.getElementById(frameId);
+	iframe.setAttribute('data-zoom-mode', mode);
+	setIframeSrc(iframe);
+
+	if (mode === 'eu') {
+		btn.setAttribute('data-mode', 'hr');
+		btn.textContent = '[HR]';
+	} else {
+		btn.setAttribute('data-mode', 'eu');
+		btn.textContent = '[EU]';
+	}
 }
 
 function hideOverlayOnDoubleTap() {

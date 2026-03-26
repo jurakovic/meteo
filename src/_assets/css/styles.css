@@ -50,6 +50,11 @@ table {
 			cursor: pointer;
 		}
 
+	.radartitle .zoom-btn {
+		text-decoration: none;
+		cursor: pointer;
+	}
+
 img {
 	max-width: 100%;
 	height: auto;

@@ -135,11 +135,12 @@
 			<tr>
 				<td align="center">
 					<div class="radartitle">
+						<a class="left zoom-btn" data-mode="eu" onclick="switchIframeZoom('windy', this)">[EU]</a>
 						<a class="center" href="https://www.windy.com/-Radar-lightning-radar?radar,44.5,16.5,7" target="_blank" rel="nofollow">Windy</a>
 						<a class="right" id="resetWindyFrame" data-frame-id="windy" style="display:none">[X]</a>
 					</div>
 					<div class="if1 placeholder">
-						<iframe id="windy" loading="lazy" data-src="https://embed.windy.com/embed2.html?lat=44.5&lon=16.56&zoom=7&level=surface&overlay=radar&menu=&message=true&marker=&calendar=&pressure=&type=map&location=coordinates&detail=&detailLat=45.798&detailLon=15.936&metricWind=m%2Fs&metricTemp=%C2%B0C&radarRange=-1" data-zoom-desktop="&zoom=7" data-zoom-mobile="&zoom=6" frameborder="0"></iframe>
+						<iframe id="windy" loading="lazy" data-src="https://embed.windy.com/embed2.html?lat=44.5&lon=16.56&zoom=7&level=surface&overlay=radar&menu=&message=true&marker=&calendar=&pressure=&type=map&location=coordinates&detail=&detailLat=45.798&detailLon=15.936&metricWind=m%2Fs&metricTemp=%C2%B0C&radarRange=-1" data-zoom-desktop="&zoom=7" data-zoom-mobile="&zoom=6" data-zoom-eu="&zoom=4" frameborder="0"></iframe>
 						<div class="overlay" id="overlayWindyFrame" data-frame-id="windy">
 							<span class="hint">Dvostruki klik za pristup interaktivnoj karti</span>
 						</div>
@@ -198,11 +199,12 @@
 			<tr>
 				<td align="center">
 					<div class="radartitle">
+						<a class="left zoom-btn" data-mode="eu" onclick="switchIframeZoom('blitzortung', this)">[EU]</a>
 						<a class="center" href="https://map.blitzortung.org/#6/44.5/16.5" target="_blank" rel="nofollow">Blitzortung.org</a> // <a href="https://www.lightningmaps.org/?lang=en#m=sen;t=3;s=200;o=0;b=;ts=0;z=7;y=44.5;x=16.5;d=4;dl=6;dc=0;" target="_blank" rel="nofollow">LightningMaps.org</a>
 						<a class="right" id="resetBlitzortungFrame" data-frame-id="blitzortung" style="display:none">[X]</a>
 					</div>
 					<div class="if1 placeholder">
-						<iframe id="blitzortung" loading="lazy" data-src="https://map.blitzortung.org/index.php?interactive=1&NavigationControl=1&FullScreenControl=0&Cookies=0&InfoDiv=0&MenuButtonDiv=0&ScaleControl=0&CirclesRangeValue=1&LinksCheckboxChecked=0&LinksRangeValue=0&MapStyle=1&MapStyleRangeValue=3&Advertisment=0#6/44.5/16.5" data-zoom-desktop="#6/" data-zoom-mobile="#5/" frameborder="0"></iframe>
+						<iframe id="blitzortung" loading="lazy" data-src="https://map.blitzortung.org/index.php?interactive=1&NavigationControl=1&FullScreenControl=0&Cookies=0&InfoDiv=0&MenuButtonDiv=0&ScaleControl=0&CirclesRangeValue=1&LinksCheckboxChecked=0&LinksRangeValue=0&MapStyle=1&MapStyleRangeValue=3&Advertisment=0#6/44.5/16.5" data-zoom-desktop="#6/" data-zoom-mobile="#5/" data-zoom-eu="#4/" frameborder="0"></iframe>
 						<div class="overlay" id="overlayBlitzortungFrame" data-frame-id="blitzortung">
 							<span class="hint">Dvostruki klik za pristup interaktivnoj karti</span>
 						</div>
