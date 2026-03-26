@@ -15,7 +15,7 @@ function scrollToElement(id) {
 	}
 }
 
-async function addExpandableClickEventListener() {
+function addExpandableClickEventListener() {
 	var expandable = document.getElementsByClassName("expandable")[0];
 	expandable.addEventListener("click", function () {
 		let arrow = this.querySelector(".arrow");
@@ -61,13 +61,13 @@ function showSlides(slideshow, n) {
 	slides[current - 1].classList.add('active');
 	indicators.forEach(indicator => indicator.classList.remove('active'));
 	indicators[current - 1].classList.add('active');
-	updateSlideshowWidth(slideshowId);
+	updateSlideshowWidth(slideshow);
 }
 
-function updateSlideshowWidth(slideshowId) {
-	if (slideshowId !== '16' && slideshowId !== '17') return; // for now only essl/estofex and chmu have different widths
+function updateSlideshowWidth(slideshow) {
+	if (!slideshow.hasAttribute('data-dynamic-width')) return;
 
-	const slideshow = document.querySelector(`.slideshow[data-slideshow-id='${slideshowId}']`);
+	const slideshowId = slideshow.getAttribute('data-slideshow-id');
 	const indicatorsContainer = document.querySelector(`.indicators-container[data-slideshow-id='${slideshowId}']`);
 	const activeSlide = slideshow.querySelector('.slide.active .placeholder');
 
