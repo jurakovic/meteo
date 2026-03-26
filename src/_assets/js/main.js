@@ -225,13 +225,12 @@ function updateIframeSrc() {
 
 function setIframeSrc(iframe) {
 	dlog(`Updating iframe src for ${iframe.id}`);
-	let url = iframe.getAttribute('data-src');
 	const mode = iframe.getAttribute('data-zoom-mode');
-	if (mode === 'eu') {
-		url = url.replace(iframe.getAttribute('data-zoom-desktop'), iframe.getAttribute('data-zoom-eu'));
-	} else if (window.innerWidth < 800) {
+	let url = mode === 'eu'
+		? iframe.getAttribute('data-src-eu')
+		: iframe.getAttribute('data-src-hr');
+	if (mode !== 'eu' && window.innerWidth < 800)
 		url = url.replace(iframe.getAttribute('data-zoom-desktop'), iframe.getAttribute('data-zoom-mobile'));
-	}
 	iframe.src = url;
 }
 
