@@ -75,14 +75,6 @@ function updateSlideshowWidth(slideshow) {
 	indicatorsContainer.style.maxWidth = activeSlide.style.maxWidth;
 }
 
-window.addEventListener('load', function () {
-	const lazyImages = document.querySelectorAll('img.lazy');
-
-	lazyImages.forEach(img => {
-		img.src = img.getAttribute('data-src');
-		img.classList.remove('lazy');
-	});
-});
 
 function showProgress() {
 	// Get all images on the page
@@ -446,6 +438,10 @@ function dlog(...args) {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
+	document.querySelectorAll('img.lazy').forEach(img => {
+		img.src = img.getAttribute('data-src');
+		img.classList.remove('lazy');
+	});
 	showProgress();
 	addExpandableClickEventListener();
 	addSwipeEvents();
