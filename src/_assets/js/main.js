@@ -238,18 +238,12 @@ function setIframeSrc(iframe) {
 }
 
 function switchIframeZoom(frameId, btn) {
-	const mode = btn.getAttribute('data-mode');
+	const newMode = btn.getAttribute('data-mode') === 'hr' ? 'eu' : 'hr';
 	const iframe = document.getElementById(frameId);
-	iframe.setAttribute('data-zoom-mode', mode);
+	iframe.setAttribute('data-zoom-mode', newMode);
 	setIframeSrc(iframe);
-
-	if (mode === 'eu') {
-		btn.setAttribute('data-mode', 'hr');
-		btn.textContent = '[HR]';
-	} else {
-		btn.setAttribute('data-mode', 'eu');
-		btn.textContent = '[EU]';
-	}
+	btn.setAttribute('data-mode', newMode);
+	btn.textContent = newMode === 'hr' ? '[HR]' : '[EU]';
 }
 
 function hideOverlayOnDoubleTap() {
