@@ -44,21 +44,24 @@ async function addExpandableClickEventListener() {
 	});
 }
 
-let slidePage = [2, 2, 2, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1];
-
 function plusSlides(slideshowId, n) {
-	showSlides(slideshowId, slidePage[slideshowId - 1] += n);
+	const slideshow = document.querySelector(`.slideshow[data-slideshow-id="${slideshowId}"]`);
+	const current = parseInt(slideshow.getAttribute('data-current-slide'));
+	showSlides(slideshowId, current + n);
 }
 
 function showSlides(slideshowId, n) {
-	const slides = document.querySelectorAll(`.slideshow[data-slideshow-id="${slideshowId}"] .slide`);
+	const slideshow = document.querySelector(`.slideshow[data-slideshow-id="${slideshowId}"]`);
+	const slides = slideshow.querySelectorAll('.slide');
 	const indicators = document.querySelectorAll(`.indicators-container[data-slideshow-id="${slideshowId}"] .indicator`);
-	if (n > slides.length) { slidePage[slideshowId - 1] = 1; }
-	if (n < 1) { slidePage[slideshowId - 1] = slides.length; }
+	let current = n;
+	if (current > slides.length) { current = 1; }
+	if (current < 1) { current = slides.length; }
+	slideshow.setAttribute('data-current-slide', current);
 	slides.forEach(slide => slide.classList.remove('active'));
-	slides[slidePage[slideshowId - 1] - 1].classList.add('active');
+	slides[current - 1].classList.add('active');
 	indicators.forEach(indicator => indicator.classList.remove('active'));
-	indicators[slidePage[slideshowId - 1] - 1].classList.add('active');
+	indicators[current - 1].classList.add('active');
 	updateSlideshowWidth(slideshowId);
 }
 
