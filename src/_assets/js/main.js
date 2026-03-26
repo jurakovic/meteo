@@ -415,31 +415,20 @@ function GetLastInit() {
 };
 
 function DTGFromDateInHours(mydate) {
-	result = mydate.getUTCFullYear().toString() + pad(mydate.getUTCMonth() + 1, 2) + pad(mydate.getUTCDate(), 2) + pad(mydate.getUTCHours(), 2);
+	const result = mydate.getUTCFullYear().toString() + pad(mydate.getUTCMonth() + 1, 2) + pad(mydate.getUTCDate(), 2) + pad(mydate.getUTCHours(), 2);
 	return result;
 };
 
 function EndValue(mydate) {
-	result = mydate.getUTCFullYear().toString() + pad(mydate.getUTCMonth() + 1, 2) + pad(mydate.getUTCDate(), 2) + "06";
+	const result = mydate.getUTCFullYear().toString() + pad(mydate.getUTCMonth() + 1, 2) + pad(mydate.getUTCDate(), 2) + "06";
 	return result;
 };
 
 function pad(n, width, z) {
-	z = z || '0';
-	n = n + '';
-	return n.length >= width ? n : new Array(width - n.length + 1).join(z) + n;
+	return String(n).padStart(width, z || '0');
 };
 
-let isDebugEnabled = false;
-
-function getUrlParameter(name) {
-	const urlParams = new URLSearchParams(window.location.search);
-	return urlParams.get(name);
-}
-
-if (getUrlParameter('debug') === '1') {
-	isDebugEnabled = true;
-}
+const isDebugEnabled = new URLSearchParams(window.location.search).get('debug') === '1';
 
 function dlog(...args) {
 	if (isDebugEnabled)
