@@ -379,16 +379,16 @@ function resetIframe(frameId) {
 }
 
 function getResetButtonFromFrameId(frameId) {
-	return document.getElementById('reset' + String(frameId).charAt(0).toUpperCase() + String(frameId).slice(1) + 'Frame');
+	return document.querySelector(`a[data-frame-id="${frameId}"]`);
 }
 
 function getResetButtonFromOverlayId(overlayId) {
-	return document.getElementById(overlayId.replace('overlay', 'reset'));
+	const frameId = document.getElementById(overlayId).getAttribute('data-frame-id');
+	return getResetButtonFromFrameId(frameId);
 }
 
 function getFrameIdFromResetButtonId(resetFrameId) {
-	let name = resetFrameId.replace('reset', '').replace('Frame', '');
-	return String(name).charAt(0).toLowerCase() + String(name).slice(1);
+	return document.getElementById(resetFrameId).getAttribute('data-frame-id');
 }
 
 function setEsslImgSrc(tryCount = 1) {
