@@ -220,7 +220,7 @@ let previousWidth = 0;
 function updateIframeSrc() {
 	if (window.innerWidth === previousWidth) return;
 	previousWidth = window.innerWidth;
-	document.querySelectorAll('iframe[data-zoom-desktop]').forEach(iframe => setIframeSrc(iframe));
+	document.querySelectorAll('iframe[data-zoom-hr-desktop]').forEach(iframe => setIframeSrc(iframe));
 }
 
 function setIframeSrc(iframe) {
@@ -229,8 +229,11 @@ function setIframeSrc(iframe) {
 	let url = mode === 'eu'
 		? iframe.getAttribute('data-src-eu')
 		: iframe.getAttribute('data-src-hr');
-	if (mode !== 'eu' && window.innerWidth < 800)
-		url = url.replace(iframe.getAttribute('data-zoom-desktop'), iframe.getAttribute('data-zoom-mobile'));
+	if (window.innerWidth < 800) {
+		const desktopAttr = mode === 'eu' ? 'data-zoom-eu-desktop' : 'data-zoom-hr-desktop';
+		const mobileAttr = mode === 'eu' ? 'data-zoom-eu-mobile' : 'data-zoom-hr-mobile';
+		url = url.replace(iframe.getAttribute(desktopAttr), iframe.getAttribute(mobileAttr));
+	}
 	iframe.src = url;
 }
 
