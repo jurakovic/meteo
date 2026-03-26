@@ -16,10 +16,10 @@ function scrollToElement(id) {
 }
 
 function addExpandableClickEventListener() {
-	var expandable = document.getElementsByClassName("expandable")[0];
+	const expandable = document.querySelector(".expandable");
 	expandable.addEventListener("click", function () {
 		let arrow = this.querySelector(".arrow");
-		var content = document.getElementsByClassName("links")[0];
+		const content = document.querySelector(".links");
 		if (content.style.maxHeight) {
 			content.style.maxHeight = null;
 			arrow.textContent = "▼";
@@ -87,7 +87,7 @@ window.addEventListener('load', function () {
 function showProgress() {
 	// Get all images on the page
 	const images = document.querySelectorAll('img');
-	const progressBar = document.getElementsByClassName('progress-bar')[0];
+	const progressBar = document.querySelector('.progress-bar');
 	let imagesLoaded = 0;
 
 	// Update progress bar
@@ -98,7 +98,7 @@ function showProgress() {
 		// Hide the progress bar when all images are loaded
 		if (imagesLoaded === images.length) {
 			setTimeout(() => {
-				document.getElementsByClassName('progress-container')[0].style.display = 'none';
+				document.querySelector('.progress-container').style.display = 'none';
 			}, 500); // Hide after a short delay
 		}
 	};
@@ -145,7 +145,7 @@ function addSwipeEvents() {
 		let endX = 0;
 		let endY = 0;
 		let isDragging = false;
-		const slideshowId = slideshow.getAttribute('data-slideshow-id');
+		const slideshowId = parseInt(slideshow.getAttribute('data-slideshow-id'));
 
 		// Prevent default drag behavior on images
 		const images = slideshow.querySelectorAll('img');
