@@ -28,72 +28,77 @@
 		body{background-color:#212f45;font-family:monospace;min-height:100vh;margin:0;padding:0}.container{margin:8px}a,h2,td{color:#fff}table{width
 		:100%;max-width:875px;height:auto}.placeholder{background-color:#202c40}.radartitle{position:relative;max-width:100%}.radartitle .center{
 		transform:translateX(-50%);left:50%}.radartitle .left{position:absolute;left:0}.radartitle .right{position:absolute;right:0;text-decoration:
-		none}.radartitle .right:hover{cursor:pointer}img{max-width:100%;height:auto;display:block;border:0}.if1{position:relative;width:100%;
-		overflow:hidden;padding-top:100%}@media (max-width:800px){.if1{padding-top:110%}}.overlay{position:absolute;top:0;left:0;width:100%;height:
-		100%}.overlay .hint{opacity:0;transition:opacity .3s ease;pointer-events:none;position:absolute;top:5%;transform:translateX(-50%);
-		background-color:#000;padding:6px 12px}@media (max-width:800px){.overlay .hint{top:10%;min-width:65%}}.overlay:hover .hint{opacity:.6}.if2{
-		position:relative;width:100%;overflow:hidden;padding-top:115%}.vid1{position:relative;width:100%;overflow:hidden;padding-top:67%}.vid2{
-		position:relative;width:100%;overflow:hidden;padding-top:87%}iframe,video{position:absolute;top:0;left:0;bottom:0;right:0;width:100%;height:
-		100%;border:none}.scaled-iframe{transform:scale(.9);width:calc(100% / .9);height:calc(100% / .9);transform-origin:0 0}
-		@media (max-width:800px){.scaled-iframe{transform:scale(.6);width:calc(100% / .6);height:calc(100% / .6);transform-origin:0 0}}.sp{height:
-		10px}.buttons{display:grid;grid-template-columns:49.5% 49.5%;gap:1%;font-size:13px}.buttons .btn{margin-top:10px;margin-bottom:5px;font-size
-		:13px;font-family:inherit;color:#fff;background-color:#485871;align-content:center;cursor:pointer;width:100%;height:24px;border:none;outline
-		:0}.buttons .btn:hover{background-color:#5f6f89}.slideshow{position:relative;display:flex;justify-content:center}.slide{display:none}
-		.slide.active{display:block}.next,.prev{cursor:pointer;position:absolute;align-content:center;top:0;bottom:0;width:15%;padding:16px;color:
-		transparent;opacity:.7;font-weight:700;font-size:36px;transition:.6s ease;user-select:none}.prev{left:0;text-align:left}.prev:hover{
-		background-image:linear-gradient(to left,transparent,rgba(0,0,0,.6));color:#fff}.prev.shorter{top:.4em}.next{right:0;text-align:right}
-		.next:hover{background-image:linear-gradient(to right,transparent,rgba(0,0,0,.6));color:#fff}.next.shorter{top:.4em}.fade{animation-name:
-		fade;animation-duration:1s}@keyframes fade{from{opacity:.6}to{opacity:1}}@media (max-width:800px){.next,.prev{padding:12px;font-size:20px}
-		.next.shorter,.prev.shorter{top:.72em}}.indicators-container{display:grid;grid-template-columns:repeat(3,1fr);gap:4px;width:100%;margin-top:
-		1px}.indicator{height:4px;background-color:#5c5c5c80;transition:background-color .3s}.indicator.active{background-color:#c7c7c7}
-		@media (max-width:800px){.indicator{height:2px}}.expandable{position:relative;justify-content:center;margin-top:10px;margin-bottom:4px;
-		font-family:inherit;color:#fff;background-color:#485871;cursor:pointer;width:100%;height:24px;border:none;outline:0}.expandable:hover{
-		background-color:#5f6f89}.expandable .arrow{position:absolute;right:10px;top:2px;font-size:14px}.links{font-size:14px;display:grid;
-		grid-template-columns:25% 45% 30%;gap:0;max-height:0;overflow:hidden;transition:max-height .3s ease-out}.links .item{padding:5px;margin:0
-		2px}.links .item:not(:last-child){border-right:1px solid #fff}.links p{margin-top:0;text-align:left}@media (max-width:800px){.links{
-		grid-template-columns:1fr}.links .item{margin:5px 0;border-right:none!important}}footer{position:sticky;top:100%;background:#485871;color:
-		#fff;text-align:center;padding:8px;margin-top:8px}.progress-container{position:fixed;left:0;top:0;width:100%;height:3px;z-index:1000;
-		background-color:#5c5c5c80}.progress-bar{width:0;height:100%;background-color:#4caf50;transition:width .3s ease-in-out}
+		none}.radartitle .right:hover{cursor:pointer}.radartitle .zoom-btn{text-decoration:none;cursor:pointer}img{max-width:100%;height:auto;
+		display:block;border:0}.if1{position:relative;width:100%;overflow:hidden;padding-top:100%}@media (max-width:800px){.if1{padding-top:110%}}
+		.overlay{position:absolute;top:0;left:0;width:100%;height:100%}.overlay .hint{opacity:0;transition:opacity .3s ease;pointer-events:none;
+		position:absolute;top:5%;transform:translateX(-50%);background-color:#000;padding:6px 12px}@media (max-width:800px){.overlay .hint{top:10%;
+		min-width:65%}}.overlay:hover .hint{opacity:.6}.if2{position:relative;width:100%;overflow:hidden;padding-top:115%}.vid1{position:relative;
+		width:100%;overflow:hidden;padding-top:67%}.vid2{position:relative;width:100%;overflow:hidden;padding-top:87%}iframe,video{position:absolute
+		;top:0;left:0;bottom:0;right:0;width:100%;height:100%;border:none}.scaled-iframe{transform:scale(.9);width:calc(100% / .9);height:
+		calc(100% / .9);transform-origin:0 0}@media (max-width:800px){.scaled-iframe{transform:scale(.6);width:calc(100% / .6);height:
+		calc(100% / .6);transform-origin:0 0}}.sp{height:10px}.buttons{display:grid;grid-template-columns:49.5% 49.5%;gap:1%;font-size:13px}
+		.buttons .btn{margin-top:10px;margin-bottom:5px;font-size:13px;font-family:inherit;color:#fff;background-color:#485871;align-content:center;
+		cursor:pointer;width:100%;height:24px;border:none;outline:0}.buttons .btn:hover{background-color:#5f6f89}.slideshow{position:relative;
+		display:flex;justify-content:center}.slide{display:none}.slide.active{display:block}.next,.prev{cursor:pointer;position:absolute;
+		align-content:center;top:0;bottom:0;width:15%;padding:16px;color:transparent;opacity:.7;font-weight:700;font-size:36px;transition:.6s ease;
+		user-select:none}.prev{left:0;text-align:left}.prev:hover{background-image:linear-gradient(to left,transparent,rgba(0,0,0,.6));color:#fff}
+		.prev.shorter{top:.4em}.next{right:0;text-align:right}.next:hover{background-image:linear-gradient(to right,transparent,rgba(0,0,0,.6));
+		color:#fff}.next.shorter{top:.4em}.fade{animation-name:fade;animation-duration:1s}@keyframes fade{from{opacity:.6}to{opacity:1}}
+		@media (max-width:800px){.next,.prev{padding:12px;font-size:20px}.next.shorter,.prev.shorter{top:.72em}}.indicators-container{display:grid;
+		grid-template-columns:repeat(3,1fr);gap:4px;width:100%;margin-top:1px}.indicator{height:4px;background-color:#5c5c5c80;transition:
+		background-color .3s}.indicator.active{background-color:#c7c7c7}@media (max-width:800px){.indicator{height:2px}}.expandable{position:
+		relative;justify-content:center;margin-top:10px;margin-bottom:4px;font-family:inherit;color:#fff;background-color:#485871;cursor:pointer;
+		width:100%;height:24px;border:none;outline:0}.expandable:hover{background-color:#5f6f89}.expandable .arrow{position:absolute;right:10px;top:
+		2px;font-size:14px}.links{font-size:14px;display:grid;grid-template-columns:25% 45% 30%;gap:0;max-height:0;overflow:hidden;transition:
+		max-height .3s ease-out}.links .item{padding:5px;margin:0 2px}.links .item:not(:last-child){border-right:1px solid #fff}.links p{margin-top:
+		0;text-align:left}@media (max-width:800px){.links{grid-template-columns:1fr}.links .item{margin:5px 0;border-right:none!important}}footer{
+		position:sticky;top:100%;background:#485871;color:#fff;text-align:center;padding:8px;margin-top:8px}.progress-container{position:fixed;left:
+		0;top:0;width:100%;height:3px;z-index:1000;background-color:#5c5c5c80}.progress-bar{width:0;height:100%;background-color:#4caf50;transition:
+		width .3s ease-in-out}
 	</style>
 	<script>
 		function scrollToTop(){window.scrollTo({top:0,behavior:"smooth"})}function scrollToElement(e){const t=document.getElementById(e)
-		;t&&t.scrollIntoView({behavior:"smooth",block:"start"})}async function addExpandableClickEventListener(){
-		document.getElementsByClassName("expandable")[0].addEventListener("click",function(){let e=this.querySelector(".arrow")
-		;var t=document.getElementsByClassName("links")[0];t.style.maxHeight?(t.style.maxHeight=null,
+		;t&&t.scrollIntoView({behavior:"smooth",block:"start"})}function addExpandableClickEventListener(){
+		document.querySelector(".expandable").addEventListener("click",function(){let e=this.querySelector(".arrow")
+		;const t=document.querySelector(".links");t.style.maxHeight?(t.style.maxHeight=null,
 		e.textContent="▼"):(t.style.maxHeight=t.scrollHeight+"px",e.textContent="▲",setTimeout(()=>{
 		document.documentElement.style.scrollBehavior="auto",document.body.style.scrollBehavior="auto",scrollToElement("links"),setTimeout(()=>{
-		document.documentElement.style.scrollBehavior="smooth",document.body.style.scrollBehavior="smooth"},50)},310))})}
-		let slidePage=[2,2,2,2,1,1,1,1,1,1,1,1,1,1,1,1,1];function plusSlides(e,t){showSlides(e,slidePage[e-1]+=t)}function showSlides(e,t){
-		const o=document.querySelectorAll(`.slideshow[data-slideshow-id="${e}"] .slide`),n=document.querySelectorAll(`.indicators-container[data-slideshow-id="${e}"] .indicator`)
-		;t>o.length&&(slidePage[e-1]=1),t<1&&(slidePage[e-1]=o.length),o.forEach(e=>e.classList.remove("active")),
-		o[slidePage[e-1]-1].classList.add("active"),n.forEach(e=>e.classList.remove("active")),n[slidePage[e-1]-1].classList.add("active"),
-		updateSlideshowWidth(e)}function updateSlideshowWidth(e){if(16!==e&&17!==e)return
-		;const t=document.querySelector(`.slideshow[data-slideshow-id='${e}']`),o=document.querySelector(`.indicators-container[data-slideshow-id='${e}']`),n=t.querySelector(".slide.active .placeholder")
-		;t.style.maxWidth=n.style.maxWidth,o.style.maxWidth=n.style.maxWidth}function showProgress(){
-		const e=document.querySelectorAll("img"),t=document.getElementsByClassName("progress-bar")[0];let o=0;const n=()=>{const n=o/e.length*100
-		;t.style.width=n+"%",o===e.length&&setTimeout(()=>{document.getElementsByClassName("progress-container")[0].style.display="none"},500)}
-		;e.forEach(e=>{e.addEventListener("load",()=>{o++,n()}),e.addEventListener("error",()=>{o++,dlog(`Error loading image: ${e.src}`),
-		e.removeAttribute("src"),n()}),e.complete&&e.dispatchEvent(new Event("load"))})}function handleSwipe(e,t,o){const n=o-t
-		;Math.abs(n)>50&&plusSlides(e,n>0?-1:1)}function addSwipeEvents(){document.querySelectorAll(".slideshow").forEach(e=>{
-		let t=0,o=0,n=0,r=0,s=!1;const a=e.getAttribute("data-slideshow-id");e.querySelectorAll("img").forEach(e=>{
+		document.documentElement.style.scrollBehavior="smooth",document.body.style.scrollBehavior="smooth"},50)},310))})}function plusSlides(e,t){
+		const o=document.querySelector(`.slideshow[data-slideshow-id="${e}"]`);showSlides(o,parseInt(o.getAttribute("data-current-slide"))+t)}
+		function showSlides(e,t){
+		const o=e.getAttribute("data-slideshow-id"),n=e.querySelectorAll(".slide"),r=document.querySelectorAll(`.indicators-container[data-slideshow-id="${o}"] .indicator`)
+		;let s=t;s>n.length&&(s=1),s<1&&(s=n.length),e.setAttribute("data-current-slide",s),n.forEach(e=>e.classList.remove("active")),
+		n[s-1].classList.add("active"),r.forEach(e=>e.classList.remove("active")),r[s-1].classList.add("active"),updateSlideshowWidth(e)}
+		function updateSlideshowWidth(e){if(!e.hasAttribute("data-dynamic-width"))return
+		;const t=e.getAttribute("data-slideshow-id"),o=document.querySelector(`.indicators-container[data-slideshow-id='${t}']`),n=e.querySelector(".slide.active .placeholder")
+		;e.style.maxWidth=n.style.maxWidth,o.style.maxWidth=n.style.maxWidth}function showProgress(){
+		const e=document.querySelectorAll("img"),t=document.querySelector(".progress-bar");let o=0;const n=()=>{const n=o/e.length*100
+		;t.style.width=n+"%",o===e.length&&setTimeout(()=>{document.querySelector(".progress-container").style.display="none"},500)};e.forEach(e=>{
+		e.addEventListener("load",()=>{o++,n()}),e.addEventListener("error",()=>{o++,dlog(`Error loading image: ${e.src}`),e.removeAttribute("src"),
+		n()}),e.complete&&e.dispatchEvent(new Event("load"))})}function handleSwipe(e,t,o){const n=o-t;if(Math.abs(n)>50){
+		const t=parseInt(e.getAttribute("data-current-slide"));showSlides(e,t+(n>0?-1:1))}}function addSwipeEvents(){
+		document.querySelectorAll(".slideshow").forEach(e=>{let t=0,o=0,n=0,r=0,s=!1;e.querySelectorAll("img").forEach(e=>{
 		e.addEventListener("dragstart",e=>e.preventDefault())}),e.addEventListener("touchstart",e=>{t=e.touches[0].clientX,o=e.touches[0].clientY,
 		s=!1}),e.addEventListener("touchmove",e=>{n=e.touches[0].clientX,r=e.touches[0].clientY,Math.abs(n-t)>Math.abs(r-o)&&(s=!0)}),
-		e.addEventListener("touchend",()=>{if(s){const e=n-t,s=r-o;Math.abs(e)>Math.abs(s)&&handleSwipe(a,t,n)}}),
+		e.addEventListener("touchend",()=>{if(s){const s=n-t,i=r-o;Math.abs(s)>Math.abs(i)&&handleSwipe(e,t,n)}}),
 		e.addEventListener("mousedown",e=>{t=e.clientX,o=e.clientY,s=!0}),e.addEventListener("mousemove",e=>{s&&(n=e.clientX,r=e.clientY)}),
-		e.addEventListener("mouseup",e=>{if(s){n=e.clientX,r=e.clientY;const i=n-t,l=r-o;Math.abs(i)>Math.abs(l)&&handleSwipe(a,t,n),s=!1}}),
-		e.addEventListener("mouseleave",()=>{s&&(s=!1)})})}window.addEventListener("load",function(){
-		document.querySelectorAll("img.lazy").forEach(e=>{e.src=e.getAttribute("data-src"),e.classList.remove("lazy")})})
-		;let previousWidth=0,zoomMap=new Map;function updateIframeSrc(){window.innerWidth!==previousWidth&&(previousWidth=window.innerWidth,
-		setIframeSrc("windy"),setIframeSrc("blitzortung"),setIframeSrc("weatherAndRadar"),setIframeSrc("rainViewer"),setIframeSrc("ventussky"))}
-		function setIframeSrc(e){dlog(`Updating iframe src for ${e}`);const t=document.getElementById(e);if(t){
-		let o=zoomMap.get(e),n=t.getAttribute("data-src");if(o&&o.length>0){let e=o[0],t=o[1];window.innerWidth<800&&(n=n.replace(e,t))}t.src=n
-		}else dlog(`${e} not found, skipping updateIframeSrc for ${e}`)}function hideOverlayOnDoubleTap(){
-		document.querySelectorAll(".if1 .overlay").forEach(e=>{let t=0;e.addEventListener("dblclick",()=>{e.style.display="none"
-		;let t=getResetButtonFromOverlayId(e.id);t.removeAttribute("style"),setResetButtonToExit(t)}),e.addEventListener("touchend",o=>{
-		const n=(new Date).getTime(),r=n-t;if(r>0&&r<200){e.style.display="none";let t=getResetButtonFromOverlayId(e.id);t.removeAttribute("style"),
-		setResetButtonToExit(t),o.preventDefault()}t=n});const o=e.querySelector(".hint");let n=0,r=0;e.addEventListener("touchstart",e=>{
-		1===e.touches.length&&(r=e.touches[0].clientX,n=e.touches[0].clientY)}),e.addEventListener("touchend",e=>{if(!o)return
-		;const t=e.changedTouches[0].clientX,s=e.changedTouches[0].clientY,a=Math.abs(t-r),i=Math.abs(s-n);a<10&&i<10&&(o.style.opacity="0.6",
+		e.addEventListener("mouseup",i=>{if(s){n=i.clientX,r=i.clientY;const a=n-t,d=r-o;Math.abs(a)>Math.abs(d)&&handleSwipe(e,t,n),s=!1}}),
+		e.addEventListener("mouseleave",()=>{s&&(s=!1)})})}let previousWidth=0;function updateIframeSrc(){
+		window.innerWidth!==previousWidth&&(previousWidth=window.innerWidth,
+		document.querySelectorAll("iframe[data-zoom-hr-desktop]").forEach(e=>setIframeSrc(e)))}function setIframeSrc(e){
+		dlog(`Updating iframe src for ${e.id}`);const t=e.getAttribute("data-zoom-mode")
+		;let o="eu"===t?e.getAttribute("data-src-eu"):e.getAttribute("data-src-hr");if(window.innerWidth<800){
+		const n="eu"===t?"data-zoom-eu-desktop":"data-zoom-hr-desktop",r="eu"===t?"data-zoom-eu-mobile":"data-zoom-hr-mobile"
+		;o=o.replace(e.getAttribute(n),e.getAttribute(r))}e.src=o}function switchIframeZoom(e,t){
+		const o="hr"===t.getAttribute("data-mode")?"eu":"hr",n=document.getElementById(e);n.setAttribute("data-zoom-mode",o),setIframeSrc(n),
+		t.setAttribute("data-mode",o),t.textContent="hr"===o?"[HR]":"[EU]";const r=getResetButtonFromFrameId(e)
+		;"[R]"===r.textContent&&(r.style.display="none")}function hideOverlayOnDoubleTap(){document.querySelectorAll(".if1 .overlay").forEach(e=>{
+		let t=0;e.addEventListener("dblclick",()=>{e.style.display="none";let t=getResetButtonFromOverlayId(e.id);t.removeAttribute("style"),
+		setResetButtonToExit(t)}),e.addEventListener("touchend",o=>{const n=(new Date).getTime(),r=n-t;if(r>0&&r<200){e.style.display="none"
+		;let t=getResetButtonFromOverlayId(e.id);t.removeAttribute("style"),setResetButtonToExit(t),o.preventDefault()}t=n})
+		;const o=e.querySelector(".hint");let n=0,r=0;e.addEventListener("touchstart",e=>{1===e.touches.length&&(r=e.touches[0].clientX,
+		n=e.touches[0].clientY)}),e.addEventListener("touchend",e=>{if(!o)return
+		;const t=e.changedTouches[0].clientX,s=e.changedTouches[0].clientY,i=Math.abs(t-r),a=Math.abs(s-n);i<10&&a<10&&(o.style.opacity="0.6",
 		clearTimeout(o._hideTimer),o._hideTimer=setTimeout(()=>{o.style.removeProperty("opacity")},2e3))})})}function updateHintText(){
 		const e=window.innerWidth<800;document.querySelectorAll(".hint").forEach(t=>{
 		t.textContent=e?"Dvostruki dodir za pristup interaktivnoj karti":"Dvostruki klik za pristup interaktivnoj karti"})}
@@ -104,30 +109,26 @@
 		restoreOverlay(getFrameIdFromResetButtonId(t.id))}),t.textContent="[X]"}function setResetButtonToReset(e){
 		dlog(`setResetButtonToReset: ${e.id}`);const t=e.cloneNode(!0);e.parentNode.replaceChild(t,e),t.addEventListener("click",e=>{
 		e.stopPropagation(),resetIframe(getFrameIdFromResetButtonId(t.id))}),t.textContent="[R]"}function resetIframe(e){
-		dlog(`Resetting iframe: ${e}`),setIframeSrc(e);const t=getResetButtonFromFrameId(e);t.style.display="none",setResetButtonToExit(t)}
-		function getResetButtonFromFrameId(e){return document.getElementById("reset"+String(e).charAt(0).toUpperCase()+String(e).slice(1)+"Frame")}
-		function getResetButtonFromOverlayId(e){return document.getElementById(e.replace("overlay","reset"))}
-		function getFrameIdFromResetButtonId(e){let t=e.replace("reset","").replace("Frame","")
-		;return String(t).charAt(0).toLowerCase()+String(t).slice(1)}function setEsslImgSrc(e=1){const t=document.getElementById("essl")
-		;if(!t)return void dlog("essl img not found, skipping setEsslImgSrc");let o=GetLastInit();e>1&&o.setUTCHours(o.getUTCHours()-12*(e-1))
+		dlog(`Resetting iframe: ${e}`),setIframeSrc(document.getElementById(e));const t=getResetButtonFromFrameId(e);t.style.display="none",
+		setResetButtonToExit(t)}function getResetButtonFromFrameId(e){return document.querySelector(`a[data-frame-id="${e}"]`)}
+		function getResetButtonFromOverlayId(e){return getResetButtonFromFrameId(document.getElementById(e).getAttribute("data-frame-id"))}
+		function getFrameIdFromResetButtonId(e){return document.getElementById(e).getAttribute("data-frame-id")}function setEsslImgSrc(e=1){
+		const t=document.getElementById("essl");if(!t)return void dlog("essl img not found, skipping setEsslImgSrc");let o=GetLastInit()
+		;e>1&&o.setUTCHours(o.getUTCHours()-12*(e-1))
 		;let n=new Date(Date.UTC(o.getUTCFullYear(),o.getUTCMonth(),o.getUTCDate()+(12===o.getUTCHours()?3:2),0,0,0,0)),r=DTGFromDateInHours(o),s=EndValue(n)
 		;dlog("dtg: "+r),dlog("end: "+s)
-		;let a=`https://www.stormforecast.eu/map_images/models/archamos/${r.slice(0,6)}/${r}/combi_paramcombi24_${r}_${s}.png`;function i(){
-		if(e<5)dlog(`Image load failed, try attempt ${e} with dtg: ${r}`),t.removeEventListener("error",i),setEsslImgSrc(e+1);else{
+		;let i=`https://www.stormforecast.eu/map_images/models/archamos/${r.slice(0,6)}/${r}/combi_paramcombi24_${r}_${s}.png`;function a(){
+		if(e<5)dlog(`Image load failed, try attempt ${e} with dtg: ${r}`),t.removeEventListener("error",a),setEsslImgSrc(e+1);else{
 		dlog("Image load failed after 5 attempts");const e=document.createElement("span");e.innerHTML="Nema prognoze za traženi period",
-		t.parentNode.appendChild(e)}}t.removeEventListener("error",i),t.addEventListener("error",i),t.src=a}function GetLastInit(){let e=new Date
+		t.parentNode.appendChild(e)}}t.removeEventListener("error",a),t.addEventListener("error",a),t.src=i}function GetLastInit(){let e=new Date
 		;return e=new Date(Date.UTC(e.getUTCFullYear(),e.getUTCMonth(),e.getUTCDate(),e.getUTCHours()>=12?12:0,0,0,0)),e}
-		function DTGFromDateInHours(e){
-		return result=e.getUTCFullYear().toString()+pad(e.getUTCMonth()+1,2)+pad(e.getUTCDate(),2)+pad(e.getUTCHours(),2),result}
-		function EndValue(e){return result=e.getUTCFullYear().toString()+pad(e.getUTCMonth()+1,2)+pad(e.getUTCDate(),2)+"06",result}
-		function pad(e,t,o){return o=o||"0",(e+="").length>=t?e:new Array(t-e.length+1).join(o)+e}zoomMap.set("windy",["&zoom=7","&zoom=6"]),
-		zoomMap.set("blitzortung",["#6/","#5/"]),zoomMap.set("weatherAndRadar",["&zoom=7.2","&zoom=6.8"]),
-		zoomMap.set("rainViewer",[",6.3&",",5.8&"]),zoomMap.set("ventussky",[";6&",";6&"]);let isDebugEnabled=!1;function getUrlParameter(e){
-		return new URLSearchParams(window.location.search).get(e)}function dlog(...e){isDebugEnabled&&console.log(...e)}
-		"1"===getUrlParameter("debug")&&(isDebugEnabled=!0),document.addEventListener("DOMContentLoaded",()=>{showProgress(),
-		addExpandableClickEventListener(),addSwipeEvents(),updateIframeSrc(),hideOverlayOnDoubleTap(),updateHintText(),setEsslImgSrc()}),
-		window.addEventListener("resize",()=>{clearTimeout(window._resizeTimeout),window._resizeTimeout=setTimeout(()=>{updateIframeSrc(),
-		updateHintText()},200)});
+		function DTGFromDateInHours(e){return e.getUTCFullYear().toString()+pad(e.getUTCMonth()+1,2)+pad(e.getUTCDate(),2)+pad(e.getUTCHours(),2)}
+		function EndValue(e){return e.getUTCFullYear().toString()+pad(e.getUTCMonth()+1,2)+pad(e.getUTCDate(),2)+"06"}function pad(e,t,o){
+		return String(e).padStart(t,o||"0")}const isDebugEnabled="1"===new URLSearchParams(window.location.search).get("debug");function dlog(...e){
+		isDebugEnabled&&console.log(...e)}document.addEventListener("DOMContentLoaded",()=>{document.querySelectorAll("img.lazy").forEach(e=>{
+		e.src=e.getAttribute("data-src"),e.classList.remove("lazy")}),showProgress(),addExpandableClickEventListener(),addSwipeEvents(),
+		updateIframeSrc(),hideOverlayOnDoubleTap(),updateHintText(),setEsslImgSrc()}),window.addEventListener("resize",()=>{
+		clearTimeout(window._resizeTimeout),window._resizeTimeout=setTimeout(()=>{updateIframeSrc(),updateHintText()},200)});
 	</script>
 	<script async src="https://www.googletagmanager.com/gtag/js?id=G-233EMZJM16"></script>
 	<script>
@@ -158,12 +159,16 @@
 			<tr>
 				<td align="center">
 					<div class="radartitle">
+						<a class="left zoom-btn" data-mode="hr" onclick="switchIframeZoom('ventussky', this)">[HR]</a>
 						<a class="center" href="https://www.ventusky.com/?p=44.5;16.5;6&l=radar&w=off" target="_blank" rel="nofollow">Ventussky</a>
-						<a class="right" id="resetVentusskyFrame" style="display:none">[X]</a>
+						<a class="right" id="resetVentusskyFrame" data-frame-id="ventussky" style="display:none">[X]</a>
 					</div>
 					<div class="if1 placeholder">
-						<iframe id="ventussky" class="scaled-iframe" loading="eager" data-src="https://embed.ventusky.com/?p=44.5;16.5;6&l=radar&w=off" frameborder="0"></iframe>
-						<div class="overlay" id="overlayVentusskyFrame">
+						<iframe id="ventussky" class="scaled-iframe" loading="eager" frameborder="0"
+								data-src-hr="https://embed.ventusky.com/?p=44.5;16.5;6&l=radar&w=off" data-zoom-hr-desktop=";6&" data-zoom-hr-mobile=";6&"
+								data-src-eu="https://embed.ventusky.com/?p=48.0;10.0;4&l=radar&w=off" data-zoom-eu-desktop=";4&" data-zoom-eu-mobile=";3&">
+						</iframe>
+						<div class="overlay" id="overlayVentusskyFrame" data-frame-id="ventussky">
 							<span class="hint">Dvostruki klik za pristup interaktivnoj karti</span>
 						</div>
 					</div>
@@ -174,12 +179,16 @@
 			<tr>
 				<td align="center">
 					<div class="radartitle">
+						<a class="left zoom-btn" data-mode="hr" onclick="switchIframeZoom('rainViewer', this)">[HR]</a>
 						<a class="center" href="https://www.rainviewer.com/map.html?loc=44.5,16.5,6&oCS=1&c=5&lm=1&layer=radar&sm=1&sn=2&ts=1" target="_blank" rel="nofollow">Rain Viewer</a>
-						<a class="right" id="resetRainViewerFrame" style="display:none">[X]</a>
+						<a class="right" id="resetRainViewerFrame" data-frame-id="rainViewer" style="display:none">[X]</a>
 					</div>
 					<div class="if1 placeholder">
-						<iframe id="rainViewer" class="scaled-iframe" loading="lazy" data-src="https://www.rainviewer.com/map.html?loc=44.8,16.5,6.3&oCS=1&c=5&lm=1&layer=radar&sm=1&sn=2&ts=1" frameborder="0"></iframe>
-						<div class="overlay" id="overlayRainViewerFrame">
+						<iframe id="rainViewer" class="scaled-iframe" loading="lazy" frameborder="0"
+								data-src-hr="https://www.rainviewer.com/map.html?loc=44.8,16.5,6.3&oCS=1&c=5&lm=1&layer=radar&sm=1&sn=2&ts=1" data-zoom-hr-desktop=",6.3&" data-zoom-hr-mobile=",5.8&"
+								data-src-eu="https://www.rainviewer.com/map.html?loc=48.0,10.0,4.0&oCS=1&c=5&lm=1&layer=radar&sm=1&sn=2&ts=1" data-zoom-eu-desktop=",4.0&" data-zoom-eu-mobile=",3.2&">
+						</iframe>
+						<div class="overlay" id="overlayRainViewerFrame" data-frame-id="rainViewer">
 							<span class="hint">Dvostruki klik za pristup interaktivnoj karti</span>
 						</div>
 					</div>
@@ -190,12 +199,16 @@
 			<tr>
 				<td align="center">
 					<div class="radartitle">
+						<a class="left zoom-btn" data-mode="hr" onclick="switchIframeZoom('weatherAndRadar', this)">[HR]</a>
 						<a class="center" href="https://www.vrijemeradar.hr/vremenski-radar/zagreb/18138691?center=44.5,16.5&zoom=7&layer=wr&tz=Europe%2FZagreb" target="_blank" rel="nofollow">Weather&Radar</a>
-						<a class="right" id="resetWeatherAndRadarFrame" style="display:none">[X]</a>
+						<a class="right" id="resetWeatherAndRadarFrame" data-frame-id="weatherAndRadar" style="display:none">[X]</a>
 					</div>
 					<div class="if1 placeholder">
-						<iframe id="weatherAndRadar" class="scaled-iframe" loading="lazy" data-src="https://radar.wo-cloud.com/pwa/?center=44.5,16.5&zoom=7.2&tz=Europe/Zagreb&tf=HH:mm&tempunit=celsius&windunit=kph&showShareButton=false&lang=en-US&placemarkName=Zagreb&desktop=true&fadeTop=true" frameborder="0"></iframe>
-						<div class="overlay" id="overlayWeatherAndRadarFrame">
+						<iframe id="weatherAndRadar" class="scaled-iframe" loading="lazy" frameborder="0" data-zoom-hr-desktop="&zoom=7.2" data-zoom-hr-mobile="&zoom=6.8" data-zoom-eu-desktop="&zoom=5.0" data-zoom-eu-mobile="&zoom=4.0"
+								data-src-hr="https://radar.wo-cloud.com/pwa/?center=44.5,16.5&zoom=7.2&tz=Europe/Zagreb&tf=HH:mm&tempunit=celsius&windunit=kph&showShareButton=false&lang=en-US&placemarkName=Zagreb&desktop=true&fadeTop=true"
+								data-src-eu="https://radar.wo-cloud.com/pwa/?center=48.0,10.0&zoom=5.0&tz=Europe/Zagreb&tf=HH:mm&tempunit=celsius&windunit=kph&showShareButton=false&lang=en-US&placemarkName=Zagreb&desktop=true&fadeTop=true">
+						</iframe>
+						<div class="overlay" id="overlayWeatherAndRadarFrame" data-frame-id="weatherAndRadar">
 							<span class="hint">Dvostruki klik za pristup interaktivnoj karti</span>
 						</div>
 					</div>
@@ -206,7 +219,7 @@
 			<tr>
 				<td align="center">
 					<a href="https://meteo.arso.gov.si/met/sl/weather/observ/radar/" target="_blank" rel="nofollow">meteo.si</a>
-					<div class="slideshow placeholder" data-slideshow-id="6" style="max-width: 821px; aspect-ratio: 821 / 660; ">
+					<div class="slideshow placeholder" data-slideshow-id="6" data-current-slide="1" style="max-width: 821px; aspect-ratio: 821 / 660; ">
 						<div class="slide fade active">
 							<img src="https://meteo.arso.gov.si/uploads/probase/www/observ/radar/si0-rm-anim.gif?nocache" />
 						</div>
@@ -287,7 +300,7 @@
 			<tr>
 				<td align="center">
 					<a href="https://meteo.hr/podaci.php?section=podaci_mjerenja&param=radari&el=puntijarka&acto=anim" target="_blank" rel="nofollow">DHMZ | MRC Puntijarka</a>
-					<div class="slideshow placeholder" data-slideshow-id="8" style="max-width: 720px; aspect-ratio: 720 / 751;">
+					<div class="slideshow placeholder" data-slideshow-id="8" data-current-slide="1" style="max-width: 720px; aspect-ratio: 720 / 751;">
 						<div class="slide fade active">
 							<img src="https://vrijeme.hr/anim_puntijarka.gif" />
 						</div>
@@ -308,7 +321,7 @@
 			<tr>
 				<td align="center">
 					<a href="https://meteo.hr/podaci.php?section=podaci_mjerenja&param=radari&el=bilogora&acto=anim" target="_blank" rel="nofollow">DHMZ | MRC Bilogora</a>
-					<div class="slideshow placeholder" data-slideshow-id="9" style="max-width: 720px; aspect-ratio: 720 / 751;">
+					<div class="slideshow placeholder" data-slideshow-id="9" data-current-slide="1" style="max-width: 720px; aspect-ratio: 720 / 751;">
 						<div class="slide fade active">
 							<img src="https://vrijeme.hr/anim_bilogora.gif" />
 						</div>
@@ -329,7 +342,7 @@
 			<tr>
 				<td align="center">
 					<a href="https://meteo.hr/podaci.php?section=podaci_mjerenja&param=radari&el=gradiste&acto=anim" target="_blank" rel="nofollow">DHMZ | MRC Gradište</a>
-					<div class="slideshow placeholder" data-slideshow-id="10" style="max-width: 720px; aspect-ratio: 720 / 751;">
+					<div class="slideshow placeholder" data-slideshow-id="10" data-current-slide="1" style="max-width: 720px; aspect-ratio: 720 / 751;">
 						<div class="slide fade active">
 							<img src="https://vrijeme.hr/anim_gradiste.gif" />
 						</div>
@@ -350,7 +363,7 @@
 			<tr>
 				<td align="center">
 					<a href="https://meteo.hr/podaci.php?section=podaci_mjerenja&param=radari&el=goli&acto=anim" target="_blank" rel="nofollow">DHMZ | MRC Goli</a>
-					<div class="slideshow placeholder" data-slideshow-id="11" style="max-width: 720px; aspect-ratio: 720 / 751;">
+					<div class="slideshow placeholder" data-slideshow-id="11" data-current-slide="1" style="max-width: 720px; aspect-ratio: 720 / 751;">
 						<div class="slide fade active">
 							<img src="https://vrijeme.hr/anim_goli.gif" />
 						</div>
@@ -371,7 +384,7 @@
 			<tr>
 				<td align="center">
 					<a href="https://meteo.hr/podaci.php?section=podaci_mjerenja&param=radari&el=debeljak&acto=anim" target="_blank" rel="nofollow">DHMZ | MRC Debeljak</a>
-					<div class="slideshow placeholder" data-slideshow-id="12" style="max-width: 720px; aspect-ratio: 720 / 751;">
+					<div class="slideshow placeholder" data-slideshow-id="12" data-current-slide="1" style="max-width: 720px; aspect-ratio: 720 / 751;">
 						<div class="slide fade active">
 							<img src="https://vrijeme.hr/anim_debeljak.gif" />
 						</div>
@@ -392,7 +405,7 @@
 			<tr>
 				<td align="center">
 					<a href="https://meteo.hr/podaci.php?section=podaci_mjerenja&param=radari&el=uljenje&acto=anim" target="_blank" rel="nofollow">DHMZ | MRC Uljenje</a>
-					<div class="slideshow placeholder" data-slideshow-id="13" style="max-width: 720px; aspect-ratio: 720 / 751;">
+					<div class="slideshow placeholder" data-slideshow-id="13" data-current-slide="1" style="max-width: 720px; aspect-ratio: 720 / 751;">
 						<div class="slide fade active">
 							<img src="https://vrijeme.hr/anim_uljenje.gif" />
 						</div>
