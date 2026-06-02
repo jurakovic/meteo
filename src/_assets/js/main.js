@@ -368,49 +368,6 @@ function getFrameIdFromResetButtonId(resetFrameId) {
 	return document.getElementById(resetFrameId).getAttribute('data-frame-id');
 }
 
-function setEsslImgSrc(tryCount = 1) {
-	// src: https://www.stormforecast.eu/storm_script_2.js
-	const esslImg = document.getElementById('essl');
-
-	if (!esslImg) {
-		dlog("essl img not found, skipping setEsslImgSrc");
-		return;
-	}
-
-	let maxTryCount = 5;
-	let dt = GetLastInit();
-
-	if (tryCount > 1)
-		dt.setUTCHours(dt.getUTCHours() - (12 * (tryCount - 1)));
-
-	let dte = new Date(Date.UTC(dt.getUTCFullYear(), dt.getUTCMonth(), dt.getUTCDate() + (dt.getUTCHours() === 12 ? 3 : 2), 0, 0, 0, 0));
-
-	let dtg = DTGFromDateInHours(dt);
-	let end = EndValue(dte);
-	dlog("dtg: " + dtg);
-	dlog("end: " + end);
-
-	let esslSrc = `https://www.stormforecast.eu/map_images/models/archamos/${dtg.slice(0, 6)}/${dtg}/combi_paramcombi24_${dtg}_${end}.png`;
-	//dlog(esslSrc);
-
-	function errorHandler() {
-		if (tryCount < maxTryCount) {
-			dlog(`Image load failed, try attempt ${tryCount} with dtg: ${dtg}`);
-			esslImg.removeEventListener('error', errorHandler);
-			setEsslImgSrc(tryCount + 1);
-		} else {
-			dlog(`Image load failed after ${maxTryCount} attempts`);
-			const noForecast = document.createElement('span');
-			noForecast.innerHTML = "Nema prognoze za traženi period";
-			esslImg.parentNode.appendChild(noForecast);
-		}
-	}
-
-	esslImg.removeEventListener('error', errorHandler);
-	esslImg.addEventListener('error', errorHandler);
-	esslImg.src = esslSrc;
-}
-
 function GetLastInit() {
 	let dt = new Date();
 	// normalize date to last 12h or 00h
@@ -450,7 +407,6 @@ document.addEventListener('DOMContentLoaded', () => {
 	updateIframeSrc();
 	hideOverlayOnDoubleTap();
 	updateHintText();
-	setEsslImgSrc();
 });
 
 window.addEventListener('resize', () => {
