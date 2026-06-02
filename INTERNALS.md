@@ -1,11 +1,5 @@
 
-# meteo
-
-A compilation of Croatia and Europe weather radar and satellite images.
-
-Available at <https://jurakovic.github.io/meteo/>.
-
-* * *
+# Internals
 
 ### Overview
 
