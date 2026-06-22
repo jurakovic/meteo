@@ -36,7 +36,7 @@ table {
 .radartitle {
 	position: relative;
 	max-width: 100%;
-	background-color: #1a55af;
+	background-color: #2b5797;
 	box-sizing: border-box;
 	height: 23px;
 	padding: 4px 3px;
@@ -167,7 +167,7 @@ iframe, video {
 
 .links-bottom {
 	text-align: left;
-	background-color: #9b1f1f;
+	background-color: #8c2c2c;
 	box-sizing: border-box;
 	padding: 5px 4px;
 }
