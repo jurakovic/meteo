@@ -15,11 +15,11 @@ function scrollToElement(id) {
 	}
 }
 
-async function addExpandableClickEventListener() {
-	var expandable = document.getElementsByClassName("expandable")[0];
+function addExpandableClickEventListener() {
+	const expandable = document.querySelector(".expandable");
 	expandable.addEventListener("click", function () {
 		let arrow = this.querySelector(".arrow");
-		var content = document.getElementsByClassName("links")[0];
+		const content = document.querySelector(".links");
 		if (content.style.maxHeight) {
 			content.style.maxHeight = null;
 			arrow.textContent = "▼";
@@ -44,28 +44,30 @@ async function addExpandableClickEventListener() {
 	});
 }
 
-let slidePage = [2, 2, 2, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1];
-
 function plusSlides(slideshowId, n) {
-	showSlides(slideshowId, slidePage[slideshowId - 1] += n);
+	const slideshow = document.querySelector(`.slideshow[data-slideshow-id="${slideshowId}"]`);
+	showSlides(slideshow, parseInt(slideshow.getAttribute('data-current-slide')) + n);
 }
 
-function showSlides(slideshowId, n) {
-	const slides = document.querySelectorAll(`.slideshow[data-slideshow-id="${slideshowId}"] .slide`);
+function showSlides(slideshow, n) {
+	const slideshowId = slideshow.getAttribute('data-slideshow-id');
+	const slides = slideshow.querySelectorAll('.slide');
 	const indicators = document.querySelectorAll(`.indicators-container[data-slideshow-id="${slideshowId}"] .indicator`);
-	if (n > slides.length) { slidePage[slideshowId - 1] = 1; }
-	if (n < 1) { slidePage[slideshowId - 1] = slides.length; }
+	let current = n;
+	if (current > slides.length) { current = 1; }
+	if (current < 1) { current = slides.length; }
+	slideshow.setAttribute('data-current-slide', current);
 	slides.forEach(slide => slide.classList.remove('active'));
-	slides[slidePage[slideshowId - 1] - 1].classList.add('active');
+	slides[current - 1].classList.add('active');
 	indicators.forEach(indicator => indicator.classList.remove('active'));
-	indicators[slidePage[slideshowId - 1] - 1].classList.add('active');
-	updateSlideshowWidth(slideshowId);
+	indicators[current - 1].classList.add('active');
+	updateSlideshowWidth(slideshow);
 }
 
-function updateSlideshowWidth(slideshowId) {
-	if (slideshowId !== 16) return; // for now only essl and estofex have different widths
+function updateSlideshowWidth(slideshow) {
+	if (!slideshow.hasAttribute('data-dynamic-width')) return;
 
-	const slideshow = document.querySelector(`.slideshow[data-slideshow-id='${slideshowId}']`);
+	const slideshowId = slideshow.getAttribute('data-slideshow-id');
 	const indicatorsContainer = document.querySelector(`.indicators-container[data-slideshow-id='${slideshowId}']`);
 	const activeSlide = slideshow.querySelector('.slide.active .placeholder');
 
@@ -73,19 +75,11 @@ function updateSlideshowWidth(slideshowId) {
 	indicatorsContainer.style.maxWidth = activeSlide.style.maxWidth;
 }
 
-window.addEventListener('load', function () {
-	const lazyImages = document.querySelectorAll('img.lazy');
-
-	lazyImages.forEach(img => {
-		img.src = img.getAttribute('data-src');
-		img.classList.remove('lazy');
-	});
-});
 
 function showProgress() {
 	// Get all images on the page
 	const images = document.querySelectorAll('img');
-	const progressBar = document.getElementsByClassName('progress-bar')[0];
+	const progressBar = document.querySelector('.progress-bar');
 	let imagesLoaded = 0;
 
 	// Update progress bar
@@ -96,7 +90,7 @@ function showProgress() {
 		// Hide the progress bar when all images are loaded
 		if (imagesLoaded === images.length) {
 			setTimeout(() => {
-				document.getElementsByClassName('progress-container')[0].style.display = 'none';
+				document.querySelector('.progress-container').style.display = 'none';
 			}, 500); // Hide after a short delay
 		}
 	};
@@ -121,16 +115,12 @@ function showProgress() {
 	});
 }
 
-function handleSwipe(slideshowId, startX, endX) {
+function handleSwipe(slideshow, startX, endX) {
 	const threshold = 50;
 	const distance = endX - startX;
-
 	if (Math.abs(distance) > threshold) {
-		if (distance > 0) {
-			plusSlides(slideshowId, -1); // swipe right
-		} else {
-			plusSlides(slideshowId, 1); // swipe left
-		}
+		const current = parseInt(slideshow.getAttribute('data-current-slide'));
+		showSlides(slideshow, current + (distance > 0 ? -1 : 1));
 	}
 }
 
@@ -143,7 +133,6 @@ function addSwipeEvents() {
 		let endX = 0;
 		let endY = 0;
 		let isDragging = false;
-		const slideshowId = slideshow.getAttribute('data-slideshow-id');
 
 		// Prevent default drag behavior on images
 		const images = slideshow.querySelectorAll('img');
@@ -153,12 +142,21 @@ function addSwipeEvents() {
 
 		// Touch events for mobile
 		slideshow.addEventListener('touchstart', (e) => {
+			// Ignore multi-touch (e.g. pinch-zoom); only single-finger swipes change slides
+			if (e.touches.length > 1) {
+				isDragging = false;
+				return;
+			}
 			startX = e.touches[0].clientX;
 			startY = e.touches[0].clientY;
 			isDragging = false;
 		});
 
 		slideshow.addEventListener('touchmove', (e) => {
+			if (e.touches.length > 1) {
+				isDragging = false;
+				return;
+			}
 			endX = e.touches[0].clientX;
 			endY = e.touches[0].clientY;
 
@@ -175,9 +173,23 @@ function addSwipeEvents() {
 
 				// Only trigger swipe if horizontal movement is greater than vertical movement (prevent swipe on scroll up or down)
 				if (Math.abs(deltaX) > Math.abs(deltaY)) {
-					handleSwipe(slideshowId, startX, endX);
+					handleSwipe(slideshow, startX, endX);
 				}
 			}
+		});
+
+		// Prevent prev/next buttons from changing the slide during a pinch-zoom gesture.
+		// A two-finger touch still synthesizes a click on the button, so suppress that
+		// click whenever more than one finger was involved in the gesture.
+		slideshow.querySelectorAll('.prev, .next').forEach(btn => {
+			let multiTouch = false;
+			btn.addEventListener('touchstart', (e) => {
+				if (e.touches.length > 1) multiTouch = true;
+			});
+			btn.addEventListener('touchend', (e) => {
+				if (multiTouch) e.preventDefault(); // cancel the click that would follow
+				if (e.touches.length === 0) multiTouch = false; // reset once all fingers lift
+			});
 		});
 
 		// Mouse events for desktop
@@ -203,7 +215,7 @@ function addSwipeEvents() {
 
 				// Only trigger swipe if horizontal movement is greater than vertical movement (prevent swipe on scroll up or down)
 				if (Math.abs(deltaX) > Math.abs(deltaY)) {
-					handleSwipe(slideshowId, startX, endX);
+					handleSwipe(slideshow, startX, endX);
 				}
 				isDragging = false;
 			}
@@ -220,43 +232,35 @@ function addSwipeEvents() {
 
 let previousWidth = 0;
 
-let zoomMap = new Map();
-zoomMap.set('windy', [ '&zoom=7', '&zoom=6' ]);
-zoomMap.set('blitzortung', [ '#6/', '#5/' ]);
-zoomMap.set('weatherAndRadar', [ '&zoom=7.2', '&zoom=6.8' ]);
-zoomMap.set('rainViewer', [ ',6.3&', ',5.8&' ]);
-zoomMap.set('ventussky', [ ';6&', ';6&' ]);
-
 function updateIframeSrc() {
-	if (window.innerWidth !== previousWidth) {
-		previousWidth = window.innerWidth;
-		setIframeSrc('windy');
-		setIframeSrc('blitzortung');
-		setIframeSrc('weatherAndRadar');
-		setIframeSrc('rainViewer');
-		setIframeSrc('ventussky');
-	}
+	if (window.innerWidth === previousWidth) return;
+	previousWidth = window.innerWidth;
+	document.querySelectorAll('iframe[data-zoom-hr-desktop]').forEach(iframe => setIframeSrc(iframe));
 }
 
-function setIframeSrc(iframeId) {
-	dlog(`Updating iframe src for ${iframeId}`);
-
-	const iframe = document.getElementById(iframeId);
-	if (iframe) {
-		let values = zoomMap.get(iframeId);
-		let zoomOld = values[0];
-		let zoomNew = values[1];
-
-		let url = iframe.getAttribute('data-src');
-
-		if (window.innerWidth < 800)
-			url = url.replace(zoomOld, zoomNew);
-
-		iframe.src = url;
+function setIframeSrc(iframe) {
+	dlog(`Updating iframe src for ${iframe.id}`);
+	const mode = iframe.getAttribute('data-zoom-mode');
+	let url = mode === 'eu'
+		? iframe.getAttribute('data-src-eu')
+		: iframe.getAttribute('data-src-hr');
+	if (window.innerWidth < 800) {
+		const desktopAttr = mode === 'eu' ? 'data-zoom-eu-desktop' : 'data-zoom-hr-desktop';
+		const mobileAttr = mode === 'eu' ? 'data-zoom-eu-mobile' : 'data-zoom-hr-mobile';
+		url = url.replace(iframe.getAttribute(desktopAttr), iframe.getAttribute(mobileAttr));
 	}
-	else {
-		dlog(`${iframeId} not found, skipping updateIframeSrc for ${iframeId}`);
-	}
+	iframe.src = url;
+}
+
+function switchIframeZoom(frameId, btn) {
+	const newMode = btn.getAttribute('data-mode') === 'hr' ? 'eu' : 'hr';
+	const iframe = document.getElementById(frameId);
+	iframe.setAttribute('data-zoom-mode', newMode);
+	setIframeSrc(iframe);
+	btn.setAttribute('data-mode', newMode);
+	btn.textContent = newMode === 'hr' ? '[HR]' : '[EU]';
+	const resetBtn = getResetButtonFromFrameId(frameId);
+	if (resetBtn.textContent === '[R]') resetBtn.style.display = 'none';
 }
 
 function hideOverlayOnDoubleTap() {
@@ -264,6 +268,7 @@ function hideOverlayOnDoubleTap() {
 
 	overlays.forEach((overlay) => {
 		let lastTap = 0;
+		let multiTouch = false;
 
 		overlay.addEventListener('dblclick', () => {
 			overlay.style.display = 'none';
@@ -272,7 +277,21 @@ function hideOverlayOnDoubleTap() {
 			setResetButtonToExit(resetFrame);
 		});
 
+		overlay.addEventListener('touchstart', (e) => {
+			if (e.touches.length > 1) multiTouch = true;
+		});
+
 		overlay.addEventListener('touchend', (e) => {
+			// Ignore multi-touch gestures (e.g. pinch-zoom): their two quick touchend
+			// events can otherwise be mistaken for a double-tap and hide the overlay.
+			if (multiTouch) {
+				if (e.touches.length === 0) {
+					multiTouch = false;
+					lastTap = 0;
+				}
+				return;
+			}
+
 			const currentTime = new Date().getTime();
 			const tapLength = currentTime - lastTap;
 
@@ -367,7 +386,7 @@ function setResetButtonToReset(resetFrame) {
 
 function resetIframe(frameId) {
 	dlog(`Resetting iframe: ${frameId}`);
-	setIframeSrc(frameId);
+	setIframeSrc(document.getElementById(frameId));
 
 	const resetFrame = getResetButtonFromFrameId(frameId);
 	resetFrame.style.display = 'none';
@@ -375,59 +394,16 @@ function resetIframe(frameId) {
 }
 
 function getResetButtonFromFrameId(frameId) {
-	return document.getElementById('reset' + String(frameId).charAt(0).toUpperCase() + String(frameId).slice(1) + 'Frame');
+	return document.querySelector(`a[data-frame-id="${frameId}"]`);
 }
 
 function getResetButtonFromOverlayId(overlayId) {
-	return document.getElementById(overlayId.replace('overlay', 'reset'));
+	const frameId = document.getElementById(overlayId).getAttribute('data-frame-id');
+	return getResetButtonFromFrameId(frameId);
 }
 
 function getFrameIdFromResetButtonId(resetFrameId) {
-	let name = resetFrameId.replace('reset', '').replace('Frame', '');
-	return String(name).charAt(0).toLowerCase() + String(name).slice(1);
-}
-
-function setEsslImgSrc(tryCount = 1) {
-	// src: https://www.stormforecast.eu/storm_script_2.js
-	const esslImg = document.getElementById('essl');
-
-	if (!esslImg) {
-		dlog("essl img not found, skipping setEsslImgSrc");
-		return;
-	}
-
-	let maxTryCount = 5;
-	let dt = GetLastInit();
-
-	if (tryCount > 1)
-		dt.setUTCHours(dt.getUTCHours() - (12 * (tryCount - 1)));
-
-	let dte = new Date(Date.UTC(dt.getUTCFullYear(), dt.getUTCMonth(), dt.getUTCDate() + (dt.getUTCHours() === 12 ? 3 : 2), 0, 0, 0, 0));
-
-	let dtg = DTGFromDateInHours(dt);
-	let end = EndValue(dte);
-	dlog("dtg: " + dtg);
-	dlog("end: " + end);
-
-	let esslSrc = `https://www.stormforecast.eu/map_images/models/archamos/${dtg.slice(0, 6)}/${dtg}/combi_paramcombi24_${dtg}_${end}.png`;
-	//dlog(esslSrc);
-
-	function errorHandler() {
-		if (tryCount < maxTryCount) {
-			dlog(`Image load failed, try attempt ${tryCount} with dtg: ${dtg}`);
-			esslImg.removeEventListener('error', errorHandler);
-			setEsslImgSrc(tryCount + 1);
-		} else {
-			dlog(`Image load failed after ${maxTryCount} attempts`);
-			const noForecast = document.createElement('span');
-			noForecast.innerHTML = "Nema prognoze za traženi period";
-			esslImg.parentNode.appendChild(noForecast);
-		}
-	}
-
-	esslImg.removeEventListener('error', errorHandler);
-	esslImg.addEventListener('error', errorHandler);
-	esslImg.src = esslSrc;
+	return document.getElementById(resetFrameId).getAttribute('data-frame-id');
 }
 
 function GetLastInit() {
@@ -438,31 +414,20 @@ function GetLastInit() {
 };
 
 function DTGFromDateInHours(mydate) {
-	result = mydate.getUTCFullYear().toString() + pad(mydate.getUTCMonth() + 1, 2) + pad(mydate.getUTCDate(), 2) + pad(mydate.getUTCHours(), 2);
+	const result = mydate.getUTCFullYear().toString() + pad(mydate.getUTCMonth() + 1, 2) + pad(mydate.getUTCDate(), 2) + pad(mydate.getUTCHours(), 2);
 	return result;
 };
 
 function EndValue(mydate) {
-	result = mydate.getUTCFullYear().toString() + pad(mydate.getUTCMonth() + 1, 2) + pad(mydate.getUTCDate(), 2) + "06";
+	const result = mydate.getUTCFullYear().toString() + pad(mydate.getUTCMonth() + 1, 2) + pad(mydate.getUTCDate(), 2) + "06";
 	return result;
 };
 
 function pad(n, width, z) {
-	z = z || '0';
-	n = n + '';
-	return n.length >= width ? n : new Array(width - n.length + 1).join(z) + n;
+	return String(n).padStart(width, z || '0');
 };
 
-let isDebugEnabled = false;
-
-function getUrlParameter(name) {
-	const urlParams = new URLSearchParams(window.location.search);
-	return urlParams.get(name);
-}
-
-if (getUrlParameter('debug') === '1') {
-	isDebugEnabled = true;
-}
+const isDebugEnabled = new URLSearchParams(window.location.search).get('debug') === '1';
 
 function dlog(...args) {
 	if (isDebugEnabled)
@@ -470,13 +435,16 @@ function dlog(...args) {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
+	document.querySelectorAll('img.lazy').forEach(img => {
+		img.src = img.getAttribute('data-src');
+		img.classList.remove('lazy');
+	});
 	showProgress();
 	addExpandableClickEventListener();
 	addSwipeEvents();
 	updateIframeSrc();
 	hideOverlayOnDoubleTap();
 	updateHintText();
-	setEsslImgSrc();
 });
 
 window.addEventListener('resize', () => {

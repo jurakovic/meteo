@@ -37,7 +37,7 @@
 					<div class="radartitle">
 						<a href="https://www.neverin.hr/radar/" target="_blank" rel="nofollow">Neverin | Radar | Hrvatska</a>
 					</div>
-					<div class="slideshow placeholder" data-slideshow-id="1" style="aspect-ratio: 880 / 640; ">
+					<div class="slideshow placeholder" data-slideshow-id="1" data-current-slide="2" style="aspect-ratio: 880 / 640;">
 						<div class="slide fade">
 							<img data-src="https://maps.neverin.hr/radar/latest_hr.webp" class="lazy" />
 						</div>
@@ -76,7 +76,7 @@
 					<div class="radartitle">
 						<a href="https://www.neverin.hr/satelit/" target="_blank" rel="nofollow">Neverin | Satelit | Hrvatska</a>
 					</div>
-					<div class="slideshow placeholder" data-slideshow-id="2" style="aspect-ratio: 880 / 640;">
+					<div class="slideshow placeholder" data-slideshow-id="2" data-current-slide="2" style="aspect-ratio: 880 / 640;">
 						<div class="slide fade">
 							<img data-src="https://maps.neverin.hr/sat/latest_vis_hr.webp" class="lazy" />
 						</div>
@@ -113,15 +113,15 @@
 					<div class="radartitle">
 						<a href="https://www.neverin.hr/radar/" target="_blank" rel="nofollow">Neverin | Radar | Europa</a>
 					</div>
-					<div class="slideshow placeholder" data-slideshow-id="3" style="aspect-ratio: 880 / 640;">
+					<div class="slideshow placeholder" data-slideshow-id="3" data-current-slide="2" style="aspect-ratio: 880 / 640;">
 						<div class="slide fade">
-							<img data-src="https://maps.neverin.hr/radar/latest_eu.webp" class="lazy" />
+							<img data-src="https://maps.neverin.hr/radar/latest_eu2.webp" class="lazy" />
 						</div>
 						<div class="slide fade active">
-							<img src="https://maps.neverin.hr/radar/anim_eu.webp" />
+							<img src="https://maps.neverin.hr/radar/anim_eu2.webp" />
 						</div>
 						<div class="slide fade">
-							<img data-src="https://maps.neverin.hr/radar/anim_eu_6h.webp" class="lazy" />
+							<img data-src="https://maps.neverin.hr/radar/anim_eu2_6h.webp" class="lazy" />
 						</div>
 						<a class="prev" onclick="plusSlides(3, -1)">&#10094;</a>
 						<a class="next" onclick="plusSlides(3, 1)">&#10095;</a>
@@ -152,15 +152,15 @@
 					<div class="radartitle">
 						<a href="https://www.neverin.hr/satelit/" target="_blank" rel="nofollow">Neverin | Satelit | Europa</a>
 					</div>
-					<div class="slideshow placeholder" data-slideshow-id="4" style="aspect-ratio: 880 / 640;">
+					<div class="slideshow placeholder" data-slideshow-id="4" data-current-slide="2" style="aspect-ratio: 880 / 640;">
 						<div class="slide fade">
-							<img data-src="https://maps.neverin.hr/sat/latest_vis_eu.webp" class="lazy" />
+							<img data-src="https://maps.neverin.hr/sat/latest_vis_eu2.webp" class="lazy" />
 						</div>
 						<div class="slide fade active">
-							<img src="https://maps.neverin.hr/sat/anim_vis_eu.webp" />
+							<img src="https://maps.neverin.hr/sat/anim_vis_eu2.webp" />
 						</div>
 						<div class="slide fade">
-							<img data-src="https://maps.neverin.hr/sat/anim_vis_eu_6h.webp" class="lazy" />
+							<img data-src="https://maps.neverin.hr/sat/anim_vis_eu2_6h.webp" class="lazy" />
 						</div>
 						<a class="prev" onclick="plusSlides(4, -1)">&#10094;</a>
 						<a class="next" onclick="plusSlides(4, 1)">&#10095;</a>
@@ -187,12 +187,16 @@
 			<tr>
 				<td align="center">
 					<div class="radartitle">
+						<a class="left zoom-btn" data-mode="hr" onclick="switchIframeZoom('windy', this)">[HR]</a>
 						<a class="center" href="https://www.windy.com/-Radar-lightning-radar?radar,44.5,16.5,7" target="_blank" rel="nofollow">Windy</a>
-						<a class="right" id="resetWindyFrame" style="display:none">[X]</a>
+						<a class="right" id="resetWindyFrame" data-frame-id="windy" style="display:none">[X]</a>
 					</div>
 					<div class="if1 placeholder">
-						<iframe id="windy" loading="lazy" data-src="https://embed.windy.com/embed2.html?lat=44.5&lon=16.56&zoom=7&level=surface&overlay=radar&menu=&message=true&marker=&calendar=&pressure=&type=map&location=coordinates&detail=&detailLat=45.798&detailLon=15.936&metricWind=m%2Fs&metricTemp=%C2%B0C&radarRange=-1" frameborder="0"></iframe>
-						<div class="overlay" id="overlayWindyFrame">
+						<iframe id="windy" loading="lazy" frameborder="0"
+								data-src-hr="https://embed.windy.com/embed2.html?lat=44.5&lon=16.56&zoom=7&level=surface&overlay=radar&menu=&message=true&marker=&calendar=&pressure=&type=map&location=coordinates&detail=&detailLat=45.798&detailLon=15.936&metricWind=m%2Fs&metricTemp=%C2%B0C&radarRange=-1" data-zoom-hr-desktop="&zoom=7" data-zoom-hr-mobile="&zoom=6"
+								data-src-eu="https://embed.windy.com/embed2.html?lat=48.0&lon=10.00&zoom=5&level=surface&overlay=radar&menu=&message=true&marker=&calendar=&pressure=&type=map&location=coordinates&detail=&detailLat=45.798&detailLon=15.936&metricWind=m%2Fs&metricTemp=%C2%B0C&radarRange=-1" data-zoom-eu-desktop="&zoom=5" data-zoom-eu-mobile="&zoom=3">
+						</iframe>
+						<div class="overlay" id="overlayWindyFrame" data-frame-id="windy">
 							<span class="hint">Dvostruki klik za pristup interaktivnoj karti</span>
 						</div>
 					</div>
@@ -205,7 +209,7 @@
 					<div class="radartitle" style="max-width: 720px;">
 						<a href="https://meteo.hr/podaci.php?section=podaci_mjerenja&param=radari&el=kompozit&acto=anim" target="_blank" rel="nofollow">DHMZ | kompozit</a>
 					</div>
-					<div class="slideshow placeholder" data-slideshow-id="7" style="max-width: 720px; aspect-ratio: 720 / 751;">
+					<div class="slideshow placeholder" data-slideshow-id="7" data-current-slide="1" style="max-width: 720px; aspect-ratio: 720 / 751;">
 						<div class="slide fade active">
 							<img src="https://vrijeme.hr/anim_kompozit.gif" />
 						</div>
@@ -225,7 +229,7 @@
 
 			<tr>
 				<td align="center">
-					<div class="slideshow" data-slideshow-id="15" style="max-width: 768px;">
+					<div class="slideshow" data-slideshow-id="15" data-current-slide="1" style="max-width: 768px;">
 						<div class="slide fade active">
 							<div class="radartitle">
 								<a href="https://www.meteociel.fr/observations-meteo/temperatures.php?region=it" target="_blank" rel="nofollow">Meteociel.fr | Temperatura </a>
@@ -267,12 +271,16 @@
 			<tr>
 				<td align="center">
 					<div class="radartitle">
+						<a class="left zoom-btn" data-mode="hr" onclick="switchIframeZoom('blitzortung', this)">[HR]</a>
 						<a class="center" href="https://map.blitzortung.org/#6/44.5/16.5" target="_blank" rel="nofollow">Blitzortung.org</a> // <a href="https://www.lightningmaps.org/?lang=en#m=sen;t=3;s=200;o=0;b=;ts=0;z=7;y=44.5;x=16.5;d=4;dl=6;dc=0;" target="_blank" rel="nofollow">LightningMaps.org</a>
-						<a class="right" id="resetBlitzortungFrame" style="display:none">[X]</a>
+						<a class="right" id="resetBlitzortungFrame" data-frame-id="blitzortung" style="display:none">[X]</a>
 					</div>
 					<div class="if1 placeholder">
-						<iframe id="blitzortung" loading="lazy" data-src="https://map.blitzortung.org/index.php?interactive=1&NavigationControl=1&FullScreenControl=0&Cookies=0&InfoDiv=0&MenuButtonDiv=0&ScaleControl=0&CirclesRangeValue=1&LinksCheckboxChecked=0&LinksRangeValue=0&MapStyle=1&MapStyleRangeValue=3&Advertisment=0#6/44.5/16.5" frameborder="0"></iframe>
-						<div class="overlay" id="overlayBlitzortungFrame">
+						<iframe id="blitzortung" loading="lazy" frameborder="0"
+								data-src-hr="https://map.blitzortung.org/index.php?interactive=1&NavigationControl=1&FullScreenControl=0&Cookies=0&InfoDiv=0&MenuButtonDiv=0&ScaleControl=0&CirclesRangeValue=1&LinksCheckboxChecked=0&LinksRangeValue=0&MapStyle=1&MapStyleRangeValue=3&Advertisment=0#6/44.5/16.5" data-zoom-hr-desktop="#6/" data-zoom-hr-mobile="#5/"
+								data-src-eu="https://map.blitzortung.org/index.php?interactive=1&NavigationControl=1&FullScreenControl=0&Cookies=0&InfoDiv=0&MenuButtonDiv=0&ScaleControl=0&CirclesRangeValue=1&LinksCheckboxChecked=0&LinksRangeValue=0&MapStyle=1&MapStyleRangeValue=3&Advertisment=0#4/48.0/10.0" data-zoom-eu-desktop="#4/" data-zoom-eu-mobile="#2.5/">
+						</iframe>
+						<div class="overlay" id="overlayBlitzortungFrame" data-frame-id="blitzortung">
 							<span class="hint">Dvostruki klik za pristup interaktivnoj karti</span>
 						</div>
 					</div>
@@ -282,37 +290,44 @@
 
 			<tr>
 				<td align="center">
-					<div class="slideshow" data-slideshow-id="16">
+					<a href="https://www.stormforecast.eu" target="_blank" rel="nofollow">ESSL | Prognoza nevremena</a>
+					<div class="slideshow placeholder" data-slideshow-id="16" data-current-slide="2" style="max-width: 900px; aspect-ratio: 900 / 600;">
+						<div class="slide fade">
+							<img data-src="https://meteo-data.jurakovic.workers.dev/essl/img1.png" class="lazy" />
+						</div>
 						<div class="slide fade active">
-							<div class="radartitle">
-								<a href="https://www.stormforecast.eu" target="_blank" rel="nofollow">ESSL | Prognoza nevremena</a>
-							</div>
-							<div class="placeholder" style="max-width: 900px; aspect-ratio: 900 / 600; ">
-								<img src="https://weather.essl.org/storm/map_images/models/archamos/latest.png" />
-							</div>
+							<img src="https://meteo-data.jurakovic.workers.dev/essl/img2.png" />
 						</div>
 						<div class="slide fade">
-							<div class="radartitle">
-								<a href="https://www.stormforecast.eu" target="_blank" rel="nofollow">ESSL | Prognoza nevremena</a>
-							</div>
-							<div class="placeholder" style="max-width: 900px; aspect-ratio: 900 / 600; ">
-								<img id="essl" />
-							</div>
+							<img data-src="https://meteo-data.jurakovic.workers.dev/essl/img3.png" class="lazy" />
 						</div>
-						<div class="slide fade">
-							<div class="radartitle">
-								<a href="https://www.estofex.org" target="_blank" rel="nofollow">ESTOFEX | Prognoza nevremena</a>
-							</div>
-							<div class="placeholder" style="max-width: 800px; aspect-ratio: 1;">
-								<img src="https://www.estofex.org/forecasts/tempmap/.png" />
-							</div>
-						</div>
-						<a class="prev shorter" onclick="plusSlides(16, -1)">&#10094;</a>
-						<a class="next shorter" onclick="plusSlides(16, 1)">&#10095;</a>
+						<a class="prev" onclick="plusSlides(16, -1)">&#10094;</a>
+						<a class="next" onclick="plusSlides(16, 1)">&#10095;</a>
 					</div>
 					<div class="indicators-container" data-slideshow-id="16" style="grid-template-columns: repeat(3, 1fr);">
+						<span class="indicator"></span>
 						<span class="indicator active"></span>
 						<span class="indicator"></span>
+					</div>
+				</td>
+			</tr>
+			<tr class="sp"></tr>
+
+			<tr>
+				<td align="center">
+					<a href="https://www.estofex.org" target="_blank" rel="nofollow">ESTOFEX | Prognoza nevremena</a>
+					<div class="slideshow placeholder" data-slideshow-id="18" data-current-slide="1" style="max-width: 800px; aspect-ratio: 1;">
+						<div class="slide fade active">
+							<img src="https://meteo-data.jurakovic.workers.dev/estofex/img1.png" />
+						</div>
+						<div class="slide fade">
+							<img data-src="https://meteo-data.jurakovic.workers.dev/estofex/img2.png" class="lazy" />
+						</div>
+						<a class="prev" onclick="plusSlides(18, -1)">&#10094;</a>
+						<a class="next" onclick="plusSlides(18, 1)">&#10095;</a>
+					</div>
+					<div class="indicators-container" data-slideshow-id="18" style="max-width: 800px; grid-template-columns: repeat(2, 1fr);">
+						<span class="indicator active"></span>
 						<span class="indicator"></span>
 					</div>
 				</td>
@@ -333,21 +348,82 @@
 
 			<tr>
 				<td align="center">
-					<div class="radartitle" style="max-width: 768px;">
-						<a href="https://www.meteociel.fr/observations-meteo/satellite.php" target="_blank" rel="nofollow">Meteociel.fr | Satelit</a>
-					</div>
-					<div class="slideshow placeholder" data-slideshow-id="5" style="max-width: 768px; aspect-ratio: 1;">
+					<div class="slideshow" data-slideshow-id="5" data-current-slide="1" style="max-width: 768px;">
 						<div class="slide fade active">
-							<img src="https://neige.meteociel.fr/satellite/anim_ir.gif" />
+							<a href="https://www.meteociel.fr/observations-meteo/satellite.php?mode=animation-infrarouge-noir-et-blanc-hd-mtg" target="_blank" rel="nofollow">Meteociel.fr | Satelit</a>
+							<div class="placeholder" style="max-width: 768px; aspect-ratio: 1;">
+								<img src="https://modeles20.meteociel.fr/satellite/animsatirmtgeu.gif" />
+							</div>
 						</div>
 						<div class="slide fade">
-							<img data-src="https://neige.meteociel.fr/satellite/latest-ir.gif" class="lazy" />
+							<a href="https://www.meteociel.fr/observations-meteo/satellite.php?mode=infrarouge-noir-et-blanc-hd-mtg" target="_blank" rel="nofollow">Meteociel.fr | Satelit</a>
+							<div class="placeholder" style="max-width: 768px; aspect-ratio: 1;">
+								<img data-src="https://modeles20.meteociel.fr/satellite/latestsatirmtgeu.png" class="lazy" />
+							</div>
 						</div>
-						<a class="prev" onclick="plusSlides(5, -1)">&#10094;</a>
-						<a class="next" onclick="plusSlides(5, 1)">&#10095;</a>
+						<!--
+						<div class="slide fade">
+							<a href="https://www.meteociel.fr/observations-meteo/satellite.php?mode=animation-sandwich-visible-infrarouge-mtg" target="_blank" rel="nofollow">Meteociel.fr | Satelit</a>
+							<div class="placeholder" style="max-width: 768px; aspect-ratio: 1;">
+								<img data-src="https://modeles20.meteociel.fr/satellite/animsatsandvisirmtgeu.gif" class="lazy" />
+							</div>
+						</div>
+						<div class="slide fade">
+							<a href="https://www.meteociel.fr/observations-meteo/satellite.php?mode=sandwich-visible-infrarouge-mtg" target="_blank" rel="nofollow">Meteociel.fr | Satelit</a>
+							<div class="placeholder" style="max-width: 768px; aspect-ratio: 1;">
+								<img data-src="https://modeles20.meteociel.fr/satellite/latestsatsandvisirmtgeu.png" class="lazy" />
+							</div>
+						</div>
+						-->
+						<a class="prev shorter" onclick="plusSlides(5, -1)">&#10094;</a>
+						<a class="next shorter" onclick="plusSlides(5, 1)">&#10095;</a>
 					</div>
 					<div class="indicators-container" data-slideshow-id="5" style="max-width: 768px; grid-template-columns: repeat(2, 1fr);">
 						<span class="indicator active"></span>
+						<span class="indicator"></span>
+						<!--
+						<span class="indicator"></span>
+						<span class="indicator"></span>
+						-->
+					</div>
+				</td>
+			</tr>
+			<tr class="sp"></tr>
+
+			<tr>
+				<td align="center">
+					<div class="slideshow" data-slideshow-id="17" data-current-slide="1" data-dynamic-width style="max-width: 760px;">
+						<div class="slide fade active">
+							<a href="https://intranet.chmi.cz/aktualni-situace/aktualni-stav-pocasi/evropa/synopticka-situace" target="_blank" rel="nofollow">ČHMÚ | Sinoptička karta</a>
+							<div class="placeholder" style="max-width: 760px; aspect-ratio: 760 / 492;">
+								<img src="https://intranet.chmi.cz/files/portal/docs/meteo/om/evropa/analyza.gif" />
+							</div>
+						</div>
+						<div class="slide fade">
+							<a href="https://intranet.chmi.cz/predpovedi/predpovedi-pocasi/evropa/synopticka-situace" target="_blank" rel="nofollow">ČHMÚ | Sinoptička karta</a>
+							<div class="placeholder" style="max-width: 760px; aspect-ratio: 760 / 435; ">
+								<img data-src="https://intranet.chmi.cz/files/portal/docs/meteo/om/evropa/preba/preba36.gif" class="lazy" />
+							</div>
+						</div>
+						<div class="slide fade">
+							<a href="https://intranet.chmi.cz/predpovedi/predpovedi-pocasi/evropa/synopticka-situace" target="_blank" rel="nofollow">ČHMÚ | Sinoptička karta</a>
+							<div class="placeholder" style="max-width: 760px; aspect-ratio: 760 / 435; ">
+								<img data-src="https://intranet.chmi.cz/files/portal/docs/meteo/om/evropa/preba/preba60.gif" class="lazy" />
+							</div>
+						</div>
+						<div class="slide fade">
+							<a href="https://intranet.chmi.cz/predpovedi/predpovedi-pocasi/evropa/synopticka-situace" target="_blank" rel="nofollow">ČHMÚ | Sinoptička karta</a>
+							<div class="placeholder" style="max-width: 760px; aspect-ratio: 760 / 435; ">
+								<img data-src="https://intranet.chmi.cz/files/portal/docs/meteo/om/evropa/preba/preba84.gif" class="lazy" />
+							</div>
+						</div>
+						<a class="prev shorter" onclick="plusSlides(17, -1)">&#10094;</a>
+						<a class="next shorter" onclick="plusSlides(17, 1)">&#10095;</a>
+					</div>
+					<div class="indicators-container" data-slideshow-id="17" style="max-width: 760px; grid-template-columns: repeat(4, 1fr);">
+						<span class="indicator active"></span>
+						<span class="indicator"></span>
+						<span class="indicator"></span>
 						<span class="indicator"></span>
 					</div>
 				</td>
@@ -368,37 +444,37 @@
 
 			<tr>
 				<td align="center">
-					<div class="slideshow" data-slideshow-id="14">
+					<div class="slideshow" data-slideshow-id="14" data-current-slide="1">
 						<div class="slide fade active">
 							<div class="radartitle">
 								<a href="https://www.meteoblue.com/en/weather/week/zagreb_croatia_3186886" target="_blank" rel="nofollow">meteoblue | Prognoza | Zagreb</a>
 							</div>
-							<div class="placeholder" style="aspect-ratio: 1152 / 963;">
-								<img src="https://my.meteoblue.com/images/meteogram?temperature_units=C&windspeed_units=kmh&precipitation_units=mm&darkmode=true&iso2=hr&lat=45.8144&lon=15.978&asl=135&tz=Europe%2FZagreb&dpi=72&apikey=jhMJTOUVRNvs25m4&lang=en&location_name=Zagreb&sig=9f25f63e492378fa1a97510d2a290acd" />
+							<div class="placeholder" style="aspect-ratio: 1700 / 1300;">
+								<img src="https://meteo-data.jurakovic.workers.dev/meteoblue/meteogram/zagreb.png" />
 							</div>
 						</div>
 						<div class="slide fade">
 							<div class="radartitle">
 								<a href="https://www.meteoblue.com/en/weather/week/split_croatia_3190261" target="_blank" rel="nofollow">meteoblue | Prognoza | Split</a>
 							</div>
-							<div class="placeholder" style="aspect-ratio: 1152 / 963;">
-								<img src="https://my.meteoblue.com/images/meteogram?temperature_units=C&windspeed_units=kmh&precipitation_units=mm&darkmode=true&iso2=hr&lat=43.5089&lon=16.4391&asl=12&tz=Europe%2FZagreb&dpi=72&apikey=jhMJTOUVRNvs25m4&lang=en&location_name=Split&sig=52d3eea0042ccfccd932445f3ff1a158" />
+							<div class="placeholder" style="aspect-ratio: 1700 / 1300;">
+								<img src="https://meteo-data.jurakovic.workers.dev/meteoblue/meteogram/split.png" />
 							</div>
 						</div>
 						<div class="slide fade">
 							<div class="radartitle">
 								<a href="https://www.meteoblue.com/en/weather/week/rijeka_croatia_3191648" target="_blank" rel="nofollow">meteoblue | Prognoza | Rijeka</a>
 							</div>
-							<div class="placeholder" style="aspect-ratio: 1152 / 963;">
-								<img src="https://my.meteoblue.com/images/meteogram?temperature_units=C&windspeed_units=kmh&precipitation_units=mm&darkmode=true&iso2=hr&lat=45.3267&lon=14.4424&asl=12&tz=Europe%2FZagreb&dpi=72&apikey=jhMJTOUVRNvs25m4&lang=en&location_name=Rijeka&sig=67a56b4147ade3e713667e2451e5a94a" />
+							<div class="placeholder" style="aspect-ratio: 1700 / 1300;">
+								<img src="https://meteo-data.jurakovic.workers.dev/meteoblue/meteogram/rijeka.png" />
 							</div>
 						</div>
 						<div class="slide fade">
 							<div class="radartitle">
 								<a href="https://www.meteoblue.com/en/weather/week/osijek_croatia_3193935" target="_blank" rel="nofollow">meteoblue | Prognoza | Osijek</a>
 							</div>
-							<div class="placeholder" style="aspect-ratio: 1152 / 963;">
-								<img src="https://my.meteoblue.com/images/meteogram?temperature_units=C&windspeed_units=kmh&precipitation_units=mm&darkmode=true&iso2=hr&lat=45.5511&lon=18.6939&asl=87&tz=Europe%2FZagreb&dpi=72&apikey=jhMJTOUVRNvs25m4&lang=en&location_name=Osijek&sig=9c848ca560bfeec99a8f8d812b50e4c8" />
+							<div class="placeholder" style="aspect-ratio: 1700 / 1300;">
+								<img src="https://meteo-data.jurakovic.workers.dev/meteoblue/meteogram/osijek.png" />
 							</div>
 						</div>
 						<a class="prev shorter" onclick="plusSlides(14, -1)">&#10094;</a>
@@ -412,7 +488,6 @@
 					</div>
 				</td>
 			</tr>
-			<tr class="sp"></tr>
 
 			<tr>
 				<td align="center" id="links">
@@ -435,7 +510,7 @@
 		·
 		<a href="/extras/index.html">Više</a>
 		|
-		<a href="https://jurakovic.github.io">Index</a>
+		<a href="https://jurakovic.github.io">Projekti</a>
 		·
 		<a href="https://github.com/jurakovic/meteo">GitHub</a>
 	</footer>
