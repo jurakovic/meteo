@@ -142,12 +142,21 @@ function addSwipeEvents() {
 
 		// Touch events for mobile
 		slideshow.addEventListener('touchstart', (e) => {
+			// Ignore multi-touch (e.g. pinch-zoom); only single-finger swipes change slides
+			if (e.touches.length > 1) {
+				isDragging = false;
+				return;
+			}
 			startX = e.touches[0].clientX;
 			startY = e.touches[0].clientY;
 			isDragging = false;
 		});
 
 		slideshow.addEventListener('touchmove', (e) => {
+			if (e.touches.length > 1) {
+				isDragging = false;
+				return;
+			}
 			endX = e.touches[0].clientX;
 			endY = e.touches[0].clientY;
 
@@ -167,6 +176,20 @@ function addSwipeEvents() {
 					handleSwipe(slideshow, startX, endX);
 				}
 			}
+		});
+
+		// Prevent prev/next buttons from changing the slide during a pinch-zoom gesture.
+		// A two-finger touch still synthesizes a click on the button, so suppress that
+		// click whenever more than one finger was involved in the gesture.
+		slideshow.querySelectorAll('.prev, .next').forEach(btn => {
+			let multiTouch = false;
+			btn.addEventListener('touchstart', (e) => {
+				if (e.touches.length > 1) multiTouch = true;
+			});
+			btn.addEventListener('touchend', (e) => {
+				if (multiTouch) e.preventDefault(); // cancel the click that would follow
+				if (e.touches.length === 0) multiTouch = false; // reset once all fingers lift
+			});
 		});
 
 		// Mouse events for desktop
@@ -245,6 +268,7 @@ function hideOverlayOnDoubleTap() {
 
 	overlays.forEach((overlay) => {
 		let lastTap = 0;
+		let multiTouch = false;
 
 		overlay.addEventListener('dblclick', () => {
 			overlay.style.display = 'none';
@@ -253,7 +277,21 @@ function hideOverlayOnDoubleTap() {
 			setResetButtonToExit(resetFrame);
 		});
 
+		overlay.addEventListener('touchstart', (e) => {
+			if (e.touches.length > 1) multiTouch = true;
+		});
+
 		overlay.addEventListener('touchend', (e) => {
+			// Ignore multi-touch gestures (e.g. pinch-zoom): their two quick touchend
+			// events can otherwise be mistaken for a double-tap and hide the overlay.
+			if (multiTouch) {
+				if (e.touches.length === 0) {
+					multiTouch = false;
+					lastTap = 0;
+				}
+				return;
+			}
+
 			const currentTime = new Date().getTime();
 			const tapLength = currentTime - lastTap;
 
