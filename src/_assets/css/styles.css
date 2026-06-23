@@ -51,11 +51,13 @@ table {
 	.radartitle .left {
 		position: absolute;
 		left: 0;
+		margin-left: 3px;
 	}
 
 	.radartitle .right {
 		position: absolute;
 		right: 0;
+		margin-right: 3px;
 		text-decoration: none;
 	}
 
