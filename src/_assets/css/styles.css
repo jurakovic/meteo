@@ -27,6 +27,7 @@ table {
 	width: 100%;
 	max-width: 875px;
 	height: auto;
+	table-layout: fixed;
 }
 
 .placeholder {
@@ -170,6 +171,9 @@ iframe, video {
 	background-color: #8c2c2c;
 	box-sizing: border-box;
 	padding: 5px 4px;
+	white-space: nowrap;
+	overflow-x: auto;
+	-webkit-overflow-scrolling: touch;
 }
 
 @media (max-width: 800px) {
