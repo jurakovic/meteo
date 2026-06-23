@@ -190,6 +190,12 @@ iframe, video {
 	height: 24px;
 }
 
+@media (max-width: 800px) {
+	.sp20 {
+		height: 12px;
+	}
+}
+
 .buttons {
 	display: grid;
 	grid-template-columns: 49.5% 49.5%;
