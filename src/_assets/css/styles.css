@@ -19,9 +19,9 @@ a {
 	text-decoration: none;
 }
 
-a:hover {
-	text-decoration: underline;
-}
+	a:hover {
+		text-decoration: underline;
+	}
 
 table {
 	width: 100%;
@@ -250,6 +250,7 @@ iframe, video {
 	.prev:hover {
 		background-image: linear-gradient(to left, transparent, rgba(0,0,0,0.6));
 		color: white;
+		text-decoration: none;
 	}
 
 	.prev.shorter {
@@ -264,6 +265,7 @@ iframe, video {
 	.next:hover {
 		background-image: linear-gradient(to right, transparent, rgba(0,0,0,0.6));
 		color: white;
+		text-decoration: none;
 	}
 
 	.next.shorter {
