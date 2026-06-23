@@ -230,6 +230,24 @@ function addSwipeEvents() {
 	});
 }
 
+function updateLinksScrollShadow(bar) {
+	const max = bar.scrollWidth - bar.clientWidth;
+	const left = bar.scrollLeft;
+	bar.classList.toggle('can-scroll-left', left > 1);
+	bar.classList.toggle('can-scroll-right', max > 1 && left < max - 1);
+}
+
+function updateLinksScrollShadows() {
+	document.querySelectorAll('.links-bottom').forEach(updateLinksScrollShadow);
+}
+
+function addLinksScrollShadows() {
+	document.querySelectorAll('.links-bottom').forEach(bar => {
+		bar.addEventListener('scroll', () => updateLinksScrollShadow(bar), { passive: true });
+	});
+	updateLinksScrollShadows();
+}
+
 let previousWidth = 0;
 
 function updateIframeSrc() {
@@ -445,6 +463,7 @@ document.addEventListener('DOMContentLoaded', () => {
 	updateIframeSrc();
 	hideOverlayOnDoubleTap();
 	updateHintText();
+	addLinksScrollShadows();
 });
 
 window.addEventListener('resize', () => {
@@ -452,5 +471,6 @@ window.addEventListener('resize', () => {
 	window._resizeTimeout = setTimeout(() => {
 		updateIframeSrc();
 		updateHintText();
+		updateLinksScrollShadows();
 	}, 200);
 });

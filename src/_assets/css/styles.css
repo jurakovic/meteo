@@ -176,7 +176,48 @@ iframe, video {
 	white-space: nowrap;
 	overflow-x: auto;
 	-webkit-overflow-scrolling: touch;
+	scrollbar-width: none;
+	-ms-overflow-style: none;
 }
+
+	.links-bottom::-webkit-scrollbar {
+		display: none;
+	}
+
+	.links-bottom::before,
+	.links-bottom::after {
+		content: "";
+		position: sticky;
+		display: inline-block;
+		width: 24px;
+		height: 1.4em;
+		margin-top: -0.3em;
+		margin-bottom: -0.3em;
+		vertical-align: middle;
+		pointer-events: none;
+		opacity: 0;
+		transition: opacity 0.2s ease;
+	}
+
+	.links-bottom::before {
+		left: -4px;
+		margin-right: -24px;
+		background: linear-gradient(to left, transparent, #6e2424);
+	}
+
+	.links-bottom::after {
+		right: -4px;
+		margin-left: -24px;
+		background: linear-gradient(to right, transparent, #6e2424);
+	}
+
+	.links-bottom.can-scroll-left::before {
+		opacity: 1;
+	}
+
+	.links-bottom.can-scroll-right::after {
+		opacity: 1;
+	}
 
 @media (max-width: 800px) {
 	.links-bottom {
