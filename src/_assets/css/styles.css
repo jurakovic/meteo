@@ -356,17 +356,16 @@ iframe, video {
 	grid-template-columns: repeat(3, 1fr);
 	gap: 4px;
 	width: 100%;
-	margin-top: 1px;
 }
 
 .indicator {
-	height: 5px;
+	height: 4px;
 	background-color: #4e5264;
 	transition: background-color 0.3s;
 }
 
 	.indicator.active {
-		background-color: white;
+		background-color: #ff9800;
 	}
 
 @media (max-width: 800px) {
