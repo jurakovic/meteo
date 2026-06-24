@@ -169,6 +169,7 @@ iframe, video {
 }
 
 .links-bottom {
+	display: none;
 	text-align: left;
 	background-color: #3a3f4a;
 	box-sizing: border-box;
@@ -219,6 +220,10 @@ iframe, video {
 		opacity: 1;
 	}
 
+	body.show-links-bottom .links-bottom {
+		display: block;
+	}
+
 @media (max-width: 800px) {
 	.links-bottom {
 		font-size: 12px;
@@ -263,6 +268,19 @@ iframe, video {
 
 		.buttons .btn:hover {
 			background-color: #5F6F89;
+		}
+
+	.links-btn {
+		position: relative;
+	}
+
+		.links-btn .links-toggle {
+			position: absolute;
+			right: 8px;
+			top: 22px;
+			transform: translateY(-50%);
+			margin: 0;
+			cursor: pointer;
 		}
 
 .slideshow {

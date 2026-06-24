@@ -38,32 +38,33 @@
 		position:relative;width:100%;overflow:hidden;padding-top:87%}iframe,video{position:absolute;top:0;left:0;bottom:0;right:0;width:100%;height:
 		100%;border:none}.scaled-iframe{transform:scale(.9);width:calc(100% / .9);height:calc(100% / .9);transform-origin:0 0}
 		@media (max-width:800px){.scaled-iframe{transform:scale(.6);width:calc(100% / .6);height:calc(100% / .6);transform-origin:0 0}}.links-bottom
-		{text-align:left;background-color:#3a3f4a;box-sizing:border-box;padding:5px 4px;white-space:nowrap;overflow-x:auto;
+		{display:none;text-align:left;background-color:#3a3f4a;box-sizing:border-box;padding:5px 4px;white-space:nowrap;overflow-x:auto;
 		-webkit-overflow-scrolling:touch;scrollbar-width:none;-ms-overflow-style:none}.links-bottom::-webkit-scrollbar{display:none}
 		.links-bottom::after,.links-bottom::before{content:"";position:sticky;display:inline-block;width:24px;height:1.4em;margin-top:-.3em;
 		margin-bottom:-.3em;vertical-align:middle;pointer-events:none;opacity:0;transition:opacity .2s ease}.links-bottom::before{left:-4px;
 		margin-right:-24px;background:linear-gradient(to left,transparent,#3a3f4a)}.links-bottom::after{right:-4px;margin-left:-24px;background:
 		linear-gradient(to right,transparent,#3a3f4a)}.links-bottom.can-scroll-left::before{opacity:1}.links-bottom.can-scroll-right::after{opacity:
-		1}@media (max-width:800px){.links-bottom{font-size:12px}}.sp{height:12px}.sp20{height:24px}@media (max-width:800px){.sp20{height:12px}}
-		.buttons{display:grid;grid-template-columns:49.5% 49.5%;gap:1%;font-size:13px}.buttons .btn{margin-top:10px;margin-bottom:5px;font-size:13px
-		;font-family:inherit;color:#fff;background-color:#485871;align-content:center;cursor:pointer;width:100%;height:24px;border:none;outline:0}
-		.buttons .btn:hover{background-color:#5f6f89}.slideshow{position:relative;display:flex;justify-content:center}.slide{display:none}
-		.slide.active{display:block}.next,.prev{cursor:pointer;position:absolute;align-content:center;top:0;bottom:0;width:15%;padding:16px;color:
-		transparent;opacity:.7;font-weight:700;font-size:36px;transition:.6s ease;user-select:none}.prev{left:0;text-align:left}.prev:hover{
-		background-image:linear-gradient(to left,transparent,rgba(0,0,0,.6));color:#fff;text-decoration:none}.prev.shorter{top:23px}.next{right:0;
-		text-align:right}.next:hover{background-image:linear-gradient(to right,transparent,rgba(0,0,0,.6));color:#fff;text-decoration:none}
-		.next.shorter{top:23px}.fade{animation-name:fade;animation-duration:1s}@keyframes fade{from{opacity:.6}to{opacity:1}}
-		@media (max-width:800px){.next,.prev{padding:12px;font-size:20px}.next.shorter,.prev.shorter{top:23px}}.indicators-container{display:grid;
-		grid-template-columns:repeat(3,1fr);gap:4px;width:100%}.indicator{height:3px;background-color:#4e5264;transition:background-color .3s}
-		.indicator.active{background-color:#ff9800}@media (max-width:800px){.indicator{height:2px}}.expandable{position:relative;justify-content:
-		center;margin-top:10px;margin-bottom:4px;font-family:inherit;color:#fff;background-color:#485871;cursor:pointer;width:100%;height:24px;
-		border:none;outline:0}.expandable:hover{background-color:#5f6f89}.expandable .arrow{position:absolute;right:10px;top:2px;font-size:14px}
-		.links{font-size:14px;display:grid;grid-template-columns:25% 45% 30%;gap:0;max-height:0;overflow:hidden;transition:max-height .3s ease-out}
-		.links .item{padding:5px;margin:0 2px}.links .item:not(:last-child){border-right:1px solid #fff}.links p{margin-top:0;text-align:left}
-		@media (max-width:800px){.links{grid-template-columns:1fr}.links .item{margin:5px 0;border-right:none!important}}footer{position:sticky;top:
-		100%;background:#485871;color:#fff;text-align:center;padding:8px;margin-top:8px}.progress-container{position:fixed;left:0;top:0;width:100%;
-		height:3px;z-index:1000;background-color:#5c5c5c80}.progress-bar{width:0;height:100%;background-color:#4caf50;transition:width .3s
-		ease-in-out}
+		1}body.show-links-bottom .links-bottom{display:block}@media (max-width:800px){.links-bottom{font-size:12px}}.sp{height:12px}.sp20{height:
+		24px}@media (max-width:800px){.sp20{height:12px}}.buttons{display:grid;grid-template-columns:49.5% 49.5%;gap:1%;font-size:13px}.buttons .btn
+		{margin-top:10px;margin-bottom:5px;font-size:13px;font-family:inherit;color:#fff;background-color:#485871;align-content:center;cursor:
+		pointer;width:100%;height:24px;border:none;outline:0}.buttons .btn:hover{background-color:#5f6f89}.links-btn{position:relative}
+		.links-btn .links-toggle{position:absolute;right:8px;top:22px;transform:translateY(-50%);margin:0;cursor:pointer}.slideshow{position:
+		relative;display:flex;justify-content:center}.slide{display:none}.slide.active{display:block}.next,.prev{cursor:pointer;position:absolute;
+		align-content:center;top:0;bottom:0;width:15%;padding:16px;color:transparent;opacity:.7;font-weight:700;font-size:36px;transition:.6s ease;
+		user-select:none}.prev{left:0;text-align:left}.prev:hover{background-image:linear-gradient(to left,transparent,rgba(0,0,0,.6));color:#fff;
+		text-decoration:none}.prev.shorter{top:23px}.next{right:0;text-align:right}.next:hover{background-image:
+		linear-gradient(to right,transparent,rgba(0,0,0,.6));color:#fff;text-decoration:none}.next.shorter{top:23px}.fade{animation-name:fade;
+		animation-duration:1s}@keyframes fade{from{opacity:.6}to{opacity:1}}@media (max-width:800px){.next,.prev{padding:12px;font-size:20px}
+		.next.shorter,.prev.shorter{top:23px}}.indicators-container{display:grid;grid-template-columns:repeat(3,1fr);gap:4px;width:100%}.indicator{
+		height:3px;background-color:#4e5264;transition:background-color .3s}.indicator.active{background-color:#ff9800}@media (max-width:800px){
+		.indicator{height:2px}}.expandable{position:relative;justify-content:center;margin-top:10px;margin-bottom:4px;font-family:inherit;color:#fff
+		;background-color:#485871;cursor:pointer;width:100%;height:24px;border:none;outline:0}.expandable:hover{background-color:#5f6f89}
+		.expandable .arrow{position:absolute;right:10px;top:2px;font-size:14px}.links{font-size:14px;display:grid;grid-template-columns:25% 45% 30%;
+		gap:0;max-height:0;overflow:hidden;transition:max-height .3s ease-out}.links .item{padding:5px;margin:0 2px}.links .item:not(:last-child){
+		border-right:1px solid #fff}.links p{margin-top:0;text-align:left}@media (max-width:800px){.links{grid-template-columns:1fr}.links .item{
+		margin:5px 0;border-right:none!important}}footer{position:sticky;top:100%;background:#485871;color:#fff;text-align:center;padding:8px;
+		margin-top:8px}.progress-container{position:fixed;left:0;top:0;width:100%;height:3px;z-index:1000;background-color:#5c5c5c80}.progress-bar{
+		width:0;height:100%;background-color:#4caf50;transition:width .3s ease-in-out}
 	</style>
 	<script>
 		function scrollToTop(){window.scrollTo({top:0,behavior:"smooth"})}function scrollToElement(e){const t=document.getElementById(e)
@@ -72,12 +73,16 @@
 		;const t=document.querySelector(".links");t.style.maxHeight?(t.style.maxHeight=null,
 		e.textContent="▼"):(t.style.maxHeight=t.scrollHeight+"px",e.textContent="▲",setTimeout(()=>{
 		document.documentElement.style.scrollBehavior="auto",document.body.style.scrollBehavior="auto",scrollToElement("links"),setTimeout(()=>{
-		document.documentElement.style.scrollBehavior="smooth",document.body.style.scrollBehavior="smooth"},50)},310))})}function plusSlides(e,t){
+		document.documentElement.style.scrollBehavior="smooth",document.body.style.scrollBehavior="smooth"},50)},310))})}
+		function toggleLinksBottom(e){document.body.classList.toggle("show-links-bottom",e.checked),
+		localStorage.setItem("showLinksBottom",e.checked?"1":"0"),updateLinksScrollShadows()}function initLinksBottom(){
+		const e=document.querySelector(".links-toggle");e&&(e.checked="1"===localStorage.getItem("showLinksBottom"),
+		document.body.classList.toggle("show-links-bottom",e.checked))}function plusSlides(e,t){
 		const o=document.querySelector(`.slideshow[data-slideshow-id="${e}"]`);showSlides(o,parseInt(o.getAttribute("data-current-slide"))+t)}
 		function showSlides(e,t){
 		const o=e.getAttribute("data-slideshow-id"),n=e.querySelectorAll(".slide"),r=document.querySelectorAll(`.indicators-container[data-slideshow-id="${o}"] .indicator`)
-		;let i=t;i>n.length&&(i=1),i<1&&(i=n.length),e.setAttribute("data-current-slide",i),n.forEach(e=>e.classList.remove("active")),
-		n[i-1].classList.add("active"),r.forEach(e=>e.classList.remove("active")),r[i-1].classList.add("active"),updateSlideshowWidth(e)}
+		;let s=t;s>n.length&&(s=1),s<1&&(s=n.length),e.setAttribute("data-current-slide",s),n.forEach(e=>e.classList.remove("active")),
+		n[s-1].classList.add("active"),r.forEach(e=>e.classList.remove("active")),r[s-1].classList.add("active"),updateSlideshowWidth(e)}
 		function updateSlideshowWidth(e){if(!e.hasAttribute("data-dynamic-width"))return
 		;const t=e.getAttribute("data-slideshow-id"),o=document.querySelector(`.indicators-container[data-slideshow-id='${t}']`),n=e.querySelector(".slide.active .placeholder")
 		;e.style.maxWidth=n.style.maxWidth,o.style.maxWidth=n.style.maxWidth}function showProgress(){
@@ -86,15 +91,15 @@
 		e.addEventListener("load",()=>{o++,n()}),e.addEventListener("error",()=>{o++,dlog(`Error loading image: ${e.src}`),e.removeAttribute("src"),
 		n()}),e.complete&&e.dispatchEvent(new Event("load"))})}function handleSwipe(e,t,o){const n=o-t;if(Math.abs(n)>50){
 		const t=parseInt(e.getAttribute("data-current-slide"));showSlides(e,t+(n>0?-1:1))}}function addSwipeEvents(){
-		document.querySelectorAll(".slideshow").forEach(e=>{let t=0,o=0,n=0,r=0,i=!1;e.querySelectorAll("img").forEach(e=>{
+		document.querySelectorAll(".slideshow").forEach(e=>{let t=0,o=0,n=0,r=0,s=!1;e.querySelectorAll("img").forEach(e=>{
 		e.addEventListener("dragstart",e=>e.preventDefault())}),e.addEventListener("touchstart",e=>{e.touches.length>1||(t=e.touches[0].clientX,
-		o=e.touches[0].clientY),i=!1}),e.addEventListener("touchmove",e=>{e.touches.length>1?i=!1:(n=e.touches[0].clientX,r=e.touches[0].clientY,
-		Math.abs(n-t)>Math.abs(r-o)&&(i=!0))}),e.addEventListener("touchend",()=>{if(i){const i=n-t,s=r-o
-		;Math.abs(i)>Math.abs(s)&&handleSwipe(e,t,n)}}),e.querySelectorAll(".prev, .next").forEach(e=>{let t=!1;e.addEventListener("touchstart",e=>{
+		o=e.touches[0].clientY),s=!1}),e.addEventListener("touchmove",e=>{e.touches.length>1?s=!1:(n=e.touches[0].clientX,r=e.touches[0].clientY,
+		Math.abs(n-t)>Math.abs(r-o)&&(s=!0))}),e.addEventListener("touchend",()=>{if(s){const s=n-t,i=r-o
+		;Math.abs(s)>Math.abs(i)&&handleSwipe(e,t,n)}}),e.querySelectorAll(".prev, .next").forEach(e=>{let t=!1;e.addEventListener("touchstart",e=>{
 		e.touches.length>1&&(t=!0)}),e.addEventListener("touchend",e=>{t&&e.preventDefault(),0===e.touches.length&&(t=!1)})}),
-		e.addEventListener("mousedown",e=>{t=e.clientX,o=e.clientY,i=!0}),e.addEventListener("mousemove",e=>{i&&(n=e.clientX,r=e.clientY)}),
-		e.addEventListener("mouseup",s=>{if(i){n=s.clientX,r=s.clientY;const a=n-t,d=r-o;Math.abs(a)>Math.abs(d)&&handleSwipe(e,t,n),i=!1}}),
-		e.addEventListener("mouseleave",()=>{i&&(i=!1)})})}function updateLinksScrollShadow(e){const t=e.scrollWidth-e.clientWidth,o=e.scrollLeft
+		e.addEventListener("mousedown",e=>{t=e.clientX,o=e.clientY,s=!0}),e.addEventListener("mousemove",e=>{s&&(n=e.clientX,r=e.clientY)}),
+		e.addEventListener("mouseup",i=>{if(s){n=i.clientX,r=i.clientY;const a=n-t,d=r-o;Math.abs(a)>Math.abs(d)&&handleSwipe(e,t,n),s=!1}}),
+		e.addEventListener("mouseleave",()=>{s&&(s=!1)})})}function updateLinksScrollShadow(e){const t=e.scrollWidth-e.clientWidth,o=e.scrollLeft
 		;e.classList.toggle("can-scroll-left",o>1),e.classList.toggle("can-scroll-right",t>1&&o<t-1)}function updateLinksScrollShadows(){
 		document.querySelectorAll(".links-bottom").forEach(updateLinksScrollShadow)}function addLinksScrollShadows(){
 		document.querySelectorAll(".links-bottom").forEach(e=>{e.addEventListener("scroll",()=>updateLinksScrollShadow(e),{passive:!0})}),
@@ -110,11 +115,11 @@
 		;"[R]"===r.textContent&&(r.style.display="none")}function hideOverlayOnDoubleTap(){document.querySelectorAll(".if1 .overlay").forEach(e=>{
 		let t=0,o=!1;e.addEventListener("dblclick",()=>{e.style.display="none";let t=getResetButtonFromOverlayId(e.id);t.removeAttribute("style"),
 		setResetButtonToExit(t)}),e.addEventListener("touchstart",e=>{e.touches.length>1&&(o=!0)}),e.addEventListener("touchend",n=>{
-		if(o)return void(0===n.touches.length&&(o=!1,t=0));const r=(new Date).getTime(),i=r-t;if(i>0&&i<200){e.style.display="none"
+		if(o)return void(0===n.touches.length&&(o=!1,t=0));const r=(new Date).getTime(),s=r-t;if(s>0&&s<200){e.style.display="none"
 		;let t=getResetButtonFromOverlayId(e.id);t.removeAttribute("style"),setResetButtonToExit(t),n.preventDefault()}t=r})
-		;const n=e.querySelector(".hint");let r=0,i=0;e.addEventListener("touchstart",e=>{1===e.touches.length&&(i=e.touches[0].clientX,
+		;const n=e.querySelector(".hint");let r=0,s=0;e.addEventListener("touchstart",e=>{1===e.touches.length&&(s=e.touches[0].clientX,
 		r=e.touches[0].clientY)}),e.addEventListener("touchend",e=>{if(!n)return
-		;const t=e.changedTouches[0].clientX,o=e.changedTouches[0].clientY,s=Math.abs(t-i),a=Math.abs(o-r);s<10&&a<10&&(n.style.opacity="0.6",
+		;const t=e.changedTouches[0].clientX,o=e.changedTouches[0].clientY,i=Math.abs(t-s),a=Math.abs(o-r);i<10&&a<10&&(n.style.opacity="0.6",
 		clearTimeout(n._hideTimer),n._hideTimer=setTimeout(()=>{n.style.removeProperty("opacity")},2e3))})})}function updateHintText(){
 		const e=window.innerWidth<800;document.querySelectorAll(".hint").forEach(t=>{
 		t.textContent=e?"Dvostruki dodir za pristup interaktivnoj karti":"Dvostruki klik za pristup interaktivnoj karti"})}
@@ -135,9 +140,9 @@
 		return String(e).padStart(t,o||"0")}const isDebugEnabled="1"===new URLSearchParams(window.location.search).get("debug");function dlog(...e){
 		isDebugEnabled&&console.log(...e)}document.addEventListener("DOMContentLoaded",()=>{document.querySelectorAll("img.lazy").forEach(e=>{
 		e.src=e.getAttribute("data-src"),e.classList.remove("lazy")}),showProgress(),addExpandableClickEventListener(),addSwipeEvents(),
-		updateIframeSrc(),hideOverlayOnDoubleTap(),updateHintText(),addLinksScrollShadows()}),window.addEventListener("resize",()=>{
-		clearTimeout(window._resizeTimeout),window._resizeTimeout=setTimeout(()=>{updateIframeSrc(),updateHintText(),updateLinksScrollShadows()
-		},200)});
+		updateIframeSrc(),hideOverlayOnDoubleTap(),updateHintText(),initLinksBottom(),addLinksScrollShadows()}),
+		window.addEventListener("resize",()=>{clearTimeout(window._resizeTimeout),window._resizeTimeout=setTimeout(()=>{updateIframeSrc(),
+		updateHintText(),updateLinksScrollShadows()},200)});
 	</script>
 	<script async src="https://www.googletagmanager.com/gtag/js?id=G-233EMZJM16"></script>
 	<script>
@@ -159,7 +164,10 @@
 				<td align="center">
 					<div class="buttons">
 						<a href="/meteo/extras/" style="text-decoration: none"><div class="btn">Više</div></a>
-						<button type="button" class="btn" onclick="scrollToElement('links')">Linkovi</button>
+						<div class="links-btn">
+							<button type="button" class="btn" onclick="scrollToElement('links')">Linkovi</button>
+							<input type="checkbox" class="links-toggle" onchange="toggleLinksBottom(this)" title="Prikaži linkove ispod karata" />
+						</div>
 					</div>
 				</td>
 			</tr>

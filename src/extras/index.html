@@ -26,7 +26,10 @@
 				<td align="center">
 					<div class="buttons">
 						<a href="/" style="text-decoration: none"><div class="btn">Početna</div></a>
-						<button type="button" class="btn" onclick="scrollToElement('links')">Linkovi</button>
+						<div class="links-btn">
+							<button type="button" class="btn" onclick="scrollToElement('links')">Linkovi</button>
+							<input type="checkbox" class="links-toggle" onchange="toggleLinksBottom(this)" title="Prikaži linkove ispod karata" />
+						</div>
 					</div>
 				</td>
 			</tr>
