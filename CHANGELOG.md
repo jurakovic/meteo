@@ -1,222 +1,157 @@
-meteo changelog
 
-https://jurakovic.github.io/meteo/
+2026-06-24 (#35)
+	added a row of inline quick links (Windy, Zoom Earth, meteoblue, Rain Viewer, Ventusky, Vrijeme&Radar, Sat24, I'm Weather, Időkép) under each map, with region-specific coordinates.
+	added a "Linkovi" toggle to show/hide the inline link rows (remembered via localStorage).
+	added Ventusky and Rain Viewer link sources, renamed "Weather&Radar" to "Vrijeme&Radar", switched Wetterzentrale model from ICON to ECMWF, fixed broken links.
 
-Wednesday, 24 June 2026
-	added inline links under each radar/satellite map. (#35)
-
-Monday, 22 June 2026
-	adjusted iframe (.if1) aspect ratio on desktop.
+2026-06-22
 	prevented multi-touch gestures from triggering slide/overlay actions.
+	adjusted interactive map aspect ratio on desktop.
 
-Wednesday, 3 June 2026
-	added a new README.
+2026-06-02 (#34)
+	separated ESSL and ESTOFEX storm forecasts and added more forecast images.
 
-Tuesday, 2 June 2026
-	separated ESSL and ESTOFEX forecasts, use more images. (#34)
-	renamed README to INTERNALS.
+2026-05-09 (#33)
+	reverted to meteoblue meteogram widgets.
 
-Saturday, 9 May 2026
-	switched back to meteogram widgets (reverted #30). (#33)
+2026-03-26 (#32)
+	added an [HR]/[EU] toggle to all interactive maps (Windy, Blitzortung, Ventusky, Rain Viewer, Weather&Radar) to switch between Croatia- and Europe-centered views, with separate desktop and mobile zoom levels.
+	fixed the progress bar hiding prematurely on mobile before lazy images finished loading.
 
-Thursday, 26 March 2026
-	added HR/EU interactive map zoom toggle.
-	other minor fixes and optimizations. (#32)
+2026-02-23
+	hide chmu map white margins.
 
-Monday, 23 February 2026
-	hid chmu top and bottom white margins.
+2026-02-11 (#31)
+	changed meteoblue meteogram from 7-day to 5-day.
+	fixed meteociel satellite slide size.
 
-Wednesday, 11 February 2026
-	minor updates and fixes. (#31)
+2026-02-04 (#30)
+	replaced meteoblue meteogram widgets with the image API (Zagreb).
 
-Wednesday, 4 February 2026
-	replaced meteoblue widget meteograms with the image api. (#30)
+2026-01-10 (#29)
+	fixed the chmu synoptic map and moved chmu maps to the main page.
+	changed neverin europe images to a whole-Europe view.
+	updated meteociel images.
 
-Saturday, 10 January 2026
-	updated images. (#29)
+2025-11-15 (#28)
+	updated meteoblue meteograms (meteoblue began requiring registration for widgets).
 
-Saturday, 15 November 2025
-	updated meteoblue meteograms. (#28)
+2025-07-27 (#27)
+	fixed ESSL storm forecast lookup.
+	added ESTOFEX forecast slide.
 
-Sunday, 27 July 2025
-	fixed ESSL forecast lookup.
-	added ESTOFEX slide. (#27)
+2025-07-07 (#26)
+	moved the image load progress bar to the top.
+	added Rain Alarm to links.
 
-Wednesday, 16 July 2025
-	fixed image aspect ratios (updated image sizes).
+2025-06-13 (#25)
+	reordered maps on the extras page (Ventusky on top).
+	changed RainViewer theme from dark to light.
+	added Zoom Earth links.
 
-Monday, 7 July 2025
-	moved the progress bar to the top.
-	added Rain Alarm to links. (#26)
+2025-06-10 (#24)
+	added embedded Weather&Radar, Rain Viewer and Ventusky maps on the extras page.
+	added a button to exit interactive mode and reset a map to its default position and zoom.
+	moved meteo.si to the extras page.
 
-Friday, 13 June 2025
-	reordered maps on the extras page.
-	changed RainViewer theme.
-	updated links. (#25)
+2025-06-05 (#23)
+	added ESSL storm forecast.
 
-Tuesday, 10 June 2025
-	added Weather&Radar, Rain Viewer and Ventusky embeds.
-	refactored ESSL storm forecast calculation lookup.
-	other changes. (#24)
+2025-05-30 (#22)
+	made the Windy and Blitzortung overlays full size, with a hint to double click/tap to remove them.
+	added vrijeme.net (Facebook) to links.
 
-Thursday, 5 June 2025
-	added ESSL storm forecast. (#23)
+2025-05-21 (#21)
+	added the blitzortung.org lightning map.
+	enlarged the Windy map and prevented accidental map drag.
+	added meteociel.fr EU temperature slides and a EUMETView link.
+	moved istramet to the extras page.
 
-Friday, 30 May 2025
-	added windy and blitzortung overlay hint.
-	minified js and css.
-	updated seo and readme.
-	other minor updates. (#22)
+2025-05-11 (#20)
+	added swipe gestures to slideshows.
 
-Wednesday, 21 May 2025
-	updated links and images.
-	added blitzortung.org map. (#21)
+2025-05-08 (#19)
+	added slideshow position indicators.
 
-Sunday, 11 May 2025
-	added slideshow swipe gestures. (#20)
+2025-03-22 (#18)
+	made the links section expandable/collapsible.
 
-Thursday, 8 May 2025
-	added slideshow indicators. (#19)
-	fixed image aspect ratios (updated image sizes).
+2025-02-28 (#17)
+	added a placeholder background while images load.
 
-Saturday, 22 March 2025
-	added expandable/collapsible links. (#18)
+2024-12-31 (#16)
+	added air quality links and nebo.com.hr.
+	enabled the dhmz bilogora radar.
 
-Friday, 28 February 2025
-	added image placeholder background. (#17)
+2024-10-14 (#15)
+	fixed the progress bar getting stuck when images loaded from cache.
 
-Tuesday, 31 December 2024
-	added air quality links.
-	other minor changes. (#16)
+2024-10-11 (#14)
+	added an image load progress bar.
+	added SWPC home to links.
 
-Monday, 14 October 2024
-	updated progress bar. (#15)
+2024-09-28 (#13)
+	changed meteoblue forecast to a slideshow.
+	reordered and hid some images, updated and reordered links.
 
-Friday, 11 October 2024
-	added image load progress bar.
-	minor slideshow css fixes. (#14)
-
-Saturday, 28 September 2024
-	reordered and hid some images.
-	changed meteoblue to slideshow.
-	updated and reordered links.
-	other minor changes. (#13)
-
-Wednesday, 11 September 2024
-	included multiple images in place ("slideshow").
+2024-09-11 (#12)
+	added the ability to show multiple images in place as a "slideshow".
 	added meteoblue forecast.
-	other minor changes. (#12)
 
-Sunday, 8 September 2024
-	minor fixes and changes. (#11)
+2024-09-07 (#10)
+	added the extras page with site navigation buttons.
+	added and rearranged images, added Facebook page links.
 
-Saturday, 7 September 2024
-	added extras page.
-	updated links, added and rearranged images. (#10)
+2024-09-06 (#9)
+	moved links to the bottom with a new layout.
 
-Friday, 6 September 2024
-	moved links to the bottom, new layout. (#9)
+2024-08-25 (#8)
+	added a page footer.
 
-Sunday, 25 August 2024
-	added seo metadata and footer. (#8)
+2024-05-20
+	added ESTOFEX.
 
-Monday, 5 August 2024
-	removed node setup, build using bash + powershell.
-	updated readme. (#7)
-
-Saturday, 27 July 2024
-	added analytics. (#6)
-
-Sunday, 14 July 2024
-	split into src and docs (publish) for GitHub Pages. (#5)
-
-Friday, 12 July 2024
-	added beta (initial).
-
-Monday, 20 May 2024
-	added estofex.
-
-Monday, 13 May 2024
+2024-05-13
 	added space weather links.
 
-Saturday, 17 February 2024
-	enabled dhmz uljenje, added puntijarka, reordered.
+2024-02-17
+	added Puntijarka radar and re-enabled dhmz uljenje.
 
-Monday, 29 January 2024
-	reverted links delimiters change.
-	minor changes and fixes.
+2024-01-23 (#4)
+	added Weather&Radar.
 
-Thursday, 25 January 2024
-	disabled w&r radar.
-	fixed crlf.
+2024-01-16 (#3)
+	added Időkép.
 
-Tuesday, 23 January 2024
-	added weatherandradar. (#4)
-	disabled dhmz uljenje (damaged).
+2024-01-15 (#2)
+	added EUMETNET.
 
-Monday, 22 January 2024
-	changed links delimiters.
+2024-01-14 (#1)
+	added a curated weather links section.
 
-Friday, 19 January 2024
-	minor style changes.
+2024-01-11
+	added I'm Weather and fixed sat24.
 
-Tuesday, 16 January 2024
-	added idokep. (#3)
-	added .editorconfig and .gitignore, autoformat doc.
+2023-07-23
+	added the remaining DHMZ radars.
 
-Monday, 15 January 2024
-	added eumetnet.
-	cleanup. (#2)
+2023-07-20
+	added RainViewer and the Időkép Adria radar.
 
-Sunday, 14 January 2024
-	added links. (#1)
+2023-06-10
+	changed the DHMZ radar to an animated gif.
 
-Friday, 12 January 2024
-	temporarily disabled i'm weather.
-	added readme.
-	added github octocat.
+2022-04-16
+	changed sat24 to animated gifs (infrared and visual).
 
-Thursday, 11 January 2024
-	fixed sat24, added i'm weather.
+2022-04-10
+	fixed meteo.hr animation, added a timer.
 
-Sunday, 23 July 2023
-	added the rest of dhmz.
-	disabled idokep adria radar and rainviewer.
+2021-07-21
+	enlarged the Windy map.
 
-Thursday, 20 July 2023
-	added rainviewer.
-	enabled idokep adria radar.
-	fixed styles, added spaces.
-
-Saturday, 10 June 2023
-	changed dhmz to animated gif.
-
-Monday, 23 January 2023
-	updated favicons.
-
-Sunday, 22 January 2023
-	changed favicon from png to ico.
-
-Saturday, 16 April 2022
-	changed sat24 to api animated gifs (infrared and visual).
-
-Friday, 15 April 2022
-	removed sat24 and meteo.hr animation.
-
-Monday, 11 April 2022
-	changed sat24 visual to infrared.
-
-Sunday, 10 April 2022
-	fixed meteo.hr animation, added js timer.
-	added favicon.
-
-Wednesday, 21 July 2021
-	enlarged windy.
-
-Sunday, 18 July 2021
+2021-07-18
 	added responsive design.
-	changed background and text color, removed links from images.
-	added hit counter.
 
-Saturday, 17 July 2021
-	initial commit.
+2021-07-17
+	initial release.
