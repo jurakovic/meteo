@@ -170,7 +170,7 @@ iframe, video {
 
 .links-bottom {
 	text-align: left;
-	background-color: #6e2424;
+	background-color: #3a3f4a;
 	box-sizing: border-box;
 	padding: 5px 4px;
 	white-space: nowrap;
@@ -202,13 +202,13 @@ iframe, video {
 	.links-bottom::before {
 		left: -4px;
 		margin-right: -24px;
-		background: linear-gradient(to left, transparent, #6e2424);
+		background: linear-gradient(to left, transparent, #3a3f4a);
 	}
 
 	.links-bottom::after {
 		right: -4px;
 		margin-left: -24px;
-		background: linear-gradient(to right, transparent, #6e2424);
+		background: linear-gradient(to right, transparent, #3a3f4a);
 	}
 
 	.links-bottom.can-scroll-left::before {
@@ -361,7 +361,7 @@ iframe, video {
 
 .indicator {
 	height: 5px;
-	background-color: #ffffff40;
+	background-color: #4e5264;
 	transition: background-color 0.3s;
 }
 
