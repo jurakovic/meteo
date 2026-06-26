@@ -300,14 +300,20 @@ function toggleFullscreen(frameId, btn) {
 	if (if1.classList.contains('fullscreen')) {
 		exitFullscreen(if1);
 	} else {
+		const overlay = if1.querySelector('.overlay');
+		const resetBtn = getResetButtonFromFrameId(frameId);
+		// snapshot the current state (locked/interactive) to restore it on exit
+		if1._fsPrevState = {
+			overlayVisible: !overlay || overlay.style.display !== 'none',
+			resetVisible: !!resetBtn && resetBtn.style.display !== 'none',
+			resetMode: resetBtn && resetBtn.textContent === '[R]' ? 'reset' : 'exit'
+		};
 		if1.classList.add('fullscreen');
 		if1.previousElementSibling.classList.add('fullscreen');
 		document.body.classList.add('fs-lock');
 		btn.textContent = '[-]';
 		// unlock interactivity: drop the overlay gate and hide the reset button
-		const overlay = if1.querySelector('.overlay');
 		if (overlay) overlay.style.display = 'none';
-		const resetBtn = getResetButtonFromFrameId(frameId);
 		if (resetBtn) resetBtn.style.display = 'none';
 	}
 }
@@ -320,11 +326,24 @@ function exitFullscreen(if1) {
 	if (btn) btn.textContent = '[ ]';
 	if (!document.querySelector('.if1.fullscreen'))
 		document.body.classList.remove('fs-lock');
-	// re-gate the map and offer the reset ([R]) button, since fullscreen was interactive
-	const frameId = if1.querySelector('iframe').id;
-	const resetBtn = getResetButtonFromFrameId(frameId);
-	if (resetBtn) resetBtn.style.removeProperty('display');
-	restoreOverlay(frameId);
+	// restore the pre-fullscreen state captured on enter
+	const prev = if1._fsPrevState || { overlayVisible: true, resetVisible: false, resetMode: 'exit' };
+	const overlay = if1.querySelector('.overlay');
+	if (overlay) {
+		if (prev.overlayVisible) overlay.removeAttribute('style');
+		else overlay.style.display = 'none';
+	}
+	const resetBtn = getResetButtonFromFrameId(if1.querySelector('iframe').id);
+	if (resetBtn) {
+		if (prev.resetVisible) {
+			resetBtn.style.removeProperty('display');
+			if (prev.resetMode === 'reset') setResetButtonToReset(resetBtn);
+			else setResetButtonToExit(resetBtn);
+		} else {
+			resetBtn.style.display = 'none';
+		}
+	}
+	delete if1._fsPrevState;
 }
 
 function hideOverlayOnDoubleTap() {
