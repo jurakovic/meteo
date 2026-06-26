@@ -78,7 +78,22 @@ table {
 		.radartitle .right-cluster a {
 			text-decoration: none;
 			cursor: pointer;
+			position: relative; /* anchor for the enlarged tap area below */
 		}
+
+	/* enlarge the tap target around the small title-bar glyphs (HR/EU, fullscreen,
+	   reset) for easier tapping on touch screens — same trick as .links-toggle::before
+	   (.left/.zoom-btn is already positioned, so its ::before anchors to it) */
+	.radartitle .zoom-btn::before,
+	.radartitle .right-cluster a::before {
+		content: '';
+		position: absolute;
+		top: 50%;
+		left: 50%;
+		transform: translate(-50%, -50%);
+		width: 26px;
+		height: 26px;
+	}
 
 img {
 	max-width: 100%;
