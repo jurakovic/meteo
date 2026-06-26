@@ -294,6 +294,39 @@ function switchIframeZoom(frameId, btn) {
 	if (resetBtn.textContent === '[R]') resetBtn.style.display = 'none';
 }
 
+function toggleFullscreen(frameId, btn) {
+	dlog(`toggleFullscreen: ${frameId}`);
+	const if1 = document.getElementById(frameId).parentElement;
+	if (if1.classList.contains('fullscreen')) {
+		exitFullscreen(if1);
+	} else {
+		if1.classList.add('fullscreen');
+		if1.previousElementSibling.classList.add('fullscreen');
+		document.body.classList.add('fs-lock');
+		btn.textContent = '[-]';
+		// unlock interactivity: drop the overlay gate and hide the reset button
+		const overlay = if1.querySelector('.overlay');
+		if (overlay) overlay.style.display = 'none';
+		const resetBtn = getResetButtonFromFrameId(frameId);
+		if (resetBtn) resetBtn.style.display = 'none';
+	}
+}
+
+function exitFullscreen(if1) {
+	if1.classList.remove('fullscreen');
+	const title = if1.previousElementSibling;
+	title.classList.remove('fullscreen');
+	const btn = title.querySelector('.fs-btn');
+	if (btn) btn.textContent = '[ ]';
+	if (!document.querySelector('.if1.fullscreen'))
+		document.body.classList.remove('fs-lock');
+	// re-gate the map and offer the reset ([R]) button, since fullscreen was interactive
+	const frameId = if1.querySelector('iframe').id;
+	const resetBtn = getResetButtonFromFrameId(frameId);
+	if (resetBtn) resetBtn.style.removeProperty('display');
+	restoreOverlay(frameId);
+}
+
 function hideOverlayOnDoubleTap() {
 	const overlays = document.querySelectorAll('.if1 .overlay');
 
@@ -487,4 +520,9 @@ window.addEventListener('resize', () => {
 		updateHintText();
 		updateLinksScrollShadows();
 	}, 200);
+});
+
+document.addEventListener('keydown', (e) => {
+	if (e.key === 'Escape')
+		document.querySelectorAll('.if1.fullscreen').forEach(exitFullscreen);
 });

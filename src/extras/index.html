@@ -40,7 +40,10 @@
 					<div class="radartitle">
 						<a class="left zoom-btn" data-mode="hr" onclick="switchIframeZoom('ventusky', this)">[HR]</a>
 						<a class="center" href="https://www.ventusky.com/?p=44.5;16.5;6&l=radar&w=off" target="_blank" rel="nofollow">Ventusky</a>
-						<a class="right" id="resetVentuskyFrame" data-frame-id="ventusky" style="display:none">[X]</a>
+						<span class="right right-cluster">
+							<a class="fs-btn" onclick="toggleFullscreen('ventusky', this)">[ ]</a>
+							<a id="resetVentuskyFrame" data-frame-id="ventusky" style="display:none">[X]</a>
+						</span>
 					</div>
 					<div class="if1 placeholder">
 						<iframe id="ventusky" class="scaled-iframe" loading="eager" frameborder="0"
@@ -74,7 +77,10 @@
 					<div class="radartitle">
 						<a class="left zoom-btn" data-mode="hr" onclick="switchIframeZoom('rainViewer', this)">[HR]</a>
 						<a class="center" href="https://www.rainviewer.com/map.html?loc=44.5,16.5,6&oCS=1&c=5&lm=1&layer=radar&sm=1&sn=2&ts=1" target="_blank" rel="nofollow">Rain Viewer</a>
-						<a class="right" id="resetRainViewerFrame" data-frame-id="rainViewer" style="display:none">[X]</a>
+						<span class="right right-cluster">
+							<a class="fs-btn" onclick="toggleFullscreen('rainViewer', this)">[ ]</a>
+							<a id="resetRainViewerFrame" data-frame-id="rainViewer" style="display:none">[X]</a>
+						</span>
 					</div>
 					<div class="if1 placeholder">
 						<iframe id="rainViewer" class="scaled-iframe" loading="lazy" frameborder="0"
@@ -108,7 +114,10 @@
 					<div class="radartitle">
 						<a class="left zoom-btn" data-mode="hr" onclick="switchIframeZoom('weatherAndRadar', this)">[HR]</a>
 						<a class="center" href="https://www.vrijemeradar.hr/vremenski-radar/zagreb/18138691?center=44.5,16.5&zoom=7&layer=wr&tz=Europe%2FZagreb" target="_blank" rel="nofollow">Vrijeme&Radar</a>
-						<a class="right" id="resetWeatherAndRadarFrame" data-frame-id="weatherAndRadar" style="display:none">[X]</a>
+						<span class="right right-cluster">
+							<a class="fs-btn" onclick="toggleFullscreen('weatherAndRadar', this)">[ ]</a>
+							<a id="resetWeatherAndRadarFrame" data-frame-id="weatherAndRadar" style="display:none">[X]</a>
+						</span>
 					</div>
 					<div class="if1 placeholder">
 						<iframe id="weatherAndRadar" class="scaled-iframe" loading="lazy" frameborder="0" data-zoom-hr-desktop="&zoom=7.2" data-zoom-hr-mobile="&zoom=6.8" data-zoom-eu-desktop="&zoom=5.0" data-zoom-eu-mobile="&zoom=4.0"
