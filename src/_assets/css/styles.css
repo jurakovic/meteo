@@ -185,6 +185,7 @@ iframe, video {
 	left: 0;
 	right: 0;
 	z-index: 10000;
+	transform: translateZ(0); /* own compositing layer: keeps taps working over the iframe on mobile */
 }
 
 .if1.fullscreen {
