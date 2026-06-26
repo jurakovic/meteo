@@ -540,8 +540,3 @@ window.addEventListener('resize', () => {
 		updateLinksScrollShadows();
 	}, 200);
 });
-
-document.addEventListener('keydown', (e) => {
-	if (e.key === 'Escape')
-		document.querySelectorAll('.if1.fullscreen').forEach(exitFullscreen);
-});
