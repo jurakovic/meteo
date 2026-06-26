@@ -346,6 +346,32 @@ function exitFullscreen(if1) {
 	delete if1._fsPrevState;
 }
 
+function addTitleTapActivation() {
+	// On mobile, the synthetic click after interacting with a cross-origin iframe
+	// (e.g. tapping the map's own zoom controls) can be swallowed, leaving the
+	// title-bar buttons unresponsive. Fire the action on touchend instead and
+	// preventDefault to suppress the now-redundant synthetic click (no double-fire).
+	// Delegated on .radartitle so it survives the reset button being recloned.
+	const sel = '.zoom-btn, .fs-btn, .right-cluster a';
+	document.querySelectorAll('.radartitle').forEach(bar => {
+		let sx = 0, sy = 0;
+		bar.addEventListener('touchstart', (e) => {
+			if (e.touches.length === 1) {
+				sx = e.touches[0].clientX;
+				sy = e.touches[0].clientY;
+			}
+		}, { passive: true });
+		bar.addEventListener('touchend', (e) => {
+			const a = e.target.closest('a');
+			if (!a || !bar.contains(a) || !a.matches(sel)) return;
+			const t = e.changedTouches[0];
+			if (Math.abs(t.clientX - sx) > 10 || Math.abs(t.clientY - sy) > 10) return; // treat as scroll/swipe
+			e.preventDefault(); // stop the (possibly swallowed) synthetic click from firing too
+			a.click();
+		});
+	});
+}
+
 function hideOverlayOnDoubleTap() {
 	const overlays = document.querySelectorAll('.if1 .overlay');
 
@@ -527,6 +553,7 @@ document.addEventListener('DOMContentLoaded', () => {
 	addSwipeEvents();
 	updateIframeSrc();
 	hideOverlayOnDoubleTap();
+	addTitleTapActivation();
 	updateHintText();
 	initLinksBottom();
 	addLinksScrollShadows();

@@ -128,13 +128,17 @@
 		resetVisible:!1,resetMode:"exit"},s=e.querySelector(".overlay");s&&(n.overlayVisible?s.removeAttribute("style"):s.style.display="none")
 		;const r=getResetButtonFromFrameId(e.querySelector("iframe").id);r&&(n.resetVisible?(r.style.removeProperty("display"),
 		"reset"===n.resetMode?setResetButtonToReset(r):setResetButtonToExit(r)):r.style.display="none"),delete e._fsPrevState}
-		function hideOverlayOnDoubleTap(){document.querySelectorAll(".if1 .overlay").forEach(e=>{let t=0,o=!1;e.addEventListener("dblclick",()=>{
-		e.style.display="none";let t=getResetButtonFromOverlayId(e.id);t.removeAttribute("style"),setResetButtonToExit(t)}),
-		e.addEventListener("touchstart",e=>{e.touches.length>1&&(o=!0)}),e.addEventListener("touchend",n=>{
-		if(o)return void(0===n.touches.length&&(o=!1,t=0));const s=(new Date).getTime(),r=s-t;if(r>0&&r<200){e.style.display="none"
-		;let t=getResetButtonFromOverlayId(e.id);t.removeAttribute("style"),setResetButtonToExit(t),n.preventDefault()}t=s})
-		;const n=e.querySelector(".hint");let s=0,r=0;e.addEventListener("touchstart",e=>{1===e.touches.length&&(r=e.touches[0].clientX,
-		s=e.touches[0].clientY)}),e.addEventListener("touchend",e=>{if(!n)return
+		function addTitleTapActivation(){document.querySelectorAll(".radartitle").forEach(e=>{let t=0,o=0;e.addEventListener("touchstart",e=>{
+		1===e.touches.length&&(t=e.touches[0].clientX,o=e.touches[0].clientY)},{passive:!0}),e.addEventListener("touchend",n=>{
+		const s=n.target.closest("a");if(!s||!e.contains(s)||!s.matches(".zoom-btn, .fs-btn, .right-cluster a"))return;const r=n.changedTouches[0]
+		;Math.abs(r.clientX-t)>10||Math.abs(r.clientY-o)>10||(n.preventDefault(),s.click())})})}function hideOverlayOnDoubleTap(){
+		document.querySelectorAll(".if1 .overlay").forEach(e=>{let t=0,o=!1;e.addEventListener("dblclick",()=>{e.style.display="none"
+		;let t=getResetButtonFromOverlayId(e.id);t.removeAttribute("style"),setResetButtonToExit(t)}),e.addEventListener("touchstart",e=>{
+		e.touches.length>1&&(o=!0)}),e.addEventListener("touchend",n=>{if(o)return void(0===n.touches.length&&(o=!1,t=0))
+		;const s=(new Date).getTime(),r=s-t;if(r>0&&r<200){e.style.display="none";let t=getResetButtonFromOverlayId(e.id)
+		;t.removeAttribute("style"),setResetButtonToExit(t),n.preventDefault()}t=s});const n=e.querySelector(".hint");let s=0,r=0
+		;e.addEventListener("touchstart",e=>{1===e.touches.length&&(r=e.touches[0].clientX,s=e.touches[0].clientY)}),
+		e.addEventListener("touchend",e=>{if(!n)return
 		;const t=e.changedTouches[0].clientX,o=e.changedTouches[0].clientY,i=Math.abs(t-r),l=Math.abs(o-s);i<10&&l<10&&(n.style.opacity="0.6",
 		clearTimeout(n._hideTimer),n._hideTimer=setTimeout(()=>{n.style.removeProperty("opacity")},2e3))})})}function updateHintText(){
 		const e=window.innerWidth<800;document.querySelectorAll(".hint").forEach(t=>{
@@ -156,7 +160,7 @@
 		return String(e).padStart(t,o||"0")}const isDebugEnabled="1"===new URLSearchParams(window.location.search).get("debug");function dlog(...e){
 		isDebugEnabled&&console.log(...e)}document.addEventListener("DOMContentLoaded",()=>{document.querySelectorAll("img.lazy").forEach(e=>{
 		e.src=e.getAttribute("data-src"),e.classList.remove("lazy")}),showProgress(),addExpandableClickEventListener(),addSwipeEvents(),
-		updateIframeSrc(),hideOverlayOnDoubleTap(),updateHintText(),initLinksBottom(),addLinksScrollShadows()}),
+		updateIframeSrc(),hideOverlayOnDoubleTap(),addTitleTapActivation(),updateHintText(),initLinksBottom(),addLinksScrollShadows()}),
 		window.addEventListener("resize",()=>{clearTimeout(window._resizeTimeout),window._resizeTimeout=setTimeout(()=>{updateIframeSrc(),
 		updateHintText(),updateLinksScrollShadows()},200)});
 	</script>
