@@ -197,12 +197,6 @@ iframe, video {
 	z-index: 9999;
 }
 
-	.if1.fullscreen .scaled-iframe {
-		transform: none;
-		width: 100%;
-		height: 100%;
-	}
-
 body.fs-lock {
 	overflow: hidden;
 }
