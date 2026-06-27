@@ -227,19 +227,28 @@ body.fs-lock {
 @media (max-width: 800px) {
 	.fs-exit-bar {
 		display: flex;
-		align-items: center;
-		justify-content: center;
 		position: fixed;
 		left: 0;
 		right: 0;
 		bottom: 0;
 		height: 32px;
 		z-index: 10000;
-		background-color: #2b5797;
-		color: white;
-		cursor: pointer;
 		transform: translateZ(0);
 	}
+
+		.fs-exit-bar .fs-bar-btn {
+			flex: 1;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			background-color: #2b5797;
+			color: white;
+			cursor: pointer;
+		}
+
+		.fs-exit-bar .fs-bar-btn + .fs-bar-btn {
+			border-left: 1px solid #1f3d6b;
+		}
 
 	.if1.fullscreen {
 		bottom: 32px; /* reserve room for .fs-exit-bar */

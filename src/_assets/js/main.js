@@ -306,15 +306,24 @@ function toggleFullscreen(frameId, btn) {
 		if1.previousElementSibling.classList.add('fullscreen');
 		document.body.classList.add('fs-lock');
 		btn.textContent = '[-]';
-		// unlock interactivity: drop the overlay gate and hide the reset button
+		// unlock interactivity: drop the overlay gate
 		if (overlay) overlay.style.display = 'none';
-		if (resetBtn) resetBtn.style.display = 'none';
-		// big mobile exit target (CSS hides it on desktop) — reliable where the
-		// tiny edge buttons aren't, since it sits over no cross-origin iframe
+		// show [R] in the top bar to reset the map to default without leaving
+		// fullscreen (reliable on desktop; mobile uses the bottom bar's Reset)
+		if (resetBtn) setResetButtonToFullscreenReset(resetBtn);
+		// mobile bottom bar (CSS hides it on desktop): big reliable Reset | Exit
+		// targets, where the tiny top-bar edge buttons aren't reachable
 		const exitBar = document.createElement('div');
 		exitBar.className = 'fs-exit-bar';
-		exitBar.textContent = '✕ Zatvori cijeli zaslon';
-		exitBar.addEventListener('click', () => exitFullscreen(if1));
+		const resetZone = document.createElement('div');
+		resetZone.className = 'fs-bar-btn';
+		resetZone.textContent = 'Reset';
+		resetZone.addEventListener('click', () => resetIframePosition(frameId));
+		const exitZone = document.createElement('div');
+		exitZone.className = 'fs-bar-btn';
+		exitZone.textContent = 'Zatvori';
+		exitZone.addEventListener('click', () => exitFullscreen(if1));
+		exitBar.append(exitZone, resetZone);
 		document.body.appendChild(exitBar);
 		if1._fsExitBar = exitBar;
 	}
@@ -471,6 +480,26 @@ function resetIframe(frameId) {
 	const resetFrame = getResetButtonFromFrameId(frameId);
 	resetFrame.style.display = 'none';
 	setResetButtonToExit(resetFrame);
+}
+
+// reload the map to its default position/zoom without changing the button —
+// used while in fullscreen, where reset must stay available for repeated use
+function resetIframePosition(frameId) {
+	dlog(`resetIframePosition: ${frameId}`);
+	setIframeSrc(document.getElementById(frameId));
+}
+
+function setResetButtonToFullscreenReset(resetFrame) {
+	dlog(`setResetButtonToFullscreenReset: ${resetFrame.id}`);
+	const newResetFrame = resetFrame.cloneNode(true);
+	resetFrame.parentNode.replaceChild(newResetFrame, resetFrame);
+
+	newResetFrame.addEventListener('click', (e) => {
+		e.stopPropagation(); // Stop event bubbling
+		resetIframePosition(getFrameIdFromResetButtonId(newResetFrame.id));
+	});
+	newResetFrame.textContent = '[R]';
+	newResetFrame.style.removeProperty('display'); // ensure visible in fullscreen
 }
 
 function getResetButtonFromFrameId(frameId) {
