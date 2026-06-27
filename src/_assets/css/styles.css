@@ -213,13 +213,15 @@ iframe, video {
 	z-index: 9999;
 }
 
-	/* EXPERIMENT: drop the scale transform on the cross-origin iframe in fullscreen.
-	   Transforms on OOPIFs are a suspected trigger for Chromium/Android hit-test
-	   misrouting (taps on the title routed into the iframe process). */
+	/* EXPERIMENT: transform ruled out as the OOPIF hit-test trigger. Now testing
+	   whether removing the iframe from hit-testing entirely (pointer-events: none)
+	   lets taps reach the main-frame title bar. NOTE: this also makes the map
+	   non-interactive in fullscreen — temporary, just to confirm the lever works. */
 	.if1.fullscreen .scaled-iframe {
 		transform: none;
 		width: 100%;
 		height: 100%;
+		pointer-events: none;
 	}
 
 body.fs-lock {
