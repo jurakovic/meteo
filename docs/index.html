@@ -42,36 +42,37 @@
 		@media (max-width:800px){.scaled-iframe{transform:scale(.6);width:calc(100% / .6);height:calc(100% / .6);transform-origin:0 0}}
 		.radartitle.fullscreen{position:fixed;top:0;left:0;right:0;z-index:10000}.if1.fullscreen{position:fixed;top:23px;left:0;right:0;bottom:0;
 		padding-top:0;z-index:9999}body.fs-lock{overflow:hidden}.fs-exit-bar{display:none}@media (max-width:800px){.fs-exit-bar{display:flex;
-		align-items:center;justify-content:center;position:fixed;left:0;right:0;bottom:0;height:32px;z-index:10000;background-color:#2b5797;color:
-		#fff;cursor:pointer;transform:translateZ(0)}.if1.fullscreen{bottom:32px}}.links-bottom{display:none;text-align:left;background-color:#3a3f4a
-		;box-sizing:border-box;padding:5px 4px;white-space:nowrap;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;
-		-ms-overflow-style:none}.links-bottom::-webkit-scrollbar{display:none}.links-bottom::after,.links-bottom::before{content:"";position:sticky;
-		display:inline-block;width:24px;height:1.4em;margin-top:-.3em;margin-bottom:-.3em;vertical-align:middle;pointer-events:none;opacity:0;
-		transition:opacity .2s ease}.links-bottom::before{left:-4px;margin-right:-24px;background:linear-gradient(to left,transparent,#3a3f4a)}
-		.links-bottom::after{right:-4px;margin-left:-24px;background:linear-gradient(to right,transparent,#3a3f4a)}
-		.links-bottom.can-scroll-left::before{opacity:1}.links-bottom.can-scroll-right::after{opacity:1}body.show-links-bottom .links-bottom{display
-		:block}@media (max-width:800px){.links-bottom{font-size:12px}}.sp{height:12px}.sp20{height:24px}@media (max-width:800px){.sp20{height:12px}}
-		.buttons{display:grid;grid-template-columns:49.5% 49.5%;gap:1%;font-size:13px}.buttons .btn{margin-top:10px;margin-bottom:5px;font-size:13px
-		;font-family:inherit;color:#fff;background-color:#485871;align-content:center;cursor:pointer;width:100%;height:24px;border:none;outline:0}
-		.buttons .btn:hover{background-color:#5f6f89}.links-btn{position:relative}.links-btn .links-toggle{position:absolute;right:8px;top:22px;
-		transform:translateY(-50%);margin:0;cursor:pointer}.links-btn .links-toggle::before{content:'';position:absolute;top:50%;left:50%;transform:
-		translate(-50%,-50%);width:28px;height:28px}.slideshow{position:relative;display:flex;justify-content:center}.slide{display:none}
-		.slide.active{display:block}.next,.prev{cursor:pointer;position:absolute;align-content:center;top:0;bottom:0;width:15%;padding:16px;color:
-		transparent;opacity:.7;font-weight:700;font-size:36px;transition:.6s ease;user-select:none}.prev{left:0;text-align:left}.prev:hover{
-		background-image:linear-gradient(to left,transparent,rgba(0,0,0,.6));color:#fff;text-decoration:none}.prev.shorter{top:23px}.next{right:0;
-		text-align:right}.next:hover{background-image:linear-gradient(to right,transparent,rgba(0,0,0,.6));color:#fff;text-decoration:none}
-		.next.shorter{top:23px}.fade{animation-name:fade;animation-duration:1s}@keyframes fade{from{opacity:.6}to{opacity:1}}
-		@media (max-width:800px){.next,.prev{padding:12px;font-size:20px}.next.shorter,.prev.shorter{top:23px}}.indicators-container{display:grid;
-		grid-template-columns:repeat(3,1fr);gap:4px;width:100%}.indicator{height:3px;background-color:#4e5264;transition:background-color .3s}
-		.indicator.active{background-color:#ff9800}@media (max-width:800px){.indicator{height:2px}}.expandable{position:relative;justify-content:
-		center;margin-top:10px;margin-bottom:4px;font-family:inherit;color:#fff;background-color:#485871;cursor:pointer;width:100%;height:24px;
-		border:none;outline:0}.expandable:hover{background-color:#5f6f89}.expandable .arrow{position:absolute;right:10px;top:2px;font-size:14px}
-		.links{font-size:14px;display:grid;grid-template-columns:25% 45% 30%;gap:0;max-height:0;overflow:hidden;transition:max-height .3s ease-out}
-		.links .item{padding:5px;margin:0 2px}.links .item:not(:last-child){border-right:1px solid #fff}.links p{margin-top:0;text-align:left}
-		@media (max-width:800px){.links{grid-template-columns:1fr}.links .item{margin:5px 0;border-right:none!important}}footer{position:sticky;top:
-		100%;background:#485871;color:#fff;text-align:center;padding:8px;margin-top:8px}.progress-container{position:fixed;left:0;top:0;width:100%;
-		height:3px;z-index:1000;background-color:#5c5c5c80}.progress-bar{width:0;height:100%;background-color:#4caf50;transition:width .3s
-		ease-in-out}
+		position:fixed;left:0;right:0;bottom:0;height:32px;z-index:10000;transform:translateZ(0)}.fs-exit-bar .fs-bar-btn{flex:1;display:flex;
+		align-items:center;justify-content:center;background-color:#2b5797;color:#fff;cursor:pointer}.fs-exit-bar .fs-bar-btn+.fs-bar-btn{
+		border-left:1px solid #1f3d6b}.fs-exit-bar .fs-exit{flex:2}.if1.fullscreen{bottom:32px}}.links-bottom{display:none;text-align:left;
+		background-color:#3a3f4a;box-sizing:border-box;padding:5px 4px;white-space:nowrap;overflow-x:auto;-webkit-overflow-scrolling:touch;
+		scrollbar-width:none;-ms-overflow-style:none}.links-bottom::-webkit-scrollbar{display:none}.links-bottom::after,.links-bottom::before{
+		content:"";position:sticky;display:inline-block;width:24px;height:1.4em;margin-top:-.3em;margin-bottom:-.3em;vertical-align:middle;
+		pointer-events:none;opacity:0;transition:opacity .2s ease}.links-bottom::before{left:-4px;margin-right:-24px;background:
+		linear-gradient(to left,transparent,#3a3f4a)}.links-bottom::after{right:-4px;margin-left:-24px;background:
+		linear-gradient(to right,transparent,#3a3f4a)}.links-bottom.can-scroll-left::before{opacity:1}.links-bottom.can-scroll-right::after{opacity:
+		1}body.show-links-bottom .links-bottom{display:block}@media (max-width:800px){.links-bottom{font-size:12px}}.sp{height:12px}.sp20{height:
+		24px}@media (max-width:800px){.sp20{height:12px}}.buttons{display:grid;grid-template-columns:49.5% 49.5%;gap:1%;font-size:13px}.buttons .btn
+		{margin-top:10px;margin-bottom:5px;font-size:13px;font-family:inherit;color:#fff;background-color:#485871;align-content:center;cursor:
+		pointer;width:100%;height:24px;border:none;outline:0}.buttons .btn:hover{background-color:#5f6f89}.links-btn{position:relative}
+		.links-btn .links-toggle{position:absolute;right:8px;top:22px;transform:translateY(-50%);margin:0;cursor:pointer}
+		.links-btn .links-toggle::before{content:'';position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:28px;height:28px}
+		.slideshow{position:relative;display:flex;justify-content:center}.slide{display:none}.slide.active{display:block}.next,.prev{cursor:pointer;
+		position:absolute;align-content:center;top:0;bottom:0;width:15%;padding:16px;color:transparent;opacity:.7;font-weight:700;font-size:36px;
+		transition:.6s ease;user-select:none}.prev{left:0;text-align:left}.prev:hover{background-image:
+		linear-gradient(to left,transparent,rgba(0,0,0,.6));color:#fff;text-decoration:none}.prev.shorter{top:23px}.next{right:0;text-align:right}
+		.next:hover{background-image:linear-gradient(to right,transparent,rgba(0,0,0,.6));color:#fff;text-decoration:none}.next.shorter{top:23px}
+		.fade{animation-name:fade;animation-duration:1s}@keyframes fade{from{opacity:.6}to{opacity:1}}@media (max-width:800px){.next,.prev{padding:
+		12px;font-size:20px}.next.shorter,.prev.shorter{top:23px}}.indicators-container{display:grid;grid-template-columns:repeat(3,1fr);gap:4px;
+		width:100%}.indicator{height:3px;background-color:#4e5264;transition:background-color .3s}.indicator.active{background-color:#ff9800}
+		@media (max-width:800px){.indicator{height:2px}}.expandable{position:relative;justify-content:center;margin-top:10px;margin-bottom:4px;
+		font-family:inherit;color:#fff;background-color:#485871;cursor:pointer;width:100%;height:24px;border:none;outline:0}.expandable:hover{
+		background-color:#5f6f89}.expandable .arrow{position:absolute;right:10px;top:2px;font-size:14px}.links{font-size:14px;display:grid;
+		grid-template-columns:25% 45% 30%;gap:0;max-height:0;overflow:hidden;transition:max-height .3s ease-out}.links .item{padding:5px;margin:0
+		2px}.links .item:not(:last-child){border-right:1px solid #fff}.links p{margin-top:0;text-align:left}@media (max-width:800px){.links{
+		grid-template-columns:1fr}.links .item{margin:5px 0;border-right:none!important}}footer{position:sticky;top:100%;background:#485871;color:
+		#fff;text-align:center;padding:8px;margin-top:8px}.progress-container{position:fixed;left:0;top:0;width:100%;height:3px;z-index:1000;
+		background-color:#5c5c5c80}.progress-bar{width:0;height:100%;background-color:#4caf50;transition:width .3s ease-in-out}
 	</style>
 	<script>
 		function scrollToTop(){window.scrollTo({top:0,behavior:"smooth"})}function scrollToElement(e){const t=document.getElementById(e)
@@ -119,26 +120,28 @@
 		;o=o.replace(e.getAttribute(n),e.getAttribute(s))}e.src=o}function switchIframeZoom(e,t){
 		const o="hr"===t.getAttribute("data-mode")?"eu":"hr",n=document.getElementById(e);n.setAttribute("data-zoom-mode",o),setIframeSrc(n),
 		t.setAttribute("data-mode",o),t.textContent="hr"===o?"[HR]":"[EU]";const s=getResetButtonFromFrameId(e)
-		;"[R]"===s.textContent&&(s.style.display="none")}function toggleFullscreen(e,t){dlog(`toggleFullscreen: ${e}`)
-		;const o=document.getElementById(e).parentElement;if(o.classList.contains("fullscreen"))exitFullscreen(o);else{
-		const n=o.querySelector(".overlay"),s=getResetButtonFromFrameId(e);o._fsPrevState={overlayVisible:!n||"none"!==n.style.display,
-		resetVisible:!!s&&"none"!==s.style.display,resetMode:s&&"[R]"===s.textContent?"reset":"exit"},o.classList.add("fullscreen"),
-		o.previousElementSibling.classList.add("fullscreen"),document.body.classList.add("fs-lock"),t.textContent="[-]",n&&(n.style.display="none"),
-		s&&(s.style.display="none");const r=document.createElement("div");r.className="fs-exit-bar",r.textContent="✕ Zatvori cijeli zaslon",
-		r.addEventListener("click",()=>exitFullscreen(o)),document.body.appendChild(r),o._fsExitBar=r}}function exitFullscreen(e){
+		;"[R]"!==s.textContent||n.parentElement.classList.contains("fullscreen")||(s.style.display="none")}function toggleFullscreen(e,t){
+		dlog(`toggleFullscreen: ${e}`);const o=document.getElementById(e).parentElement
+		;if(o.classList.contains("fullscreen"))exitFullscreen(o);else{const n=o.querySelector(".overlay"),s=getResetButtonFromFrameId(e)
+		;if(o._fsOverlayVisible=!n||"none"!==n.style.display,o.classList.add("fullscreen"),o.previousElementSibling.classList.add("fullscreen"),
+		document.body.classList.add("fs-lock"),t.textContent="[-]",n&&(n.style.display="none"),s&&setResetButtonToFullscreenReset(s),
+		window.innerWidth<=800){const t=document.createElement("div");t.className="fs-exit-bar";const n=document.createElement("div")
+		;n.className="fs-bar-btn fs-reset",n.textContent="Reset",n.addEventListener("click",()=>resetIframePosition(e))
+		;const s=document.createElement("div");s.className="fs-bar-btn fs-exit",s.textContent="Zatvori",
+		s.addEventListener("click",()=>exitFullscreen(o)),t.append(s,n),document.body.appendChild(t),o._fsExitBar=t}}}function exitFullscreen(e){
 		e.classList.remove("fullscreen"),e._fsExitBar&&(e._fsExitBar.remove(),delete e._fsExitBar);const t=e.previousElementSibling
 		;t.classList.remove("fullscreen");const o=t.querySelector(".fs-btn");o&&(o.textContent="[ ]"),
-		document.querySelector(".if1.fullscreen")||document.body.classList.remove("fs-lock");const n=e._fsPrevState||{overlayVisible:!0,
-		resetVisible:!1,resetMode:"exit"},s=e.querySelector(".overlay");s&&(n.overlayVisible?s.removeAttribute("style"):s.style.display="none")
-		;const r=getResetButtonFromFrameId(e.querySelector("iframe").id);r&&(n.resetVisible?(r.style.removeProperty("display"),
-		"reset"===n.resetMode?setResetButtonToReset(r):setResetButtonToExit(r)):r.style.display="none"),delete e._fsPrevState}
-		function hideOverlayOnDoubleTap(){document.querySelectorAll(".if1 .overlay").forEach(e=>{let t=0,o=!1;e.addEventListener("dblclick",()=>{
-		e.style.display="none";let t=getResetButtonFromOverlayId(e.id);t.removeAttribute("style"),setResetButtonToExit(t)}),
-		e.addEventListener("touchstart",e=>{e.touches.length>1&&(o=!0)}),e.addEventListener("touchend",n=>{
-		if(o)return void(0===n.touches.length&&(o=!1,t=0));const s=(new Date).getTime(),r=s-t;if(r>0&&r<200){e.style.display="none"
-		;let t=getResetButtonFromOverlayId(e.id);t.removeAttribute("style"),setResetButtonToExit(t),n.preventDefault()}t=s})
-		;const n=e.querySelector(".hint");let s=0,r=0;e.addEventListener("touchstart",e=>{1===e.touches.length&&(r=e.touches[0].clientX,
-		s=e.touches[0].clientY)}),e.addEventListener("touchend",e=>{if(!n)return
+		document.querySelector(".if1.fullscreen")||document.body.classList.remove("fs-lock");const n=!1===e._fsOverlayVisible
+		;delete e._fsOverlayVisible;const s=e.querySelector(".overlay");s&&(n?s.style.display="none":s.removeAttribute("style"))
+		;const r=getResetButtonFromFrameId(e.querySelector("iframe").id);r&&(r.style.removeProperty("display"),
+		n?setResetButtonToExit(r):setResetButtonToReset(r))}function hideOverlayOnDoubleTap(){
+		document.querySelectorAll(".if1 .overlay").forEach(e=>{let t=0,o=!1;e.addEventListener("dblclick",()=>{e.style.display="none"
+		;let t=getResetButtonFromOverlayId(e.id);t.removeAttribute("style"),setResetButtonToExit(t)}),e.addEventListener("touchstart",e=>{
+		e.touches.length>1&&(o=!0)}),e.addEventListener("touchend",n=>{if(o)return void(0===n.touches.length&&(o=!1,t=0))
+		;const s=(new Date).getTime(),r=s-t;if(r>0&&r<200){e.style.display="none";let t=getResetButtonFromOverlayId(e.id)
+		;t.removeAttribute("style"),setResetButtonToExit(t),n.preventDefault()}t=s});const n=e.querySelector(".hint");let s=0,r=0
+		;e.addEventListener("touchstart",e=>{1===e.touches.length&&(r=e.touches[0].clientX,s=e.touches[0].clientY)}),
+		e.addEventListener("touchend",e=>{if(!n)return
 		;const t=e.changedTouches[0].clientX,o=e.changedTouches[0].clientY,i=Math.abs(t-r),l=Math.abs(o-s);i<10&&l<10&&(n.style.opacity="0.6",
 		clearTimeout(n._hideTimer),n._hideTimer=setTimeout(()=>{n.style.removeProperty("opacity")},2e3))})})}function updateHintText(){
 		const e=window.innerWidth<800;document.querySelectorAll(".hint").forEach(t=>{
@@ -151,10 +154,14 @@
 		dlog(`setResetButtonToReset: ${e.id}`);const t=e.cloneNode(!0);e.parentNode.replaceChild(t,e),t.addEventListener("click",e=>{
 		e.stopPropagation(),resetIframe(getFrameIdFromResetButtonId(t.id))}),t.textContent="[R]"}function resetIframe(e){
 		dlog(`Resetting iframe: ${e}`),setIframeSrc(document.getElementById(e));const t=getResetButtonFromFrameId(e);t.style.display="none",
-		setResetButtonToExit(t)}function getResetButtonFromFrameId(e){return document.querySelector(`a[data-frame-id="${e}"]`)}
-		function getResetButtonFromOverlayId(e){return getResetButtonFromFrameId(document.getElementById(e).getAttribute("data-frame-id"))}
-		function getFrameIdFromResetButtonId(e){return document.getElementById(e).getAttribute("data-frame-id")}function GetLastInit(){
-		let e=new Date;return e=new Date(Date.UTC(e.getUTCFullYear(),e.getUTCMonth(),e.getUTCDate(),e.getUTCHours()>=12?12:0,0,0,0)),e}
+		setResetButtonToExit(t)}function resetIframePosition(e){dlog(`resetIframePosition: ${e}`),setIframeSrc(document.getElementById(e))}
+		function setResetButtonToFullscreenReset(e){dlog(`setResetButtonToFullscreenReset: ${e.id}`);const t=e.cloneNode(!0)
+		;e.parentNode.replaceChild(t,e),t.addEventListener("click",e=>{e.stopPropagation(),resetIframePosition(getFrameIdFromResetButtonId(t.id))}),
+		t.textContent="[R]",t.style.removeProperty("display")}function getResetButtonFromFrameId(e){
+		return document.querySelector(`a[data-frame-id="${e}"]`)}function getResetButtonFromOverlayId(e){
+		return getResetButtonFromFrameId(document.getElementById(e).getAttribute("data-frame-id"))}function getFrameIdFromResetButtonId(e){
+		return document.getElementById(e).getAttribute("data-frame-id")}function GetLastInit(){let e=new Date
+		;return e=new Date(Date.UTC(e.getUTCFullYear(),e.getUTCMonth(),e.getUTCDate(),e.getUTCHours()>=12?12:0,0,0,0)),e}
 		function DTGFromDateInHours(e){return e.getUTCFullYear().toString()+pad(e.getUTCMonth()+1,2)+pad(e.getUTCDate(),2)+pad(e.getUTCHours(),2)}
 		function EndValue(e){return e.getUTCFullYear().toString()+pad(e.getUTCMonth()+1,2)+pad(e.getUTCDate(),2)+"06"}function pad(e,t,o){
 		return String(e).padStart(t,o||"0")}const isDebugEnabled="1"===new URLSearchParams(window.location.search).get("debug");function dlog(...e){
