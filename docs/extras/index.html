@@ -40,20 +40,21 @@
 		:67%}.vid2{position:relative;width:100%;overflow:hidden;padding-top:87%}iframe,video{position:absolute;top:0;left:0;bottom:0;right:0;width:
 		100%;height:100%;border:none}.scaled-iframe{transform:scale(.9);width:calc(100% / .9);height:calc(100% / .9);transform-origin:0 0}
 		@media (max-width:800px){.scaled-iframe{transform:scale(.6);width:calc(100% / .6);height:calc(100% / .6);transform-origin:0 0}}
-		.radartitle.fullscreen{position:fixed;top:0;left:0;right:0;z-index:10000;transform:translateZ(0)}.if1.fullscreen{position:fixed;top:23px;
-		left:0;right:0;bottom:0;padding-top:0;z-index:9999}.if1.fullscreen .scaled-iframe{transform:none;width:100%;height:100%;pointer-events:none}
-		body.fs-lock{overflow:hidden}.links-bottom{display:none;text-align:left;background-color:#3a3f4a;box-sizing:border-box;padding:5px 4px;
-		white-space:nowrap;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;-ms-overflow-style:none}
-		.links-bottom::-webkit-scrollbar{display:none}.links-bottom::after,.links-bottom::before{content:"";position:sticky;display:inline-block;
-		width:24px;height:1.4em;margin-top:-.3em;margin-bottom:-.3em;vertical-align:middle;pointer-events:none;opacity:0;transition:opacity .2s ease
-		}.links-bottom::before{left:-4px;margin-right:-24px;background:linear-gradient(to left,transparent,#3a3f4a)}.links-bottom::after{right:-4px;
-		margin-left:-24px;background:linear-gradient(to right,transparent,#3a3f4a)}.links-bottom.can-scroll-left::before{opacity:1}
-		.links-bottom.can-scroll-right::after{opacity:1}body.show-links-bottom .links-bottom{display:block}@media (max-width:800px){.links-bottom{
-		font-size:12px}}.sp{height:12px}.sp20{height:24px}@media (max-width:800px){.sp20{height:12px}}.buttons{display:grid;grid-template-columns:
-		49.5% 49.5%;gap:1%;font-size:13px}.buttons .btn{margin-top:10px;margin-bottom:5px;font-size:13px;font-family:inherit;color:#fff;
-		background-color:#485871;align-content:center;cursor:pointer;width:100%;height:24px;border:none;outline:0}.buttons .btn:hover{
-		background-color:#5f6f89}.links-btn{position:relative}.links-btn .links-toggle{position:absolute;right:8px;top:22px;transform:
-		translateY(-50%);margin:0;cursor:pointer}.links-btn .links-toggle::before{content:'';position:absolute;top:50%;left:50%;transform:
+		.radartitle.fullscreen{position:fixed;top:0;left:0;right:0;z-index:10000}.if1.fullscreen{position:fixed;top:23px;left:0;right:0;bottom:0;
+		padding-top:0;z-index:9999}body.fs-lock{overflow:hidden}.fs-exit-bar{display:none}@media (max-width:800px){.fs-exit-bar{display:flex;
+		align-items:center;justify-content:center;position:fixed;left:0;right:0;bottom:0;height:32px;z-index:10000;background-color:#2b5797;color:
+		#fff;cursor:pointer;transform:translateZ(0)}.if1.fullscreen{bottom:32px}}.links-bottom{display:none;text-align:left;background-color:#3a3f4a
+		;box-sizing:border-box;padding:5px 4px;white-space:nowrap;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;
+		-ms-overflow-style:none}.links-bottom::-webkit-scrollbar{display:none}.links-bottom::after,.links-bottom::before{content:"";position:sticky;
+		display:inline-block;width:24px;height:1.4em;margin-top:-.3em;margin-bottom:-.3em;vertical-align:middle;pointer-events:none;opacity:0;
+		transition:opacity .2s ease}.links-bottom::before{left:-4px;margin-right:-24px;background:linear-gradient(to left,transparent,#3a3f4a)}
+		.links-bottom::after{right:-4px;margin-left:-24px;background:linear-gradient(to right,transparent,#3a3f4a)}
+		.links-bottom.can-scroll-left::before{opacity:1}.links-bottom.can-scroll-right::after{opacity:1}body.show-links-bottom .links-bottom{display
+		:block}@media (max-width:800px){.links-bottom{font-size:12px}}.sp{height:12px}.sp20{height:24px}@media (max-width:800px){.sp20{height:12px}}
+		.buttons{display:grid;grid-template-columns:49.5% 49.5%;gap:1%;font-size:13px}.buttons .btn{margin-top:10px;margin-bottom:5px;font-size:13px
+		;font-family:inherit;color:#fff;background-color:#485871;align-content:center;cursor:pointer;width:100%;height:24px;border:none;outline:0}
+		.buttons .btn:hover{background-color:#5f6f89}.links-btn{position:relative}.links-btn .links-toggle{position:absolute;right:8px;top:22px;
+		transform:translateY(-50%);margin:0;cursor:pointer}.links-btn .links-toggle::before{content:'';position:absolute;top:50%;left:50%;transform:
 		translate(-50%,-50%);width:28px;height:28px}.slideshow{position:relative;display:flex;justify-content:center}.slide{display:none}
 		.slide.active{display:block}.next,.prev{cursor:pointer;position:absolute;align-content:center;top:0;bottom:0;width:15%;padding:16px;color:
 		transparent;opacity:.7;font-weight:700;font-size:36px;transition:.6s ease;user-select:none}.prev{left:0;text-align:left}.prev:hover{
@@ -104,7 +105,7 @@
 		;Math.abs(r)>Math.abs(i)&&handleSwipe(e,t,n)}}),e.querySelectorAll(".prev, .next").forEach(e=>{let t=!1;e.addEventListener("touchstart",e=>{
 		e.touches.length>1&&(t=!0)}),e.addEventListener("touchend",e=>{t&&e.preventDefault(),0===e.touches.length&&(t=!1)})}),
 		e.addEventListener("mousedown",e=>{t=e.clientX,o=e.clientY,r=!0}),e.addEventListener("mousemove",e=>{r&&(n=e.clientX,s=e.clientY)}),
-		e.addEventListener("mouseup",i=>{if(r){n=i.clientX,s=i.clientY;const a=n-t,l=s-o;Math.abs(a)>Math.abs(l)&&handleSwipe(e,t,n),r=!1}}),
+		e.addEventListener("mouseup",i=>{if(r){n=i.clientX,s=i.clientY;const l=n-t,a=s-o;Math.abs(l)>Math.abs(a)&&handleSwipe(e,t,n),r=!1}}),
 		e.addEventListener("mouseleave",()=>{r&&(r=!1)})})}function updateLinksScrollShadow(e){const t=e.scrollWidth-e.clientWidth,o=e.scrollLeft
 		;e.classList.toggle("can-scroll-left",o>1),e.classList.toggle("can-scroll-right",t>1&&o<t-1)}function updateLinksScrollShadows(){
 		document.querySelectorAll(".links-bottom").forEach(updateLinksScrollShadow)}function addLinksScrollShadows(){
@@ -123,32 +124,22 @@
 		const n=o.querySelector(".overlay"),s=getResetButtonFromFrameId(e);o._fsPrevState={overlayVisible:!n||"none"!==n.style.display,
 		resetVisible:!!s&&"none"!==s.style.display,resetMode:s&&"[R]"===s.textContent?"reset":"exit"},o.classList.add("fullscreen"),
 		o.previousElementSibling.classList.add("fullscreen"),document.body.classList.add("fs-lock"),t.textContent="[-]",n&&(n.style.display="none"),
-		s&&(s.style.display="none")}}function exitFullscreen(e){e.classList.remove("fullscreen");const t=e.previousElementSibling
+		s&&(s.style.display="none");const r=document.createElement("div");r.className="fs-exit-bar",r.textContent="✕ Zatvori cijeli zaslon",
+		r.addEventListener("click",()=>exitFullscreen(o)),document.body.appendChild(r),o._fsExitBar=r}}function exitFullscreen(e){
+		e.classList.remove("fullscreen"),e._fsExitBar&&(e._fsExitBar.remove(),delete e._fsExitBar);const t=e.previousElementSibling
 		;t.classList.remove("fullscreen");const o=t.querySelector(".fs-btn");o&&(o.textContent="[ ]"),
 		document.querySelector(".if1.fullscreen")||document.body.classList.remove("fs-lock");const n=e._fsPrevState||{overlayVisible:!0,
 		resetVisible:!1,resetMode:"exit"},s=e.querySelector(".overlay");s&&(n.overlayVisible?s.removeAttribute("style"):s.style.display="none")
 		;const r=getResetButtonFromFrameId(e.querySelector("iframe").id);r&&(n.resetVisible?(r.style.removeProperty("display"),
 		"reset"===n.resetMode?setResetButtonToReset(r):setResetButtonToExit(r)):r.style.display="none"),delete e._fsPrevState}
-		function addTitleTapActivation(){document.querySelectorAll(".radartitle").forEach(e=>{let t=0,o=0;e.addEventListener("touchstart",e=>{
-		1===e.touches.length&&(t=e.touches[0].clientX,o=e.touches[0].clientY)},{passive:!0}),e.addEventListener("touchend",n=>{
-		const s=n.target.closest("a");if(!s||!e.contains(s)||!s.matches(".zoom-btn, .fs-btn, .right-cluster a"))return;const r=n.changedTouches[0]
-		;Math.abs(r.clientX-t)>10||Math.abs(r.clientY-o)>10||(n.preventDefault(),s.click())})})}function addTapDebugReadout(){
-		if(!isDebugEnabled)return;const e=document.createElement("div");e.id="tapDebug",
-		e.style.cssText="position:fixed;left:0;right:0;bottom:0;z-index:2147483647;pointer-events:none;background:rgba(0,0,0,.8);color:#0f0;font:12px/1.4 monospace;padding:4px 6px;white-space:pre-wrap;word-break:break-all",
-		e.textContent="tap debug ready",document.body.appendChild(e);const t={pointerdown:0,touchstart:0,touchend:0,click:0},o=(o,n)=>{t[o]++
-		;const s=n.touches&&n.touches[0]||n.changedTouches&&n.changedTouches[0]||n,r=Math.round(s&&s.clientX||0),i=Math.round(s&&s.clientY||0)
-		;e.textContent=`pd:${t.pointerdown} ts:${t.touchstart} te:${t.touchend} ck:${t.click}\nlast: ${o} @${r},${i}  fs:${!!document.querySelector(".if1.fullscreen")}\ntarget: ${(e=>{
-		if(!(e instanceof Element))return String(e);let t=e.tagName.toLowerCase();return e.id&&(t+="#"+e.id),
-		"string"==typeof e.className&&e.className.trim()&&(t+="."+e.className.trim().replace(/\s+/g,".")),t})(n.target)}`}
-		;["pointerdown","touchstart","touchend","click"].forEach(e=>document.addEventListener(e,t=>o(e,t),!0))}function hideOverlayOnDoubleTap(){
-		document.querySelectorAll(".if1 .overlay").forEach(e=>{let t=0,o=!1;e.addEventListener("dblclick",()=>{e.style.display="none"
-		;let t=getResetButtonFromOverlayId(e.id);t.removeAttribute("style"),setResetButtonToExit(t)}),e.addEventListener("touchstart",e=>{
-		e.touches.length>1&&(o=!0)}),e.addEventListener("touchend",n=>{if(o)return void(0===n.touches.length&&(o=!1,t=0))
-		;const s=(new Date).getTime(),r=s-t;if(r>0&&r<200){e.style.display="none";let t=getResetButtonFromOverlayId(e.id)
-		;t.removeAttribute("style"),setResetButtonToExit(t),n.preventDefault()}t=s});const n=e.querySelector(".hint");let s=0,r=0
-		;e.addEventListener("touchstart",e=>{1===e.touches.length&&(r=e.touches[0].clientX,s=e.touches[0].clientY)}),
-		e.addEventListener("touchend",e=>{if(!n)return
-		;const t=e.changedTouches[0].clientX,o=e.changedTouches[0].clientY,i=Math.abs(t-r),a=Math.abs(o-s);i<10&&a<10&&(n.style.opacity="0.6",
+		function hideOverlayOnDoubleTap(){document.querySelectorAll(".if1 .overlay").forEach(e=>{let t=0,o=!1;e.addEventListener("dblclick",()=>{
+		e.style.display="none";let t=getResetButtonFromOverlayId(e.id);t.removeAttribute("style"),setResetButtonToExit(t)}),
+		e.addEventListener("touchstart",e=>{e.touches.length>1&&(o=!0)}),e.addEventListener("touchend",n=>{
+		if(o)return void(0===n.touches.length&&(o=!1,t=0));const s=(new Date).getTime(),r=s-t;if(r>0&&r<200){e.style.display="none"
+		;let t=getResetButtonFromOverlayId(e.id);t.removeAttribute("style"),setResetButtonToExit(t),n.preventDefault()}t=s})
+		;const n=e.querySelector(".hint");let s=0,r=0;e.addEventListener("touchstart",e=>{1===e.touches.length&&(r=e.touches[0].clientX,
+		s=e.touches[0].clientY)}),e.addEventListener("touchend",e=>{if(!n)return
+		;const t=e.changedTouches[0].clientX,o=e.changedTouches[0].clientY,i=Math.abs(t-r),l=Math.abs(o-s);i<10&&l<10&&(n.style.opacity="0.6",
 		clearTimeout(n._hideTimer),n._hideTimer=setTimeout(()=>{n.style.removeProperty("opacity")},2e3))})})}function updateHintText(){
 		const e=window.innerWidth<800;document.querySelectorAll(".hint").forEach(t=>{
 		t.textContent=e?"Dvostruki dodir za pristup interaktivnoj karti":"Dvostruki klik za pristup interaktivnoj karti"})}
@@ -169,9 +160,9 @@
 		return String(e).padStart(t,o||"0")}const isDebugEnabled="1"===new URLSearchParams(window.location.search).get("debug");function dlog(...e){
 		isDebugEnabled&&console.log(...e)}document.addEventListener("DOMContentLoaded",()=>{document.querySelectorAll("img.lazy").forEach(e=>{
 		e.src=e.getAttribute("data-src"),e.classList.remove("lazy")}),showProgress(),addExpandableClickEventListener(),addSwipeEvents(),
-		updateIframeSrc(),hideOverlayOnDoubleTap(),addTitleTapActivation(),addTapDebugReadout(),updateHintText(),initLinksBottom(),
-		addLinksScrollShadows()}),window.addEventListener("resize",()=>{clearTimeout(window._resizeTimeout),window._resizeTimeout=setTimeout(()=>{
-		updateIframeSrc(),updateHintText(),updateLinksScrollShadows()},200)});
+		updateIframeSrc(),hideOverlayOnDoubleTap(),updateHintText(),initLinksBottom(),addLinksScrollShadows()}),
+		window.addEventListener("resize",()=>{clearTimeout(window._resizeTimeout),window._resizeTimeout=setTimeout(()=>{updateIframeSrc(),
+		updateHintText(),updateLinksScrollShadows()},200)});
 	</script>
 	
 	<script async src="https://www.googletagmanager.com/gtag/js?id=G-233EMZJM16"></script>

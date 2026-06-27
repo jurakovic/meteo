@@ -358,72 +358,6 @@ function exitFullscreen(if1) {
 	delete if1._fsPrevState;
 }
 
-function addTitleTapActivation() {
-	// On mobile, the synthetic click after interacting with a cross-origin iframe
-	// (e.g. tapping the map's own zoom controls) can be swallowed, leaving the
-	// title-bar buttons unresponsive. Fire the action on touchend instead and
-	// preventDefault to suppress the now-redundant synthetic click (no double-fire).
-	// Delegated on .radartitle so it survives the reset button being recloned.
-	const sel = '.zoom-btn, .fs-btn, .right-cluster a';
-	document.querySelectorAll('.radartitle').forEach(bar => {
-		let sx = 0, sy = 0;
-		bar.addEventListener('touchstart', (e) => {
-			if (e.touches.length === 1) {
-				sx = e.touches[0].clientX;
-				sy = e.touches[0].clientY;
-			}
-		}, { passive: true });
-		bar.addEventListener('touchend', (e) => {
-			const a = e.target.closest('a');
-			if (!a || !bar.contains(a) || !a.matches(sel)) return;
-			const t = e.changedTouches[0];
-			if (Math.abs(t.clientX - sx) > 10 || Math.abs(t.clientY - sy) > 10) return; // treat as scroll/swipe
-			e.preventDefault(); // stop the (possibly swallowed) synthetic click from firing too
-			a.click();
-		});
-	});
-}
-
-function addTapDebugReadout() {
-	// DEBUG (?debug=1 only): on-screen readout to confirm whether taps reach the
-	// main frame at all. Capture-phase listeners on document fire for any event the
-	// main frame receives, before handlers/stopPropagation. If you tap a "dead"
-	// title button and NO counter moves -> the tap was routed to the cross-origin
-	// iframe's process (OOPIF misrouting). If pd/ts/te move but ck doesn't -> the
-	// click is being swallowed. If all move with target = the <a> -> handler issue.
-	if (!isDebugEnabled) return;
-
-	const box = document.createElement('div');
-	box.id = 'tapDebug';
-	box.style.cssText = 'position:fixed;left:0;right:0;bottom:0;z-index:2147483647;'
-		+ 'pointer-events:none;background:rgba(0,0,0,.8);color:#0f0;'
-		+ 'font:12px/1.4 monospace;padding:4px 6px;white-space:pre-wrap;word-break:break-all';
-	box.textContent = 'tap debug ready';
-	document.body.appendChild(box);
-
-	const counts = { pointerdown: 0, touchstart: 0, touchend: 0, click: 0 };
-	const describe = (t) => {
-		if (!(t instanceof Element)) return String(t);
-		let s = t.tagName.toLowerCase();
-		if (t.id) s += '#' + t.id;
-		if (typeof t.className === 'string' && t.className.trim())
-			s += '.' + t.className.trim().replace(/\s+/g, '.');
-		return s;
-	};
-	const render = (type, e) => {
-		counts[type]++;
-		const p = (e.touches && e.touches[0]) || (e.changedTouches && e.changedTouches[0]) || e;
-		const x = Math.round((p && p.clientX) || 0);
-		const y = Math.round((p && p.clientY) || 0);
-		box.textContent =
-			`pd:${counts.pointerdown} ts:${counts.touchstart} te:${counts.touchend} ck:${counts.click}\n`
-			+ `last: ${type} @${x},${y}  fs:${!!document.querySelector('.if1.fullscreen')}\n`
-			+ `target: ${describe(e.target)}`;
-	};
-	['pointerdown', 'touchstart', 'touchend', 'click'].forEach(type =>
-		document.addEventListener(type, (e) => render(type, e), true));
-}
-
 function hideOverlayOnDoubleTap() {
 	const overlays = document.querySelectorAll('.if1 .overlay');
 
@@ -605,8 +539,6 @@ document.addEventListener('DOMContentLoaded', () => {
 	addSwipeEvents();
 	updateIframeSrc();
 	hideOverlayOnDoubleTap();
-	addTitleTapActivation();
-	addTapDebugReadout();
 	updateHintText();
 	initLinksBottom();
 	addLinksScrollShadows();

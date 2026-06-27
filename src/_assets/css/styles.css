@@ -200,19 +200,7 @@ iframe, video {
 	left: 0;
 	right: 0;
 	z-index: 10000;
-	transform: translateZ(0); /* own compositing layer: keeps taps working over the iframe on mobile */
 }
-
-	/* Inset the edge buttons out of Android's left/right gesture-nav zones.
-	   Touches starting in the ~20dp edge strips are swallowed by the OS for the
-	   back-swipe gesture, so a button flush against the edge never gets the tap. */
-	.radartitle.fullscreen .left {
-		margin-left: 36px;
-	}
-
-	.radartitle.fullscreen .right {
-		margin-right: 36px;
-	}
 
 .if1.fullscreen {
 	position: fixed;
