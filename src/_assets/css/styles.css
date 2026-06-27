@@ -213,6 +213,15 @@ iframe, video {
 	z-index: 9999;
 }
 
+	/* EXPERIMENT: drop the scale transform on the cross-origin iframe in fullscreen.
+	   Transforms on OOPIFs are a suspected trigger for Chromium/Android hit-test
+	   misrouting (taps on the title routed into the iframe process). */
+	.if1.fullscreen .scaled-iframe {
+		transform: none;
+		width: 100%;
+		height: 100%;
+	}
+
 body.fs-lock {
 	overflow: hidden;
 }
