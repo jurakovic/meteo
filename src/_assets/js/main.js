@@ -321,11 +321,11 @@ function toggleFullscreen(frameId, btn) {
 			const exitBar = document.createElement('div');
 			exitBar.className = 'fs-exit-bar';
 			const resetZone = document.createElement('div');
-			resetZone.className = 'fs-bar-btn';
+			resetZone.className = 'fs-bar-btn fs-reset';
 			resetZone.textContent = 'Reset';
 			resetZone.addEventListener('click', () => resetIframePosition(frameId));
 			const exitZone = document.createElement('div');
-			exitZone.className = 'fs-bar-btn';
+			exitZone.className = 'fs-bar-btn fs-exit';
 			exitZone.textContent = 'Zatvori';
 			exitZone.addEventListener('click', () => exitFullscreen(if1));
 			exitBar.append(exitZone, resetZone);

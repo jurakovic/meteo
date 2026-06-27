@@ -250,6 +250,10 @@ body.fs-lock {
 			border-left: 1px solid #1f3d6b;
 		}
 
+		.fs-exit-bar .fs-exit {
+			flex: 2; /* exit 2/3, reset 1/3 */
+		}
+
 	.if1.fullscreen {
 		bottom: 32px; /* reserve room for .fs-exit-bar */
 	}
