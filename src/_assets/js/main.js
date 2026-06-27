@@ -315,11 +315,23 @@ function toggleFullscreen(frameId, btn) {
 		// unlock interactivity: drop the overlay gate and hide the reset button
 		if (overlay) overlay.style.display = 'none';
 		if (resetBtn) resetBtn.style.display = 'none';
+		// big mobile exit target (CSS hides it on desktop) — reliable where the
+		// tiny edge buttons aren't, since it sits over no cross-origin iframe
+		const exitBar = document.createElement('div');
+		exitBar.className = 'fs-exit-bar';
+		exitBar.textContent = '✕ Zatvori cijeli zaslon';
+		exitBar.addEventListener('click', () => exitFullscreen(if1));
+		document.body.appendChild(exitBar);
+		if1._fsExitBar = exitBar;
 	}
 }
 
 function exitFullscreen(if1) {
 	if1.classList.remove('fullscreen');
+	if (if1._fsExitBar) { // remove the mobile exit bar (all exit paths land here)
+		if1._fsExitBar.remove();
+		delete if1._fsExitBar;
+	}
 	const title = if1.previousElementSibling;
 	title.classList.remove('fullscreen');
 	const btn = title.querySelector('.fs-btn');
