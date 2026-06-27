@@ -103,7 +103,7 @@
 		;Math.abs(r)>Math.abs(i)&&handleSwipe(e,t,n)}}),e.querySelectorAll(".prev, .next").forEach(e=>{let t=!1;e.addEventListener("touchstart",e=>{
 		e.touches.length>1&&(t=!0)}),e.addEventListener("touchend",e=>{t&&e.preventDefault(),0===e.touches.length&&(t=!1)})}),
 		e.addEventListener("mousedown",e=>{t=e.clientX,o=e.clientY,r=!0}),e.addEventListener("mousemove",e=>{r&&(n=e.clientX,s=e.clientY)}),
-		e.addEventListener("mouseup",i=>{if(r){n=i.clientX,s=i.clientY;const l=n-t,a=s-o;Math.abs(l)>Math.abs(a)&&handleSwipe(e,t,n),r=!1}}),
+		e.addEventListener("mouseup",i=>{if(r){n=i.clientX,s=i.clientY;const a=n-t,l=s-o;Math.abs(a)>Math.abs(l)&&handleSwipe(e,t,n),r=!1}}),
 		e.addEventListener("mouseleave",()=>{r&&(r=!1)})})}function updateLinksScrollShadow(e){const t=e.scrollWidth-e.clientWidth,o=e.scrollLeft
 		;e.classList.toggle("can-scroll-left",o>1),e.classList.toggle("can-scroll-right",t>1&&o<t-1)}function updateLinksScrollShadows(){
 		document.querySelectorAll(".links-bottom").forEach(updateLinksScrollShadow)}function addLinksScrollShadows(){
@@ -131,7 +131,15 @@
 		function addTitleTapActivation(){document.querySelectorAll(".radartitle").forEach(e=>{let t=0,o=0;e.addEventListener("touchstart",e=>{
 		1===e.touches.length&&(t=e.touches[0].clientX,o=e.touches[0].clientY)},{passive:!0}),e.addEventListener("touchend",n=>{
 		const s=n.target.closest("a");if(!s||!e.contains(s)||!s.matches(".zoom-btn, .fs-btn, .right-cluster a"))return;const r=n.changedTouches[0]
-		;Math.abs(r.clientX-t)>10||Math.abs(r.clientY-o)>10||(n.preventDefault(),s.click())})})}function hideOverlayOnDoubleTap(){
+		;Math.abs(r.clientX-t)>10||Math.abs(r.clientY-o)>10||(n.preventDefault(),s.click())})})}function addTapDebugReadout(){
+		if(!isDebugEnabled)return;const e=document.createElement("div");e.id="tapDebug",
+		e.style.cssText="position:fixed;left:0;right:0;bottom:0;z-index:2147483647;pointer-events:none;background:rgba(0,0,0,.8);color:#0f0;font:12px/1.4 monospace;padding:4px 6px;white-space:pre-wrap;word-break:break-all",
+		e.textContent="tap debug ready",document.body.appendChild(e);const t={pointerdown:0,touchstart:0,touchend:0,click:0},o=(o,n)=>{t[o]++
+		;const s=n.touches&&n.touches[0]||n.changedTouches&&n.changedTouches[0]||n,r=Math.round(s&&s.clientX||0),i=Math.round(s&&s.clientY||0)
+		;e.textContent=`pd:${t.pointerdown} ts:${t.touchstart} te:${t.touchend} ck:${t.click}\nlast: ${o} @${r},${i}  fs:${!!document.querySelector(".if1.fullscreen")}\ntarget: ${(e=>{
+		if(!(e instanceof Element))return String(e);let t=e.tagName.toLowerCase();return e.id&&(t+="#"+e.id),
+		"string"==typeof e.className&&e.className.trim()&&(t+="."+e.className.trim().replace(/\s+/g,".")),t})(n.target)}`}
+		;["pointerdown","touchstart","touchend","click"].forEach(e=>document.addEventListener(e,t=>o(e,t),!0))}function hideOverlayOnDoubleTap(){
 		document.querySelectorAll(".if1 .overlay").forEach(e=>{let t=0,o=!1;e.addEventListener("dblclick",()=>{e.style.display="none"
 		;let t=getResetButtonFromOverlayId(e.id);t.removeAttribute("style"),setResetButtonToExit(t)}),e.addEventListener("touchstart",e=>{
 		e.touches.length>1&&(o=!0)}),e.addEventListener("touchend",n=>{if(o)return void(0===n.touches.length&&(o=!1,t=0))
@@ -139,7 +147,7 @@
 		;t.removeAttribute("style"),setResetButtonToExit(t),n.preventDefault()}t=s});const n=e.querySelector(".hint");let s=0,r=0
 		;e.addEventListener("touchstart",e=>{1===e.touches.length&&(r=e.touches[0].clientX,s=e.touches[0].clientY)}),
 		e.addEventListener("touchend",e=>{if(!n)return
-		;const t=e.changedTouches[0].clientX,o=e.changedTouches[0].clientY,i=Math.abs(t-r),l=Math.abs(o-s);i<10&&l<10&&(n.style.opacity="0.6",
+		;const t=e.changedTouches[0].clientX,o=e.changedTouches[0].clientY,i=Math.abs(t-r),a=Math.abs(o-s);i<10&&a<10&&(n.style.opacity="0.6",
 		clearTimeout(n._hideTimer),n._hideTimer=setTimeout(()=>{n.style.removeProperty("opacity")},2e3))})})}function updateHintText(){
 		const e=window.innerWidth<800;document.querySelectorAll(".hint").forEach(t=>{
 		t.textContent=e?"Dvostruki dodir za pristup interaktivnoj karti":"Dvostruki klik za pristup interaktivnoj karti"})}
@@ -160,9 +168,9 @@
 		return String(e).padStart(t,o||"0")}const isDebugEnabled="1"===new URLSearchParams(window.location.search).get("debug");function dlog(...e){
 		isDebugEnabled&&console.log(...e)}document.addEventListener("DOMContentLoaded",()=>{document.querySelectorAll("img.lazy").forEach(e=>{
 		e.src=e.getAttribute("data-src"),e.classList.remove("lazy")}),showProgress(),addExpandableClickEventListener(),addSwipeEvents(),
-		updateIframeSrc(),hideOverlayOnDoubleTap(),addTitleTapActivation(),updateHintText(),initLinksBottom(),addLinksScrollShadows()}),
-		window.addEventListener("resize",()=>{clearTimeout(window._resizeTimeout),window._resizeTimeout=setTimeout(()=>{updateIframeSrc(),
-		updateHintText(),updateLinksScrollShadows()},200)});
+		updateIframeSrc(),hideOverlayOnDoubleTap(),addTitleTapActivation(),addTapDebugReadout(),updateHintText(),initLinksBottom(),
+		addLinksScrollShadows()}),window.addEventListener("resize",()=>{clearTimeout(window._resizeTimeout),window._resizeTimeout=setTimeout(()=>{
+		updateIframeSrc(),updateHintText(),updateLinksScrollShadows()},200)});
 	</script>
 	
 	<script async src="https://www.googletagmanager.com/gtag/js?id=G-233EMZJM16"></script>
