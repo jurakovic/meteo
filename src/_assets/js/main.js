@@ -291,7 +291,9 @@ function switchIframeZoom(frameId, btn) {
 	btn.setAttribute('data-mode', newMode);
 	btn.textContent = newMode === 'hr' ? '[HR]' : '[EU]';
 	const resetBtn = getResetButtonFromFrameId(frameId);
-	if (resetBtn.textContent === '[R]') resetBtn.style.display = 'none';
+	// only the gated [R] hides on a zoom switch; the in-fullscreen [R] must stay
+	if (resetBtn.textContent === '[R]' && !iframe.parentElement.classList.contains('fullscreen'))
+		resetBtn.style.display = 'none';
 }
 
 function toggleFullscreen(frameId, btn) {
@@ -302,6 +304,8 @@ function toggleFullscreen(frameId, btn) {
 	} else {
 		const overlay = if1.querySelector('.overlay');
 		const resetBtn = getResetButtonFromFrameId(frameId);
+		// snapshot whether the overlay gate was up, to restore it on exit
+		if1._fsOverlayVisible = !overlay || overlay.style.display !== 'none';
 		if1.classList.add('fullscreen');
 		if1.previousElementSibling.classList.add('fullscreen');
 		document.body.classList.add('fs-lock');
@@ -311,21 +315,23 @@ function toggleFullscreen(frameId, btn) {
 		// show [R] in the top bar to reset the map to default without leaving
 		// fullscreen (reliable on desktop; mobile uses the bottom bar's Reset)
 		if (resetBtn) setResetButtonToFullscreenReset(resetBtn);
-		// mobile bottom bar (CSS hides it on desktop): big reliable Reset | Exit
-		// targets, where the tiny top-bar edge buttons aren't reachable
-		const exitBar = document.createElement('div');
-		exitBar.className = 'fs-exit-bar';
-		const resetZone = document.createElement('div');
-		resetZone.className = 'fs-bar-btn';
-		resetZone.textContent = 'Reset';
-		resetZone.addEventListener('click', () => resetIframePosition(frameId));
-		const exitZone = document.createElement('div');
-		exitZone.className = 'fs-bar-btn';
-		exitZone.textContent = 'Zatvori';
-		exitZone.addEventListener('click', () => exitFullscreen(if1));
-		exitBar.append(exitZone, resetZone);
-		document.body.appendChild(exitBar);
-		if1._fsExitBar = exitBar;
+		// mobile-only bottom bar (matches the CSS <=800px breakpoint): big reliable
+		// Zatvori | Reset targets, where the tiny top-bar edge buttons aren't reachable
+		if (window.innerWidth <= 800) {
+			const exitBar = document.createElement('div');
+			exitBar.className = 'fs-exit-bar';
+			const resetZone = document.createElement('div');
+			resetZone.className = 'fs-bar-btn';
+			resetZone.textContent = 'Reset';
+			resetZone.addEventListener('click', () => resetIframePosition(frameId));
+			const exitZone = document.createElement('div');
+			exitZone.className = 'fs-bar-btn';
+			exitZone.textContent = 'Zatvori';
+			exitZone.addEventListener('click', () => exitFullscreen(if1));
+			exitBar.append(exitZone, resetZone);
+			document.body.appendChild(exitBar);
+			if1._fsExitBar = exitBar;
+		}
 	}
 }
 
@@ -341,14 +347,22 @@ function exitFullscreen(if1) {
 	if (btn) btn.textContent = '[ ]';
 	if (!document.querySelector('.if1.fullscreen'))
 		document.body.classList.remove('fs-lock');
-	// the map was likely panned/zoomed in fullscreen, so return to the gated
-	// state and show the reset button as [R] for easy reset to default position
+	// restore the overlay gate to its pre-fullscreen lock state (tracked on enter)
+	const wasUnlocked = if1._fsOverlayVisible === false;
+	delete if1._fsOverlayVisible;
 	const overlay = if1.querySelector('.overlay');
-	if (overlay) overlay.removeAttribute('style');
+	if (overlay) {
+		if (wasUnlocked) overlay.style.display = 'none';
+		else overlay.removeAttribute('style');
+	}
+	// the map was likely panned/zoomed in fullscreen, so always show the reset
+	// button, matching the lock state: [X] (re-lock, then [R]) if it was
+	// unlocked, [R] (reset to default) if it was locked
 	const resetBtn = getResetButtonFromFrameId(if1.querySelector('iframe').id);
 	if (resetBtn) {
 		resetBtn.style.removeProperty('display');
-		setResetButtonToReset(resetBtn);
+		if (wasUnlocked) setResetButtonToExit(resetBtn);
+		else setResetButtonToReset(resetBtn);
 	}
 }
 
