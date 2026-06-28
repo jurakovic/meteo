@@ -217,6 +217,15 @@ iframe, video {
 		transform: translateY(-50%);
 	}
 
+	/* gap from the screen edge in fullscreen (bar spans the full width) */
+	.radartitle.fullscreen .left {
+		margin-left: 10px;
+	}
+
+	.radartitle.fullscreen .right {
+		margin-right: 10px;
+	}
+
 .if1.fullscreen {
 	position: fixed;
 	top: 23px; /* matches .radartitle height */
