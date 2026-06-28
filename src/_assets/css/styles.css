@@ -217,15 +217,6 @@ iframe, video {
 		transform: translateY(-50%);
 	}
 
-	/* gap from the screen edge in fullscreen (bar spans the full width) */
-	.radartitle.fullscreen .left {
-		margin-left: 10px;
-	}
-
-	.radartitle.fullscreen .right {
-		margin-right: 10px;
-	}
-
 .if1.fullscreen {
 	position: fixed;
 	top: 23px; /* matches .radartitle height */
@@ -253,6 +244,15 @@ body.fs-lock {
 	/* wider gap so the [-] and [R] tap areas don't overlap on touch screens */
 	.radartitle .right-cluster {
 		gap: 14px;
+	}
+
+	/* gap from the screen edge in fullscreen (bar spans the full width) */
+	.radartitle.fullscreen .left {
+		margin-left: 10px;
+	}
+
+	.radartitle.fullscreen .right {
+		margin-right: 10px;
 	}
 }
 
