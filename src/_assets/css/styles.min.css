@@ -13,11 +13,11 @@ opacity:.6}.if2{position:relative;width:100%;overflow:hidden;padding-top:115%}.v
 :67%}.vid2{position:relative;width:100%;overflow:hidden;padding-top:87%}iframe,video{position:absolute;top:0;left:0;bottom:0;right:0;width:
 100%;height:100%;border:none}.scaled-iframe{transform:scale(.9);width:calc(100% / .9);height:calc(100% / .9);transform-origin:0 0}
 @media (max-width:800px){.scaled-iframe{transform:scale(.6);width:calc(100% / .6);height:calc(100% / .6);transform-origin:0 0}}
-.radartitle.fullscreen{position:fixed;top:0;left:0;right:0;z-index:10000}.if1.fullscreen{position:fixed;top:23px;left:0;right:0;bottom:0;
-padding-top:0;z-index:9999}body.fs-lock{overflow:hidden}.fs-exit-bar{display:none}@media (max-width:800px){.fs-exit-bar{display:flex;
-position:fixed;left:0;right:0;bottom:0;height:32px;z-index:10000;transform:translateZ(0)}.fs-exit-bar .fs-bar-btn{flex:1;display:flex;
-align-items:center;justify-content:center;background-color:#2b5797;color:#fff;cursor:pointer}.fs-exit-bar .fs-bar-btn+.fs-bar-btn{
-border-left:1px solid #1f3d6b}.fs-exit-bar .fs-exit{flex:2}.if1.fullscreen{bottom:32px}}.links-bottom{display:none;text-align:left;
+.radartitle.fullscreen{position:fixed;top:0;left:0;right:0;z-index:10000;display:flex;align-items:center;justify-content:center}
+.radartitle.fullscreen .center{transform:none;left:auto}.radartitle.fullscreen .left,.radartitle.fullscreen .right{top:50%;transform:
+translateY(-50%)}.radartitle.fullscreen .left{margin-left:10px}.radartitle.fullscreen .right{margin-right:10px}.if1.fullscreen{position:
+fixed;top:23px;left:0;right:0;bottom:0;padding-top:0;z-index:9999}body.fs-lock{overflow:hidden}@media (max-width:800px){
+.radartitle.fullscreen{height:32px}.if1.fullscreen{top:32px}.radartitle .right-cluster{gap:14px}}.links-bottom{display:none;text-align:left;
 background-color:#3a3f4a;box-sizing:border-box;padding:5px 4px;white-space:nowrap;overflow-x:auto;-webkit-overflow-scrolling:touch;
 scrollbar-width:none;-ms-overflow-style:none}.links-bottom::-webkit-scrollbar{display:none}.links-bottom::after,.links-bottom::before{
 content:"";position:sticky;display:inline-block;width:24px;height:1.4em;margin-top:-.3em;margin-bottom:-.3em;vertical-align:middle;
