@@ -231,51 +231,19 @@ body.fs-lock {
 	overflow: hidden;
 }
 
-/* Mobile-only "tap anywhere to exit" bar at the bottom. Big central target that
-   avoids the tiny edge buttons and the top address-bar zone. The iframe is held
-   off this strip (see .if1.fullscreen bottom below) so the bar sits over no
-   cross-origin iframe and stays reliably tappable while the map is interactive. */
-.fs-exit-bar {
-	display: none;
-}
-
 @media (max-width: 800px) {
-	.fs-exit-bar {
-		display: none; /* TEMP: bottom bar hidden for testing */
-		position: fixed;
-		left: 0;
-		right: 0;
-		bottom: 0;
-		height: 32px;
-		z-index: 10000;
-		transform: translateZ(0);
-	}
-
-		.fs-exit-bar .fs-bar-btn {
-			flex: 1;
-			display: flex;
-			align-items: center;
-			justify-content: center;
-			background-color: #2b5797;
-			color: white;
-			cursor: pointer;
-		}
-
-		.fs-exit-bar .fs-bar-btn + .fs-bar-btn {
-			border-left: 1px solid #1f3d6b;
-		}
-
-		.fs-exit-bar .fs-exit {
-			flex: 2; /* exit 2/3, reset 1/3 */
-		}
-
+	/* taller fullscreen title bar so the centered buttons are reliably tappable */
 	.radartitle.fullscreen {
-		height: 32px; /* match the bottom bar height on mobile */
+		height: 32px;
 	}
 
 	.if1.fullscreen {
 		top: 32px; /* match the taller mobile title bar */
-		bottom: 0; /* TEMP: bottom bar hidden, let the map fill */
+	}
+
+	/* wider gap so the [-] and [R] tap areas don't overlap on touch screens */
+	.radartitle .right-cluster {
+		gap: 14px;
 	}
 }
 

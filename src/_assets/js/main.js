@@ -313,34 +313,13 @@ function toggleFullscreen(frameId, btn) {
 		// unlock interactivity: drop the overlay gate
 		if (overlay) overlay.style.display = 'none';
 		// show [R] in the top bar to reset the map to default without leaving
-		// fullscreen (reliable on desktop; mobile uses the bottom bar's Reset)
+		// fullscreen; it reloads and stays available for repeated use
 		if (resetBtn) setResetButtonToFullscreenReset(resetBtn);
-		// mobile-only bottom bar (matches the CSS <=800px breakpoint): big reliable
-		// Zatvori | Reset targets, where the tiny top-bar edge buttons aren't reachable
-		if (window.innerWidth <= 800) {
-			const exitBar = document.createElement('div');
-			exitBar.className = 'fs-exit-bar';
-			const resetZone = document.createElement('div');
-			resetZone.className = 'fs-bar-btn fs-reset';
-			resetZone.textContent = 'Reset';
-			resetZone.addEventListener('click', () => resetIframePosition(frameId));
-			const exitZone = document.createElement('div');
-			exitZone.className = 'fs-bar-btn fs-exit';
-			exitZone.textContent = 'Zatvori';
-			exitZone.addEventListener('click', () => exitFullscreen(if1));
-			exitBar.append(exitZone, resetZone);
-			document.body.appendChild(exitBar);
-			if1._fsExitBar = exitBar;
-		}
 	}
 }
 
 function exitFullscreen(if1) {
 	if1.classList.remove('fullscreen');
-	if (if1._fsExitBar) { // remove the mobile exit bar (all exit paths land here)
-		if1._fsExitBar.remove();
-		delete if1._fsExitBar;
-	}
 	const title = if1.previousElementSibling;
 	title.classList.remove('fullscreen');
 	const btn = title.querySelector('.fs-btn');
