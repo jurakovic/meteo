@@ -309,7 +309,7 @@ function toggleFullscreen(frameId, btn) {
 		if1.classList.add('fullscreen');
 		if1.previousElementSibling.classList.add('fullscreen');
 		document.body.classList.add('fs-lock');
-		btn.textContent = '[□]';
+		btn.textContent = '[-]';
 		// unlock interactivity: drop the overlay gate
 		if (overlay) overlay.style.display = 'none';
 		// show [R] in the top bar to reset the map to default without leaving
