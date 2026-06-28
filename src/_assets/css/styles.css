@@ -70,6 +70,31 @@ table {
 		cursor: pointer;
 	}
 
+	.radartitle .right-cluster {
+		display: inline-flex;
+		gap: 8px;
+	}
+
+		.radartitle .right-cluster a {
+			text-decoration: none;
+			cursor: pointer;
+			position: relative; /* anchor for the enlarged tap area below */
+		}
+
+	/* enlarge the tap target around the small title-bar glyphs (HR/EU, fullscreen,
+	   reset) for easier tapping on touch screens — same trick as .links-toggle::before
+	   (.left/.zoom-btn is already positioned, so its ::before anchors to it) */
+	.radartitle .zoom-btn::before,
+	.radartitle .right-cluster a::before {
+		content: '';
+		position: absolute;
+		top: 50%;
+		left: 50%;
+		transform: translate(-50%, -50%);
+		width: 26px;
+		height: 26px;
+	}
+
 img {
 	max-width: 100%;
 	height: auto;
@@ -165,6 +190,69 @@ iframe, video {
 		width: calc(100% / 0.6);
 		height: calc(100% / 0.6);
 		transform-origin: 0 0;
+	}
+}
+
+/* fullscreen takeover: title row pinned to top, map fills the rest */
+.radartitle.fullscreen {
+	position: fixed;
+	top: 0;
+	left: 0;
+	right: 0;
+	z-index: 10000;
+	display: flex;
+	align-items: center; /* vertically center the title items in a taller bar */
+	justify-content: center;
+}
+
+	/* flex centers the in-flow .center; the absolute side items center via top/translate */
+	.radartitle.fullscreen .center {
+		transform: none;
+		left: auto;
+	}
+
+	.radartitle.fullscreen .left,
+	.radartitle.fullscreen .right {
+		top: 50%;
+		transform: translateY(-50%);
+	}
+
+.if1.fullscreen {
+	position: fixed;
+	top: 23px; /* matches .radartitle height */
+	left: 0;
+	right: 0;
+	bottom: 0;
+	padding-top: 0;
+	z-index: 9999;
+}
+
+body.fs-lock {
+	overflow: hidden;
+}
+
+@media (max-width: 800px) {
+	/* taller fullscreen title bar so the centered buttons are reliably tappable */
+	.radartitle.fullscreen {
+		height: 32px;
+	}
+
+	.if1.fullscreen {
+		top: 32px; /* match the taller mobile title bar */
+	}
+
+	/* wider gap so the [-] and [R] tap areas don't overlap on touch screens */
+	.radartitle .right-cluster {
+		gap: 14px;
+	}
+
+	/* gap from the screen edge in fullscreen (bar spans the full width) */
+	.radartitle.fullscreen .left {
+		margin-left: 10px;
+	}
+
+	.radartitle.fullscreen .right {
+		margin-right: 10px;
 	}
 }
 
