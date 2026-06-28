@@ -42,9 +42,9 @@
 		@media (max-width:800px){.scaled-iframe{transform:scale(.6);width:calc(100% / .6);height:calc(100% / .6);transform-origin:0 0}}
 		.radartitle.fullscreen{position:fixed;top:0;left:0;right:0;z-index:10000;display:flex;align-items:center;justify-content:center}
 		.radartitle.fullscreen .center{transform:none;left:auto}.radartitle.fullscreen .left,.radartitle.fullscreen .right{top:50%;transform:
-		translateY(-50%)}.radartitle.fullscreen .left{margin-left:10px}.radartitle.fullscreen .right{margin-right:10px}.if1.fullscreen{position:
-		fixed;top:23px;left:0;right:0;bottom:0;padding-top:0;z-index:9999}body.fs-lock{overflow:hidden}@media (max-width:800px){
-		.radartitle.fullscreen{height:32px}.if1.fullscreen{top:32px}.radartitle .right-cluster{gap:14px}}.links-bottom{display:none;text-align:left;
+		translateY(-50%)}.if1.fullscreen{position:fixed;top:23px;left:0;right:0;bottom:0;padding-top:0;z-index:9999}body.fs-lock{overflow:hidden}
+		@media (max-width:800px){.radartitle.fullscreen{height:32px}.if1.fullscreen{top:32px}.radartitle .right-cluster{gap:14px}
+		.radartitle.fullscreen .left{margin-left:10px}.radartitle.fullscreen .right{margin-right:10px}}.links-bottom{display:none;text-align:left;
 		background-color:#3a3f4a;box-sizing:border-box;padding:5px 4px;white-space:nowrap;overflow-x:auto;-webkit-overflow-scrolling:touch;
 		scrollbar-width:none;-ms-overflow-style:none}.links-bottom::-webkit-scrollbar{display:none}.links-bottom::after,.links-bottom::before{
 		content:"";position:sticky;display:inline-block;width:24px;height:1.4em;margin-top:-.3em;margin-bottom:-.3em;vertical-align:middle;
@@ -124,7 +124,7 @@
 		dlog(`toggleFullscreen: ${e}`);const o=document.getElementById(e).parentElement
 		;if(o.classList.contains("fullscreen"))exitFullscreen(o);else{const n=o.querySelector(".overlay"),s=getResetButtonFromFrameId(e)
 		;o._fsOverlayVisible=!n||"none"!==n.style.display,o.classList.add("fullscreen"),o.previousElementSibling.classList.add("fullscreen"),
-		document.body.classList.add("fs-lock"),t.textContent="[-]",n&&(n.style.display="none"),s&&setResetButtonToFullscreenReset(s)}}
+		document.body.classList.add("fs-lock"),t.textContent="[□]",n&&(n.style.display="none"),s&&setResetButtonToFullscreenReset(s)}}
 		function exitFullscreen(e){e.classList.remove("fullscreen");const t=e.previousElementSibling;t.classList.remove("fullscreen")
 		;const o=t.querySelector(".fs-btn")
 		;o&&(o.textContent="[ ]"),document.querySelector(".if1.fullscreen")||document.body.classList.remove("fs-lock")
@@ -365,8 +365,8 @@
 						<a class="left zoom-btn" data-mode="hr" onclick="switchIframeZoom('windy', this)">[HR]</a>
 						<a class="center" href="https://www.windy.com/-Radar-lightning-radar?radar,44.5,16.5,7" target="_blank" rel="nofollow">Windy</a>
 						<span class="right right-cluster">
-							<a class="fs-btn" onclick="toggleFullscreen('windy', this)">[ ]</a>
 							<a id="resetWindyFrame" data-frame-id="windy" style="display:none">[X]</a>
+							<a class="fs-btn" onclick="toggleFullscreen('windy', this)">[ ]</a>
 						</span>
 					</div>
 					<div class="if1 placeholder">
@@ -483,8 +483,8 @@
 						<a class="left zoom-btn" data-mode="hr" onclick="switchIframeZoom('blitzortung', this)">[HR]</a>
 						<a class="center" href="https://map.blitzortung.org/#6/44.5/16.5" target="_blank" rel="nofollow">Blitzortung.org | Munje</a>
 						<span class="right right-cluster">
-							<a class="fs-btn" onclick="toggleFullscreen('blitzortung', this)">[ ]</a>
 							<a id="resetBlitzortungFrame" data-frame-id="blitzortung" style="display:none">[X]</a>
+							<a class="fs-btn" onclick="toggleFullscreen('blitzortung', this)">[ ]</a>
 						</span>
 					</div>
 					<div class="if1 placeholder">
