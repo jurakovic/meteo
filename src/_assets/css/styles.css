@@ -200,7 +200,22 @@ iframe, video {
 	left: 0;
 	right: 0;
 	z-index: 10000;
+	display: flex;
+	align-items: center; /* vertically center the title items in a taller bar */
+	justify-content: center;
 }
+
+	/* flex centers the in-flow .center; the absolute side items center via top/translate */
+	.radartitle.fullscreen .center {
+		transform: none;
+		left: auto;
+	}
+
+	.radartitle.fullscreen .left,
+	.radartitle.fullscreen .right {
+		top: 50%;
+		transform: translateY(-50%);
+	}
 
 .if1.fullscreen {
 	position: fixed;
@@ -226,7 +241,7 @@ body.fs-lock {
 
 @media (max-width: 800px) {
 	.fs-exit-bar {
-		display: flex;
+		display: none; /* TEMP: bottom bar hidden for testing */
 		position: fixed;
 		left: 0;
 		right: 0;
@@ -254,8 +269,13 @@ body.fs-lock {
 			flex: 2; /* exit 2/3, reset 1/3 */
 		}
 
+	.radartitle.fullscreen {
+		height: 32px; /* match the bottom bar height on mobile */
+	}
+
 	.if1.fullscreen {
-		bottom: 32px; /* reserve room for .fs-exit-bar */
+		top: 32px; /* match the taller mobile title bar */
+		bottom: 0; /* TEMP: bottom bar hidden, let the map fill */
 	}
 }
 
