@@ -906,26 +906,12 @@ function buildMapSettings(panel) {
 			const checkbox = el('input', { type: 'checkbox' });
 			checkbox.checked = selectedIds.includes(id);
 			checkbox.addEventListener('change', markCustom);
-			const up = el('a', { text: '▲', title: 'Pomakni gore' });
-			const down = el('a', { text: '▼', title: 'Pomakni dolje' });
 			const handle = el('span', { class: 'ms-handle', text: '≡', title: 'Povuci za premještanje' });
 			const row = el('div', { class: 'ms-item', 'data-map-id': id }, [
 				el('label', {}, [checkbox, document.createTextNode(' ' + map.name)]),
-				el('span', { class: 'ms-arrows' }, [up, down, handle])
+				handle
 			]);
 			enableDragReorder(handle, row);
-			up.addEventListener('click', () => {
-				if (row.previousElementSibling) {
-					listDiv.insertBefore(row, row.previousElementSibling);
-					markCustom();
-				}
-			});
-			down.addEventListener('click', () => {
-				if (row.nextElementSibling) {
-					listDiv.insertBefore(row.nextElementSibling, row);
-					markCustom();
-				}
-			});
 			listDiv.appendChild(row);
 		});
 	}

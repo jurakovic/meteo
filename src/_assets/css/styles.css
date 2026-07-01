@@ -459,12 +459,6 @@ body.fs-lock {
 		padding: 2px 0;
 	}
 
-	.map-settings .ms-arrows a {
-		cursor: pointer;
-		padding: 2px 8px;
-		user-select: none;
-	}
-
 	.map-settings .ms-handle {
 		/* touch-action is ignored on non-replaced inline elements, so the
 		   handle must be a box for it to take effect on touch screens */
