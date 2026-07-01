@@ -10,6 +10,7 @@
 	<title>Meteo radari</title>
 	<!-- seo -->
 	<link rel="stylesheet" href="/_assets/css/styles.css">
+	<script src="/_assets/js/maps.js" defer></script>
 	<script src="/_assets/js/main.js" defer></script>
 	<script src="/_assets/js/include.js" defer></script>
 	<!-- gtag -->
@@ -22,469 +23,45 @@
 		<h2 align="center">Meteo radari</h2>
 		<hr>
 		<table border="0" align="center" cellpadding="0" cellspacing="0">
-			<tr>
-				<td align="center">
-					<div class="buttons">
-						<a href="/" style="text-decoration: none"><div class="btn">Početna</div></a>
-						<div class="links-btn">
-							<button type="button" class="btn" onclick="scrollToElement('links')">Linkovi</button>
-							<input type="checkbox" class="links-toggle" onchange="toggleLinksBottom(this)" title="Prikaži linkove ispod karata" />
+			<tbody>
+				<tr>
+					<td align="center">
+						<div class="buttons">
+							<a href="/" style="text-decoration: none"><div class="btn">Početna</div></a>
+							<button type="button" class="btn" onclick="toggleMapSettings()">Karte</button>
+							<div class="links-btn">
+								<button type="button" class="btn" onclick="scrollToElement('links')">Linkovi</button>
+								<input type="checkbox" class="links-toggle" onchange="toggleLinksBottom(this)" title="Prikaži linkove ispod karata" />
+							</div>
 						</div>
-					</div>
-				</td>
-			</tr>
-			<tr class="sp"></tr>
+					</td>
+				</tr>
+				<tr>
+					<td align="center">
+						<div class="map-settings" id="mapSettings" hidden></div>
+					</td>
+				</tr>
+				<tr class="sp"></tr>
+			</tbody>
 
-			<tr>
-				<td align="center">
-					<div class="radartitle">
-						<a class="left zoom-btn" data-mode="hr" onclick="switchIframeZoom('ventusky', this)">[HR]</a>
-						<a class="center" href="https://www.ventusky.com/?p=44.5;16.5;6&l=radar&w=off" target="_blank" rel="nofollow">Ventusky</a>
-						<span class="right right-cluster">
-							<a id="resetVentuskyFrame" data-frame-id="ventusky" style="display:none">[X]</a>
-							<a class="fs-btn" onclick="toggleFullscreen('ventusky', this)">[ ]</a>
-						</span>
-					</div>
-					<div class="if1 placeholder">
-						<iframe id="ventusky" class="scaled-iframe" loading="eager" frameborder="0"
-								data-src-hr="https://embed.ventusky.com/?p=44.5;16.5;6&l=radar&w=off" data-zoom-hr-desktop=";6&" data-zoom-hr-mobile=";6&"
-								data-src-eu="https://embed.ventusky.com/?p=48.0;10.0;4&l=radar&w=off" data-zoom-eu-desktop=";4&" data-zoom-eu-mobile=";3&">
-						</iframe>
-						<div class="overlay" id="overlayVentuskyFrame" data-frame-id="ventusky">
-							<span class="hint">Dvostruki klik za pristup interaktivnoj karti</span>
-						</div>
-					</div>
-				</td>
-			</tr>
-			<tr>
-				<td align="center">
-					<div class="links-bottom">
-						<a href="https://www.windy.com/-Weather-radar-radar?radar,44.5,16.5,7" target="_blank" rel="nofollow">Windy</a>
-						· <a href="https://zoom.earth/maps/radar/#view=44.5,16.5,7z" target="_blank" rel="nofollow">Zoom Earth</a>
-						· <a href="https://www.meteoblue.com/en/weather/maps/croatia_croatia_3202326#map=radar~radarMapEU~none~none~none&coords=6/44.5/16.5" target="_blank" rel="nofollow">meteoblue</a>
-						· <a href="https://www.rainviewer.com/map.html?loc=44.5,16.5,6&oCS=1&c=5&lm=1&layer=radar&sm=1&sn=2&ts=1" target="_blank" rel="nofollow">Rain Viewer</a>
-						· <a href="https://www.vrijemeradar.hr/vremenski-radar/zagreb/18138691?center=44.5,16.5&zoom=7&layer=wr&tz=Europe%2FZagreb" target="_blank" rel="nofollow">Vrijeme&Radar</a>
-						· <a href="https://www.sat24.com/en-gb/country/hr/hd#selectedLayer=euRadarSat" target="_blank" rel="nofollow">Sat24</a>
-						· <a href="https://imweather.com/?model=nowcast&run=&member=&element=radsat&level=&lat=44.5000&lng=16.5000&z=6" target="_blank" rel="nofollow">I'm Weather</a>
-						· <a href="https://www.idokep.eu/adria" target="_blank" rel="nofollow">Időkép</a>
-					</div>
-				</td>
-			</tr>
-			<tr class="sp20"></tr>
+			<tbody data-maps data-page="extras"></tbody>
 
-			<tr>
-				<td align="center">
-					<div class="radartitle">
-						<a class="left zoom-btn" data-mode="hr" onclick="switchIframeZoom('rainViewer', this)">[HR]</a>
-						<a class="center" href="https://www.rainviewer.com/map.html?loc=44.5,16.5,6&oCS=1&c=5&lm=1&layer=radar&sm=1&sn=2&ts=1" target="_blank" rel="nofollow">Rain Viewer</a>
-						<span class="right right-cluster">
-							<a id="resetRainViewerFrame" data-frame-id="rainViewer" style="display:none">[X]</a>
-							<a class="fs-btn" onclick="toggleFullscreen('rainViewer', this)">[ ]</a>
-						</span>
-					</div>
-					<div class="if1 placeholder">
-						<iframe id="rainViewer" class="scaled-iframe" loading="lazy" frameborder="0"
-								data-src-hr="https://www.rainviewer.com/map.html?loc=44.8,16.5,6.3&oCS=1&c=5&lm=1&layer=radar&sm=1&sn=2&ts=1" data-zoom-hr-desktop=",6.3&" data-zoom-hr-mobile=",5.8&"
-								data-src-eu="https://www.rainviewer.com/map.html?loc=48.0,10.0,4.0&oCS=1&c=5&lm=1&layer=radar&sm=1&sn=2&ts=1" data-zoom-eu-desktop=",4.0&" data-zoom-eu-mobile=",3.2&">
-						</iframe>
-						<div class="overlay" id="overlayRainViewerFrame" data-frame-id="rainViewer">
-							<span class="hint">Dvostruki klik za pristup interaktivnoj karti</span>
-						</div>
-					</div>
-				</td>
-			</tr>
-			<tr>
-				<td align="center">
-					<div class="links-bottom">
-						<a href="https://www.windy.com/-Weather-radar-radar?radar,44.5,16.5,7" target="_blank" rel="nofollow">Windy</a>
-						· <a href="https://zoom.earth/maps/radar/#view=44.5,16.5,7z" target="_blank" rel="nofollow">Zoom Earth</a>
-						· <a href="https://www.meteoblue.com/en/weather/maps/croatia_croatia_3202326#map=radar~radarMapEU~none~none~none&coords=6/44.5/16.5" target="_blank" rel="nofollow">meteoblue</a>
-						· <a href="https://www.ventusky.com/?p=44.5;16.5;6&l=radar&w=off" target="_blank" rel="nofollow">Ventusky</a>
-						· <a href="https://www.vrijemeradar.hr/vremenski-radar/zagreb/18138691?center=44.5,16.5&zoom=7&layer=wr&tz=Europe%2FZagreb" target="_blank" rel="nofollow">Vrijeme&Radar</a>
-						· <a href="https://www.sat24.com/en-gb/country/hr/hd#selectedLayer=euRadarSat" target="_blank" rel="nofollow">Sat24</a>
-						· <a href="https://imweather.com/?model=nowcast&run=&member=&element=radsat&level=&lat=44.5000&lng=16.5000&z=6" target="_blank" rel="nofollow">I'm Weather</a>
-						· <a href="https://www.idokep.eu/adria" target="_blank" rel="nofollow">Időkép</a>
-					</div>
-				</td>
-			</tr>
-			<tr class="sp20"></tr>
-
-			<tr>
-				<td align="center">
-					<div class="radartitle">
-						<a class="left zoom-btn" data-mode="hr" onclick="switchIframeZoom('weatherAndRadar', this)">[HR]</a>
-						<a class="center" href="https://www.vrijemeradar.hr/vremenski-radar/zagreb/18138691?center=44.5,16.5&zoom=7&layer=wr&tz=Europe%2FZagreb" target="_blank" rel="nofollow">Vrijeme&Radar</a>
-						<span class="right right-cluster">
-							<a id="resetWeatherAndRadarFrame" data-frame-id="weatherAndRadar" style="display:none">[X]</a>
-							<a class="fs-btn" onclick="toggleFullscreen('weatherAndRadar', this)">[ ]</a>
-						</span>
-					</div>
-					<div class="if1 placeholder">
-						<iframe id="weatherAndRadar" class="scaled-iframe" loading="lazy" frameborder="0" data-zoom-hr-desktop="&zoom=7.2" data-zoom-hr-mobile="&zoom=6.8" data-zoom-eu-desktop="&zoom=5.0" data-zoom-eu-mobile="&zoom=4.0"
-								data-src-hr="https://radar.wo-cloud.com/pwa/?center=44.5,16.5&zoom=7.2&tz=Europe/Zagreb&tf=HH:mm&tempunit=celsius&windunit=kph&showShareButton=false&lang=en-US&placemarkName=Zagreb&desktop=true&fadeTop=true"
-								data-src-eu="https://radar.wo-cloud.com/pwa/?center=48.0,10.0&zoom=5.0&tz=Europe/Zagreb&tf=HH:mm&tempunit=celsius&windunit=kph&showShareButton=false&lang=en-US&placemarkName=Zagreb&desktop=true&fadeTop=true">
-						</iframe>
-						<div class="overlay" id="overlayWeatherAndRadarFrame" data-frame-id="weatherAndRadar">
-							<span class="hint">Dvostruki klik za pristup interaktivnoj karti</span>
-						</div>
-					</div>
-				</td>
-			</tr>
-			<tr>
-				<td align="center">
-					<div class="links-bottom">
-						<a href="https://www.windy.com/-Weather-radar-radar?radar,44.5,16.5,7" target="_blank" rel="nofollow">Windy</a>
-						· <a href="https://zoom.earth/maps/radar/#view=44.5,16.5,7z" target="_blank" rel="nofollow">Zoom Earth</a>
-						· <a href="https://www.meteoblue.com/en/weather/maps/croatia_croatia_3202326#map=radar~radarMapEU~none~none~none&coords=6/44.5/16.5" target="_blank" rel="nofollow">meteoblue</a>
-						· <a href="https://www.rainviewer.com/map.html?loc=44.5,16.5,6&oCS=1&c=5&lm=1&layer=radar&sm=1&sn=2&ts=1" target="_blank" rel="nofollow">Rain Viewer</a>
-						· <a href="https://www.ventusky.com/?p=44.5;16.5;6&l=radar&w=off" target="_blank" rel="nofollow">Ventusky</a>
-						· <a href="https://www.sat24.com/en-gb/country/hr/hd#selectedLayer=euRadarSat" target="_blank" rel="nofollow">Sat24</a>
-						· <a href="https://imweather.com/?model=nowcast&run=&member=&element=radsat&level=&lat=44.5000&lng=16.5000&z=6" target="_blank" rel="nofollow">I'm Weather</a>
-						· <a href="https://www.idokep.eu/adria" target="_blank" rel="nofollow">Időkép</a>
-					</div>
-				</td>
-			</tr>
-			<tr class="sp20"></tr>
-
-			<tr>
-				<td align="center">
-					<div class="radartitle" style="max-width: 821px;">
-						<a href="https://meteo.arso.gov.si/met/sl/weather/observ/radar/" target="_blank" rel="nofollow">meteo.si</a>
-					</div>
-					<div class="slideshow placeholder" data-slideshow-id="6" data-current-slide="1" style="max-width: 821px; aspect-ratio: 821 / 660; ">
-						<div class="slide fade active">
-							<img src="https://meteo.arso.gov.si/uploads/probase/www/observ/radar/si0-rm-anim.gif?nocache" />
-						</div>
-						<div class="slide fade">
-							<img data-src="https://meteo.arso.gov.si/uploads/probase/www/observ/radar/si0-rm.gif?nocache" class="lazy" />
-						</div>
-						<a class="prev" onclick="plusSlides(6, -1)">&#10094;</a>
-						<a class="next" onclick="plusSlides(6, 1)">&#10095;</a>
-					</div>
-					<div class="indicators-container" data-slideshow-id="6" style="max-width: 821px; grid-template-columns: repeat(2, 1fr);">
-						<span class="indicator active"></span>
-						<span class="indicator"></span>
-					</div>
-				</td>
-			</tr>
-			<tr>
-				<td align="center">
-					<div class="links-bottom" style="max-width: 821px">
-						<a href="https://www.windy.com/-Weather-radar-radar?radar,44.5,16.5,7" target="_blank" rel="nofollow">Windy</a>
-						· <a href="https://zoom.earth/maps/radar/#view=44.5,16.5,7z" target="_blank" rel="nofollow">Zoom Earth</a>
-						· <a href="https://www.meteoblue.com/en/weather/maps/croatia_croatia_3202326#map=radar~radarMapEU~none~none~none&coords=6/44.5/16.5" target="_blank" rel="nofollow">meteoblue</a>
-						· <a href="https://www.rainviewer.com/map.html?loc=44.5,16.5,6&oCS=1&c=5&lm=1&layer=radar&sm=1&sn=2&ts=1" target="_blank" rel="nofollow">Rain Viewer</a>
-						· <a href="https://www.ventusky.com/?p=44.5;16.5;6&l=radar&w=off" target="_blank" rel="nofollow">Ventusky</a>
-						· <a href="https://www.vrijemeradar.hr/vremenski-radar/zagreb/18138691?center=44.5,16.5&zoom=7&layer=wr&tz=Europe%2FZagreb" target="_blank" rel="nofollow">Vrijeme&Radar</a>
-						· <a href="https://www.sat24.com/en-gb/country/hr/hd#selectedLayer=euRadarSat" target="_blank" rel="nofollow">Sat24</a>
-						· <a href="https://imweather.com/?model=nowcast&run=&member=&element=radsat&level=&lat=44.5000&lng=16.5000&z=6" target="_blank" rel="nofollow">I'm Weather</a>
-						· <a href="https://www.idokep.eu/adria" target="_blank" rel="nofollow">Időkép</a>
-					</div>
-				</td>
-			</tr>
-			<tr class="sp20"></tr>
-
-			<tr>
-				<td align="center">
-					<div class="radartitle" style="max-width: 840px;">
-						<a href="https://www.idokep.eu/ceu/radar" target="_blank" rel="nofollow">Időkép | Radar | Europa</a>
-					</div>
-					<div class="placeholder" style="max-width: 840px; aspect-ratio: 840 / 600;">
-						<img src="https://www.idokep.eu/terkep/eu/radar.gif" />
-					</div>
-				</td>
-			</tr>
-			<tr>
-				<td align="center">
-					<div class="links-bottom" style="max-width: 840px">
-						<a href="https://www.windy.com/-Weather-radar-radar?radar,47.5,17.5,5" target="_blank" rel="nofollow">Windy</a>
-						· <a href="https://zoom.earth/maps/radar/#view=47.5,17.5,5z" target="_blank" rel="nofollow">Zoom Earth</a>
-						· <a href="https://www.meteoblue.com/en/weather/maps/croatia_croatia_3202326#map=radar~radarMapEU~none~none~none&coords=4/47.5/17.5" target="_blank" rel="nofollow">meteoblue</a>
-						· <a href="https://www.rainviewer.com/map.html?loc=47.5,17.5,4&oCS=1&c=5&lm=1&layer=radar&sm=1&sn=2&ts=1" target="_blank" rel="nofollow">Rain Viewer</a>
-						· <a href="https://www.ventusky.com/?p=47.5;17.5;4&l=radar&w=off" target="_blank" rel="nofollow">Ventusky</a>
-						· <a href="https://www.vrijemeradar.hr/vremenski-radar/zagreb/18138691?center=47.5,15.5&zoom=5&layer=wr&tz=Europe%2FZagreb" target="_blank" rel="nofollow">Vrijeme&Radar</a>
-						· <a href="https://www.sat24.com/en-gb/continent/eu/hd#selectedLayer=euRadarSat" target="_blank" rel="nofollow">Sat24</a>
-						· <a href="https://imweather.com/?model=nowcast&run=&member=&element=radsat&level=&lat=47.5000&lng=17.5000&z=4.2" target="_blank" rel="nofollow">I'm Weather</a>
-					</div>
-				</td>
-			</tr>
-			<tr class="sp20"></tr>
-
-			<tr>
-				<td align="center">
-					<div class="radartitle">
-						<a href="https://www.idokep.hu/muhold" target="_blank" rel="nofollow">Időkép | Satelit | Europa</a>
-					</div>
-					<div class="placeholder" style="aspect-ratio: 1070 / 713;">
-						<div class="vid1"><video muted="" autoplay="" loop="" controls=""><source type="video/mp4" src="https://www.idokep.hu/radar/sat-eu.mp4"></video></div>
-					</div>
-				</td>
-			</tr>
-			<tr>
-				<td align="center">
-					<div class="links-bottom">
-						<a href="https://www.windy.com/-Satellite-satellite?satellite,47.5,17.5,5" target="_blank" rel="nofollow">Windy</a>
-						· <a href="https://zoom.earth/maps/satellite/#view=47.5,17.5,5z" target="_blank" rel="nofollow">Zoom Earth</a>
-						· <a href="https://www.meteoblue.com/en/weather/maps/croatia_croatia_3202326#map=satellite~radar~none~none~none&coords=4/47.5/17.5" target="_blank" rel="nofollow">meteoblue</a>
-						· <a href="https://www.ventusky.com/?p=47.5;17.5;4&l=satellite&w=off" target="_blank" rel="nofollow">Ventusky</a>
-						· <a href="https://www.sat24.com/en-gb/continent/eu/hd" target="_blank" rel="nofollow">Sat24</a>
-						· <a href="https://imweather.com/?model=nowcast&element=satellite&run=&member=&level=&lat=47.5000&lng=17.5000&z=4.2" target="_blank" rel="nofollow">I'm Weather</a>
-						· <a href="https://www.wetterzentrale.de/en/reanalysis.php?map=1&model=sat&var=404&nmaps=32" target="_blank" rel="nofollow">Wetterzentrale</a>
-					</div>
-				</td>
-			</tr>
-			<tr class="sp20"></tr>
-
-			<!--
-			<tr>
-				<td align="center">
-					<div class="radartitle">
-						<a href="https://www.idokep.eu/adria" target="_blank" rel="nofollow">Időkép | Radar | Hrvatska</a>
-					</div>
-					<div class="vid2"><video muted="" autoplay="" loop="" controls=""><source type="video/mp4" src="https://www.idokep.hu/idokepradar/public_radar_adria.mp4"></video></div>
-				</td>
-			</tr>
-			<tr class="sp20"></tr>
-			 -->
-
-			<tr>
-				<td align="center">
-					<div class="radartitle" style="max-width: 804px;">
-						<a href="https://www.istramet.hr/radari-munja/" target="_blank" rel="nofollow">Istramet | Munje</a>
-					</div>
-					<div class="placeholder" style="max-width: 804px; aspect-ratio: 804 / 687; ">
-						<img src="https://www.istramet.hr/wp-content/themes/istramet/img/munje_hr.png" />
-					</div>
-				</td>
-			</tr>
-			<tr>
-				<td align="center">
-					<div class="links-bottom" style="max-width: 804px">
-						<a href="https://map.blitzortung.org/#6.5/44.5/16.5" target="_blank" rel="nofollow">Blitzortung.org</a>
-						· <a href="https://www.lightningmaps.org/?lang=en#m=sen;t=3;s=200;o=0;b=0.00;ts=0;z=7;y=44.5;x=16.5;d=4;dl=6;dc=0;" target="_blank" rel="nofollow">LightningMaps.org</a>
-						· <a href="https://www.neverin.hr/munje/" target="_blank" rel="nofollow">Neverin</a>
-					</div>
-				</td>
-			</tr>
-			<tr class="sp20"></tr>
-
-			<tr>
-				<td align="center">
-					<div class="radartitle">
-						<a href="https://www.blitzortung.org/en/historical_maps.php?map=10" target="_blank" rel="nofollow">Blitzortung.org | Munje</a>
-					</div>
-					<div class="placeholder" style="aspect-ratio: 1;">
-						<img src="https://www.blitzortung.org/Images/image_b_eu.png" />
-					</div>
-				</td>
-			</tr>
-			<tr>
-				<td align="center">
-					<div class="links-bottom">
-						<a href="https://map.blitzortung.org/#6/44.5/16.5" target="_blank" rel="nofollow">Blitzortung.org</a>
-						· <a href="https://www.lightningmaps.org/?lang=en#m=sen;t=3;s=200;o=0;b=0.00;ts=0;z=5;y=47.5;x=17.5;d=4;dl=6;dc=0;" target="_blank" rel="nofollow">LightningMaps.org</a>
-						· <a href="https://www.neverin.hr/munje/#:~:text=Pojava%20munja%20Europa" target="_blank" rel="nofollow">Neverin</a>
-					</div>
-				</td>
-			</tr>
-			<tr class="sp20"></tr>
-
-			<tr>
-				<td align="center">
-					<div class="radartitle">
-						<a href="https://www.wetterzentrale.de/en/topkarten.php?map=17&model=ecm&var=5&run=6&time=0&lid=OP&h=1&mv=0&tr=1" target="_blank" rel="nofollow">Wetterzentrale | Temperatura </a>
-					</div>
-					<div class="placeholder" style="aspect-ratio: 959 / 741;">
-						<img src="https://www.wetterzentrale.de/en/create_gif.php?model=ECM&member=OP&var=5&map=IT&run=06&speed=250&times=0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47" alt="Wetterzentrale Temperatura" />
-					</div>
-				</td>
-			</tr>
-			<tr>
-				<td align="center">
-					<div class="links-bottom">
-						<a href="https://www.windy.com/-Temperature-temp?temp,44.5,16.5,7" target="_blank" rel="nofollow">Windy</a>
-						· <a href="https://zoom.earth/maps/temperature/#view=44.5,16.5,7z/model=icon" target="_blank" rel="nofollow">Zoom Earth</a>
-						· <a href="https://www.meteoblue.com/en/weather/maps/croatia_croatia_3202326#map=temperature~daily-max~auto~2%20m%20above%20gnd~none&coords=6/44.5/16.5" target="_blank" rel="nofollow">meteoblue</a>
-						· <a href="https://www.ventusky.com/?p=44.49;16.50;6&l=temperature-2m&w=off" target="_blank" rel="nofollow">Ventusky</a>
-						· <a href="https://www.vrijemeradar.hr/vremenski-radar/zagreb/18138691?center=44.5,16.5&zoom=7&layer=tr&tz=Europe%2FZagreb" target="_blank" rel="nofollow">Vrijeme&Radar</a>
-						· <a href="https://www.meteoradar.co.uk/en-gb/country/hr/maps/temperature" target="_blank" rel="nofollow">Meteoradar</a>
-						· <a href="https://www.meteociel.fr/observations-meteo/temperatures.php?region=it" target="_blank" rel="nofollow">Meteociel</a>
-						· <a href="https://pljusak.com/karta.php" target="_blank" rel="nofollow">Pljusak</a>
-					</div>
-				</td>
-			</tr>
-			<tr class="sp20"></tr>
-
-			<tr>
-				<td align="center">
-					<div class="radartitle" style="max-width: 720px;">
-						<a href="https://meteo.hr/prognoze.php?section=prognoze_model&param=web_fronte_sutra12" target="_blank" rel="nofollow">DHMZ | Sinoptička karta</a>
-					</div>
-					<div class="placeholder" style="max-width: 720px; aspect-ratio: 1;">
-						<img src="https://prognoza.hr/web_fronte_sutra12.jpg" />
-					</div>
-				</td>
-			</tr>
-			<tr>
-				<td align="center">
-					<div class="links-bottom" style="max-width: 720px">
-						<a href="https://intranet.chmi.cz/aktualni-situace/aktualni-stav-pocasi/evropa/synopticka-situace" target="_blank" rel="nofollow">ČHMÚ</a>
-					</div>
-				</td>
-			</tr>
-			<tr class="sp20"></tr>
-
-			<tr>
-				<td align="center">
-					<div class="radartitle" style="max-width: 720px;">
-						<a href="https://meteo.hr/podaci.php?section=podaci_mjerenja&param=radari&el=puntijarka&acto=anim" target="_blank" rel="nofollow">DHMZ | MRC Puntijarka</a>
-					</div>
-					<div class="slideshow placeholder" data-slideshow-id="8" data-current-slide="1" style="max-width: 720px; aspect-ratio: 720 / 751;">
-						<div class="slide fade active">
-							<img src="https://vrijeme.hr/anim_puntijarka.gif" />
-						</div>
-						<div class="slide fade">
-							<img data-src="https://vrijeme.hr/puntijarka-stat.png" class="lazy" />
-						</div>
-						<a class="prev" onclick="plusSlides(8, -1)">&#10094;</a>
-						<a class="next" onclick="plusSlides(8, 1)">&#10095;</a>
-					</div>
-					<div class="indicators-container" data-slideshow-id="8" style="max-width: 720px; grid-template-columns: repeat(2, 1fr);">
-						<span class="indicator active"></span>
-						<span class="indicator"></span>
-					</div>
-				</td>
-			</tr>
-			<tr class="sp20"></tr>
-
-			<tr>
-				<td align="center">
-					<div class="radartitle" style="max-width: 720px;">
-						<a href="https://meteo.hr/podaci.php?section=podaci_mjerenja&param=radari&el=bilogora&acto=anim" target="_blank" rel="nofollow">DHMZ | MRC Bilogora</a>
-					</div>
-					<div class="slideshow placeholder" data-slideshow-id="9" data-current-slide="1" style="max-width: 720px; aspect-ratio: 720 / 751;">
-						<div class="slide fade active">
-							<img src="https://vrijeme.hr/anim_bilogora.gif" />
-						</div>
-						<div class="slide fade">
-							<img data-src="https://vrijeme.hr/bilogora-stat.png" class="lazy" />
-						</div>
-						<a class="prev" onclick="plusSlides(9, -1)">&#10094;</a>
-						<a class="next" onclick="plusSlides(9, 1)">&#10095;</a>
-					</div>
-					<div class="indicators-container" data-slideshow-id="9" style="max-width: 720px; grid-template-columns: repeat(2, 1fr);">
-						<span class="indicator active"></span>
-						<span class="indicator"></span>
-					</div>
-				</td>
-			</tr>
-			<tr class="sp20"></tr>
-
-			<tr>
-				<td align="center">
-					<div class="radartitle" style="max-width: 720px;">
-						<a href="https://meteo.hr/podaci.php?section=podaci_mjerenja&param=radari&el=gradiste&acto=anim" target="_blank" rel="nofollow">DHMZ | MRC Gradište</a>
-					</div>
-					<div class="slideshow placeholder" data-slideshow-id="10" data-current-slide="1" style="max-width: 720px; aspect-ratio: 720 / 751;">
-						<div class="slide fade active">
-							<img src="https://vrijeme.hr/anim_gradiste.gif" />
-						</div>
-						<div class="slide fade">
-							<img data-src="https://vrijeme.hr/gradiste-stat.png" class="lazy" />
-						</div>
-						<a class="prev" onclick="plusSlides(10, -1)">&#10094;</a>
-						<a class="next" onclick="plusSlides(10, 1)">&#10095;</a>
-					</div>
-					<div class="indicators-container" data-slideshow-id="10" style="max-width: 720px; grid-template-columns: repeat(2, 1fr);">
-						<span class="indicator active"></span>
-						<span class="indicator"></span>
-					</div>
-				</td>
-			</tr>
-			<tr class="sp20"></tr>
-
-			<tr>
-				<td align="center">
-					<div class="radartitle" style="max-width: 720px;">
-						<a href="https://meteo.hr/podaci.php?section=podaci_mjerenja&param=radari&el=goli&acto=anim" target="_blank" rel="nofollow">DHMZ | MRC Goli</a>
-					</div>
-					<div class="slideshow placeholder" data-slideshow-id="11" data-current-slide="1" style="max-width: 720px; aspect-ratio: 720 / 751;">
-						<div class="slide fade active">
-							<img src="https://vrijeme.hr/anim_goli.gif" />
-						</div>
-						<div class="slide fade">
-							<img data-src="https://vrijeme.hr/goli-stat.png" class="lazy" />
-						</div>
-						<a class="prev" onclick="plusSlides(11, -1)">&#10094;</a>
-						<a class="next" onclick="plusSlides(11, 1)">&#10095;</a>
-					</div>
-					<div class="indicators-container" data-slideshow-id="11" style="max-width: 720px; grid-template-columns: repeat(2, 1fr);">
-						<span class="indicator active"></span>
-						<span class="indicator"></span>
-					</div>
-				</td>
-			</tr>
-			<tr class="sp20"></tr>
-
-			<tr>
-				<td align="center">
-					<div class="radartitle" style="max-width: 720px;">
-						<a href="https://meteo.hr/podaci.php?section=podaci_mjerenja&param=radari&el=debeljak&acto=anim" target="_blank" rel="nofollow">DHMZ | MRC Debeljak</a>
-					</div>
-					<div class="slideshow placeholder" data-slideshow-id="12" data-current-slide="1" style="max-width: 720px; aspect-ratio: 720 / 751;">
-						<div class="slide fade active">
-							<img src="https://vrijeme.hr/anim_debeljak.gif" />
-						</div>
-						<div class="slide fade">
-							<img data-src="https://vrijeme.hr/debeljak-stat.png" class="lazy" />
-						</div>
-						<a class="prev" onclick="plusSlides(12, -1)">&#10094;</a>
-						<a class="next" onclick="plusSlides(12, 1)">&#10095;</a>
-					</div>
-					<div class="indicators-container" data-slideshow-id="12" style="max-width: 720px; grid-template-columns: repeat(2, 1fr);">
-						<span class="indicator active"></span>
-						<span class="indicator"></span>
-					</div>
-				</td>
-			</tr>
-			<tr class="sp20"></tr>
-
-			<tr>
-				<td align="center">
-					<div class="radartitle" style="max-width: 720px;">
-						<a href="https://meteo.hr/podaci.php?section=podaci_mjerenja&param=radari&el=uljenje&acto=anim" target="_blank" rel="nofollow">DHMZ | MRC Uljenje</a>
-					</div>
-					<div class="slideshow placeholder" data-slideshow-id="13" data-current-slide="1" style="max-width: 720px; aspect-ratio: 720 / 751;">
-						<div class="slide fade active">
-							<img src="https://vrijeme.hr/anim_uljenje.gif" />
-						</div>
-						<div class="slide fade">
-							<img data-src="https://vrijeme.hr/uljenje-stat.png" class="lazy" />
-						</div>
-						<a class="prev" onclick="plusSlides(13, -1)">&#10094;</a>
-						<a class="next" onclick="plusSlides(13, 1)">&#10095;</a>
-					</div>
-					<div class="indicators-container" data-slideshow-id="13" style="max-width: 720px; grid-template-columns: repeat(2, 1fr);">
-						<span class="indicator active"></span>
-						<span class="indicator"></span>
-					</div>
-				</td>
-			</tr>
-			<tr class="sp"></tr>
-
-			<tr>
-				<td align="center" id="links">
-					<button type="button" class="expandable">
-						<span class="label">Linkovi</span>
-						<span class="arrow">▼</span>
-					</button>
-				</td>
-			</tr>
-			<tr>
-				<td align="left">
-					<div class="links" data-include-html="/_components/links.c.html"></div>
-				</td>
-			</tr>
+			<tbody>
+				<tr class="sp"></tr>
+				<tr>
+					<td align="center" id="links">
+						<button type="button" class="expandable">
+							<span class="label">Linkovi</span>
+							<span class="arrow">▼</span>
+						</button>
+					</td>
+				</tr>
+				<tr>
+					<td align="left">
+						<div class="links" data-include-html="/_components/links.c.html"></div>
+					</td>
+				</tr>
+			</tbody>
 		</table>
 	</div>
 	<footer>

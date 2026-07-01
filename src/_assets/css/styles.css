@@ -334,7 +334,7 @@ body.fs-lock {
 
 .buttons {
 	display: grid;
-	grid-template-columns: 49.5% 49.5%;
+	grid-template-columns: repeat(3, 1fr);
 	gap: 1%;
 	font-size: 13px;
 }
@@ -379,6 +379,66 @@ body.fs-lock {
 				transform: translate(-50%, -50%);
 				width: 28px;
 				height: 28px;
+			}
+
+.map-settings {
+	background-color: #202c40;
+	text-align: left;
+	padding: 10px;
+	margin-top: 5px;
+	font-size: 13px;
+	color: white;
+}
+
+	.map-settings label {
+		cursor: pointer;
+	}
+
+	.map-settings .ms-presets {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 4px 16px;
+		padding-bottom: 8px;
+		margin-bottom: 8px;
+		border-bottom: 1px solid #485871;
+	}
+
+		.map-settings .ms-presets label {
+			white-space: nowrap;
+		}
+
+	.map-settings .ms-item {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		padding: 2px 0;
+	}
+
+	.map-settings .ms-arrows a {
+		cursor: pointer;
+		padding: 2px 8px;
+		user-select: none;
+	}
+
+	.map-settings .ms-actions {
+		margin-top: 10px;
+		text-align: center;
+	}
+
+		.map-settings .ms-actions .btn {
+			font-size: 13px;
+			font-family: inherit;
+			color: white;
+			background-color: #485871;
+			cursor: pointer;
+			height: 24px;
+			padding: 0 24px;
+			border: none;
+			outline: none;
+		}
+
+			.map-settings .ms-actions .btn:hover {
+				background-color: #5F6F89;
 			}
 
 .slideshow {
