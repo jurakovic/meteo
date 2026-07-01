@@ -803,6 +803,20 @@ function renderMaps() {
 
 // ---------- settings panel ----------
 
+// scroll the preset bar horizontally so the radio's label is visible;
+// scrollIntoView is unusable here — it also scrolls the page vertically
+// back up to the panel (e.g. on every checkbox change far down the list)
+function revealPresetOption(radio, smooth) {
+	const label = radio.parentElement;
+	const bar = label.parentElement;
+	const labelRect = label.getBoundingClientRect();
+	const barRect = bar.getBoundingClientRect();
+	let delta = 0;
+	if (labelRect.right > barRect.right) delta = labelRect.right - barRect.right;
+	else if (labelRect.left < barRect.left) delta = labelRect.left - barRect.left;
+	if (delta !== 0) bar.scrollBy({ left: delta, behavior: smooth ? 'smooth' : 'auto' });
+}
+
 function toggleMapSettings() {
 	const panel = document.getElementById('mapSettings');
 	if (!panel) return;
@@ -813,7 +827,7 @@ function toggleMapSettings() {
 		const presets = panel.querySelector('.ms-presets');
 		updateLinksScrollShadow(presets);
 		const checked = presets.querySelector('input:checked');
-		if (checked) checked.parentElement.scrollIntoView({ block: 'nearest', inline: 'nearest' });
+		if (checked) revealPresetOption(checked, false);
 	} else {
 		panel.hidden = true;
 	}
@@ -830,7 +844,7 @@ function buildMapSettings(panel) {
 		const custom = panel.querySelector('input[name="msPreset"][value="custom"]');
 		custom.checked = true;
 		// the custom radio is last and may be scrolled out of view
-		custom.parentElement.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'nearest' });
+		revealPresetOption(custom, true);
 	}
 
 	// pointer-events drag reorder: works for both mouse and touch (the HTML5
