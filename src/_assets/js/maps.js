@@ -775,6 +775,11 @@ function toggleMapSettings() {
 	if (panel.hidden) {
 		buildMapSettings(panel);
 		panel.hidden = false;
+		// scroll shadows and positions need layout, so only after unhiding
+		const presets = panel.querySelector('.ms-presets');
+		updateLinksScrollShadow(presets);
+		const checked = presets.querySelector('input:checked');
+		if (checked) checked.parentElement.scrollIntoView({ block: 'nearest', inline: 'nearest' });
 	} else {
 		panel.hidden = true;
 	}
@@ -788,7 +793,10 @@ function buildMapSettings(panel) {
 	const listDiv = el('div', { class: 'ms-list' });
 
 	function markCustom() {
-		panel.querySelector('input[name="msPreset"][value="custom"]').checked = true;
+		const custom = panel.querySelector('input[name="msPreset"][value="custom"]');
+		custom.checked = true;
+		// the custom radio is last and may be scrolled out of view
+		custom.parentElement.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'nearest' });
 	}
 
 	function fillList(selectedIds) {
@@ -836,6 +844,7 @@ function buildMapSettings(panel) {
 		});
 		presetsDiv.appendChild(el('label', {}, [radio, document.createTextNode(' ' + preset.name)]));
 	});
+	presetsDiv.addEventListener('scroll', () => updateLinksScrollShadow(presetsDiv), { passive: true });
 
 	fillList(resolveMapIds(page));
 

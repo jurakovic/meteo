@@ -394,17 +394,62 @@ body.fs-lock {
 		cursor: pointer;
 	}
 
+	/* single-line preset row with horizontal scroll and edge fades,
+	   same mechanics as .links-bottom but on the panel background */
 	.map-settings .ms-presets {
-		display: flex;
-		flex-wrap: wrap;
-		gap: 4px 16px;
+		white-space: nowrap;
+		overflow-x: auto;
 		padding-bottom: 8px;
 		margin-bottom: 8px;
 		border-bottom: 1px solid #485871;
+		-webkit-overflow-scrolling: touch;
+		scrollbar-width: none;
+		-ms-overflow-style: none;
 	}
 
-		.map-settings .ms-presets label {
-			white-space: nowrap;
+		.map-settings .ms-presets::-webkit-scrollbar {
+			display: none;
+		}
+
+		.map-settings .ms-presets::before,
+		.map-settings .ms-presets::after {
+			content: "";
+			position: sticky;
+			display: inline-block;
+			width: 24px;
+			/* taller than the .links-bottom fades: radio buttons overflow the
+			   text line on Android; negative margins keep the row height */
+			height: 2.4em;
+			margin-top: -0.8em;
+			margin-bottom: -0.8em;
+			vertical-align: middle;
+			pointer-events: none;
+			opacity: 0;
+			transition: opacity 0.2s ease;
+		}
+
+		.map-settings .ms-presets::before {
+			left: 0;
+			margin-right: -24px;
+			background: linear-gradient(to left, transparent, #202c40);
+		}
+
+		.map-settings .ms-presets::after {
+			right: 0;
+			margin-left: -24px;
+			background: linear-gradient(to right, transparent, #202c40);
+		}
+
+		.map-settings .ms-presets.can-scroll-left::before {
+			opacity: 1;
+		}
+
+		.map-settings .ms-presets.can-scroll-right::after {
+			opacity: 1;
+		}
+
+		.map-settings .ms-presets label:not(:last-child) {
+			margin-right: 16px;
 		}
 
 	.map-settings .ms-item {
@@ -421,7 +466,9 @@ body.fs-lock {
 	}
 
 	.map-settings .ms-actions {
-		margin-top: 10px;
+		padding-top: 8px;
+		margin-top: 8px;
+		border-top: 1px solid #485871;
 		text-align: center;
 	}
 
