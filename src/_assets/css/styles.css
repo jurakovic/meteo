@@ -332,12 +332,47 @@ body.fs-lock {
 	}
 }
 
+.beta {
+	font-size: 9px;
+	color: #ff9800;
+	vertical-align: super;
+	text-transform: uppercase;
+	letter-spacing: 1px;
+}
+
+	/* in centered contexts the tag goes out of flow so it renders right after
+	   the text without shifting its centering; the footer occurrence sits
+	   mid-sentence and must stay in flow (vertical-align is ignored on
+	   absolutely positioned elements, hence the translate) */
+	.btn .beta,
+	h2 .beta {
+		position: absolute;
+		transform: translateY(-40%);
+		margin-left: 1px;
+	}
+
 .buttons {
 	display: grid;
 	grid-template-columns: 49.5% 49.5%;
 	gap: 1%;
 	font-size: 13px;
 }
+
+	.buttons.three {
+		grid-template-columns: repeat(3, 1fr);
+	}
+
+	/* same expand affordance as the .expandable "Linkovi" button */
+	.buttons button.btn {
+		position: relative;
+	}
+
+		.buttons button.btn .arrow {
+			position: absolute;
+			right: 10px;
+			top: 2px;
+			font-size: 14px;
+		}
 
 	.buttons .btn {
 		margin-top: 10px;
@@ -379,6 +414,129 @@ body.fs-lock {
 				transform: translate(-50%, -50%);
 				width: 28px;
 				height: 28px;
+			}
+
+.map-settings {
+	background-color: #202c40;
+	text-align: left;
+	padding: 10px;
+	margin-top: 5px;
+	font-size: 13px;
+	color: white;
+}
+
+	.map-settings label {
+		cursor: pointer;
+	}
+
+	/* single-line preset row with horizontal scroll and edge fades,
+	   same mechanics as .links-bottom but on the panel background */
+	.map-settings .ms-presets {
+		white-space: nowrap;
+		overflow-x: auto;
+		padding-bottom: 8px;
+		margin-bottom: 8px;
+		border-bottom: 1px solid #485871;
+		-webkit-overflow-scrolling: touch;
+		scrollbar-width: none;
+		-ms-overflow-style: none;
+	}
+
+		.map-settings .ms-presets::-webkit-scrollbar {
+			display: none;
+		}
+
+		.map-settings .ms-presets::before,
+		.map-settings .ms-presets::after {
+			content: "";
+			position: sticky;
+			display: inline-block;
+			width: 24px;
+			/* taller than the .links-bottom fades: radio buttons overflow the
+			   text line on Android; negative margins keep the row height */
+			height: 2.4em;
+			margin-top: -0.8em;
+			margin-bottom: -0.8em;
+			vertical-align: middle;
+			pointer-events: none;
+			opacity: 0;
+			transition: opacity 0.2s ease;
+		}
+
+		.map-settings .ms-presets::before {
+			left: 0;
+			margin-right: -24px;
+			background: linear-gradient(to left, transparent, #202c40);
+		}
+
+		.map-settings .ms-presets::after {
+			right: 0;
+			margin-left: -24px;
+			background: linear-gradient(to right, transparent, #202c40);
+		}
+
+		.map-settings .ms-presets.can-scroll-left::before {
+			opacity: 1;
+		}
+
+		.map-settings .ms-presets.can-scroll-right::after {
+			opacity: 1;
+		}
+
+		.map-settings .ms-presets label:not(:last-child) {
+			margin-right: 16px;
+		}
+
+	.map-settings .ms-item {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		padding: 2px 0;
+	}
+
+	.map-settings .ms-handle {
+		/* touch-action is ignored on non-replaced inline elements, so the
+		   handle must be a box for it to take effect on touch screens */
+		display: inline-block;
+		cursor: grab;
+		touch-action: none; /* the handle's touches drag the row, never scroll */
+		padding: 2px 8px;
+		user-select: none;
+	}
+
+	.map-settings .ms-item.dragging {
+		background-color: #2b5797;
+	}
+
+		.map-settings .ms-item.dragging .ms-handle {
+			cursor: grabbing;
+		}
+
+	.map-settings .ms-actions {
+		padding-top: 8px;
+		margin-top: 8px;
+		border-top: 1px solid #485871;
+		text-align: center;
+	}
+
+		.map-settings .ms-actions .btn {
+			font-size: 13px;
+			font-family: inherit;
+			color: white;
+			background-color: #485871;
+			cursor: pointer;
+			height: 24px;
+			padding: 0 24px;
+			border: none;
+			outline: none;
+		}
+
+			.map-settings .ms-actions .btn:hover {
+				background-color: #5F6F89;
+			}
+
+			.map-settings .ms-actions .btn + .btn {
+				margin-left: 8px;
 			}
 
 .slideshow {

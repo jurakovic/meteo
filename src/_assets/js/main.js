@@ -251,7 +251,7 @@ function updateLinksScrollShadow(bar) {
 }
 
 function updateLinksScrollShadows() {
-	document.querySelectorAll('.links-bottom').forEach(updateLinksScrollShadow);
+	document.querySelectorAll('.links-bottom, .ms-presets').forEach(updateLinksScrollShadow);
 }
 
 function addLinksScrollShadows() {
@@ -536,19 +536,26 @@ function dlog(...args) {
 		console.log(...args);
 }
 
-document.addEventListener('DOMContentLoaded', () => {
+// wiring for content inside the maps tbody; called on load and again after
+// maps.js re-renders it, so it must only touch freshly created nodes
+function initDynamicContent() {
 	document.querySelectorAll('img.lazy').forEach(img => {
 		img.src = img.getAttribute('data-src');
 		img.classList.remove('lazy');
 	});
-	showProgress();
-	addExpandableClickEventListener();
 	addSwipeEvents();
+	previousWidth = 0; // force updateIframeSrc to run for newly rendered iframes
 	updateIframeSrc();
 	hideOverlayOnDoubleTap();
 	updateHintText();
-	initLinksBottom();
 	addLinksScrollShadows();
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+	initLinksBottom();
+	initDynamicContent();
+	showProgress();
+	addExpandableClickEventListener();
 });
 
 window.addEventListener('resize', () => {
