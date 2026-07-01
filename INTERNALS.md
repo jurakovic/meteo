@@ -47,6 +47,13 @@ cd src
 ./build.sh
 ```
 
+`build.ps1` produces `docs/` from `src/` by processing every `.html` file (except `_components/`):
+
+1. inlines the minified assets (`styles.min.css`, `main.min.js`, `maps.min.js`) in place of their `<link>`/`<script>` tags
+2. injects `_components/*.c.html` (seo, gtag, links) at their placeholders
+3. rewrites dev paths to GitHub Pages paths (`href="/customize/index.html` → `/meteo/customize/`, `href="/"` → `/meteo/"`, image paths, the extras stub's `url=`)
+4. strips HTML comments, trims trailing whitespace, collapses blank lines
+
 ### Maps catalog
 
 The landing page ([`src/index.html`](./src/index.html)) is plain static HTML and does not load `maps.js`. The customize page ([`src/customize/index.html`](./src/customize/index.html)) renders its maps client-side by [`maps.js`](./src/_assets/js/maps.js) from a single catalog (`MAP_CATALOG`) into `<tbody data-maps>`. `maps.js` is loaded before `main.js` (both `defer`) and renders at script evaluation time, so the wiring in `main.js` (`DOMContentLoaded`) sees the finished DOM. `src/extras/index.html` is only a redirect stub to the customize page (kept for old bookmarks).
@@ -74,6 +81,11 @@ The repeated per-map link rows come from shared groups (`RADAR_HR_LINKS`, `SAT_E
 #### Share links
 
 *Podijeli* copies a link with the current panel state URL-safe-base64 encoded in `?v=`. On load the parameter overrides saved preferences **for the session only** — it never writes to the recipient's localStorage. The parameter stays in the address bar (refresh-safe, re-copyable) and is removed via `history.replaceState` when the user applies their own settings. Clipboard API needs a secure context (https/localhost); elsewhere a prompt with the link is shown.
+
+#### Misc
+
+- `?debug=1` on any page enables console logging via `dlog()` in `main.js`
+- localStorage keys: `mapPrefs` (customize page view), `showLinksBottom` (links-under-maps toggle)
 
 #### Touch notes
 
