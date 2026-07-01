@@ -567,10 +567,44 @@ function presetMapIds(presetId, page) {
 }
 
 function resolveMapIds(page) {
-	const prefs = getMapPrefs(page);
+	const prefs = getActiveMapPrefs(page);
 	if (prefs.preset === 'custom' && Array.isArray(prefs.maps))
 		return prefs.maps.filter(id => MAP_CATALOG.some(map => map.id === id));
 	return presetMapIds(prefs.preset, page) || presetMapIds('zadano', page);
+}
+
+// ---------- shared view (?v= query parameter) ----------
+// A shared link overrides the saved preferences for the session only; the
+// parameter is kept in the address bar (re-copyable, refresh-safe) and is
+// removed once the user applies their own settings.
+
+function encodeMapView(prefs) {
+	return btoa(JSON.stringify(prefs)).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+}
+
+function decodeMapView(value) {
+	try {
+		const prefs = JSON.parse(atob(value.replace(/-/g, '+').replace(/_/g, '/')));
+		if (prefs && typeof prefs.preset === 'string') return prefs;
+	} catch (e) { /* malformed parameter falls through */ }
+	return null;
+}
+
+let sharedMapView = (() => {
+	const value = new URLSearchParams(window.location.search).get('v');
+	return value ? decodeMapView(value) : null;
+})();
+
+function getActiveMapPrefs(page) {
+	return sharedMapView || getMapPrefs(page);
+}
+
+function clearSharedMapView() {
+	if (!sharedMapView) return;
+	sharedMapView = null;
+	const url = new URL(window.location);
+	url.searchParams.delete('v');
+	history.replaceState(null, '', url);
 }
 
 function getMapsPage() {
@@ -787,7 +821,7 @@ function toggleMapSettings() {
 
 function buildMapSettings(panel) {
 	const page = getMapsPage();
-	const prefs = getMapPrefs(page);
+	const prefs = getActiveMapPrefs(page);
 	panel.replaceChildren();
 
 	const listDiv = el('div', { class: 'ms-list' });
@@ -848,26 +882,49 @@ function buildMapSettings(panel) {
 
 	fillList(resolveMapIds(page));
 
-	const applyBtn = el('button', { type: 'button', class: 'btn', text: 'Primijeni' });
-	applyBtn.addEventListener('click', () => {
+	function readPanelPrefs() {
 		const checked = panel.querySelector('input[name="msPreset"]:checked');
 		const presetId = checked ? checked.value : 'zadano';
 		if (presetId === 'custom') {
 			const ids = [...listDiv.querySelectorAll('.ms-item')]
 				.filter(row => row.querySelector('input[type="checkbox"]').checked)
 				.map(row => row.getAttribute('data-map-id'));
-			saveMapPrefs(page, { preset: 'custom', maps: ids });
-		} else {
-			saveMapPrefs(page, { preset: presetId });
+			return { preset: 'custom', maps: ids };
 		}
+		return { preset: presetId };
+	}
+
+	const applyBtn = el('button', { type: 'button', class: 'btn', text: 'Primijeni' });
+	applyBtn.addEventListener('click', () => {
+		saveMapPrefs(page, readPanelPrefs());
+		clearSharedMapView(); // the saved preferences take over from the shared link
 		panel.hidden = true;
 		renderMaps();
 		initDynamicContent();
 	});
 
+	const shareBtn = el('button', { type: 'button', class: 'btn', text: 'Podijeli' });
+	shareBtn.addEventListener('click', () => {
+		const url = new URL(window.location.origin + window.location.pathname);
+		url.searchParams.set('v', encodeMapView(readPanelPrefs()));
+		const link = url.toString();
+		// navigator.clipboard only exists in secure contexts (https/localhost),
+		// e.g. not on http://<LAN-IP>; fall back to a copyable prompt there
+		if (navigator.clipboard && navigator.clipboard.writeText) {
+			navigator.clipboard.writeText(link).then(() => {
+				shareBtn.textContent = 'Kopirano!';
+				setTimeout(() => { shareBtn.textContent = 'Podijeli'; }, 1500);
+			}).catch(() => {
+				window.prompt('Kopiraj poveznicu:', link);
+			});
+		} else {
+			window.prompt('Kopiraj poveznicu:', link);
+		}
+	});
+
 	panel.appendChild(presetsDiv);
 	panel.appendChild(listDiv);
-	panel.appendChild(el('div', { class: 'ms-actions' }, [applyBtn]));
+	panel.appendChild(el('div', { class: 'ms-actions' }, [applyBtn, shareBtn]));
 }
 
 renderMaps();

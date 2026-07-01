@@ -488,6 +488,10 @@ body.fs-lock {
 				background-color: #5F6F89;
 			}
 
+			.map-settings .ms-actions .btn + .btn {
+				margin-left: 8px;
+			}
+
 .slideshow {
 	position: relative;
 	display: flex;
