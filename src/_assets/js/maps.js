@@ -833,6 +833,67 @@ function buildMapSettings(panel) {
 		custom.parentElement.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'nearest' });
 	}
 
+	// pointer-events drag reorder: works for both mouse and touch (the HTML5
+	// drag-and-drop API does not fire on mobile); touch-action: none on the
+	// handle keeps the browser from scrolling instead
+	function enableDragReorder(handle, row) {
+		handle.addEventListener('pointerdown', (e) => {
+			e.preventDefault(); // no text selection while dragging with a mouse
+			// no pointer capture at all: touch pointers implicitly capture the
+			// handle, and any capture (implicit or moved elsewhere) misbehaves
+			// once the row moves in the DOM; releasing it lets the events
+			// hit-test naturally and bubble to the document-level listeners
+			if (handle.hasPointerCapture(e.pointerId)) handle.releasePointerCapture(e.pointerId);
+			row.classList.add('dragging');
+			const startNext = row.nextElementSibling;
+			let lastY = e.clientY;
+			let scrollDir = 0;
+			let raf = null;
+
+			// move the row before the first sibling whose midpoint is below the pointer
+			const reorder = () => {
+				const target = [...listDiv.children].find(sibling =>
+					sibling !== row && lastY < sibling.getBoundingClientRect().top + sibling.offsetHeight / 2);
+				if (target) {
+					if (target.previousElementSibling !== row) listDiv.insertBefore(row, target);
+				} else if (listDiv.lastElementChild !== row) {
+					listDiv.appendChild(row);
+				}
+			};
+
+			// keep scrolling (and reordering) while the pointer rests near a viewport edge
+			const autoScroll = () => {
+				if (scrollDir !== 0) {
+					window.scrollBy(0, scrollDir);
+					reorder();
+				}
+				raf = requestAnimationFrame(autoScroll);
+			};
+
+			const onMove = (ev) => {
+				if (ev.buttons === 0) { onEnd(); return; } // pointerup was missed (released outside the window)
+				lastY = ev.clientY;
+				const margin = 60;
+				scrollDir = lastY < margin ? -8 : (lastY > window.innerHeight - margin ? 8 : 0);
+				reorder();
+			};
+
+			const onEnd = () => {
+				document.removeEventListener('pointermove', onMove);
+				document.removeEventListener('pointerup', onEnd);
+				document.removeEventListener('pointercancel', onEnd);
+				cancelAnimationFrame(raf);
+				row.classList.remove('dragging');
+				if (row.nextElementSibling !== startNext) markCustom();
+			};
+
+			document.addEventListener('pointermove', onMove);
+			document.addEventListener('pointerup', onEnd);
+			document.addEventListener('pointercancel', onEnd);
+			raf = requestAnimationFrame(autoScroll);
+		});
+	}
+
 	function fillList(selectedIds) {
 		listDiv.replaceChildren();
 		const orderedIds = [
@@ -847,10 +908,12 @@ function buildMapSettings(panel) {
 			checkbox.addEventListener('change', markCustom);
 			const up = el('a', { text: '▲', title: 'Pomakni gore' });
 			const down = el('a', { text: '▼', title: 'Pomakni dolje' });
+			const handle = el('span', { class: 'ms-handle', text: '≡', title: 'Povuci za premještanje' });
 			const row = el('div', { class: 'ms-item', 'data-map-id': id }, [
 				el('label', {}, [checkbox, document.createTextNode(' ' + map.name)]),
-				el('span', { class: 'ms-arrows' }, [up, down])
+				el('span', { class: 'ms-arrows' }, [up, down, handle])
 			]);
+			enableDragReorder(handle, row);
 			up.addEventListener('click', () => {
 				if (row.previousElementSibling) {
 					listDiv.insertBefore(row, row.previousElementSibling);

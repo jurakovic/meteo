@@ -465,6 +465,24 @@ body.fs-lock {
 		user-select: none;
 	}
 
+	.map-settings .ms-handle {
+		/* touch-action is ignored on non-replaced inline elements, so the
+		   handle must be a box for it to take effect on touch screens */
+		display: inline-block;
+		cursor: grab;
+		touch-action: none; /* the handle's touches drag the row, never scroll */
+		padding: 2px 8px;
+		user-select: none;
+	}
+
+	.map-settings .ms-item.dragging {
+		background-color: #2b5797;
+	}
+
+		.map-settings .ms-item.dragging .ms-handle {
+			cursor: grabbing;
+		}
+
 	.map-settings .ms-actions {
 		padding-top: 8px;
 		margin-top: 8px;
