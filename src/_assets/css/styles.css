@@ -332,6 +332,25 @@ body.fs-lock {
 	}
 }
 
+.beta {
+	font-size: 9px;
+	color: #ff9800;
+	vertical-align: super;
+	text-transform: uppercase;
+	letter-spacing: 1px;
+}
+
+	/* in centered contexts the tag goes out of flow so it renders right after
+	   the text without shifting its centering; the footer occurrence sits
+	   mid-sentence and must stay in flow (vertical-align is ignored on
+	   absolutely positioned elements, hence the translate) */
+	.btn .beta,
+	h2 .beta {
+		position: absolute;
+		transform: translateY(-40%);
+		margin-left: 1px;
+	}
+
 .buttons {
 	display: grid;
 	grid-template-columns: 49.5% 49.5%;
