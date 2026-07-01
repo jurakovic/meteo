@@ -271,7 +271,19 @@ const MAP_CATALOG = [
 				title: { text: 'Meteociel.fr | Satelit', href: 'https://www.meteociel.fr/observations-meteo/satellite.php?mode=infrarouge-noir-et-blanc-hd-mtg' },
 				img: 'https://modeles20.meteociel.fr/satellite/latestsatirmtgeu.png',
 				aspect: '1'
+			},
+			/*
+			{
+				title: { text: 'Meteociel.fr | Satelit', href: 'https://www.meteociel.fr/observations-meteo/satellite.php?mode=animation-sandwich-visible-infrarouge-mtg' },
+				img: 'https://modeles20.meteociel.fr/satellite/animsatsandvisirmtgeu.gif',
+				aspect: '1'
+			},
+			{
+				title: { text: 'Meteociel.fr | Satelit', href: 'https://www.meteociel.fr/observations-meteo/satellite.php?mode=sandwich-visible-infrarouge-mtg' },
+				img: 'https://modeles20.meteociel.fr/satellite/latestsatsandvisirmtgeu.png',
+				aspect: '1'
 			}
+			*/
 		],
 		links: SAT_EU_LINKS
 	},
@@ -429,6 +441,16 @@ const MAP_CATALOG = [
 		src: 'https://www.idokep.hu/radar/sat-eu.mp4',
 		links: SAT_EU_LINKS
 	},
+	/*
+	{
+		id: 'idokep-radar-adria',
+		name: 'Időkép | Radar | Hrvatska',
+		type: 'video',
+		title: { text: 'Időkép | Radar | Hrvatska', href: 'https://www.idokep.eu/adria' },
+		videoClass: 'vid2',
+		src: 'https://www.idokep.hu/idokepradar/public_radar_adria.mp4'
+	},
+	*/
 	{
 		id: 'istramet-munje',
 		name: 'Istramet | Munje',
@@ -496,7 +518,7 @@ const PAGE_DEFAULT_MAPS = {
 	],
 	extras: [
 		'ventusky', 'rainviewer', 'weatherandradar', 'meteo-si', 'idokep-radar-eu',
-		'idokep-satelit-eu', 'istramet-munje', 'blitzortung-karta', 'wetterzentrale-temp',
+		'idokep-satelit-eu', /* 'idokep-radar-adria', */ 'istramet-munje', 'blitzortung-karta', 'wetterzentrale-temp',
 		'dhmz-sinopticka', 'dhmz-puntijarka', 'dhmz-bilogora', 'dhmz-gradiste', 'dhmz-goli',
 		'dhmz-debeljak', 'dhmz-uljenje'
 	]
@@ -647,10 +669,12 @@ function buildVideo(map) {
 	video.muted = true;
 	video.autoplay = true;
 	video.loop = true;
+	// without an aspect the wrapper class (.vid1/.vid2 padding-top) sizes the box
+	const style = `${maxWidthStyle(map)}${map.aspect ? ` aspect-ratio: ${map.aspect};` : ''}`.trim();
 	return [
 		buildTitleBar(map.title, map),
-		el('div', { class: 'placeholder', style: `${maxWidthStyle(map)} aspect-ratio: ${map.aspect};`.trim() }, [
-			el('div', { class: 'vid1' }, [video])
+		el('div', { class: 'placeholder', style: style || undefined }, [
+			el('div', { class: map.videoClass || 'vid1' }, [video])
 		])
 	];
 }
