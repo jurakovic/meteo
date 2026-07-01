@@ -334,10 +334,14 @@ body.fs-lock {
 
 .buttons {
 	display: grid;
-	grid-template-columns: repeat(3, 1fr);
+	grid-template-columns: 49.5% 49.5%;
 	gap: 1%;
 	font-size: 13px;
 }
+
+	.buttons.three {
+		grid-template-columns: repeat(3, 1fr);
+	}
 
 	.buttons .btn {
 		margin-top: 10px;

@@ -1,6 +1,7 @@
-// Map catalog, renderer and user preferences (presets + custom pick/order).
-// Loaded before main.js; renders maps into <tbody data-maps> at parse time
-// so main.js's DOMContentLoaded wiring sees the finished DOM.
+// Map catalog, renderer and user preferences (presets + custom pick/order)
+// for the customize page. Loaded before main.js; renders maps into
+// <tbody data-maps> at parse time so main.js's DOMContentLoaded wiring sees
+// the finished DOM. The static landing page does not load this file.
 
 // ---------- shared link groups ----------
 
@@ -510,22 +511,24 @@ const MAP_CATALOG = [
 
 // ---------- presets ----------
 
-const PAGE_DEFAULT_MAPS = {
-	index: [
-		'neverin-radar-hr', 'neverin-satelit-hr', 'neverin-radar-eu', 'neverin-satelit-eu',
-		'windy', 'dhmz-radar', 'meteociel-temp', 'blitzortung', 'essl', 'astorp', 'estofex',
-		'eumetnet', 'meteociel-satelit', 'chmi-sinopticka', 'neverin-kamera', 'meteoblue-prognoza'
-	],
-	extras: [
-		'ventusky', 'rainviewer', 'weatherandradar', 'meteo-si', 'idokep-radar-eu',
-		'idokep-satelit-eu', /* 'idokep-radar-adria', */ 'istramet-munje', 'blitzortung-karta', 'wetterzentrale-temp',
-		'dhmz-sinopticka', 'dhmz-puntijarka', 'dhmz-bilogora', 'dhmz-gradiste', 'dhmz-goli',
-		'dhmz-debeljak', 'dhmz-uljenje'
-	]
-};
+// default view of the customize page (mirrors the static landing page)
+const DEFAULT_MAPS = [
+	'neverin-radar-hr', 'neverin-satelit-hr', 'neverin-radar-eu', 'neverin-satelit-eu',
+	'windy', 'dhmz-radar', 'meteociel-temp', 'blitzortung', 'essl', 'astorp', 'estofex',
+	'eumetnet', 'meteociel-satelit', 'chmi-sinopticka', 'neverin-kamera', 'meteoblue-prognoza'
+];
 
 const MAP_PRESETS = [
 	{ id: 'zadano', name: 'Zadano' },
+	{
+		id: 'vise', name: 'Više',
+		maps: [
+			'ventusky', 'rainviewer', 'weatherandradar', 'meteo-si', 'idokep-radar-eu',
+			'idokep-satelit-eu', /* 'idokep-radar-adria', */ 'istramet-munje', 'blitzortung-karta', 'wetterzentrale-temp',
+			'dhmz-sinopticka', 'dhmz-puntijarka', 'dhmz-bilogora', 'dhmz-gradiste', 'dhmz-goli',
+			'dhmz-debeljak', 'dhmz-uljenje'
+		]
+	},
 	{
 		id: 'radari', name: 'Radari',
 		maps: ['neverin-radar-hr', 'neverin-radar-eu', 'windy', 'dhmz-radar', 'eumetnet', 'ventusky', 'rainviewer', 'weatherandradar', 'meteo-si', 'idokep-radar-eu']
@@ -543,34 +546,32 @@ const MAP_PRESETS = [
 
 // ---------- preferences (localStorage) ----------
 
-function mapPrefsKey(page) {
-	return `mapPrefs-${page}`;
-}
+const MAP_PREFS_KEY = 'mapPrefs';
 
-function getMapPrefs(page) {
+function getMapPrefs() {
 	try {
-		const prefs = JSON.parse(localStorage.getItem(mapPrefsKey(page)));
+		const prefs = JSON.parse(localStorage.getItem(MAP_PREFS_KEY));
 		if (prefs && typeof prefs.preset === 'string') return prefs;
 	} catch (e) { /* corrupt storage falls through to default */ }
 	return { preset: 'zadano' };
 }
 
-function saveMapPrefs(page, prefs) {
-	localStorage.setItem(mapPrefsKey(page), JSON.stringify(prefs));
+function saveMapPrefs(prefs) {
+	localStorage.setItem(MAP_PREFS_KEY, JSON.stringify(prefs));
 }
 
-function presetMapIds(presetId, page) {
-	if (presetId === 'zadano') return PAGE_DEFAULT_MAPS[page] || PAGE_DEFAULT_MAPS.index;
+function presetMapIds(presetId) {
+	if (presetId === 'zadano') return DEFAULT_MAPS;
 	if (presetId === 'sve') return MAP_CATALOG.map(map => map.id);
 	const preset = MAP_PRESETS.find(p => p.id === presetId);
 	return preset ? preset.maps : null;
 }
 
-function resolveMapIds(page) {
-	const prefs = getActiveMapPrefs(page);
+function resolveMapIds() {
+	const prefs = getActiveMapPrefs();
 	if (prefs.preset === 'custom' && Array.isArray(prefs.maps))
 		return prefs.maps.filter(id => MAP_CATALOG.some(map => map.id === id));
-	return presetMapIds(prefs.preset, page) || presetMapIds('zadano', page);
+	return presetMapIds(prefs.preset) || presetMapIds('zadano');
 }
 
 // ---------- shared view (?v= query parameter) ----------
@@ -595,8 +596,8 @@ let sharedMapView = (() => {
 	return value ? decodeMapView(value) : null;
 })();
 
-function getActiveMapPrefs(page) {
-	return sharedMapView || getMapPrefs(page);
+function getActiveMapPrefs() {
+	return sharedMapView || getMapPrefs();
 }
 
 function clearSharedMapView() {
@@ -605,11 +606,6 @@ function clearSharedMapView() {
 	const url = new URL(window.location);
 	url.searchParams.delete('v');
 	history.replaceState(null, '', url);
-}
-
-function getMapsPage() {
-	const tbody = document.querySelector('tbody[data-maps]');
-	return tbody ? (tbody.getAttribute('data-page') || 'index') : 'index';
 }
 
 // ---------- rendering ----------
@@ -790,9 +786,8 @@ function buildMapContent(map) {
 function renderMaps() {
 	const tbody = document.querySelector('tbody[data-maps]');
 	if (!tbody) return;
-	const page = tbody.getAttribute('data-page') || 'index';
 	tbody.replaceChildren();
-	resolveMapIds(page).forEach((id, i) => {
+	resolveMapIds().forEach((id, i) => {
 		const map = MAP_CATALOG.find(m => m.id === id);
 		if (!map) return;
 		if (i > 0) tbody.appendChild(el('tr', { class: 'sp20' }));
@@ -840,8 +835,7 @@ function toggleMapSettings() {
 }
 
 function buildMapSettings(panel) {
-	const page = getMapsPage();
-	const prefs = getActiveMapPrefs(page);
+	const prefs = getActiveMapPrefs();
 	panel.replaceChildren();
 
 	const listDiv = el('div', { class: 'ms-list' });
@@ -943,13 +937,13 @@ function buildMapSettings(panel) {
 		radio.checked = prefs.preset === preset.id;
 		radio.addEventListener('change', () => {
 			// switching to a named preset previews its list; "custom" keeps the current list
-			if (preset.id !== 'custom') fillList(presetMapIds(preset.id, page));
+			if (preset.id !== 'custom') fillList(presetMapIds(preset.id));
 		});
 		presetsDiv.appendChild(el('label', {}, [radio, document.createTextNode(' ' + preset.name)]));
 	});
 	presetsDiv.addEventListener('scroll', () => updateLinksScrollShadow(presetsDiv), { passive: true });
 
-	fillList(resolveMapIds(page));
+	fillList(resolveMapIds());
 
 	function readPanelPrefs() {
 		const checked = panel.querySelector('input[name="msPreset"]:checked');
@@ -965,7 +959,7 @@ function buildMapSettings(panel) {
 
 	const applyBtn = el('button', { type: 'button', class: 'btn', text: 'Primijeni' });
 	applyBtn.addEventListener('click', () => {
-		saveMapPrefs(page, readPanelPrefs());
+		saveMapPrefs(readPanelPrefs());
 		clearSharedMapView(); // the saved preferences take over from the shared link
 		panel.hidden = true;
 		renderMaps();

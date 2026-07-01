@@ -58,7 +58,8 @@ function ProcessHtml() {
 
 	$html = Get-Content "$file" -Raw -Encoding "utf8"
 	$html = $html.Replace('href="/_assets/img', 'href="/meteo/img')
-	$html = $html.Replace('href="/extras/index.html', 'href="/meteo/extras/')
+	$html = $html.Replace('href="/customize/index.html', 'href="/meteo/customize/')
+	$html = $html.Replace('url=/customize/index.html', 'url=/meteo/customize/')
 	$html = $html.Replace('href="/"', 'href="/meteo/"')
 	$html = $html.Replace('<link rel="stylesheet" href="/_assets/css/styles.css">', "<style>`r`n$css`r`n`t</style>")
 	$html = $html.Replace("<script src=""/_assets/js/main.js"" defer></script>", "<script>`r`n$mainjs`r`n`t</script>")

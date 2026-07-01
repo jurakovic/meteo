@@ -49,7 +49,9 @@ cd src
 
 ### Maps catalog
 
-All maps on both pages are rendered client-side by [`maps.js`](./src/_assets/js/maps.js) from a single catalog (`MAP_CATALOG`) into `<tbody data-maps data-page="index|extras">`. `maps.js` is loaded before `main.js` (both `defer`) and renders at script evaluation time, so the wiring in `main.js` (`DOMContentLoaded`) sees the finished DOM.
+The landing page ([`src/index.html`](./src/index.html)) is plain static HTML and does not load `maps.js`. The customize page ([`src/customize/index.html`](./src/customize/index.html)) renders its maps client-side by [`maps.js`](./src/_assets/js/maps.js) from a single catalog (`MAP_CATALOG`) into `<tbody data-maps>`. `maps.js` is loaded before `main.js` (both `defer`) and renders at script evaluation time, so the wiring in `main.js` (`DOMContentLoaded`) sees the finished DOM. `src/extras/index.html` is only a redirect stub to the customize page (kept for old bookmarks).
+
+Note: the landing page's maps are duplicated in the catalog — a URL or layout change there must be applied in both places.
 
 #### Map descriptors
 
@@ -67,7 +69,7 @@ The repeated per-map link rows come from shared groups (`RADAR_HR_LINKS`, `SAT_E
 
 #### Presets and preferences
 
-`PAGE_DEFAULT_MAPS` holds each page's default order; `MAP_PRESETS` lists the named presets (`zadano` resolves to the page default, `sve` to the whole catalog). The "Karte" button opens a settings panel to pick a preset or a custom checked/ordered list (drag the `≡` handle). Changing the list auto-selects *Prilagođeno*. *Primijeni* saves to localStorage as `mapPrefs-{page}` (`{"preset":"radari"}` or `{"preset":"custom","maps":[…]}`), re-renders, and calls `initDynamicContent()` in `main.js` to wire the fresh DOM (lazy images, swipe, iframe src, overlays, link shadows).
+`DEFAULT_MAPS` holds the default order (mirroring the landing page); `MAP_PRESETS` lists the named presets (`zadano` resolves to the default, `vise` to the former extras set, `sve` to the whole catalog). The "Karte" button opens a settings panel to pick a preset or a custom checked/ordered list (drag the `≡` handle). Changing the list auto-selects *Prilagođeno*. *Primijeni* saves to localStorage as `mapPrefs` (`{"preset":"radari"}` or `{"preset":"custom","maps":[…]}`), re-renders, and calls `initDynamicContent()` in `main.js` to wire the fresh DOM (lazy images, swipe, iframe src, overlays, link shadows).
 
 #### Share links
 
