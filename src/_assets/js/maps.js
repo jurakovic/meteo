@@ -75,7 +75,7 @@ function dhmzMrcRadar(id, name) {
 		id: `dhmz-${id}`,
 		name: `DHMZ | MRC ${name}`,
 		type: 'slideshow',
-		title: { text: `DHMZ | MRC ${name}`, href: `https://meteo.hr/podaci.php?section=podaci_mjerenja&param=radari&el=${id}&acto=anim` },
+		titleHref: `https://meteo.hr/podaci.php?section=podaci_mjerenja&param=radari&el=${id}&acto=anim`,
 		maxWidth: 720,
 		aspect: '720 / 751',
 		slides: [`https://vrijeme.hr/anim_${id}.gif`, `https://vrijeme.hr/${id}-stat.png`]
@@ -87,7 +87,7 @@ const MAP_CATALOG = [
 		id: 'neverin-radar-hr',
 		name: 'Neverin | Radar | Hrvatska',
 		type: 'slideshow',
-		title: { text: 'Neverin | Radar | Hrvatska', href: 'https://www.neverin.hr/radar/' },
+		titleHref: 'https://www.neverin.hr/radar/',
 		aspect: '880 / 640',
 		startSlide: 2,
 		slides: [
@@ -101,7 +101,7 @@ const MAP_CATALOG = [
 		id: 'neverin-satelit-hr',
 		name: 'Neverin | Satelit | Hrvatska',
 		type: 'slideshow',
-		title: { text: 'Neverin | Satelit | Hrvatska', href: 'https://www.neverin.hr/satelit/' },
+		titleHref: 'https://www.neverin.hr/satelit/',
 		aspect: '880 / 640',
 		startSlide: 2,
 		slides: [
@@ -115,7 +115,7 @@ const MAP_CATALOG = [
 		id: 'neverin-radar-eu',
 		name: 'Neverin | Radar | Europa',
 		type: 'slideshow',
-		title: { text: 'Neverin | Radar | Europa', href: 'https://www.neverin.hr/radar/' },
+		titleHref: 'https://www.neverin.hr/radar/',
 		aspect: '880 / 640',
 		startSlide: 2,
 		slides: [
@@ -129,7 +129,7 @@ const MAP_CATALOG = [
 		id: 'neverin-satelit-eu',
 		name: 'Neverin | Satelit | Europa',
 		type: 'slideshow',
-		title: { text: 'Neverin | Satelit | Europa', href: 'https://www.neverin.hr/satelit/' },
+		titleHref: 'https://www.neverin.hr/satelit/',
 		aspect: '880 / 640',
 		startSlide: 2,
 		slides: [
@@ -141,10 +141,10 @@ const MAP_CATALOG = [
 	},
 	{
 		id: 'windy',
-		name: 'Windy | Radar',
+		name: 'Windy',
 		type: 'iframe',
 		frameId: 'windy',
-		title: { text: 'Windy', href: 'https://www.windy.com/-Radar-lightning-radar?radar,44.5,16.5,7' },
+		titleHref: 'https://www.windy.com/-Radar-lightning-radar?radar,44.5,16.5,7',
 		srcHr: 'https://embed.windy.com/embed2.html?lat=44.5&lon=16.56&zoom=7&level=surface&overlay=radar&menu=&message=true&marker=&calendar=&pressure=&type=map&location=coordinates&detail=&detailLat=45.798&detailLon=15.936&metricWind=m%2Fs&metricTemp=%C2%B0C&radarRange=-1',
 		zoomHrDesktop: '&zoom=7',
 		zoomHrMobile: '&zoom=6',
@@ -157,7 +157,7 @@ const MAP_CATALOG = [
 		id: 'dhmz-radar',
 		name: 'DHMZ | Radar | Hrvatska',
 		type: 'slideshow',
-		title: { text: 'DHMZ | Radar | Hrvatska', href: 'https://meteo.hr/podaci.php?section=podaci_mjerenja&param=radari&el=kompozit&acto=anim' },
+		titleHref: 'https://meteo.hr/podaci.php?section=podaci_mjerenja&param=radari&el=kompozit&acto=anim',
 		maxWidth: 720,
 		aspect: '720 / 751',
 		slides: [
@@ -190,7 +190,7 @@ const MAP_CATALOG = [
 		name: 'Blitzortung.org | Munje',
 		type: 'iframe',
 		frameId: 'blitzortung',
-		title: { text: 'Blitzortung.org | Munje', href: 'https://map.blitzortung.org/#6/44.5/16.5' },
+		titleHref: 'https://map.blitzortung.org/#6/44.5/16.5',
 		srcHr: 'https://map.blitzortung.org/index.php?interactive=1&NavigationControl=1&FullScreenControl=0&Cookies=0&InfoDiv=0&MenuButtonDiv=0&ScaleControl=0&CirclesRangeValue=1&LinksCheckboxChecked=0&LinksRangeValue=0&MapStyle=1&MapStyleRangeValue=3&Advertisment=0#6/44.5/16.5',
 		zoomHrDesktop: '#6/',
 		zoomHrMobile: '#5/',
@@ -207,7 +207,7 @@ const MAP_CATALOG = [
 		id: 'essl',
 		name: 'ESSL | Prognoza nevremena',
 		type: 'slideshow',
-		title: { text: 'ESSL | Prognoza nevremena', href: 'https://www.stormforecast.eu' },
+		titleHref: 'https://www.stormforecast.eu',
 		maxWidth: 900,
 		aspect: '900 / 600',
 		startSlide: 2,
@@ -222,7 +222,7 @@ const MAP_CATALOG = [
 		id: 'astorp',
 		name: 'ASTORP | Prognoza nevremena',
 		type: 'slideshow',
-		title: { text: 'ASTORP | Prognoza nevremena', href: 'https://rawinsonde.com/ASTORP/ESTOFEX.html' },
+		titleHref: 'https://rawinsonde.com/ASTORP/ESTOFEX.html',
 		aspect: '1048 / 850',
 		slides: [
 			'https://rawinsonde.com/ASTORP/Results/ESTOFEX_DAY_1.jpg',
@@ -239,7 +239,7 @@ const MAP_CATALOG = [
 		id: 'estofex',
 		name: 'ESTOFEX | Prognoza nevremena',
 		type: 'slideshow',
-		title: { text: 'ESTOFEX | Prognoza nevremena', href: 'https://www.estofex.org' },
+		titleHref: 'https://www.estofex.org',
 		maxWidth: 800,
 		aspect: '1',
 		slides: [
@@ -250,9 +250,9 @@ const MAP_CATALOG = [
 	},
 	{
 		id: 'eumetnet',
-		name: 'EUMETNET | Radar | Europa',
+		name: 'EUMETNET',
 		type: 'iframe-basic',
-		title: { text: 'EUMETNET', href: 'https://www.eumetnet.eu/observations/opera-radar-animation/' },
+		titleHref: 'https://www.eumetnet.eu/observations/opera-radar-animation/',
 		src: 'https://cdn.fmi.fi/demos/eumetnet-web-site-radar-animator/',
 		links: RADAR_EU_LINKS
 	},
@@ -323,7 +323,7 @@ const MAP_CATALOG = [
 		id: 'neverin-kamera',
 		name: 'Neverin | Kamera | Zagreb',
 		type: 'image',
-		title: { text: 'Neverin | Kamera | Zagreb-Remetinečki rotor', href: 'https://www.neverin.hr/kamere/' },
+		titleHref: 'https://www.neverin.hr/kamere/',
 		aspect: '1280 / 720',
 		img: 'https://webcams.neverin.hr/7332072588/latest.jpg'
 	},
@@ -365,12 +365,12 @@ const MAP_CATALOG = [
 	},
 	{
 		id: 'ventusky',
-		name: 'Ventusky | Radar',
+		name: 'Ventusky',
 		type: 'iframe',
 		frameId: 'ventusky',
 		scaled: true,
 		loading: 'eager',
-		title: { text: 'Ventusky', href: 'https://www.ventusky.com/?p=44.5;16.5;6&l=radar&w=off' },
+		titleHref: 'https://www.ventusky.com/?p=44.5;16.5;6&l=radar&w=off',
 		srcHr: 'https://embed.ventusky.com/?p=44.5;16.5;6&l=radar&w=off',
 		zoomHrDesktop: ';6&',
 		zoomHrMobile: ';6&',
@@ -381,11 +381,11 @@ const MAP_CATALOG = [
 	},
 	{
 		id: 'rainviewer',
-		name: 'Rain Viewer | Radar',
+		name: 'Rain Viewer',
 		type: 'iframe',
 		frameId: 'rainViewer',
 		scaled: true,
-		title: { text: 'Rain Viewer', href: 'https://www.rainviewer.com/map.html?loc=44.5,16.5,6&oCS=1&c=5&lm=1&layer=radar&sm=1&sn=2&ts=1' },
+		titleHref: 'https://www.rainviewer.com/map.html?loc=44.5,16.5,6&oCS=1&c=5&lm=1&layer=radar&sm=1&sn=2&ts=1',
 		srcHr: 'https://www.rainviewer.com/map.html?loc=44.8,16.5,6.3&oCS=1&c=5&lm=1&layer=radar&sm=1&sn=2&ts=1',
 		zoomHrDesktop: ',6.3&',
 		zoomHrMobile: ',5.8&',
@@ -400,7 +400,7 @@ const MAP_CATALOG = [
 		type: 'iframe',
 		frameId: 'weatherAndRadar',
 		scaled: true,
-		title: { text: 'Vrijeme&Radar', href: 'https://www.vrijemeradar.hr/vremenski-radar/zagreb/18138691?center=44.5,16.5&zoom=7&layer=wr&tz=Europe%2FZagreb' },
+		titleHref: 'https://www.vrijemeradar.hr/vremenski-radar/zagreb/18138691?center=44.5,16.5&zoom=7&layer=wr&tz=Europe%2FZagreb',
 		srcHr: 'https://radar.wo-cloud.com/pwa/?center=44.5,16.5&zoom=7.2&tz=Europe/Zagreb&tf=HH:mm&tempunit=celsius&windunit=kph&showShareButton=false&lang=en-US&placemarkName=Zagreb&desktop=true&fadeTop=true',
 		zoomHrDesktop: '&zoom=7.2',
 		zoomHrMobile: '&zoom=6.8',
@@ -411,9 +411,9 @@ const MAP_CATALOG = [
 	},
 	{
 		id: 'meteo-si',
-		name: 'meteo.si | Radar',
+		name: 'meteo.si',
 		type: 'slideshow',
-		title: { text: 'meteo.si', href: 'https://meteo.arso.gov.si/met/sl/weather/observ/radar/' },
+		titleHref: 'https://meteo.arso.gov.si/met/sl/weather/observ/radar/',
 		maxWidth: 821,
 		aspect: '821 / 660',
 		slides: [
@@ -426,7 +426,7 @@ const MAP_CATALOG = [
 		id: 'idokep-radar-eu',
 		name: 'Időkép | Radar | Europa',
 		type: 'image',
-		title: { text: 'Időkép | Radar | Europa', href: 'https://www.idokep.eu/ceu/radar' },
+		titleHref: 'https://www.idokep.eu/ceu/radar',
 		maxWidth: 840,
 		aspect: '840 / 600',
 		img: 'https://www.idokep.eu/terkep/eu/radar.gif',
@@ -436,7 +436,7 @@ const MAP_CATALOG = [
 		id: 'idokep-satelit-eu',
 		name: 'Időkép | Satelit | Europa',
 		type: 'video',
-		title: { text: 'Időkép | Satelit | Europa', href: 'https://www.idokep.hu/muhold' },
+		titleHref: 'https://www.idokep.hu/muhold',
 		aspect: '1070 / 713',
 		src: 'https://www.idokep.hu/radar/sat-eu.mp4',
 		links: SAT_EU_LINKS
@@ -446,7 +446,7 @@ const MAP_CATALOG = [
 		id: 'idokep-radar-adria',
 		name: 'Időkép | Radar | Hrvatska',
 		type: 'video',
-		title: { text: 'Időkép | Radar | Hrvatska', href: 'https://www.idokep.eu/adria' },
+		titleHref: 'https://www.idokep.eu/adria',
 		videoClass: 'vid2',
 		src: 'https://www.idokep.hu/idokepradar/public_radar_adria.mp4'
 	},
@@ -455,7 +455,7 @@ const MAP_CATALOG = [
 		id: 'istramet-munje',
 		name: 'Istramet | Munje',
 		type: 'image',
-		title: { text: 'Istramet | Munje', href: 'https://www.istramet.hr/radari-munja/' },
+		titleHref: 'https://www.istramet.hr/radari-munja/',
 		maxWidth: 804,
 		aspect: '804 / 687',
 		img: 'https://www.istramet.hr/wp-content/themes/istramet/img/munje_hr.png',
@@ -469,7 +469,7 @@ const MAP_CATALOG = [
 		id: 'blitzortung-karta',
 		name: 'Blitzortung.org | Munje | Europa',
 		type: 'image',
-		title: { text: 'Blitzortung.org | Munje', href: 'https://www.blitzortung.org/en/historical_maps.php?map=10' },
+		titleHref: 'https://www.blitzortung.org/en/historical_maps.php?map=10',
 		aspect: '1',
 		img: 'https://www.blitzortung.org/Images/image_b_eu.png',
 		links: [
@@ -482,7 +482,7 @@ const MAP_CATALOG = [
 		id: 'wetterzentrale-temp',
 		name: 'Wetterzentrale | Temperatura',
 		type: 'image',
-		title: { text: 'Wetterzentrale | Temperatura', href: 'https://www.wetterzentrale.de/en/topkarten.php?map=17&model=ecm&var=5&run=6&time=0&lid=OP&h=1&mv=0&tr=1' },
+		titleHref: 'https://www.wetterzentrale.de/en/topkarten.php?map=17&model=ecm&var=5&run=6&time=0&lid=OP&h=1&mv=0&tr=1',
 		aspect: '959 / 741',
 		img: 'https://www.wetterzentrale.de/en/create_gif.php?model=ECM&member=OP&var=5&map=IT&run=06&speed=250&times=0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47',
 		alt: 'Wetterzentrale Temperatura',
@@ -492,7 +492,7 @@ const MAP_CATALOG = [
 		id: 'dhmz-sinopticka',
 		name: 'DHMZ | Sinoptička karta',
 		type: 'image',
-		title: { text: 'DHMZ | Sinoptička karta', href: 'https://meteo.hr/prognoze.php?section=prognoze_model&param=web_fronte_sutra12' },
+		titleHref: 'https://meteo.hr/prognoze.php?section=prognoze_model&param=web_fronte_sutra12',
 		maxWidth: 720,
 		aspect: '1',
 		img: 'https://prognoza.hr/web_fronte_sutra12.jpg',
@@ -638,6 +638,12 @@ function buildTitleBar(title, map) {
 	]);
 }
 
+// top-level title bars show the map's picker name; only slide titles
+// carry their own text (it differs per slide)
+function buildMapTitleBar(map) {
+	return buildTitleBar({ text: map.name, href: map.titleHref }, map);
+}
+
 function buildSlideshow(map) {
 	const start = map.startSlide || 1;
 	const titled = map.slides.some(slide => slide.title);
@@ -686,12 +692,12 @@ function buildSlideshow(map) {
 		indicators.appendChild(el('span', { class: 'indicator' + (i === start - 1 ? ' active' : '') }));
 	});
 
-	return [map.title ? buildTitleBar(map.title, map) : null, container, indicators];
+	return [map.titleHref ? buildMapTitleBar(map) : null, container, indicators];
 }
 
 function buildImage(map) {
 	return [
-		buildTitleBar(map.title, map),
+		buildMapTitleBar(map),
 		el('div', { class: 'placeholder', style: `${maxWidthStyle(map)} aspect-ratio: ${map.aspect};`.trim() }, [
 			el('img', { src: map.img, alt: map.alt })
 		])
@@ -706,7 +712,7 @@ function buildVideo(map) {
 	// without an aspect the wrapper class (.vid1/.vid2 padding-top) sizes the box
 	const style = `${maxWidthStyle(map)}${map.aspect ? ` aspect-ratio: ${map.aspect};` : ''}`.trim();
 	return [
-		buildTitleBar(map.title, map),
+		buildMapTitleBar(map),
 		el('div', { class: 'placeholder', style: style || undefined }, [
 			el('div', { class: map.videoClass || 'vid1' }, [video])
 		])
@@ -724,7 +730,7 @@ function buildIframe(map) {
 
 	const title = el('div', { class: 'radartitle' }, [
 		zoomBtn,
-		el('a', { class: 'center', href: map.title.href, target: '_blank', rel: 'nofollow', text: map.title.text }),
+		el('a', { class: 'center', href: map.titleHref, target: '_blank', rel: 'nofollow', text: map.name }),
 		el('span', { class: 'right right-cluster' }, [
 			el('a', { id: `reset${pascal}Frame`, 'data-frame-id': frameId, style: 'display:none', text: '[X]' }),
 			fsBtn
@@ -754,7 +760,7 @@ function buildIframe(map) {
 
 function buildBasicIframe(map) {
 	return [
-		buildTitleBar(map.title, map),
+		buildMapTitleBar(map),
 		el('div', { class: 'if2 placeholder' }, [
 			el('iframe', { loading: 'lazy', src: map.src, frameborder: '0', scrolling: 'no' })
 		])
