@@ -362,6 +362,18 @@ body.fs-lock {
 		grid-template-columns: repeat(3, 1fr);
 	}
 
+	/* same expand affordance as the .expandable "Linkovi" button */
+	.buttons button.btn {
+		position: relative;
+	}
+
+		.buttons button.btn .arrow {
+			position: absolute;
+			right: 10px;
+			top: 2px;
+			font-size: 14px;
+		}
+
 	.buttons .btn {
 		margin-top: 10px;
 		margin-bottom: 5px;

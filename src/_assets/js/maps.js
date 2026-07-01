@@ -818,19 +818,25 @@ function revealPresetOption(radio, smooth) {
 	if (delta !== 0) bar.scrollBy({ left: delta, behavior: smooth ? 'smooth' : 'auto' });
 }
 
+function setMapSettingsVisible(panel, visible) {
+	panel.hidden = !visible;
+	const arrow = document.querySelector('.buttons button.btn .arrow');
+	if (arrow) arrow.textContent = visible ? '▲' : '▼';
+}
+
 function toggleMapSettings() {
 	const panel = document.getElementById('mapSettings');
 	if (!panel) return;
 	if (panel.hidden) {
 		buildMapSettings(panel);
-		panel.hidden = false;
+		setMapSettingsVisible(panel, true);
 		// scroll shadows and positions need layout, so only after unhiding
 		const presets = panel.querySelector('.ms-presets');
 		updateLinksScrollShadow(presets);
 		const checked = presets.querySelector('input:checked');
 		if (checked) revealPresetOption(checked, false);
 	} else {
-		panel.hidden = true;
+		setMapSettingsVisible(panel, false);
 	}
 }
 
@@ -961,7 +967,7 @@ function buildMapSettings(panel) {
 	applyBtn.addEventListener('click', () => {
 		saveMapPrefs(readPanelPrefs());
 		clearSharedMapView(); // the saved preferences take over from the shared link
-		panel.hidden = true;
+		setMapSettingsVisible(panel, false);
 		renderMaps();
 		initDynamicContent();
 	});
