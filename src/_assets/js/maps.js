@@ -970,6 +970,7 @@ function buildMapSettings(panel) {
 		setMapSettingsVisible(panel, false);
 		renderMaps();
 		initDynamicContent();
+		scrollToTop(); // the panel collapse leaves the scroll offset mid-page
 	});
 
 	const shareBtn = el('button', { type: 'button', class: 'btn', text: 'Podijeli' });
