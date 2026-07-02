@@ -24,6 +24,16 @@ docker run -d -p 8080:80 --name meteo -v "$(pwd)/src:/usr/share/nginx/html" ngin
 
 Open <http://localhost:8080>
 
+#### Run from docs (built site)
+
+The build rewrites paths for GitHub Pages (`/meteo/...`), so mount `docs/` under the same subpath:
+
+```bash
+docker run -d -p 8081:80 --name meteo-docs -v "$(pwd)/docs:/usr/share/nginx/html/meteo" nginx
+```
+
+Open <http://localhost:8081/meteo/>
+
 #### Minify JS and CSS
 
 > [`terser`](https://www.npmjs.com/package/terser), [`clean-css-cli`](https://www.npmjs.com/package/clean-css-cli)
