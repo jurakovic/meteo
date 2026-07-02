@@ -494,6 +494,33 @@ body.fs-lock {
 		padding: 2px 0;
 	}
 
+	.map-settings .ms-glyph {
+		margin: 0 6px 0 4px;
+	}
+
+	/* rows in the available section are not part of the render order */
+	.map-settings .ms-available .ms-handle {
+		display: none;
+	}
+
+	.map-settings .ms-sort {
+		display: flex;
+		gap: 14px;
+		padding: 6px 0;
+		margin: 6px 0;
+		border-top: 1px solid #485871;
+		border-bottom: 1px solid #485871;
+	}
+
+		.map-settings .ms-sort a {
+			cursor: pointer;
+			user-select: none;
+		}
+
+		.map-settings .ms-sort a.active {
+			color: #ff9800;
+		}
+
 	.map-settings .ms-handle {
 		/* touch-action is ignored on non-replaced inline elements, so the
 		   handle must be a box for it to take effect on touch screens */

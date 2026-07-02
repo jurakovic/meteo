@@ -72,7 +72,7 @@ Note: the landing page's maps are duplicated in the catalog — a URL or layout 
 
 #### Map descriptors
 
-Every map is one object with `id`, `name` (shown both in the title bar and in the settings picker), `titleHref`, optional `maxWidth`/`aspect`, `links`, and a `type`:
+Every map is one object with `id`, `category` (radar/satelit/munje/… — shown as a glyph in the picker, see `CATEGORY_GLYPHS`), `name` (shown both in the title bar and in the settings picker), `titleHref`, optional `maxWidth`/`aspect`, `links`, and a `type`:
 
 | type | notes |
 |---|---|
@@ -86,7 +86,7 @@ The repeated per-map link rows come from shared groups (`RADAR_HR_LINKS`, `SAT_E
 
 #### Presets and preferences
 
-`DEFAULT_MAPS` holds the default order (mirroring the landing page); `MAP_PRESETS` lists the named presets (`zadano` resolves to the default, `vise` to the former extras set, `sve` to the whole catalog). The "Karte" button opens a settings panel to pick a preset or a custom checked/ordered list (drag the `≡` handle). Changing the list auto-selects *Prilagođeno*. *Primijeni* saves to localStorage as `mapPrefs` (`{"preset":"radari"}` or `{"preset":"custom","maps":[…]}`), re-renders, and calls `initDynamicContent()` in `main.js` to wire the fresh DOM (lazy images, swipe, iframe src, overlays, link shadows).
+`DEFAULT_MAPS` holds the default order (mirroring the landing page); `MAP_PRESETS` lists the named presets (`zadano` resolves to the default, `vise` to the former extras set, `sve` to the whole catalog). The "Karte" button opens a settings panel with two sections: the selected maps on top (this *is* the render order — drag the `≡` handle to reorder) and the available maps below (a finding surface only, sortable by name or category without affecting the render order; checking a map appends it to the selected block). Changing the selection or order auto-selects *Prilagođeno*. *Primijeni* saves to localStorage as `mapPrefs` (`{"preset":"radari"}` or `{"preset":"custom","maps":[…]}`), re-renders, and calls `initDynamicContent()` in `main.js` to wire the fresh DOM (lazy images, swipe, iframe src, overlays, link shadows).
 
 #### Share links
 

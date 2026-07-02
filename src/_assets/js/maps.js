@@ -71,9 +71,21 @@ function except(links, ...names) {
 
 // ---------- map catalog ----------
 
+const CATEGORY_GLYPHS = {
+	radar: '📡',
+	satelit: '🛰️',
+	munje: '⚡',
+	temperatura: '🌡️',
+	nevrijeme: '⛈️',
+	sinoptika: '🗺️',
+	kamera: '📷',
+	prognoza: '📈'
+};
+
 function dhmzMrcRadar(id, name) {
 	return {
 		id: `dhmz-${id}`,
+		category: 'radar',
 		name: `DHMZ | MRC ${name}`,
 		type: 'slideshow',
 		titleHref: `https://meteo.hr/podaci.php?section=podaci_mjerenja&param=radari&el=${id}&acto=anim`,
@@ -86,6 +98,7 @@ function dhmzMrcRadar(id, name) {
 const MAP_CATALOG = [
 	{
 		id: 'neverin-radar-hr',
+		category: 'radar',
 		name: 'Neverin | Radar | Hrvatska',
 		type: 'slideshow',
 		titleHref: 'https://www.neverin.hr/radar/',
@@ -100,6 +113,7 @@ const MAP_CATALOG = [
 	},
 	{
 		id: 'neverin-satelit-hr',
+		category: 'satelit',
 		name: 'Neverin | Satelit | Hrvatska',
 		type: 'slideshow',
 		titleHref: 'https://www.neverin.hr/satelit/',
@@ -114,6 +128,7 @@ const MAP_CATALOG = [
 	},
 	{
 		id: 'neverin-radar-eu',
+		category: 'radar',
 		name: 'Neverin | Radar | Europa',
 		type: 'slideshow',
 		titleHref: 'https://www.neverin.hr/radar/',
@@ -128,6 +143,7 @@ const MAP_CATALOG = [
 	},
 	{
 		id: 'neverin-satelit-eu',
+		category: 'satelit',
 		name: 'Neverin | Satelit | Europa',
 		type: 'slideshow',
 		titleHref: 'https://www.neverin.hr/satelit/',
@@ -142,6 +158,7 @@ const MAP_CATALOG = [
 	},
 	{
 		id: 'windy',
+		category: 'radar',
 		name: 'Windy',
 		type: 'iframe',
 		frameId: 'windy',
@@ -156,6 +173,7 @@ const MAP_CATALOG = [
 	},
 	{
 		id: 'dhmz-radar',
+		category: 'radar',
 		name: 'DHMZ | Radar | Hrvatska',
 		type: 'slideshow',
 		titleHref: 'https://meteo.hr/podaci.php?section=podaci_mjerenja&param=radari&el=kompozit&acto=anim',
@@ -169,6 +187,7 @@ const MAP_CATALOG = [
 	},
 	{
 		id: 'meteociel-temp',
+		category: 'temperatura',
 		name: 'Meteociel.fr | Temperatura',
 		type: 'slideshow',
 		maxWidth: 768,
@@ -188,6 +207,7 @@ const MAP_CATALOG = [
 	},
 	{
 		id: 'blitzortung',
+		category: 'munje',
 		name: 'Blitzortung.org | Munje',
 		type: 'iframe',
 		frameId: 'blitzortung',
@@ -206,6 +226,7 @@ const MAP_CATALOG = [
 	},
 	{
 		id: 'essl',
+		category: 'nevrijeme',
 		name: 'ESSL | Prognoza nevremena',
 		type: 'slideshow',
 		titleHref: 'https://www.stormforecast.eu',
@@ -221,6 +242,7 @@ const MAP_CATALOG = [
 	},
 	{
 		id: 'astorp',
+		category: 'nevrijeme',
 		name: 'ASTORP | Prognoza nevremena',
 		type: 'slideshow',
 		titleHref: 'https://rawinsonde.com/ASTORP/ESTOFEX.html',
@@ -238,6 +260,7 @@ const MAP_CATALOG = [
 	},
 	{
 		id: 'estofex',
+		category: 'nevrijeme',
 		name: 'ESTOFEX | Prognoza nevremena',
 		type: 'slideshow',
 		titleHref: 'https://www.estofex.org',
@@ -251,6 +274,7 @@ const MAP_CATALOG = [
 	},
 	{
 		id: 'eumetnet',
+		category: 'radar',
 		name: 'EUMETNET',
 		type: 'iframe-basic',
 		titleHref: 'https://www.eumetnet.eu/observations/opera-radar-animation/',
@@ -259,6 +283,7 @@ const MAP_CATALOG = [
 	},
 	{
 		id: 'meteociel-satelit',
+		category: 'satelit',
 		name: 'Meteociel.fr | Satelit',
 		type: 'slideshow',
 		maxWidth: 768,
@@ -290,6 +315,7 @@ const MAP_CATALOG = [
 	},
 	{
 		id: 'chmi-sinopticka',
+		category: 'sinoptika',
 		name: 'ČHMÚ | Sinoptička karta',
 		type: 'slideshow',
 		maxWidth: 760,
@@ -322,6 +348,7 @@ const MAP_CATALOG = [
 	},
 	{
 		id: 'neverin-kamera',
+		category: 'kamera',
 		name: 'Neverin | Kamera | Zagreb',
 		type: 'image',
 		titleHref: 'https://www.neverin.hr/kamere/',
@@ -330,6 +357,7 @@ const MAP_CATALOG = [
 	},
 	{
 		id: 'meteoblue-prognoza',
+		category: 'prognoza',
 		name: 'meteoblue | Prognoza',
 		type: 'slideshow',
 		eagerSlides: true,
@@ -366,6 +394,7 @@ const MAP_CATALOG = [
 	},
 	{
 		id: 'ventusky',
+		category: 'radar',
 		name: 'Ventusky',
 		type: 'iframe',
 		frameId: 'ventusky',
@@ -382,6 +411,7 @@ const MAP_CATALOG = [
 	},
 	{
 		id: 'rainviewer',
+		category: 'radar',
 		name: 'Rain Viewer',
 		type: 'iframe',
 		frameId: 'rainViewer',
@@ -397,6 +427,7 @@ const MAP_CATALOG = [
 	},
 	{
 		id: 'weatherandradar',
+		category: 'radar',
 		name: 'Vrijeme&Radar',
 		type: 'iframe',
 		frameId: 'weatherAndRadar',
@@ -412,6 +443,7 @@ const MAP_CATALOG = [
 	},
 	{
 		id: 'meteo-si',
+		category: 'radar',
 		name: 'meteo.si',
 		type: 'slideshow',
 		titleHref: 'https://meteo.arso.gov.si/met/sl/weather/observ/radar/',
@@ -425,6 +457,7 @@ const MAP_CATALOG = [
 	},
 	{
 		id: 'idokep-radar-eu',
+		category: 'radar',
 		name: 'Időkép | Radar | Europa',
 		type: 'image',
 		titleHref: 'https://www.idokep.eu/ceu/radar',
@@ -435,6 +468,7 @@ const MAP_CATALOG = [
 	},
 	{
 		id: 'idokep-satelit-eu',
+		category: 'satelit',
 		name: 'Időkép | Satelit | Europa',
 		type: 'video',
 		titleHref: 'https://www.idokep.hu/muhold',
@@ -445,6 +479,7 @@ const MAP_CATALOG = [
 	/*
 	{
 		id: 'idokep-radar-adria',
+		category: 'radar',
 		name: 'Időkép | Radar | Hrvatska',
 		type: 'video',
 		titleHref: 'https://www.idokep.eu/adria',
@@ -454,6 +489,7 @@ const MAP_CATALOG = [
 	*/
 	{
 		id: 'istramet-munje',
+		category: 'munje',
 		name: 'Istramet | Munje',
 		type: 'image',
 		titleHref: 'https://www.istramet.hr/radari-munja/',
@@ -468,6 +504,7 @@ const MAP_CATALOG = [
 	},
 	{
 		id: 'blitzortung-karta',
+		category: 'munje',
 		name: 'Blitzortung.org | Munje | Europa',
 		type: 'image',
 		titleHref: 'https://www.blitzortung.org/en/historical_maps.php?map=10',
@@ -481,6 +518,7 @@ const MAP_CATALOG = [
 	},
 	{
 		id: 'wetterzentrale-temp',
+		category: 'temperatura',
 		name: 'Wetterzentrale | Temperatura',
 		type: 'image',
 		titleHref: 'https://www.wetterzentrale.de/en/topkarten.php?map=17&model=ecm&var=5&run=6&time=0&lid=OP&h=1&mv=0&tr=1',
@@ -491,6 +529,7 @@ const MAP_CATALOG = [
 	},
 	{
 		id: 'dhmz-sinopticka',
+		category: 'sinoptika',
 		name: 'DHMZ | Sinoptička karta',
 		type: 'image',
 		titleHref: 'https://meteo.hr/prognoze.php?section=prognoze_model&param=web_fronte_sutra12',
@@ -541,7 +580,8 @@ const MAP_PRESETS = [
 		id: 'nevrijeme', name: 'Nevrijeme',
 		maps: ['essl', 'astorp', 'estofex', 'blitzortung', 'istramet-munje', 'blitzortung-karta']
 	},
-	{ id: 'sve', name: 'Sve' }
+	{ id: 'sve', name: 'Sve' },
+	{ id: 'nista', name: 'Ništa', maps: [] }
 ];
 
 // ---------- preferences (localStorage) ----------
@@ -844,7 +884,49 @@ function buildMapSettings(panel) {
 	const prefs = getActiveMapPrefs();
 	panel.replaceChildren();
 
-	const listDiv = el('div', { class: 'ms-list' });
+	// two sections: the selected block is the render order (draggable), the
+	// available block below is only a finding surface and can be sorted freely
+	const selectedDiv = el('div', { class: 'ms-list ms-selected' });
+	const availableDiv = el('div', { class: 'ms-list ms-available' });
+
+	let sortKey = 'zadano';
+	let sortAsc = true;
+
+	function compareRows(a, b) {
+		const ma = MAP_CATALOG.find(m => m.id === a.getAttribute('data-map-id'));
+		const mb = MAP_CATALOG.find(m => m.id === b.getAttribute('data-map-id'));
+		const dir = sortAsc ? 1 : -1;
+		if (sortKey === 'naziv') return ma.name.localeCompare(mb.name, 'hr') * dir;
+		if (sortKey === 'vrsta') return (ma.category.localeCompare(mb.category, 'hr') || ma.name.localeCompare(mb.name, 'hr')) * dir;
+		return (MAP_CATALOG.indexOf(ma) - MAP_CATALOG.indexOf(mb)) * dir;
+	}
+
+	function sortAvailable() {
+		[...availableDiv.children].sort(compareRows).forEach(row => availableDiv.appendChild(row));
+	}
+
+	const sortLinks = {};
+	const sortDiv = el('div', { class: 'ms-sort' }, [el('span', { text: 'Poredaj:' })]);
+	[['zadano', 'Zadano'], ['naziv', 'Naziv'], ['vrsta', 'Vrsta']].forEach(([key, label]) => {
+		const link = el('a', { text: label });
+		link.addEventListener('click', () => {
+			if (sortKey === key) sortAsc = !sortAsc;
+			else { sortKey = key; sortAsc = true; }
+			updateSortLinks();
+			sortAvailable();
+		});
+		sortLinks[key] = { link, label };
+		sortDiv.appendChild(link);
+	});
+
+	function updateSortLinks() {
+		for (const [key, { link, label }] of Object.entries(sortLinks)) {
+			const active = key === sortKey;
+			link.classList.toggle('active', active);
+			link.textContent = active ? `${label} ${sortAsc ? '▲' : '▼'}` : label;
+		}
+	}
+	updateSortLinks();
 
 	function markCustom() {
 		const custom = panel.querySelector('input[name="msPreset"][value="custom"]');
@@ -872,12 +954,12 @@ function buildMapSettings(panel) {
 
 			// move the row before the first sibling whose midpoint is below the pointer
 			const reorder = () => {
-				const target = [...listDiv.children].find(sibling =>
+				const target = [...selectedDiv.children].find(sibling =>
 					sibling !== row && lastY < sibling.getBoundingClientRect().top + sibling.offsetHeight / 2);
 				if (target) {
-					if (target.previousElementSibling !== row) listDiv.insertBefore(row, target);
-				} else if (listDiv.lastElementChild !== row) {
-					listDiv.appendChild(row);
+					if (target.previousElementSibling !== row) selectedDiv.insertBefore(row, target);
+				} else if (selectedDiv.lastElementChild !== row) {
+					selectedDiv.appendChild(row);
 				}
 			};
 
@@ -914,26 +996,42 @@ function buildMapSettings(panel) {
 		});
 	}
 
-	function fillList(selectedIds) {
-		listDiv.replaceChildren();
-		const orderedIds = [
-			...selectedIds,
-			...MAP_CATALOG.map(map => map.id).filter(id => !selectedIds.includes(id))
-		];
-		orderedIds.forEach(id => {
-			const map = MAP_CATALOG.find(m => m.id === id);
-			if (!map) return;
-			const checkbox = el('input', { type: 'checkbox' });
-			checkbox.checked = selectedIds.includes(id);
-			checkbox.addEventListener('change', markCustom);
-			const handle = el('span', { class: 'ms-handle', text: '≡', title: 'Povuci za premještanje' });
-			const row = el('div', { class: 'ms-item', 'data-map-id': id }, [
-				el('label', {}, [checkbox, document.createTextNode(' ' + map.name)]),
-				handle
-			]);
-			enableDragReorder(handle, row);
-			listDiv.appendChild(row);
+	function buildRow(map, checked) {
+		const checkbox = el('input', { type: 'checkbox' });
+		checkbox.checked = checked;
+		const handle = el('span', { class: 'ms-handle', text: '≡', title: 'Povuci za premještanje' });
+		const row = el('div', { class: 'ms-item', 'data-map-id': map.id }, [
+			el('label', {}, [
+				checkbox,
+				el('span', { class: 'ms-glyph', text: CATEGORY_GLYPHS[map.category] || '' }),
+				document.createTextNode(map.name)
+			]),
+			handle
+		]);
+		checkbox.addEventListener('change', () => {
+			// checking appends to the page order; unchecking returns the row to the sorted shelf
+			if (checkbox.checked) {
+				selectedDiv.appendChild(row);
+			} else {
+				availableDiv.appendChild(row);
+				sortAvailable();
+			}
+			markCustom();
 		});
+		enableDragReorder(handle, row);
+		return row;
+	}
+
+	function fillList(selectedIds) {
+		selectedDiv.replaceChildren();
+		availableDiv.replaceChildren();
+		selectedIds.forEach(id => {
+			const map = MAP_CATALOG.find(m => m.id === id);
+			if (map) selectedDiv.appendChild(buildRow(map, true));
+		});
+		MAP_CATALOG.filter(map => !selectedIds.includes(map.id))
+			.forEach(map => availableDiv.appendChild(buildRow(map, false)));
+		sortAvailable();
 	}
 
 	const presetsDiv = el('div', { class: 'ms-presets' });
@@ -955,9 +1053,8 @@ function buildMapSettings(panel) {
 		const checked = panel.querySelector('input[name="msPreset"]:checked');
 		const presetId = checked ? checked.value : 'zadano';
 		if (presetId === 'custom') {
-			const ids = [...listDiv.querySelectorAll('.ms-item')]
-				.filter(row => row.querySelector('input[type="checkbox"]').checked)
-				.map(row => row.getAttribute('data-map-id'));
+			// the selected block holds exactly the checked rows, in render order
+			const ids = [...selectedDiv.children].map(row => row.getAttribute('data-map-id'));
 			return { preset: 'custom', maps: ids };
 		}
 		return { preset: presetId };
@@ -993,7 +1090,9 @@ function buildMapSettings(panel) {
 	});
 
 	panel.appendChild(presetsDiv);
-	panel.appendChild(listDiv);
+	panel.appendChild(selectedDiv);
+	panel.appendChild(sortDiv);
+	panel.appendChild(availableDiv);
 	panel.appendChild(el('div', { class: 'ms-actions' }, [applyBtn, shareBtn]));
 }
 
