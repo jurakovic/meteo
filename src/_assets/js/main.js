@@ -95,6 +95,12 @@ function showProgress() {
 	const progressBar = document.querySelector('.progress-bar');
 	let imagesLoaded = 0;
 
+	// nothing to track (e.g. all maps unselected) — hide the bar right away
+	if (images.length === 0) {
+		document.querySelector('.progress-container').style.display = 'none';
+		return;
+	}
+
 	// Update progress bar
 	const updateProgress = () => {
 		const percent = (imagesLoaded / images.length) * 100;
