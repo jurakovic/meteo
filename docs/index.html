@@ -68,28 +68,30 @@
 		linear-gradient(to left,transparent,#202c40)}.map-settings .ms-presets::after{right:0;margin-left:-24px;background:
 		linear-gradient(to right,transparent,#202c40)}.map-settings .ms-presets.can-scroll-left::before{opacity:1}
 		.map-settings .ms-presets.can-scroll-right::after{opacity:1}.map-settings .ms-presets label:not(:last-child){margin-right:16px}
-		.map-settings .ms-item{display:flex;justify-content:space-between;align-items:center;padding:2px 0}.map-settings .ms-handle{display:
-		inline-block;cursor:grab;touch-action:none;padding:2px 8px;user-select:none}.map-settings .ms-item.dragging{background-color:#2b5797}
-		.map-settings .ms-item.dragging .ms-handle{cursor:grabbing}.map-settings .ms-actions{padding-top:8px;margin-top:8px;border-top:1px solid
-		#485871;text-align:center}.map-settings .ms-actions .btn{font-size:13px;font-family:inherit;color:#fff;background-color:#485871;cursor:
-		pointer;height:24px;padding:0 24px;border:none;outline:0}.map-settings .ms-actions .btn:hover{background-color:#5f6f89}
-		.map-settings .ms-actions .btn+.btn{margin-left:8px}.slideshow{position:relative;display:flex;justify-content:center}.slide{display:none}
-		.slide.active{display:block}.next,.prev{cursor:pointer;position:absolute;align-content:center;top:0;bottom:0;width:15%;padding:16px;color:
-		transparent;opacity:.7;font-weight:700;font-size:36px;transition:.6s ease;user-select:none}.prev{left:0;text-align:left}.prev:hover{
-		background-image:linear-gradient(to left,transparent,rgba(0,0,0,.6));color:#fff;text-decoration:none}.prev.shorter{top:23px}.next{right:0;
-		text-align:right}.next:hover{background-image:linear-gradient(to right,transparent,rgba(0,0,0,.6));color:#fff;text-decoration:none}
-		.next.shorter{top:23px}.fade{animation-name:fade;animation-duration:1s}@keyframes fade{from{opacity:.6}to{opacity:1}}
-		@media (max-width:800px){.next,.prev{padding:12px;font-size:20px}.next.shorter,.prev.shorter{top:23px}}.indicators-container{display:grid;
-		grid-template-columns:repeat(3,1fr);gap:4px;width:100%}.indicator{height:3px;background-color:#4e5264;transition:background-color .3s}
-		.indicator.active{background-color:#ff9800}@media (max-width:800px){.indicator{height:2px}}.expandable{position:relative;justify-content:
-		center;margin-top:10px;margin-bottom:4px;font-family:inherit;color:#fff;background-color:#485871;cursor:pointer;width:100%;height:24px;
-		border:none;outline:0}.expandable:hover{background-color:#5f6f89}.expandable .arrow{position:absolute;right:10px;top:2px;font-size:14px}
-		.links{font-size:14px;display:grid;grid-template-columns:25% 45% 30%;gap:0;max-height:0;overflow:hidden;transition:max-height .3s ease-out}
-		.links .item{padding:5px;margin:0 2px}.links .item:not(:last-child){border-right:1px solid #fff}.links p{margin-top:0;text-align:left}
-		@media (max-width:800px){.links{grid-template-columns:1fr}.links .item{margin:5px 0;border-right:none!important}}footer{position:sticky;top:
-		100%;background:#485871;color:#fff;text-align:center;padding:8px;margin-top:8px}.progress-container{position:fixed;left:0;top:0;width:100%;
-		height:3px;z-index:1000;background-color:#5c5c5c80}.progress-bar{width:0;height:100%;background-color:#4caf50;transition:width .3s
-		ease-in-out}
+		.map-settings .ms-item{display:flex;justify-content:space-between;align-items:center;padding:2px 0}.map-settings .ms-glyph{margin:0 6px 0
+		4px}.map-settings .ms-available .ms-handle{display:none}.map-settings .ms-sort{display:flex;gap:14px;padding:6px 0;margin:6px 0;border-top:
+		1px solid #485871;border-bottom:1px solid #485871}.map-settings .ms-sort a{cursor:pointer;user-select:none}.map-settings .ms-sort a.active{
+		color:#ff9800}.map-settings .ms-handle{display:inline-block;cursor:grab;touch-action:none;padding:2px 8px;user-select:none}
+		.map-settings .ms-item.dragging{background-color:#2b5797}.map-settings .ms-item.dragging .ms-handle{cursor:grabbing}
+		.map-settings .ms-actions{padding-top:8px;margin-top:8px;border-top:1px solid #485871;text-align:center}.map-settings .ms-actions .btn{
+		font-size:13px;font-family:inherit;color:#fff;background-color:#485871;cursor:pointer;height:24px;padding:0 24px;border:none;outline:0}
+		.map-settings .ms-actions .btn:hover{background-color:#5f6f89}.map-settings .ms-actions .btn+.btn{margin-left:8px}.slideshow{position:
+		relative;display:flex;justify-content:center}.slide{display:none}.slide.active{display:block}.next,.prev{cursor:pointer;position:absolute;
+		align-content:center;top:0;bottom:0;width:15%;padding:16px;color:transparent;opacity:.7;font-weight:700;font-size:36px;transition:.6s ease;
+		user-select:none}.prev{left:0;text-align:left}.prev:hover{background-image:linear-gradient(to left,transparent,rgba(0,0,0,.6));color:#fff;
+		text-decoration:none}.prev.shorter{top:23px}.next{right:0;text-align:right}.next:hover{background-image:
+		linear-gradient(to right,transparent,rgba(0,0,0,.6));color:#fff;text-decoration:none}.next.shorter{top:23px}.fade{animation-name:fade;
+		animation-duration:1s}@keyframes fade{from{opacity:.6}to{opacity:1}}@media (max-width:800px){.next,.prev{padding:12px;font-size:20px}
+		.next.shorter,.prev.shorter{top:23px}}.indicators-container{display:grid;grid-template-columns:repeat(3,1fr);gap:4px;width:100%}.indicator{
+		height:3px;background-color:#4e5264;transition:background-color .3s}.indicator.active{background-color:#ff9800}@media (max-width:800px){
+		.indicator{height:2px}}.expandable{position:relative;justify-content:center;margin-top:10px;margin-bottom:4px;font-family:inherit;color:#fff
+		;background-color:#485871;cursor:pointer;width:100%;height:24px;border:none;outline:0}.expandable:hover{background-color:#5f6f89}
+		.expandable .arrow{position:absolute;right:10px;top:2px;font-size:14px}.links{font-size:14px;display:grid;grid-template-columns:25% 45% 30%;
+		gap:0;max-height:0;overflow:hidden;transition:max-height .3s ease-out}.links .item{padding:5px;margin:0 2px}.links .item:not(:last-child){
+		border-right:1px solid #fff}.links p{margin-top:0;text-align:left}@media (max-width:800px){.links{grid-template-columns:1fr}.links .item{
+		margin:5px 0;border-right:none!important}}footer{position:sticky;top:100%;background:#485871;color:#fff;text-align:center;padding:8px;
+		margin-top:8px}.progress-container{position:fixed;left:0;top:0;width:100%;height:3px;z-index:1000;background-color:#5c5c5c80}.progress-bar{
+		width:0;height:100%;background-color:#ff9800;transition:width .3s ease-in-out}
 	</style>
 	<script>
 		function scrollToTop(){window.scrollTo({top:0,behavior:"smooth"})}function scrollToElement(e){const t=document.getElementById(e)
@@ -111,10 +113,11 @@
 		function updateSlideshowWidth(e){if(!e.hasAttribute("data-dynamic-width"))return
 		;const t=e.getAttribute("data-slideshow-id"),o=document.querySelector(`.indicators-container[data-slideshow-id='${t}']`),n=e.querySelector(".slide.active .placeholder")
 		;e.style.maxWidth=n.style.maxWidth,o.style.maxWidth=n.style.maxWidth}function showProgress(){
-		const e=document.querySelectorAll("img"),t=document.querySelector(".progress-bar");let o=0;const n=()=>{const n=o/e.length*100
-		;t.style.width=n+"%",o===e.length&&setTimeout(()=>{document.querySelector(".progress-container").style.display="none"},500)};e.forEach(e=>{
-		e.addEventListener("load",()=>{o++,n()}),e.addEventListener("error",()=>{o++,dlog(`Error loading image: ${e.src}`),e.removeAttribute("src"),
-		n()}),e.complete&&e.dispatchEvent(new Event("load"))})}function handleSwipe(e,t,o){const n=o-t;if(Math.abs(n)>50){
+		const e=document.querySelectorAll("img"),t=document.querySelector(".progress-bar"),o=document.querySelector(".progress-container");let n=0
+		;if(clearTimeout(o._hideTimer),t.style.width="0",o.style.removeProperty("display"),0===e.length)return void(o.style.display="none")
+		;const s=()=>{const s=n/e.length*100;t.style.width=s+"%",n===e.length&&(o._hideTimer=setTimeout(()=>{o.style.display="none"},500))}
+		;e.forEach(e=>{e.addEventListener("load",()=>{n++,s()}),e.addEventListener("error",()=>{n++,dlog(`Error loading image: ${e.src}`),
+		e.removeAttribute("src"),s()}),e.complete&&e.dispatchEvent(new Event("load"))})}function handleSwipe(e,t,o){const n=o-t;if(Math.abs(n)>50){
 		const t=parseInt(e.getAttribute("data-current-slide"));showSlides(e,t+(n>0?-1:1))}}function addSwipeEvents(){
 		document.querySelectorAll(".slideshow").forEach(e=>{let t=0,o=0,n=0,s=0,r=!1;e.querySelectorAll("img").forEach(e=>{
 		e.addEventListener("dragstart",e=>e.preventDefault())}),e.addEventListener("touchstart",e=>{e.touches.length>1||(t=e.touches[0].clientX,
@@ -180,8 +183,8 @@
 		return String(e).padStart(t,o||"0")}const isDebugEnabled="1"===new URLSearchParams(window.location.search).get("debug");function dlog(...e){
 		isDebugEnabled&&console.log(...e)}function initDynamicContent(){document.querySelectorAll("img.lazy").forEach(e=>{
 		e.src=e.getAttribute("data-src"),e.classList.remove("lazy")}),addSwipeEvents(),previousWidth=0,updateIframeSrc(),hideOverlayOnDoubleTap(),
-		updateHintText(),addLinksScrollShadows()}document.addEventListener("DOMContentLoaded",()=>{initLinksBottom(),initDynamicContent(),
-		showProgress(),addExpandableClickEventListener()}),window.addEventListener("resize",()=>{clearTimeout(window._resizeTimeout),
+		updateHintText(),addLinksScrollShadows(),showProgress()}document.addEventListener("DOMContentLoaded",()=>{initLinksBottom(),
+		initDynamicContent(),addExpandableClickEventListener()}),window.addEventListener("resize",()=>{clearTimeout(window._resizeTimeout),
 		window._resizeTimeout=setTimeout(()=>{updateIframeSrc(),updateHintText(),updateLinksScrollShadows()},200)});
 	</script>
 	<script async src="https://www.googletagmanager.com/gtag/js?id=G-233EMZJM16"></script>
