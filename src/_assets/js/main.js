@@ -93,11 +93,18 @@ function showProgress() {
 	// Get all images on the page
 	const images = document.querySelectorAll('img');
 	const progressBar = document.querySelector('.progress-bar');
+	const progressContainer = document.querySelector('.progress-container');
 	let imagesLoaded = 0;
+
+	// re-runnable after a re-render: reset the bar, show the container and
+	// cancel a hide still pending from the previous run
+	clearTimeout(progressContainer._hideTimer);
+	progressBar.style.width = '0';
+	progressContainer.style.removeProperty('display');
 
 	// nothing to track (e.g. all maps unselected) — hide the bar right away
 	if (images.length === 0) {
-		document.querySelector('.progress-container').style.display = 'none';
+		progressContainer.style.display = 'none';
 		return;
 	}
 
@@ -108,8 +115,8 @@ function showProgress() {
 
 		// Hide the progress bar when all images are loaded
 		if (imagesLoaded === images.length) {
-			setTimeout(() => {
-				document.querySelector('.progress-container').style.display = 'none';
+			progressContainer._hideTimer = setTimeout(() => {
+				progressContainer.style.display = 'none';
 			}, 500); // Hide after a short delay
 		}
 	};
@@ -555,12 +562,12 @@ function initDynamicContent() {
 	hideOverlayOnDoubleTap();
 	updateHintText();
 	addLinksScrollShadows();
+	showProgress();
 }
 
 document.addEventListener('DOMContentLoaded', () => {
 	initLinksBottom();
 	initDynamicContent();
-	showProgress();
 	addExpandableClickEventListener();
 });
 
