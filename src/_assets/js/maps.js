@@ -996,4 +996,12 @@ function buildMapSettings(panel) {
 	panel.appendChild(el('div', { class: 'ms-actions' }, [applyBtn, shareBtn]));
 }
 
-renderMaps();
+// in dev this is a deferred external script, so the DOM is already parsed and
+// the render happens immediately; the docs build inlines it into <head>
+// (inline scripts cannot defer), where it must wait for DOMContentLoaded —
+// registered before main.js's listener, so the wiring still sees the maps
+if (document.readyState === 'loading') {
+	document.addEventListener('DOMContentLoaded', renderMaps);
+} else {
+	renderMaps();
+}
