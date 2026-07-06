@@ -83,6 +83,7 @@ function updateSlideshowWidth(slideshow) {
 	const slideshowId = slideshow.getAttribute('data-slideshow-id');
 	const indicatorsContainer = document.querySelector(`.indicators-container[data-slideshow-id='${slideshowId}']`);
 	const activeSlide = slideshow.querySelector('.slide.active .placeholder');
+	if (!activeSlide) return; // only titled slides have a .placeholder wrapper
 
 	slideshow.style.maxWidth = activeSlide.style.maxWidth;
 	indicatorsContainer.style.maxWidth = activeSlide.style.maxWidth;
@@ -95,6 +96,12 @@ function showProgress() {
 	const progressBar = document.querySelector('.progress-bar');
 	const progressContainer = document.querySelector('.progress-container');
 	let imagesLoaded = 0;
+
+	// each invocation gets a token; listeners left over from a superseded run
+	// (e.g. Primijeni clicked while images are still loading) bail out so they
+	// can't move the shared bar or schedule a hide over the current run
+	const runId = (progressContainer._runId || 0) + 1;
+	progressContainer._runId = runId;
 
 	// re-runnable after a re-render: reset the bar, show the container and
 	// cancel a hide still pending from the previous run
@@ -110,6 +117,7 @@ function showProgress() {
 
 	// Update progress bar
 	const updateProgress = () => {
+		if (progressContainer._runId !== runId) return; // superseded by a newer run
 		const percent = (imagesLoaded / images.length) * 100;
 		progressBar.style.width = percent + '%';
 

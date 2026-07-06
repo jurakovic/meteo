@@ -319,25 +319,27 @@ const MAP_CATALOG = [
 		name: 'ČHMÚ | Sinoptička karta',
 		type: 'slideshow',
 		maxWidth: 760,
+		// only has an effect on titled slideshows: updateSlideshowWidth (main.js)
+		// reads the active slide's .placeholder wrapper, which untitled slides lack
 		dynamicWidth: true,
 		slides: [
 			{
-				title: { text: 'ČHMÚ | Sinoptička karta', href: 'https://intranet.chmi.cz/aktualni-situace/aktualni-stav-pocasi/evropa/synopticka-situace' },
+				title: { href: 'https://intranet.chmi.cz/aktualni-situace/aktualni-stav-pocasi/evropa/synopticka-situace' },
 				img: 'https://intranet.chmi.cz/files/portal/docs/meteo/om/evropa/analyza.gif',
 				aspect: '760 / 492'
 			},
 			{
-				title: { text: 'ČHMÚ | Sinoptička karta', href: 'https://intranet.chmi.cz/predpovedi/predpovedi-pocasi/evropa/synopticka-situace' },
+				title: { href: 'https://intranet.chmi.cz/predpovedi/predpovedi-pocasi/evropa/synopticka-situace' },
 				img: 'https://intranet.chmi.cz/files/portal/docs/meteo/om/evropa/preba/preba36.gif',
 				aspect: '760 / 435'
 			},
 			{
-				title: { text: 'ČHMÚ | Sinoptička karta', href: 'https://intranet.chmi.cz/predpovedi/predpovedi-pocasi/evropa/synopticka-situace' },
+				title: { href: 'https://intranet.chmi.cz/predpovedi/predpovedi-pocasi/evropa/synopticka-situace' },
 				img: 'https://intranet.chmi.cz/files/portal/docs/meteo/om/evropa/preba/preba60.gif',
 				aspect: '760 / 435'
 			},
 			{
-				title: { text: 'ČHMÚ | Sinoptička karta', href: 'https://intranet.chmi.cz/predpovedi/predpovedi-pocasi/evropa/synopticka-situace' },
+				title: { href: 'https://intranet.chmi.cz/predpovedi/predpovedi-pocasi/evropa/synopticka-situace' },
 				img: 'https://intranet.chmi.cz/files/portal/docs/meteo/om/evropa/preba/preba84.gif',
 				aspect: '760 / 435'
 			}
@@ -588,16 +590,25 @@ const MAP_PRESETS = [
 
 const MAP_PREFS_KEY = 'mapPrefs';
 
+// 'custom' is a runtime-only preset (not in MAP_PRESETS); everything else must
+// name a real preset or it can't be selected/rendered — coerce unknown ids
+// (older/newer site version, hand-crafted ?v=) so a stale value isn't kept
+function isKnownPreset(id) {
+	return id === 'custom' || MAP_PRESETS.some(p => p.id === id);
+}
+
 function getMapPrefs() {
 	try {
 		const prefs = JSON.parse(localStorage.getItem(MAP_PREFS_KEY));
-		if (prefs && typeof prefs.preset === 'string') return prefs;
+		if (prefs && typeof prefs.preset === 'string' && isKnownPreset(prefs.preset)) return prefs;
 	} catch (e) { /* corrupt storage falls through to default */ }
 	return { preset: 'zadano' };
 }
 
 function saveMapPrefs(prefs) {
-	localStorage.setItem(MAP_PREFS_KEY, JSON.stringify(prefs));
+	try {
+		localStorage.setItem(MAP_PREFS_KEY, JSON.stringify(prefs));
+	} catch (e) { /* storage disabled or full — still apply the view this session */ }
 }
 
 function presetMapIds(presetId) {
@@ -626,7 +637,7 @@ function encodeMapView(prefs) {
 function decodeMapView(value) {
 	try {
 		const prefs = JSON.parse(atob(value.replace(/-/g, '+').replace(/_/g, '/')));
-		if (prefs && typeof prefs.preset === 'string') return prefs;
+		if (prefs && typeof prefs.preset === 'string' && isKnownPreset(prefs.preset)) return prefs;
 	} catch (e) { /* malformed parameter falls through */ }
 	return null;
 }
@@ -701,7 +712,9 @@ function buildSlideshow(map) {
 		const slideDiv = el('div', { class: 'slide fade' + (active ? ' active' : '') });
 		if (titled) {
 			const width = slide.maxWidth || map.maxWidth;
-			slideDiv.appendChild(buildTitleBar(slide.title, {}));
+			// a slide may omit its title text to inherit the map name (its href still differs per slide)
+			const title = { text: slide.title.text || map.name, href: slide.title.href };
+			slideDiv.appendChild(buildTitleBar(title, {}));
 			slideDiv.appendChild(el('div', {
 				class: 'placeholder',
 				style: `${width ? `max-width: ${width}px; ` : ''}aspect-ratio: ${slide.aspect};`
