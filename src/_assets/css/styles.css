@@ -505,6 +505,9 @@ body.fs-lock {
 
 	.map-settings .ms-sort {
 		display: flex;
+		/* the ▲/▼ arrow renders in a fallback font with taller metrics on
+		   Android; baseline alignment keeps the links from shifting down */
+		align-items: baseline;
 		gap: 14px;
 		padding: 6px 0;
 		margin: 6px 0;
@@ -515,6 +518,7 @@ body.fs-lock {
 		.map-settings .ms-sort a {
 			cursor: pointer;
 			user-select: none;
+			text-decoration: none;
 		}
 
 		.map-settings .ms-sort a.active {
