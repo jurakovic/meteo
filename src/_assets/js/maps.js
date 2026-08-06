@@ -1097,16 +1097,16 @@ function buildMapSettings(panel) {
 		url.searchParams.set('v', encodeMapView(readPanelPrefs()));
 		const link = url.toString();
 		// navigator.clipboard only exists in secure contexts (https/localhost),
-		// e.g. not on http://<LAN-IP>; fall back to a copyable prompt there
+		// e.g. not on http://<LAN-IP>; fall back to a copyable prompt there —
+		// and again if the write itself is refused (permissions, lost focus)
+		const promptCopy = () => window.prompt('Kopiraj poveznicu:', link);
 		if (navigator.clipboard && navigator.clipboard.writeText) {
 			navigator.clipboard.writeText(link).then(() => {
 				shareBtn.textContent = 'Kopirano!';
 				setTimeout(() => { shareBtn.textContent = 'Podijeli'; }, 1500);
-			}).catch(() => {
-				window.prompt('Kopiraj poveznicu:', link);
-			});
+			}).catch(promptCopy);
 		} else {
-			window.prompt('Kopiraj poveznicu:', link);
+			promptCopy();
 		}
 	});
 
