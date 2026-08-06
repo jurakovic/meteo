@@ -680,7 +680,9 @@ function maxWidthStyle(map) {
 	return map.maxWidth ? `max-width: ${map.maxWidth}px;` : '';
 }
 
-function buildTitleBar(title, map) {
+// map is optional and only supplies the width: slide title bars are
+// unconstrained, their max-width sits on the .placeholder wrapper below
+function buildTitleBar(title, map = {}) {
 	return el('div', { class: 'radartitle', style: maxWidthStyle(map) || undefined }, [
 		el('a', { href: title.href, target: '_blank', rel: 'nofollow', text: title.text })
 	]);
@@ -715,7 +717,7 @@ function buildSlideshow(map) {
 			const width = slide.maxWidth || map.maxWidth;
 			// a slide may omit its title text to inherit the map name (its href still differs per slide)
 			const title = { text: slide.title.text || map.name, href: slide.title.href };
-			slideDiv.appendChild(buildTitleBar(title, {}));
+			slideDiv.appendChild(buildTitleBar(title));
 			slideDiv.appendChild(el('div', {
 				class: 'placeholder',
 				style: `${width ? `max-width: ${width}px; ` : ''}aspect-ratio: ${slide.aspect};`
