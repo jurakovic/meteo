@@ -668,6 +668,55 @@ function deleteUserPreset(id) {
 	saveUserPresets();
 }
 
+// ---------- hidden built-in presets (localStorage) ----------
+// Built-ins are code, so they are hidden rather than deleted — and hiding is a
+// display choice only. allPresets keeps returning them, so a saved preference,
+// the zadano fallback and a shared link naming a preset the recipient hides
+// all keep resolving. Only the preset bar filters.
+
+const HIDDEN_PRESETS_KEY = 'mapHiddenPresets';
+
+function loadHiddenPresets() {
+	try {
+		const list = JSON.parse(localStorage.getItem(HIDDEN_PRESETS_KEY));
+		if (Array.isArray(list)) return list.filter(id => MAP_PRESETS.some(preset => preset.id === id));
+	} catch (e) { /* corrupt storage falls through to none hidden */ }
+	return [];
+}
+
+let hiddenPresets = loadHiddenPresets();
+
+function saveHiddenPresets() {
+	try {
+		localStorage.setItem(HIDDEN_PRESETS_KEY, JSON.stringify(hiddenPresets));
+	} catch (e) { /* storage disabled or full — the choice still holds this session */ }
+}
+
+function isPresetHidden(id) {
+	return hiddenPresets.includes(id);
+}
+
+function setPresetHidden(id, hidden) {
+	hiddenPresets = hiddenPresets.filter(hiddenId => hiddenId !== id);
+	if (hidden) hiddenPresets.push(id);
+	saveHiddenPresets();
+}
+
+function hideAllPresets() {
+	hiddenPresets = MAP_PRESETS.map(preset => preset.id);
+	saveHiddenPresets();
+}
+
+function showAllPresets() {
+	hiddenPresets = [];
+	saveHiddenPresets();
+}
+
+// what the preset bar offers, as opposed to what still resolves
+function visiblePresets() {
+	return allPresets().filter(preset => !isPresetHidden(preset.id));
+}
+
 // ---------- preferences (localStorage) ----------
 
 const MAP_PREFS_KEY = 'mapPrefs';
@@ -1176,7 +1225,11 @@ function buildMapSettings(panel) {
 	// as the built-ins and stay selectable the same way
 	function renderPresets(selectedId) {
 		presetsDiv.replaceChildren();
-		[...allPresets(), { id: 'custom', name: 'Prilagođeno' }].forEach(preset => {
+		const options = [...visiblePresets(), { id: 'custom', name: 'Prilagođeno' }];
+		// a hidden preset has no radio to check, and the maps on screen are still
+		// its own, so the selection becomes custom rather than silently reverting
+		if (!options.some(preset => preset.id === selectedId)) selectedId = 'custom';
+		options.forEach(preset => {
 			const radio = el('input', { type: 'radio', name: 'msPreset', value: preset.id });
 			radio.checked = preset.id === selectedId;
 			radio.addEventListener('change', () => {
@@ -1185,6 +1238,12 @@ function buildMapSettings(panel) {
 			});
 			presetsDiv.appendChild(el('label', {}, [radio, document.createTextNode(' ' + preset.name)]));
 		});
+		// hiding or saving changes how far the bar reaches, so the edge fades
+		// have to be recomputed — otherwise they stay latched on from the
+		// previous contents and dim an option that now fits. Measuring needs
+		// layout, so at build time (panel still hidden) this is a no-op and
+		// toggleMapSettings does it again after unhiding.
+		updateLinksScrollShadow(presetsDiv);
 	}
 
 	presetsDiv.addEventListener('scroll', () => updateLinksScrollShadow(presetsDiv), { passive: true });
@@ -1247,26 +1306,47 @@ function buildMapSettings(panel) {
 	// an editor, so starting a second rename closes the first on its own
 	let renamingId = null;
 
+	// the action slots line up as columns down the list, so a row without one
+	// leaves it empty instead of shifting the rest along
+	function buildLinkCells(cells) {
+		return el('span', { class: 'ms-manage-links' }, cells.map(cell => cell || el('span')));
+	}
+
+	// shares the preset as saved — the panel's Podijeli button is the one that
+	// carries unsaved edits to the list. Built-ins share by id, which every
+	// visitor resolves; a saved preset has to carry its contents instead.
+	function buildShareLink(getPrefs) {
+		const link = el('a', { text: 'podijeli' });
+		link.addEventListener('click', () => {
+			copyMapViewLink(getPrefs(), () => flashLabel(link, 'kopirano!', 'podijeli'));
+		});
+		return link;
+	}
+
+	function buildBuiltinRow(preset) {
+		const hidden = isPresetHidden(preset.id);
+		const toggleLink = el('a', { text: hidden ? 'prikaži' : 'sakrij' });
+		toggleLink.addEventListener('click', () => {
+			setPresetHidden(preset.id, !hidden);
+			// renderPresets drops a selection that just became invisible
+			renderPresets(checkedPresetId());
+			renderManage();
+		});
+		return el('div', { class: 'ms-manage-item' + (hidden ? ' ms-hidden' : '') }, [
+			el('span', { class: 'ms-manage-name', text: preset.name }),
+			buildLinkCells([buildShareLink(() => ({ preset: preset.id })), toggleLink, null])
+		]);
+	}
+
 	function buildManageRow(preset) {
 		if (preset.id === renamingId) return buildRenameRow(preset);
 
-		const shareLink = el('a', { text: 'podijeli' });
 		const renameLink = el('a', { text: 'preimenuj' });
 		const deleteLink = el('a', { text: 'obriši' });
 		const row = el('div', { class: 'ms-manage-item' }, [
 			el('span', { class: 'ms-manage-name', text: preset.name }),
-			el('span', { class: 'ms-manage-links' }, [
-				shareLink, document.createTextNode(' · '),
-				renameLink, document.createTextNode(' · '),
-				deleteLink
-			])
+			buildLinkCells([buildShareLink(() => presetSharePrefs(preset)), renameLink, deleteLink])
 		]);
-
-		// shares the preset as saved — the panel's Podijeli button is the one
-		// that carries unsaved edits to the list
-		shareLink.addEventListener('click', () => {
-			copyMapViewLink(presetSharePrefs(preset), () => flashLabel(shareLink, 'kopirano!', 'podijeli'));
-		});
 
 		renameLink.addEventListener('click', () => {
 			renamingId = preset.id;
@@ -1339,9 +1419,10 @@ function buildMapSettings(panel) {
 		confirmLink.addEventListener('click', commit);
 		cancelLink.addEventListener('click', cancel);
 
+		// potvrdi and odustani sit under preimenuj and obriši, the actions they stand in for
 		return el('div', { class: 'ms-manage-item' }, [
 			input,
-			el('span', { class: 'ms-manage-links' }, [confirmLink, document.createTextNode(' · '), cancelLink])
+			buildLinkCells([null, confirmLink, cancelLink])
 		]);
 	}
 
@@ -1357,16 +1438,44 @@ function buildMapSettings(panel) {
 		]);
 	}
 
+	function buildBuiltinHeading() {
+		const heading = el('div', { class: 'ms-manage-title', text: 'Zadani predlošci' });
+		const links = el('span', { class: 'ms-manage-title-links' });
+
+		const addLink = (text, apply) => {
+			const link = el('a', { text: text });
+			link.addEventListener('click', () => {
+				apply();
+				renderPresets(checkedPresetId());
+				renderManage();
+			});
+			links.appendChild(link);
+		};
+
+		// each shown only while it would do something
+		if (hiddenPresets.length < MAP_PRESETS.length) addLink('sakrij sve', hideAllPresets);
+		if (hiddenPresets.length) addLink('prikaži sve', showAllPresets);
+
+		heading.appendChild(links);
+		return heading;
+	}
+
 	function renderManage() {
 		manageDiv.replaceChildren();
 		manageDiv.appendChild(el('div', { class: 'ms-manage-title', text: 'Moji predlošci' }));
 		manageDiv.appendChild(el('div', { class: 'ms-save' }, [nameInput, saveBtn]));
 		if (sharedMapView && sharedMapView.name) manageDiv.appendChild(buildSharedRow());
-		if (!userPresets.length) {
+		if (userPresets.length) {
+			userPresets.forEach(preset => manageDiv.appendChild(buildManageRow(preset)));
+		} else {
 			manageDiv.appendChild(el('div', { class: 'ms-manage-empty', text: 'Nema spremljenih predložaka' }));
-			return;
 		}
-		userPresets.forEach(preset => manageDiv.appendChild(buildManageRow(preset)));
+
+		// the built-ins are listed too, so a hidden one can be brought back
+		// individually and not only through "prikaži sve"
+		manageDiv.appendChild(buildBuiltinHeading());
+		MAP_PRESETS.forEach(preset => manageDiv.appendChild(buildBuiltinRow(preset)));
+
 		// only ever present right after a rename was started, so this cannot
 		// steal focus on an ordinary re-render
 		const editing = manageDiv.querySelector('.ms-rename');

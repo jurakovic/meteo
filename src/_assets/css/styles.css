@@ -568,7 +568,29 @@ body.fs-lock {
 	}
 
 		.map-settings .ms-manage-title {
+			display: flex;
+			justify-content: space-between;
+			align-items: baseline;
 			margin-bottom: 6px;
+		}
+
+			.map-settings .ms-manage-title a {
+				cursor: pointer;
+				user-select: none;
+				text-decoration: none;
+			}
+
+			.map-settings .ms-manage-title-links {
+				display: flex;
+				gap: 12px;
+			}
+
+		/* a heading following rows rules the two groups apart */
+		.map-settings .ms-manage-item + .ms-manage-title,
+		.map-settings .ms-manage-empty + .ms-manage-title {
+			padding-top: 8px;
+			margin-top: 8px;
+			border-top: 1px solid #485871;
 		}
 
 		.map-settings .ms-save {
@@ -624,8 +646,28 @@ body.fs-lock {
 			white-space: nowrap;
 		}
 
+		/* hidden built-ins stay listed so they can be brought back one by one.
+		   The whole row dims so it reads as one "off" unit, and lifts on hover
+		   so the link that undoes it is at full contrast when reached for —
+		   kept legible on its own, since touch never hovers */
+		.map-settings .ms-manage-item.ms-hidden {
+			opacity: 0.55;
+		}
+
+			.map-settings .ms-manage-item.ms-hidden:hover,
+			.map-settings .ms-manage-item.ms-hidden:focus-within {
+				opacity: 1;
+			}
+
+		/* fixed slots so the actions read as columns down the list rather than
+		   sitting wherever the word lengths leave them; the panel font is
+		   monospace, so ch widths hold exactly (the widest words are the
+		   9-character "preimenuj" and the "kopirano!" the share link flashes) */
 		.map-settings .ms-manage-links {
 			flex: none;
+			display: grid;
+			grid-template-columns: 9ch 9ch 8ch;
+			gap: 10px;
 			white-space: nowrap;
 		}
 
