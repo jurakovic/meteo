@@ -563,7 +563,8 @@ const DEFAULT_MAPS = [
 
 // every preset carries its own id list, so resolving one is a plain lookup
 const MAP_PRESETS = [
-	{ id: 'zadano', name: 'Zadano', maps: DEFAULT_MAPS },
+	// the id stays 'zadano': it is written into saved preferences and shared links
+	{ id: 'zadano', name: 'Osnovno', maps: DEFAULT_MAPS },
 	{
 		id: 'vise', name: 'Više',
 		maps: [
