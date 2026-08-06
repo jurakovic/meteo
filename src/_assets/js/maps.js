@@ -231,7 +231,7 @@ const MAP_CATALOG = [
 		category: 'nevrijeme',
 		name: 'ESSL | Prognoza nevremena',
 		type: 'slideshow',
-		titleHref: 'https://www.stormforecast.eu',
+		titleHref: 'https://stormforecast.eu',
 		maxWidth: 900,
 		aspect: '900 / 600',
 		startSlide: 2,
