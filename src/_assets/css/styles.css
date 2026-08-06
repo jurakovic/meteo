@@ -707,11 +707,17 @@ body.fs-lock {
 		}
 
 	.map-settings .ms-actions {
-		padding-top: 8px;
+		padding: 8px 0;
 		margin-top: 8px;
 		border-top: 1px solid #485871;
 		text-align: center;
 	}
+
+		/* mid-panel now, so the sort row's own rule closes it off and the
+		   buttons keep equal air on both sides */
+		.map-settings .ms-actions + .ms-sort {
+			margin-top: 0;
+		}
 
 		.map-settings .ms-actions .btn + .btn {
 			margin-left: 8px;

@@ -1503,12 +1503,14 @@ function buildMapSettings(panel) {
 		copyMapViewLink(readSharePrefs(), () => flashLabel(shareBtn, 'Kopirano!', 'Podijeli'));
 	});
 
+	// the actions sit right under the render order they act on, rather than at
+	// the far end of the picker and the preset management below it
 	panel.appendChild(presetsDiv);
 	panel.appendChild(selectedDiv);
+	panel.appendChild(el('div', { class: 'ms-actions' }, [applyBtn, shareBtn]));
 	panel.appendChild(sortDiv);
 	panel.appendChild(availableDiv);
 	panel.appendChild(manageDiv);
-	panel.appendChild(el('div', { class: 'ms-actions' }, [applyBtn, shareBtn]));
 }
 
 // in dev this is a deferred external script, so the DOM is already parsed and
