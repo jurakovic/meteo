@@ -729,6 +729,33 @@ function decodeMapView(value) {
 	return null;
 }
 
+// a saved preset's id means nothing to a recipient, so it travels as its
+// contents plus its name — the name is only a label to save it under
+function presetSharePrefs(preset) {
+	return { preset: 'custom', maps: preset.maps.slice(), name: preset.name };
+}
+
+// navigator.clipboard only exists in secure contexts (https/localhost), e.g.
+// not on http://<LAN-IP>; fall back to a copyable prompt there — and again if
+// the write itself is refused (permissions, lost focus)
+function copyMapViewLink(prefs, onCopied) {
+	const url = new URL(window.location.origin + window.location.pathname);
+	url.searchParams.set('v', encodeMapView(prefs));
+	const link = url.toString();
+	const promptCopy = () => window.prompt('Kopiraj poveznicu:', link);
+	if (navigator.clipboard && navigator.clipboard.writeText) {
+		navigator.clipboard.writeText(link).then(onCopied).catch(promptCopy);
+	} else {
+		promptCopy();
+	}
+}
+
+// confirms a copy in place, since the panel has no other feedback channel
+function flashLabel(node, text, restore) {
+	node.textContent = text;
+	setTimeout(() => { node.textContent = restore; }, 1500);
+}
+
 let sharedMapView = (() => {
 	const value = new URLSearchParams(window.location.search).get('v');
 	return value ? decodeMapView(value) : null;
@@ -1181,13 +1208,12 @@ function buildMapSettings(panel) {
 		return { preset: presetId };
 	}
 
-	// a saved preset's id means nothing to a recipient, so a shared link carries
-	// its contents and its name instead — the name is only a label to save it under
+	// the panel's own share button carries whatever is on screen, expanding a
+	// saved preset the same way the per-preset links do
 	function readSharePrefs() {
 		const prefs = readPanelPrefs();
 		const preset = userPresets.find(p => p.id === prefs.preset);
-		if (!preset) return prefs;
-		return { preset: 'custom', maps: preset.maps.slice(), name: preset.name };
+		return preset ? presetSharePrefs(preset) : prefs;
 	}
 
 	// ----- saved preset management -----
@@ -1224,12 +1250,23 @@ function buildMapSettings(panel) {
 	function buildManageRow(preset) {
 		if (preset.id === renamingId) return buildRenameRow(preset);
 
+		const shareLink = el('a', { text: 'podijeli' });
 		const renameLink = el('a', { text: 'preimenuj' });
 		const deleteLink = el('a', { text: 'obriši' });
 		const row = el('div', { class: 'ms-manage-item' }, [
 			el('span', { class: 'ms-manage-name', text: preset.name }),
-			el('span', { class: 'ms-manage-links' }, [renameLink, document.createTextNode(' · '), deleteLink])
+			el('span', { class: 'ms-manage-links' }, [
+				shareLink, document.createTextNode(' · '),
+				renameLink, document.createTextNode(' · '),
+				deleteLink
+			])
 		]);
+
+		// shares the preset as saved — the panel's Podijeli button is the one
+		// that carries unsaved edits to the list
+		shareLink.addEventListener('click', () => {
+			copyMapViewLink(presetSharePrefs(preset), () => flashLabel(shareLink, 'kopirano!', 'podijeli'));
+		});
 
 		renameLink.addEventListener('click', () => {
 			renamingId = preset.id;
@@ -1353,21 +1390,7 @@ function buildMapSettings(panel) {
 
 	const shareBtn = el('button', { type: 'button', class: 'btn', text: 'Podijeli' });
 	shareBtn.addEventListener('click', () => {
-		const url = new URL(window.location.origin + window.location.pathname);
-		url.searchParams.set('v', encodeMapView(readSharePrefs()));
-		const link = url.toString();
-		// navigator.clipboard only exists in secure contexts (https/localhost),
-		// e.g. not on http://<LAN-IP>; fall back to a copyable prompt there —
-		// and again if the write itself is refused (permissions, lost focus)
-		const promptCopy = () => window.prompt('Kopiraj poveznicu:', link);
-		if (navigator.clipboard && navigator.clipboard.writeText) {
-			navigator.clipboard.writeText(link).then(() => {
-				shareBtn.textContent = 'Kopirano!';
-				setTimeout(() => { shareBtn.textContent = 'Podijeli'; }, 1500);
-			}).catch(promptCopy);
-		} else {
-			promptCopy();
-		}
+		copyMapViewLink(readSharePrefs(), () => flashLabel(shareBtn, 'Kopirano!', 'Podijeli'));
 	});
 
 	panel.appendChild(presetsDiv);

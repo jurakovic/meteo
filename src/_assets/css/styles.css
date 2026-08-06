@@ -605,6 +605,10 @@ body.fs-lock {
 		.map-settings .ms-manage-item,
 		.map-settings .ms-shared {
 			display: flex;
+			/* three action links leave little room on a phone: rather than pick a
+			   breakpoint, let them drop to their own line once the name is down
+			   to its minimum */
+			flex-wrap: wrap;
 			justify-content: space-between;
 			align-items: center;
 			gap: 8px;
@@ -613,6 +617,8 @@ body.fs-lock {
 
 		/* a long name shortens instead of pushing the links off the row */
 		.map-settings .ms-manage-name {
+			flex: 1;
+			min-width: 6em;
 			overflow: hidden;
 			text-overflow: ellipsis;
 			white-space: nowrap;
@@ -620,6 +626,7 @@ body.fs-lock {
 
 		.map-settings .ms-manage-links {
 			flex: none;
+			white-space: nowrap;
 		}
 
 			.map-settings .ms-manage-links a,
