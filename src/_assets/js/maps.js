@@ -591,17 +591,19 @@ const MAP_PRESETS = [
 
 const MAP_PREFS_KEY = 'mapPrefs';
 
-// 'custom' is a runtime-only preset (not in MAP_PRESETS); everything else must
-// name a real preset or it can't be selected/rendered — coerce unknown ids
-// (older/newer site version, hand-crafted ?v=) so a stale value isn't kept
-function isKnownPreset(id) {
-	return id === 'custom' || MAP_PRESETS.some(p => p.id === id);
+// guards both untrusted sources (localStorage, ?v=): 'custom' is a runtime-only
+// preset (not in MAP_PRESETS), everything else must name a real preset or it
+// can't be selected/rendered — unknown ids (older/newer site version,
+// hand-crafted ?v=) are rejected so a stale value isn't kept
+function isValidPrefs(prefs) {
+	return prefs && typeof prefs.preset === 'string'
+		&& (prefs.preset === 'custom' || MAP_PRESETS.some(p => p.id === prefs.preset));
 }
 
 function getMapPrefs() {
 	try {
 		const prefs = JSON.parse(localStorage.getItem(MAP_PREFS_KEY));
-		if (prefs && typeof prefs.preset === 'string' && isKnownPreset(prefs.preset)) return prefs;
+		if (isValidPrefs(prefs)) return prefs;
 	} catch (e) { /* corrupt storage falls through to default */ }
 	return { preset: 'zadano' };
 }
@@ -636,7 +638,7 @@ function encodeMapView(prefs) {
 function decodeMapView(value) {
 	try {
 		const prefs = JSON.parse(atob(value.replace(/-/g, '+').replace(/_/g, '/')));
-		if (prefs && typeof prefs.preset === 'string' && isKnownPreset(prefs.preset)) return prefs;
+		if (isValidPrefs(prefs)) return prefs;
 	} catch (e) { /* malformed parameter falls through */ }
 	return null;
 }
