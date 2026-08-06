@@ -568,11 +568,14 @@ body.fs-lock {
 		border-top: 1px solid #485871;
 	}
 
+		/* the accent means "active" and dimming means "hidden", so weight is what
+		   is left to mark these as structure rather than another row */
 		.map-settings .ms-manage-title {
 			display: flex;
 			justify-content: space-between;
 			align-items: baseline;
 			margin-bottom: 6px;
+			font-weight: bold;
 		}
 
 			.map-settings .ms-manage-title a {
@@ -581,9 +584,11 @@ body.fs-lock {
 				text-decoration: none;
 			}
 
+			/* the heading's own actions are links like any other, not part of the label */
 			.map-settings .ms-manage-title-links {
 				display: flex;
 				gap: 12px;
+				font-weight: normal;
 			}
 
 		/* a heading following rows rules the two groups apart */
