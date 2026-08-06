@@ -65,8 +65,10 @@ const STORM_LINKS = [
 	{ text: 'ESWD', href: 'https://www.eswd.eu' }
 ];
 
-function except(links, ...names) {
-	return links.filter(link => !names.includes(link.text));
+// a map's own site is already linked from its title bar, so drop it from the
+// row of alternatives below
+function except(links, name) {
+	return links.filter(link => link.text !== name);
 }
 
 // ---------- map catalog ----------
