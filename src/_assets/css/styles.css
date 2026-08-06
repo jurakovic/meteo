@@ -498,6 +498,24 @@ body.fs-lock {
 		margin: 0 6px 0 4px;
 	}
 
+	/* both sections empty out at the ends of the range: "Ništa" leaves nothing
+	   selected, "Sve" leaves nothing available; the lists hold only rows, so
+	   :empty is enough and no placeholder node has to be kept in sync */
+	.map-settings .ms-list:empty::before {
+		display: block;
+		padding: 2px 0;
+		font-style: italic;
+		opacity: 0.6;
+	}
+
+	.map-settings .ms-selected:empty::before {
+		content: "Nema odabranih karata";
+	}
+
+	.map-settings .ms-available:empty::before {
+		content: "Sve su karte odabrane";
+	}
+
 	/* rows in the available section are not part of the render order */
 	.map-settings .ms-available .ms-handle {
 		display: none;
@@ -569,6 +587,14 @@ body.fs-lock {
 			.map-settings .ms-actions .btn + .btn {
 				margin-left: 8px;
 			}
+
+/* stands in for the maps when the view resolves to none ("Ništa") */
+.maps-empty {
+	padding: 20px 0;
+	font-size: 13px;
+	font-style: italic;
+	opacity: 0.6;
+}
 
 .slideshow {
 	position: relative;

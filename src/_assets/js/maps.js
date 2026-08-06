@@ -840,9 +840,16 @@ function renderMaps() {
 	const tbody = document.querySelector('tbody[data-maps]');
 	if (!tbody) return;
 	tbody.replaceChildren();
-	resolveMapIds().forEach((id, i) => {
-		const map = MAP_CATALOG.find(m => m.id === id);
-		if (!map) return;
+	const maps = resolveMapIds().map(id => MAP_CATALOG.find(m => m.id === id)).filter(Boolean);
+	if (!maps.length) {
+		tbody.appendChild(el('tr', {}, [
+			el('td', { align: 'center' }, [
+				el('div', { class: 'maps-empty', text: 'Nema odabranih karata. Odaberite ih pod „Karte”.' })
+			])
+		]));
+		return;
+	}
+	maps.forEach((map, i) => {
 		if (i > 0) tbody.appendChild(el('tr', { class: 'sp20' }));
 		const td = el('td', { align: 'center' });
 		buildMapContent(map).forEach(node => {
