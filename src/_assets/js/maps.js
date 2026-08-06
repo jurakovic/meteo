@@ -1280,6 +1280,10 @@ function buildMapSettings(panel) {
 
 	const manageDiv = el('div', { class: 'ms-manage' });
 
+	// whether the name field is open; the field itself outlives every re-render
+	// so what was typed survives a row being deleted or hidden underneath it
+	let addingPreset = false;
+
 	const nameInput = el('input', {
 		type: 'text', class: 'ms-name', maxlength: String(PRESET_NAME_MAX),
 		placeholder: 'Naziv predloška'
@@ -1289,6 +1293,7 @@ function buildMapSettings(panel) {
 	function saveCurrentAs(name) {
 		const preset = storeUserPreset(name, selectedMapIds());
 		nameInput.value = '';
+		addingPreset = false; // the form has done its job
 		renderPresets(preset.id); // saving selects what was just saved
 		renderManage();
 		revealPresetOption(presetsDiv.querySelector('input:checked'), true);
@@ -1301,6 +1306,11 @@ function buildMapSettings(panel) {
 	});
 	nameInput.addEventListener('keydown', (e) => {
 		if (e.key === 'Enter') { e.preventDefault(); saveBtn.click(); }
+		else if (e.key === 'Escape') { // same way out as the rename editor
+			addingPreset = false;
+			nameInput.value = '';
+			renderManage();
+		}
 	});
 
 	// which preset is being renamed, if any; renderManage builds that one row as
@@ -1461,10 +1471,26 @@ function buildMapSettings(panel) {
 		return heading;
 	}
 
+	// the name field is only worth its space while a preset is being added, so
+	// it lives behind "dodaj" and folds away again once one is saved
+	function buildUserHeading() {
+		const heading = el('div', { class: 'ms-manage-title', text: 'Moji predlošci' });
+		const addLink = el('a', { text: addingPreset ? 'odustani' : 'dodaj' });
+		addLink.addEventListener('click', () => {
+			addingPreset = !addingPreset;
+			if (!addingPreset) nameInput.value = '';
+			renderManage();
+			// nameInput outlives the re-render, so this reaches the live field
+			if (addingPreset) nameInput.focus();
+		});
+		heading.appendChild(el('span', { class: 'ms-manage-title-links' }, [addLink]));
+		return heading;
+	}
+
 	function renderManage() {
 		manageDiv.replaceChildren();
-		manageDiv.appendChild(el('div', { class: 'ms-manage-title', text: 'Moji predlošci' }));
-		manageDiv.appendChild(el('div', { class: 'ms-save' }, [nameInput, saveBtn]));
+		manageDiv.appendChild(buildUserHeading());
+		if (addingPreset) manageDiv.appendChild(el('div', { class: 'ms-save' }, [nameInput, saveBtn]));
 		if (sharedMapView && sharedMapView.name) manageDiv.appendChild(buildSharedRow());
 		if (userPresets.length) {
 			userPresets.forEach(preset => manageDiv.appendChild(buildManageRow(preset)));
