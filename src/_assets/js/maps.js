@@ -1327,16 +1327,16 @@ function buildMapSettings(panel) {
 	// carries unsaved edits to the list. Built-ins share by id, which every
 	// visitor resolves; a saved preset has to carry its contents instead.
 	function buildShareLink(getPrefs) {
-		const link = el('a', { text: 'podijeli' });
+		const link = el('a', { text: 'Podijeli' });
 		link.addEventListener('click', () => {
-			copyMapViewLink(getPrefs(), () => flashLabel(link, 'kopirano!', 'podijeli'));
+			copyMapViewLink(getPrefs(), () => flashLabel(link, 'Kopirano!', 'Podijeli'));
 		});
 		return link;
 	}
 
 	function buildBuiltinRow(preset) {
 		const hidden = isPresetHidden(preset.id);
-		const toggleLink = el('a', { text: hidden ? 'prikaži' : 'sakrij' });
+		const toggleLink = el('a', { text: hidden ? 'Prikaži' : 'Sakrij' });
 		toggleLink.addEventListener('click', () => {
 			setPresetHidden(preset.id, !hidden);
 			// renderPresets drops a selection that just became invisible
@@ -1352,8 +1352,8 @@ function buildMapSettings(panel) {
 	function buildManageRow(preset) {
 		if (preset.id === renamingId) return buildRenameRow(preset);
 
-		const renameLink = el('a', { text: 'preimenuj' });
-		const deleteLink = el('a', { text: 'obriši' });
+		const renameLink = el('a', { text: 'Preimenuj' });
+		const deleteLink = el('a', { text: 'Obriši' });
 		const row = el('div', { class: 'ms-manage-item' }, [
 			el('span', { class: 'ms-manage-name', text: preset.name }),
 			buildLinkCells([buildShareLink(() => presetSharePrefs(preset)), renameLink, deleteLink])
@@ -1370,12 +1370,12 @@ function buildMapSettings(panel) {
 		const disarm = () => {
 			clearTimeout(armed);
 			armed = null;
-			deleteLink.textContent = 'obriši';
+			deleteLink.textContent = 'Obriši';
 			deleteLink.classList.remove('active');
 		};
 		deleteLink.addEventListener('click', () => {
 			if (!armed) {
-				deleteLink.textContent = 'sigurno?';
+				deleteLink.textContent = 'Sigurno?';
 				deleteLink.classList.add('active');
 				armed = setTimeout(disarm, 3000);
 				return;
@@ -1391,14 +1391,14 @@ function buildMapSettings(panel) {
 		return row;
 	}
 
-	// the name is only committed on "potvrdi" or Enter — never on leaving the
+	// the name is only committed on "Potvrdi" or Enter — never on leaving the
 	// field, so clicking elsewhere can't rename anything behind your back
 	function buildRenameRow(preset) {
 		const input = el('input', {
 			type: 'text', class: 'ms-name ms-rename', maxlength: String(PRESET_NAME_MAX), value: preset.name
 		});
-		const confirmLink = el('a', { text: 'potvrdi' });
-		const cancelLink = el('a', { text: 'odustani' });
+		const confirmLink = el('a', { text: 'Potvrdi' });
+		const cancelLink = el('a', { text: 'Odustani' });
 
 		const commit = () => {
 			const name = cleanPresetName(input.value);
@@ -1430,7 +1430,7 @@ function buildMapSettings(panel) {
 		confirmLink.addEventListener('click', commit);
 		cancelLink.addEventListener('click', cancel);
 
-		// potvrdi and odustani sit under preimenuj and obriši, the actions they stand in for
+		// Potvrdi and Odustani sit under Preimenuj and Obriši, the actions they stand in for
 		return el('div', { class: 'ms-manage-item' }, [
 			input,
 			buildLinkCells([null, confirmLink, cancelLink])
@@ -1464,18 +1464,18 @@ function buildMapSettings(panel) {
 		};
 
 		// each shown only while it would do something
-		if (hiddenPresets.length < MAP_PRESETS.length) addLink('sakrij sve', hideAllPresets);
-		if (hiddenPresets.length) addLink('prikaži sve', showAllPresets);
+		if (hiddenPresets.length < MAP_PRESETS.length) addLink('Sakrij sve', hideAllPresets);
+		if (hiddenPresets.length) addLink('Prikaži sve', showAllPresets);
 
 		heading.appendChild(links);
 		return heading;
 	}
 
 	// the name field is only worth its space while a preset is being added, so
-	// it lives behind "dodaj" and folds away again once one is saved
+	// it lives behind "Dodaj" and folds away again once one is saved
 	function buildUserHeading() {
 		const heading = el('div', { class: 'ms-manage-title', text: 'Moji predlošci' });
-		const addLink = el('a', { text: addingPreset ? 'odustani' : 'dodaj' });
+		const addLink = el('a', { text: addingPreset ? 'Odustani' : 'Dodaj' });
 		addLink.addEventListener('click', () => {
 			addingPreset = !addingPreset;
 			if (!addingPreset) nameInput.value = '';
@@ -1499,7 +1499,7 @@ function buildMapSettings(panel) {
 		}
 
 		// the built-ins are listed too, so a hidden one can be brought back
-		// individually and not only through "prikaži sve"
+		// individually and not only through "Prikaži sve"
 		manageDiv.appendChild(buildBuiltinHeading());
 		MAP_PRESETS.forEach(preset => manageDiv.appendChild(buildBuiltinRow(preset)));
 

@@ -662,7 +662,7 @@ body.fs-lock {
 		/* fixed slots so the actions read as columns down the list rather than
 		   sitting wherever the word lengths leave them; the panel font is
 		   monospace, so ch widths hold exactly (the widest words are the
-		   9-character "preimenuj" and the "kopirano!" the share link flashes) */
+		   9-character "Preimenuj" and the "Kopirano!" the share link flashes) */
 		.map-settings .ms-manage-links {
 			flex: none;
 			display: grid;
