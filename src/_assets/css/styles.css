@@ -528,9 +528,10 @@ body.fs-lock {
 		align-items: baseline;
 		gap: 14px;
 		padding: 6px 0;
-		margin: 6px 0;
+		/* no rule below: sorting only reaches the list underneath, so the row
+		   reads as its header rather than a band between the two lists */
+		margin: 6px 0 0;
 		border-top: 1px solid #485871;
-		border-bottom: 1px solid #485871;
 	}
 
 		.map-settings .ms-sort a {
