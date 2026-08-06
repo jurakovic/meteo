@@ -1217,42 +1217,23 @@ function buildMapSettings(panel) {
 		if (e.key === 'Enter') { e.preventDefault(); saveBtn.click(); }
 	});
 
+	// which preset is being renamed, if any; renderManage builds that one row as
+	// an editor, so starting a second rename closes the first on its own
+	let renamingId = null;
+
 	function buildManageRow(preset) {
-		const nameSpan = el('span', { class: 'ms-manage-name', text: preset.name });
+		if (preset.id === renamingId) return buildRenameRow(preset);
+
 		const renameLink = el('a', { text: 'preimenuj' });
 		const deleteLink = el('a', { text: 'obriši' });
 		const row = el('div', { class: 'ms-manage-item' }, [
-			nameSpan,
+			el('span', { class: 'ms-manage-name', text: preset.name }),
 			el('span', { class: 'ms-manage-links' }, [renameLink, document.createTextNode(' · '), deleteLink])
 		]);
 
 		renameLink.addEventListener('click', () => {
-			const input = el('input', {
-				type: 'text', class: 'ms-name', maxlength: String(PRESET_NAME_MAX), value: preset.name
-			});
-			// Enter and blur commit, Escape reverts; the guard keeps the blur that
-			// follows either key from committing a second time
-			let settled = false;
-			const settle = (keep) => {
-				if (settled) return;
-				settled = true;
-				const name = cleanPresetName(input.value);
-				const clash = findUserPresetByName(name);
-				if (keep && name && (!clash || clash === preset)) {
-					preset.name = name;
-					saveUserPresets();
-					renderPresets(checkedPresetId());
-				}
-				renderManage();
-			};
-			input.addEventListener('keydown', (e) => {
-				if (e.key === 'Enter') settle(true);
-				else if (e.key === 'Escape') settle(false);
-			});
-			input.addEventListener('blur', () => settle(true));
-			row.replaceChild(input, nameSpan);
-			input.focus();
-			input.select();
+			renamingId = preset.id;
+			renderManage();
 		});
 
 		// two-step instead of a confirm() dialog: the first click arms the link,
@@ -1282,6 +1263,51 @@ function buildMapSettings(panel) {
 		return row;
 	}
 
+	// the name is only committed on "potvrdi" or Enter — never on leaving the
+	// field, so clicking elsewhere can't rename anything behind your back
+	function buildRenameRow(preset) {
+		const input = el('input', {
+			type: 'text', class: 'ms-name ms-rename', maxlength: String(PRESET_NAME_MAX), value: preset.name
+		});
+		const confirmLink = el('a', { text: 'potvrdi' });
+		const cancelLink = el('a', { text: 'odustani' });
+
+		const commit = () => {
+			const name = cleanPresetName(input.value);
+			const clash = findUserPresetByName(name);
+			// empty, or a name another preset already holds: stay in the editor and
+			// mark the field rather than silently dropping what was typed
+			if (!name || (clash && clash !== preset)) {
+				input.classList.add('invalid');
+				input.focus();
+				return;
+			}
+			preset.name = name;
+			saveUserPresets();
+			renamingId = null;
+			renderPresets(checkedPresetId());
+			renderManage();
+		};
+
+		const cancel = () => {
+			renamingId = null;
+			renderManage();
+		};
+
+		input.addEventListener('keydown', (e) => {
+			if (e.key === 'Enter') { e.preventDefault(); commit(); }
+			else if (e.key === 'Escape') cancel();
+		});
+		input.addEventListener('input', () => input.classList.remove('invalid'));
+		confirmLink.addEventListener('click', commit);
+		cancelLink.addEventListener('click', cancel);
+
+		return el('div', { class: 'ms-manage-item' }, [
+			input,
+			el('span', { class: 'ms-manage-links' }, [confirmLink, document.createTextNode(' · '), cancelLink])
+		]);
+	}
+
 	function buildSharedRow() {
 		const saveLink = el('a', { text: 'Spremi' });
 		saveLink.addEventListener('click', () => {
@@ -1304,6 +1330,13 @@ function buildMapSettings(panel) {
 			return;
 		}
 		userPresets.forEach(preset => manageDiv.appendChild(buildManageRow(preset)));
+		// only ever present right after a rename was started, so this cannot
+		// steal focus on an ordinary re-render
+		const editing = manageDiv.querySelector('.ms-rename');
+		if (editing) {
+			editing.focus();
+			editing.select();
+		}
 	}
 
 	renderManage();

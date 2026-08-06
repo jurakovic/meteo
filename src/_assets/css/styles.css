@@ -592,6 +592,11 @@ body.fs-lock {
 			padding: 0 6px;
 		}
 
+		/* a rejected rename (empty or already taken) keeps the editor open */
+		.map-settings .ms-name.invalid {
+			border-color: #ff9800;
+		}
+
 		.map-settings .ms-save .btn {
 			flex: none;
 			padding: 0 14px;
