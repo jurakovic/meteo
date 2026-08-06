@@ -589,17 +589,96 @@ const MAP_PRESETS = [
 	{ id: 'nista', name: 'Ništa', maps: [] }
 ];
 
+// ---------- user presets (localStorage) ----------
+// Saved views take the same { id, name, maps } shape as the built-ins, so the
+// preset bar, presetMapIds and the stored preferences treat both alike. Ids
+// are prefixed to keep them out of the built-in namespace, which leaves the
+// name free to change — renaming never breaks a saved preference or selection.
+
+const USER_PRESETS_KEY = 'mapUserPresets';
+const USER_PRESET_PREFIX = 'u:';
+const PRESET_NAME_MAX = 40;
+
+function isValidPreset(preset) {
+	return preset && typeof preset.id === 'string' && preset.id.startsWith(USER_PRESET_PREFIX)
+		&& typeof preset.name === 'string' && Array.isArray(preset.maps);
+}
+
+function loadUserPresets() {
+	try {
+		const list = JSON.parse(localStorage.getItem(USER_PRESETS_KEY));
+		if (Array.isArray(list)) return list.filter(isValidPreset);
+	} catch (e) { /* corrupt storage falls through to none */ }
+	return [];
+}
+
+// read once: allPresets runs on every validation and panel build
+let userPresets = loadUserPresets();
+
+function saveUserPresets() {
+	try {
+		localStorage.setItem(USER_PRESETS_KEY, JSON.stringify(userPresets));
+	} catch (e) { /* storage disabled or full — the presets still work this session */ }
+}
+
+function allPresets() {
+	return MAP_PRESETS.concat(userPresets);
+}
+
+function newPresetId() {
+	let id;
+	do { id = USER_PRESET_PREFIX + Date.now().toString(36) + Math.random().toString(36).slice(2, 6); }
+	while (userPresets.some(preset => preset.id === id));
+	return id;
+}
+
+// the name is the handle for overwriting, so it has to stay printable and bounded
+function cleanPresetName(name) {
+	return String(name).trim().replace(/\s+/g, ' ').slice(0, PRESET_NAME_MAX);
+}
+
+function findUserPresetByName(name) {
+	return userPresets.find(preset => preset.name.toLowerCase() === name.toLowerCase());
+}
+
+// saving under an existing name updates that preset — the way to amend a saved
+// view is to edit the list and save it again under the same name
+function storeUserPreset(name, maps) {
+	const existing = findUserPresetByName(name);
+	if (existing) {
+		existing.name = name;
+		existing.maps = maps;
+	} else {
+		userPresets.push({ id: newPresetId(), name: name, maps: maps });
+	}
+	saveUserPresets();
+	return existing || userPresets[userPresets.length - 1];
+}
+
+// for a preset arriving from someone else's link, where silently overwriting a
+// preset of the recipient's own would lose their list
+function uniquePresetName(name) {
+	let candidate = name;
+	for (let n = 2; findUserPresetByName(candidate); n++) candidate = `${name} (${n})`;
+	return cleanPresetName(candidate);
+}
+
+function deleteUserPreset(id) {
+	userPresets = userPresets.filter(preset => preset.id !== id);
+	saveUserPresets();
+}
+
 // ---------- preferences (localStorage) ----------
 
 const MAP_PREFS_KEY = 'mapPrefs';
 
 // guards both untrusted sources (localStorage, ?v=): 'custom' is a runtime-only
 // preset (not in MAP_PRESETS), everything else must name a real preset or it
-// can't be selected/rendered — unknown ids (older/newer site version,
-// hand-crafted ?v=) are rejected so a stale value isn't kept
+// can't be selected/rendered — unknown ids (older/newer site version, a deleted
+// user preset, hand-crafted ?v=) are rejected so a stale value isn't kept
 function isValidPrefs(prefs) {
 	return prefs && typeof prefs.preset === 'string'
-		&& (prefs.preset === 'custom' || MAP_PRESETS.some(p => p.id === prefs.preset));
+		&& (prefs.preset === 'custom' || allPresets().some(p => p.id === prefs.preset));
 }
 
 function getMapPrefs() {
@@ -617,7 +696,7 @@ function saveMapPrefs(prefs) {
 }
 
 function presetMapIds(presetId) {
-	const preset = MAP_PRESETS.find(p => p.id === presetId);
+	const preset = allPresets().find(p => p.id === presetId);
 	return preset ? preset.maps : null;
 }
 
@@ -640,7 +719,12 @@ function encodeMapView(prefs) {
 function decodeMapView(value) {
 	try {
 		const prefs = JSON.parse(atob(value.replace(/-/g, '+').replace(/_/g, '/')));
-		if (isValidPrefs(prefs)) return prefs;
+		if (isValidPrefs(prefs)) {
+			// a shared saved preset travels as its contents plus its name, which
+			// the panel offers to save — it lands in storage, so bound it here
+			if (prefs.name) prefs.name = cleanPresetName(prefs.name);
+			return prefs;
+		}
 	} catch (e) { /* malformed parameter falls through */ }
 	return null;
 }
@@ -1060,30 +1144,169 @@ function buildMapSettings(panel) {
 	}
 
 	const presetsDiv = el('div', { class: 'ms-presets' });
-	const presetOptions = [...MAP_PRESETS, { id: 'custom', name: 'Prilagođeno' }];
-	presetOptions.forEach(preset => {
-		const radio = el('input', { type: 'radio', name: 'msPreset', value: preset.id });
-		radio.checked = prefs.preset === preset.id;
-		radio.addEventListener('change', () => {
-			// switching to a named preset previews its list; "custom" keeps the current list
-			if (preset.id !== 'custom') fillList(presetMapIds(preset.id));
+
+	// rebuilt whenever the saved presets change, so they sit in the same bar
+	// as the built-ins and stay selectable the same way
+	function renderPresets(selectedId) {
+		presetsDiv.replaceChildren();
+		[...allPresets(), { id: 'custom', name: 'Prilagođeno' }].forEach(preset => {
+			const radio = el('input', { type: 'radio', name: 'msPreset', value: preset.id });
+			radio.checked = preset.id === selectedId;
+			radio.addEventListener('change', () => {
+				// switching to a named preset previews its list; "custom" keeps the current list
+				if (preset.id !== 'custom') fillList(presetMapIds(preset.id));
+			});
+			presetsDiv.appendChild(el('label', {}, [radio, document.createTextNode(' ' + preset.name)]));
 		});
-		presetsDiv.appendChild(el('label', {}, [radio, document.createTextNode(' ' + preset.name)]));
-	});
+	}
+
 	presetsDiv.addEventListener('scroll', () => updateLinksScrollShadow(presetsDiv), { passive: true });
+	renderPresets(prefs.preset);
 
 	fillList(resolveMapIds());
 
-	function readPanelPrefs() {
+	function checkedPresetId() {
 		const checked = panel.querySelector('input[name="msPreset"]:checked');
-		const presetId = checked ? checked.value : 'zadano';
-		if (presetId === 'custom') {
-			// the selected block holds exactly the checked rows, in render order
-			const ids = [...selectedDiv.children].map(row => row.getAttribute('data-map-id'));
-			return { preset: 'custom', maps: ids };
-		}
+		return checked ? checked.value : 'zadano';
+	}
+
+	// the selected block holds exactly the checked rows, in render order
+	function selectedMapIds() {
+		return [...selectedDiv.children].map(row => row.getAttribute('data-map-id'));
+	}
+
+	function readPanelPrefs() {
+		const presetId = checkedPresetId();
+		if (presetId === 'custom') return { preset: 'custom', maps: selectedMapIds() };
 		return { preset: presetId };
 	}
+
+	// a saved preset's id means nothing to a recipient, so a shared link carries
+	// its contents and its name instead — the name is only a label to save it under
+	function readSharePrefs() {
+		const prefs = readPanelPrefs();
+		const preset = userPresets.find(p => p.id === prefs.preset);
+		if (!preset) return prefs;
+		return { preset: 'custom', maps: preset.maps.slice(), name: preset.name };
+	}
+
+	// ----- saved preset management -----
+
+	const manageDiv = el('div', { class: 'ms-manage' });
+
+	const nameInput = el('input', {
+		type: 'text', class: 'ms-name', maxlength: String(PRESET_NAME_MAX),
+		placeholder: 'Naziv predloška'
+	});
+	const saveBtn = el('button', { type: 'button', class: 'btn', text: 'Spremi' });
+
+	function saveCurrentAs(name) {
+		const preset = storeUserPreset(name, selectedMapIds());
+		nameInput.value = '';
+		renderPresets(preset.id); // saving selects what was just saved
+		renderManage();
+		revealPresetOption(presetsDiv.querySelector('input:checked'), true);
+	}
+
+	saveBtn.addEventListener('click', () => {
+		const name = cleanPresetName(nameInput.value);
+		if (!name) { nameInput.focus(); return; }
+		saveCurrentAs(name);
+	});
+	nameInput.addEventListener('keydown', (e) => {
+		if (e.key === 'Enter') { e.preventDefault(); saveBtn.click(); }
+	});
+
+	function buildManageRow(preset) {
+		const nameSpan = el('span', { class: 'ms-manage-name', text: preset.name });
+		const renameLink = el('a', { text: 'preimenuj' });
+		const deleteLink = el('a', { text: 'obriši' });
+		const row = el('div', { class: 'ms-manage-item' }, [
+			nameSpan,
+			el('span', { class: 'ms-manage-links' }, [renameLink, document.createTextNode(' · '), deleteLink])
+		]);
+
+		renameLink.addEventListener('click', () => {
+			const input = el('input', {
+				type: 'text', class: 'ms-name', maxlength: String(PRESET_NAME_MAX), value: preset.name
+			});
+			// Enter and blur commit, Escape reverts; the guard keeps the blur that
+			// follows either key from committing a second time
+			let settled = false;
+			const settle = (keep) => {
+				if (settled) return;
+				settled = true;
+				const name = cleanPresetName(input.value);
+				const clash = findUserPresetByName(name);
+				if (keep && name && (!clash || clash === preset)) {
+					preset.name = name;
+					saveUserPresets();
+					renderPresets(checkedPresetId());
+				}
+				renderManage();
+			};
+			input.addEventListener('keydown', (e) => {
+				if (e.key === 'Enter') settle(true);
+				else if (e.key === 'Escape') settle(false);
+			});
+			input.addEventListener('blur', () => settle(true));
+			row.replaceChild(input, nameSpan);
+			input.focus();
+			input.select();
+		});
+
+		// two-step instead of a confirm() dialog: the first click arms the link,
+		// a second within a few seconds deletes, and it disarms itself otherwise
+		let armed = null;
+		const disarm = () => {
+			clearTimeout(armed);
+			armed = null;
+			deleteLink.textContent = 'obriši';
+			deleteLink.classList.remove('active');
+		};
+		deleteLink.addEventListener('click', () => {
+			if (!armed) {
+				deleteLink.textContent = 'sigurno?';
+				deleteLink.classList.add('active');
+				armed = setTimeout(disarm, 3000);
+				return;
+			}
+			disarm();
+			// the map list on screen is untouched — it just stops being a saved preset
+			const wasSelected = checkedPresetId() === preset.id;
+			deleteUserPreset(preset.id);
+			renderPresets(wasSelected ? 'custom' : checkedPresetId());
+			renderManage();
+		});
+
+		return row;
+	}
+
+	function buildSharedRow() {
+		const saveLink = el('a', { text: 'Spremi' });
+		saveLink.addEventListener('click', () => {
+			// saves what is on screen, so any tweak the recipient made is kept
+			saveCurrentAs(uniquePresetName(sharedMapView.name));
+		});
+		return el('div', { class: 'ms-shared' }, [
+			el('span', { text: `Podijeljen predložak „${sharedMapView.name}”` }),
+			saveLink
+		]);
+	}
+
+	function renderManage() {
+		manageDiv.replaceChildren();
+		manageDiv.appendChild(el('div', { class: 'ms-manage-title', text: 'Moji predlošci' }));
+		manageDiv.appendChild(el('div', { class: 'ms-save' }, [nameInput, saveBtn]));
+		if (sharedMapView && sharedMapView.name) manageDiv.appendChild(buildSharedRow());
+		if (!userPresets.length) {
+			manageDiv.appendChild(el('div', { class: 'ms-manage-empty', text: 'Nema spremljenih predložaka' }));
+			return;
+		}
+		userPresets.forEach(preset => manageDiv.appendChild(buildManageRow(preset)));
+	}
+
+	renderManage();
 
 	const applyBtn = el('button', { type: 'button', class: 'btn', text: 'Primijeni' });
 	applyBtn.addEventListener('click', () => {
@@ -1098,7 +1321,7 @@ function buildMapSettings(panel) {
 	const shareBtn = el('button', { type: 'button', class: 'btn', text: 'Podijeli' });
 	shareBtn.addEventListener('click', () => {
 		const url = new URL(window.location.origin + window.location.pathname);
-		url.searchParams.set('v', encodeMapView(readPanelPrefs()));
+		url.searchParams.set('v', encodeMapView(readSharePrefs()));
 		const link = url.toString();
 		// navigator.clipboard only exists in secure contexts (https/localhost),
 		// e.g. not on http://<LAN-IP>; fall back to a copyable prompt there —
@@ -1118,6 +1341,7 @@ function buildMapSettings(panel) {
 	panel.appendChild(selectedDiv);
 	panel.appendChild(sortDiv);
 	panel.appendChild(availableDiv);
+	panel.appendChild(manageDiv);
 	panel.appendChild(el('div', { class: 'ms-actions' }, [applyBtn, shareBtn]));
 }
 

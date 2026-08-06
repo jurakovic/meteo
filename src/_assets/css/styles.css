@@ -561,6 +561,97 @@ body.fs-lock {
 			cursor: grabbing;
 		}
 
+	.map-settings .ms-manage {
+		padding-top: 6px;
+		margin-top: 6px;
+		border-top: 1px solid #485871;
+	}
+
+		.map-settings .ms-manage-title {
+			margin-bottom: 6px;
+		}
+
+		.map-settings .ms-save {
+			display: flex;
+			gap: 8px;
+			margin-bottom: 6px;
+		}
+
+		.map-settings .ms-name {
+			/* min-width overrides the input's default intrinsic width, which
+			   would otherwise keep it from shrinking inside the flex row */
+			flex: 1;
+			min-width: 0;
+			font-family: inherit;
+			font-size: 13px;
+			color: white;
+			background-color: #2b3a52;
+			border: 1px solid #485871;
+			outline: none;
+			height: 24px;
+			padding: 0 6px;
+		}
+
+		.map-settings .ms-save .btn {
+			flex: none;
+			padding: 0 14px;
+		}
+
+		.map-settings .ms-manage-item,
+		.map-settings .ms-shared {
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+			gap: 8px;
+			padding: 2px 0;
+		}
+
+		/* a long name shortens instead of pushing the links off the row */
+		.map-settings .ms-manage-name {
+			overflow: hidden;
+			text-overflow: ellipsis;
+			white-space: nowrap;
+		}
+
+		.map-settings .ms-manage-links {
+			flex: none;
+		}
+
+			.map-settings .ms-manage-links a,
+			.map-settings .ms-shared a {
+				cursor: pointer;
+				user-select: none;
+				text-decoration: none;
+			}
+
+			/* armed delete, same accent as the active sort link */
+			.map-settings .ms-manage-links a.active {
+				color: #ff9800;
+			}
+
+		.map-settings .ms-manage-empty {
+			padding: 2px 0;
+			font-style: italic;
+			opacity: 0.6;
+		}
+
+	/* shared by the actions row and the save row */
+	.map-settings .btn {
+		font-size: 13px;
+		font-family: inherit;
+		color: white;
+		background-color: #485871;
+		cursor: pointer;
+		height: 24px;
+		padding: 0 24px;
+		border: none;
+		outline: none;
+	}
+
+		.map-settings .btn:hover {
+			background-color: #5F6F89;
+		}
+
 	.map-settings .ms-actions {
 		padding-top: 8px;
 		margin-top: 8px;
@@ -568,25 +659,9 @@ body.fs-lock {
 		text-align: center;
 	}
 
-		.map-settings .ms-actions .btn {
-			font-size: 13px;
-			font-family: inherit;
-			color: white;
-			background-color: #485871;
-			cursor: pointer;
-			height: 24px;
-			padding: 0 24px;
-			border: none;
-			outline: none;
+		.map-settings .ms-actions .btn + .btn {
+			margin-left: 8px;
 		}
-
-			.map-settings .ms-actions .btn:hover {
-				background-color: #5F6F89;
-			}
-
-			.map-settings .ms-actions .btn + .btn {
-				margin-left: 8px;
-			}
 
 /* stands in for the maps when the view resolves to none ("Ništa") */
 .maps-empty {
