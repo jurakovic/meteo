@@ -1343,9 +1343,13 @@ function buildMapSettings(panel) {
 			renderPresets(checkedPresetId());
 			renderManage();
 		});
+		// no share link: a built-in resolves for every visitor already, so a link
+		// to one carries nothing they lack — and the panel's Podijeli button
+		// covers sharing whichever view is on screen. The toggle takes the last
+		// slot so it ends the row where Obriši ends the ones above.
 		return el('div', { class: 'ms-manage-item' + (hidden ? ' ms-hidden' : '') }, [
 			el('span', { class: 'ms-manage-name', text: preset.name }),
-			buildLinkCells([buildShareLink(() => ({ preset: preset.id })), toggleLink, null])
+			buildLinkCells([null, null, toggleLink])
 		]);
 	}
 
