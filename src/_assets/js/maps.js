@@ -559,8 +559,9 @@ const DEFAULT_MAPS = [
 	'eumetnet', 'meteociel-satelit', 'chmi-sinopticka', 'neverin-kamera', 'meteoblue-prognoza'
 ];
 
+// every preset carries its own id list, so resolving one is a plain lookup
 const MAP_PRESETS = [
-	{ id: 'zadano', name: 'Zadano' },
+	{ id: 'zadano', name: 'Zadano', maps: DEFAULT_MAPS },
 	{
 		id: 'vise', name: 'Više',
 		maps: [
@@ -582,7 +583,7 @@ const MAP_PRESETS = [
 		id: 'nevrijeme', name: 'Nevrijeme',
 		maps: ['essl', 'astorp', 'estofex', 'blitzortung', 'istramet-munje', 'blitzortung-karta']
 	},
-	{ id: 'sve', name: 'Sve' },
+	{ id: 'sve', name: 'Sve', maps: MAP_CATALOG.map(map => map.id) },
 	{ id: 'nista', name: 'Ništa', maps: [] }
 ];
 
@@ -612,8 +613,6 @@ function saveMapPrefs(prefs) {
 }
 
 function presetMapIds(presetId) {
-	if (presetId === 'zadano') return DEFAULT_MAPS;
-	if (presetId === 'sve') return MAP_CATALOG.map(map => map.id);
 	const preset = MAP_PRESETS.find(p => p.id === presetId);
 	return preset ? preset.maps : null;
 }
