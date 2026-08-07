@@ -712,21 +712,25 @@ body.fs-lock {
 			background-color: #5F6F89;
 		}
 
+	/* flex so the button and the link sit on a common middle rather than on a
+	   shared text baseline, which a 24px button and inline text do not share */
 	.map-settings .ms-actions {
-		padding: 8px 0;
-		margin-top: 8px;
-		border-top: 1px solid #485871;
-		text-align: center;
+		display: flex;
+		align-items: center;
+		gap: 16px;
+		padding: 10px 0 8px;
 	}
 
-		/* mid-panel now, so the sort row's own rule closes it off and the
-		   buttons keep equal air on both sides */
-		.map-settings .ms-actions + .ms-sort {
-			margin-top: 0;
+		.map-settings .ms-actions a {
+			cursor: pointer;
+			user-select: none;
+			text-decoration: none;
 		}
 
-		.map-settings .ms-actions .btn + .btn {
-			margin-left: 8px;
+		/* the sort row brings its own rule, which is what closes the actions off
+		   below; its margin on top of that would push the two apart */
+		.map-settings .ms-actions + .ms-sort {
+			margin-top: 0;
 		}
 
 /* stands in for the maps when the view resolves to none ("Ništa") */

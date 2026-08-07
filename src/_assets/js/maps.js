@@ -1528,16 +1528,18 @@ function buildMapSettings(panel) {
 		scrollToTop(); // the panel collapse leaves the scroll offset mid-page
 	});
 
-	const shareBtn = el('button', { type: 'button', class: 'btn', text: 'Podijeli' });
-	shareBtn.addEventListener('click', () => {
-		copyMapViewLink(readSharePrefs(), () => flashLabel(shareBtn, 'Kopirano!', 'Podijeli'));
+	// a link, like the per-preset Podijeli it does the same job as; the filled
+	// button is kept for Primijeni, the one action that changes the page
+	const shareLink = el('a', { text: 'Podijeli' });
+	shareLink.addEventListener('click', () => {
+		copyMapViewLink(readSharePrefs(), () => flashLabel(shareLink, 'Kopirano!', 'Podijeli'));
 	});
 
 	// the actions sit right under the render order they act on, rather than at
 	// the far end of the picker and the preset management below it
 	panel.appendChild(presetsDiv);
 	panel.appendChild(selectedDiv);
-	panel.appendChild(el('div', { class: 'ms-actions' }, [applyBtn, shareBtn]));
+	panel.appendChild(el('div', { class: 'ms-actions' }, [applyBtn, shareLink]));
 	panel.appendChild(sortDiv);
 	panel.appendChild(availableDiv);
 	panel.appendChild(manageDiv);
