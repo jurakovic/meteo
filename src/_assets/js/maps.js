@@ -659,13 +659,28 @@ function storeUserPreset(name, maps) {
 // for a preset arriving from someone else's link, where silently overwriting a
 // preset of the recipient's own would lose their list
 function uniquePresetName(name) {
-	let candidate = name;
-	for (let n = 2; findUserPresetByName(candidate); n++) candidate = `${name} (${n})`;
-	return cleanPresetName(candidate);
+	// the budget is spent before the clash is looked up, not after: appending
+	// the suffix and slicing back to PRESET_NAME_MAX would hand a full-length
+	// name straight back to storeUserPreset, which overwrites by name
+	const base = cleanPresetName(name);
+	let candidate = base;
+	for (let n = 2; findUserPresetByName(candidate); n++) {
+		const suffix = ` (${n})`;
+		candidate = base.slice(0, PRESET_NAME_MAX - suffix.length).trim() + suffix;
+	}
+	return candidate;
 }
 
+// deleting writes to storage at once, unlike the rest of the panel, which only
+// commits on Primijeni — so a saved preference naming this preset has to be
+// rewritten in the same breath. Left alone it would fail isValidPrefs on the
+// next load and fall back to Osnovno, losing the view still on screen. The
+// stored contents are what gets kept, not the panel's possibly-edited list.
 function deleteUserPreset(id) {
-	userPresets = userPresets.filter(preset => preset.id !== id);
+	const preset = userPresets.find(p => p.id === id);
+	if (preset && getMapPrefs().preset === id)
+		saveMapPrefs({ preset: 'custom', maps: preset.maps.slice() });
+	userPresets = userPresets.filter(p => p.id !== id);
 	saveUserPresets();
 }
 
@@ -767,8 +782,11 @@ function presetMapIds(presetId) {
 
 function resolveMapIds() {
 	const prefs = getActiveMapPrefs();
+	// deduped as well as filtered: a hand-crafted ?v= can name the same map
+	// twice, and two rendered copies would share one data-slideshow-id — the
+	// arrows drive whichever comes first while both sets of indicators light up
 	if (prefs.preset === 'custom' && Array.isArray(prefs.maps))
-		return prefs.maps.filter(id => MAP_CATALOG.some(map => map.id === id));
+		return [...new Set(prefs.maps)].filter(id => MAP_CATALOG.some(map => map.id === id));
 	return presetMapIds(prefs.preset) || presetMapIds('zadano');
 }
 
@@ -777,8 +795,15 @@ function resolveMapIds() {
 // parameter is kept in the address bar (re-copyable, refresh-safe) and is
 // removed once the user applies their own settings.
 
+// btoa only takes code points up to U+00FF, and a saved preset's name rides
+// along in the payload — every Croatian diacritic (č ć š ž đ) is above that.
+// Escaping them as \uXXXX first keeps the input ASCII; JSON.parse reads those
+// back on its own, so decodeMapView needs no counterpart and links shared by
+// an older version (ASCII throughout) still decode unchanged.
 function encodeMapView(prefs) {
-	return btoa(JSON.stringify(prefs)).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+	const json = JSON.stringify(prefs)
+		.replace(/[\u0080-\uffff]/g, c => '\\u' + c.charCodeAt(0).toString(16).padStart(4, '0'));
+	return btoa(json).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
 }
 
 function decodeMapView(value) {
@@ -1308,6 +1333,57 @@ function buildMapSettings(panel) {
 	// an editor, so starting a second rename closes the first on its own
 	let renamingId = null;
 
+	// mirrors nameInput: the editor outlives renderManage, so what was typed
+	// survives a re-render started from anywhere else in the panel — hiding a
+	// built-in, opening the add form, deleting another row. A rebuilt input
+	// would reset itself to the stored name and drop the edit in progress.
+	const renameInput = el('input', {
+		type: 'text', class: 'ms-name ms-rename', maxlength: String(PRESET_NAME_MAX)
+	});
+
+	// set only where the editor is opened, so those same re-renders leave the
+	// focus wherever the user just put it
+	let renameOpening = false;
+
+	function startRename(preset) {
+		renamingId = preset.id;
+		renameInput.value = preset.name;
+		renameInput.classList.remove('invalid');
+		renameOpening = true;
+		renderManage();
+	}
+
+	function commitRename() {
+		const preset = userPresets.find(p => p.id === renamingId);
+		if (!preset) return;
+		const name = cleanPresetName(renameInput.value);
+		const clash = findUserPresetByName(name);
+		// empty, or a name another preset already holds: stay in the editor and
+		// mark the field rather than silently dropping what was typed
+		if (!name || (clash && clash !== preset)) {
+			renameInput.classList.add('invalid');
+			renameInput.focus();
+			return;
+		}
+		preset.name = name;
+		saveUserPresets();
+		renamingId = null;
+		renderPresets(checkedPresetId());
+		renderManage();
+	}
+
+	function cancelRename() {
+		renamingId = null;
+		renderManage();
+	}
+
+	// bound once, on the element that outlives the re-renders
+	renameInput.addEventListener('keydown', (e) => {
+		if (e.key === 'Enter') { e.preventDefault(); commitRename(); }
+		else if (e.key === 'Escape') cancelRename();
+	});
+	renameInput.addEventListener('input', () => renameInput.classList.remove('invalid'));
+
 	// the action slots line up as columns down the list, so a row without one
 	// leaves it empty instead of shifting the rest along
 	function buildLinkCells(cells) {
@@ -1351,7 +1427,7 @@ function buildMapSettings(panel) {
 	}
 
 	function buildManageRow(preset) {
-		if (preset.id === renamingId) return buildRenameRow(preset);
+		if (preset.id === renamingId) return buildRenameRow();
 
 		const renameLink = el('a', { text: 'Preimenuj' });
 		const deleteLink = el('a', { text: 'Obriši' });
@@ -1360,10 +1436,7 @@ function buildMapSettings(panel) {
 			buildLinkCells([buildShareLink(() => presetSharePrefs(preset)), renameLink, deleteLink])
 		]);
 
-		renameLink.addEventListener('click', () => {
-			renamingId = preset.id;
-			renderManage();
-		});
+		renameLink.addEventListener('click', () => startRename(preset));
 
 		// two-step instead of a confirm() dialog: the first click arms the link,
 		// a second within a few seconds deletes, and it disarms itself otherwise
@@ -1394,46 +1467,15 @@ function buildMapSettings(panel) {
 
 	// the name is only committed on "Potvrdi" or Enter — never on leaving the
 	// field, so clicking elsewhere can't rename anything behind your back
-	function buildRenameRow(preset) {
-		const input = el('input', {
-			type: 'text', class: 'ms-name ms-rename', maxlength: String(PRESET_NAME_MAX), value: preset.name
-		});
+	function buildRenameRow() {
 		const confirmLink = el('a', { text: 'Potvrdi' });
 		const cancelLink = el('a', { text: 'Odustani' });
-
-		const commit = () => {
-			const name = cleanPresetName(input.value);
-			const clash = findUserPresetByName(name);
-			// empty, or a name another preset already holds: stay in the editor and
-			// mark the field rather than silently dropping what was typed
-			if (!name || (clash && clash !== preset)) {
-				input.classList.add('invalid');
-				input.focus();
-				return;
-			}
-			preset.name = name;
-			saveUserPresets();
-			renamingId = null;
-			renderPresets(checkedPresetId());
-			renderManage();
-		};
-
-		const cancel = () => {
-			renamingId = null;
-			renderManage();
-		};
-
-		input.addEventListener('keydown', (e) => {
-			if (e.key === 'Enter') { e.preventDefault(); commit(); }
-			else if (e.key === 'Escape') cancel();
-		});
-		input.addEventListener('input', () => input.classList.remove('invalid'));
-		confirmLink.addEventListener('click', commit);
-		cancelLink.addEventListener('click', cancel);
+		confirmLink.addEventListener('click', commitRename);
+		cancelLink.addEventListener('click', cancelRename);
 
 		// Potvrdi and Odustani sit under Preimenuj and Obriši, the actions they stand in for
 		return el('div', { class: 'ms-manage-item' }, [
-			input,
+			renameInput,
 			buildLinkCells([null, confirmLink, cancelLink])
 		]);
 	}
@@ -1505,12 +1547,12 @@ function buildMapSettings(panel) {
 		manageDiv.appendChild(buildBuiltinHeading());
 		MAP_PRESETS.forEach(preset => manageDiv.appendChild(buildBuiltinRow(preset)));
 
-		// only ever present right after a rename was started, so this cannot
-		// steal focus on an ordinary re-render
-		const editing = manageDiv.querySelector('.ms-rename');
-		if (editing) {
-			editing.focus();
-			editing.select();
+		// only where the rename was just opened — every other re-render leaves
+		// the focus alone, including the ones that happen with an editor open
+		if (renameOpening) {
+			renameOpening = false;
+			renameInput.focus();
+			renameInput.select();
 		}
 	}
 
