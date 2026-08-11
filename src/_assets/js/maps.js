@@ -1025,7 +1025,7 @@ function renderMaps() {
 	if (!maps.length) {
 		tbody.appendChild(el('tr', {}, [
 			el('td', { align: 'center' }, [
-				el('div', { class: 'maps-empty', text: 'Nema odabranih karata. Odaberite ih pod „Karte”.' })
+				el('div', { class: 'maps-empty', text: 'Nema odabranih karata. Odaberite ih pod "Karte".' })
 			])
 		]));
 		return;
@@ -1445,7 +1445,7 @@ function buildMapSettings(panel) {
 			saveCurrentAs(uniquePresetName(sharedMapView.name));
 		});
 		return el('div', { class: 'ms-shared' }, [
-			el('span', { text: `Podijeljen predložak „${sharedMapView.name}”` }),
+			el('span', { text: `Podijeljen predložak "${sharedMapView.name}"` }),
 			saveLink
 		]);
 	}
