@@ -76,7 +76,7 @@ Every map is one object with `id`, `category` (radar/satelit/munje/… — shown
 
 | type | notes |
 |---|---|
-| `slideshow` | `slides` is an array of image URLs, or of `{ title, img, aspect }` objects when each slide has its own title bar; `startSlide` (1-based) is eager, the rest lazy-load unless `eagerSlides`; `dynamicWidth` resizes the container to the active slide |
+| `slideshow` | `slides` is an array of image URLs, or of `{ title, img, aspect }` objects when each slide has its own title bar (`title.text` may be omitted to inherit the map's `name` — useful when only the `href` differs per slide); `startSlide` (1-based) is eager, the rest lazy-load unless `eagerSlides`; `dynamicWidth` resizes the container to the active slide, and only works on titled slideshows — `updateSlideshowWidth()` reads the active slide's `.placeholder` wrapper, which untitled slides do not have |
 | `image` | single `img`, optional `alt` |
 | `video` | mp4 `src`; `videoClass` picks the aspect wrapper (`vid1`/`vid2`) |
 | `iframe` | interactive map with HR/EU zoom switch, overlay gate and fullscreen; `frameId` plus `srcHr`/`srcEu` and the four `zoom*` marker strings consumed by `setIframeSrc()` in `main.js` |
@@ -86,16 +86,28 @@ The repeated per-map link rows come from shared groups (`RADAR_HR_LINKS`, `SAT_E
 
 #### Presets and preferences
 
-`DEFAULT_MAPS` holds the default order (mirroring the landing page); `MAP_PRESETS` lists the named presets (`zadano` resolves to the default, `vise` to the former extras set, `sve` to the whole catalog, `nista` to none). The "Karte" button opens a settings panel with two sections: the selected maps on top (this *is* the render order — drag the `≡` handle to reorder) and the available maps below (a finding surface only, sortable by name or category without affecting the render order; checking a map appends it to the selected block). Changing the selection or order auto-selects *Prilagođeno*. *Primijeni* saves to localStorage as `mapPrefs` (`{"preset":"radari"}` or `{"preset":"custom","maps":[…]}`), re-renders, and calls `initDynamicContent()` in `main.js` to wire the fresh DOM (lazy images, swipe, iframe src, overlays, link shadows, progress bar).
+`DEFAULT_MAPS` holds the default order (mirroring the landing page); `MAP_PRESETS` lists the built-in presets, each carrying its own `maps` id list so resolving one is a plain lookup (`zadano` is the default set — displayed as *Osnovno*, but the id stays `zadano` because it is written into saved preferences and shared links; `vise` is the former extras set, `sve` the whole catalog, `nista` none). The "Karte" button opens a settings panel with two sections: the selected maps on top (this *is* the render order — drag the `≡` handle to reorder) and the available maps below (a finding surface only, sortable by name or category without affecting the render order; checking a map appends it to the selected block). Changing the selection or order auto-selects *Prilagođeno*. *Primijeni* saves to localStorage as `mapPrefs` (`{"preset":"radari"}` or `{"preset":"custom","maps":[…]}`), re-renders, and calls `initDynamicContent()` in `main.js` to wire the fresh DOM (lazy images, swipe, iframe src, overlays, link shadows, progress bar).
+
+#### Saved presets
+
+Below the picker, *Moji predlošci* lets the current selection be saved under a name (`mapUserPresets`), then renamed, shared or deleted. Saved presets take the same `{ id, name, maps }` shape as the built-ins and are appended to them by `allPresets()`, so the preset bar, `presetMapIds()` and the stored preferences treat both alike. Their ids are prefixed `u:` to keep them out of the built-in namespace, which leaves the name free to change — renaming never breaks a saved preference. Saving under an existing name overwrites that preset (the way to amend a saved view), so the name is the handle: it is trimmed, collapsed and capped at `PRESET_NAME_MAX`.
+
+Built-ins cannot be deleted (they are code) but can be hidden from the preset bar (`mapHiddenPresets`). Hiding is a **display choice only** — `allPresets()` keeps returning them, so a saved preference, the `zadano` fallback and a shared link naming a preset the recipient hides all still resolve; only `visiblePresets()` filters. `zadano` is exempt (`PERMANENT_PRESET_ID`) so the bar can never come down to *Prilagođeno* alone.
+
+Deleting is the one panel action that writes to storage without *Primijeni*, so `deleteUserPreset()` also rewrites a `mapPrefs` naming the deleted preset into a `custom` snapshot of its maps — otherwise it would fail `isValidPrefs()` on the next load and silently fall back to *Osnovno*.
 
 #### Share links
 
 *Podijeli* copies a link with the current panel state URL-safe-base64 encoded in `?v=`. On load the parameter overrides saved preferences **for the session only** — it never writes to the recipient's localStorage. The parameter stays in the address bar (refresh-safe, re-copyable) and is removed via `history.replaceState` when the user applies their own settings. Clipboard API needs a secure context (https/localhost); elsewhere a prompt with the link is shown.
 
+A built-in preset travels as its id, which every visitor resolves. A saved preset's id means nothing to a recipient, so it travels as its contents plus its name (`preset: 'custom'` + `maps` + `name`); the panel then offers to save it under that name, de-duplicated against the recipient's own presets so nothing of theirs is overwritten.
+
+Note when extending the payload: `btoa()` rejects code points above U+00FF, and the name is user-typed — every Croatian diacritic (č ć š ž đ) is above it. `encodeMapView()` escapes non-ASCII to `\uXXXX` before encoding, which keeps the input ASCII and needs no counterpart in `decodeMapView()`, since `JSON.parse` reads those escapes back on its own.
+
 #### Misc
 
 - `?debug=1` on any page enables console logging via `dlog()` in `main.js`
-- localStorage keys: `mapPrefs` (customize page view), `showLinksBottom` (links-under-maps toggle)
+- localStorage keys: `mapPrefs` (customize page view), `mapUserPresets` (saved presets), `mapHiddenPresets` (built-ins hidden from the preset bar), `showLinksBottom` (links-under-maps toggle). Everything read back from storage or from `?v=` passes a guard (`isValidPrefs`, `isValidPreset`, the filter in `loadHiddenPresets`) — an unknown preset id is rejected rather than kept, and every write is wrapped so disabled or full storage still leaves the view working for the session
 
 #### Touch notes
 
@@ -103,4 +115,4 @@ Hard-won details worth keeping in mind when touching the drag/scroll code:
 
 - the drag handle must not be `display: inline` — `touch-action` is ignored on non-replaced inline elements, so touches would scroll the page instead of dragging
 - pointer capture cannot be used for the drag: touch pointers implicitly capture the handle, and any capture breaks once the row is moved in the DOM (`insertBefore`). The implicit capture is released on `pointerdown` and move/up listeners live on `document` instead
-- `scrollIntoView` scrolls *all* ancestors — for revealing a preset radio in the horizontally scrollable preset row, only the row itself may be scrolled (`revealPresetOption()`), otherwise the page jumps
+- `scrollIntoView` scrolls *all* ancestors, so it cannot be used to reveal something inside the panel — it drags the page back up to the panel too. The preset bar used to scroll horizontally and needed a hand-rolled reveal for this reason; it now wraps its options as chips instead, growing in the axis the page already scrolls, and the reveal is gone
