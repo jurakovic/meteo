@@ -429,62 +429,70 @@ body.fs-lock {
 		cursor: pointer;
 	}
 
-	/* single-line preset row with horizontal scroll and edge fades,
-	   same mechanics as .links-bottom but on the panel background */
+	/* the options wrap onto as many lines as they need — a saved-preset list
+	   can grow long, and it grows in the axis the page already scrolls rather
+	   than off the side of a bar */
 	.map-settings .ms-presets {
-		white-space: nowrap;
-		overflow-x: auto;
+		display: flex;
+		flex-wrap: wrap;
+		gap: 6px;
 		padding-bottom: 8px;
 		margin-bottom: 8px;
 		border-bottom: 1px solid #485871;
-		-webkit-overflow-scrolling: touch;
-		scrollbar-width: none;
-		-ms-overflow-style: none;
 	}
 
-		.map-settings .ms-presets::-webkit-scrollbar {
-			display: none;
+		/* the radio holds the state and takes the keyboard focus, the chip
+		   beside it carries the whole look and the tap area; absolute keeps
+		   the hidden input from padding out the row */
+		.map-settings .ms-presets label {
+			position: relative;
+			/* the leftover on each line is split between that line's chips, so
+			   every row reaches both edges instead of ending ragged. Widths
+			   still differ — each chip keeps its name's width plus its share.
+			   The last line is exempt, see .ms-fill */
+			flex: 1 1 auto;
 		}
 
-		.map-settings .ms-presets::before,
-		.map-settings .ms-presets::after {
-			content: "";
-			position: sticky;
-			display: inline-block;
-			width: 24px;
-			/* taller than the .links-bottom fades: radio buttons overflow the
-			   text line on Android; negative margins keep the row height */
-			height: 2.4em;
-			margin-top: -0.8em;
-			margin-bottom: -0.8em;
-			vertical-align: middle;
-			pointer-events: none;
+		/* zero-basis, so it never forces a wrap of its own and always ends up
+		   on the last line; the outsized grow then leaves that line's chips
+		   with a fraction of a pixel each, i.e. their natural width */
+		.map-settings .ms-presets .ms-fill {
+			flex: 1000 1 0;
+			height: 0;
+		}
+
+		.map-settings .ms-presets input {
+			position: absolute;
+			margin: 0;
 			opacity: 0;
-			transition: opacity 0.2s ease;
 		}
 
-		.map-settings .ms-presets::before {
-			left: 0;
-			margin-right: -24px;
-			background: linear-gradient(to left, transparent, #202c40);
+		.map-settings .ms-chip {
+			display: block;
+			text-align: center; /* the chips are wider than their names once stretched */
+			padding: 3px 10px;
+			background-color: #2b3a52;
+			border: 1px solid #485871;
+			user-select: none;
 		}
 
-		.map-settings .ms-presets::after {
-			right: 0;
-			margin-left: -24px;
-			background: linear-gradient(to right, transparent, #202c40);
+		.map-settings .ms-presets label:hover .ms-chip {
+			background-color: #3a4a66;
 		}
 
-		.map-settings .ms-presets.can-scroll-left::before {
-			opacity: 1;
+		/* the panel's button fill, with the accent on the name alone — the same
+		   way the active sort link is marked. The fill is restated to hold
+		   steady under :hover, which it ties with on specificity */
+		.map-settings .ms-presets input:checked + .ms-chip {
+			color: #ff9800;
+			background-color: #485871;
 		}
 
-		.map-settings .ms-presets.can-scroll-right::after {
-			opacity: 1;
-		}
-
-		.map-settings .ms-presets label:not(:last-child) {
-			margin-right: 16px;
+		/* white, not the accent: orange now means "selected", and a focus ring in
+		   the same colour would read as a second selected chip */
+		.map-settings .ms-presets input:focus-visible + .ms-chip {
+			outline: 1px solid white;
+			outline-offset: 1px;
 		}
 
 	.map-settings .ms-item {
