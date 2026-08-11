@@ -429,30 +429,62 @@ body.fs-lock {
 		cursor: pointer;
 	}
 
-	/* the dropdown holds the whole list however long it grows, so the row
-	   carries the control alone and never scrolls */
+	/* single-line preset row with horizontal scroll and edge fades,
+	   same mechanics as .links-bottom but on the panel background */
 	.map-settings .ms-presets {
-		display: flex;
+		white-space: nowrap;
+		overflow-x: auto;
 		padding-bottom: 8px;
 		margin-bottom: 8px;
 		border-bottom: 1px solid #485871;
+		-webkit-overflow-scrolling: touch;
+		scrollbar-width: none;
+		-ms-overflow-style: none;
 	}
 
-		/* same field styling as .ms-name, so the two controls in the panel match */
-		.map-settings .ms-preset-select {
-			/* min-width overrides the intrinsic width, which a long preset name
-			   would otherwise push past the panel */
-			flex: 1;
-			min-width: 0;
-			font-family: inherit;
-			font-size: 13px;
-			color: white;
-			background-color: #2b3a52;
-			border: 1px solid #485871;
-			outline: none;
-			height: 24px;
-			padding: 0 4px;
-			cursor: pointer;
+		.map-settings .ms-presets::-webkit-scrollbar {
+			display: none;
+		}
+
+		.map-settings .ms-presets::before,
+		.map-settings .ms-presets::after {
+			content: "";
+			position: sticky;
+			display: inline-block;
+			width: 24px;
+			/* taller than the .links-bottom fades: radio buttons overflow the
+			   text line on Android; negative margins keep the row height */
+			height: 2.4em;
+			margin-top: -0.8em;
+			margin-bottom: -0.8em;
+			vertical-align: middle;
+			pointer-events: none;
+			opacity: 0;
+			transition: opacity 0.2s ease;
+		}
+
+		.map-settings .ms-presets::before {
+			left: 0;
+			margin-right: -24px;
+			background: linear-gradient(to left, transparent, #202c40);
+		}
+
+		.map-settings .ms-presets::after {
+			right: 0;
+			margin-left: -24px;
+			background: linear-gradient(to right, transparent, #202c40);
+		}
+
+		.map-settings .ms-presets.can-scroll-left::before {
+			opacity: 1;
+		}
+
+		.map-settings .ms-presets.can-scroll-right::after {
+			opacity: 1;
+		}
+
+		.map-settings .ms-presets label:not(:last-child) {
+			margin-right: 16px;
 		}
 
 	.map-settings .ms-item {
