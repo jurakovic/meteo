@@ -677,10 +677,20 @@ function deleteUserPreset(id) {
 
 const HIDDEN_PRESETS_KEY = 'mapHiddenPresets';
 
+// one built-in always stays on offer, so the row can never come down to
+// "Prilagođeno" alone and there is always a named view to get back to
+const PERMANENT_PRESET_ID = 'zadano';
+
+function isHideablePreset(id) {
+	return id !== PERMANENT_PRESET_ID;
+}
+
 function loadHiddenPresets() {
 	try {
 		const list = JSON.parse(localStorage.getItem(HIDDEN_PRESETS_KEY));
-		if (Array.isArray(list)) return list.filter(id => MAP_PRESETS.some(preset => preset.id === id));
+		// the permanent one is dropped on the way in, so a list stored before it
+		// became permanent doesn't keep it hidden or skew the counts below
+		if (Array.isArray(list)) return list.filter(id => isHideablePreset(id) && MAP_PRESETS.some(preset => preset.id === id));
 	} catch (e) { /* corrupt storage falls through to none hidden */ }
 	return [];
 }
@@ -698,13 +708,18 @@ function isPresetHidden(id) {
 }
 
 function setPresetHidden(id, hidden) {
+	if (hidden && !isHideablePreset(id)) return; // no row offers this, but the rule lives here
 	hiddenPresets = hiddenPresets.filter(hiddenId => hiddenId !== id);
 	if (hidden) hiddenPresets.push(id);
 	saveHiddenPresets();
 }
 
+function hideablePresets() {
+	return MAP_PRESETS.filter(preset => isHideablePreset(preset.id));
+}
+
 function hideAllPresets() {
-	hiddenPresets = MAP_PRESETS.map(preset => preset.id);
+	hiddenPresets = hideablePresets().map(preset => preset.id);
 	saveHiddenPresets();
 }
 
@@ -1312,13 +1327,19 @@ function buildMapSettings(panel) {
 
 	function buildBuiltinRow(preset) {
 		const hidden = isPresetHidden(preset.id);
-		const toggleLink = el('a', { text: hidden ? 'Prikaži' : 'Sakrij' });
-		toggleLink.addEventListener('click', () => {
-			setPresetHidden(preset.id, !hidden);
-			// renderPresets drops a selection that just became invisible
-			renderPresets(checkedPresetId());
-			renderManage();
-		});
+
+		// the permanent one keeps its row but not the toggle, so it reads as an
+		// option that was never on offer rather than one that failed to work
+		let toggleLink = null;
+		if (isHideablePreset(preset.id)) {
+			toggleLink = el('a', { text: hidden ? 'Prikaži' : 'Sakrij' });
+			toggleLink.addEventListener('click', () => {
+				setPresetHidden(preset.id, !hidden);
+				// renderPresets drops a selection that just became invisible
+				renderPresets(checkedPresetId());
+				renderManage();
+			});
+		}
 		// no share link: a built-in resolves for every visitor already, so a link
 		// to one carries nothing they lack — and the panel's Podijeli button
 		// covers sharing whichever view is on screen. The toggle takes the last
@@ -1443,8 +1464,9 @@ function buildMapSettings(panel) {
 			links.appendChild(link);
 		};
 
-		// each shown only while it would do something
-		if (hiddenPresets.length < MAP_PRESETS.length) addLink('Sakrij sve', hideAllPresets);
+		// each shown only while it would do something — "Sakrij sve" reaches
+		// every preset but the permanent one, so that is the count to stop at
+		if (hiddenPresets.length < hideablePresets().length) addLink('Sakrij sve', hideAllPresets);
 		if (hiddenPresets.length) addLink('Prikaži sve', showAllPresets);
 
 		heading.appendChild(links);
