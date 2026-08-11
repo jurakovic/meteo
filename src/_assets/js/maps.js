@@ -1030,20 +1030,6 @@ function renderMaps() {
 
 // ---------- settings panel ----------
 
-// scroll the preset bar horizontally so the radio's label is visible;
-// scrollIntoView is unusable here — it also scrolls the page vertically
-// back up to the panel (e.g. on every checkbox change far down the list)
-function revealPresetOption(radio, smooth) {
-	const label = radio.parentElement;
-	const bar = label.parentElement;
-	const labelRect = label.getBoundingClientRect();
-	const barRect = bar.getBoundingClientRect();
-	let delta = 0;
-	if (labelRect.right > barRect.right) delta = labelRect.right - barRect.right;
-	else if (labelRect.left < barRect.left) delta = labelRect.left - barRect.left;
-	if (delta !== 0) bar.scrollBy({ left: delta, behavior: smooth ? 'smooth' : 'auto' });
-}
-
 function setMapSettingsVisible(panel, visible) {
 	panel.hidden = !visible;
 	const arrow = document.querySelector('.buttons button.btn .arrow');
@@ -1056,11 +1042,6 @@ function toggleMapSettings() {
 	if (panel.hidden) {
 		buildMapSettings(panel);
 		setMapSettingsVisible(panel, true);
-		// scroll shadows and positions need layout, so only after unhiding
-		const presets = panel.querySelector('.ms-presets');
-		updateLinksScrollShadow(presets);
-		const checked = presets.querySelector('input:checked');
-		if (checked) revealPresetOption(checked, false);
 	} else {
 		setMapSettingsVisible(panel, false);
 	}
@@ -1115,10 +1096,9 @@ function buildMapSettings(panel) {
 	updateSortLinks();
 
 	function markCustom() {
-		const custom = panel.querySelector('input[name="msPreset"][value="custom"]');
-		custom.checked = true;
-		// the custom radio is last and may be scrolled out of view
-		revealPresetOption(custom, true);
+		// setting .value fires no change event, so this cannot loop back into
+		// the select's own handler and refill the list underneath the edit
+		presetSelect.value = 'custom';
 	}
 
 	// pointer-events drag reorder: works for both mouse and touch (the HTML5
@@ -1220,41 +1200,38 @@ function buildMapSettings(panel) {
 		sortAvailable();
 	}
 
-	const presetsDiv = el('div', { class: 'ms-presets' });
+	// no visible label — the option names say what the control is; aria-label
+	// keeps it announced for anyone who can't see them
+	const presetSelect = el('select', { class: 'ms-preset-select', 'aria-label': 'Predložak' });
+	const presetsDiv = el('div', { class: 'ms-presets' }, [presetSelect]);
 
-	// rebuilt whenever the saved presets change, so they sit in the same bar
+	// one listener for the control, not one per option — the options are
+	// rebuilt whenever the saved presets change, the select itself is not
+	presetSelect.addEventListener('change', () => {
+		// switching to a named preset previews its list; "custom" keeps the current list
+		if (presetSelect.value !== 'custom') fillList(presetMapIds(presetSelect.value));
+	});
+
+	// rebuilt whenever the saved presets change, so they sit in the same list
 	// as the built-ins and stay selectable the same way
 	function renderPresets(selectedId) {
-		presetsDiv.replaceChildren();
+		presetSelect.replaceChildren();
 		const options = [...visiblePresets(), { id: 'custom', name: 'Prilagođeno' }];
-		// a hidden preset has no radio to check, and the maps on screen are still
+		// a hidden preset has no option to select, and the maps on screen are still
 		// its own, so the selection becomes custom rather than silently reverting
 		if (!options.some(preset => preset.id === selectedId)) selectedId = 'custom';
 		options.forEach(preset => {
-			const radio = el('input', { type: 'radio', name: 'msPreset', value: preset.id });
-			radio.checked = preset.id === selectedId;
-			radio.addEventListener('change', () => {
-				// switching to a named preset previews its list; "custom" keeps the current list
-				if (preset.id !== 'custom') fillList(presetMapIds(preset.id));
-			});
-			presetsDiv.appendChild(el('label', {}, [radio, document.createTextNode(' ' + preset.name)]));
+			presetSelect.appendChild(el('option', { value: preset.id, text: preset.name }));
 		});
-		// hiding or saving changes how far the bar reaches, so the edge fades
-		// have to be recomputed — otherwise they stay latched on from the
-		// previous contents and dim an option that now fits. Measuring needs
-		// layout, so at build time (panel still hidden) this is a no-op and
-		// toggleMapSettings does it again after unhiding.
-		updateLinksScrollShadow(presetsDiv);
+		presetSelect.value = selectedId;
 	}
 
-	presetsDiv.addEventListener('scroll', () => updateLinksScrollShadow(presetsDiv), { passive: true });
 	renderPresets(prefs.preset);
 
 	fillList(resolveMapIds());
 
-	function checkedPresetId() {
-		const checked = panel.querySelector('input[name="msPreset"]:checked');
-		return checked ? checked.value : 'zadano';
+	function selectedPresetId() {
+		return presetSelect.value || 'zadano';
 	}
 
 	// the selected block holds exactly the checked rows, in render order
@@ -1263,7 +1240,7 @@ function buildMapSettings(panel) {
 	}
 
 	function readPanelPrefs() {
-		const presetId = checkedPresetId();
+		const presetId = selectedPresetId();
 		if (presetId === 'custom') return { preset: 'custom', maps: selectedMapIds() };
 		return { preset: presetId };
 	}
@@ -1296,7 +1273,6 @@ function buildMapSettings(panel) {
 		addingPreset = false; // the form has done its job
 		renderPresets(preset.id); // saving selects what was just saved
 		renderManage();
-		revealPresetOption(presetsDiv.querySelector('input:checked'), true);
 	}
 
 	saveBtn.addEventListener('click', () => {
@@ -1340,7 +1316,7 @@ function buildMapSettings(panel) {
 		toggleLink.addEventListener('click', () => {
 			setPresetHidden(preset.id, !hidden);
 			// renderPresets drops a selection that just became invisible
-			renderPresets(checkedPresetId());
+			renderPresets(selectedPresetId());
 			renderManage();
 		});
 		// no share link: a built-in resolves for every visitor already, so a link
@@ -1386,9 +1362,9 @@ function buildMapSettings(panel) {
 			}
 			disarm();
 			// the map list on screen is untouched — it just stops being a saved preset
-			const wasSelected = checkedPresetId() === preset.id;
+			const wasSelected = selectedPresetId() === preset.id;
 			deleteUserPreset(preset.id);
-			renderPresets(wasSelected ? 'custom' : checkedPresetId());
+			renderPresets(wasSelected ? 'custom' : selectedPresetId());
 			renderManage();
 		});
 
@@ -1417,7 +1393,7 @@ function buildMapSettings(panel) {
 			preset.name = name;
 			saveUserPresets();
 			renamingId = null;
-			renderPresets(checkedPresetId());
+			renderPresets(selectedPresetId());
 			renderManage();
 		};
 
@@ -1461,7 +1437,7 @@ function buildMapSettings(panel) {
 			const link = el('a', { text: text });
 			link.addEventListener('click', () => {
 				apply();
-				renderPresets(checkedPresetId());
+				renderPresets(selectedPresetId());
 				renderManage();
 			});
 			links.appendChild(link);

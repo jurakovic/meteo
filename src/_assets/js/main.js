@@ -272,7 +272,7 @@ function updateLinksScrollShadow(bar) {
 }
 
 function updateLinksScrollShadows() {
-	document.querySelectorAll('.links-bottom, .ms-presets').forEach(updateLinksScrollShadow);
+	document.querySelectorAll('.links-bottom').forEach(updateLinksScrollShadow);
 }
 
 function addLinksScrollShadows() {
