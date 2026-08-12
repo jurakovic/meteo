@@ -469,12 +469,26 @@ body.fs-lock {
 
 		.map-settings .ms-chip {
 			display: block;
+			position: relative; /* for the saved-preset corner mark */
 			text-align: center; /* the chips are wider than their names once stretched */
 			padding: 3px 10px;
 			background-color: #2b3a52;
 			border: 1px solid #485871;
 			user-select: none;
 		}
+
+			/* a saved preset gets a corner triangle rather than a glyph beside its
+			   name: the chips stretch to fill the line and centre their names, so
+			   anything taking inline space shifts the name and eats the width.
+			   Grey, not the accent — orange means "selected" on this bar */
+			.map-settings .ms-chip.ms-user::after {
+				content: '';
+				position: absolute;
+				top: 0;
+				right: 0;
+				border-top: 7px solid #93a4bd;
+				border-left: 7px solid transparent;
+			}
 
 		.map-settings .ms-presets label:hover .ms-chip {
 			background-color: #3a4a66;

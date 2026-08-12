@@ -1255,9 +1255,12 @@ function buildMapSettings(panel) {
 				// switching to a named preset previews its list; "custom" keeps the current list
 				if (preset.id !== 'custom') fillList(presetMapIds(preset.id));
 			});
+			// a corner mark on the saved ones, so the two kinds stay apart in the
+			// bar the way the management list below already keeps them apart
+			const chipClass = 'ms-chip' + (preset.id.startsWith(USER_PRESET_PREFIX) ? ' ms-user' : '');
 			// the name rides in a span rather than a bare text node so the chip
 			// styling can hang off the radio's :checked as a sibling selector
-			presetsDiv.appendChild(el('label', {}, [radio, el('span', { class: 'ms-chip', text: preset.name })]));
+			presetsDiv.appendChild(el('label', {}, [radio, el('span', { class: chipClass, text: preset.name })]));
 		});
 		// carries no content: it exists so the last line has something to give
 		// its leftover width to, leaving those chips at their natural size
