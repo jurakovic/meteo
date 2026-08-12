@@ -1650,6 +1650,13 @@ function buildMapSettings(panel) {
 		showUpdate = userPresets.some(hasPendingEdits);
 		manageDiv.classList.toggle('ms-editing', showUpdate);
 		manageDiv.replaceChildren();
+
+		// the built-ins are listed too, so a hidden one can be brought back
+		// individually and not only through "Prikaži sve". They lead here the way
+		// they lead the preset bar, where the saved ones follow them as well
+		manageDiv.appendChild(buildBuiltinHeading());
+		MAP_PRESETS.forEach(preset => manageDiv.appendChild(buildBuiltinRow(preset)));
+
 		manageDiv.appendChild(buildUserHeading());
 		if (addingPreset) manageDiv.appendChild(el('div', { class: 'ms-save' }, [nameInput, saveBtn]));
 		if (sharedMapView && sharedMapView.name && !sharedAlreadySaved()) manageDiv.appendChild(buildSharedRow());
@@ -1658,11 +1665,6 @@ function buildMapSettings(panel) {
 		} else {
 			manageDiv.appendChild(el('div', { class: 'ms-manage-empty', text: 'Nema spremljenih predložaka' }));
 		}
-
-		// the built-ins are listed too, so a hidden one can be brought back
-		// individually and not only through "Prikaži sve"
-		manageDiv.appendChild(buildBuiltinHeading());
-		MAP_PRESETS.forEach(preset => manageDiv.appendChild(buildBuiltinRow(preset)));
 
 		// only where the rename was just opened — every other re-render leaves
 		// the focus alone, including the ones that happen with an editor open
