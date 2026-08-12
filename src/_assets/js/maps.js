@@ -1169,7 +1169,8 @@ function buildMapSettings(panel) {
 	function markCustom() {
 		panel.querySelector('input[name="msPreset"][value="custom"]').checked = true;
 		// the edit may have just put the list out of step with the preset it came
-		// from, or brought it back into step, which is what "Ažuriraj" hangs on
+		// from, or brought it back into step, which is what both marks hang off
+		updateOriginMark();
 		renderManage();
 	}
 
@@ -1274,10 +1275,12 @@ function buildMapSettings(panel) {
 
 	const presetsDiv = el('div', { class: 'ms-presets' });
 
-	// which saved preset the list in the picker came from. Editing it flips the
-	// bar to "Prilagođeno" (see markCustom), so the selection can no longer say
-	// where the list started — this is what the "Ažuriraj" link writes back to.
-	let editingPresetId = isUserPresetId(activePresetId()) ? activePresetId() : null;
+	// which preset the list in the picker came from, built-in or saved. Editing
+	// it flips the bar to "Prilagođeno" (see markCustom), so the selection can no
+	// longer say where the list started: this is what the dot on the origin chip
+	// and the "Ažuriraj" link on the saved row both hang off. Null whenever the
+	// list is nobody's — a stored custom view, or a shared one matching nothing.
+	let editingPresetId = activePresetId() === 'custom' ? null : activePresetId();
 
 	// rebuilt whenever the saved presets change, so they sit among the
 	// built-ins and stay selectable the same way
@@ -1294,8 +1297,9 @@ function buildMapSettings(panel) {
 				// switching to a named preset previews its list; "custom" keeps the current list
 				if (preset.id !== 'custom') fillList(presetMapIds(preset.id));
 				// picking "Prilagođeno" by hand detaches the list from wherever it
-				// came from, so no row offers to take the edits back
-				editingPresetId = isUserPresetId(preset.id) ? preset.id : null;
+				// came from: no dot, and no row offering to take the edits back
+				editingPresetId = preset.id === 'custom' ? null : preset.id;
+				updateOriginMark();
 				renderManage();
 			});
 			// a corner mark on the saved ones, so the two kinds stay apart in the
@@ -1309,11 +1313,31 @@ function buildMapSettings(panel) {
 		// its leftover width to, leaving those chips at their natural size
 		// while the full lines above still stretch to both edges
 		presetsDiv.appendChild(el('span', { class: 'ms-fill' }));
+		updateOriginMark(); // the chips are new, so the dot has to be put back
 	}
 
-	renderPresets(activePresetId());
+	// The dot marks the preset the list on screen started from, once it no longer
+	// matches it. "Prilagođeno" keeps the selection — what travels in a share link
+	// is a bare list, and a chip left looking selected would promise a name the
+	// payload cannot carry — so the dot says which named view the edits are a copy
+	// of without claiming to be it. Clicking that chip reloads the preset and
+	// drops the edits, which the radio already does: it is the unchecked one.
+	function updateOriginMark() {
+		presetsDiv.querySelectorAll('.ms-origin').forEach(chip => chip.classList.remove('ms-origin'));
+		const preset = allPresets().find(p => p.id === editingPresetId);
+		// a hidden preset has no chip to mark, hence the guard on the radio
+		if (!preset || sameMapIds(preset.maps, selectedMapIds())) return;
+		// compared rather than built into a selector: ids come from localStorage,
+		// where a hand-edited one could carry a quote and throw on querySelector
+		const radio = [...presetsDiv.querySelectorAll('input')].find(input => input.value === editingPresetId);
+		if (radio) radio.nextElementSibling.classList.add('ms-origin');
+	}
 
+	// the list first: renderPresets reads it back to decide where the dot goes,
+	// and an empty picker would read as "edited away from the origin"
 	fillList(resolveMapIds());
+
+	renderPresets(activePresetId());
 
 	function checkedPresetId() {
 		const checked = panel.querySelector('input[name="msPreset"]:checked');
@@ -1447,9 +1471,13 @@ function buildMapSettings(panel) {
 	// only the preset the list came from: any other row would take an overwrite
 	// with a list that has nothing to do with it. Saving under the same name in
 	// the add form still works and is unchanged — this is the same write, minus
-	// having to know that the name is the handle.
+	// having to know that the name is the handle. The saved-preset guard is not
+	// redundant: editingPresetId also holds built-in ids (they carry the origin
+	// dot), and a built-in reaching storeUserPreset would fork a saved copy of
+	// itself under its own name rather than update anything.
 	function hasPendingEdits(preset) {
-		return preset.id === editingPresetId && !sameMapIds(preset.maps, selectedMapIds());
+		return isUserPresetId(preset.id) && preset.id === editingPresetId
+			&& !sameMapIds(preset.maps, selectedMapIds());
 	}
 
 	// shares the preset as saved — the panel's Podijeli button is the one that

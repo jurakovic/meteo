@@ -490,6 +490,23 @@ body.fs-lock {
 				border-left: 7px solid transparent;
 			}
 
+			/* the list on screen started here and has been edited since, while
+			   "Prilagođeno" holds the selection — so the bar still names the view
+			   the edits came from. Left edge, clear of the corner triangle, which
+			   a saved preset carries at the same time. Grey like the triangle:
+			   both are marks about the chip, and orange stays "selected" */
+			.map-settings .ms-chip.ms-origin::before {
+				content: '';
+				position: absolute;
+				left: 4px;
+				top: 50%;
+				width: 4px;
+				height: 4px;
+				margin-top: -2px;
+				border-radius: 50%;
+				background-color: #93a4bd;
+			}
+
 		.map-settings .ms-presets label:hover .ms-chip {
 			background-color: #3a4a66;
 		}
