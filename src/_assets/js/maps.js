@@ -600,8 +600,12 @@ const USER_PRESETS_KEY = 'mapUserPresets';
 const USER_PRESET_PREFIX = 'u:';
 const PRESET_NAME_MAX = 40;
 
+function isUserPresetId(id) {
+	return typeof id === 'string' && id.startsWith(USER_PRESET_PREFIX);
+}
+
 function isValidPreset(preset) {
-	return preset && typeof preset.id === 'string' && preset.id.startsWith(USER_PRESET_PREFIX)
+	return preset && isUserPresetId(preset.id)
 		&& typeof preset.name === 'string' && Array.isArray(preset.maps);
 }
 
@@ -1164,6 +1168,9 @@ function buildMapSettings(panel) {
 
 	function markCustom() {
 		panel.querySelector('input[name="msPreset"][value="custom"]').checked = true;
+		// the edit may have just put the list out of step with the preset it came
+		// from, or brought it back into step, which is what "Ažuriraj" hangs on
+		renderManage();
 	}
 
 	// pointer-events drag reorder: works for both mouse and touch (the HTML5
@@ -1267,6 +1274,11 @@ function buildMapSettings(panel) {
 
 	const presetsDiv = el('div', { class: 'ms-presets' });
 
+	// which saved preset the list in the picker came from. Editing it flips the
+	// bar to "Prilagođeno" (see markCustom), so the selection can no longer say
+	// where the list started — this is what the "Ažuriraj" link writes back to.
+	let editingPresetId = isUserPresetId(activePresetId()) ? activePresetId() : null;
+
 	// rebuilt whenever the saved presets change, so they sit among the
 	// built-ins and stay selectable the same way
 	function renderPresets(selectedId) {
@@ -1281,10 +1293,14 @@ function buildMapSettings(panel) {
 			radio.addEventListener('change', () => {
 				// switching to a named preset previews its list; "custom" keeps the current list
 				if (preset.id !== 'custom') fillList(presetMapIds(preset.id));
+				// picking "Prilagođeno" by hand detaches the list from wherever it
+				// came from, so no row offers to take the edits back
+				editingPresetId = isUserPresetId(preset.id) ? preset.id : null;
+				renderManage();
 			});
 			// a corner mark on the saved ones, so the two kinds stay apart in the
 			// bar the way the management list below already keeps them apart
-			const chipClass = 'ms-chip' + (preset.id.startsWith(USER_PRESET_PREFIX) ? ' ms-user' : '');
+			const chipClass = 'ms-chip' + (isUserPresetId(preset.id) ? ' ms-user' : '');
 			// the name rides in a span rather than a bare text node so the chip
 			// styling can hang off the radio's :checked as a sibling selector
 			presetsDiv.appendChild(el('label', {}, [radio, el('span', { class: chipClass, text: preset.name })]));
@@ -1341,6 +1357,7 @@ function buildMapSettings(panel) {
 		const preset = storeUserPreset(name, selectedMapIds());
 		nameInput.value = '';
 		addingPreset = false; // the form has done its job
+		editingPresetId = preset.id; // the list is now this preset's, so edits from here go back to it
 		renderPresets(preset.id); // saving selects what was just saved
 		renderManage();
 	}
@@ -1414,10 +1431,25 @@ function buildMapSettings(panel) {
 	});
 	renameInput.addEventListener('input', () => renameInput.classList.remove('invalid'));
 
+	// whether any row is offering to take edits back, i.e. whether the rows carry
+	// the leading action slot at all. An empty 8ch column on every row would wrap
+	// them all on a phone for an action that is usually not on offer.
+	let showUpdate = false;
+
 	// the action slots line up as columns down the list, so a row without one
-	// leaves it empty instead of shifting the rest along
+	// leaves it empty instead of shifting the rest along. The first cell is the
+	// update slot, dropped from every row together when no row can use it.
 	function buildLinkCells(cells) {
-		return el('span', { class: 'ms-manage-links' }, cells.map(cell => cell || el('span')));
+		const slots = showUpdate ? cells : cells.slice(1);
+		return el('span', { class: 'ms-manage-links' }, slots.map(cell => cell || el('span')));
+	}
+
+	// only the preset the list came from: any other row would take an overwrite
+	// with a list that has nothing to do with it. Saving under the same name in
+	// the add form still works and is unchanged — this is the same write, minus
+	// having to know that the name is the handle.
+	function hasPendingEdits(preset) {
+		return preset.id === editingPresetId && !sameMapIds(preset.maps, selectedMapIds());
 	}
 
 	// shares the preset as saved — the panel's Podijeli button is the one that
@@ -1452,7 +1484,7 @@ function buildMapSettings(panel) {
 		// slot so it ends the row where Obriši ends the ones above.
 		return el('div', { class: 'ms-manage-item' + (hidden ? ' ms-hidden' : '') }, [
 			el('span', { class: 'ms-manage-name', text: preset.name }),
-			buildLinkCells([null, null, toggleLink])
+			buildLinkCells([null, null, null, toggleLink])
 		]);
 	}
 
@@ -1461,9 +1493,24 @@ function buildMapSettings(panel) {
 
 		const renameLink = el('a', { text: 'Preimenuj' });
 		const deleteLink = el('a', { text: 'Obriši' });
+
+		// writes the list on screen over this preset, keeping its id — so saved
+		// preferences and links naming it follow the change instead of breaking.
+		// It saves the preset only: the page still shows the old view until
+		// Primijeni, the same as every other panel action.
+		let updateLink = null;
+		if (hasPendingEdits(preset)) {
+			updateLink = el('a', { text: 'Ažuriraj' });
+			updateLink.addEventListener('click', () => {
+				storeUserPreset(preset.name, selectedMapIds()); // by name, the one write path
+				renderPresets(preset.id); // the list is this preset again, so its chip comes back
+				renderManage();
+			});
+		}
+
 		const row = el('div', { class: 'ms-manage-item' }, [
 			el('span', { class: 'ms-manage-name', text: preset.name }),
-			buildLinkCells([buildShareLink(() => presetSharePrefs(preset)), renameLink, deleteLink])
+			buildLinkCells([updateLink, buildShareLink(() => presetSharePrefs(preset)), renameLink, deleteLink])
 		]);
 
 		renameLink.addEventListener('click', () => startRename(preset));
@@ -1487,6 +1534,7 @@ function buildMapSettings(panel) {
 			disarm();
 			// the map list on screen is untouched — it just stops being a saved preset
 			const wasSelected = checkedPresetId() === preset.id;
+			if (editingPresetId === preset.id) editingPresetId = null; // nothing left to write back to
 			deleteUserPreset(preset.id);
 			renderPresets(wasSelected ? 'custom' : checkedPresetId());
 			renderManage();
@@ -1506,7 +1554,7 @@ function buildMapSettings(panel) {
 		// Potvrdi and Odustani sit under Preimenuj and Obriši, the actions they stand in for
 		return el('div', { class: 'ms-manage-item' }, [
 			renameInput,
-			buildLinkCells([null, confirmLink, cancelLink])
+			buildLinkCells([null, null, confirmLink, cancelLink])
 		]);
 	}
 
@@ -1570,6 +1618,9 @@ function buildMapSettings(panel) {
 	}
 
 	function renderManage() {
+		// settled before any row is built: the slot count is shared by all of them
+		showUpdate = userPresets.some(hasPendingEdits);
+		manageDiv.classList.toggle('ms-editing', showUpdate);
 		manageDiv.replaceChildren();
 		manageDiv.appendChild(buildUserHeading());
 		if (addingPreset) manageDiv.appendChild(el('div', { class: 'ms-save' }, [nameInput, saveBtn]));
