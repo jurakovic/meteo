@@ -825,6 +825,24 @@ function presetSharePrefs(preset) {
 	return { preset: 'custom', maps: preset.maps.slice(), name: preset.name };
 }
 
+// same maps in the same order: the render order is part of what a preset is,
+// so a reordered copy is a different view and stays "Prilagođeno"
+function sameMapIds(a, b) {
+	return a.length === b.length && a.every((id, index) => id === b[index]);
+}
+
+// A shared preset arrives without an id (see presetSharePrefs), so the bar has
+// nothing to match and falls back to "Prilagođeno" — including when you open
+// your own link, where the list is one of your saved presets. Matching on
+// contents finds it again. The name is not part of the test: it is a label the
+// recipient may already have used for something else, and a renamed preset is
+// still the same view. Saved presets are searched before the built-ins, so a
+// saved copy of a built-in list selects the copy rather than the original.
+function presetIdForMapIds(mapIds) {
+	const match = userPresets.concat(MAP_PRESETS).find(preset => sameMapIds(preset.maps, mapIds));
+	return match ? match.id : null;
+}
+
 // navigator.clipboard only exists in secure contexts (https/localhost), e.g.
 // not on http://<LAN-IP>; fall back to a copyable prompt there — and again if
 // the write itself is refused (permissions, lost focus)
@@ -853,6 +871,16 @@ let sharedMapView = (() => {
 
 function getActiveMapPrefs() {
 	return sharedMapView || getMapPrefs();
+}
+
+// which chip the panel opens on. Only a shared list is matched back to a
+// preset: saved preferences hold "custom" because the user applied a list
+// without saving it, and binding that to a preset id behind their back would
+// hand later edits of that preset to a view that only happens to match today.
+function activePresetId() {
+	const prefs = getActiveMapPrefs();
+	if (sharedMapView && prefs.preset === 'custom') return presetIdForMapIds(resolveMapIds()) || 'custom';
+	return prefs.preset;
 }
 
 function clearSharedMapView() {
@@ -1088,7 +1116,6 @@ function toggleMapSettings() {
 }
 
 function buildMapSettings(panel) {
-	const prefs = getActiveMapPrefs();
 	panel.replaceChildren();
 
 	// two sections: the selected block is the render order (draggable), the
@@ -1268,7 +1295,7 @@ function buildMapSettings(panel) {
 		presetsDiv.appendChild(el('span', { class: 'ms-fill' }));
 	}
 
-	renderPresets(prefs.preset);
+	renderPresets(activePresetId());
 
 	fillList(resolveMapIds());
 
@@ -1483,6 +1510,14 @@ function buildMapSettings(panel) {
 		]);
 	}
 
+	// the shared list is already one of the saved presets, so the bar has its
+	// chip selected and "Spremi" would only add a second copy under a suffixed
+	// name. Recomputed per render: deleting that preset brings the row back.
+	function sharedAlreadySaved() {
+		const ids = resolveMapIds();
+		return userPresets.some(preset => sameMapIds(preset.maps, ids));
+	}
+
 	function buildSharedRow() {
 		const saveLink = el('a', { text: 'Spremi' });
 		saveLink.addEventListener('click', () => {
@@ -1538,7 +1573,7 @@ function buildMapSettings(panel) {
 		manageDiv.replaceChildren();
 		manageDiv.appendChild(buildUserHeading());
 		if (addingPreset) manageDiv.appendChild(el('div', { class: 'ms-save' }, [nameInput, saveBtn]));
-		if (sharedMapView && sharedMapView.name) manageDiv.appendChild(buildSharedRow());
+		if (sharedMapView && sharedMapView.name && !sharedAlreadySaved()) manageDiv.appendChild(buildSharedRow());
 		if (userPresets.length) {
 			userPresets.forEach(preset => manageDiv.appendChild(buildManageRow(preset)));
 		} else {
