@@ -716,14 +716,6 @@ body.fs-lock {
 			white-space: nowrap;
 		}
 
-			/* a fourth column while a row offers to take edits back ("Ažuriraj",
-			   8 characters). It is carried only then, and by every row at once so
-			   the columns stay lined up — held permanently, the empty slot would
-			   wrap every row on a phone for an action rarely on offer */
-			.map-settings .ms-manage.ms-editing .ms-manage-links {
-				grid-template-columns: 8ch 9ch 9ch 8ch;
-			}
-
 			.map-settings .ms-manage-links a,
 			.map-settings .ms-shared a {
 				cursor: pointer;

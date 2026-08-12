@@ -1455,17 +1455,12 @@ function buildMapSettings(panel) {
 	});
 	renameInput.addEventListener('input', () => renameInput.classList.remove('invalid'));
 
-	// whether any row is offering to take edits back, i.e. whether the rows carry
-	// the leading action slot at all. An empty 8ch column on every row would wrap
-	// them all on a phone for an action that is usually not on offer.
-	let showUpdate = false;
-
 	// the action slots line up as columns down the list, so a row without one
-	// leaves it empty instead of shifting the rest along. The first cell is the
-	// update slot, dropped from every row together when no row can use it.
+	// leaves it empty instead of shifting the rest along. Three is what fits a
+	// phone row beside the name, so an action added here has to replace one
+	// rather than join them — see the Ažuriraj/Podijeli swap below.
 	function buildLinkCells(cells) {
-		const slots = showUpdate ? cells : cells.slice(1);
-		return el('span', { class: 'ms-manage-links' }, slots.map(cell => cell || el('span')));
+		return el('span', { class: 'ms-manage-links' }, cells.map(cell => cell || el('span')));
 	}
 
 	// only the preset the list came from: any other row would take an overwrite
@@ -1512,7 +1507,7 @@ function buildMapSettings(panel) {
 		// slot so it ends the row where Obriši ends the ones above.
 		return el('div', { class: 'ms-manage-item' + (hidden ? ' ms-hidden' : '') }, [
 			el('span', { class: 'ms-manage-name', text: preset.name }),
-			buildLinkCells([null, null, null, toggleLink])
+			buildLinkCells([null, null, toggleLink])
 		]);
 	}
 
@@ -1526,19 +1521,28 @@ function buildMapSettings(panel) {
 		// preferences and links naming it follow the change instead of breaking.
 		// It saves the preset only: the page still shows the old view until
 		// Primijeni, the same as every other panel action.
-		let updateLink = null;
+		//
+		// It takes the share slot rather than a fourth one: four columns overflow
+		// a phone row beside the name and drop every row's actions onto a second
+		// line. Podijeli is the one to give up while a row has unsaved edits — it
+		// shares the preset *as saved*, which is least useful exactly then, and
+		// the panel's own Podijeli covers the list on screen. It comes back the
+		// moment the edits are saved or dropped.
+		let firstLink;
 		if (hasPendingEdits(preset)) {
-			updateLink = el('a', { text: 'Ažuriraj' });
-			updateLink.addEventListener('click', () => {
+			firstLink = el('a', { text: 'Ažuriraj' });
+			firstLink.addEventListener('click', () => {
 				storeUserPreset(preset.name, selectedMapIds()); // by name, the one write path
 				renderPresets(preset.id); // the list is this preset again, so its chip comes back
 				renderManage();
 			});
+		} else {
+			firstLink = buildShareLink(() => presetSharePrefs(preset));
 		}
 
 		const row = el('div', { class: 'ms-manage-item' }, [
 			el('span', { class: 'ms-manage-name', text: preset.name }),
-			buildLinkCells([updateLink, buildShareLink(() => presetSharePrefs(preset)), renameLink, deleteLink])
+			buildLinkCells([firstLink, renameLink, deleteLink])
 		]);
 
 		renameLink.addEventListener('click', () => startRename(preset));
@@ -1582,7 +1586,7 @@ function buildMapSettings(panel) {
 		// Potvrdi and Odustani sit under Preimenuj and Obriši, the actions they stand in for
 		return el('div', { class: 'ms-manage-item' }, [
 			renameInput,
-			buildLinkCells([null, null, confirmLink, cancelLink])
+			buildLinkCells([null, confirmLink, cancelLink])
 		]);
 	}
 
@@ -1646,9 +1650,6 @@ function buildMapSettings(panel) {
 	}
 
 	function renderManage() {
-		// settled before any row is built: the slot count is shared by all of them
-		showUpdate = userPresets.some(hasPendingEdits);
-		manageDiv.classList.toggle('ms-editing', showUpdate);
 		manageDiv.replaceChildren();
 
 		// the built-ins are listed too, so a hidden one can be brought back
