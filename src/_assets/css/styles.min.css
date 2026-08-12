@@ -36,11 +36,14 @@ none;outline:0}.buttons .btn:hover{background-color:#5f6f89}.links-btn{position:
 ;font-size:13px;color:#fff}.map-settings label{cursor:pointer}.map-settings .ms-presets{display:flex;flex-wrap:wrap;gap:6px;padding-bottom:
 8px;margin-bottom:8px;border-bottom:1px solid #485871}.map-settings .ms-presets label{position:relative;flex:1 1 auto}
 .map-settings .ms-presets .ms-fill{flex:1000 1 0;height:0}.map-settings .ms-presets input{position:absolute;margin:0;opacity:0}
-.map-settings .ms-chip{display:block;text-align:center;padding:3px 10px;background-color:#2b3a52;border:1px solid #485871;user-select:none}
-.map-settings .ms-presets label:hover .ms-chip{background-color:#3a4a66}.map-settings .ms-presets input:checked+.ms-chip{color:#ff9800;
-background-color:#485871}.map-settings .ms-presets input:focus-visible+.ms-chip{outline:1px solid white;outline-offset:1px}
-.map-settings .ms-item{display:flex;justify-content:space-between;align-items:center;padding:2px 0}.map-settings .ms-glyph{margin:0 6px 0 
-4px}.map-settings .ms-list:empty::before{display:block;padding:2px 0;font-style:italic;opacity:.6}.map-settings .ms-selected:empty::before{
+.map-settings .ms-chip{display:block;position:relative;text-align:center;padding:3px 10px;background-color:#2b3a52;border:1px solid #485871;
+user-select:none}.map-settings .ms-chip.ms-user::after{content:'';position:absolute;top:0;right:0;border-top:7px solid #93a4bd;border-left:
+7px solid transparent}.map-settings .ms-chip.ms-origin::before{content:'';position:absolute;left:4px;top:50%;width:4px;height:4px;margin-top
+:-2px;border-radius:50%;background-color:#93a4bd}.map-settings .ms-presets label:hover .ms-chip{background-color:#3a4a66}
+.map-settings .ms-presets input:checked+.ms-chip{color:#ff9800;background-color:#485871}
+.map-settings .ms-presets input:focus-visible+.ms-chip{outline:1px solid white;outline-offset:1px}.map-settings .ms-item{display:flex;
+justify-content:space-between;align-items:center;padding:2px 0}.map-settings .ms-glyph{margin:0 6px 0 4px}
+.map-settings .ms-list:empty::before{display:block;padding:2px 0;font-style:italic;opacity:.6}.map-settings .ms-selected:empty::before{
 content:"Nema odabranih karata"}.map-settings .ms-available:empty::before{content:"Sve su karte odabrane"}
 .map-settings .ms-available .ms-handle{display:none}.map-settings .ms-sort{display:flex;align-items:baseline;gap:14px;padding:6px 0;margin:
 6px 0 0;border-top:1px solid #485871}.map-settings .ms-sort a{cursor:pointer;user-select:none;text-decoration:none}
