@@ -65,8 +65,10 @@ const STORM_LINKS = [
 	{ text: 'ESWD', href: 'https://www.eswd.eu' }
 ];
 
-function except(links, ...names) {
-	return links.filter(link => !names.includes(link.text));
+// a map's own site is already linked from its title bar, so drop it from the
+// row of alternatives below
+function except(links, name) {
+	return links.filter(link => link.text !== name);
 }
 
 // ---------- map catalog ----------
@@ -229,7 +231,7 @@ const MAP_CATALOG = [
 		category: 'nevrijeme',
 		name: 'ESSL | Prognoza nevremena',
 		type: 'slideshow',
-		titleHref: 'https://www.stormforecast.eu',
+		titleHref: 'https://stormforecast.eu',
 		maxWidth: 900,
 		aspect: '900 / 600',
 		startSlide: 2,
@@ -319,25 +321,27 @@ const MAP_CATALOG = [
 		name: 'ČHMÚ | Sinoptička karta',
 		type: 'slideshow',
 		maxWidth: 760,
+		// only has an effect on titled slideshows: updateSlideshowWidth (main.js)
+		// reads the active slide's .placeholder wrapper, which untitled slides lack
 		dynamicWidth: true,
 		slides: [
 			{
-				title: { text: 'ČHMÚ | Sinoptička karta', href: 'https://intranet.chmi.cz/aktualni-situace/aktualni-stav-pocasi/evropa/synopticka-situace' },
+				title: { href: 'https://intranet.chmi.cz/aktualni-situace/aktualni-stav-pocasi/evropa/synopticka-situace' },
 				img: 'https://intranet.chmi.cz/files/portal/docs/meteo/om/evropa/analyza.gif',
 				aspect: '760 / 492'
 			},
 			{
-				title: { text: 'ČHMÚ | Sinoptička karta', href: 'https://intranet.chmi.cz/predpovedi/predpovedi-pocasi/evropa/synopticka-situace' },
+				title: { href: 'https://intranet.chmi.cz/predpovedi/predpovedi-pocasi/evropa/synopticka-situace' },
 				img: 'https://intranet.chmi.cz/files/portal/docs/meteo/om/evropa/preba/preba36.gif',
 				aspect: '760 / 435'
 			},
 			{
-				title: { text: 'ČHMÚ | Sinoptička karta', href: 'https://intranet.chmi.cz/predpovedi/predpovedi-pocasi/evropa/synopticka-situace' },
+				title: { href: 'https://intranet.chmi.cz/predpovedi/predpovedi-pocasi/evropa/synopticka-situace' },
 				img: 'https://intranet.chmi.cz/files/portal/docs/meteo/om/evropa/preba/preba60.gif',
 				aspect: '760 / 435'
 			},
 			{
-				title: { text: 'ČHMÚ | Sinoptička karta', href: 'https://intranet.chmi.cz/predpovedi/predpovedi-pocasi/evropa/synopticka-situace' },
+				title: { href: 'https://intranet.chmi.cz/predpovedi/predpovedi-pocasi/evropa/synopticka-situace' },
 				img: 'https://intranet.chmi.cz/files/portal/docs/meteo/om/evropa/preba/preba84.gif',
 				aspect: '760 / 435'
 			}
@@ -557,8 +561,10 @@ const DEFAULT_MAPS = [
 	'eumetnet', 'meteociel-satelit', 'chmi-sinopticka', 'neverin-kamera', 'meteoblue-prognoza'
 ];
 
+// every preset carries its own id list, so resolving one is a plain lookup
 const MAP_PRESETS = [
-	{ id: 'zadano', name: 'Zadano' },
+	// the id stays 'zadano': it is written into saved preferences and shared links
+	{ id: 'zadano', name: 'Osnovno', maps: DEFAULT_MAPS },
 	{
 		id: 'vise', name: 'Više',
 		maps: [
@@ -580,37 +586,211 @@ const MAP_PRESETS = [
 		id: 'nevrijeme', name: 'Nevrijeme',
 		maps: ['essl', 'astorp', 'estofex', 'blitzortung', 'istramet-munje', 'blitzortung-karta']
 	},
-	{ id: 'sve', name: 'Sve' },
+	{ id: 'sve', name: 'Sve', maps: MAP_CATALOG.map(map => map.id) },
 	{ id: 'nista', name: 'Ništa', maps: [] }
 ];
+
+// ---------- user presets (localStorage) ----------
+// Saved views take the same { id, name, maps } shape as the built-ins, so the
+// preset bar, presetMapIds and the stored preferences treat both alike. Ids
+// are prefixed to keep them out of the built-in namespace, which leaves the
+// name free to change — renaming never breaks a saved preference or selection.
+
+const USER_PRESETS_KEY = 'mapUserPresets';
+const USER_PRESET_PREFIX = 'u:';
+const PRESET_NAME_MAX = 40;
+
+function isUserPresetId(id) {
+	return typeof id === 'string' && id.startsWith(USER_PRESET_PREFIX);
+}
+
+function isValidPreset(preset) {
+	return preset && isUserPresetId(preset.id)
+		&& typeof preset.name === 'string' && Array.isArray(preset.maps);
+}
+
+function loadUserPresets() {
+	try {
+		const list = JSON.parse(localStorage.getItem(USER_PRESETS_KEY));
+		if (Array.isArray(list)) return list.filter(isValidPreset);
+	} catch (e) { /* corrupt storage falls through to none */ }
+	return [];
+}
+
+// read once: allPresets runs on every validation and panel build
+let userPresets = loadUserPresets();
+
+function saveUserPresets() {
+	try {
+		localStorage.setItem(USER_PRESETS_KEY, JSON.stringify(userPresets));
+	} catch (e) { /* storage disabled or full — the presets still work this session */ }
+}
+
+function allPresets() {
+	return MAP_PRESETS.concat(userPresets);
+}
+
+function newPresetId() {
+	let id;
+	do { id = USER_PRESET_PREFIX + Date.now().toString(36) + Math.random().toString(36).slice(2, 6); }
+	while (userPresets.some(preset => preset.id === id));
+	return id;
+}
+
+// the name is the handle for overwriting, so it has to stay printable and bounded
+function cleanPresetName(name) {
+	return String(name).trim().replace(/\s+/g, ' ').slice(0, PRESET_NAME_MAX);
+}
+
+function findUserPresetByName(name) {
+	return userPresets.find(preset => preset.name.toLowerCase() === name.toLowerCase());
+}
+
+// saving under an existing name updates that preset — the way to amend a saved
+// view is to edit the list and save it again under the same name
+function storeUserPreset(name, maps) {
+	const existing = findUserPresetByName(name);
+	if (existing) {
+		existing.name = name;
+		existing.maps = maps;
+	} else {
+		userPresets.push({ id: newPresetId(), name: name, maps: maps });
+	}
+	saveUserPresets();
+	return existing || userPresets[userPresets.length - 1];
+}
+
+// for a preset arriving from someone else's link, where silently overwriting a
+// preset of the recipient's own would lose their list
+function uniquePresetName(name) {
+	// the budget is spent before the clash is looked up, not after: appending
+	// the suffix and slicing back to PRESET_NAME_MAX would hand a full-length
+	// name straight back to storeUserPreset, which overwrites by name
+	const base = cleanPresetName(name);
+	let candidate = base;
+	for (let n = 2; findUserPresetByName(candidate); n++) {
+		const suffix = ` (${n})`;
+		candidate = base.slice(0, PRESET_NAME_MAX - suffix.length).trim() + suffix;
+	}
+	return candidate;
+}
+
+// deleting writes to storage at once, unlike the rest of the panel, which only
+// commits on Primijeni — so a saved preference naming this preset has to be
+// rewritten in the same breath. Left alone it would fail isValidPrefs on the
+// next load and fall back to Osnovno, losing the view still on screen. The
+// stored contents are what gets kept, not the panel's possibly-edited list.
+function deleteUserPreset(id) {
+	const preset = userPresets.find(p => p.id === id);
+	if (preset && getMapPrefs().preset === id)
+		saveMapPrefs({ preset: 'custom', maps: preset.maps.slice() });
+	userPresets = userPresets.filter(p => p.id !== id);
+	saveUserPresets();
+}
+
+// ---------- hidden built-in presets (localStorage) ----------
+// Built-ins are code, so they are hidden rather than deleted — and hiding is a
+// display choice only. allPresets keeps returning them, so a saved preference,
+// the zadano fallback and a shared link naming a preset the recipient hides
+// all keep resolving. Only the preset bar filters.
+
+const HIDDEN_PRESETS_KEY = 'mapHiddenPresets';
+
+// one built-in always stays on offer, so the row can never come down to
+// "Prilagođeno" alone and there is always a named view to get back to
+const PERMANENT_PRESET_ID = 'zadano';
+
+function isHideablePreset(id) {
+	return id !== PERMANENT_PRESET_ID;
+}
+
+function loadHiddenPresets() {
+	try {
+		const list = JSON.parse(localStorage.getItem(HIDDEN_PRESETS_KEY));
+		// the permanent one is dropped on the way in, so a list stored before it
+		// became permanent doesn't keep it hidden or skew the counts below
+		if (Array.isArray(list)) return list.filter(id => isHideablePreset(id) && MAP_PRESETS.some(preset => preset.id === id));
+	} catch (e) { /* corrupt storage falls through to none hidden */ }
+	return [];
+}
+
+let hiddenPresets = loadHiddenPresets();
+
+function saveHiddenPresets() {
+	try {
+		localStorage.setItem(HIDDEN_PRESETS_KEY, JSON.stringify(hiddenPresets));
+	} catch (e) { /* storage disabled or full — the choice still holds this session */ }
+}
+
+function isPresetHidden(id) {
+	return hiddenPresets.includes(id);
+}
+
+function setPresetHidden(id, hidden) {
+	if (hidden && !isHideablePreset(id)) return; // no row offers this, but the rule lives here
+	hiddenPresets = hiddenPresets.filter(hiddenId => hiddenId !== id);
+	if (hidden) hiddenPresets.push(id);
+	saveHiddenPresets();
+}
+
+function hideablePresets() {
+	return MAP_PRESETS.filter(preset => isHideablePreset(preset.id));
+}
+
+function hideAllPresets() {
+	hiddenPresets = hideablePresets().map(preset => preset.id);
+	saveHiddenPresets();
+}
+
+function showAllPresets() {
+	hiddenPresets = [];
+	saveHiddenPresets();
+}
+
+// what the preset bar offers, as opposed to what still resolves
+function visiblePresets() {
+	return allPresets().filter(preset => !isPresetHidden(preset.id));
+}
 
 // ---------- preferences (localStorage) ----------
 
 const MAP_PREFS_KEY = 'mapPrefs';
 
+// guards both untrusted sources (localStorage, ?v=): 'custom' is a runtime-only
+// preset (not in MAP_PRESETS), everything else must name a real preset or it
+// can't be selected/rendered — unknown ids (older/newer site version, a deleted
+// user preset, hand-crafted ?v=) are rejected so a stale value isn't kept
+function isValidPrefs(prefs) {
+	return prefs && typeof prefs.preset === 'string'
+		&& (prefs.preset === 'custom' || allPresets().some(p => p.id === prefs.preset));
+}
+
 function getMapPrefs() {
 	try {
 		const prefs = JSON.parse(localStorage.getItem(MAP_PREFS_KEY));
-		if (prefs && typeof prefs.preset === 'string') return prefs;
+		if (isValidPrefs(prefs)) return prefs;
 	} catch (e) { /* corrupt storage falls through to default */ }
 	return { preset: 'zadano' };
 }
 
 function saveMapPrefs(prefs) {
-	localStorage.setItem(MAP_PREFS_KEY, JSON.stringify(prefs));
+	try {
+		localStorage.setItem(MAP_PREFS_KEY, JSON.stringify(prefs));
+	} catch (e) { /* storage disabled or full — still apply the view this session */ }
 }
 
 function presetMapIds(presetId) {
-	if (presetId === 'zadano') return DEFAULT_MAPS;
-	if (presetId === 'sve') return MAP_CATALOG.map(map => map.id);
-	const preset = MAP_PRESETS.find(p => p.id === presetId);
+	const preset = allPresets().find(p => p.id === presetId);
 	return preset ? preset.maps : null;
 }
 
 function resolveMapIds() {
 	const prefs = getActiveMapPrefs();
+	// deduped as well as filtered: a hand-crafted ?v= can name the same map
+	// twice, and two rendered copies would share one data-slideshow-id — the
+	// arrows drive whichever comes first while both sets of indicators light up
 	if (prefs.preset === 'custom' && Array.isArray(prefs.maps))
-		return prefs.maps.filter(id => MAP_CATALOG.some(map => map.id === id));
+		return [...new Set(prefs.maps)].filter(id => MAP_CATALOG.some(map => map.id === id));
 	return presetMapIds(prefs.preset) || presetMapIds('zadano');
 }
 
@@ -619,16 +799,73 @@ function resolveMapIds() {
 // parameter is kept in the address bar (re-copyable, refresh-safe) and is
 // removed once the user applies their own settings.
 
+// btoa only takes code points up to U+00FF, and a saved preset's name rides
+// along in the payload — every Croatian diacritic (č ć š ž đ) is above that.
+// Escaping them as \uXXXX first keeps the input ASCII; JSON.parse reads those
+// back on its own, so decodeMapView needs no counterpart and links shared by
+// an older version (ASCII throughout) still decode unchanged.
 function encodeMapView(prefs) {
-	return btoa(JSON.stringify(prefs)).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+	const json = JSON.stringify(prefs)
+		.replace(/[\u0080-\uffff]/g, c => '\\u' + c.charCodeAt(0).toString(16).padStart(4, '0'));
+	return btoa(json).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
 }
 
 function decodeMapView(value) {
 	try {
 		const prefs = JSON.parse(atob(value.replace(/-/g, '+').replace(/_/g, '/')));
-		if (prefs && typeof prefs.preset === 'string') return prefs;
+		if (isValidPrefs(prefs)) {
+			// a shared saved preset travels as its contents plus its name, which
+			// the panel offers to save — it lands in storage, so bound it here
+			if (prefs.name) prefs.name = cleanPresetName(prefs.name);
+			return prefs;
+		}
 	} catch (e) { /* malformed parameter falls through */ }
 	return null;
+}
+
+// a saved preset's id means nothing to a recipient, so it travels as its
+// contents plus its name — the name is only a label to save it under
+function presetSharePrefs(preset) {
+	return { preset: 'custom', maps: preset.maps.slice(), name: preset.name };
+}
+
+// same maps in the same order: the render order is part of what a preset is,
+// so a reordered copy is a different view and stays "Prilagođeno"
+function sameMapIds(a, b) {
+	return a.length === b.length && a.every((id, index) => id === b[index]);
+}
+
+// A shared preset arrives without an id (see presetSharePrefs), so the bar has
+// nothing to match and falls back to "Prilagođeno" — including when you open
+// your own link, where the list is one of your saved presets. Matching on
+// contents finds it again. The name is not part of the test: it is a label the
+// recipient may already have used for something else, and a renamed preset is
+// still the same view. Saved presets are searched before the built-ins, so a
+// saved copy of a built-in list selects the copy rather than the original.
+function presetIdForMapIds(mapIds) {
+	const match = userPresets.concat(MAP_PRESETS).find(preset => sameMapIds(preset.maps, mapIds));
+	return match ? match.id : null;
+}
+
+// navigator.clipboard only exists in secure contexts (https/localhost), e.g.
+// not on http://<LAN-IP>; fall back to a copyable prompt there — and again if
+// the write itself is refused (permissions, lost focus)
+function copyMapViewLink(prefs, onCopied) {
+	const url = new URL(window.location.origin + window.location.pathname);
+	url.searchParams.set('v', encodeMapView(prefs));
+	const link = url.toString();
+	const promptCopy = () => window.prompt('Kopiraj poveznicu:', link);
+	if (navigator.clipboard && navigator.clipboard.writeText) {
+		navigator.clipboard.writeText(link).then(onCopied).catch(promptCopy);
+	} else {
+		promptCopy();
+	}
+}
+
+// confirms a copy in place, since the panel has no other feedback channel
+function flashLabel(node, text, restore) {
+	node.textContent = text;
+	setTimeout(() => { node.textContent = restore; }, 1500);
 }
 
 let sharedMapView = (() => {
@@ -638,6 +875,16 @@ let sharedMapView = (() => {
 
 function getActiveMapPrefs() {
 	return sharedMapView || getMapPrefs();
+}
+
+// which chip the panel opens on. Only a shared list is matched back to a
+// preset: saved preferences hold "custom" because the user applied a list
+// without saving it, and binding that to a preset id behind their back would
+// hand later edits of that preset to a view that only happens to match today.
+function activePresetId() {
+	const prefs = getActiveMapPrefs();
+	if (sharedMapView && prefs.preset === 'custom') return presetIdForMapIds(resolveMapIds()) || 'custom';
+	return prefs.preset;
 }
 
 function clearSharedMapView() {
@@ -668,7 +915,9 @@ function maxWidthStyle(map) {
 	return map.maxWidth ? `max-width: ${map.maxWidth}px;` : '';
 }
 
-function buildTitleBar(title, map) {
+// map is optional and only supplies the width: slide title bars are
+// unconstrained, their max-width sits on the .placeholder wrapper below
+function buildTitleBar(title, map = {}) {
 	return el('div', { class: 'radartitle', style: maxWidthStyle(map) || undefined }, [
 		el('a', { href: title.href, target: '_blank', rel: 'nofollow', text: title.text })
 	]);
@@ -701,7 +950,9 @@ function buildSlideshow(map) {
 		const slideDiv = el('div', { class: 'slide fade' + (active ? ' active' : '') });
 		if (titled) {
 			const width = slide.maxWidth || map.maxWidth;
-			slideDiv.appendChild(buildTitleBar(slide.title, {}));
+			// a slide may omit its title text to inherit the map name (its href still differs per slide)
+			const title = { text: slide.title.text || map.name, href: slide.title.href };
+			slideDiv.appendChild(buildTitleBar(title));
 			slideDiv.appendChild(el('div', {
 				class: 'placeholder',
 				style: `${width ? `max-width: ${width}px; ` : ''}aspect-ratio: ${slide.aspect};`
@@ -827,9 +1078,16 @@ function renderMaps() {
 	const tbody = document.querySelector('tbody[data-maps]');
 	if (!tbody) return;
 	tbody.replaceChildren();
-	resolveMapIds().forEach((id, i) => {
-		const map = MAP_CATALOG.find(m => m.id === id);
-		if (!map) return;
+	const maps = resolveMapIds().map(id => MAP_CATALOG.find(m => m.id === id)).filter(Boolean);
+	if (!maps.length) {
+		tbody.appendChild(el('tr', {}, [
+			el('td', { align: 'center' }, [
+				el('div', { class: 'maps-empty', text: 'Nema odabranih karata. Odaberite ih pod "Karte".' })
+			])
+		]));
+		return;
+	}
+	maps.forEach((map, i) => {
 		if (i > 0) tbody.appendChild(el('tr', { class: 'sp20' }));
 		const td = el('td', { align: 'center' });
 		buildMapContent(map).forEach(node => {
@@ -844,20 +1102,6 @@ function renderMaps() {
 
 // ---------- settings panel ----------
 
-// scroll the preset bar horizontally so the radio's label is visible;
-// scrollIntoView is unusable here — it also scrolls the page vertically
-// back up to the panel (e.g. on every checkbox change far down the list)
-function revealPresetOption(radio, smooth) {
-	const label = radio.parentElement;
-	const bar = label.parentElement;
-	const labelRect = label.getBoundingClientRect();
-	const barRect = bar.getBoundingClientRect();
-	let delta = 0;
-	if (labelRect.right > barRect.right) delta = labelRect.right - barRect.right;
-	else if (labelRect.left < barRect.left) delta = labelRect.left - barRect.left;
-	if (delta !== 0) bar.scrollBy({ left: delta, behavior: smooth ? 'smooth' : 'auto' });
-}
-
 function setMapSettingsVisible(panel, visible) {
 	panel.hidden = !visible;
 	const arrow = document.querySelector('.buttons button.btn .arrow');
@@ -870,18 +1114,12 @@ function toggleMapSettings() {
 	if (panel.hidden) {
 		buildMapSettings(panel);
 		setMapSettingsVisible(panel, true);
-		// scroll shadows and positions need layout, so only after unhiding
-		const presets = panel.querySelector('.ms-presets');
-		updateLinksScrollShadow(presets);
-		const checked = presets.querySelector('input:checked');
-		if (checked) revealPresetOption(checked, false);
 	} else {
 		setMapSettingsVisible(panel, false);
 	}
 }
 
 function buildMapSettings(panel) {
-	const prefs = getActiveMapPrefs();
 	panel.replaceChildren();
 
 	// two sections: the selected block is the render order (draggable), the
@@ -929,10 +1167,11 @@ function buildMapSettings(panel) {
 	updateSortLinks();
 
 	function markCustom() {
-		const custom = panel.querySelector('input[name="msPreset"][value="custom"]');
-		custom.checked = true;
-		// the custom radio is last and may be scrolled out of view
-		revealPresetOption(custom, true);
+		panel.querySelector('input[name="msPreset"][value="custom"]').checked = true;
+		// the edit may have just put the list out of step with the preset it came
+		// from, or brought it back into step, which is what both marks hang off
+		updateOriginMark();
+		renderManage();
 	}
 
 	// pointer-events drag reorder: works for both mouse and touch (the HTML5
@@ -1035,30 +1274,409 @@ function buildMapSettings(panel) {
 	}
 
 	const presetsDiv = el('div', { class: 'ms-presets' });
-	const presetOptions = [...MAP_PRESETS, { id: 'custom', name: 'Prilagođeno' }];
-	presetOptions.forEach(preset => {
-		const radio = el('input', { type: 'radio', name: 'msPreset', value: preset.id });
-		radio.checked = prefs.preset === preset.id;
-		radio.addEventListener('change', () => {
-			// switching to a named preset previews its list; "custom" keeps the current list
-			if (preset.id !== 'custom') fillList(presetMapIds(preset.id));
-		});
-		presetsDiv.appendChild(el('label', {}, [radio, document.createTextNode(' ' + preset.name)]));
-	});
-	presetsDiv.addEventListener('scroll', () => updateLinksScrollShadow(presetsDiv), { passive: true });
 
+	// which preset the list in the picker came from, built-in or saved. Editing
+	// it flips the bar to "Prilagođeno" (see markCustom), so the selection can no
+	// longer say where the list started: this is what the dot on the origin chip
+	// and the "Ažuriraj" link on the saved row both hang off. Null whenever the
+	// list is nobody's — a stored custom view, or a shared one matching nothing.
+	let editingPresetId = activePresetId() === 'custom' ? null : activePresetId();
+
+	// rebuilt whenever the saved presets change, so they sit among the
+	// built-ins and stay selectable the same way
+	function renderPresets(selectedId) {
+		presetsDiv.replaceChildren();
+		const options = [...visiblePresets(), { id: 'custom', name: 'Prilagođeno' }];
+		// a hidden preset has no radio to check, and the maps on screen are still
+		// its own, so the selection becomes custom rather than silently reverting
+		if (!options.some(preset => preset.id === selectedId)) selectedId = 'custom';
+		options.forEach(preset => {
+			const radio = el('input', { type: 'radio', name: 'msPreset', value: preset.id });
+			radio.checked = preset.id === selectedId;
+			radio.addEventListener('change', () => {
+				// switching to a named preset previews its list; "custom" keeps the current list
+				if (preset.id !== 'custom') fillList(presetMapIds(preset.id));
+				// picking "Prilagođeno" by hand detaches the list from wherever it
+				// came from: no dot, and no row offering to take the edits back
+				editingPresetId = preset.id === 'custom' ? null : preset.id;
+				updateOriginMark();
+				renderManage();
+			});
+			// a corner mark on the saved ones, so the two kinds stay apart in the
+			// bar the way the management list below already keeps them apart
+			const chipClass = 'ms-chip' + (isUserPresetId(preset.id) ? ' ms-user' : '');
+			// the name rides in a span rather than a bare text node so the chip
+			// styling can hang off the radio's :checked as a sibling selector
+			presetsDiv.appendChild(el('label', {}, [radio, el('span', { class: chipClass, text: preset.name })]));
+		});
+		// carries no content: it exists so the last line has something to give
+		// its leftover width to, leaving those chips at their natural size
+		// while the full lines above still stretch to both edges
+		presetsDiv.appendChild(el('span', { class: 'ms-fill' }));
+		updateOriginMark(); // the chips are new, so the dot has to be put back
+	}
+
+	// The dot marks the preset the list on screen started from, once it no longer
+	// matches it. "Prilagođeno" keeps the selection — what travels in a share link
+	// is a bare list, and a chip left looking selected would promise a name the
+	// payload cannot carry — so the dot says which named view the edits are a copy
+	// of without claiming to be it. Clicking that chip reloads the preset and
+	// drops the edits, which the radio already does: it is the unchecked one.
+	function updateOriginMark() {
+		presetsDiv.querySelectorAll('.ms-origin').forEach(chip => chip.classList.remove('ms-origin'));
+		const preset = allPresets().find(p => p.id === editingPresetId);
+		// a hidden preset has no chip to mark, hence the guard on the radio
+		if (!preset || sameMapIds(preset.maps, selectedMapIds())) return;
+		// compared rather than built into a selector: ids come from localStorage,
+		// where a hand-edited one could carry a quote and throw on querySelector
+		const radio = [...presetsDiv.querySelectorAll('input')].find(input => input.value === editingPresetId);
+		if (radio) radio.nextElementSibling.classList.add('ms-origin');
+	}
+
+	// the list first: renderPresets reads it back to decide where the dot goes,
+	// and an empty picker would read as "edited away from the origin"
 	fillList(resolveMapIds());
 
-	function readPanelPrefs() {
+	renderPresets(activePresetId());
+
+	function checkedPresetId() {
 		const checked = panel.querySelector('input[name="msPreset"]:checked');
-		const presetId = checked ? checked.value : 'zadano';
-		if (presetId === 'custom') {
-			// the selected block holds exactly the checked rows, in render order
-			const ids = [...selectedDiv.children].map(row => row.getAttribute('data-map-id'));
-			return { preset: 'custom', maps: ids };
-		}
+		return checked ? checked.value : 'zadano';
+	}
+
+	// the selected block holds exactly the checked rows, in render order
+	function selectedMapIds() {
+		return [...selectedDiv.children].map(row => row.getAttribute('data-map-id'));
+	}
+
+	function readPanelPrefs() {
+		const presetId = checkedPresetId();
+		if (presetId === 'custom') return { preset: 'custom', maps: selectedMapIds() };
 		return { preset: presetId };
 	}
+
+	// the panel's own share button carries whatever is on screen, expanding a
+	// saved preset the same way the per-preset links do
+	function readSharePrefs() {
+		const prefs = readPanelPrefs();
+		const preset = userPresets.find(p => p.id === prefs.preset);
+		return preset ? presetSharePrefs(preset) : prefs;
+	}
+
+	// ----- saved preset management -----
+
+	const manageDiv = el('div', { class: 'ms-manage' });
+
+	// whether the name field is open; the field itself outlives every re-render
+	// so what was typed survives a row being deleted or hidden underneath it
+	let addingPreset = false;
+
+	const nameInput = el('input', {
+		type: 'text', class: 'ms-name', maxlength: String(PRESET_NAME_MAX),
+		placeholder: 'Naziv predloška'
+	});
+	const saveBtn = el('button', { type: 'button', class: 'btn', text: 'Spremi' });
+
+	function saveCurrentAs(name) {
+		const preset = storeUserPreset(name, selectedMapIds());
+		nameInput.value = '';
+		addingPreset = false; // the form has done its job
+		editingPresetId = preset.id; // the list is now this preset's, so edits from here go back to it
+		renderPresets(preset.id); // saving selects what was just saved
+		renderManage();
+	}
+
+	saveBtn.addEventListener('click', () => {
+		const name = cleanPresetName(nameInput.value);
+		if (!name) { nameInput.focus(); return; }
+		saveCurrentAs(name);
+	});
+	nameInput.addEventListener('keydown', (e) => {
+		if (e.key === 'Enter') { e.preventDefault(); saveBtn.click(); }
+		else if (e.key === 'Escape') { // same way out as the rename editor
+			addingPreset = false;
+			nameInput.value = '';
+			renderManage();
+		}
+	});
+
+	// which preset is being renamed, if any; renderManage builds that one row as
+	// an editor, so starting a second rename closes the first on its own
+	let renamingId = null;
+
+	// mirrors nameInput: the editor outlives renderManage, so what was typed
+	// survives a re-render started from anywhere else in the panel — hiding a
+	// built-in, opening the add form, deleting another row. A rebuilt input
+	// would reset itself to the stored name and drop the edit in progress.
+	const renameInput = el('input', {
+		type: 'text', class: 'ms-name ms-rename', maxlength: String(PRESET_NAME_MAX)
+	});
+
+	// set only where the editor is opened, so those same re-renders leave the
+	// focus wherever the user just put it
+	let renameOpening = false;
+
+	function startRename(preset) {
+		renamingId = preset.id;
+		renameInput.value = preset.name;
+		renameInput.classList.remove('invalid');
+		renameOpening = true;
+		renderManage();
+	}
+
+	function commitRename() {
+		const preset = userPresets.find(p => p.id === renamingId);
+		if (!preset) return;
+		const name = cleanPresetName(renameInput.value);
+		const clash = findUserPresetByName(name);
+		// empty, or a name another preset already holds: stay in the editor and
+		// mark the field rather than silently dropping what was typed
+		if (!name || (clash && clash !== preset)) {
+			renameInput.classList.add('invalid');
+			renameInput.focus();
+			return;
+		}
+		preset.name = name;
+		saveUserPresets();
+		renamingId = null;
+		renderPresets(checkedPresetId());
+		renderManage();
+	}
+
+	function cancelRename() {
+		renamingId = null;
+		renderManage();
+	}
+
+	// bound once, on the element that outlives the re-renders
+	renameInput.addEventListener('keydown', (e) => {
+		if (e.key === 'Enter') { e.preventDefault(); commitRename(); }
+		else if (e.key === 'Escape') cancelRename();
+	});
+	renameInput.addEventListener('input', () => renameInput.classList.remove('invalid'));
+
+	// the action slots line up as columns down the list, so a row without one
+	// leaves it empty instead of shifting the rest along. Three is what fits a
+	// phone row beside the name, so an action added here has to replace one
+	// rather than join them — see the Ažuriraj/Podijeli swap below.
+	function buildLinkCells(cells) {
+		return el('span', { class: 'ms-manage-links' }, cells.map(cell => cell || el('span')));
+	}
+
+	// only the preset the list came from: any other row would take an overwrite
+	// with a list that has nothing to do with it. Saving under the same name in
+	// the add form still works and is unchanged — this is the same write, minus
+	// having to know that the name is the handle. The saved-preset guard is not
+	// redundant: editingPresetId also holds built-in ids (they carry the origin
+	// dot), and a built-in reaching storeUserPreset would fork a saved copy of
+	// itself under its own name rather than update anything.
+	function hasPendingEdits(preset) {
+		return isUserPresetId(preset.id) && preset.id === editingPresetId
+			&& !sameMapIds(preset.maps, selectedMapIds());
+	}
+
+	// shares the preset as saved — the panel's Podijeli button is the one that
+	// carries unsaved edits to the list. Built-ins share by id, which every
+	// visitor resolves; a saved preset has to carry its contents instead.
+	function buildShareLink(getPrefs) {
+		const link = el('a', { text: 'Podijeli' });
+		link.addEventListener('click', () => {
+			copyMapViewLink(getPrefs(), () => flashLabel(link, 'Kopirano!', 'Podijeli'));
+		});
+		return link;
+	}
+
+	function buildBuiltinRow(preset) {
+		const hidden = isPresetHidden(preset.id);
+
+		// the permanent one keeps its row but not the toggle, so it reads as an
+		// option that was never on offer rather than one that failed to work
+		let toggleLink = null;
+		if (isHideablePreset(preset.id)) {
+			toggleLink = el('a', { text: hidden ? 'Prikaži' : 'Sakrij' });
+			toggleLink.addEventListener('click', () => {
+				setPresetHidden(preset.id, !hidden);
+				// renderPresets drops a selection that just became invisible
+				renderPresets(checkedPresetId());
+				renderManage();
+			});
+		}
+		// no share link: a built-in resolves for every visitor already, so a link
+		// to one carries nothing they lack — and the panel's Podijeli button
+		// covers sharing whichever view is on screen. The toggle takes the last
+		// slot so it ends the row where Obriši ends the ones above.
+		return el('div', { class: 'ms-manage-item' + (hidden ? ' ms-hidden' : '') }, [
+			el('span', { class: 'ms-manage-name', text: preset.name }),
+			buildLinkCells([null, null, toggleLink])
+		]);
+	}
+
+	function buildManageRow(preset) {
+		if (preset.id === renamingId) return buildRenameRow();
+
+		const renameLink = el('a', { text: 'Preimenuj' });
+		const deleteLink = el('a', { text: 'Obriši' });
+
+		// writes the list on screen over this preset, keeping its id — so saved
+		// preferences and links naming it follow the change instead of breaking.
+		// It saves the preset only: the page still shows the old view until
+		// Primijeni, the same as every other panel action.
+		//
+		// It takes the share slot rather than a fourth one: four columns overflow
+		// a phone row beside the name and drop every row's actions onto a second
+		// line. Podijeli is the one to give up while a row has unsaved edits — it
+		// shares the preset *as saved*, which is least useful exactly then, and
+		// the panel's own Podijeli covers the list on screen. It comes back the
+		// moment the edits are saved or dropped.
+		let firstLink;
+		if (hasPendingEdits(preset)) {
+			firstLink = el('a', { text: 'Ažuriraj' });
+			firstLink.addEventListener('click', () => {
+				storeUserPreset(preset.name, selectedMapIds()); // by name, the one write path
+				renderPresets(preset.id); // the list is this preset again, so its chip comes back
+				renderManage();
+			});
+		} else {
+			firstLink = buildShareLink(() => presetSharePrefs(preset));
+		}
+
+		const row = el('div', { class: 'ms-manage-item' }, [
+			el('span', { class: 'ms-manage-name', text: preset.name }),
+			buildLinkCells([firstLink, renameLink, deleteLink])
+		]);
+
+		renameLink.addEventListener('click', () => startRename(preset));
+
+		// two-step instead of a confirm() dialog: the first click arms the link,
+		// a second within a few seconds deletes, and it disarms itself otherwise
+		let armed = null;
+		const disarm = () => {
+			clearTimeout(armed);
+			armed = null;
+			deleteLink.textContent = 'Obriši';
+			deleteLink.classList.remove('active');
+		};
+		deleteLink.addEventListener('click', () => {
+			if (!armed) {
+				deleteLink.textContent = 'Sigurno?';
+				deleteLink.classList.add('active');
+				armed = setTimeout(disarm, 3000);
+				return;
+			}
+			disarm();
+			// the map list on screen is untouched — it just stops being a saved preset
+			const wasSelected = checkedPresetId() === preset.id;
+			if (editingPresetId === preset.id) editingPresetId = null; // nothing left to write back to
+			deleteUserPreset(preset.id);
+			renderPresets(wasSelected ? 'custom' : checkedPresetId());
+			renderManage();
+		});
+
+		return row;
+	}
+
+	// the name is only committed on "Potvrdi" or Enter — never on leaving the
+	// field, so clicking elsewhere can't rename anything behind your back
+	function buildRenameRow() {
+		const confirmLink = el('a', { text: 'Potvrdi' });
+		const cancelLink = el('a', { text: 'Odustani' });
+		confirmLink.addEventListener('click', commitRename);
+		cancelLink.addEventListener('click', cancelRename);
+
+		// Potvrdi and Odustani sit under Preimenuj and Obriši, the actions they stand in for
+		return el('div', { class: 'ms-manage-item' }, [
+			renameInput,
+			buildLinkCells([null, confirmLink, cancelLink])
+		]);
+	}
+
+	// the shared list is already one of the saved presets, so the bar has its
+	// chip selected and "Spremi" would only add a second copy under a suffixed
+	// name. Recomputed per render: deleting that preset brings the row back.
+	function sharedAlreadySaved() {
+		const ids = resolveMapIds();
+		return userPresets.some(preset => sameMapIds(preset.maps, ids));
+	}
+
+	function buildSharedRow() {
+		const saveLink = el('a', { text: 'Spremi' });
+		saveLink.addEventListener('click', () => {
+			// saves what is on screen, so any tweak the recipient made is kept
+			saveCurrentAs(uniquePresetName(sharedMapView.name));
+		});
+		return el('div', { class: 'ms-shared' }, [
+			el('span', { text: `Podijeljen predložak "${sharedMapView.name}"` }),
+			saveLink
+		]);
+	}
+
+	function buildBuiltinHeading() {
+		const heading = el('div', { class: 'ms-manage-title', text: 'Zadani predlošci' });
+		const links = el('span', { class: 'ms-manage-title-links' });
+
+		const addLink = (text, apply) => {
+			const link = el('a', { text: text });
+			link.addEventListener('click', () => {
+				apply();
+				renderPresets(checkedPresetId());
+				renderManage();
+			});
+			links.appendChild(link);
+		};
+
+		// each shown only while it would do something — "Sakrij sve" reaches
+		// every preset but the permanent one, so that is the count to stop at
+		if (hiddenPresets.length < hideablePresets().length) addLink('Sakrij sve', hideAllPresets);
+		if (hiddenPresets.length) addLink('Prikaži sve', showAllPresets);
+
+		heading.appendChild(links);
+		return heading;
+	}
+
+	// the name field is only worth its space while a preset is being added, so
+	// it lives behind "Dodaj" and folds away again once one is saved
+	function buildUserHeading() {
+		const heading = el('div', { class: 'ms-manage-title', text: 'Moji predlošci' });
+		const addLink = el('a', { text: addingPreset ? 'Odustani' : 'Dodaj' });
+		addLink.addEventListener('click', () => {
+			addingPreset = !addingPreset;
+			if (!addingPreset) nameInput.value = '';
+			renderManage();
+			// nameInput outlives the re-render, so this reaches the live field
+			if (addingPreset) nameInput.focus();
+		});
+		heading.appendChild(el('span', { class: 'ms-manage-title-links' }, [addLink]));
+		return heading;
+	}
+
+	function renderManage() {
+		manageDiv.replaceChildren();
+
+		// the built-ins are listed too, so a hidden one can be brought back
+		// individually and not only through "Prikaži sve". They lead here the way
+		// they lead the preset bar, where the saved ones follow them as well
+		manageDiv.appendChild(buildBuiltinHeading());
+		MAP_PRESETS.forEach(preset => manageDiv.appendChild(buildBuiltinRow(preset)));
+
+		manageDiv.appendChild(buildUserHeading());
+		if (addingPreset) manageDiv.appendChild(el('div', { class: 'ms-save' }, [nameInput, saveBtn]));
+		if (sharedMapView && sharedMapView.name && !sharedAlreadySaved()) manageDiv.appendChild(buildSharedRow());
+		if (userPresets.length) {
+			userPresets.forEach(preset => manageDiv.appendChild(buildManageRow(preset)));
+		} else {
+			manageDiv.appendChild(el('div', { class: 'ms-manage-empty', text: 'Nema spremljenih predložaka' }));
+		}
+
+		// only where the rename was just opened — every other re-render leaves
+		// the focus alone, including the ones that happen with an editor open
+		if (renameOpening) {
+			renameOpening = false;
+			renameInput.focus();
+			renameInput.select();
+		}
+	}
+
+	renderManage();
 
 	const applyBtn = el('button', { type: 'button', class: 'btn', text: 'Primijeni' });
 	applyBtn.addEventListener('click', () => {
@@ -1070,30 +1688,21 @@ function buildMapSettings(panel) {
 		scrollToTop(); // the panel collapse leaves the scroll offset mid-page
 	});
 
-	const shareBtn = el('button', { type: 'button', class: 'btn', text: 'Podijeli' });
-	shareBtn.addEventListener('click', () => {
-		const url = new URL(window.location.origin + window.location.pathname);
-		url.searchParams.set('v', encodeMapView(readPanelPrefs()));
-		const link = url.toString();
-		// navigator.clipboard only exists in secure contexts (https/localhost),
-		// e.g. not on http://<LAN-IP>; fall back to a copyable prompt there
-		if (navigator.clipboard && navigator.clipboard.writeText) {
-			navigator.clipboard.writeText(link).then(() => {
-				shareBtn.textContent = 'Kopirano!';
-				setTimeout(() => { shareBtn.textContent = 'Podijeli'; }, 1500);
-			}).catch(() => {
-				window.prompt('Kopiraj poveznicu:', link);
-			});
-		} else {
-			window.prompt('Kopiraj poveznicu:', link);
-		}
+	// a link, like the per-preset Podijeli it does the same job as; the filled
+	// button is kept for Primijeni, the one action that changes the page
+	const shareLink = el('a', { text: 'Podijeli' });
+	shareLink.addEventListener('click', () => {
+		copyMapViewLink(readSharePrefs(), () => flashLabel(shareLink, 'Kopirano!', 'Podijeli'));
 	});
 
+	// the actions sit right under the render order they act on, rather than at
+	// the far end of the picker and the preset management below it
 	panel.appendChild(presetsDiv);
 	panel.appendChild(selectedDiv);
+	panel.appendChild(el('div', { class: 'ms-actions' }, [applyBtn, shareLink]));
 	panel.appendChild(sortDiv);
 	panel.appendChild(availableDiv);
-	panel.appendChild(el('div', { class: 'ms-actions' }, [applyBtn, shareBtn]));
+	panel.appendChild(manageDiv);
 }
 
 // in dev this is a deferred external script, so the DOM is already parsed and

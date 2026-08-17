@@ -429,62 +429,101 @@ body.fs-lock {
 		cursor: pointer;
 	}
 
-	/* single-line preset row with horizontal scroll and edge fades,
-	   same mechanics as .links-bottom but on the panel background */
+	/* the options wrap onto as many lines as they need — a saved-preset list
+	   can grow long, and it grows in the axis the page already scrolls rather
+	   than off the side of a bar */
 	.map-settings .ms-presets {
-		white-space: nowrap;
-		overflow-x: auto;
+		display: flex;
+		flex-wrap: wrap;
+		gap: 6px;
 		padding-bottom: 8px;
 		margin-bottom: 8px;
 		border-bottom: 1px solid #485871;
-		-webkit-overflow-scrolling: touch;
-		scrollbar-width: none;
-		-ms-overflow-style: none;
 	}
 
-		.map-settings .ms-presets::-webkit-scrollbar {
-			display: none;
+		/* the radio holds the state and takes the keyboard focus, the chip
+		   beside it carries the whole look and the tap area; absolute keeps
+		   the hidden input from padding out the row */
+		.map-settings .ms-presets label {
+			position: relative;
+			/* the leftover on each line is split between that line's chips, so
+			   every row reaches both edges instead of ending ragged. Widths
+			   still differ — each chip keeps its name's width plus its share.
+			   The last line is exempt, see .ms-fill */
+			flex: 1 1 auto;
 		}
 
-		.map-settings .ms-presets::before,
-		.map-settings .ms-presets::after {
-			content: "";
-			position: sticky;
-			display: inline-block;
-			width: 24px;
-			/* taller than the .links-bottom fades: radio buttons overflow the
-			   text line on Android; negative margins keep the row height */
-			height: 2.4em;
-			margin-top: -0.8em;
-			margin-bottom: -0.8em;
-			vertical-align: middle;
-			pointer-events: none;
+		/* zero-basis, so it never forces a wrap of its own and always ends up
+		   on the last line; the outsized grow then leaves that line's chips
+		   with a fraction of a pixel each, i.e. their natural width */
+		.map-settings .ms-presets .ms-fill {
+			flex: 1000 1 0;
+			height: 0;
+		}
+
+		.map-settings .ms-presets input {
+			position: absolute;
+			margin: 0;
 			opacity: 0;
-			transition: opacity 0.2s ease;
 		}
 
-		.map-settings .ms-presets::before {
-			left: 0;
-			margin-right: -24px;
-			background: linear-gradient(to left, transparent, #202c40);
+		.map-settings .ms-chip {
+			display: block;
+			position: relative; /* for the saved-preset corner mark */
+			text-align: center; /* the chips are wider than their names once stretched */
+			padding: 3px 10px;
+			background-color: #2b3a52;
+			border: 1px solid #485871;
+			user-select: none;
 		}
 
-		.map-settings .ms-presets::after {
-			right: 0;
-			margin-left: -24px;
-			background: linear-gradient(to right, transparent, #202c40);
+			/* a saved preset gets a corner triangle rather than a glyph beside its
+			   name: the chips stretch to fill the line and centre their names, so
+			   anything taking inline space shifts the name and eats the width.
+			   Grey, not the accent — orange means "selected" on this bar */
+			.map-settings .ms-chip.ms-user::after {
+				content: '';
+				position: absolute;
+				top: 0;
+				right: 0;
+				border-top: 7px solid #93a4bd;
+				border-left: 7px solid transparent;
+			}
+
+			/* the list on screen started here and has been edited since, while
+			   "Prilagođeno" holds the selection — so the bar still names the view
+			   the edits came from. Left edge, clear of the corner triangle, which
+			   a saved preset carries at the same time. Grey like the triangle:
+			   both are marks about the chip, and orange stays "selected" */
+			.map-settings .ms-chip.ms-origin::before {
+				content: '';
+				position: absolute;
+				left: 4px;
+				top: 50%;
+				width: 4px;
+				height: 4px;
+				margin-top: -2px;
+				border-radius: 50%;
+				background-color: #93a4bd;
+			}
+
+		.map-settings .ms-presets label:hover .ms-chip {
+			background-color: #3a4a66;
 		}
 
-		.map-settings .ms-presets.can-scroll-left::before {
-			opacity: 1;
+		/* the panel's button fill, with the accent on the name alone — the same
+		   way the active sort link is marked. The fill is restated to hold
+		   steady under :hover, which it ties with on specificity */
+		.map-settings .ms-presets input:checked + .ms-chip {
+			color: #ff9800;
+			background-color: #485871;
 		}
 
-		.map-settings .ms-presets.can-scroll-right::after {
-			opacity: 1;
-		}
-
-		.map-settings .ms-presets label:not(:last-child) {
-			margin-right: 16px;
+		/* white, not the accent: orange now means "selected", and a focus ring in
+		   the same colour would read as a second selected chip */
+		.map-settings .ms-presets input:focus-visible + .ms-chip {
+			outline: 1px solid white;
+			outline-offset: 1px;
 		}
 
 	.map-settings .ms-item {
@@ -498,6 +537,24 @@ body.fs-lock {
 		margin: 0 6px 0 4px;
 	}
 
+	/* both sections empty out at the ends of the range: "Ništa" leaves nothing
+	   selected, "Sve" leaves nothing available; the lists hold only rows, so
+	   :empty is enough and no placeholder node has to be kept in sync */
+	.map-settings .ms-list:empty::before {
+		display: block;
+		padding: 2px 0;
+		font-style: italic;
+		opacity: 0.6;
+	}
+
+	.map-settings .ms-selected:empty::before {
+		content: "Nema odabranih karata";
+	}
+
+	.map-settings .ms-available:empty::before {
+		content: "Sve su karte odabrane";
+	}
+
 	/* rows in the available section are not part of the render order */
 	.map-settings .ms-available .ms-handle {
 		display: none;
@@ -505,16 +562,21 @@ body.fs-lock {
 
 	.map-settings .ms-sort {
 		display: flex;
+		/* the ▲/▼ arrow renders in a fallback font with taller metrics on
+		   Android; baseline alignment keeps the links from shifting down */
+		align-items: baseline;
 		gap: 14px;
 		padding: 6px 0;
-		margin: 6px 0;
+		/* no rule below: sorting only reaches the list underneath, so the row
+		   reads as its header rather than a band between the two lists */
+		margin: 6px 0 0;
 		border-top: 1px solid #485871;
-		border-bottom: 1px solid #485871;
 	}
 
 		.map-settings .ms-sort a {
 			cursor: pointer;
 			user-select: none;
+			text-decoration: none;
 		}
 
 		.map-settings .ms-sort a.active {
@@ -539,32 +601,184 @@ body.fs-lock {
 			cursor: grabbing;
 		}
 
-	.map-settings .ms-actions {
-		padding-top: 8px;
-		margin-top: 8px;
+	.map-settings .ms-manage {
+		padding-top: 6px;
+		margin-top: 6px;
 		border-top: 1px solid #485871;
-		text-align: center;
 	}
 
-		.map-settings .ms-actions .btn {
-			font-size: 13px;
-			font-family: inherit;
-			color: white;
-			background-color: #485871;
-			cursor: pointer;
-			height: 24px;
-			padding: 0 24px;
-			border: none;
-			outline: none;
+		/* the accent means "active" and dimming means "hidden", so weight is what
+		   is left to mark these as structure rather than another row */
+		.map-settings .ms-manage-title {
+			display: flex;
+			justify-content: space-between;
+			align-items: baseline;
+			margin-bottom: 6px;
+			font-weight: bold;
 		}
 
-			.map-settings .ms-actions .btn:hover {
-				background-color: #5F6F89;
+			.map-settings .ms-manage-title a {
+				cursor: pointer;
+				user-select: none;
+				text-decoration: none;
 			}
 
-			.map-settings .ms-actions .btn + .btn {
-				margin-left: 8px;
+			/* the heading's own actions are links like any other, not part of the label */
+			.map-settings .ms-manage-title-links {
+				display: flex;
+				gap: 12px;
+				font-weight: normal;
 			}
+
+		/* a heading following rows rules the two groups apart */
+		.map-settings .ms-manage-item + .ms-manage-title,
+		.map-settings .ms-manage-empty + .ms-manage-title {
+			padding-top: 8px;
+			margin-top: 8px;
+			border-top: 1px solid #485871;
+		}
+
+		.map-settings .ms-save {
+			display: flex;
+			gap: 8px;
+			margin-bottom: 6px;
+		}
+
+		.map-settings .ms-name {
+			/* min-width overrides the input's default intrinsic width, which
+			   would otherwise keep it from shrinking inside the flex row */
+			flex: 1;
+			min-width: 0;
+			font-family: inherit;
+			font-size: 13px;
+			color: white;
+			background-color: #2b3a52;
+			border: 1px solid #485871;
+			outline: none;
+			height: 24px;
+			padding: 0 6px;
+		}
+
+		/* a rejected rename (empty or already taken) keeps the editor open */
+		.map-settings .ms-name.invalid {
+			border-color: #ff9800;
+		}
+
+		.map-settings .ms-save .btn {
+			flex: none;
+			padding: 0 14px;
+		}
+
+		.map-settings .ms-manage-item,
+		.map-settings .ms-shared {
+			display: flex;
+			/* three action links leave little room on a phone: rather than pick a
+			   breakpoint, let them drop to their own line once the name is down
+			   to its minimum */
+			flex-wrap: wrap;
+			justify-content: space-between;
+			align-items: center;
+			gap: 8px;
+			padding: 2px 0;
+		}
+
+		/* a long name shortens instead of pushing the links off the row */
+		.map-settings .ms-manage-name {
+			flex: 1;
+			min-width: 6em;
+			overflow: hidden;
+			text-overflow: ellipsis;
+			white-space: nowrap;
+		}
+
+		/* hidden built-ins stay listed so they can be brought back one by one.
+		   The whole row dims so it reads as one "off" unit, and lifts on hover
+		   so the link that undoes it is at full contrast when reached for —
+		   kept legible on its own, since touch never hovers */
+		.map-settings .ms-manage-item.ms-hidden {
+			opacity: 0.55;
+		}
+
+			.map-settings .ms-manage-item.ms-hidden:hover,
+			.map-settings .ms-manage-item.ms-hidden:focus-within {
+				opacity: 1;
+			}
+
+		/* fixed slots so the actions read as columns down the list rather than
+		   sitting wherever the word lengths leave them; the panel font is
+		   monospace, so ch widths hold exactly (the widest words are the
+		   9-character "Preimenuj" and the "Kopirano!" the share link flashes) */
+		.map-settings .ms-manage-links {
+			flex: none;
+			display: grid;
+			grid-template-columns: 9ch 9ch 8ch;
+			gap: 10px;
+			white-space: nowrap;
+		}
+
+			.map-settings .ms-manage-links a,
+			.map-settings .ms-shared a {
+				cursor: pointer;
+				user-select: none;
+				text-decoration: none;
+			}
+
+			/* armed delete, same accent as the active sort link */
+			.map-settings .ms-manage-links a.active {
+				color: #ff9800;
+			}
+
+		.map-settings .ms-manage-empty {
+			padding: 2px 0;
+			font-style: italic;
+			opacity: 0.6;
+		}
+
+	/* shared by the actions row and the save row */
+	.map-settings .btn {
+		font-size: 13px;
+		font-family: inherit;
+		color: white;
+		background-color: #485871;
+		cursor: pointer;
+		height: 24px;
+		padding: 0 24px;
+		border: none;
+		outline: none;
+	}
+
+		.map-settings .btn:hover {
+			background-color: #5F6F89;
+		}
+
+	/* flex so the button and the link sit on a common middle rather than on a
+	   shared text baseline, which a 24px button and inline text do not share */
+	.map-settings .ms-actions {
+		display: flex;
+		align-items: center;
+		gap: 16px;
+		padding: 10px 0 8px;
+	}
+
+		.map-settings .ms-actions a {
+			cursor: pointer;
+			user-select: none;
+			text-decoration: none;
+		}
+
+		/* the sort row brings its own rule, which is what closes the actions off
+		   below; its margin on top of that would push the two apart */
+		.map-settings .ms-actions + .ms-sort {
+			margin-top: 0;
+		}
+
+/* stands in for the maps when the view resolves to none ("Ništa") */
+.maps-empty {
+	padding: 20px 0;
+	font-size: 13px;
+	font-style: italic;
+	opacity: 0.6;
+}
 
 .slideshow {
 	position: relative;
