@@ -107,9 +107,9 @@ const MAP_CATALOG = [
 		aspect: '880 / 640',
 		startSlide: 2,
 		slides: [
-			'https://maps.neverin.hr/radar/latest_hr.webp',
-			'https://maps.neverin.hr/radar/anim_hr.webp',
-			'https://maps.neverin.hr/radar/anim_hr_6h.webp'
+			'https://maps.neverin.hr/radar/latest/hr/latest.webp',
+			'https://maps.neverin.hr/radar/latest/hr/anim.webp',
+			'https://maps.neverin.hr/radar/latest/hr/anim_6h.webp'
 		],
 		links: RADAR_HR_LINKS
 	},
@@ -137,9 +137,9 @@ const MAP_CATALOG = [
 		aspect: '880 / 640',
 		startSlide: 2,
 		slides: [
-			'https://maps.neverin.hr/radar/latest_eu2.webp',
-			'https://maps.neverin.hr/radar/anim_eu2.webp',
-			'https://maps.neverin.hr/radar/anim_eu2_6h.webp'
+			'https://maps.neverin.hr/radar/latest/eu2/latest.webp',
+			'https://maps.neverin.hr/radar/latest/eu2/anim.webp',
+			'https://maps.neverin.hr/radar/latest/eu2/anim_6h.webp'
 		],
 		links: RADAR_EU_LINKS
 	},

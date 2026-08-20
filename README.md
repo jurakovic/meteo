@@ -10,7 +10,7 @@ Available at <https://jurakovic.github.io/meteo/>.
 ### Some Examples
 
 [Neverin | Radar | Hrvatska](https://www.neverin.hr/radar/)  
-![](https://maps.neverin.hr/radar/anim_hr_6h.webp)
+![](https://maps.neverin.hr/radar/latest/hr/anim_6h.webp)
 
 [Neverin | Satelit | Europa](https://www.neverin.hr/satelit/)  
 ![](https://maps.neverin.hr/satellite/rgb_geocolour/latest/eu2/anim.webp)
