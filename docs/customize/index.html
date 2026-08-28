@@ -263,7 +263,7 @@ img:"https://prognoza.hr/web_fronte_sutra12.jpg",links:[{text:"ČHMÚ",
 href:"https://intranet.chmi.cz/aktualni-situace/aktualni-stav-pocasi/evropa/synopticka-situace"}]},{id:"dwd-sinopticka",
 category:"sinoptika",name:"DWD | Sinoptička karta",type:"slideshow",
 titleHref:"https://www.dwd.de/EN/ourservices/hobbymet_wcharts_europe/hobbyeuropecharts.html",maxWidth:800,aspect:"800 / 653",
-slides:["https://www.dwd.de/DWD/wetter/wv_spez/hobbymet/wetterkarten/ico_tkboden_na_v36.png","https://www.dwd.de/DWD/wetter/wv_spez/hobbymet/wetterkarten/ico_tkboden_na_036.png","https://www.dwd.de/DWD/wetter/wv_spez/hobbymet/wetterkarten/ico_tkboden_na_048.png","https://www.dwd.de/DWD/wetter/wv_spez/hobbymet/wetterkarten/ico_tkboden_na_060.png"],
+slides:["https://www.dwd.de/DWD/wetter/wv_spez/hobbymet/wetterkarten/ico_tkboden_na_v36.png","https://www.dwd.de/DWD/wetter/wv_spez/hobbymet/wetterkarten/ico_tkboden_na_036.png","https://www.dwd.de/DWD/wetter/wv_spez/hobbymet/wetterkarten/ico_tkboden_na_048.png","https://www.dwd.de/DWD/wetter/wv_spez/hobbymet/wetterkarten/ico_tkboden_na_060.png","https://www.dwd.de/DWD/wetter/wv_spez/hobbymet/wetterkarten/ico_tkboden_na_084.png","https://www.dwd.de/DWD/wetter/wv_spez/hobbymet/wetterkarten/ico_tkboden_na_108.png"],
 links:[{text:"ČHMÚ",href:"https://intranet.chmi.cz/aktualni-situace/aktualni-stav-pocasi/evropa/synopticka-situace"},{text:"DHMZ",
 href:"https://meteo.hr/prognoze.php?section=prognoze_model&param=web_fronte_sutra12"}]
 },dhmzMrcRadar("puntijarka","Puntijarka"),dhmzMrcRadar("bilogora","Bilogora"),dhmzMrcRadar("gradiste","Gradište"),dhmzMrcRadar("goli","Goli"),dhmzMrcRadar("debeljak","Debeljak"),dhmzMrcRadar("uljenje","Uljenje")],DEFAULT_MAPS=["neverin-radar-hr","neverin-satelit-hr","neverin-radar-eu","neverin-satelit-eu","windy","dhmz-radar","meteociel-temp","blitzortung","essl","astorp","estofex","eumetnet","meteociel-satelit","dwd-sinopticka","neverin-kamera","meteoblue-prognoza"],MAP_PRESETS=[{
@@ -389,18 +389,18 @@ h.appendChild(el("span",{class:"ms-fill"})),f()}function f(){h.querySelectorAll(
 ;let y=!1;const S=el("input",{type:"text",class:"ms-name",maxlength:String(40),placeholder:"Naziv predloška"}),P=el("button",{type:"button",
 class:"btn",text:"Spremi"});function x(e){const t=storeUserPreset(e,v());S.value="",y=!1,u=t.id,w(t.id),C()}P.addEventListener("click",()=>{
 const e=cleanPresetName(S.value);e?x(e):S.focus()}),S.addEventListener("keydown",e=>{"Enter"===e.key?(e.preventDefault(),
-P.click()):"Escape"===e.key&&(y=!1,S.value="",C())});let z=null;const E=el("input",{type:"text",class:"ms-name ms-rename",
-maxlength:String(40)});let _=!1;function M(){const e=userPresets.find(e=>e.id===z);if(!e)return
-;const t=cleanPresetName(E.value),a=findUserPresetByName(t);if(!t||a&&a!==e)return E.classList.add("invalid"),void E.focus();e.name=t,
+P.click()):"Escape"===e.key&&(y=!1,S.value="",C())});let z=null;const _=el("input",{type:"text",class:"ms-name ms-rename",
+maxlength:String(40)});let E=!1;function M(){const e=userPresets.find(e=>e.id===z);if(!e)return
+;const t=cleanPresetName(_.value),a=findUserPresetByName(t);if(!t||a&&a!==e)return _.classList.add("invalid"),void _.focus();e.name=t,
 saveUserPresets(),z=null,w(g()),C()}function A(){z=null,C()}function R(e){return el("span",{class:"ms-manage-links"
 },e.map(e=>e||el("span")))}function L(e){if(e.id===z)return function(){const e=el("a",{text:"Potvrdi"}),t=el("a",{text:"Odustani"})
-;return e.addEventListener("click",M),t.addEventListener("click",A),el("div",{class:"ms-manage-item"},[E,R([null,e,t])])}();const t=el("a",{
+;return e.addEventListener("click",M),t.addEventListener("click",A),el("div",{class:"ms-manage-item"},[_,R([null,e,t])])}();const t=el("a",{
 text:"Preimenuj"}),a=el("a",{text:"Obriši"});let r;!function(e){return isUserPresetId(e.id)&&e.id===u&&!sameMapIds(e.maps,v())
 }(e)?r=function(e){const t=el("a",{text:"Podijeli"});return t.addEventListener("click",()=>{
 copyMapViewLink(e(),()=>flashLabel(t,"Kopirano!","Podijeli"))}),t}(()=>presetSharePrefs(e)):(r=el("a",{text:"Ažuriraj"}),
 r.addEventListener("click",()=>{storeUserPreset(e.name,v()),w(e.id),C()}));const s=el("div",{class:"ms-manage-item"},[el("span",{
-class:"ms-manage-name",text:e.name}),R([r,t,a])]);t.addEventListener("click",()=>function(e){z=e.id,E.value=e.name,
-E.classList.remove("invalid"),_=!0,C()}(e));let i=null;const n=()=>{clearTimeout(i),i=null,a.textContent="Obriši",
+class:"ms-manage-name",text:e.name}),R([r,t,a])]);t.addEventListener("click",()=>function(e){z=e.id,_.value=e.name,
+_.classList.remove("invalid"),E=!0,C()}(e));let i=null;const n=()=>{clearTimeout(i),i=null,a.textContent="Obriši",
 a.classList.remove("active")};return a.addEventListener("click",()=>{if(!i)return a.textContent="Sigurno?",a.classList.add("active"),
 void(i=setTimeout(n,3e3));n();const t=g()===e.id;u===e.id&&(u=null),deleteUserPreset(e.id),w(t?"custom":g()),C()}),s}function C(){
 k.replaceChildren(),k.appendChild(function(){const e=el("div",{class:"ms-manage-title",text:"Zadani predlošci"}),t=el("span",{
@@ -416,8 +416,8 @@ k.appendChild(function(){const e=el("div",{class:"ms-manage-title",text:"Moji pr
 ;return e.addEventListener("click",()=>{x(uniquePresetName(sharedMapView.name))}),el("div",{class:"ms-shared"},[el("span",{
 text:`Podijeljen predložak "${sharedMapView.name}"`}),e])
 }()),userPresets.length?userPresets.forEach(e=>k.appendChild(L(e))):k.appendChild(el("div",{class:"ms-manage-empty",
-text:"Nema spremljenih predložaka"})),_&&(_=!1,E.focus(),E.select())}E.addEventListener("keydown",e=>{"Enter"===e.key?(e.preventDefault(),
-M()):"Escape"===e.key&&A()}),E.addEventListener("input",()=>E.classList.remove("invalid")),C();const j=el("button",{type:"button",
+text:"Nema spremljenih predložaka"})),E&&(E=!1,_.focus(),_.select())}_.addEventListener("keydown",e=>{"Enter"===e.key?(e.preventDefault(),
+M()):"Escape"===e.key&&A()}),_.addEventListener("input",()=>_.classList.remove("invalid")),C();const j=el("button",{type:"button",
 class:"btn",text:"Primijeni"});j.addEventListener("click",()=>{saveMapPrefs(b()),clearSharedMapView(),setMapSettingsVisible(e,!1),
 renderMaps(),initDynamicContent(),scrollToTop()});const H=el("a",{text:"Podijeli"});H.addEventListener("click",()=>{
 copyMapViewLink(function(){const e=b(),t=userPresets.find(t=>t.id===e.preset);return t?presetSharePrefs(t):e
