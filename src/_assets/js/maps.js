@@ -544,6 +544,25 @@ const MAP_CATALOG = [
 			{ text: 'ČHMÚ', href: 'https://intranet.chmi.cz/aktualni-situace/aktualni-stav-pocasi/evropa/synopticka-situace' }
 		]
 	},
+	{
+		id: 'dwd-sinopticka',
+		category: 'sinoptika',
+		name: 'DWD | Sinoptička karta',
+		type: 'slideshow',
+		titleHref: 'https://www.dwd.de/EN/ourservices/hobbymet_wcharts_europe/hobbyeuropecharts.html',
+		maxWidth: 800,
+		aspect: '800 / 653',
+		slides: [
+			'https://www.dwd.de/DWD/wetter/wv_spez/hobbymet/wetterkarten/ico_tkboden_na_v36.png',
+			'https://www.dwd.de/DWD/wetter/wv_spez/hobbymet/wetterkarten/ico_tkboden_na_036.png',
+			'https://www.dwd.de/DWD/wetter/wv_spez/hobbymet/wetterkarten/ico_tkboden_na_048.png',
+			'https://www.dwd.de/DWD/wetter/wv_spez/hobbymet/wetterkarten/ico_tkboden_na_060.png'
+		],
+		links: [
+			{ text: 'ČHMÚ', href: 'https://intranet.chmi.cz/aktualni-situace/aktualni-stav-pocasi/evropa/synopticka-situace' },
+			{ text: 'DHMZ', href: 'https://meteo.hr/prognoze.php?section=prognoze_model&param=web_fronte_sutra12' }
+		]
+	},
 	dhmzMrcRadar('puntijarka', 'Puntijarka'),
 	dhmzMrcRadar('bilogora', 'Bilogora'),
 	dhmzMrcRadar('gradiste', 'Gradište'),
@@ -570,7 +589,7 @@ const MAP_PRESETS = [
 		maps: [
 			'ventusky', 'rainviewer', 'weatherandradar', 'meteo-si', 'idokep-radar-eu',
 			'idokep-satelit-eu', /* 'idokep-radar-adria', */ 'istramet-munje', 'blitzortung-karta', 'wetterzentrale-temp',
-			'dhmz-sinopticka', 'dhmz-puntijarka', 'dhmz-bilogora', 'dhmz-gradiste', 'dhmz-goli',
+			'dhmz-sinopticka', 'dwd-sinopticka', 'dhmz-puntijarka', 'dhmz-bilogora', 'dhmz-gradiste', 'dhmz-goli',
 			'dhmz-debeljak', 'dhmz-uljenje'
 		]
 	},
