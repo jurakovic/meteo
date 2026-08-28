@@ -577,7 +577,7 @@ const MAP_CATALOG = [
 const DEFAULT_MAPS = [
 	'neverin-radar-hr', 'neverin-satelit-hr', 'neverin-radar-eu', 'neverin-satelit-eu',
 	'windy', 'dhmz-radar', 'meteociel-temp', 'blitzortung', 'essl', 'astorp', 'estofex',
-	'eumetnet', 'meteociel-satelit', 'chmi-sinopticka', 'neverin-kamera', 'meteoblue-prognoza'
+	'eumetnet', 'meteociel-satelit', 'dwd-sinopticka', 'neverin-kamera', 'meteoblue-prognoza'
 ];
 
 // every preset carries its own id list, so resolving one is a plain lookup
@@ -589,7 +589,7 @@ const MAP_PRESETS = [
 		maps: [
 			'ventusky', 'rainviewer', 'weatherandradar', 'meteo-si', 'idokep-radar-eu',
 			'idokep-satelit-eu', /* 'idokep-radar-adria', */ 'istramet-munje', 'blitzortung-karta', 'wetterzentrale-temp',
-			'dhmz-sinopticka', 'dwd-sinopticka', 'dhmz-puntijarka', 'dhmz-bilogora', 'dhmz-gradiste', 'dhmz-goli',
+			'dhmz-sinopticka', 'chmi-sinopticka', 'dhmz-puntijarka', 'dhmz-bilogora', 'dhmz-gradiste', 'dhmz-goli',
 			'dhmz-debeljak', 'dhmz-uljenje'
 		]
 	},
