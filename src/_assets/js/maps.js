@@ -937,17 +937,19 @@ function maxWidthStyle(map) {
 }
 
 // map is optional and only supplies the width: slide title bars are
-// unconstrained, their max-width sits on the .placeholder wrapper below
-function buildTitleBar(title, map = {}) {
+// unconstrained, their max-width sits on the .placeholder wrapper below;
+// popout adds the pop-out button (desktop only, see the pop-out section)
+function buildTitleBar(title, map = {}, popout = false) {
 	return el('div', { class: 'radartitle', style: maxWidthStyle(map) || undefined }, [
-		el('a', { href: title.href, target: '_blank', rel: 'nofollow', text: title.text })
+		el('a', { href: title.href, target: '_blank', rel: 'nofollow', text: title.text }),
+		popout ? el('span', { class: 'right right-cluster' }, [buildPopoutButton()]) : null
 	]);
 }
 
 // top-level title bars show the map's picker name; only slide titles
 // carry their own text (it differs per slide)
 function buildMapTitleBar(map) {
-	return buildTitleBar({ text: map.name, href: map.titleHref }, map);
+	return buildTitleBar({ text: map.name, href: map.titleHref }, map, true);
 }
 
 function buildSlideshow(map) {
@@ -971,9 +973,10 @@ function buildSlideshow(map) {
 		const slideDiv = el('div', { class: 'slide fade' + (active ? ' active' : '') });
 		if (titled) {
 			const width = slide.maxWidth || map.maxWidth;
-			// a slide may omit its title text to inherit the map name (its href still differs per slide)
+			// a slide may omit its title text to inherit the map name (its href still differs per slide);
+			// without a map-level title bar the slide bars carry the pop-out button instead
 			const title = { text: slide.title.text || map.name, href: slide.title.href };
-			slideDiv.appendChild(buildTitleBar(title));
+			slideDiv.appendChild(buildTitleBar(title, {}, !map.titleHref));
 			slideDiv.appendChild(el('div', {
 				class: 'placeholder',
 				style: `${width ? `max-width: ${width}px; ` : ''}aspect-ratio: ${slide.aspect};`
@@ -1041,7 +1044,8 @@ function buildIframe(map) {
 		el('a', { class: 'center', href: map.titleHref, target: '_blank', rel: 'nofollow', text: map.name }),
 		el('span', { class: 'right right-cluster' }, [
 			el('a', { id: `reset${pascal}Frame`, 'data-frame-id': frameId, style: 'display:none', text: '[X]' }),
-			fsBtn
+			fsBtn,
+			buildPopoutButton()
 		])
 	]);
 
@@ -1110,16 +1114,139 @@ function renderMaps() {
 	}
 	maps.forEach((map, i) => {
 		if (i > 0) tbody.appendChild(el('tr', { class: 'sp20' }));
-		const td = el('td', { align: 'center' });
-		buildMapContent(map).forEach(node => {
-			if (node) td.appendChild(node);
-		});
-		tbody.appendChild(el('tr', {}, [td]));
+		// one block per map so the pop-out can lift title, map and indicators together
+		const block = el('div', { class: 'map-block', 'data-map-id': map.id }, buildMapContent(map));
+		tbody.appendChild(el('tr', {}, [el('td', { align: 'center' }, [block])]));
 		if (map.links && map.links.length) {
 			tbody.appendChild(el('tr', {}, [el('td', { align: 'center' }, [buildLinksBottom(map)])]));
 		}
 	});
 }
+
+// ---------- pop-out (desktop) ----------
+
+// a map block lifted out of the page into a fixed, draggable, resizable widget
+// so it stays visible while the rest of the page scrolls. Nothing moves in the
+// DOM (an iframe would reload): the block only gets a class and inline
+// left/top/width, the same trick as the iframe fullscreen. A spacer of the
+// block's height keeps its place in the table and offers a way back.
+// Desktop only — the button is hidden by the same media query in CSS.
+const POPOUT_MQ = window.matchMedia('(min-width: 801px) and (hover: hover) and (pointer: fine)');
+const POPOUT_WIDTH = 420;
+const POPOUT_TITLE_HEIGHT = 23; // .radartitle height; keeps the drag handle reachable
+let popoutZ = 5000; // bumped on every raise so the last touched widget is on top
+
+function buildPopoutButton() {
+	const btn = el('a', { class: 'po-btn' });
+	btn.addEventListener('click', () => togglePopout(btn.closest('.map-block')));
+	setPopoutButton(btn, false);
+	return btn;
+}
+
+function setPopoutButton(btn, popped) {
+	btn.textContent = popped ? '[↙]' : '[↗]';
+	btn.title = popped ? 'Vrati kartu na stranicu' : 'Izdvoji kartu u pomični prozor';
+}
+
+function togglePopout(block) {
+	if (!block) return;
+	if (block.classList.contains('popout')) dockMap(block);
+	else if (POPOUT_MQ.matches) popoutMap(block);
+}
+
+function popoutMap(block) {
+	dlog(`popoutMap: ${block.dataset.mapId}`);
+	const rect = block.getBoundingClientRect();
+	const back = el('a', { text: 'Vrati' });
+	back.addEventListener('click', () => dockMap(block));
+	const gap = el('div', { class: 'map-gap', style: `height: ${rect.height}px;` }, [
+		el('span', { text: 'Karta je izdvojena u prozor ·' }),
+		back
+	]);
+	block._gap = gap;
+	block.after(gap);
+	block.classList.add('popout');
+	block.style.width = `${Math.min(POPOUT_WIDTH, rect.width)}px`;
+	// stays where it was on screen, so it reads as lifted rather than teleported
+	placePopout(block, rect.left, rect.top);
+	raisePopout(block);
+	block.querySelectorAll('.po-btn').forEach(btn => setPopoutButton(btn, true));
+}
+
+function dockMap(block) {
+	dlog(`dockMap: ${block.dataset.mapId}`);
+	// a fullscreen iframe inside the widget is fixed on its own; take it down first
+	const fs = block.querySelector('.if1.fullscreen');
+	if (fs) exitFullscreen(fs);
+	block.classList.remove('popout');
+	// the browser's resize grip writes width and height inline, clear both
+	['left', 'top', 'width', 'height', 'z-index'].forEach(p => block.style.removeProperty(p));
+	if (block._gap) block._gap.remove();
+	delete block._gap;
+	block.querySelectorAll('.po-btn').forEach(btn => setPopoutButton(btn, false));
+}
+
+function dockAllPopouts() {
+	document.querySelectorAll('.map-block.popout').forEach(dockMap);
+}
+
+// keep the whole widget inside the viewport when it fits, else at least its
+// top-left corner so the title bar can always be grabbed
+function placePopout(block, left, top) {
+	const maxLeft = Math.max(0, window.innerWidth - block.offsetWidth);
+	const maxTop = Math.max(0, window.innerHeight - Math.max(block.offsetHeight, POPOUT_TITLE_HEIGHT));
+	block.style.left = `${Math.round(Math.min(Math.max(0, left), maxLeft))}px`;
+	block.style.top = `${Math.round(Math.min(Math.max(0, top), maxTop))}px`;
+}
+
+function raisePopout(block) {
+	block.style.zIndex = ++popoutZ;
+}
+
+// dragging by the title bar; mouse only, so document listeners suffice and
+// nothing moves in the DOM (compare the picker drag in the settings panel)
+document.addEventListener('pointerdown', (e) => {
+	const block = e.target.closest('.map-block.popout');
+	if (!block) return;
+	raisePopout(block);
+	if (e.button !== 0) return;
+	const title = e.target.closest('.radartitle');
+	// links and buttons keep working; a fullscreen bar is pinned, not a handle
+	if (!title || e.target.closest('a') || title.classList.contains('fullscreen')) return;
+	// also suppresses the compatibility mousedown, so a slide title bar drag
+	// cannot register as a swipe on the slideshow around it
+	e.preventDefault();
+	const rect = block.getBoundingClientRect();
+	const startX = e.clientX, startY = e.clientY;
+	const move = (ev) => placePopout(block, rect.left + ev.clientX - startX, rect.top + ev.clientY - startY);
+	const stop = () => {
+		document.removeEventListener('pointermove', move);
+		document.removeEventListener('pointerup', stop);
+		document.removeEventListener('pointercancel', stop);
+		document.body.classList.remove('po-dragging');
+	};
+	// iframes would swallow the pointer mid-drag; .po-dragging turns their events off
+	document.body.classList.add('po-dragging');
+	document.addEventListener('pointermove', move);
+	document.addEventListener('pointerup', stop);
+	document.addEventListener('pointercancel', stop);
+});
+
+// widgets are a desktop thing: shrinking below the breakpoint puts them back
+POPOUT_MQ.addEventListener('change', (e) => {
+	if (!e.matches) dockAllPopouts();
+});
+
+// a smaller window must not strand a widget off-screen
+window.addEventListener('resize', () => {
+	clearTimeout(window._popoutResizeTimeout);
+	window._popoutResizeTimeout = setTimeout(() => {
+		document.querySelectorAll('.map-block.popout').forEach(block => {
+			const rect = block.getBoundingClientRect();
+			placePopout(block, rect.left, rect.top);
+		});
+	}, 200);
+});
 
 // ---------- settings panel ----------
 

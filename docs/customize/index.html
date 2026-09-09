@@ -44,12 +44,17 @@
 		.radartitle.fullscreen .center{transform:none;left:auto}.radartitle.fullscreen .left,.radartitle.fullscreen .right{top:50%;transform:
 		translateY(-50%)}.if1.fullscreen{position:fixed;top:23px;left:0;right:0;bottom:0;padding-top:0;z-index:9999}body.fs-lock{overflow:hidden}
 		@media (max-width:800px){.radartitle.fullscreen{height:32px}.if1.fullscreen{top:32px}.radartitle .right-cluster{gap:14px}
-		.radartitle.fullscreen .left{margin-left:10px}.radartitle.fullscreen .right{margin-right:10px}}.links-bottom{display:none;text-align:left;
-		background-color:#3a3f4a;box-sizing:border-box;padding:5px 4px;white-space:nowrap;overflow-x:auto;-webkit-overflow-scrolling:touch;
-		scrollbar-width:none;-ms-overflow-style:none}.links-bottom::-webkit-scrollbar{display:none}.links-bottom::after,.links-bottom::before{
-		content:"";position:sticky;display:inline-block;width:24px;height:1.4em;margin-top:-.3em;margin-bottom:-.3em;vertical-align:middle;
-		pointer-events:none;opacity:0;transition:opacity .2s ease}.links-bottom::before{left:-4px;margin-right:-24px;background:
-		linear-gradient(to left,transparent,#3a3f4a)}.links-bottom::after{right:-4px;margin-left:-24px;background:
+		.radartitle.fullscreen .left{margin-left:10px}.radartitle.fullscreen .right{margin-right:10px}}.po-btn{display:none}.map-gap{display:flex;
+		align-items:center;justify-content:center;gap:6px;box-sizing:border-box;padding:8px;background-color:#202c40;color:#8a94a8}.map-gap a{cursor
+		:pointer}@media (min-width:801px) and (hover:hover) and (pointer:fine){.po-btn{display:inline}.radartitle.fullscreen .po-btn{display:none}
+		.map-block.popout{position:fixed;z-index:5000;min-width:260px;max-width:min(875px,calc(100vw - 16px));height:auto!important;overflow:hidden;
+		resize:horizontal;background-color:#212f45;outline:1px solid #2b5797;box-shadow:0 6px 24px rgba(0,0,0,.6)}
+		.map-block.popout .radartitle:not(.fullscreen){cursor:move}body.po-dragging{user-select:none}body.po-dragging iframe{pointer-events:none}}
+		.links-bottom{display:none;text-align:left;background-color:#3a3f4a;box-sizing:border-box;padding:5px 4px;white-space:nowrap;overflow-x:auto
+		;-webkit-overflow-scrolling:touch;scrollbar-width:none;-ms-overflow-style:none}.links-bottom::-webkit-scrollbar{display:none}
+		.links-bottom::after,.links-bottom::before{content:"";position:sticky;display:inline-block;width:24px;height:1.4em;margin-top:-.3em;
+		margin-bottom:-.3em;vertical-align:middle;pointer-events:none;opacity:0;transition:opacity .2s ease}.links-bottom::before{left:-4px;
+		margin-right:-24px;background:linear-gradient(to left,transparent,#3a3f4a)}.links-bottom::after{right:-4px;margin-left:-24px;background:
 		linear-gradient(to right,transparent,#3a3f4a)}.links-bottom.can-scroll-left::before{opacity:1}.links-bottom.can-scroll-right::after{opacity:
 		1}body.show-links-bottom .links-bottom{display:block}@media (max-width:800px){.links-bottom{font-size:12px}}.sp{height:12px}.sp20{height:
 		24px}@media (max-width:800px){.sp20{height:12px}}.beta{font-size:9px;color:#ff9800;vertical-align:super;text-transform:uppercase;
@@ -112,318 +117,345 @@
 	</style>
 	<script>
 		const RADAR_HR_LINKS=[{text:"Windy",href:"https://www.windy.com/-Weather-radar-radar?radar,44.5,16.5,7"},{text:"Zoom Earth",
-href:"https://zoom.earth/maps/radar/#view=44.5,16.5,7z"},{text:"meteoblue",
-href:"https://www.meteoblue.com/en/weather/maps/croatia_croatia_3202326#map=radar~radarMapEU~none~none~none&coords=6/44.5/16.5"},{
-text:"Rain Viewer",href:"https://www.rainviewer.com/map.html?loc=44.5,16.5,6&oCS=1&c=5&lm=1&layer=radar&sm=1&sn=2&ts=1"},{text:"Ventusky",
-href:"https://www.ventusky.com/?p=44.5;16.5;6&l=radar&w=off"},{text:"Vrijeme&Radar",
-href:"https://www.vrijemeradar.hr/vremenski-radar/zagreb/18138691?center=44.5,16.5&zoom=7&layer=wr&tz=Europe%2FZagreb"},{text:"Sat24",
-href:"https://www.sat24.com/en-gb/country/hr/hd#selectedLayer=euRadarSat"},{text:"I'm Weather",
-href:"https://imweather.com/?model=nowcast&run=&member=&element=radsat&level=&lat=44.5000&lng=16.5000&z=6"},{text:"Időkép",
-href:"https://www.idokep.eu/adria"}],RADAR_EU_LINKS=[{text:"Windy",href:"https://www.windy.com/-Weather-radar-radar?radar,47.5,17.5,5"},{
-text:"Zoom Earth",href:"https://zoom.earth/maps/radar/#view=47.5,17.5,5z"},{text:"meteoblue",
-href:"https://www.meteoblue.com/en/weather/maps/croatia_croatia_3202326#map=radar~radarMapEU~none~none~none&coords=4/47.5/17.5"},{
-text:"Rain Viewer",href:"https://www.rainviewer.com/map.html?loc=47.5,17.5,4&oCS=1&c=5&lm=1&layer=radar&sm=1&sn=2&ts=1"},{text:"Ventusky",
-href:"https://www.ventusky.com/?p=47.5;17.5;4&l=radar&w=off"},{text:"Vrijeme&Radar",
-href:"https://www.vrijemeradar.hr/vremenski-radar/zagreb/18138691?center=47.5,15.5&zoom=5&layer=wr&tz=Europe%2FZagreb"},{text:"Sat24",
-href:"https://www.sat24.com/en-gb/continent/eu/hd#selectedLayer=euRadarSat"},{text:"I'm Weather",
-href:"https://imweather.com/?model=nowcast&run=&member=&element=radsat&level=&lat=47.5000&lng=17.5000&z=4.2"}],SAT_HR_LINKS=[{text:"Windy",
-href:"https://www.windy.com/-Satellite-satellite?satellite,44.5,16.5,7"},{text:"Zoom Earth",
-href:"https://zoom.earth/maps/satellite/#view=44.5,16.5,7z"},{text:"meteoblue",
-href:"https://www.meteoblue.com/en/weather/maps/croatia_croatia_3202326#map=satellite~radar~none~none~none&coords=6/44.5/16.5"},{
-text:"Ventusky",href:"https://www.ventusky.com/?p=44.5;16.5;6&l=satellite&w=off"},{text:"Sat24",
-href:"https://www.sat24.com/en-gb/country/hr/hd"},{text:"I'm Weather",
-href:"https://imweather.com/?model=nowcast&element=satellite&run=&member=&level=&lat=44.5000&lng=16.5000&z=6"}],SAT_EU_LINKS=[{text:"Windy",
-href:"https://www.windy.com/-Satellite-satellite?satellite,47.5,17.5,5"},{text:"Zoom Earth",
-href:"https://zoom.earth/maps/satellite/#view=47.5,17.5,5z"},{text:"meteoblue",
-href:"https://www.meteoblue.com/en/weather/maps/croatia_croatia_3202326#map=satellite~radar~none~none~none&coords=4/47.5/17.5"},{
-text:"Ventusky",href:"https://www.ventusky.com/?p=47.5;17.5;4&l=satellite&w=off"},{text:"Sat24",
-href:"https://www.sat24.com/en-gb/continent/eu/hd"},{text:"I'm Weather",
-href:"https://imweather.com/?model=nowcast&element=satellite&run=&member=&level=&lat=47.5000&lng=17.5000&z=4.2"},{text:"Wetterzentrale",
-href:"https://www.wetterzentrale.de/en/reanalysis.php?map=1&model=sat&var=404&nmaps=32"}],TEMP_HR_LINKS=[{text:"Windy",
-href:"https://www.windy.com/-Temperature-temp?temp,44.5,16.5,7"},{text:"Zoom Earth",
-href:"https://zoom.earth/maps/temperature/#view=44.5,16.5,7z/model=icon"},{text:"meteoblue",
-href:"https://www.meteoblue.com/en/weather/maps/croatia_croatia_3202326#map=temperature~daily-max~auto~2%20m%20above%20gnd~none&coords=6/44.5/16.5"
-},{text:"Ventusky",href:"https://www.ventusky.com/?p=44.49;16.50;6&l=temperature-2m&w=off"},{text:"Vrijeme&Radar",
-href:"https://www.vrijemeradar.hr/vremenski-radar/zagreb/18138691?center=44.5,16.5&zoom=7&layer=tr&tz=Europe%2FZagreb"},{text:"Meteoradar",
-href:"https://www.meteoradar.co.uk/en-gb/country/hr/maps/temperature"},{text:"Meteociel",
-href:"https://www.meteociel.fr/observations-meteo/temperatures.php?region=it"},{text:"Pljusak",href:"https://pljusak.com/karta.php"
-}],STORM_LINKS=[{text:"ESSL",href:"https://weather.essl.org/storm/"},{text:"ASTORP",href:"https://rawinsonde.com/ASTORP/ESTOFEX.html"},{
-text:"ESTOFEX",href:"https://www.estofex.org"},{text:"ESWD",href:"https://www.eswd.eu"}];function except(e,t){return e.filter(e=>e.text!==t)
-}const CATEGORY_GLYPHS={radar:"📡",satelit:"🛰️",munje:"⚡",temperatura:"🌡️",nevrijeme:"⛈️",sinoptika:"🗺️",kamera:"📷",prognoza:"📈"}
-;function dhmzMrcRadar(e,t){return{id:`dhmz-${e}`,category:"radar",name:`DHMZ | MRC ${t}`,type:"slideshow",
-titleHref:`https://meteo.hr/podaci.php?section=podaci_mjerenja&param=radari&el=${e}&acto=anim`,maxWidth:720,aspect:"720 / 751",
-slides:[`https://vrijeme.hr/anim_${e}.gif`,`https://vrijeme.hr/${e}-stat.png`]}}const MAP_CATALOG=[{id:"neverin-radar-hr",category:"radar",
-name:"Neverin | Radar | Hrvatska",type:"slideshow",titleHref:"https://www.neverin.hr/radar/",aspect:"880 / 640",startSlide:2,
-slides:["https://maps.neverin.hr/radar/latest/hr/latest.webp","https://maps.neverin.hr/radar/latest/hr/anim.webp","https://maps.neverin.hr/radar/latest/hr/anim_6h.webp"],
-links:RADAR_HR_LINKS},{id:"neverin-satelit-hr",category:"satelit",name:"Neverin | Satelit | Hrvatska",type:"slideshow",
-titleHref:"https://www.neverin.hr/satelit/",aspect:"880 / 640",startSlide:2,
-slides:["https://maps.neverin.hr/satellite/rgb_geocolour/latest/hr/latest.webp","https://maps.neverin.hr/satellite/rgb_geocolour/latest/hr/anim.webp","https://maps.neverin.hr/satellite/rgb_geocolour/latest/hr/anim_6h.webp"],
-links:SAT_HR_LINKS},{id:"neverin-radar-eu",category:"radar",name:"Neverin | Radar | Europa",type:"slideshow",
-titleHref:"https://www.neverin.hr/radar/",aspect:"880 / 640",startSlide:2,
-slides:["https://maps.neverin.hr/radar/latest/eu2/latest.webp","https://maps.neverin.hr/radar/latest/eu2/anim.webp","https://maps.neverin.hr/radar/latest/eu2/anim_6h.webp"],
-links:RADAR_EU_LINKS},{id:"neverin-satelit-eu",category:"satelit",name:"Neverin | Satelit | Europa",type:"slideshow",
-titleHref:"https://www.neverin.hr/satelit/",aspect:"880 / 640",startSlide:2,
-slides:["https://maps.neverin.hr/satellite/rgb_geocolour/latest/eu2/latest.webp","https://maps.neverin.hr/satellite/rgb_geocolour/latest/eu2/anim.webp","https://maps.neverin.hr/satellite/rgb_geocolour/latest/eu2/anim_6h.webp"],
-links:SAT_EU_LINKS},{id:"windy",category:"radar",name:"Windy",type:"iframe",frameId:"windy",
-titleHref:"https://www.windy.com/-Radar-lightning-radar?radar,44.5,16.5,7",
-srcHr:"https://embed.windy.com/embed2.html?lat=44.5&lon=16.56&zoom=7&level=surface&overlay=radar&menu=&message=true&marker=&calendar=&pressure=&type=map&location=coordinates&detail=&detailLat=45.798&detailLon=15.936&metricWind=m%2Fs&metricTemp=%C2%B0C&radarRange=-1",
-zoomHrDesktop:"&zoom=7",zoomHrMobile:"&zoom=6",
-srcEu:"https://embed.windy.com/embed2.html?lat=48.0&lon=10.00&zoom=5&level=surface&overlay=radar&menu=&message=true&marker=&calendar=&pressure=&type=map&location=coordinates&detail=&detailLat=45.798&detailLon=15.936&metricWind=m%2Fs&metricTemp=%C2%B0C&radarRange=-1",
-zoomEuDesktop:"&zoom=5",zoomEuMobile:"&zoom=3",links:except(RADAR_HR_LINKS,"Windy")},{id:"dhmz-radar",category:"radar",
-name:"DHMZ | Radar | Hrvatska",type:"slideshow",
-titleHref:"https://meteo.hr/podaci.php?section=podaci_mjerenja&param=radari&el=kompozit&acto=anim",maxWidth:720,aspect:"720 / 751",
-slides:["https://vrijeme.hr/anim_kompozit.gif","https://vrijeme.hr/kompozit-stat.png"],links:RADAR_HR_LINKS},{id:"meteociel-temp",
-category:"temperatura",name:"Meteociel.fr | Temperatura",type:"slideshow",maxWidth:768,slides:[{title:{text:"Meteociel.fr | Temperatura",
-href:"https://www.meteociel.fr/observations-meteo/temperatures.php?region=it"},img:"https://www.meteociel.fr/cartes_obs/temp_it.png",
-aspect:"1"},{title:{text:"Meteociel.fr | Temperatura",href:"https://www.meteociel.fr/observations-meteo/temperatures.php?region=eur2"},
-img:"https://www.meteociel.com/cartes_obs/temp_eur2.png",aspect:"1"}],links:except(TEMP_HR_LINKS,"Meteociel")},{id:"blitzortung",
-category:"munje",name:"Blitzortung.org | Munje",type:"iframe",frameId:"blitzortung",titleHref:"https://map.blitzortung.org/#6/44.5/16.5",
-srcHr:"https://map.blitzortung.org/index.php?interactive=1&NavigationControl=1&FullScreenControl=0&Cookies=0&InfoDiv=0&MenuButtonDiv=0&ScaleControl=0&CirclesRangeValue=1&LinksCheckboxChecked=0&LinksRangeValue=0&MapStyle=1&MapStyleRangeValue=3&Advertisment=0#6/44.5/16.5",
-zoomHrDesktop:"#6/",zoomHrMobile:"#5/",
-srcEu:"https://map.blitzortung.org/index.php?interactive=1&NavigationControl=1&FullScreenControl=0&Cookies=0&InfoDiv=0&MenuButtonDiv=0&ScaleControl=0&CirclesRangeValue=1&LinksCheckboxChecked=0&LinksRangeValue=0&MapStyle=1&MapStyleRangeValue=3&Advertisment=0#4/48.0/10.0",
-zoomEuDesktop:"#4/",zoomEuMobile:"#2.5/",links:[{text:"Blitzortung.org",href:"https://www.blitzortung.org/en/historical_maps.php?map=10"},{
-text:"LightningMaps.org",href:"https://www.lightningmaps.org/?lang=en#m=sen;t=3;s=200;o=0;b=0.00;ts=0;z=7;y=44.5;x=16.5;d=4;dl=6;dc=0;"},{
-text:"Neverin",href:"https://www.neverin.hr/munje/"}]},{id:"essl",category:"nevrijeme",name:"ESSL | Prognoza nevremena",type:"slideshow",
-titleHref:"https://stormforecast.eu",maxWidth:900,aspect:"900 / 600",startSlide:2,
-slides:["https://meteo-data.jurakovic.workers.dev/essl/img1.png","https://meteo-data.jurakovic.workers.dev/essl/img2.png","https://meteo-data.jurakovic.workers.dev/essl/img3.png"],
-links:except(STORM_LINKS,"ESSL")},{id:"astorp",category:"nevrijeme",name:"ASTORP | Prognoza nevremena",type:"slideshow",
-titleHref:"https://rawinsonde.com/ASTORP/ESTOFEX.html",aspect:"1048 / 850",
-slides:["https://rawinsonde.com/ASTORP/Results/ESTOFEX_DAY_1.jpg","https://rawinsonde.com/ASTORP/Results/ESTOFEX_DAY_2.jpg","https://rawinsonde.com/ASTORP/Results/ESTOFEX_DAY_3.jpg","https://rawinsonde.com/ASTORP/Results/ESTOFEX_DAY_4.jpg","https://rawinsonde.com/ASTORP/Results/ESTOFEX_DAY_5.jpg","https://rawinsonde.com/ASTORP/Results/ESTOFEX_DAY_6.jpg","https://rawinsonde.com/ASTORP/Results/ESTOFEX_DAY_7.jpg"],
-links:except(STORM_LINKS,"ASTORP")},{id:"estofex",category:"nevrijeme",name:"ESTOFEX | Prognoza nevremena",type:"slideshow",
-titleHref:"https://www.estofex.org",maxWidth:800,aspect:"1",
-slides:["https://meteo-data.jurakovic.workers.dev/estofex/img1.png","https://meteo-data.jurakovic.workers.dev/estofex/img2.png"],
-links:except(STORM_LINKS,"ESTOFEX")},{id:"eumetnet",category:"radar",name:"EUMETNET",type:"iframe-basic",
-titleHref:"https://www.eumetnet.eu/observations/opera-radar-animation/",src:"https://cdn.fmi.fi/demos/eumetnet-web-site-radar-animator/",
-links:RADAR_EU_LINKS},{id:"meteociel-satelit",category:"satelit",name:"Meteociel.fr | Satelit",type:"slideshow",maxWidth:768,slides:[{
-title:{text:"Meteociel.fr | Satelit",
-href:"https://www.meteociel.fr/observations-meteo/satellite.php?mode=animation-infrarouge-noir-et-blanc-hd-mtg"},
-img:"https://modeles20.meteociel.fr/satellite/animsatirmtgeu.gif",aspect:"1"},{title:{text:"Meteociel.fr | Satelit",
-href:"https://www.meteociel.fr/observations-meteo/satellite.php?mode=infrarouge-noir-et-blanc-hd-mtg"},
-img:"https://modeles20.meteociel.fr/satellite/latestsatirmtgeu.png",aspect:"1"}],links:SAT_EU_LINKS},{id:"chmi-sinopticka",
-category:"sinoptika",name:"ČHMÚ | Sinoptička karta",type:"slideshow",maxWidth:760,dynamicWidth:!0,slides:[{title:{
-href:"https://intranet.chmi.cz/aktualni-situace/aktualni-stav-pocasi/evropa/synopticka-situace"},
-img:"https://intranet.chmi.cz/files/portal/docs/meteo/om/evropa/analyza.gif",aspect:"760 / 492"},{title:{
-href:"https://intranet.chmi.cz/predpovedi/predpovedi-pocasi/evropa/synopticka-situace"},
-img:"https://intranet.chmi.cz/files/portal/docs/meteo/om/evropa/preba/preba36.gif",aspect:"760 / 435"},{title:{
-href:"https://intranet.chmi.cz/predpovedi/predpovedi-pocasi/evropa/synopticka-situace"},
-img:"https://intranet.chmi.cz/files/portal/docs/meteo/om/evropa/preba/preba60.gif",aspect:"760 / 435"},{title:{
-href:"https://intranet.chmi.cz/predpovedi/predpovedi-pocasi/evropa/synopticka-situace"},
-img:"https://intranet.chmi.cz/files/portal/docs/meteo/om/evropa/preba/preba84.gif",aspect:"760 / 435"}],links:[{text:"DHMZ",
-href:"https://meteo.hr/prognoze.php?section=prognoze_model&param=web_fronte_sutra12"}]},{id:"neverin-kamera",category:"kamera",
-name:"Neverin | Kamera | Zagreb",type:"image",titleHref:"https://www.neverin.hr/kamere/",aspect:"1280 / 720",
-img:"https://webcams.neverin.hr/7332072588/latest.jpg"},{id:"meteoblue-prognoza",category:"prognoza",name:"meteoblue | Prognoza",
-type:"slideshow",eagerSlides:!0,slides:[{title:{text:"meteoblue | Prognoza | Zagreb",
-href:"https://www.meteoblue.com/en/weather/week/zagreb_croatia_3186886"},
-img:"https://meteo-data.jurakovic.workers.dev/meteoblue/meteogram/zagreb.png",aspect:"1700 / 1300"},{title:{
-text:"meteoblue | Prognoza | Split",href:"https://www.meteoblue.com/en/weather/week/split_croatia_3190261"},
-img:"https://meteo-data.jurakovic.workers.dev/meteoblue/meteogram/split.png",aspect:"1700 / 1300"},{title:{
-text:"meteoblue | Prognoza | Rijeka",href:"https://www.meteoblue.com/en/weather/week/rijeka_croatia_3191648"},
-img:"https://meteo-data.jurakovic.workers.dev/meteoblue/meteogram/rijeka.png",aspect:"1700 / 1300"},{title:{
-text:"meteoblue | Prognoza | Osijek",href:"https://www.meteoblue.com/en/weather/week/osijek_croatia_3193935"},
-img:"https://meteo-data.jurakovic.workers.dev/meteoblue/meteogram/osijek.png",aspect:"1700 / 1300"}],links:[{text:"DHMZ",
-href:"https://meteo.hr"},{text:"HRT Vrijeme",href:"https://vrijeme-i-promet.hrt.hr/vrijeme/"},{text:"Pljusak",
-href:"https://pljusak.com/karta.php"},{text:"Neverin",href:"https://www.neverin.hr/prognoza/zagreb/"},{text:"Yr.no",
-href:"https://www.yr.no/en/details/table/2-3186886/Croatia/City%20of%20Zagreb/Zagreb"},{text:"Wetterzentrale",
-href:"https://www.wetterzentrale.de/en/show_diagrams.php?geoid=54032&model=ecm&var=93&run=6&lid=OP&bw=1"}]},{id:"ventusky",category:"radar",
-name:"Ventusky",type:"iframe",frameId:"ventusky",scaled:!0,loading:"eager",
-titleHref:"https://www.ventusky.com/?p=44.5;16.5;6&l=radar&w=off",srcHr:"https://embed.ventusky.com/?p=44.5;16.5;6&l=radar&w=off",
-zoomHrDesktop:";6&",zoomHrMobile:";6&",srcEu:"https://embed.ventusky.com/?p=48.0;10.0;4&l=radar&w=off",zoomEuDesktop:";4&",
-zoomEuMobile:";3&",links:except(RADAR_HR_LINKS,"Ventusky")},{id:"rainviewer",category:"radar",name:"Rain Viewer",type:"iframe",
-frameId:"rainViewer",scaled:!0,titleHref:"https://www.rainviewer.com/map.html?loc=44.5,16.5,6&oCS=1&c=5&lm=1&layer=radar&sm=1&sn=2&ts=1",
-srcHr:"https://www.rainviewer.com/map.html?loc=44.8,16.5,6.3&oCS=1&c=5&lm=1&layer=radar&sm=1&sn=2&ts=1",zoomHrDesktop:",6.3&",
-zoomHrMobile:",5.8&",srcEu:"https://www.rainviewer.com/map.html?loc=48.0,10.0,4.0&oCS=1&c=5&lm=1&layer=radar&sm=1&sn=2&ts=1",
-zoomEuDesktop:",4.0&",zoomEuMobile:",3.2&",links:except(RADAR_HR_LINKS,"Rain Viewer")},{id:"weatherandradar",category:"radar",
-name:"Vrijeme&Radar",type:"iframe",frameId:"weatherAndRadar",scaled:!0,
-titleHref:"https://www.vrijemeradar.hr/vremenski-radar/zagreb/18138691?center=44.5,16.5&zoom=7&layer=wr&tz=Europe%2FZagreb",
-srcHr:"https://radar.wo-cloud.com/pwa/?center=44.5,16.5&zoom=7.2&tz=Europe/Zagreb&tf=HH:mm&tempunit=celsius&windunit=kph&showShareButton=false&lang=en-US&placemarkName=Zagreb&desktop=true&fadeTop=true",
-zoomHrDesktop:"&zoom=7.2",zoomHrMobile:"&zoom=6.8",
-srcEu:"https://radar.wo-cloud.com/pwa/?center=48.0,10.0&zoom=5.0&tz=Europe/Zagreb&tf=HH:mm&tempunit=celsius&windunit=kph&showShareButton=false&lang=en-US&placemarkName=Zagreb&desktop=true&fadeTop=true",
-zoomEuDesktop:"&zoom=5.0",zoomEuMobile:"&zoom=4.0",links:except(RADAR_HR_LINKS,"Vrijeme&Radar")},{id:"meteo-si",category:"radar",
-name:"meteo.si",type:"slideshow",titleHref:"https://meteo.arso.gov.si/met/sl/weather/observ/radar/",maxWidth:821,aspect:"821 / 660",
-slides:["https://meteo.arso.gov.si/uploads/probase/www/observ/radar/si0-rm-anim.gif?nocache","https://meteo.arso.gov.si/uploads/probase/www/observ/radar/si0-rm.gif?nocache"],
-links:RADAR_HR_LINKS},{id:"idokep-radar-eu",category:"radar",name:"Időkép | Radar | Europa",type:"image",
-titleHref:"https://www.idokep.eu/ceu/radar",maxWidth:840,aspect:"840 / 600",img:"https://www.idokep.eu/terkep/eu/radar.gif",
-links:RADAR_EU_LINKS},{id:"idokep-satelit-eu",category:"satelit",name:"Időkép | Satelit | Europa",type:"video",
-titleHref:"https://www.idokep.hu/muhold",aspect:"1070 / 713",src:"https://www.idokep.hu/radar/sat-eu.mp4",links:SAT_EU_LINKS},{
-id:"istramet-munje",category:"munje",name:"Istramet | Munje",type:"image",titleHref:"https://www.istramet.hr/radari-munja/",maxWidth:804,
-aspect:"804 / 687",img:"https://www.istramet.hr/wp-content/themes/istramet/img/munje_hr.png",links:[{text:"Blitzortung.org",
-href:"https://map.blitzortung.org/#6.5/44.5/16.5"},{text:"LightningMaps.org",
-href:"https://www.lightningmaps.org/?lang=en#m=sen;t=3;s=200;o=0;b=0.00;ts=0;z=7;y=44.5;x=16.5;d=4;dl=6;dc=0;"},{text:"Neverin",
-href:"https://www.neverin.hr/munje/"}]},{id:"blitzortung-karta",category:"munje",name:"Blitzortung.org | Munje | Europa",type:"image",
-titleHref:"https://www.blitzortung.org/en/historical_maps.php?map=10",aspect:"1",img:"https://www.blitzortung.org/Images/image_b_eu.png",
-links:[{text:"Blitzortung.org",href:"https://map.blitzortung.org/#6/44.5/16.5"},{text:"LightningMaps.org",
-href:"https://www.lightningmaps.org/?lang=en#m=sen;t=3;s=200;o=0;b=0.00;ts=0;z=5;y=47.5;x=17.5;d=4;dl=6;dc=0;"},{text:"Neverin",
-href:"https://www.neverin.hr/munje/#:~:text=Pojava%20munja%20Europa"}]},{id:"wetterzentrale-temp",category:"temperatura",
-name:"Wetterzentrale | Temperatura",type:"image",
-titleHref:"https://www.wetterzentrale.de/en/topkarten.php?map=17&model=ecm&var=5&run=6&time=0&lid=OP&h=1&mv=0&tr=1",aspect:"959 / 741",
-img:"https://www.wetterzentrale.de/en/create_gif.php?model=ECM&member=OP&var=5&map=IT&run=06&speed=250&times=0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47",
-alt:"Wetterzentrale Temperatura",links:TEMP_HR_LINKS},{id:"dhmz-sinopticka",category:"sinoptika",name:"DHMZ | Sinoptička karta",
-type:"image",titleHref:"https://meteo.hr/prognoze.php?section=prognoze_model&param=web_fronte_sutra12",maxWidth:720,aspect:"1",
-img:"https://prognoza.hr/web_fronte_sutra12.jpg",links:[{text:"ČHMÚ",
-href:"https://intranet.chmi.cz/aktualni-situace/aktualni-stav-pocasi/evropa/synopticka-situace"}]},{id:"dwd-sinopticka",
-category:"sinoptika",name:"DWD | Sinoptička karta",type:"slideshow",
-titleHref:"https://www.dwd.de/EN/ourservices/hobbymet_wcharts_europe/hobbyeuropecharts.html",maxWidth:800,aspect:"800 / 653",
-slides:["https://www.dwd.de/DWD/wetter/wv_spez/hobbymet/wetterkarten/ico_tkboden_na_v36.png","https://www.dwd.de/DWD/wetter/wv_spez/hobbymet/wetterkarten/ico_tkboden_na_036.png","https://www.dwd.de/DWD/wetter/wv_spez/hobbymet/wetterkarten/ico_tkboden_na_048.png","https://www.dwd.de/DWD/wetter/wv_spez/hobbymet/wetterkarten/ico_tkboden_na_060.png","https://www.dwd.de/DWD/wetter/wv_spez/hobbymet/wetterkarten/ico_tkboden_na_084.png","https://www.dwd.de/DWD/wetter/wv_spez/hobbymet/wetterkarten/ico_tkboden_na_108.png"],
-links:[{text:"ČHMÚ",href:"https://intranet.chmi.cz/aktualni-situace/aktualni-stav-pocasi/evropa/synopticka-situace"},{text:"DHMZ",
-href:"https://meteo.hr/prognoze.php?section=prognoze_model&param=web_fronte_sutra12"}]
-},dhmzMrcRadar("puntijarka","Puntijarka"),dhmzMrcRadar("bilogora","Bilogora"),dhmzMrcRadar("gradiste","Gradište"),dhmzMrcRadar("goli","Goli"),dhmzMrcRadar("debeljak","Debeljak"),dhmzMrcRadar("uljenje","Uljenje")],DEFAULT_MAPS=["neverin-radar-hr","neverin-satelit-hr","neverin-radar-eu","neverin-satelit-eu","windy","dhmz-radar","meteociel-temp","blitzortung","essl","astorp","estofex","eumetnet","meteociel-satelit","dwd-sinopticka","neverin-kamera","meteoblue-prognoza"],MAP_PRESETS=[{
-id:"zadano",name:"Osnovno",maps:DEFAULT_MAPS},{id:"vise",name:"Više",
-maps:["ventusky","rainviewer","weatherandradar","meteo-si","idokep-radar-eu","idokep-satelit-eu","istramet-munje","blitzortung-karta","wetterzentrale-temp","dhmz-sinopticka","chmi-sinopticka","dhmz-puntijarka","dhmz-bilogora","dhmz-gradiste","dhmz-goli","dhmz-debeljak","dhmz-uljenje"]
-},{id:"radari",name:"Radari",
-maps:["neverin-radar-hr","neverin-radar-eu","windy","dhmz-radar","eumetnet","ventusky","rainviewer","weatherandradar","meteo-si","idokep-radar-eu"]
-},{id:"sateliti",name:"Sateliti",maps:["neverin-satelit-hr","neverin-satelit-eu","meteociel-satelit","idokep-satelit-eu"]},{id:"nevrijeme",
-name:"Nevrijeme",maps:["essl","astorp","estofex","blitzortung","istramet-munje","blitzortung-karta"]},{id:"sve",name:"Sve",
-maps:MAP_CATALOG.map(e=>e.id)},{id:"nista",name:"Ništa",maps:[]
-}],USER_PRESETS_KEY="mapUserPresets",USER_PRESET_PREFIX="u:",PRESET_NAME_MAX=40;function isUserPresetId(e){
-return"string"==typeof e&&e.startsWith("u:")}function isValidPreset(e){
-return e&&isUserPresetId(e.id)&&"string"==typeof e.name&&Array.isArray(e.maps)}function loadUserPresets(){try{
-const e=JSON.parse(localStorage.getItem("mapUserPresets"));if(Array.isArray(e))return e.filter(isValidPreset)}catch(e){}return[]}
-let userPresets=loadUserPresets();function saveUserPresets(){try{localStorage.setItem("mapUserPresets",JSON.stringify(userPresets))
-}catch(e){}}function allPresets(){return MAP_PRESETS.concat(userPresets)}function newPresetId(){let e;do{
-e="u:"+Date.now().toString(36)+Math.random().toString(36).slice(2,6)}while(userPresets.some(t=>t.id===e));return e}
-function cleanPresetName(e){return String(e).trim().replace(/\s+/g," ").slice(0,40)}function findUserPresetByName(e){
-return userPresets.find(t=>t.name.toLowerCase()===e.toLowerCase())}function storeUserPreset(e,t){const a=findUserPresetByName(e)
-;return a?(a.name=e,a.maps=t):userPresets.push({id:newPresetId(),name:e,maps:t}),saveUserPresets(),a||userPresets[userPresets.length-1]}
-function uniquePresetName(e){const t=cleanPresetName(e);let a=t;for(let e=2;findUserPresetByName(a);e++){const r=` (${e})`
-;a=t.slice(0,40-r.length).trim()+r}return a}function deleteUserPreset(e){const t=userPresets.find(t=>t.id===e)
-;t&&getMapPrefs().preset===e&&saveMapPrefs({preset:"custom",maps:t.maps.slice()}),userPresets=userPresets.filter(t=>t.id!==e),
-saveUserPresets()}const HIDDEN_PRESETS_KEY="mapHiddenPresets",PERMANENT_PRESET_ID="zadano";function isHideablePreset(e){return"zadano"!==e}
-function loadHiddenPresets(){try{const e=JSON.parse(localStorage.getItem("mapHiddenPresets"))
-;if(Array.isArray(e))return e.filter(e=>isHideablePreset(e)&&MAP_PRESETS.some(t=>t.id===e))}catch(e){}return[]}
-let hiddenPresets=loadHiddenPresets();function saveHiddenPresets(){try{
-localStorage.setItem("mapHiddenPresets",JSON.stringify(hiddenPresets))}catch(e){}}function isPresetHidden(e){
-return hiddenPresets.includes(e)}function setPresetHidden(e,t){t&&!isHideablePreset(e)||(hiddenPresets=hiddenPresets.filter(t=>t!==e),
-t&&hiddenPresets.push(e),saveHiddenPresets())}function hideablePresets(){return MAP_PRESETS.filter(e=>isHideablePreset(e.id))}
-function hideAllPresets(){hiddenPresets=hideablePresets().map(e=>e.id),saveHiddenPresets()}function showAllPresets(){hiddenPresets=[],
-saveHiddenPresets()}function visiblePresets(){return allPresets().filter(e=>!isPresetHidden(e.id))}const MAP_PREFS_KEY="mapPrefs"
-;function isValidPrefs(e){return e&&"string"==typeof e.preset&&("custom"===e.preset||allPresets().some(t=>t.id===e.preset))}
-function getMapPrefs(){try{const e=JSON.parse(localStorage.getItem(MAP_PREFS_KEY));if(isValidPrefs(e))return e}catch(e){}return{
-preset:"zadano"}}function saveMapPrefs(e){try{localStorage.setItem(MAP_PREFS_KEY,JSON.stringify(e))}catch(e){}}function presetMapIds(e){
-const t=allPresets().find(t=>t.id===e);return t?t.maps:null}function resolveMapIds(){const e=getActiveMapPrefs()
-;return"custom"===e.preset&&Array.isArray(e.maps)?[...new Set(e.maps)].filter(e=>MAP_CATALOG.some(t=>t.id===e)):presetMapIds(e.preset)||presetMapIds("zadano")
-}function encodeMapView(e){const t=JSON.stringify(e).replace(/[\u0080-\uffff]/g,e=>"\\u"+e.charCodeAt(0).toString(16).padStart(4,"0"))
-;return btoa(t).replace(/\+/g,"-").replace(/\//g,"_").replace(/=+$/,"")}function decodeMapView(e){try{
-const t=JSON.parse(atob(e.replace(/-/g,"+").replace(/_/g,"/")));if(isValidPrefs(t))return t.name&&(t.name=cleanPresetName(t.name)),t
-}catch(e){}return null}function presetSharePrefs(e){return{preset:"custom",maps:e.maps.slice(),name:e.name}}function sameMapIds(e,t){
-return e.length===t.length&&e.every((e,a)=>e===t[a])}function presetIdForMapIds(e){
-const t=userPresets.concat(MAP_PRESETS).find(t=>sameMapIds(t.maps,e));return t?t.id:null}function copyMapViewLink(e,t){
-const a=new URL(window.location.origin+window.location.pathname);a.searchParams.set("v",encodeMapView(e))
-;const r=a.toString(),s=()=>window.prompt("Kopiraj poveznicu:",r)
-;navigator.clipboard&&navigator.clipboard.writeText?navigator.clipboard.writeText(r).then(t).catch(s):s()}function flashLabel(e,t,a){
-e.textContent=t,setTimeout(()=>{e.textContent=a},1500)}let sharedMapView=(()=>{const e=new URLSearchParams(window.location.search).get("v")
-;return e?decodeMapView(e):null})();function getActiveMapPrefs(){return sharedMapView||getMapPrefs()}function activePresetId(){
-const e=getActiveMapPrefs();return sharedMapView&&"custom"===e.preset?presetIdForMapIds(resolveMapIds())||"custom":e.preset}
-function clearSharedMapView(){if(!sharedMapView)return;sharedMapView=null;const e=new URL(window.location);e.searchParams.delete("v"),
-history.replaceState(null,"",e)}function el(e,t={},a=[]){const r=document.createElement(e)
-;for(const[e,a]of Object.entries(t))null!=a&&!1!==a&&("text"===e?r.textContent=a:"html"===e?r.innerHTML=a:r.setAttribute(e,a))
-;for(const e of a)e&&r.appendChild(e);return r}function maxWidthStyle(e){return e.maxWidth?`max-width: ${e.maxWidth}px;`:""}
-function buildTitleBar(e,t={}){return el("div",{class:"radartitle",style:maxWidthStyle(t)||void 0},[el("a",{href:e.href,target:"_blank",
-rel:"nofollow",text:e.text})])}function buildMapTitleBar(e){return buildTitleBar({text:e.name,href:e.titleHref},e)}
-function buildSlideshow(e){const t=e.startSlide||1,a=e.slides.some(e=>e.title),r=el("div",{class:a?"slideshow":"slideshow placeholder",
-"data-slideshow-id":e.id,"data-current-slide":t,"data-dynamic-width":e.dynamicWidth?"":void 0,
-style:(maxWidthStyle(e)+(a?"":` aspect-ratio: ${e.aspect};`)).trim()||void 0});e.slides.forEach((s,i)=>{
-const n=i===t-1,o=a?s.img:s,l=n||e.eagerSlides?el("img",{src:o}):el("img",{"data-src":o,class:"lazy"}),d=el("div",{
-class:"slide fade"+(n?" active":"")});if(a){const t=s.maxWidth||e.maxWidth,a={text:s.title.text||e.name,href:s.title.href}
-;d.appendChild(buildTitleBar(a)),d.appendChild(el("div",{class:"placeholder",style:`${t?`max-width: ${t}px; `:""}aspect-ratio: ${s.aspect};`
-},[l]))}else d.appendChild(l);r.appendChild(d)});const s=el("a",{class:"prev"+(a?" shorter":""),html:"&#10094;"})
-;s.addEventListener("click",()=>plusSlides(e.id,-1));const i=el("a",{class:"next"+(a?" shorter":""),html:"&#10095;"})
-;i.addEventListener("click",()=>plusSlides(e.id,1)),r.appendChild(s),r.appendChild(i);const n=el("div",{class:"indicators-container",
-"data-slideshow-id":e.id,style:`${maxWidthStyle(e)} grid-template-columns: repeat(${e.slides.length}, 1fr);`.trim()})
-;return e.slides.forEach((e,a)=>{n.appendChild(el("span",{class:"indicator"+(a===t-1?" active":"")}))}),
-[e.titleHref?buildMapTitleBar(e):null,r,n]}function buildImage(e){return[buildMapTitleBar(e),el("div",{class:"placeholder",
-style:`${maxWidthStyle(e)} aspect-ratio: ${e.aspect};`.trim()},[el("img",{src:e.img,alt:e.alt})])]}function buildVideo(e){
-const t=el("video",{controls:""},[el("source",{type:"video/mp4",src:e.src})]);t.muted=!0,t.autoplay=!0,t.loop=!0
-;const a=`${maxWidthStyle(e)}${e.aspect?` aspect-ratio: ${e.aspect};`:""}`.trim();return[buildMapTitleBar(e),el("div",{class:"placeholder",
-style:a||void 0},[el("div",{class:e.videoClass||"vid1"},[t])])]}function buildIframe(e){
-const t=e.frameId,a=t[0].toUpperCase()+t.slice(1),r=el("a",{class:"left zoom-btn","data-mode":"hr",text:"[HR]"})
-;r.addEventListener("click",()=>switchIframeZoom(t,r));const s=el("a",{class:"fs-btn",text:"[ ]"})
-;s.addEventListener("click",()=>toggleFullscreen(t,s));return[el("div",{class:"radartitle"},[r,el("a",{class:"center",href:e.titleHref,
-target:"_blank",rel:"nofollow",text:e.name}),el("span",{class:"right right-cluster"},[el("a",{id:`reset${a}Frame`,"data-frame-id":t,
-style:"display:none",text:"[X]"}),s])]),el("div",{class:"if1 placeholder"},[el("iframe",{id:t,class:e.scaled?"scaled-iframe":void 0,
-loading:e.loading||"lazy",frameborder:"0","data-src-hr":e.srcHr,"data-zoom-hr-desktop":e.zoomHrDesktop,"data-zoom-hr-mobile":e.zoomHrMobile,
-"data-src-eu":e.srcEu,"data-zoom-eu-desktop":e.zoomEuDesktop,"data-zoom-eu-mobile":e.zoomEuMobile}),el("div",{class:"overlay",
-id:`overlay${a}Frame`,"data-frame-id":t},[el("span",{class:"hint",text:"Dvostruki klik za pristup interaktivnoj karti"})])])]}
-function buildBasicIframe(e){return[buildMapTitleBar(e),el("div",{class:"if2 placeholder"},[el("iframe",{loading:"lazy",src:e.src,
-frameborder:"0",scrolling:"no"})])]}function buildLinksBottom(e){const t=el("div",{class:"links-bottom",style:maxWidthStyle(e)||void 0})
-;return e.links.forEach((e,a)=>{a>0&&t.appendChild(document.createTextNode(" · ")),t.appendChild(el("a",{href:e.href,target:"_blank",
-rel:"nofollow",text:e.text}))}),t}function buildMapContent(e){switch(e.type){case"slideshow":return buildSlideshow(e);case"image":
-return buildImage(e);case"video":return buildVideo(e);case"iframe":return buildIframe(e);case"iframe-basic":return buildBasicIframe(e)}
-return[]}function renderMaps(){const e=document.querySelector("tbody[data-maps]");if(!e)return;e.replaceChildren()
-;const t=resolveMapIds().map(e=>MAP_CATALOG.find(t=>t.id===e)).filter(Boolean);t.length?t.forEach((t,a)=>{a>0&&e.appendChild(el("tr",{
-class:"sp20"}));const r=el("td",{align:"center"});buildMapContent(t).forEach(e=>{e&&r.appendChild(e)}),e.appendChild(el("tr",{},[r])),
-t.links&&t.links.length&&e.appendChild(el("tr",{},[el("td",{align:"center"},[buildLinksBottom(t)])]))}):e.appendChild(el("tr",{},[el("td",{
-align:"center"},[el("div",{class:"maps-empty",text:'Nema odabranih karata. Odaberite ih pod "Karte".'})])]))}
-function setMapSettingsVisible(e,t){e.hidden=!t;const a=document.querySelector(".buttons button.btn .arrow");a&&(a.textContent=t?"▲":"▼")}
-function toggleMapSettings(){const e=document.getElementById("mapSettings");e&&(e.hidden?(buildMapSettings(e),
-setMapSettingsVisible(e,!0)):setMapSettingsVisible(e,!1))}function buildMapSettings(e){e.replaceChildren();const t=el("div",{
-class:"ms-list ms-selected"}),a=el("div",{class:"ms-list ms-available"});let r="zadano",s=!0;function i(e,t){
-const a=MAP_CATALOG.find(t=>t.id===e.getAttribute("data-map-id")),i=MAP_CATALOG.find(e=>e.id===t.getAttribute("data-map-id")),n=s?1:-1
-;return"naziv"===r?a.name.localeCompare(i.name,"hr")*n:"vrsta"===r?(a.category.localeCompare(i.category,"hr")||a.name.localeCompare(i.name,"hr"))*n:(MAP_CATALOG.indexOf(a)-MAP_CATALOG.indexOf(i))*n
-}function n(){[...a.children].sort(i).forEach(e=>a.appendChild(e))}const o={},l=el("div",{class:"ms-sort"},[el("span",{text:"Poredaj:"})])
-;function d(){for(const[e,{link:t,label:a}]of Object.entries(o)){const i=e===r;t.classList.toggle("active",i),
-t.textContent=i?`${a} ${s?"▲":"▼"}`:a}}function p(){e.querySelector('input[name="msPreset"][value="custom"]').checked=!0,f(),C()}
-function m(e,r){const s=el("input",{type:"checkbox"});s.checked=r;const i=el("span",{class:"ms-handle",text:"≡",
-title:"Povuci za premještanje"}),o=el("div",{class:"ms-item","data-map-id":e.id},[el("label",{},[s,el("span",{class:"ms-glyph",
-text:CATEGORY_GLYPHS[e.category]||""}),document.createTextNode(e.name)]),i]);return s.addEventListener("change",()=>{
-s.checked?t.appendChild(o):(a.appendChild(o),n()),p()}),function(e,a){e.addEventListener("pointerdown",r=>{r.preventDefault(),
-e.hasPointerCapture(r.pointerId)&&e.releasePointerCapture(r.pointerId),a.classList.add("dragging");const s=a.nextElementSibling
-;let i=r.clientY,n=0,o=null;const l=()=>{const e=[...t.children].find(e=>e!==a&&i<e.getBoundingClientRect().top+e.offsetHeight/2)
-;e?e.previousElementSibling!==a&&t.insertBefore(a,e):t.lastElementChild!==a&&t.appendChild(a)},d=()=>{0!==n&&(window.scrollBy(0,n),l()),
-o=requestAnimationFrame(d)},m=e=>{0!==e.buttons?(i=e.clientY,n=i<60?-8:i>window.innerHeight-60?8:0,l()):c()},c=()=>{
-document.removeEventListener("pointermove",m),document.removeEventListener("pointerup",c),document.removeEventListener("pointercancel",c),
-cancelAnimationFrame(o),a.classList.remove("dragging"),a.nextElementSibling!==s&&p()};document.addEventListener("pointermove",m),
-document.addEventListener("pointerup",c),document.addEventListener("pointercancel",c),o=requestAnimationFrame(d)})}(i,o),o}function c(e){
-t.replaceChildren(),a.replaceChildren(),e.forEach(e=>{const a=MAP_CATALOG.find(t=>t.id===e);a&&t.appendChild(m(a,!0))}),
-MAP_CATALOG.filter(t=>!e.includes(t.id)).forEach(e=>a.appendChild(m(e,!1))),n()}
-[["zadano","Zadano"],["naziv","Naziv"],["vrsta","Vrsta"]].forEach(([e,t])=>{const a=el("a",{text:t});a.addEventListener("click",()=>{
-r===e?s=!s:(r=e,s=!0),d(),n()}),o[e]={link:a,label:t},l.appendChild(a)}),d();const h=el("div",{class:"ms-presets"})
-;let u="custom"===activePresetId()?null:activePresetId();function w(e){h.replaceChildren();const t=[...visiblePresets(),{id:"custom",
-name:"Prilagođeno"}];t.some(t=>t.id===e)||(e="custom"),t.forEach(t=>{const a=el("input",{type:"radio",name:"msPreset",value:t.id})
-;a.checked=t.id===e,a.addEventListener("change",()=>{"custom"!==t.id&&c(presetMapIds(t.id)),u="custom"===t.id?null:t.id,f(),C()})
-;const r="ms-chip"+(isUserPresetId(t.id)?" ms-user":"");h.appendChild(el("label",{},[a,el("span",{class:r,text:t.name})]))}),
-h.appendChild(el("span",{class:"ms-fill"})),f()}function f(){h.querySelectorAll(".ms-origin").forEach(e=>e.classList.remove("ms-origin"))
-;const e=allPresets().find(e=>e.id===u);if(!e||sameMapIds(e.maps,v()))return;const t=[...h.querySelectorAll("input")].find(e=>e.value===u)
-;t&&t.nextElementSibling.classList.add("ms-origin")}function g(){const t=e.querySelector('input[name="msPreset"]:checked')
-;return t?t.value:"zadano"}function v(){return[...t.children].map(e=>e.getAttribute("data-map-id"))}function b(){const e=g()
-;return"custom"===e?{preset:"custom",maps:v()}:{preset:e}}c(resolveMapIds()),w(activePresetId());const k=el("div",{class:"ms-manage"})
-;let y=!1;const S=el("input",{type:"text",class:"ms-name",maxlength:String(40),placeholder:"Naziv predloška"}),P=el("button",{type:"button",
-class:"btn",text:"Spremi"});function x(e){const t=storeUserPreset(e,v());S.value="",y=!1,u=t.id,w(t.id),C()}P.addEventListener("click",()=>{
-const e=cleanPresetName(S.value);e?x(e):S.focus()}),S.addEventListener("keydown",e=>{"Enter"===e.key?(e.preventDefault(),
-P.click()):"Escape"===e.key&&(y=!1,S.value="",C())});let z=null;const _=el("input",{type:"text",class:"ms-name ms-rename",
-maxlength:String(40)});let E=!1;function M(){const e=userPresets.find(e=>e.id===z);if(!e)return
-;const t=cleanPresetName(_.value),a=findUserPresetByName(t);if(!t||a&&a!==e)return _.classList.add("invalid"),void _.focus();e.name=t,
-saveUserPresets(),z=null,w(g()),C()}function A(){z=null,C()}function R(e){return el("span",{class:"ms-manage-links"
-},e.map(e=>e||el("span")))}function L(e){if(e.id===z)return function(){const e=el("a",{text:"Potvrdi"}),t=el("a",{text:"Odustani"})
-;return e.addEventListener("click",M),t.addEventListener("click",A),el("div",{class:"ms-manage-item"},[_,R([null,e,t])])}();const t=el("a",{
-text:"Preimenuj"}),a=el("a",{text:"Obriši"});let r;!function(e){return isUserPresetId(e.id)&&e.id===u&&!sameMapIds(e.maps,v())
-}(e)?r=function(e){const t=el("a",{text:"Podijeli"});return t.addEventListener("click",()=>{
-copyMapViewLink(e(),()=>flashLabel(t,"Kopirano!","Podijeli"))}),t}(()=>presetSharePrefs(e)):(r=el("a",{text:"Ažuriraj"}),
-r.addEventListener("click",()=>{storeUserPreset(e.name,v()),w(e.id),C()}));const s=el("div",{class:"ms-manage-item"},[el("span",{
-class:"ms-manage-name",text:e.name}),R([r,t,a])]);t.addEventListener("click",()=>function(e){z=e.id,_.value=e.name,
-_.classList.remove("invalid"),E=!0,C()}(e));let i=null;const n=()=>{clearTimeout(i),i=null,a.textContent="Obriši",
-a.classList.remove("active")};return a.addEventListener("click",()=>{if(!i)return a.textContent="Sigurno?",a.classList.add("active"),
-void(i=setTimeout(n,3e3));n();const t=g()===e.id;u===e.id&&(u=null),deleteUserPreset(e.id),w(t?"custom":g()),C()}),s}function C(){
-k.replaceChildren(),k.appendChild(function(){const e=el("div",{class:"ms-manage-title",text:"Zadani predlošci"}),t=el("span",{
-class:"ms-manage-title-links"}),a=(e,a)=>{const r=el("a",{text:e});r.addEventListener("click",()=>{a(),w(g()),C()}),t.appendChild(r)}
-;return hiddenPresets.length<hideablePresets().length&&a("Sakrij sve",hideAllPresets),hiddenPresets.length&&a("Prikaži sve",showAllPresets),
-e.appendChild(t),e}()),MAP_PRESETS.forEach(e=>k.appendChild(function(e){const t=isPresetHidden(e.id);let a=null
-;return isHideablePreset(e.id)&&(a=el("a",{text:t?"Prikaži":"Sakrij"}),a.addEventListener("click",()=>{setPresetHidden(e.id,!t),w(g()),C()
-})),el("div",{class:"ms-manage-item"+(t?" ms-hidden":"")},[el("span",{class:"ms-manage-name",text:e.name}),R([null,null,a])])}(e))),
-k.appendChild(function(){const e=el("div",{class:"ms-manage-title",text:"Moji predlošci"}),t=el("a",{text:y?"Odustani":"Dodaj"})
-;return t.addEventListener("click",()=>{y=!y,y||(S.value=""),C(),y&&S.focus()}),e.appendChild(el("span",{class:"ms-manage-title-links"
-},[t])),e}()),y&&k.appendChild(el("div",{class:"ms-save"},[S,P])),sharedMapView&&sharedMapView.name&&!function(){const e=resolveMapIds()
-;return userPresets.some(t=>sameMapIds(t.maps,e))}()&&k.appendChild(function(){const e=el("a",{text:"Spremi"})
-;return e.addEventListener("click",()=>{x(uniquePresetName(sharedMapView.name))}),el("div",{class:"ms-shared"},[el("span",{
-text:`Podijeljen predložak "${sharedMapView.name}"`}),e])
-}()),userPresets.length?userPresets.forEach(e=>k.appendChild(L(e))):k.appendChild(el("div",{class:"ms-manage-empty",
-text:"Nema spremljenih predložaka"})),E&&(E=!1,_.focus(),_.select())}_.addEventListener("keydown",e=>{"Enter"===e.key?(e.preventDefault(),
-M()):"Escape"===e.key&&A()}),_.addEventListener("input",()=>_.classList.remove("invalid")),C();const j=el("button",{type:"button",
-class:"btn",text:"Primijeni"});j.addEventListener("click",()=>{saveMapPrefs(b()),clearSharedMapView(),setMapSettingsVisible(e,!1),
-renderMaps(),initDynamicContent(),scrollToTop()});const H=el("a",{text:"Podijeli"});H.addEventListener("click",()=>{
-copyMapViewLink(function(){const e=b(),t=userPresets.find(t=>t.id===e.preset);return t?presetSharePrefs(t):e
-}(),()=>flashLabel(H,"Kopirano!","Podijeli"))}),e.appendChild(h),e.appendChild(t),e.appendChild(el("div",{class:"ms-actions"},[j,H])),
-e.appendChild(l),e.appendChild(a),e.appendChild(k)}
-"loading"===document.readyState?document.addEventListener("DOMContentLoaded",renderMaps):renderMaps();
+		href:"https://zoom.earth/maps/radar/#view=44.5,16.5,7z"},{text:"meteoblue",
+		href:"https://www.meteoblue.com/en/weather/maps/croatia_croatia_3202326#map=radar~radarMapEU~none~none~none&coords=6/44.5/16.5"},{
+		text:"Rain Viewer",href:"https://www.rainviewer.com/map.html?loc=44.5,16.5,6&oCS=1&c=5&lm=1&layer=radar&sm=1&sn=2&ts=1"},{text:"Ventusky",
+		href:"https://www.ventusky.com/?p=44.5;16.5;6&l=radar&w=off"},{text:"Vrijeme&Radar",
+		href:"https://www.vrijemeradar.hr/vremenski-radar/zagreb/18138691?center=44.5,16.5&zoom=7&layer=wr&tz=Europe%2FZagreb"},{text:"Sat24",
+		href:"https://www.sat24.com/en-gb/country/hr/hd#selectedLayer=euRadarSat"},{text:"I'm Weather",
+		href:"https://imweather.com/?model=nowcast&run=&member=&element=radsat&level=&lat=44.5000&lng=16.5000&z=6"},{text:"Időkép",
+		href:"https://www.idokep.eu/adria"}],RADAR_EU_LINKS=[{text:"Windy",href:"https://www.windy.com/-Weather-radar-radar?radar,47.5,17.5,5"},{
+		text:"Zoom Earth",href:"https://zoom.earth/maps/radar/#view=47.5,17.5,5z"},{text:"meteoblue",
+		href:"https://www.meteoblue.com/en/weather/maps/croatia_croatia_3202326#map=radar~radarMapEU~none~none~none&coords=4/47.5/17.5"},{
+		text:"Rain Viewer",href:"https://www.rainviewer.com/map.html?loc=47.5,17.5,4&oCS=1&c=5&lm=1&layer=radar&sm=1&sn=2&ts=1"},{text:"Ventusky",
+		href:"https://www.ventusky.com/?p=47.5;17.5;4&l=radar&w=off"},{text:"Vrijeme&Radar",
+		href:"https://www.vrijemeradar.hr/vremenski-radar/zagreb/18138691?center=47.5,15.5&zoom=5&layer=wr&tz=Europe%2FZagreb"},{text:"Sat24",
+		href:"https://www.sat24.com/en-gb/continent/eu/hd#selectedLayer=euRadarSat"},{text:"I'm Weather",
+		href:"https://imweather.com/?model=nowcast&run=&member=&element=radsat&level=&lat=47.5000&lng=17.5000&z=4.2"}],SAT_HR_LINKS=[{text:"Windy",
+		href:"https://www.windy.com/-Satellite-satellite?satellite,44.5,16.5,7"},{text:"Zoom Earth",
+		href:"https://zoom.earth/maps/satellite/#view=44.5,16.5,7z"},{text:"meteoblue",
+		href:"https://www.meteoblue.com/en/weather/maps/croatia_croatia_3202326#map=satellite~radar~none~none~none&coords=6/44.5/16.5"},{
+		text:"Ventusky",href:"https://www.ventusky.com/?p=44.5;16.5;6&l=satellite&w=off"},{text:"Sat24",
+		href:"https://www.sat24.com/en-gb/country/hr/hd"},{text:"I'm Weather",
+		href:"https://imweather.com/?model=nowcast&element=satellite&run=&member=&level=&lat=44.5000&lng=16.5000&z=6"}],SAT_EU_LINKS=[{text:"Windy",
+		href:"https://www.windy.com/-Satellite-satellite?satellite,47.5,17.5,5"},{text:"Zoom Earth",
+		href:"https://zoom.earth/maps/satellite/#view=47.5,17.5,5z"},{text:"meteoblue",
+		href:"https://www.meteoblue.com/en/weather/maps/croatia_croatia_3202326#map=satellite~radar~none~none~none&coords=4/47.5/17.5"},{
+		text:"Ventusky",href:"https://www.ventusky.com/?p=47.5;17.5;4&l=satellite&w=off"},{text:"Sat24",
+		href:"https://www.sat24.com/en-gb/continent/eu/hd"},{text:"I'm Weather",
+		href:"https://imweather.com/?model=nowcast&element=satellite&run=&member=&level=&lat=47.5000&lng=17.5000&z=4.2"},{text:"Wetterzentrale",
+		href:"https://www.wetterzentrale.de/en/reanalysis.php?map=1&model=sat&var=404&nmaps=32"}],TEMP_HR_LINKS=[{text:"Windy",
+		href:"https://www.windy.com/-Temperature-temp?temp,44.5,16.5,7"},{text:"Zoom Earth",
+		href:"https://zoom.earth/maps/temperature/#view=44.5,16.5,7z/model=icon"},{text:"meteoblue",
+		href:"https://www.meteoblue.com/en/weather/maps/croatia_croatia_3202326#map=temperature~daily-max~auto~2%20m%20above%20gnd~none&coords=6/44.5/16.5"
+		},{text:"Ventusky",href:"https://www.ventusky.com/?p=44.49;16.50;6&l=temperature-2m&w=off"},{text:"Vrijeme&Radar",
+		href:"https://www.vrijemeradar.hr/vremenski-radar/zagreb/18138691?center=44.5,16.5&zoom=7&layer=tr&tz=Europe%2FZagreb"},{text:"Meteoradar",
+		href:"https://www.meteoradar.co.uk/en-gb/country/hr/maps/temperature"},{text:"Meteociel",
+		href:"https://www.meteociel.fr/observations-meteo/temperatures.php?region=it"},{text:"Pljusak",href:"https://pljusak.com/karta.php"
+		}],STORM_LINKS=[{text:"ESSL",href:"https://weather.essl.org/storm/"},{text:"ASTORP",href:"https://rawinsonde.com/ASTORP/ESTOFEX.html"},{
+		text:"ESTOFEX",href:"https://www.estofex.org"},{text:"ESWD",href:"https://www.eswd.eu"}];function except(e,t){return e.filter(e=>e.text!==t)
+		}const CATEGORY_GLYPHS={radar:"📡",satelit:"🛰️",munje:"⚡",temperatura:"🌡️",nevrijeme:"⛈️",sinoptika:"🗺️",kamera:"📷",prognoza:"📈"}
+		;function dhmzMrcRadar(e,t){return{id:`dhmz-${e}`,category:"radar",name:`DHMZ | MRC ${t}`,type:"slideshow",
+		titleHref:`https://meteo.hr/podaci.php?section=podaci_mjerenja&param=radari&el=${e}&acto=anim`,maxWidth:720,aspect:"720 / 751",
+		slides:[`https://vrijeme.hr/anim_${e}.gif`,`https://vrijeme.hr/${e}-stat.png`]}}const MAP_CATALOG=[{id:"neverin-radar-hr",category:"radar",
+		name:"Neverin | Radar | Hrvatska",type:"slideshow",titleHref:"https://www.neverin.hr/radar/",aspect:"880 / 640",startSlide:2,
+		slides:["https://maps.neverin.hr/radar/latest/hr/latest.webp","https://maps.neverin.hr/radar/latest/hr/anim.webp","https://maps.neverin.hr/radar/latest/hr/anim_6h.webp"],
+		links:RADAR_HR_LINKS},{id:"neverin-satelit-hr",category:"satelit",name:"Neverin | Satelit | Hrvatska",type:"slideshow",
+		titleHref:"https://www.neverin.hr/satelit/",aspect:"880 / 640",startSlide:2,
+		slides:["https://maps.neverin.hr/satellite/rgb_geocolour/latest/hr/latest.webp","https://maps.neverin.hr/satellite/rgb_geocolour/latest/hr/anim.webp","https://maps.neverin.hr/satellite/rgb_geocolour/latest/hr/anim_6h.webp"],
+		links:SAT_HR_LINKS},{id:"neverin-radar-eu",category:"radar",name:"Neverin | Radar | Europa",type:"slideshow",
+		titleHref:"https://www.neverin.hr/radar/",aspect:"880 / 640",startSlide:2,
+		slides:["https://maps.neverin.hr/radar/latest/eu2/latest.webp","https://maps.neverin.hr/radar/latest/eu2/anim.webp","https://maps.neverin.hr/radar/latest/eu2/anim_6h.webp"],
+		links:RADAR_EU_LINKS},{id:"neverin-satelit-eu",category:"satelit",name:"Neverin | Satelit | Europa",type:"slideshow",
+		titleHref:"https://www.neverin.hr/satelit/",aspect:"880 / 640",startSlide:2,
+		slides:["https://maps.neverin.hr/satellite/rgb_geocolour/latest/eu2/latest.webp","https://maps.neverin.hr/satellite/rgb_geocolour/latest/eu2/anim.webp","https://maps.neverin.hr/satellite/rgb_geocolour/latest/eu2/anim_6h.webp"],
+		links:SAT_EU_LINKS},{id:"windy",category:"radar",name:"Windy",type:"iframe",frameId:"windy",
+		titleHref:"https://www.windy.com/-Radar-lightning-radar?radar,44.5,16.5,7",
+		srcHr:"https://embed.windy.com/embed2.html?lat=44.5&lon=16.56&zoom=7&level=surface&overlay=radar&menu=&message=true&marker=&calendar=&pressure=&type=map&location=coordinates&detail=&detailLat=45.798&detailLon=15.936&metricWind=m%2Fs&metricTemp=%C2%B0C&radarRange=-1",
+		zoomHrDesktop:"&zoom=7",zoomHrMobile:"&zoom=6",
+		srcEu:"https://embed.windy.com/embed2.html?lat=48.0&lon=10.00&zoom=5&level=surface&overlay=radar&menu=&message=true&marker=&calendar=&pressure=&type=map&location=coordinates&detail=&detailLat=45.798&detailLon=15.936&metricWind=m%2Fs&metricTemp=%C2%B0C&radarRange=-1",
+		zoomEuDesktop:"&zoom=5",zoomEuMobile:"&zoom=3",links:except(RADAR_HR_LINKS,"Windy")},{id:"dhmz-radar",category:"radar",
+		name:"DHMZ | Radar | Hrvatska",type:"slideshow",
+		titleHref:"https://meteo.hr/podaci.php?section=podaci_mjerenja&param=radari&el=kompozit&acto=anim",maxWidth:720,aspect:"720 / 751",
+		slides:["https://vrijeme.hr/anim_kompozit.gif","https://vrijeme.hr/kompozit-stat.png"],links:RADAR_HR_LINKS},{id:"meteociel-temp",
+		category:"temperatura",name:"Meteociel.fr | Temperatura",type:"slideshow",maxWidth:768,slides:[{title:{text:"Meteociel.fr | Temperatura",
+		href:"https://www.meteociel.fr/observations-meteo/temperatures.php?region=it"},img:"https://www.meteociel.fr/cartes_obs/temp_it.png",
+		aspect:"1"},{title:{text:"Meteociel.fr | Temperatura",href:"https://www.meteociel.fr/observations-meteo/temperatures.php?region=eur2"},
+		img:"https://www.meteociel.com/cartes_obs/temp_eur2.png",aspect:"1"}],links:except(TEMP_HR_LINKS,"Meteociel")},{id:"blitzortung",
+		category:"munje",name:"Blitzortung.org | Munje",type:"iframe",frameId:"blitzortung",titleHref:"https://map.blitzortung.org/#6/44.5/16.5",
+		srcHr:"https://map.blitzortung.org/index.php?interactive=1&NavigationControl=1&FullScreenControl=0&Cookies=0&InfoDiv=0&MenuButtonDiv=0&ScaleControl=0&CirclesRangeValue=1&LinksCheckboxChecked=0&LinksRangeValue=0&MapStyle=1&MapStyleRangeValue=3&Advertisment=0#6/44.5/16.5",
+		zoomHrDesktop:"#6/",zoomHrMobile:"#5/",
+		srcEu:"https://map.blitzortung.org/index.php?interactive=1&NavigationControl=1&FullScreenControl=0&Cookies=0&InfoDiv=0&MenuButtonDiv=0&ScaleControl=0&CirclesRangeValue=1&LinksCheckboxChecked=0&LinksRangeValue=0&MapStyle=1&MapStyleRangeValue=3&Advertisment=0#4/48.0/10.0",
+		zoomEuDesktop:"#4/",zoomEuMobile:"#2.5/",links:[{text:"Blitzortung.org",href:"https://www.blitzortung.org/en/historical_maps.php?map=10"},{
+		text:"LightningMaps.org",href:"https://www.lightningmaps.org/?lang=en#m=sen;t=3;s=200;o=0;b=0.00;ts=0;z=7;y=44.5;x=16.5;d=4;dl=6;dc=0;"},{
+		text:"Neverin",href:"https://www.neverin.hr/munje/"}]},{id:"essl",category:"nevrijeme",name:"ESSL | Prognoza nevremena",type:"slideshow",
+		titleHref:"https://stormforecast.eu",maxWidth:900,aspect:"900 / 600",startSlide:2,
+		slides:["https://meteo-data.jurakovic.workers.dev/essl/img1.png","https://meteo-data.jurakovic.workers.dev/essl/img2.png","https://meteo-data.jurakovic.workers.dev/essl/img3.png"],
+		links:except(STORM_LINKS,"ESSL")},{id:"astorp",category:"nevrijeme",name:"ASTORP | Prognoza nevremena",type:"slideshow",
+		titleHref:"https://rawinsonde.com/ASTORP/ESTOFEX.html",aspect:"1048 / 850",
+		slides:["https://rawinsonde.com/ASTORP/Results/ESTOFEX_DAY_1.jpg","https://rawinsonde.com/ASTORP/Results/ESTOFEX_DAY_2.jpg","https://rawinsonde.com/ASTORP/Results/ESTOFEX_DAY_3.jpg","https://rawinsonde.com/ASTORP/Results/ESTOFEX_DAY_4.jpg","https://rawinsonde.com/ASTORP/Results/ESTOFEX_DAY_5.jpg","https://rawinsonde.com/ASTORP/Results/ESTOFEX_DAY_6.jpg","https://rawinsonde.com/ASTORP/Results/ESTOFEX_DAY_7.jpg"],
+		links:except(STORM_LINKS,"ASTORP")},{id:"estofex",category:"nevrijeme",name:"ESTOFEX | Prognoza nevremena",type:"slideshow",
+		titleHref:"https://www.estofex.org",maxWidth:800,aspect:"1",
+		slides:["https://meteo-data.jurakovic.workers.dev/estofex/img1.png","https://meteo-data.jurakovic.workers.dev/estofex/img2.png"],
+		links:except(STORM_LINKS,"ESTOFEX")},{id:"eumetnet",category:"radar",name:"EUMETNET",type:"iframe-basic",
+		titleHref:"https://www.eumetnet.eu/observations/opera-radar-animation/",src:"https://cdn.fmi.fi/demos/eumetnet-web-site-radar-animator/",
+		links:RADAR_EU_LINKS},{id:"meteociel-satelit",category:"satelit",name:"Meteociel.fr | Satelit",type:"slideshow",maxWidth:768,slides:[{
+		title:{text:"Meteociel.fr | Satelit",
+		href:"https://www.meteociel.fr/observations-meteo/satellite.php?mode=animation-infrarouge-noir-et-blanc-hd-mtg"},
+		img:"https://modeles20.meteociel.fr/satellite/animsatirmtgeu.gif",aspect:"1"},{title:{text:"Meteociel.fr | Satelit",
+		href:"https://www.meteociel.fr/observations-meteo/satellite.php?mode=infrarouge-noir-et-blanc-hd-mtg"},
+		img:"https://modeles20.meteociel.fr/satellite/latestsatirmtgeu.png",aspect:"1"}],links:SAT_EU_LINKS},{id:"chmi-sinopticka",
+		category:"sinoptika",name:"ČHMÚ | Sinoptička karta",type:"slideshow",maxWidth:760,dynamicWidth:!0,slides:[{title:{
+		href:"https://intranet.chmi.cz/aktualni-situace/aktualni-stav-pocasi/evropa/synopticka-situace"},
+		img:"https://intranet.chmi.cz/files/portal/docs/meteo/om/evropa/analyza.gif",aspect:"760 / 492"},{title:{
+		href:"https://intranet.chmi.cz/predpovedi/predpovedi-pocasi/evropa/synopticka-situace"},
+		img:"https://intranet.chmi.cz/files/portal/docs/meteo/om/evropa/preba/preba36.gif",aspect:"760 / 435"},{title:{
+		href:"https://intranet.chmi.cz/predpovedi/predpovedi-pocasi/evropa/synopticka-situace"},
+		img:"https://intranet.chmi.cz/files/portal/docs/meteo/om/evropa/preba/preba60.gif",aspect:"760 / 435"},{title:{
+		href:"https://intranet.chmi.cz/predpovedi/predpovedi-pocasi/evropa/synopticka-situace"},
+		img:"https://intranet.chmi.cz/files/portal/docs/meteo/om/evropa/preba/preba84.gif",aspect:"760 / 435"}],links:[{text:"DHMZ",
+		href:"https://meteo.hr/prognoze.php?section=prognoze_model&param=web_fronte_sutra12"}]},{id:"neverin-kamera",category:"kamera",
+		name:"Neverin | Kamera | Zagreb",type:"image",titleHref:"https://www.neverin.hr/kamere/",aspect:"1280 / 720",
+		img:"https://webcams.neverin.hr/7332072588/latest.jpg"},{id:"meteoblue-prognoza",category:"prognoza",name:"meteoblue | Prognoza",
+		type:"slideshow",eagerSlides:!0,slides:[{title:{text:"meteoblue | Prognoza | Zagreb",
+		href:"https://www.meteoblue.com/en/weather/week/zagreb_croatia_3186886"},
+		img:"https://meteo-data.jurakovic.workers.dev/meteoblue/meteogram/zagreb.png",aspect:"1700 / 1300"},{title:{
+		text:"meteoblue | Prognoza | Split",href:"https://www.meteoblue.com/en/weather/week/split_croatia_3190261"},
+		img:"https://meteo-data.jurakovic.workers.dev/meteoblue/meteogram/split.png",aspect:"1700 / 1300"},{title:{
+		text:"meteoblue | Prognoza | Rijeka",href:"https://www.meteoblue.com/en/weather/week/rijeka_croatia_3191648"},
+		img:"https://meteo-data.jurakovic.workers.dev/meteoblue/meteogram/rijeka.png",aspect:"1700 / 1300"},{title:{
+		text:"meteoblue | Prognoza | Osijek",href:"https://www.meteoblue.com/en/weather/week/osijek_croatia_3193935"},
+		img:"https://meteo-data.jurakovic.workers.dev/meteoblue/meteogram/osijek.png",aspect:"1700 / 1300"}],links:[{text:"DHMZ",
+		href:"https://meteo.hr"},{text:"HRT Vrijeme",href:"https://vrijeme-i-promet.hrt.hr/vrijeme/"},{text:"Pljusak",
+		href:"https://pljusak.com/karta.php"},{text:"Neverin",href:"https://www.neverin.hr/prognoza/zagreb/"},{text:"Yr.no",
+		href:"https://www.yr.no/en/details/table/2-3186886/Croatia/City%20of%20Zagreb/Zagreb"},{text:"Wetterzentrale",
+		href:"https://www.wetterzentrale.de/en/show_diagrams.php?geoid=54032&model=ecm&var=93&run=6&lid=OP&bw=1"}]},{id:"ventusky",category:"radar",
+		name:"Ventusky",type:"iframe",frameId:"ventusky",scaled:!0,loading:"eager",
+		titleHref:"https://www.ventusky.com/?p=44.5;16.5;6&l=radar&w=off",srcHr:"https://embed.ventusky.com/?p=44.5;16.5;6&l=radar&w=off",
+		zoomHrDesktop:";6&",zoomHrMobile:";6&",srcEu:"https://embed.ventusky.com/?p=48.0;10.0;4&l=radar&w=off",zoomEuDesktop:";4&",
+		zoomEuMobile:";3&",links:except(RADAR_HR_LINKS,"Ventusky")},{id:"rainviewer",category:"radar",name:"Rain Viewer",type:"iframe",
+		frameId:"rainViewer",scaled:!0,titleHref:"https://www.rainviewer.com/map.html?loc=44.5,16.5,6&oCS=1&c=5&lm=1&layer=radar&sm=1&sn=2&ts=1",
+		srcHr:"https://www.rainviewer.com/map.html?loc=44.8,16.5,6.3&oCS=1&c=5&lm=1&layer=radar&sm=1&sn=2&ts=1",zoomHrDesktop:",6.3&",
+		zoomHrMobile:",5.8&",srcEu:"https://www.rainviewer.com/map.html?loc=48.0,10.0,4.0&oCS=1&c=5&lm=1&layer=radar&sm=1&sn=2&ts=1",
+		zoomEuDesktop:",4.0&",zoomEuMobile:",3.2&",links:except(RADAR_HR_LINKS,"Rain Viewer")},{id:"weatherandradar",category:"radar",
+		name:"Vrijeme&Radar",type:"iframe",frameId:"weatherAndRadar",scaled:!0,
+		titleHref:"https://www.vrijemeradar.hr/vremenski-radar/zagreb/18138691?center=44.5,16.5&zoom=7&layer=wr&tz=Europe%2FZagreb",
+		srcHr:"https://radar.wo-cloud.com/pwa/?center=44.5,16.5&zoom=7.2&tz=Europe/Zagreb&tf=HH:mm&tempunit=celsius&windunit=kph&showShareButton=false&lang=en-US&placemarkName=Zagreb&desktop=true&fadeTop=true",
+		zoomHrDesktop:"&zoom=7.2",zoomHrMobile:"&zoom=6.8",
+		srcEu:"https://radar.wo-cloud.com/pwa/?center=48.0,10.0&zoom=5.0&tz=Europe/Zagreb&tf=HH:mm&tempunit=celsius&windunit=kph&showShareButton=false&lang=en-US&placemarkName=Zagreb&desktop=true&fadeTop=true",
+		zoomEuDesktop:"&zoom=5.0",zoomEuMobile:"&zoom=4.0",links:except(RADAR_HR_LINKS,"Vrijeme&Radar")},{id:"meteo-si",category:"radar",
+		name:"meteo.si",type:"slideshow",titleHref:"https://meteo.arso.gov.si/met/sl/weather/observ/radar/",maxWidth:821,aspect:"821 / 660",
+		slides:["https://meteo.arso.gov.si/uploads/probase/www/observ/radar/si0-rm-anim.gif?nocache","https://meteo.arso.gov.si/uploads/probase/www/observ/radar/si0-rm.gif?nocache"],
+		links:RADAR_HR_LINKS},{id:"idokep-radar-eu",category:"radar",name:"Időkép | Radar | Europa",type:"image",
+		titleHref:"https://www.idokep.eu/ceu/radar",maxWidth:840,aspect:"840 / 600",img:"https://www.idokep.eu/terkep/eu/radar.gif",
+		links:RADAR_EU_LINKS},{id:"idokep-satelit-eu",category:"satelit",name:"Időkép | Satelit | Europa",type:"video",
+		titleHref:"https://www.idokep.hu/muhold",aspect:"1070 / 713",src:"https://www.idokep.hu/radar/sat-eu.mp4",links:SAT_EU_LINKS},{
+		id:"istramet-munje",category:"munje",name:"Istramet | Munje",type:"image",titleHref:"https://www.istramet.hr/radari-munja/",maxWidth:804,
+		aspect:"804 / 687",img:"https://www.istramet.hr/wp-content/themes/istramet/img/munje_hr.png",links:[{text:"Blitzortung.org",
+		href:"https://map.blitzortung.org/#6.5/44.5/16.5"},{text:"LightningMaps.org",
+		href:"https://www.lightningmaps.org/?lang=en#m=sen;t=3;s=200;o=0;b=0.00;ts=0;z=7;y=44.5;x=16.5;d=4;dl=6;dc=0;"},{text:"Neverin",
+		href:"https://www.neverin.hr/munje/"}]},{id:"blitzortung-karta",category:"munje",name:"Blitzortung.org | Munje | Europa",type:"image",
+		titleHref:"https://www.blitzortung.org/en/historical_maps.php?map=10",aspect:"1",img:"https://www.blitzortung.org/Images/image_b_eu.png",
+		links:[{text:"Blitzortung.org",href:"https://map.blitzortung.org/#6/44.5/16.5"},{text:"LightningMaps.org",
+		href:"https://www.lightningmaps.org/?lang=en#m=sen;t=3;s=200;o=0;b=0.00;ts=0;z=5;y=47.5;x=17.5;d=4;dl=6;dc=0;"},{text:"Neverin",
+		href:"https://www.neverin.hr/munje/#:~:text=Pojava%20munja%20Europa"}]},{id:"wetterzentrale-temp",category:"temperatura",
+		name:"Wetterzentrale | Temperatura",type:"image",
+		titleHref:"https://www.wetterzentrale.de/en/topkarten.php?map=17&model=ecm&var=5&run=6&time=0&lid=OP&h=1&mv=0&tr=1",aspect:"959 / 741",
+		img:"https://www.wetterzentrale.de/en/create_gif.php?model=ECM&member=OP&var=5&map=IT&run=06&speed=250&times=0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47",
+		alt:"Wetterzentrale Temperatura",links:TEMP_HR_LINKS},{id:"dhmz-sinopticka",category:"sinoptika",name:"DHMZ | Sinoptička karta",
+		type:"image",titleHref:"https://meteo.hr/prognoze.php?section=prognoze_model&param=web_fronte_sutra12",maxWidth:720,aspect:"1",
+		img:"https://prognoza.hr/web_fronte_sutra12.jpg",links:[{text:"ČHMÚ",
+		href:"https://intranet.chmi.cz/aktualni-situace/aktualni-stav-pocasi/evropa/synopticka-situace"}]},{id:"dwd-sinopticka",
+		category:"sinoptika",name:"DWD | Sinoptička karta",type:"slideshow",
+		titleHref:"https://www.dwd.de/EN/ourservices/hobbymet_wcharts_europe/hobbyeuropecharts.html",maxWidth:800,aspect:"800 / 653",
+		slides:["https://www.dwd.de/DWD/wetter/wv_spez/hobbymet/wetterkarten/ico_tkboden_na_v36.png","https://www.dwd.de/DWD/wetter/wv_spez/hobbymet/wetterkarten/ico_tkboden_na_036.png","https://www.dwd.de/DWD/wetter/wv_spez/hobbymet/wetterkarten/ico_tkboden_na_048.png","https://www.dwd.de/DWD/wetter/wv_spez/hobbymet/wetterkarten/ico_tkboden_na_060.png","https://www.dwd.de/DWD/wetter/wv_spez/hobbymet/wetterkarten/ico_tkboden_na_084.png","https://www.dwd.de/DWD/wetter/wv_spez/hobbymet/wetterkarten/ico_tkboden_na_108.png"],
+		links:[{text:"ČHMÚ",href:"https://intranet.chmi.cz/aktualni-situace/aktualni-stav-pocasi/evropa/synopticka-situace"},{text:"DHMZ",
+		href:"https://meteo.hr/prognoze.php?section=prognoze_model&param=web_fronte_sutra12"}]
+		},dhmzMrcRadar("puntijarka","Puntijarka"),dhmzMrcRadar("bilogora","Bilogora"),dhmzMrcRadar("gradiste","Gradište"),dhmzMrcRadar("goli","Goli"),dhmzMrcRadar("debeljak","Debeljak"),dhmzMrcRadar("uljenje","Uljenje")],DEFAULT_MAPS=["neverin-radar-hr","neverin-satelit-hr","neverin-radar-eu","neverin-satelit-eu","windy","dhmz-radar","meteociel-temp","blitzortung","essl","astorp","estofex","eumetnet","meteociel-satelit","dwd-sinopticka","neverin-kamera","meteoblue-prognoza"],MAP_PRESETS=[{
+		id:"zadano",name:"Osnovno",maps:DEFAULT_MAPS},{id:"vise",name:"Više",
+		maps:["ventusky","rainviewer","weatherandradar","meteo-si","idokep-radar-eu","idokep-satelit-eu","istramet-munje","blitzortung-karta","wetterzentrale-temp","dhmz-sinopticka","chmi-sinopticka","dhmz-puntijarka","dhmz-bilogora","dhmz-gradiste","dhmz-goli","dhmz-debeljak","dhmz-uljenje"]
+		},{id:"radari",name:"Radari",
+		maps:["neverin-radar-hr","neverin-radar-eu","windy","dhmz-radar","eumetnet","ventusky","rainviewer","weatherandradar","meteo-si","idokep-radar-eu"]
+		},{id:"sateliti",name:"Sateliti",maps:["neverin-satelit-hr","neverin-satelit-eu","meteociel-satelit","idokep-satelit-eu"]},{id:"nevrijeme",
+		name:"Nevrijeme",maps:["essl","astorp","estofex","blitzortung","istramet-munje","blitzortung-karta"]},{id:"sve",name:"Sve",
+		maps:MAP_CATALOG.map(e=>e.id)},{id:"nista",name:"Ništa",maps:[]
+		}],USER_PRESETS_KEY="mapUserPresets",USER_PRESET_PREFIX="u:",PRESET_NAME_MAX=40;function isUserPresetId(e){
+		return"string"==typeof e&&e.startsWith("u:")}function isValidPreset(e){
+		return e&&isUserPresetId(e.id)&&"string"==typeof e.name&&Array.isArray(e.maps)}function loadUserPresets(){try{
+		const e=JSON.parse(localStorage.getItem("mapUserPresets"));if(Array.isArray(e))return e.filter(isValidPreset)}catch(e){}return[]}
+		let userPresets=loadUserPresets();function saveUserPresets(){try{localStorage.setItem("mapUserPresets",JSON.stringify(userPresets))
+		}catch(e){}}function allPresets(){return MAP_PRESETS.concat(userPresets)}function newPresetId(){let e;do{
+		e="u:"+Date.now().toString(36)+Math.random().toString(36).slice(2,6)}while(userPresets.some(t=>t.id===e));return e}
+		function cleanPresetName(e){return String(e).trim().replace(/\s+/g," ").slice(0,40)}function findUserPresetByName(e){
+		return userPresets.find(t=>t.name.toLowerCase()===e.toLowerCase())}function storeUserPreset(e,t){const a=findUserPresetByName(e)
+		;return a?(a.name=e,a.maps=t):userPresets.push({id:newPresetId(),name:e,maps:t}),saveUserPresets(),a||userPresets[userPresets.length-1]}
+		function uniquePresetName(e){const t=cleanPresetName(e);let a=t;for(let e=2;findUserPresetByName(a);e++){const r=` (${e})`
+		;a=t.slice(0,40-r.length).trim()+r}return a}function deleteUserPreset(e){const t=userPresets.find(t=>t.id===e)
+		;t&&getMapPrefs().preset===e&&saveMapPrefs({preset:"custom",maps:t.maps.slice()}),userPresets=userPresets.filter(t=>t.id!==e),
+		saveUserPresets()}const HIDDEN_PRESETS_KEY="mapHiddenPresets",PERMANENT_PRESET_ID="zadano";function isHideablePreset(e){return"zadano"!==e}
+		function loadHiddenPresets(){try{const e=JSON.parse(localStorage.getItem("mapHiddenPresets"))
+		;if(Array.isArray(e))return e.filter(e=>isHideablePreset(e)&&MAP_PRESETS.some(t=>t.id===e))}catch(e){}return[]}
+		let hiddenPresets=loadHiddenPresets();function saveHiddenPresets(){try{
+		localStorage.setItem("mapHiddenPresets",JSON.stringify(hiddenPresets))}catch(e){}}function isPresetHidden(e){
+		return hiddenPresets.includes(e)}function setPresetHidden(e,t){t&&!isHideablePreset(e)||(hiddenPresets=hiddenPresets.filter(t=>t!==e),
+		t&&hiddenPresets.push(e),saveHiddenPresets())}function hideablePresets(){return MAP_PRESETS.filter(e=>isHideablePreset(e.id))}
+		function hideAllPresets(){hiddenPresets=hideablePresets().map(e=>e.id),saveHiddenPresets()}function showAllPresets(){hiddenPresets=[],
+		saveHiddenPresets()}function visiblePresets(){return allPresets().filter(e=>!isPresetHidden(e.id))}const MAP_PREFS_KEY="mapPrefs"
+		;function isValidPrefs(e){return e&&"string"==typeof e.preset&&("custom"===e.preset||allPresets().some(t=>t.id===e.preset))}
+		function getMapPrefs(){try{const e=JSON.parse(localStorage.getItem(MAP_PREFS_KEY));if(isValidPrefs(e))return e}catch(e){}return{
+		preset:"zadano"}}function saveMapPrefs(e){try{localStorage.setItem(MAP_PREFS_KEY,JSON.stringify(e))}catch(e){}}function presetMapIds(e){
+		const t=allPresets().find(t=>t.id===e);return t?t.maps:null}function resolveMapIds(){const e=getActiveMapPrefs()
+		;return"custom"===e.preset&&Array.isArray(e.maps)?[...new Set(e.maps)].filter(e=>MAP_CATALOG.some(t=>t.id===e)):presetMapIds(e.preset)||presetMapIds("zadano")
+		}function encodeMapView(e){const t=JSON.stringify(e).replace(/[\u0080-\uffff]/g,e=>"\\u"+e.charCodeAt(0).toString(16).padStart(4,"0"))
+		;return btoa(t).replace(/\+/g,"-").replace(/\//g,"_").replace(/=+$/,"")}function decodeMapView(e){try{
+		const t=JSON.parse(atob(e.replace(/-/g,"+").replace(/_/g,"/")));if(isValidPrefs(t))return t.name&&(t.name=cleanPresetName(t.name)),t
+		}catch(e){}return null}function presetSharePrefs(e){return{preset:"custom",maps:e.maps.slice(),name:e.name}}function sameMapIds(e,t){
+		return e.length===t.length&&e.every((e,a)=>e===t[a])}function presetIdForMapIds(e){
+		const t=userPresets.concat(MAP_PRESETS).find(t=>sameMapIds(t.maps,e));return t?t.id:null}function copyMapViewLink(e,t){
+		const a=new URL(window.location.origin+window.location.pathname);a.searchParams.set("v",encodeMapView(e))
+		;const r=a.toString(),s=()=>window.prompt("Kopiraj poveznicu:",r)
+		;navigator.clipboard&&navigator.clipboard.writeText?navigator.clipboard.writeText(r).then(t).catch(s):s()}function flashLabel(e,t,a){
+		e.textContent=t,setTimeout(()=>{e.textContent=a},1500)}let sharedMapView=(()=>{const e=new URLSearchParams(window.location.search).get("v")
+		;return e?decodeMapView(e):null})();function getActiveMapPrefs(){return sharedMapView||getMapPrefs()}function activePresetId(){
+		const e=getActiveMapPrefs();return sharedMapView&&"custom"===e.preset?presetIdForMapIds(resolveMapIds())||"custom":e.preset}
+		function clearSharedMapView(){if(!sharedMapView)return;sharedMapView=null;const e=new URL(window.location);e.searchParams.delete("v"),
+		history.replaceState(null,"",e)}function el(e,t={},a=[]){const r=document.createElement(e)
+		;for(const[e,a]of Object.entries(t))null!=a&&!1!==a&&("text"===e?r.textContent=a:"html"===e?r.innerHTML=a:r.setAttribute(e,a))
+		;for(const e of a)e&&r.appendChild(e);return r}function maxWidthStyle(e){return e.maxWidth?`max-width: ${e.maxWidth}px;`:""}
+		function buildTitleBar(e,t={},a=!1){return el("div",{class:"radartitle",style:maxWidthStyle(t)||void 0},[el("a",{href:e.href,
+		target:"_blank",rel:"nofollow",text:e.text}),a?el("span",{class:"right right-cluster"},[buildPopoutButton()]):null])}
+		function buildMapTitleBar(e){return buildTitleBar({text:e.name,href:e.titleHref},e,!0)}function buildSlideshow(e){
+		const t=e.startSlide||1,a=e.slides.some(e=>e.title),r=el("div",{class:a?"slideshow":"slideshow placeholder","data-slideshow-id":e.id,
+		"data-current-slide":t,"data-dynamic-width":e.dynamicWidth?"":void 0,
+		style:(maxWidthStyle(e)+(a?"":` aspect-ratio: ${e.aspect};`)).trim()||void 0});e.slides.forEach((s,i)=>{
+		const n=i===t-1,o=a?s.img:s,l=n||e.eagerSlides?el("img",{src:o}):el("img",{"data-src":o,class:"lazy"}),d=el("div",{
+		class:"slide fade"+(n?" active":"")});if(a){const t=s.maxWidth||e.maxWidth,a={text:s.title.text||e.name,href:s.title.href}
+		;d.appendChild(buildTitleBar(a,{},!e.titleHref)),d.appendChild(el("div",{class:"placeholder",
+		style:`${t?`max-width: ${t}px; `:""}aspect-ratio: ${s.aspect};`},[l]))}else d.appendChild(l);r.appendChild(d)});const s=el("a",{
+		class:"prev"+(a?" shorter":""),html:"&#10094;"});s.addEventListener("click",()=>plusSlides(e.id,-1));const i=el("a",{
+		class:"next"+(a?" shorter":""),html:"&#10095;"});i.addEventListener("click",()=>plusSlides(e.id,1)),r.appendChild(s),r.appendChild(i)
+		;const n=el("div",{class:"indicators-container","data-slideshow-id":e.id,
+		style:`${maxWidthStyle(e)} grid-template-columns: repeat(${e.slides.length}, 1fr);`.trim()});return e.slides.forEach((e,a)=>{
+		n.appendChild(el("span",{class:"indicator"+(a===t-1?" active":"")}))}),[e.titleHref?buildMapTitleBar(e):null,r,n]}function buildImage(e){
+		return[buildMapTitleBar(e),el("div",{class:"placeholder",style:`${maxWidthStyle(e)} aspect-ratio: ${e.aspect};`.trim()},[el("img",{
+		src:e.img,alt:e.alt})])]}function buildVideo(e){const t=el("video",{controls:""},[el("source",{type:"video/mp4",src:e.src})]);t.muted=!0,
+		t.autoplay=!0,t.loop=!0;const a=`${maxWidthStyle(e)}${e.aspect?` aspect-ratio: ${e.aspect};`:""}`.trim()
+		;return[buildMapTitleBar(e),el("div",{class:"placeholder",style:a||void 0},[el("div",{class:e.videoClass||"vid1"},[t])])]}
+		function buildIframe(e){const t=e.frameId,a=t[0].toUpperCase()+t.slice(1),r=el("a",{class:"left zoom-btn","data-mode":"hr",text:"[HR]"})
+		;r.addEventListener("click",()=>switchIframeZoom(t,r));const s=el("a",{class:"fs-btn",text:"[ ]"})
+		;s.addEventListener("click",()=>toggleFullscreen(t,s));return[el("div",{class:"radartitle"},[r,el("a",{class:"center",href:e.titleHref,
+		target:"_blank",rel:"nofollow",text:e.name}),el("span",{class:"right right-cluster"},[el("a",{id:`reset${a}Frame`,"data-frame-id":t,
+		style:"display:none",text:"[X]"}),s,buildPopoutButton()])]),el("div",{class:"if1 placeholder"},[el("iframe",{id:t,
+		class:e.scaled?"scaled-iframe":void 0,loading:e.loading||"lazy",frameborder:"0","data-src-hr":e.srcHr,
+		"data-zoom-hr-desktop":e.zoomHrDesktop,"data-zoom-hr-mobile":e.zoomHrMobile,"data-src-eu":e.srcEu,"data-zoom-eu-desktop":e.zoomEuDesktop,
+		"data-zoom-eu-mobile":e.zoomEuMobile}),el("div",{class:"overlay",id:`overlay${a}Frame`,"data-frame-id":t},[el("span",{class:"hint",
+		text:"Dvostruki klik za pristup interaktivnoj karti"})])])]}function buildBasicIframe(e){return[buildMapTitleBar(e),el("div",{
+		class:"if2 placeholder"},[el("iframe",{loading:"lazy",src:e.src,frameborder:"0",scrolling:"no"})])]}function buildLinksBottom(e){
+		const t=el("div",{class:"links-bottom",style:maxWidthStyle(e)||void 0});return e.links.forEach((e,a)=>{
+		a>0&&t.appendChild(document.createTextNode(" · ")),t.appendChild(el("a",{href:e.href,target:"_blank",rel:"nofollow",text:e.text}))}),t}
+		function buildMapContent(e){switch(e.type){case"slideshow":return buildSlideshow(e);case"image":return buildImage(e);case"video":
+		return buildVideo(e);case"iframe":return buildIframe(e);case"iframe-basic":return buildBasicIframe(e)}return[]}function renderMaps(){
+		const e=document.querySelector("tbody[data-maps]");if(!e)return;e.replaceChildren()
+		;const t=resolveMapIds().map(e=>MAP_CATALOG.find(t=>t.id===e)).filter(Boolean);t.length?t.forEach((t,a)=>{a>0&&e.appendChild(el("tr",{
+		class:"sp20"}));const r=el("div",{class:"map-block","data-map-id":t.id},buildMapContent(t));e.appendChild(el("tr",{},[el("td",{
+		align:"center"},[r])])),t.links&&t.links.length&&e.appendChild(el("tr",{},[el("td",{align:"center"},[buildLinksBottom(t)])]))
+		}):e.appendChild(el("tr",{},[el("td",{align:"center"},[el("div",{class:"maps-empty",text:'Nema odabranih karata. Odaberite ih pod "Karte".'
+		})])]))}
+		const POPOUT_MQ=window.matchMedia("(min-width: 801px) and (hover: hover) and (pointer: fine)"),POPOUT_WIDTH=420,POPOUT_TITLE_HEIGHT=23
+		;let popoutZ=5e3;function buildPopoutButton(){const e=el("a",{class:"po-btn"})
+		;return e.addEventListener("click",()=>togglePopout(e.closest(".map-block"))),setPopoutButton(e,!1),e}function setPopoutButton(e,t){
+		e.textContent=t?"[↙]":"[↗]",e.title=t?"Vrati kartu na stranicu":"Izdvoji kartu u pomični prozor"}function togglePopout(e){
+		e&&(e.classList.contains("popout")?dockMap(e):POPOUT_MQ.matches&&popoutMap(e))}function popoutMap(e){dlog(`popoutMap: ${e.dataset.mapId}`)
+		;const t=e.getBoundingClientRect(),a=el("a",{text:"Vrati"});a.addEventListener("click",()=>dockMap(e));const r=el("div",{class:"map-gap",
+		style:`height: ${t.height}px;`},[el("span",{text:"Karta je izdvojena u prozor ·"}),a]);e._gap=r,e.after(r),e.classList.add("popout"),
+		e.style.width=`${Math.min(420,t.width)}px`,placePopout(e,t.left,t.top),raisePopout(e),
+		e.querySelectorAll(".po-btn").forEach(e=>setPopoutButton(e,!0))}function dockMap(e){dlog(`dockMap: ${e.dataset.mapId}`)
+		;const t=e.querySelector(".if1.fullscreen");t&&exitFullscreen(t),e.classList.remove("popout"),
+		["left","top","width","height","z-index"].forEach(t=>e.style.removeProperty(t)),e._gap&&e._gap.remove(),delete e._gap,
+		e.querySelectorAll(".po-btn").forEach(e=>setPopoutButton(e,!1))}function dockAllPopouts(){
+		document.querySelectorAll(".map-block.popout").forEach(dockMap)}function placePopout(e,t,a){
+		const r=Math.max(0,window.innerWidth-e.offsetWidth),s=Math.max(0,window.innerHeight-Math.max(e.offsetHeight,23))
+		;e.style.left=`${Math.round(Math.min(Math.max(0,t),r))}px`,e.style.top=`${Math.round(Math.min(Math.max(0,a),s))}px`}function raisePopout(e){
+		e.style.zIndex=++popoutZ}function setMapSettingsVisible(e,t){e.hidden=!t;const a=document.querySelector(".buttons button.btn .arrow")
+		;a&&(a.textContent=t?"▲":"▼")}function toggleMapSettings(){const e=document.getElementById("mapSettings");e&&(e.hidden?(buildMapSettings(e),
+		setMapSettingsVisible(e,!0)):setMapSettingsVisible(e,!1))}function buildMapSettings(e){e.replaceChildren();const t=el("div",{
+		class:"ms-list ms-selected"}),a=el("div",{class:"ms-list ms-available"});let r="zadano",s=!0;function i(e,t){
+		const a=MAP_CATALOG.find(t=>t.id===e.getAttribute("data-map-id")),i=MAP_CATALOG.find(e=>e.id===t.getAttribute("data-map-id")),n=s?1:-1
+		;return"naziv"===r?a.name.localeCompare(i.name,"hr")*n:"vrsta"===r?(a.category.localeCompare(i.category,"hr")||a.name.localeCompare(i.name,"hr"))*n:(MAP_CATALOG.indexOf(a)-MAP_CATALOG.indexOf(i))*n
+		}function n(){[...a.children].sort(i).forEach(e=>a.appendChild(e))}const o={},l=el("div",{class:"ms-sort"},[el("span",{text:"Poredaj:"})])
+		;function d(){for(const[e,{link:t,label:a}]of Object.entries(o)){const i=e===r;t.classList.toggle("active",i),
+		t.textContent=i?`${a} ${s?"▲":"▼"}`:a}}function p(){e.querySelector('input[name="msPreset"][value="custom"]').checked=!0,g(),C()}
+		function c(e,r){const s=el("input",{type:"checkbox"});s.checked=r;const i=el("span",{class:"ms-handle",text:"≡",
+		title:"Povuci za premještanje"}),o=el("div",{class:"ms-item","data-map-id":e.id},[el("label",{},[s,el("span",{class:"ms-glyph",
+		text:CATEGORY_GLYPHS[e.category]||""}),document.createTextNode(e.name)]),i]);return s.addEventListener("change",()=>{
+		s.checked?t.appendChild(o):(a.appendChild(o),n()),p()}),function(e,a){e.addEventListener("pointerdown",r=>{r.preventDefault(),
+		e.hasPointerCapture(r.pointerId)&&e.releasePointerCapture(r.pointerId),a.classList.add("dragging");const s=a.nextElementSibling
+		;let i=r.clientY,n=0,o=null;const l=()=>{const e=[...t.children].find(e=>e!==a&&i<e.getBoundingClientRect().top+e.offsetHeight/2)
+		;e?e.previousElementSibling!==a&&t.insertBefore(a,e):t.lastElementChild!==a&&t.appendChild(a)},d=()=>{0!==n&&(window.scrollBy(0,n),l()),
+		o=requestAnimationFrame(d)},c=e=>{0!==e.buttons?(i=e.clientY,n=i<60?-8:i>window.innerHeight-60?8:0,l()):m()},m=()=>{
+		document.removeEventListener("pointermove",c),document.removeEventListener("pointerup",m),document.removeEventListener("pointercancel",m),
+		cancelAnimationFrame(o),a.classList.remove("dragging"),a.nextElementSibling!==s&&p()};document.addEventListener("pointermove",c),
+		document.addEventListener("pointerup",m),document.addEventListener("pointercancel",m),o=requestAnimationFrame(d)})}(i,o),o}function m(e){
+		t.replaceChildren(),a.replaceChildren(),e.forEach(e=>{const a=MAP_CATALOG.find(t=>t.id===e);a&&t.appendChild(c(a,!0))}),
+		MAP_CATALOG.filter(t=>!e.includes(t.id)).forEach(e=>a.appendChild(c(e,!1))),n()}
+		[["zadano","Zadano"],["naziv","Naziv"],["vrsta","Vrsta"]].forEach(([e,t])=>{const a=el("a",{text:t});a.addEventListener("click",()=>{
+		r===e?s=!s:(r=e,s=!0),d(),n()}),o[e]={link:a,label:t},l.appendChild(a)}),d();const h=el("div",{class:"ms-presets"})
+		;let u="custom"===activePresetId()?null:activePresetId();function w(e){h.replaceChildren();const t=[...visiblePresets(),{id:"custom",
+		name:"Prilagođeno"}];t.some(t=>t.id===e)||(e="custom"),t.forEach(t=>{const a=el("input",{type:"radio",name:"msPreset",value:t.id})
+		;a.checked=t.id===e,a.addEventListener("change",()=>{"custom"!==t.id&&m(presetMapIds(t.id)),u="custom"===t.id?null:t.id,g(),C()})
+		;const r="ms-chip"+(isUserPresetId(t.id)?" ms-user":"");h.appendChild(el("label",{},[a,el("span",{class:r,text:t.name})]))}),
+		h.appendChild(el("span",{class:"ms-fill"})),g()}function g(){h.querySelectorAll(".ms-origin").forEach(e=>e.classList.remove("ms-origin"))
+		;const e=allPresets().find(e=>e.id===u);if(!e||sameMapIds(e.maps,v()))return;const t=[...h.querySelectorAll("input")].find(e=>e.value===u)
+		;t&&t.nextElementSibling.classList.add("ms-origin")}function f(){const t=e.querySelector('input[name="msPreset"]:checked')
+		;return t?t.value:"zadano"}function v(){return[...t.children].map(e=>e.getAttribute("data-map-id"))}function b(){const e=f()
+		;return"custom"===e?{preset:"custom",maps:v()}:{preset:e}}m(resolveMapIds()),w(activePresetId());const k=el("div",{class:"ms-manage"})
+		;let y=!1;const P=el("input",{type:"text",class:"ms-name",maxlength:String(40),placeholder:"Naziv predloška"}),S=el("button",{type:"button",
+		class:"btn",text:"Spremi"});function x(e){const t=storeUserPreset(e,v());P.value="",y=!1,u=t.id,w(t.id),C()}S.addEventListener("click",()=>{
+		const e=cleanPresetName(P.value);e?x(e):P.focus()}),P.addEventListener("keydown",e=>{"Enter"===e.key?(e.preventDefault(),
+		S.click()):"Escape"===e.key&&(y=!1,P.value="",C())});let E=null;const _=el("input",{type:"text",class:"ms-name ms-rename",
+		maxlength:String(40)});let z=!1;function M(){const e=userPresets.find(e=>e.id===E);if(!e)return
+		;const t=cleanPresetName(_.value),a=findUserPresetByName(t);if(!t||a&&a!==e)return _.classList.add("invalid"),void _.focus();e.name=t,
+		saveUserPresets(),E=null,w(f()),C()}function A(){E=null,C()}function L(e){return el("span",{class:"ms-manage-links"
+		},e.map(e=>e||el("span")))}function R(e){if(e.id===E)return function(){const e=el("a",{text:"Potvrdi"}),t=el("a",{text:"Odustani"})
+		;return e.addEventListener("click",M),t.addEventListener("click",A),el("div",{class:"ms-manage-item"},[_,L([null,e,t])])}();const t=el("a",{
+		text:"Preimenuj"}),a=el("a",{text:"Obriši"});let r;!function(e){return isUserPresetId(e.id)&&e.id===u&&!sameMapIds(e.maps,v())
+		}(e)?r=function(e){const t=el("a",{text:"Podijeli"});return t.addEventListener("click",()=>{
+		copyMapViewLink(e(),()=>flashLabel(t,"Kopirano!","Podijeli"))}),t}(()=>presetSharePrefs(e)):(r=el("a",{text:"Ažuriraj"}),
+		r.addEventListener("click",()=>{storeUserPreset(e.name,v()),w(e.id),C()}));const s=el("div",{class:"ms-manage-item"},[el("span",{
+		class:"ms-manage-name",text:e.name}),L([r,t,a])]);t.addEventListener("click",()=>function(e){E=e.id,_.value=e.name,
+		_.classList.remove("invalid"),z=!0,C()}(e));let i=null;const n=()=>{clearTimeout(i),i=null,a.textContent="Obriši",
+		a.classList.remove("active")};return a.addEventListener("click",()=>{if(!i)return a.textContent="Sigurno?",a.classList.add("active"),
+		void(i=setTimeout(n,3e3));n();const t=f()===e.id;u===e.id&&(u=null),deleteUserPreset(e.id),w(t?"custom":f()),C()}),s}function C(){
+		k.replaceChildren(),k.appendChild(function(){const e=el("div",{class:"ms-manage-title",text:"Zadani predlošci"}),t=el("span",{
+		class:"ms-manage-title-links"}),a=(e,a)=>{const r=el("a",{text:e});r.addEventListener("click",()=>{a(),w(f()),C()}),t.appendChild(r)}
+		;return hiddenPresets.length<hideablePresets().length&&a("Sakrij sve",hideAllPresets),hiddenPresets.length&&a("Prikaži sve",showAllPresets),
+		e.appendChild(t),e}()),MAP_PRESETS.forEach(e=>k.appendChild(function(e){const t=isPresetHidden(e.id);let a=null
+		;return isHideablePreset(e.id)&&(a=el("a",{text:t?"Prikaži":"Sakrij"}),a.addEventListener("click",()=>{setPresetHidden(e.id,!t),w(f()),C()
+		})),el("div",{class:"ms-manage-item"+(t?" ms-hidden":"")},[el("span",{class:"ms-manage-name",text:e.name}),L([null,null,a])])}(e))),
+		k.appendChild(function(){const e=el("div",{class:"ms-manage-title",text:"Moji predlošci"}),t=el("a",{text:y?"Odustani":"Dodaj"})
+		;return t.addEventListener("click",()=>{y=!y,y||(P.value=""),C(),y&&P.focus()}),e.appendChild(el("span",{class:"ms-manage-title-links"
+		},[t])),e}()),y&&k.appendChild(el("div",{class:"ms-save"},[P,S])),sharedMapView&&sharedMapView.name&&!function(){const e=resolveMapIds()
+		;return userPresets.some(t=>sameMapIds(t.maps,e))}()&&k.appendChild(function(){const e=el("a",{text:"Spremi"})
+		;return e.addEventListener("click",()=>{x(uniquePresetName(sharedMapView.name))}),el("div",{class:"ms-shared"},[el("span",{
+		text:`Podijeljen predložak "${sharedMapView.name}"`}),e])
+		}()),userPresets.length?userPresets.forEach(e=>k.appendChild(R(e))):k.appendChild(el("div",{class:"ms-manage-empty",
+		text:"Nema spremljenih predložaka"})),z&&(z=!1,_.focus(),_.select())}_.addEventListener("keydown",e=>{"Enter"===e.key?(e.preventDefault(),
+		M()):"Escape"===e.key&&A()}),_.addEventListener("input",()=>_.classList.remove("invalid")),C();const T=el("button",{type:"button",
+		class:"btn",text:"Primijeni"});T.addEventListener("click",()=>{saveMapPrefs(b()),clearSharedMapView(),setMapSettingsVisible(e,!1),
+		renderMaps(),initDynamicContent(),scrollToTop()});const j=el("a",{text:"Podijeli"});j.addEventListener("click",()=>{
+		copyMapViewLink(function(){const e=b(),t=userPresets.find(t=>t.id===e.preset);return t?presetSharePrefs(t):e
+		}(),()=>flashLabel(j,"Kopirano!","Podijeli"))}),e.appendChild(h),e.appendChild(t),e.appendChild(el("div",{class:"ms-actions"},[T,j])),
+		e.appendChild(l),e.appendChild(a),e.appendChild(k)}document.addEventListener("pointerdown",e=>{const t=e.target.closest(".map-block.popout")
+		;if(!t)return;if(raisePopout(t),0!==e.button)return;const a=e.target.closest(".radartitle")
+		;if(!a||e.target.closest("a")||a.classList.contains("fullscreen"))return;e.preventDefault()
+		;const r=t.getBoundingClientRect(),s=e.clientX,i=e.clientY,n=e=>placePopout(t,r.left+e.clientX-s,r.top+e.clientY-i),o=()=>{
+		document.removeEventListener("pointermove",n),document.removeEventListener("pointerup",o),document.removeEventListener("pointercancel",o),
+		document.body.classList.remove("po-dragging")};document.body.classList.add("po-dragging"),document.addEventListener("pointermove",n),
+		document.addEventListener("pointerup",o),document.addEventListener("pointercancel",o)}),POPOUT_MQ.addEventListener("change",e=>{
+		e.matches||dockAllPopouts()}),window.addEventListener("resize",()=>{clearTimeout(window._popoutResizeTimeout),
+		window._popoutResizeTimeout=setTimeout(()=>{document.querySelectorAll(".map-block.popout").forEach(e=>{const t=e.getBoundingClientRect()
+		;placePopout(e,t.left,t.top)})},200)
+		}),"loading"===document.readyState?document.addEventListener("DOMContentLoaded",renderMaps):renderMaps();
 	</script>
 	<script>
 		function scrollToTop(){window.scrollTo({top:0,behavior:"smooth"})}function scrollToElement(e){const t=document.getElementById(e)

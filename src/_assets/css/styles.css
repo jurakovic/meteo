@@ -256,6 +256,65 @@ body.fs-lock {
 	}
 }
 
+/* pop-out widgets (customize page): a map block lifted out of the table into a
+   fixed, draggable, resizable box — desktop only, the button stays hidden elsewhere */
+.po-btn {
+	display: none;
+}
+
+/* holds the block's place in the table while it floats */
+.map-gap {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: 6px;
+	box-sizing: border-box;
+	padding: 8px;
+	background-color: #202c40;
+	color: #8a94a8;
+}
+
+	.map-gap a {
+		cursor: pointer;
+	}
+
+@media (min-width: 801px) and (hover: hover) and (pointer: fine) {
+	.po-btn {
+		display: inline;
+	}
+
+	/* the fullscreen bar is pinned; no widget toggling from there */
+	.radartitle.fullscreen .po-btn {
+		display: none;
+	}
+
+	.map-block.popout {
+		position: fixed;
+		z-index: 5000;
+		min-width: 260px;
+		max-width: min(875px, calc(100vw - 16px));
+		height: auto !important; /* the resize grip may write a height; width alone drives the aspect */
+		overflow: hidden; /* required for resize; fixed descendants (fullscreen) are not clipped */
+		resize: horizontal;
+		background-color: #212f45;
+		outline: 1px solid #2b5797;
+		box-shadow: 0 6px 24px rgba(0, 0, 0, 0.6);
+	}
+
+		.map-block.popout .radartitle:not(.fullscreen) {
+			cursor: move;
+		}
+
+	body.po-dragging {
+		user-select: none;
+	}
+
+		/* iframes would swallow the pointer while a widget is dragged across them */
+		body.po-dragging iframe {
+			pointer-events: none;
+		}
+}
+
 .links-bottom {
 	display: none;
 	text-align: left;
