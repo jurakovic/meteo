@@ -1043,9 +1043,9 @@ function buildIframe(map) {
 		zoomBtn,
 		el('a', { class: 'center', href: map.titleHref, target: '_blank', rel: 'nofollow', text: map.name }),
 		el('span', { class: 'right right-cluster' }, [
+			buildPopoutButton(),
 			el('a', { id: `reset${pascal}Frame`, 'data-frame-id': frameId, style: 'display:none', text: '[X]' }),
-			fsBtn,
-			buildPopoutButton()
+			fsBtn
 		])
 	]);
 
@@ -1150,7 +1150,8 @@ function buildPopoutButton() {
 }
 
 function setPopoutButton(btn, popped) {
-	btn.textContent = popped ? '[↙]' : '[↗]';
+	// ASCII only: an arrow glyph comes from a fallback font and sits off the baseline of [ ] and [X]
+	btn.textContent = popped ? '[=]' : '[^]';
 	btn.title = popped ? 'Vrati kartu na stranicu' : 'Izdvoji kartu u pomični prozor';
 }
 
