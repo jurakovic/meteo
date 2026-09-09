@@ -447,6 +447,12 @@ body.fs-lock {
 			visibility: visible;
 		}
 
+	/* a free pane alone in its column already fills what fullscreen would; the
+	   button is kept on a fullscreen bar, or a pane left alone mid-fullscreen would have no way out */
+	.map-block.free.snapped-alone .radartitle:not(.fullscreen) .fs-btn {
+		display: none;
+	}
+
 	/* the dividers would cross a pane's fullscreen; the edge stays, the map follows it */
 	.snap-ui.snap-fs .snap-div {
 		display: none;

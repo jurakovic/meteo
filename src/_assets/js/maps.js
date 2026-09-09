@@ -1495,7 +1495,7 @@ function unsnapPane(block) {
 	col.panes = col.panes.filter(p => p.block !== block);
 	const total = col.panes.reduce((sum, p) => sum + p.share, 0);
 	col.panes.forEach(p => p.share /= total);
-	block.classList.remove('snapped', `snapped-${col.side}`);
+	block.classList.remove('snapped', `snapped-${col.side}`, 'snapped-alone');
 	block.style.width = block._float.width;
 	block.style.height = block._float.height;
 	delete block._float;
@@ -1556,6 +1556,8 @@ function layoutSnapColumn(col, seam) {
 				class: 'snap-div', 'data-side': col.side, 'data-index': i, style: `top: ${y}px;`, title: 'Visina karata'
 			}));
 		}
+		// alone in its column a free pane already fills what fullscreen would (CSS hides the button)
+		pane.block.classList.toggle('snapped-alone', col.panes.length === 1);
 		fitSnapPane(pane.block, x, y, width, height);
 		y += height;
 	});
