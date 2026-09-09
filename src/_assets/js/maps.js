@@ -1133,7 +1133,12 @@ function renderMaps() {
 // Desktop only — the button is hidden by the same media query in CSS.
 const POPOUT_MQ = window.matchMedia('(min-width: 801px) and (hover: hover) and (pointer: fine)');
 const POPOUT_WIDTH = 420;
+const POPOUT_MIN_WIDTH = 260;
+const POPOUT_MAX_WIDTH = 875; // the table's max-width
+const POPOUT_MIN_HEIGHT = 120; // free (iframe) widgets only; the others follow their aspect
+const POPOUT_MARGIN = 16; // kept free of the viewport edge when sizing
 const POPOUT_TITLE_HEIGHT = 23; // .radartitle height; keeps the drag handle reachable
+const POPOUT_HANDLES = ['n', 'ne', 'e', 'se', 's', 'sw', 'w', 'nw'];
 let popoutZ = 5000; // bumped on every raise so the last touched widget is on top
 
 function buildPopoutButton() {
@@ -1167,10 +1172,24 @@ function popoutMap(block) {
 	block.after(gap);
 	block.classList.add('popout');
 	block.style.width = `${Math.min(POPOUT_WIDTH, rect.width)}px`;
+	// an interactive map is sized freely in both dimensions: it starts at the
+	// height its aspect gives it at this width, then the block takes over from
+	// the .if1/.if2 padding (.free lays it out as a column, the map fills)
+	if (isFreePopout(block)) {
+		block.style.height = `${block.offsetHeight}px`;
+		block.classList.add('free');
+	}
+	POPOUT_HANDLES.forEach(dir => block.appendChild(el('div', { class: `po-h po-h-${dir}`, 'data-dir': dir })));
 	// stays where it was on screen, so it reads as lifted rather than teleported
 	placePopout(block, rect.left, rect.top);
 	raisePopout(block);
 	block.querySelectorAll('.po-btn').forEach(btn => setPopoutButton(btn, true));
+}
+
+// iframes have no intrinsic aspect, so their widgets resize in both dimensions;
+// images, slideshows and videos keep the height their aspect ratio gives them
+function isFreePopout(block) {
+	return !!block.querySelector('.if1, .if2');
 }
 
 function dockMap(block) {
@@ -1178,9 +1197,9 @@ function dockMap(block) {
 	// a fullscreen iframe inside the widget is fixed on its own; take it down first
 	const fs = block.querySelector('.if1.fullscreen');
 	if (fs) exitFullscreen(fs);
-	block.classList.remove('popout');
-	// the browser's resize grip writes width and height inline, clear both
+	block.classList.remove('popout', 'free');
 	['left', 'top', 'width', 'height', 'z-index'].forEach(p => block.style.removeProperty(p));
+	block.querySelectorAll('.po-h').forEach(h => h.remove());
 	if (block._gap) block._gap.remove();
 	delete block._gap;
 	block.querySelectorAll('.po-btn').forEach(btn => setPopoutButton(btn, false));
@@ -1203,33 +1222,81 @@ function raisePopout(block) {
 	block.style.zIndex = ++popoutZ;
 }
 
-// dragging by the title bar; mouse only, so document listeners suffice and
-// nothing moves in the DOM (compare the picker drag in the settings panel)
-document.addEventListener('pointerdown', (e) => {
-	const block = e.target.closest('.map-block.popout');
-	if (!block) return;
-	raisePopout(block);
-	if (e.button !== 0) return;
-	const title = e.target.closest('.radartitle');
-	// links and buttons keep working; a fullscreen bar is pinned, not a handle
-	if (!title || e.target.closest('a') || title.classList.contains('fullscreen')) return;
-	// also suppresses the compatibility mousedown, so a slide title bar drag
-	// cannot register as a swipe on the slideshow around it
-	e.preventDefault();
-	const rect = block.getBoundingClientRect();
+function clamp(value, min, max) {
+	return Math.min(Math.max(value, min), Math.max(min, max));
+}
+
+// a pointer gesture on a widget: move/up listeners on document (mouse only,
+// nothing moves in the DOM — compare the picker drag in the settings panel),
+// and .po-dragging turns iframe pointer events off so the pointer is not
+// swallowed when it crosses one mid-gesture
+function trackPopoutPointer(e, onMove) {
 	const startX = e.clientX, startY = e.clientY;
-	const move = (ev) => placePopout(block, rect.left + ev.clientX - startX, rect.top + ev.clientY - startY);
+	const move = (ev) => onMove(ev.clientX - startX, ev.clientY - startY);
 	const stop = () => {
 		document.removeEventListener('pointermove', move);
 		document.removeEventListener('pointerup', stop);
 		document.removeEventListener('pointercancel', stop);
 		document.body.classList.remove('po-dragging');
 	};
-	// iframes would swallow the pointer mid-drag; .po-dragging turns their events off
 	document.body.classList.add('po-dragging');
 	document.addEventListener('pointermove', move);
 	document.addEventListener('pointerup', stop);
 	document.addEventListener('pointercancel', stop);
+}
+
+function dragPopout(block, e) {
+	const rect = block.getBoundingClientRect();
+	trackPopoutPointer(e, (dx, dy) => placePopout(block, rect.left + dx, rect.top + dy));
+}
+
+// resizing from any side or corner. Width is the dimension every widget has;
+// a locked (aspect) widget derives its height from it, so a pull on its top or
+// bottom edge is turned into the width that gives that height, and a corner
+// follows whichever axis asks for more. Pulling the left or top edge keeps the
+// opposite edge where it is by moving the widget along.
+function resizePopout(block, dir, e) {
+	const start = block.getBoundingClientRect();
+	const free = block.classList.contains('free');
+	const ratio = start.width / start.height;
+	const maxWidth = Math.min(POPOUT_MAX_WIDTH, window.innerWidth - POPOUT_MARGIN);
+	const maxHeight = window.innerHeight - POPOUT_MARGIN;
+	trackPopoutPointer(e, (dx, dy) => {
+		let w = start.width, h = start.height;
+		if (dir.includes('e')) w = start.width + dx;
+		if (dir.includes('w')) w = start.width - dx;
+		if (dir.includes('s')) h = start.height + dy;
+		if (dir.includes('n')) h = start.height - dy;
+		if (free) {
+			w = clamp(w, POPOUT_MIN_WIDTH, maxWidth);
+			h = clamp(h, POPOUT_MIN_HEIGHT, maxHeight);
+			block.style.height = `${Math.round(h)}px`;
+		} else {
+			if (dir === 'n' || dir === 's') w = h * ratio;
+			else if (dir.length === 2) w = Math.max(w, h * ratio);
+			w = clamp(w, POPOUT_MIN_WIDTH, maxWidth);
+		}
+		block.style.width = `${Math.round(w)}px`;
+		// the laid-out height, exact for locked widgets where it follows the width
+		h = block.offsetHeight;
+		placePopout(block, dir.includes('w') ? start.right - w : start.left, dir.includes('n') ? start.bottom - h : start.top);
+	});
+}
+
+document.addEventListener('pointerdown', (e) => {
+	const block = e.target.closest('.map-block.popout');
+	if (!block) return;
+	raisePopout(block);
+	if (e.button !== 0) return;
+	const handle = e.target.closest('.po-h');
+	const title = e.target.closest('.radartitle');
+	// links and buttons keep working; a fullscreen bar is pinned, not a handle
+	if (!handle && (!title || e.target.closest('a') || title.classList.contains('fullscreen'))) return;
+	// also suppresses the compatibility mousedown, so a slide title bar drag
+	// cannot register as a swipe on the slideshow around it
+	e.preventDefault();
+	if (handle) resizePopout(block, handle.dataset.dir, e);
+	else dragPopout(block, e);
 });
 
 // widgets are a desktop thing: shrinking below the breakpoint puts them back

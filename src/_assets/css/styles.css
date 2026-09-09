@@ -291,11 +291,6 @@ body.fs-lock {
 	.map-block.popout {
 		position: fixed;
 		z-index: 5000;
-		min-width: 260px;
-		max-width: min(875px, calc(100vw - 16px));
-		height: auto !important; /* the resize grip may write a height; width alone drives the aspect */
-		overflow: hidden; /* required for resize; fixed descendants (fullscreen) are not clipped */
-		resize: horizontal;
 		background-color: #212f45;
 		outline: 1px solid #2b5797;
 		box-shadow: 0 6px 24px rgba(0, 0, 0, 0.6);
@@ -304,6 +299,57 @@ body.fs-lock {
 		.map-block.popout .radartitle:not(.fullscreen) {
 			cursor: move;
 		}
+
+		/* an interactive map has no aspect of its own: the block carries an inline
+		   height and lays out as a column, the map takes what the title bar leaves */
+		.map-block.popout.free {
+			display: flex;
+			flex-direction: column;
+		}
+
+			.map-block.popout.free > .radartitle {
+				flex: none;
+			}
+
+			.map-block.popout.free .if1,
+			.map-block.popout.free .if2 {
+				flex: 1;
+				min-height: 0;
+				padding-top: 0;
+			}
+
+		/* resize handles: thin strips along the sides, squares in the corners,
+		   straddling the edge so they are easy to hit without eating the title bar */
+		.map-block.popout .po-h {
+			position: absolute;
+			z-index: 1;
+		}
+
+		.po-h-n, .po-h-s {
+			left: 6px;
+			right: 6px;
+			height: 8px;
+			cursor: ns-resize;
+		}
+
+		.po-h-e, .po-h-w {
+			top: 6px;
+			bottom: 6px;
+			width: 8px;
+			cursor: ew-resize;
+		}
+
+		.po-h-ne, .po-h-se, .po-h-sw, .po-h-nw {
+			width: 10px;
+			height: 10px;
+		}
+
+		.po-h-n, .po-h-ne, .po-h-nw { top: -4px; }
+		.po-h-s, .po-h-se, .po-h-sw { bottom: -4px; }
+		.po-h-e, .po-h-ne, .po-h-se { right: -4px; }
+		.po-h-w, .po-h-nw, .po-h-sw { left: -4px; }
+		.po-h-ne, .po-h-sw { cursor: nesw-resize; }
+		.po-h-nw, .po-h-se { cursor: nwse-resize; }
 
 	body.po-dragging {
 		user-select: none;
