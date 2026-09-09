@@ -1102,6 +1102,7 @@ function buildMapContent(map) {
 function renderMaps() {
 	const tbody = document.querySelector('tbody[data-maps]');
 	if (!tbody) return;
+	resetSnapColumns(); // their panes go with the tbody
 	tbody.replaceChildren();
 	const maps = resolveMapIds().map(id => MAP_CATALOG.find(m => m.id === id)).filter(Boolean);
 	if (!maps.length) {
@@ -1197,6 +1198,7 @@ function dockMap(block) {
 	// a fullscreen iframe inside the widget is fixed on its own; take it down first
 	const fs = block.querySelector('.if1.fullscreen');
 	if (fs) exitFullscreen(fs);
+	unsnapPane(block);
 	block.classList.remove('popout', 'free');
 	['left', 'top', 'width', 'height', 'z-index'].forEach(p => block.style.removeProperty(p));
 	block.querySelectorAll('.po-h').forEach(h => h.remove());
@@ -1229,15 +1231,17 @@ function clamp(value, min, max) {
 // a pointer gesture on a widget: move/up listeners on document (mouse only,
 // nothing moves in the DOM — compare the picker drag in the settings panel),
 // and .po-dragging turns iframe pointer events off so the pointer is not
-// swallowed when it crosses one mid-gesture
-function trackPopoutPointer(e, onMove) {
+// swallowed when it crosses one mid-gesture. onEnd runs once the pointer is
+// released (or the gesture cancelled)
+function trackPopoutPointer(e, onMove, onEnd) {
 	const startX = e.clientX, startY = e.clientY;
-	const move = (ev) => onMove(ev.clientX - startX, ev.clientY - startY);
+	const move = (ev) => onMove(ev.clientX - startX, ev.clientY - startY, ev);
 	const stop = () => {
 		document.removeEventListener('pointermove', move);
 		document.removeEventListener('pointerup', stop);
 		document.removeEventListener('pointercancel', stop);
 		document.body.classList.remove('po-dragging');
+		if (onEnd) onEnd();
 	};
 	document.body.classList.add('po-dragging');
 	document.addEventListener('pointermove', move);
@@ -1245,9 +1249,30 @@ function trackPopoutPointer(e, onMove) {
 	document.addEventListener('pointercancel', stop);
 }
 
+// the widget follows the pointer by the point of the title bar it was grabbed
+// at. Near a viewport edge the pointer picks a snap slot (previewed, taken on
+// release); a snapped pane holds its place until the drag is decidedly one,
+// then floats again at the size it had before it snapped, the title bar kept
+// under the pointer
 function dragPopout(block, e) {
 	const rect = block.getBoundingClientRect();
-	trackPopoutPointer(e, (dx, dy) => placePopout(block, rect.left + dx, rect.top + dy));
+	const grab = { x: e.clientX - rect.left, y: e.clientY - rect.top };
+	let snapped = isSnapped(block);
+	let target = null;
+	trackPopoutPointer(e, (dx, dy, ev) => {
+		if (snapped) {
+			if (Math.hypot(dx, dy) < SNAP_DETACH) return;
+			unsnapPane(block);
+			snapped = false;
+			grab.x = Math.min(grab.x, block.offsetWidth - POPOUT_TITLE_HEIGHT);
+		}
+		placePopout(block, ev.clientX - grab.x, ev.clientY - grab.y);
+		target = snapTargetAt(ev.clientX, ev.clientY);
+		showSnapPreview(target ? snapSlotRect(block, target) : null);
+	}, () => {
+		showSnapPreview(null);
+		if (target) snapPane(block, target.side, target.index);
+	});
 }
 
 // resizing from any side or corner. Width is the dimension every widget has;
@@ -1284,6 +1309,15 @@ function resizePopout(block, dir, e) {
 }
 
 document.addEventListener('pointerdown', (e) => {
+	const snapHandle = e.target.closest('.snap-edge, .snap-div');
+	if (snapHandle) {
+		if (e.button !== 0) return;
+		e.preventDefault();
+		const col = snapColumns[snapHandle.dataset.side];
+		if (snapHandle.classList.contains('snap-edge')) resizeSnapColumn(col, e);
+		else resizeSnapRow(col, Number(snapHandle.dataset.index), e);
+		return;
+	}
 	const block = e.target.closest('.map-block.popout');
 	if (!block) return;
 	raisePopout(block);
@@ -1308,11 +1342,233 @@ POPOUT_MQ.addEventListener('change', (e) => {
 window.addEventListener('resize', () => {
 	clearTimeout(window._popoutResizeTimeout);
 	window._popoutResizeTimeout = setTimeout(() => {
-		document.querySelectorAll('.map-block.popout').forEach(block => {
+		layoutSnapColumns();
+		document.querySelectorAll('.map-block.popout:not(.snapped)').forEach(block => {
 			const rect = block.getBoundingClientRect();
 			placePopout(block, rect.left, rect.top);
 		});
 	}, 200);
+});
+
+// ---------- snap columns (desktop) ----------
+
+// a widget dragged to the left or right edge of the viewport snaps into a
+// column there: a stack of up to SNAP_MAX_PANES panes filling the viewport
+// height, the page laid out in what is left between the columns (body
+// padding, through --snap-l/--snap-r). A pane is still a pop-out widget —
+// same block, same fixed positioning, nothing moves in the DOM — only its
+// place and size come from layoutSnapColumns() instead of a gesture: a column
+// has a width and each pane a share of the height, both fractions of the
+// viewport so a window resize keeps the proportions. The column's inner edge
+// and the dividers between panes are the resize handles (.snap-ui, above the
+// panes); .snap-col paints the column's ground below them. A free (iframe)
+// pane fills its slot; a locked one takes the slot's width, shrinks until its
+// height fits and sits centred in the slot.
+const SNAP_MAX_PANES = 3;
+const SNAP_EDGE = 24; // the pointer this close to a viewport edge targets its column
+const SNAP_DETACH = 40; // drag distance before a snapped pane floats again
+const SNAP_MIN_WIDTH = POPOUT_MIN_WIDTH;
+const SNAP_MIN_HEIGHT = POPOUT_MIN_HEIGHT + POPOUT_TITLE_HEIGHT;
+const snapColumns = {
+	left: { side: 'left', width: null, panes: [], node: null, ui: null },
+	right: { side: 'right', width: null, panes: [], node: null, ui: null }
+};
+let snapPreview = null;
+
+function isSnapped(block) {
+	return block.classList.contains('snapped');
+}
+
+function snapColumnOf(block) {
+	return Object.values(snapColumns).find(col => col.panes.some(p => p.block === block)) || null;
+}
+
+function otherSnapColumn(col) {
+	return col.side === 'left' ? snapColumns.right : snapColumns.left;
+}
+
+function snapColumnPx(col) {
+	return col.panes.length ? Math.round(col.width * window.innerWidth) : 0;
+}
+
+// where the pointer would drop a widget: a column when at its edge, the slot
+// from the height split into as many equal bands as the column would then
+// hold — the preview shows the exact slot, this only picks it
+function snapTargetAt(x, y) {
+	const side = x <= SNAP_EDGE ? 'left' : x >= window.innerWidth - SNAP_EDGE ? 'right' : null;
+	if (!side) return null;
+	const col = snapColumns[side];
+	if (col.panes.length >= SNAP_MAX_PANES) return null;
+	const n = col.panes.length + 1;
+	const index = Math.min(n - 1, Math.floor(y / (window.innerHeight / n)));
+	return { side, index };
+}
+
+// the slot a block snapped at target would get: an empty column takes the
+// block's width, the new pane a 1/n share and the others shrink to make room
+// — the same split snapPane() applies
+function snapSlotRect(block, { side, index }) {
+	const col = snapColumns[side];
+	const width = col.panes.length
+		? snapColumnPx(col)
+		: clamp(block.offsetWidth, SNAP_MIN_WIDTH, window.innerWidth - snapColumnPx(otherSnapColumn(col)));
+	const n = col.panes.length + 1;
+	const before = col.panes.slice(0, index).reduce((sum, p) => sum + p.share, 0) * (n - 1) / n;
+	return {
+		left: side === 'left' ? 0 : window.innerWidth - width,
+		top: Math.round(before * window.innerHeight),
+		width,
+		height: Math.round(window.innerHeight / n)
+	};
+}
+
+function showSnapPreview(rect) {
+	if (!snapPreview) {
+		snapPreview = el('div', { class: 'snap-preview', hidden: true });
+		document.body.appendChild(snapPreview);
+	}
+	snapPreview.hidden = !rect;
+	if (!rect) return;
+	Object.assign(snapPreview.style, {
+		left: `${rect.left}px`, top: `${rect.top}px`, width: `${rect.width}px`, height: `${rect.height}px`
+	});
+}
+
+function snapPane(block, side, index) {
+	dlog(`snapPane: ${block.dataset.mapId} → ${side} ${index}`);
+	unsnapPane(block);
+	const col = snapColumns[side];
+	if (col.panes.length >= SNAP_MAX_PANES) return;
+	const slot = snapSlotRect(block, { side, index });
+	if (!col.panes.length) {
+		col.width = slot.width / window.innerWidth;
+		col.node = el('div', { class: `snap-col snap-${side}` });
+		col.ui = el('div', { class: `snap-ui snap-${side}` }, [
+			el('div', { class: 'snap-edge', 'data-side': side, title: 'Širina stupca' })
+		]);
+		document.body.append(col.node, col.ui);
+	}
+	// the floating size comes back when the pane leaves the column
+	block._float = { width: block.style.width, height: block.style.height };
+	const n = col.panes.length + 1;
+	col.panes.forEach(p => p.share *= (n - 1) / n);
+	col.panes.splice(index, 0, { block, share: 1 / n });
+	block.classList.add('snapped');
+	block.querySelectorAll('.po-h').forEach(h => h.remove());
+	layoutSnapColumns();
+}
+
+function unsnapPane(block) {
+	const col = snapColumnOf(block);
+	if (!col) return;
+	dlog(`unsnapPane: ${block.dataset.mapId}`);
+	col.panes = col.panes.filter(p => p.block !== block);
+	const total = col.panes.reduce((sum, p) => sum + p.share, 0);
+	col.panes.forEach(p => p.share /= total);
+	block.classList.remove('snapped');
+	block.style.width = block._float.width;
+	block.style.height = block._float.height;
+	delete block._float;
+	POPOUT_HANDLES.forEach(dir => block.appendChild(el('div', { class: `po-h po-h-${dir}`, 'data-dir': dir })));
+	if (!col.panes.length) dropSnapColumn(col);
+	layoutSnapColumns();
+}
+
+function dropSnapColumn(col) {
+	if (col.node) col.node.remove();
+	if (col.ui) col.ui.remove();
+	col.node = col.ui = col.width = null;
+	col.panes = [];
+}
+
+// the panes are gone with the tbody they were part of
+function resetSnapColumns() {
+	Object.values(snapColumns).forEach(dropSnapColumn);
+	layoutSnapColumns();
+}
+
+function layoutSnapColumns() {
+	const root = document.documentElement.style;
+	root.setProperty('--snap-l', `${snapColumnPx(snapColumns.left)}px`);
+	root.setProperty('--snap-r', `${snapColumnPx(snapColumns.right)}px`);
+	Object.values(snapColumns).forEach(layoutSnapColumn);
+}
+
+function layoutSnapColumn(col) {
+	const width = snapColumnPx(col);
+	if (!width) return;
+	const x = col.side === 'left' ? 0 : window.innerWidth - width;
+	[col.node, col.ui].forEach(node => {
+		node.style.left = `${x}px`;
+		node.style.width = `${width}px`;
+	});
+	col.ui.querySelectorAll('.snap-div').forEach(d => d.remove());
+	let y = 0;
+	col.panes.forEach((pane, i) => {
+		const last = i === col.panes.length - 1;
+		const height = last ? window.innerHeight - y : Math.round(pane.share * window.innerHeight);
+		if (i > 0) {
+			col.ui.appendChild(el('div', {
+				class: 'snap-div', 'data-side': col.side, 'data-index': i, style: `top: ${y}px;`, title: 'Visina karata'
+			}));
+		}
+		fitSnapPane(pane.block, x, y, width, height);
+		y += height;
+	});
+}
+
+// a free pane fills the slot; a locked one sizes its height from its width,
+// so it gets the slot's width and is shrunk until its height fits — the title
+// bar's fixed height makes the scale slightly nonlinear, the second pass
+// settles it (the same fit the grid page used)
+function fitSnapPane(block, x, y, width, height) {
+	block.style.width = `${width}px`;
+	if (block.classList.contains('free')) {
+		block.style.height = `${height}px`;
+	} else {
+		let w = width;
+		for (let pass = 0; pass < 2 && block.offsetHeight > height; pass++) {
+			w = Math.floor(w * (height - POPOUT_TITLE_HEIGHT) / (block.offsetHeight - POPOUT_TITLE_HEIGHT));
+			block.style.width = `${w}px`;
+		}
+	}
+	block.style.left = `${Math.round(x + (width - block.offsetWidth) / 2)}px`;
+	block.style.top = `${Math.round(y + (height - block.offsetHeight) / 2)}px`;
+}
+
+// the inner edge: the column may take everything the other one leaves
+function resizeSnapColumn(col, e) {
+	const start = snapColumnPx(col);
+	const max = window.innerWidth - snapColumnPx(otherSnapColumn(col));
+	trackPopoutPointer(e, (dx) => {
+		const px = clamp(col.side === 'left' ? start + dx : start - dx, SNAP_MIN_WIDTH, max);
+		col.width = px / window.innerWidth;
+		layoutSnapColumns();
+	});
+}
+
+// the divider above pane i moves height between it and the pane above
+function resizeSnapRow(col, i, e) {
+	const above = col.panes[i - 1], below = col.panes[i];
+	if (!above || !below) return;
+	const start = above.share, total = above.share + below.share;
+	const min = SNAP_MIN_HEIGHT / window.innerHeight;
+	trackPopoutPointer(e, (dx, dy) => {
+		above.share = clamp(start + dy / window.innerHeight, min, total - min);
+		below.share = total - above.share;
+		layoutSnapColumns();
+	});
+}
+
+// a locked pane's height can change under the fit: a titled slideshow takes
+// its width from the image (so the real height is there once it has loaded)
+// and changes aspect with the slide (arrows and swipe end in a click or a
+// pointerup) — fit again after the change has been applied
+['load', 'click', 'pointerup'].forEach(type => {
+	document.addEventListener(type, (e) => {
+		const block = e.target.closest && e.target.closest('.map-block.snapped:not(.free)');
+		if (block) setTimeout(layoutSnapColumns, 0);
+	}, true);
 });
 
 // ---------- settings panel ----------

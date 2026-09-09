@@ -53,8 +53,14 @@
 		.map-block.popout .po-h{position:absolute;z-index:1}.po-h-n,.po-h-s{left:6px;right:6px;height:8px;cursor:ns-resize}.po-h-e,.po-h-w{top:6px;
 		bottom:6px;width:8px;cursor:ew-resize}.po-h-ne,.po-h-nw,.po-h-se,.po-h-sw{width:10px;height:10px}.po-h-n,.po-h-ne,.po-h-nw{top:-4px}.po-h-s,
 		.po-h-se,.po-h-sw{bottom:-4px}.po-h-e,.po-h-ne,.po-h-se{right:-4px}.po-h-nw,.po-h-sw,.po-h-w{left:-4px}.po-h-ne,.po-h-sw{cursor:nesw-resize}
-		.po-h-nw,.po-h-se{cursor:nwse-resize}body.po-dragging{user-select:none}body.po-dragging iframe{pointer-events:none}}.links-bottom{display:
-		none;text-align:left;background-color:#3a3f4a;box-sizing:border-box;padding:5px 4px;white-space:nowrap;overflow-x:auto;
+		.po-h-nw,.po-h-se{cursor:nwse-resize}body.po-dragging{user-select:none}body.po-dragging iframe{pointer-events:none}body{padding-left:
+		var(--snap-l,0);padding-right:var(--snap-r,0)}.snap-col{position:fixed;top:0;bottom:0;z-index:3999;background-color:#1a2536;pointer-events:
+		none}.snap-ui{position:fixed;top:0;bottom:0;z-index:8000;pointer-events:none}.snap-div,.snap-edge{position:absolute;pointer-events:auto}
+		.snap-div:hover,.snap-edge:hover,body.po-dragging .snap-div,body.po-dragging .snap-edge{background-color:rgba(43,87,151,.6)}.snap-edge{top:0
+		;bottom:0;width:8px;cursor:ew-resize}.snap-left .snap-edge{right:-4px}.snap-right .snap-edge{left:-4px}.snap-div{left:0;right:0;height:8px;
+		margin-top:-4px;cursor:ns-resize}body.fs-lock .snap-ui{display:none}.map-block.popout.snapped{box-shadow:none}.snap-preview{position:fixed;
+		z-index:8500;box-sizing:border-box;border:2px dashed #4a8de6;background-color:rgba(43,87,151,.25);pointer-events:none}}.links-bottom{display
+		:none;text-align:left;background-color:#3a3f4a;box-sizing:border-box;padding:5px 4px;white-space:nowrap;overflow-x:auto;
 		-webkit-overflow-scrolling:touch;scrollbar-width:none;-ms-overflow-style:none}.links-bottom::-webkit-scrollbar{display:none}
 		.links-bottom::after,.links-bottom::before{content:"";position:sticky;display:inline-block;width:24px;height:1.4em;margin-top:-.3em;
 		margin-bottom:-.3em;vertical-align:middle;pointer-events:none;opacity:0;transition:opacity .2s ease}.links-bottom::before{left:-4px;

@@ -359,6 +359,78 @@ body.fs-lock {
 		body.po-dragging iframe {
 			pointer-events: none;
 		}
+
+	/* snap columns: the page keeps to the space between them */
+	body {
+		padding-left: var(--snap-l, 0px);
+		padding-right: var(--snap-r, 0px);
+	}
+
+	/* the column's ground, below the panes; a locked pane leaves some of it showing */
+	.snap-col {
+		position: fixed;
+		top: 0;
+		bottom: 0;
+		z-index: 3999;
+		background-color: #1a2536;
+		pointer-events: none;
+	}
+
+	/* the handles, above the panes: the wrapper lets the pointer through, the strips catch it */
+	.snap-ui {
+		position: fixed;
+		top: 0;
+		bottom: 0;
+		z-index: 8000;
+		pointer-events: none;
+	}
+
+		.snap-edge, .snap-div {
+			position: absolute;
+			pointer-events: auto;
+		}
+
+			.snap-edge:hover, .snap-div:hover,
+			body.po-dragging .snap-edge, body.po-dragging .snap-div {
+				background-color: rgba(43, 87, 151, 0.6);
+			}
+
+		.snap-edge {
+			top: 0;
+			bottom: 0;
+			width: 8px;
+			cursor: ew-resize;
+		}
+
+		.snap-left .snap-edge { right: -4px; }
+		.snap-right .snap-edge { left: -4px; }
+
+		.snap-div {
+			left: 0;
+			right: 0;
+			height: 8px;
+			margin-top: -4px;
+			cursor: ns-resize;
+		}
+
+	/* a fullscreen map inside a pane stacks under the handles otherwise */
+	body.fs-lock .snap-ui {
+		display: none;
+	}
+
+	.map-block.popout.snapped {
+		box-shadow: none;
+	}
+
+	/* the slot a dragged widget would take */
+	.snap-preview {
+		position: fixed;
+		z-index: 8500;
+		box-sizing: border-box;
+		border: 2px dashed #4a8de6;
+		background-color: rgba(43, 87, 151, 0.25);
+		pointer-events: none;
+	}
 }
 
 .links-bottom {
