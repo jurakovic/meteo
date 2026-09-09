@@ -346,10 +346,10 @@
 		const t=e.startSlide||1,a=e.slides.some(e=>e.title),n=el("div",{class:a?"slideshow":"slideshow placeholder","data-slideshow-id":e.id,
 		"data-current-slide":t,"data-dynamic-width":e.dynamicWidth?"":void 0,
 		style:(maxWidthStyle(e)+(a?"":` aspect-ratio: ${e.aspect};`)).trim()||void 0});e.slides.forEach((r,s)=>{
-		const i=s===t-1,o=a?r.img:r,l=i||e.eagerSlides?el("img",{src:o}):el("img",{"data-src":o,class:"lazy"}),d=el("div",{
+		const i=s===t-1,o=a?r.img:r,l=i||e.eagerSlides?el("img",{src:o}):el("img",{"data-src":o,class:"lazy"}),p=el("div",{
 		class:"slide fade"+(i?" active":"")});if(a){const t=r.maxWidth||e.maxWidth,a={text:r.title.text||e.name,href:r.title.href}
-		;d.appendChild(buildTitleBar(a,{},!e.titleHref)),d.appendChild(el("div",{class:"placeholder",
-		style:`${t?`max-width: ${t}px; `:""}aspect-ratio: ${r.aspect};`},[l]))}else d.appendChild(l);n.appendChild(d)});const r=el("a",{
+		;p.appendChild(buildTitleBar(a,{},!e.titleHref)),p.appendChild(el("div",{class:"placeholder",
+		style:`${t?`max-width: ${t}px; `:""}aspect-ratio: ${r.aspect};`},[l]))}else p.appendChild(l);n.appendChild(p)});const r=el("a",{
 		class:"prev"+(a?" shorter":""),html:"&#10094;"});r.addEventListener("click",()=>plusSlides(e.id,-1));const s=el("a",{
 		class:"next"+(a?" shorter":""),html:"&#10095;"});s.addEventListener("click",()=>plusSlides(e.id,1)),n.appendChild(r),n.appendChild(s)
 		;const i=el("div",{class:"indicators-container","data-slideshow-id":e.id,
@@ -409,10 +409,10 @@
 		showSnapPreview(s?snapSlotRect(e,s):null)},()=>{showSnapPreview(null),s?snapPane(e,s.side,s.index):persistSnapLayout()})}
 		function resizePopout(e,t,a){
 		const n=e.getBoundingClientRect(),r=e.classList.contains("free"),s=n.width/n.height,i=Math.min(875,viewportWidth()-16),o=viewportHeight()-16
-		;trackPopoutPointer(a,(a,l)=>{let d=n.width,p=n.height;t.includes("e")&&(d=n.width+a),t.includes("w")&&(d=n.width-a),
-		t.includes("s")&&(p=n.height+l),t.includes("n")&&(p=n.height-l),r?(d=clamp(d,260,i),p=clamp(p,120,o),
-		e.style.height=`${Math.round(p)}px`):("n"===t||"s"===t?d=p*s:2===t.length&&(d=Math.max(d,p*s)),d=clamp(d,260,i)),
-		e.style.width=`${Math.round(d)}px`,p=e.offsetHeight,placePopout(e,t.includes("w")?n.right-d:n.left,t.includes("n")?n.bottom-p:n.top)
+		;trackPopoutPointer(a,(a,l)=>{let p=n.width,d=n.height;t.includes("e")&&(p=n.width+a),t.includes("w")&&(p=n.width-a),
+		t.includes("s")&&(d=n.height+l),t.includes("n")&&(d=n.height-l),r?(p=clamp(p,260,i),d=clamp(d,120,o),
+		e.style.height=`${Math.round(d)}px`):("n"===t||"s"===t?p=d*s:2===t.length&&(p=Math.max(p,d*s)),p=clamp(p,260,i)),
+		e.style.width=`${Math.round(p)}px`,d=e.offsetHeight,placePopout(e,t.includes("w")?n.right-p:n.left,t.includes("n")?n.bottom-d:n.top)
 		},persistSnapLayout)}document.addEventListener("pointerdown",e=>{const t=e.target.closest(".snap-edge, .snap-div");if(t){
 		if(0!==e.button)return;return e.preventDefault(),void snapHandlePointerDown(t,e)}const a=e.target.closest(".map-block.popout");if(!a)return
 		;if(raisePopout(a),0!==e.button)return;const n=e.target.closest(".po-h"),r=e.target.closest(".radartitle")
@@ -524,23 +524,23 @@
 		const a=MAP_CATALOG.find(t=>t.id===e.getAttribute("data-map-id")),s=MAP_CATALOG.find(e=>e.id===t.getAttribute("data-map-id")),i=r?1:-1
 		;return"naziv"===n?a.name.localeCompare(s.name,"hr")*i:"vrsta"===n?(a.category.localeCompare(s.category,"hr")||a.name.localeCompare(s.name,"hr"))*i:(MAP_CATALOG.indexOf(a)-MAP_CATALOG.indexOf(s))*i
 		}function i(){[...a.children].sort(s).forEach(e=>a.appendChild(e))}const o={},l=el("div",{class:"ms-sort"},[el("span",{text:"Poredaj:"})])
-		;function d(){for(const[e,{link:t,label:a}]of Object.entries(o)){const s=e===n;t.classList.toggle("active",s),
-		t.textContent=s?`${a} ${r?"▲":"▼"}`:a}}function p(){e.querySelector('input[name="msPreset"][value="custom"]').checked=!0,w(),N()}
+		;function p(){for(const[e,{link:t,label:a}]of Object.entries(o)){const s=e===n;t.classList.toggle("active",s),
+		t.textContent=s?`${a} ${r?"▲":"▼"}`:a}}function d(){e.querySelector('input[name="msPreset"][value="custom"]').checked=!0,w(),N()}
 		function c(e,n){const r=el("input",{type:"checkbox"});r.checked=n;const s=el("span",{class:"ms-handle",text:"≡",
 		title:"Povuci za premještanje"}),o=el("div",{class:"ms-item","data-map-id":e.id},[el("label",{},[r,el("span",{class:"ms-glyph",
 		text:CATEGORY_GLYPHS[e.category]||""}),document.createTextNode(e.name)]),s]);return r.addEventListener("change",()=>{
-		r.checked?t.appendChild(o):(a.appendChild(o),i()),p()}),function(e,a){e.addEventListener("pointerdown",n=>{n.preventDefault(),
+		r.checked?t.appendChild(o):(a.appendChild(o),i()),d()}),function(e,a){e.addEventListener("pointerdown",n=>{n.preventDefault(),
 		e.hasPointerCapture(n.pointerId)&&e.releasePointerCapture(n.pointerId),a.classList.add("dragging");const r=a.nextElementSibling
 		;let s=n.clientY,i=0,o=null;const l=()=>{const e=[...t.children].find(e=>e!==a&&s<e.getBoundingClientRect().top+e.offsetHeight/2)
-		;e?e.previousElementSibling!==a&&t.insertBefore(a,e):t.lastElementChild!==a&&t.appendChild(a)},d=()=>{0!==i&&(window.scrollBy(0,i),l()),
-		o=requestAnimationFrame(d)},c=e=>{0!==e.buttons?(s=e.clientY,i=s<60?-8:s>window.innerHeight-60?8:0,l()):m()},m=()=>{
+		;e?e.previousElementSibling!==a&&t.insertBefore(a,e):t.lastElementChild!==a&&t.appendChild(a)},p=()=>{0!==i&&(window.scrollBy(0,i),l()),
+		o=requestAnimationFrame(p)},c=e=>{0!==e.buttons?(s=e.clientY,i=s<60?-8:s>window.innerHeight-60?8:0,l()):m()},m=()=>{
 		document.removeEventListener("pointermove",c),document.removeEventListener("pointerup",m),document.removeEventListener("pointercancel",m),
-		cancelAnimationFrame(o),a.classList.remove("dragging"),a.nextElementSibling!==r&&p()};document.addEventListener("pointermove",c),
-		document.addEventListener("pointerup",m),document.addEventListener("pointercancel",m),o=requestAnimationFrame(d)})}(s,o),o}function m(e){
+		cancelAnimationFrame(o),a.classList.remove("dragging"),a.nextElementSibling!==r&&d()};document.addEventListener("pointermove",c),
+		document.addEventListener("pointerup",m),document.addEventListener("pointercancel",m),o=requestAnimationFrame(p)})}(s,o),o}function m(e){
 		t.replaceChildren(),a.replaceChildren(),e.forEach(e=>{const a=MAP_CATALOG.find(t=>t.id===e);a&&t.appendChild(c(a,!0))}),
 		MAP_CATALOG.filter(t=>!e.includes(t.id)).forEach(e=>a.appendChild(c(e,!1))),i()}
 		[["zadano","Zadano"],["naziv","Naziv"],["vrsta","Vrsta"]].forEach(([e,t])=>{const a=el("a",{text:t});a.addEventListener("click",()=>{
-		n===e?r=!r:(n=e,r=!0),d(),i()}),o[e]={link:a,label:t},l.appendChild(a)}),d();const u=el("div",{class:"ms-presets"})
+		n===e?r=!r:(n=e,r=!0),p(),i()}),o[e]={link:a,label:t},l.appendChild(a)}),p();const u=el("div",{class:"ms-presets"})
 		;let h="custom"===activePresetId()?null:activePresetId();function f(e){u.replaceChildren();const t=[...visiblePresets(),{id:"custom",
 		name:"Prilagođeno"}];t.some(t=>t.id===e)||(e="custom"),t.forEach(t=>{const a=el("input",{type:"radio",name:"msPreset",value:t.id})
 		;a.checked=t.id===e,a.addEventListener("change",()=>{"custom"!==t.id&&m(presetMapIds(t.id)),h="custom"===t.id?null:t.id,w(),N()})
@@ -549,10 +549,11 @@
 		;const e=allPresets().find(e=>e.id===h);if(!e||sameMapIds(e.maps,v()))return;const t=[...u.querySelectorAll("input")].find(e=>e.value===h)
 		;t&&t.nextElementSibling.classList.add("ms-origin")}function g(){const t=e.querySelector('input[name="msPreset"]:checked')
 		;return t?t.value:"zadano"}function v(){return[...t.children].map(e=>e.getAttribute("data-map-id"))}function P(){const e=g()
-		;return"custom"===e?{preset:"custom",maps:v()}:{preset:e}}function y(e){const t=userPresets.find(t=>t.id===e.preset)
-		;return sanitizeSnapLayout(t&&"layout"in t?t.layout:snapLayout(),prefsMapIds(e))}function S(){return sanitizeSnapLayout(snapLayout(),v())}
-		m(resolveMapIds()),f(activePresetId());const b=el("div",{class:"ms-layout"});function k(){b.replaceChildren();const e=snapLayout()
-		;if(b.hidden=!e,!e)return;const t=[];e.left&&t.push(`lijevo ${e.left.panes.length}`),e.right&&t.push(`desno ${e.right.panes.length}`),
+		;return"custom"===e?{preset:"custom",maps:v()}:{preset:e}}function y(e){
+		if("custom"===e.preset)return sanitizeSnapLayout(snapLayout(),prefsMapIds(e));const t=userPresets.find(t=>t.id===e.preset)
+		;return t?sanitizeSnapLayout(t.layout,prefsMapIds(e)):null}function S(){return sanitizeSnapLayout(snapLayout(),v())}m(resolveMapIds()),
+		f(activePresetId());const b=el("div",{class:"ms-layout"});function k(){b.replaceChildren();const e=snapLayout();if(b.hidden=!e,!e)return
+		;const t=[];e.left&&t.push(`lijevo ${e.left.panes.length}`),e.right&&t.push(`desno ${e.right.panes.length}`),
 		e.floating&&t.push(`u prozoru ${e.floating.length}`);const a=el("a",{text:"Vrati sve"});a.addEventListener("click",dockAllPopouts),
 		b.append(el("span",{text:`Izdvojene karte: ${t.join(", ")}`}),a)}k(),e._onLayoutChange=()=>{k(),N()};const x=el("div",{class:"ms-manage"})
 		;let E=!1;const _=el("input",{type:"text",class:"ms-name",maxlength:String(40),placeholder:"Naziv predloška"}),M=el("button",{type:"button",

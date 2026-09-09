@@ -2138,13 +2138,15 @@ function buildMapSettings(panel) {
 		return { preset: presetId };
 	}
 
-	// the arrangement to go with a prefs object: a saved preset's own (null
-	// included — it is the whole view, as saved), otherwise the one on screen,
-	// which a built-in or the custom list keeps as far as its maps allow
+	// the arrangement to go with a prefs object. A preset is a whole view:
+	// applying a saved one brings its own arrangement (none, if it was saved
+	// with nothing popped out), and a built-in has none, so everything docks.
+	// Only the custom list keeps what is on screen, as far as its maps allow —
+	// that is an edit of the current view, not a switch to another one
 	function layoutForPrefs(prefs) {
+		if (prefs.preset === 'custom') return sanitizeSnapLayout(snapLayout(), prefsMapIds(prefs));
 		const preset = userPresets.find(p => p.id === prefs.preset);
-		const layout = preset && 'layout' in preset ? preset.layout : snapLayout();
-		return sanitizeSnapLayout(layout, prefsMapIds(prefs));
+		return preset ? sanitizeSnapLayout(preset.layout, prefsMapIds(prefs)) : null;
 	}
 
 	// the arrangement on screen, held to the list in the picker (a map unchecked
