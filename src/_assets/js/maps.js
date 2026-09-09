@@ -1195,6 +1195,7 @@ function popoutMap(block) {
 	placePopout(block, rect.left, rect.top);
 	raisePopout(block);
 	block.querySelectorAll('.po-btn').forEach(btn => setPopoutButton(btn, true));
+	persistSnapLayout();
 }
 
 // iframes have no intrinsic aspect, so their widgets resize in both dimensions;
@@ -1215,6 +1216,7 @@ function dockMap(block) {
 	if (block._gap) block._gap.remove();
 	delete block._gap;
 	block.querySelectorAll('.po-btn').forEach(btn => setPopoutButton(btn, false));
+	persistSnapLayout();
 }
 
 function dockAllPopouts() {
@@ -1295,6 +1297,7 @@ function dragPopout(block, e) {
 	}, () => {
 		showSnapPreview(null);
 		if (target) snapPane(block, target.side, target.index);
+		else persistSnapLayout();
 	});
 }
 
@@ -1328,7 +1331,7 @@ function resizePopout(block, dir, e) {
 		// the laid-out height, exact for locked widgets where it follows the width
 		h = block.offsetHeight;
 		placePopout(block, dir.includes('w') ? start.right - w : start.left, dir.includes('n') ? start.bottom - h : start.top);
-	});
+	}, persistSnapLayout);
 }
 
 document.addEventListener('pointerdown', (e) => {
@@ -1521,7 +1524,7 @@ function unsnapPane(block) {
 	POPOUT_HANDLES.forEach(dir => block.appendChild(el('div', { class: `po-h po-h-${dir}`, 'data-dir': dir })));
 	if (!col.panes.length) dropSnapColumn(col);
 	layoutSnapColumns();
-	persistSnapLayout();
+	// not persisted here: the callers (a drag, a dock, a move between columns) end in a state of their own
 }
 
 function dropSnapColumn(col) {
@@ -1713,6 +1716,22 @@ function snapLayout() {
 			panes: col.panes.map(p => ({ id: p.block.dataset.mapId, share: roundFraction(p.share) }))
 		};
 	});
+	// widgets floating over the page, bottom to top, so they stack the same
+	// way again; a locked one has no height of its own to store
+	const floating = [...document.querySelectorAll('.map-block.popout:not(.snapped)')]
+		.sort((a, b) => (Number(a.style.zIndex) || 0) - (Number(b.style.zIndex) || 0))
+		.map(block => {
+			const rect = block.getBoundingClientRect();
+			const entry = {
+				id: block.dataset.mapId,
+				left: roundFraction(rect.left / viewportWidth()),
+				top: roundFraction(rect.top / viewportHeight()),
+				width: roundFraction(rect.width / viewportWidth())
+			};
+			if (block.classList.contains('free')) entry.height = roundFraction(rect.height / viewportHeight());
+			return entry;
+		});
+	if (floating.length) layout.floating = floating;
 	return Object.keys(layout).length ? layout : null;
 }
 
@@ -1750,6 +1769,19 @@ function sanitizeSnapLayout(layout, mapIds) {
 		clean.right.width = roundFraction(1 - clean.left.width);
 		if (clean.right.width <= 0) delete clean.right;
 	}
+	const fraction = (n, max = 1) => Number.isFinite(n) && n >= 0 && n <= max;
+	if (Array.isArray(layout.floating)) {
+		const floating = layout.floating
+			.filter(f => f && typeof f.id === 'string' && mapIds.includes(f.id) && !seen.has(f.id)
+				&& fraction(Number(f.left)) && fraction(Number(f.top)) && fraction(Number(f.width)) && Number(f.width) > 0)
+			.map(f => {
+				seen.add(f.id);
+				const entry = { id: f.id, left: roundFraction(Number(f.left)), top: roundFraction(Number(f.top)), width: roundFraction(Number(f.width)) };
+				if (fraction(Number(f.height)) && Number(f.height) > 0) entry.height = roundFraction(Number(f.height));
+				return entry;
+			});
+		if (floating.length) clean.floating = floating;
+	}
 	return Object.keys(clean).length ? clean : null;
 }
 
@@ -1764,6 +1796,7 @@ function sameSnapLayout(a, b) {
 function applySnapLayout(layout) {
 	resetSnapColumns();
 	if (!layout || !POPOUT_MQ.matches) return;
+	snapPersistPaused = true; // what is being applied is already what is stored
 	['left', 'right'].forEach(side => {
 		const stored = layout[side];
 		if (!stored) return;
@@ -1780,6 +1813,17 @@ function applySnapLayout(layout) {
 	const { left, right } = snapColumns;
 	if (left.panes.length && right.panes.length && left.width + right.width > 1) right.width = 1 - left.width;
 	layoutSnapColumns();
+	(layout.floating || []).forEach(({ id, left, top, width, height }) => {
+		const block = document.querySelector(`.map-block[data-map-id="${CSS.escape(id)}"]`);
+		if (!block || block.classList.contains('popout')) return;
+		popoutMap(block);
+		block.style.width = `${Math.round(clamp(width * viewportWidth(), POPOUT_MIN_WIDTH, Math.min(POPOUT_MAX_WIDTH, viewportWidth() - POPOUT_MARGIN)))}px`;
+		if (block.classList.contains('free') && height)
+			block.style.height = `${Math.round(clamp(height * viewportHeight(), POPOUT_MIN_HEIGHT, viewportHeight() - POPOUT_MARGIN))}px`;
+		placePopout(block, left * viewportWidth(), top * viewportHeight());
+		raisePopout(block); // in stored order, so the last one is on top again
+	});
+	snapPersistPaused = false;
 }
 
 function applyStoredSnapLayout() {
@@ -1810,6 +1854,9 @@ function persistSnapLayout() {
 		else delete prefs.layout;
 		saveMapPrefs(prefs);
 	}
+	// the settings panel, if open, names the arrangement and offers Ažuriraj off it
+	const panel = document.getElementById('mapSettings');
+	if (panel && !panel.hidden && panel._onLayoutChange) panel._onLayoutChange();
 }
 
 // a fullscreen map fills its container (CSS off --snap-l/--snap-r and the
@@ -2128,17 +2175,21 @@ function buildMapSettings(panel) {
 		layoutDiv.hidden = !layout;
 		if (!layout) return;
 		const parts = [];
-		if (layout.left) parts.push(`${layout.left.panes.length} lijevo`);
-		if (layout.right) parts.push(`${layout.right.panes.length} desno`);
+		if (layout.left) parts.push(`lijevo ${layout.left.panes.length}`);
+		if (layout.right) parts.push(`desno ${layout.right.panes.length}`);
+		if (layout.floating) parts.push(`u prozoru ${layout.floating.length}`);
 		const backLink = el('a', { text: 'Vrati sve' });
-		backLink.addEventListener('click', () => {
-			dockAllPopouts();
-			renderLayoutLine();
-			renderManage(); // Ažuriraj may hang off the arrangement
-		});
+		backLink.addEventListener('click', dockAllPopouts); // the change comes back through _onLayoutChange
 		layoutDiv.append(el('span', { text: `Izdvojene karte: ${parts.join(', ')}` }), backLink);
 	}
 	renderLayoutLine();
+
+	// the arrangement changes behind the open panel — a map popped out, a pane
+	// snapped, everything put back — and the line and Ažuriraj follow at once
+	panel._onLayoutChange = () => {
+		renderLayoutLine();
+		renderManage();
+	};
 
 	// ----- saved preset management -----
 
