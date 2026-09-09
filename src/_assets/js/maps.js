@@ -1482,7 +1482,7 @@ function snapPane(block, side, index) {
 	const n = col.panes.length + 1;
 	col.panes.forEach(p => p.share *= (n - 1) / n);
 	col.panes.splice(index, 0, { block, share: 1 / n });
-	block.classList.add('snapped');
+	block.classList.add('snapped', `snapped-${side}`); // the side places the pane's fullscreen (CSS)
 	block.querySelectorAll('.po-h').forEach(h => h.remove());
 	layoutSnapColumns();
 }
@@ -1494,7 +1494,7 @@ function unsnapPane(block) {
 	col.panes = col.panes.filter(p => p.block !== block);
 	const total = col.panes.reduce((sum, p) => sum + p.share, 0);
 	col.panes.forEach(p => p.share /= total);
-	block.classList.remove('snapped');
+	block.classList.remove('snapped', `snapped-${col.side}`);
 	block.style.width = block._float.width;
 	block.style.height = block._float.height;
 	delete block._float;
@@ -1539,6 +1539,8 @@ function layoutSnapColumn(col, seam) {
 	});
 	const edge = col.ui.querySelector('.snap-edge');
 	edge.hidden = seam && col.side === 'right';
+	// a pane's fullscreen fills the column; the dividers would cross it
+	col.ui.classList.toggle('snap-fs', col.panes.some(p => p.block.querySelector('.if1.fullscreen')));
 	edge.classList.toggle('snap-seam', seam && col.side === 'left');
 	edge.title = seam ? 'Širina stupaca · dvoklik vraća stranicu'
 		: isSnapPageHidden() ? 'Širina stupca · dvoklik vraća stranicu'
@@ -1669,6 +1671,12 @@ document.addEventListener('dblclick', (e) => {
 	const edge = e.target.closest && e.target.closest('.snap-edge');
 	if (edge) toggleSnapPage(snapColumns[edge.dataset.side]);
 });
+
+// a fullscreen map fills its container (CSS off --snap-l/--snap-r and the
+// pane's side class); main.js says when one is toggled, so the column can
+// hide its dividers under it — and, when the page's scroll lock takes the
+// scrollbar, the viewport the columns are laid out in has changed width
+document.addEventListener('map-fullscreen', layoutSnapColumns);
 
 // a locked pane's height can change under the fit: a titled slideshow takes
 // its width from the image (so the real height is there once it has loaded)

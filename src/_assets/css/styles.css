@@ -194,11 +194,13 @@ iframe, video {
 }
 
 /* fullscreen takeover: title row pinned to top, map fills the rest */
+/* fullscreen fills the map's container: the page between the snap columns
+   (customize page, the variables are 0 elsewhere), or a snapped pane's column */
 .radartitle.fullscreen {
 	position: fixed;
 	top: 0;
-	left: 0;
-	right: 0;
+	left: var(--snap-l, 0px);
+	right: var(--snap-r, 0px);
 	z-index: 10000;
 	display: flex;
 	align-items: center; /* vertically center the title items in a taller bar */
@@ -220,8 +222,9 @@ iframe, video {
 .if1.fullscreen {
 	position: fixed;
 	top: 23px; /* matches .radartitle height */
-	left: 0;
-	right: 0;
+	left: var(--snap-l, 0px);
+	right: var(--snap-r, 0px);
+	width: auto; /* the .if1 width: 100% would win over right */
 	bottom: 0;
 	padding-top: 0;
 	z-index: 9999;
@@ -413,8 +416,28 @@ body.fs-lock {
 			cursor: ns-resize;
 		}
 
-	/* a fullscreen map inside a pane stacks under the handles otherwise */
-	body.fs-lock .snap-ui {
+	/* a fullscreen map in a pane fills its column, and the page hidden behind
+	   the columns leaves a floating widget's fullscreen the whole viewport */
+	body.snap-full .radartitle.fullscreen,
+	body.snap-full .if1.fullscreen {
+		left: 0;
+		right: 0;
+	}
+
+	.map-block.snapped-left .radartitle.fullscreen,
+	.map-block.snapped-left .if1.fullscreen {
+		left: 0;
+		right: calc(100% - var(--snap-l));
+	}
+
+	.map-block.snapped-right .radartitle.fullscreen,
+	.map-block.snapped-right .if1.fullscreen {
+		left: calc(100% - var(--snap-r));
+		right: 0;
+	}
+
+	/* the dividers would cross a pane's fullscreen; the edge stays, the map follows it */
+	.snap-ui.snap-fs .snap-div {
 		display: none;
 	}
 
