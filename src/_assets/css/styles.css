@@ -805,6 +805,20 @@ body.fs-lock {
 			color: #ff9800;
 		}
 
+	/* the snapped arrangement, named and undoable (desktop only, like the panes) */
+	.map-settings .ms-layout {
+		display: flex;
+		gap: 14px;
+		padding: 6px 0;
+		color: #8a94a8;
+	}
+
+		.map-settings .ms-layout a {
+			cursor: pointer;
+			user-select: none;
+			text-decoration: none;
+		}
+
 	.map-settings .ms-handle {
 		/* touch-action is ignored on non-replaced inline elements, so the
 		   handle must be a box for it to take effect on touch screens */

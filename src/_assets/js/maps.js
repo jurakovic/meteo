@@ -668,14 +668,17 @@ function findUserPresetByName(name) {
 }
 
 // saving under an existing name updates that preset — the way to amend a saved
-// view is to edit the list and save it again under the same name
-function storeUserPreset(name, maps) {
+// view is to edit the list and save it again under the same name. The layout
+// (the snapped arrangement, null for none) is part of what is saved: a preset
+// is the whole view, and applying it brings the arrangement back
+function storeUserPreset(name, maps, layout = null) {
 	const existing = findUserPresetByName(name);
 	if (existing) {
 		existing.name = name;
 		existing.maps = maps;
+		existing.layout = layout;
 	} else {
-		userPresets.push({ id: newPresetId(), name: name, maps: maps });
+		userPresets.push({ id: newPresetId(), name: name, maps: maps, layout: layout });
 	}
 	saveUserPresets();
 	return existing || userPresets[userPresets.length - 1];
@@ -704,7 +707,7 @@ function uniquePresetName(name) {
 function deleteUserPreset(id) {
 	const preset = userPresets.find(p => p.id === id);
 	if (preset && getMapPrefs().preset === id)
-		saveMapPrefs({ preset: 'custom', maps: preset.maps.slice() });
+		saveMapPrefs({ preset: 'custom', maps: preset.maps.slice(), layout: getMapPrefs().layout });
 	userPresets = userPresets.filter(p => p.id !== id);
 	saveUserPresets();
 }
@@ -806,10 +809,14 @@ function presetMapIds(presetId) {
 }
 
 function resolveMapIds() {
-	const prefs = getActiveMapPrefs();
-	// deduped as well as filtered: a hand-crafted ?v= can name the same map
-	// twice, and two rendered copies would share one data-slideshow-id — the
-	// arrows drive whichever comes first while both sets of indicators light up
+	return prefsMapIds(getActiveMapPrefs());
+}
+
+// the list a preferences object names — deduped as well as filtered: a
+// hand-crafted ?v= can name the same map twice, and two rendered copies would
+// share one data-slideshow-id (the arrows drive whichever comes first while
+// both sets of indicators light up)
+function prefsMapIds(prefs) {
 	if (prefs.preset === 'custom' && Array.isArray(prefs.maps))
 		return [...new Set(prefs.maps)].filter(id => MAP_CATALOG.some(map => map.id === id));
 	return presetMapIds(prefs.preset) || presetMapIds('zadano');
@@ -847,7 +854,9 @@ function decodeMapView(value) {
 // a saved preset's id means nothing to a recipient, so it travels as its
 // contents plus its name — the name is only a label to save it under
 function presetSharePrefs(preset) {
-	return { preset: 'custom', maps: preset.maps.slice(), name: preset.name };
+	const prefs = { preset: 'custom', maps: preset.maps.slice(), name: preset.name };
+	if (preset.layout) prefs.layout = preset.layout;
+	return prefs;
 }
 
 // same maps in the same order: the render order is part of what a preset is,
@@ -1347,7 +1356,10 @@ document.addEventListener('pointerdown', (e) => {
 
 // widgets are a desktop thing: shrinking below the breakpoint puts them back
 POPOUT_MQ.addEventListener('change', (e) => {
-	if (!e.matches) dockAllPopouts();
+	if (e.matches) return;
+	snapPersistPaused = true; // the stored arrangement is kept for a desktop window
+	dockAllPopouts();
+	snapPersistPaused = false;
 });
 
 // a smaller window must not strand a widget off-screen
@@ -1470,22 +1482,29 @@ function snapPane(block, side, index) {
 	const col = snapColumns[side];
 	if (col.panes.length >= SNAP_MAX_PANES) return;
 	const slot = snapSlotRect(block, { side, index });
-	if (!col.panes.length) {
-		col.width = slot.width / viewportWidth();
-		col.node = el('div', { class: `snap-col snap-${side}` });
-		col.ui = el('div', { class: `snap-ui snap-${side}` }, [
-			el('div', { class: 'snap-edge', 'data-side': side })
+	if (!col.panes.length) col.width = slot.width / viewportWidth();
+	const n = col.panes.length + 1;
+	col.panes.forEach(p => p.share *= (n - 1) / n);
+	attachSnapPane(col, block, index, 1 / n);
+	layoutSnapColumns();
+	persistSnapLayout();
+}
+
+// a popped-out block becomes a pane of the column, at index with that height
+// share; the first one brings the column's ground and handles with it
+function attachSnapPane(col, block, index, share) {
+	if (!col.node) {
+		col.node = el('div', { class: `snap-col snap-${col.side}` });
+		col.ui = el('div', { class: `snap-ui snap-${col.side}` }, [
+			el('div', { class: 'snap-edge', 'data-side': col.side })
 		]);
 		document.body.append(col.node, col.ui);
 	}
 	// the floating size comes back when the pane leaves the column
 	block._float = { width: block.style.width, height: block.style.height };
-	const n = col.panes.length + 1;
-	col.panes.forEach(p => p.share *= (n - 1) / n);
-	col.panes.splice(index, 0, { block, share: 1 / n });
-	block.classList.add('snapped', `snapped-${side}`); // the side places the pane's fullscreen (CSS)
+	col.panes.splice(index, 0, { block, share });
+	block.classList.add('snapped', `snapped-${col.side}`); // the side places the pane's fullscreen (CSS)
 	block.querySelectorAll('.po-h').forEach(h => h.remove());
-	layoutSnapColumns();
 }
 
 function unsnapPane(block) {
@@ -1502,6 +1521,7 @@ function unsnapPane(block) {
 	POPOUT_HANDLES.forEach(dir => block.appendChild(el('div', { class: `po-h po-h-${dir}`, 'data-dir': dir })));
 	if (!col.panes.length) dropSnapColumn(col);
 	layoutSnapColumns();
+	persistSnapLayout();
 }
 
 function dropSnapColumn(col) {
@@ -1614,7 +1634,7 @@ function resizeSnapColumn(col, e) {
 		if (isSnapPageHidden() && !snapPageWidths && before.left + before.right < 0.999) snapPageWidths = before;
 		if (!isSnapPageHidden()) snapPageWidths = null;
 		layoutSnapColumns();
-	});
+	}, persistSnapLayout);
 }
 
 // the seam between two columns that meet moves width from one to the other
@@ -1626,7 +1646,7 @@ function resizeSnapSeam(e) {
 		left.width = px / viewportWidth();
 		right.width = 1 - left.width;
 		layoutSnapColumns();
-	});
+	}, persistSnapLayout);
 }
 
 // double-click on an edge: hide the page behind the columns — this column
@@ -1646,6 +1666,7 @@ function toggleSnapPage(col) {
 		snapPageWidths = null;
 	}
 	layoutSnapColumns();
+	persistSnapLayout();
 }
 
 // the divider above pane i moves height between it and the pane above
@@ -1658,7 +1679,7 @@ function resizeSnapRow(col, i, e) {
 		above.share = clamp(start + dy / viewportHeight(), min, total - min);
 		below.share = total - above.share;
 		layoutSnapColumns();
-	});
+	}, persistSnapLayout);
 }
 
 function snapHandlePointerDown(handle, e) {
@@ -1674,6 +1695,122 @@ document.addEventListener('dblclick', (e) => {
 	const edge = e.target.closest && e.target.closest('.snap-edge');
 	if (edge) toggleSnapPage(snapColumns[edge.dataset.side]);
 });
+
+// ---------- snap layout: remembered and shared ----------
+
+// the arrangement as data: per side the column width and the panes as map
+// ids with their height shares, every number a fraction of the viewport, so
+// another window or screen gets the proportions. Null when nothing is
+// snapped. It rides in mapPrefs next to the map list, in a saved preset next
+// to its maps, and in the ?v= payload — always a subset of the map list it
+// sits beside, which is what sanitizeSnapLayout() holds it to on the way back.
+function snapLayout() {
+	const layout = {};
+	Object.values(snapColumns).forEach(col => {
+		if (!col.panes.length) return;
+		layout[col.side] = {
+			width: roundFraction(col.width),
+			panes: col.panes.map(p => ({ id: p.block.dataset.mapId, share: roundFraction(p.share) }))
+		};
+	});
+	return Object.keys(layout).length ? layout : null;
+}
+
+function roundFraction(n) {
+	return Math.round(n * 10000) / 10000;
+}
+
+// rebuilt rather than trusted (storage, links, a saved entry): a pane must
+// name a map in the list, once across both columns, up to the cap; shares are
+// renormalised; the two widths are held to the viewport. A map dropped from
+// the list leaves the layout, and an emptied column with it
+function sanitizeSnapLayout(layout, mapIds) {
+	if (!layout || typeof layout !== 'object') return null;
+	const clean = {};
+	const seen = new Set();
+	['left', 'right'].forEach(side => {
+		const col = layout[side];
+		if (!col || typeof col !== 'object' || !Array.isArray(col.panes)) return;
+		const width = Number(col.width);
+		if (!(width > 0 && width <= 1)) return;
+		const panes = col.panes
+			.filter(p => p && typeof p.id === 'string' && mapIds.includes(p.id) && !seen.has(p.id))
+			.slice(0, SNAP_MAX_PANES)
+			.map(p => {
+				seen.add(p.id);
+				const share = Number(p.share);
+				return { id: p.id, share: share > 0 && Number.isFinite(share) ? share : 1 };
+			});
+		if (!panes.length) return;
+		const total = panes.reduce((sum, p) => sum + p.share, 0);
+		panes.forEach(p => { p.share = roundFraction(p.share / total); });
+		clean[side] = { width: roundFraction(width), panes };
+	});
+	if (clean.left && clean.right && clean.left.width + clean.right.width > 1) {
+		clean.right.width = roundFraction(1 - clean.left.width);
+		if (clean.right.width <= 0) delete clean.right;
+	}
+	return Object.keys(clean).length ? clean : null;
+}
+
+function sameSnapLayout(a, b) {
+	return JSON.stringify(a || null) === JSON.stringify(b || null);
+}
+
+// the columns from a (sanitized) layout, after a render: each pane is popped
+// out and attached to its column as it stands, then the widths and shares are
+// set as stored. Desktop only, like the gestures — on a phone the layout is
+// carried, not shown
+function applySnapLayout(layout) {
+	resetSnapColumns();
+	if (!layout || !POPOUT_MQ.matches) return;
+	['left', 'right'].forEach(side => {
+		const stored = layout[side];
+		if (!stored) return;
+		const col = snapColumns[side];
+		stored.panes.forEach(({ id, share }) => {
+			const block = document.querySelector(`.map-block[data-map-id="${CSS.escape(id)}"]`);
+			if (!block || block.classList.contains('popout')) return;
+			popoutMap(block);
+			attachSnapPane(col, block, col.panes.length, share);
+		});
+		if (!col.panes.length) return;
+		col.width = clamp(stored.width * viewportWidth(), SNAP_MIN_WIDTH, viewportWidth()) / viewportWidth();
+	});
+	const { left, right } = snapColumns;
+	if (left.panes.length && right.panes.length && left.width + right.width > 1) right.width = 1 - left.width;
+	layoutSnapColumns();
+}
+
+function applyStoredSnapLayout() {
+	applySnapLayout(sanitizeSnapLayout(getActiveMapPrefs().layout, resolveMapIds()));
+}
+
+let snapPersistPaused = false;
+
+// the arrangement is written as it changes — it is direct manipulation, not
+// a form with an apply button — next to the map list it belongs to: into the
+// preferences, or, while a shared view is on, into that view and back into
+// the address bar, so the link stays re-copyable with the arrangement as it
+// is now and a refresh keeps it (the recipient's storage is still never
+// written). Paused while the breakpoint docks everything: that is the window
+// changing, not the arrangement
+function persistSnapLayout() {
+	if (snapPersistPaused) return;
+	const layout = snapLayout();
+	if (sharedMapView) {
+		if (layout) sharedMapView.layout = layout;
+		else delete sharedMapView.layout;
+		const url = new URL(window.location);
+		url.searchParams.set('v', encodeMapView(sharedMapView));
+		history.replaceState(null, '', url);
+	} else {
+		const prefs = getMapPrefs();
+		if (layout) prefs.layout = layout;
+		else delete prefs.layout;
+		saveMapPrefs(prefs);
+	}
+}
 
 // a fullscreen map fills its container (CSS off --snap-l/--snap-r and the
 // pane's side class); main.js says when one is toggled, so the column can
@@ -1954,13 +2091,54 @@ function buildMapSettings(panel) {
 		return { preset: presetId };
 	}
 
+	// the arrangement to go with a prefs object: a saved preset's own (null
+	// included — it is the whole view, as saved), otherwise the one on screen,
+	// which a built-in or the custom list keeps as far as its maps allow
+	function layoutForPrefs(prefs) {
+		const preset = userPresets.find(p => p.id === prefs.preset);
+		const layout = preset && 'layout' in preset ? preset.layout : snapLayout();
+		return sanitizeSnapLayout(layout, prefsMapIds(prefs));
+	}
+
+	// the arrangement on screen, held to the list in the picker (a map unchecked
+	// there cannot stay a pane)
+	function selectedLayout() {
+		return sanitizeSnapLayout(snapLayout(), selectedMapIds());
+	}
+
 	// the panel's own share button carries whatever is on screen, expanding a
 	// saved preset the same way the per-preset links do
 	function readSharePrefs() {
 		const prefs = readPanelPrefs();
 		const preset = userPresets.find(p => p.id === prefs.preset);
-		return preset ? presetSharePrefs(preset) : prefs;
+		if (preset) return presetSharePrefs(preset);
+		const layout = layoutForPrefs(prefs);
+		if (layout) prefs.layout = layout;
+		return prefs;
 	}
+
+	// what is snapped, and a way to put it all back; shown only while there is
+	// something to say. The line is the panel's only sign that the arrangement
+	// is part of the view a preset saves and a link carries
+	const layoutDiv = el('div', { class: 'ms-layout' });
+
+	function renderLayoutLine() {
+		layoutDiv.replaceChildren();
+		const layout = snapLayout();
+		layoutDiv.hidden = !layout;
+		if (!layout) return;
+		const parts = [];
+		if (layout.left) parts.push(`${layout.left.panes.length} lijevo`);
+		if (layout.right) parts.push(`${layout.right.panes.length} desno`);
+		const backLink = el('a', { text: 'Vrati sve' });
+		backLink.addEventListener('click', () => {
+			dockAllPopouts();
+			renderLayoutLine();
+			renderManage(); // Ažuriraj may hang off the arrangement
+		});
+		layoutDiv.append(el('span', { text: `Izdvojene karte: ${parts.join(', ')}` }), backLink);
+	}
+	renderLayoutLine();
 
 	// ----- saved preset management -----
 
@@ -1977,7 +2155,7 @@ function buildMapSettings(panel) {
 	const saveBtn = el('button', { type: 'button', class: 'btn', text: 'Spremi' });
 
 	function saveCurrentAs(name) {
-		const preset = storeUserPreset(name, selectedMapIds());
+		const preset = storeUserPreset(name, selectedMapIds(), selectedLayout());
 		nameInput.value = '';
 		addingPreset = false; // the form has done its job
 		editingPresetId = preset.id; // the list is now this preset's, so edits from here go back to it
@@ -2069,9 +2247,13 @@ function buildMapSettings(panel) {
 	// redundant: editingPresetId also holds built-in ids (they carry the origin
 	// dot), and a built-in reaching storeUserPreset would fork a saved copy of
 	// itself under its own name rather than update anything.
+	// The arrangement counts as an edit too — it is part of what the preset
+	// stores — but only here: the origin dot on the chip marks a changed list,
+	// which is what the panel itself edits, and a rearranged page still shows
+	// the preset's maps.
 	function hasPendingEdits(preset) {
 		return isUserPresetId(preset.id) && preset.id === editingPresetId
-			&& !sameMapIds(preset.maps, selectedMapIds());
+			&& (!sameMapIds(preset.maps, selectedMapIds()) || !sameSnapLayout(preset.layout, selectedLayout()));
 	}
 
 	// shares the preset as saved — the panel's Podijeli button is the one that
@@ -2131,7 +2313,7 @@ function buildMapSettings(panel) {
 		if (hasPendingEdits(preset)) {
 			firstLink = el('a', { text: 'Ažuriraj' });
 			firstLink.addEventListener('click', () => {
-				storeUserPreset(preset.name, selectedMapIds()); // by name, the one write path
+				storeUserPreset(preset.name, selectedMapIds(), selectedLayout()); // by name, the one write path
 				renderPresets(preset.id); // the list is this preset again, so its chip comes back
 				renderManage();
 			});
@@ -2279,11 +2461,15 @@ function buildMapSettings(panel) {
 
 	const applyBtn = el('button', { type: 'button', class: 'btn', text: 'Primijeni' });
 	applyBtn.addEventListener('click', () => {
-		saveMapPrefs(readPanelPrefs());
+		const prefs = readPanelPrefs();
+		const layout = layoutForPrefs(prefs);
+		if (layout) prefs.layout = layout;
+		saveMapPrefs(prefs);
 		clearSharedMapView(); // the saved preferences take over from the shared link
 		setMapSettingsVisible(panel, false);
 		renderMaps();
 		initDynamicContent();
+		applySnapLayout(layout); // the render dropped the panes; these are the ones to come back
 		scrollToTop(); // the panel collapse leaves the scroll offset mid-page
 	});
 
@@ -2297,6 +2483,7 @@ function buildMapSettings(panel) {
 	// the actions sit right under the render order they act on, rather than at
 	// the far end of the picker and the preset management below it
 	panel.appendChild(presetsDiv);
+	panel.appendChild(layoutDiv);
 	panel.appendChild(selectedDiv);
 	panel.appendChild(el('div', { class: 'ms-actions' }, [applyBtn, shareLink]));
 	panel.appendChild(sortDiv);
@@ -2313,3 +2500,6 @@ if (document.readyState === 'loading') {
 } else {
 	renderMaps();
 }
+// the remembered arrangement, once the maps are there — registered after the
+// render above, and DOMContentLoaded is also when main.js (dlog) has run in dev
+document.addEventListener('DOMContentLoaded', applyStoredSnapLayout);
