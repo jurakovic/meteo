@@ -1214,8 +1214,8 @@ function dockAllPopouts() {
 // keep the whole widget inside the viewport when it fits, else at least its
 // top-left corner so the title bar can always be grabbed
 function placePopout(block, left, top) {
-	const maxLeft = Math.max(0, window.innerWidth - block.offsetWidth);
-	const maxTop = Math.max(0, window.innerHeight - Math.max(block.offsetHeight, POPOUT_TITLE_HEIGHT));
+	const maxLeft = Math.max(0, viewportWidth() - block.offsetWidth);
+	const maxTop = Math.max(0, viewportHeight() - Math.max(block.offsetHeight, POPOUT_TITLE_HEIGHT));
 	block.style.left = `${Math.round(Math.min(Math.max(0, left), maxLeft))}px`;
 	block.style.top = `${Math.round(Math.min(Math.max(0, top), maxTop))}px`;
 }
@@ -1226,6 +1226,16 @@ function raisePopout(block) {
 
 function clamp(value, min, max) {
 	return Math.min(Math.max(value, min), Math.max(min, max));
+}
+
+// the layout viewport: innerWidth counts the vertical scrollbar, under which
+// a widget's right edge (and a right column) would then land
+function viewportWidth() {
+	return document.documentElement.clientWidth;
+}
+
+function viewportHeight() {
+	return document.documentElement.clientHeight;
 }
 
 // a pointer gesture on a widget: move/up listeners on document (mouse only,
@@ -1250,10 +1260,12 @@ function trackPopoutPointer(e, onMove, onEnd) {
 }
 
 // the widget follows the pointer by the point of the title bar it was grabbed
-// at. Near a viewport edge the pointer picks a snap slot (previewed, taken on
-// release); a snapped pane holds its place until the drag is decidedly one,
-// then floats again at the size it had before it snapped, the title bar kept
-// under the pointer
+// at. Once its edge reaches a viewport edge (wherever it is held — the place
+// the pointer asks for is checked, not the clamped one, so pushing on past
+// the edge still counts) it has a snap slot, previewed and taken on release;
+// a snapped pane holds its place until the drag is decidedly one, then floats
+// again at the size it had before it snapped, the title bar kept under the
+// pointer
 function dragPopout(block, e) {
 	const rect = block.getBoundingClientRect();
 	const grab = { x: e.clientX - rect.left, y: e.clientY - rect.top };
@@ -1266,8 +1278,9 @@ function dragPopout(block, e) {
 			snapped = false;
 			grab.x = Math.min(grab.x, block.offsetWidth - POPOUT_TITLE_HEIGHT);
 		}
-		placePopout(block, ev.clientX - grab.x, ev.clientY - grab.y);
-		target = snapTargetAt(ev.clientX, ev.clientY);
+		const left = ev.clientX - grab.x;
+		placePopout(block, left, ev.clientY - grab.y);
+		target = Math.hypot(dx, dy) >= SNAP_ARM ? snapTargetAt(left, left + block.offsetWidth, ev.clientY) : null;
 		showSnapPreview(target ? snapSlotRect(block, target) : null);
 	}, () => {
 		showSnapPreview(null);
@@ -1284,8 +1297,8 @@ function resizePopout(block, dir, e) {
 	const start = block.getBoundingClientRect();
 	const free = block.classList.contains('free');
 	const ratio = start.width / start.height;
-	const maxWidth = Math.min(POPOUT_MAX_WIDTH, window.innerWidth - POPOUT_MARGIN);
-	const maxHeight = window.innerHeight - POPOUT_MARGIN;
+	const maxWidth = Math.min(POPOUT_MAX_WIDTH, viewportWidth() - POPOUT_MARGIN);
+	const maxHeight = viewportHeight() - POPOUT_MARGIN;
 	trackPopoutPointer(e, (dx, dy) => {
 		let w = start.width, h = start.height;
 		if (dir.includes('e')) w = start.width + dx;
@@ -1313,9 +1326,7 @@ document.addEventListener('pointerdown', (e) => {
 	if (snapHandle) {
 		if (e.button !== 0) return;
 		e.preventDefault();
-		const col = snapColumns[snapHandle.dataset.side];
-		if (snapHandle.classList.contains('snap-edge')) resizeSnapColumn(col, e);
-		else resizeSnapRow(col, Number(snapHandle.dataset.index), e);
+		snapHandlePointerDown(snapHandle, e);
 		return;
 	}
 	const block = e.target.closest('.map-block.popout');
@@ -1364,9 +1375,16 @@ window.addEventListener('resize', () => {
 // panes); .snap-col paints the column's ground below them. A free (iframe)
 // pane fills its slot; a locked one takes the slot's width, shrinks until its
 // height fits and sits centred in the slot.
+//
+// The columns can take the whole width — two of them meeting, or one at full
+// width — which hides the page (body.snap-full also drops its scrollbar). An
+// edge dragged that close snaps shut; a double-click on an edge shuts it too,
+// or opens it back to the widths from before. Two columns that meet share one
+// seam handle that moves width between them.
 const SNAP_MAX_PANES = 3;
-const SNAP_EDGE = 24; // the pointer this close to a viewport edge targets its column
+const SNAP_EDGE = 24; // a widget edge this close to a viewport edge targets its column; a column edge this close to the far side shuts
 const SNAP_DETACH = 40; // drag distance before a snapped pane floats again
+const SNAP_ARM = 4; // drag distance before a floating widget can snap (a click on a parked widget must not)
 const SNAP_MIN_WIDTH = POPOUT_MIN_WIDTH;
 const SNAP_MIN_HEIGHT = POPOUT_MIN_HEIGHT + POPOUT_TITLE_HEIGHT;
 const snapColumns = {
@@ -1374,6 +1392,7 @@ const snapColumns = {
 	right: { side: 'right', width: null, panes: [], node: null, ui: null }
 };
 let snapPreview = null;
+let snapPageWidths = null; // the column widths before the page was hidden, for the way back
 
 function isSnapped(block) {
 	return block.classList.contains('snapped');
@@ -1387,20 +1406,30 @@ function otherSnapColumn(col) {
 	return col.side === 'left' ? snapColumns.right : snapColumns.left;
 }
 
-function snapColumnPx(col) {
-	return col.panes.length ? Math.round(col.width * window.innerWidth) : 0;
+function snapColumnWidth(col) {
+	return col.panes.length ? col.width : 0;
 }
 
-// where the pointer would drop a widget: a column when at its edge, the slot
-// from the height split into as many equal bands as the column would then
-// hold — the preview shows the exact slot, this only picks it
-function snapTargetAt(x, y) {
-	const side = x <= SNAP_EDGE ? 'left' : x >= window.innerWidth - SNAP_EDGE ? 'right' : null;
+function snapColumnPx(col) {
+	return Math.round(snapColumnWidth(col) * viewportWidth());
+}
+
+// the columns leave the page no width (a rounding hair short of it counts)
+function isSnapPageHidden() {
+	return snapColumnWidth(snapColumns.left) + snapColumnWidth(snapColumns.right) >= 0.999;
+}
+
+// where a widget spanning left..right would drop: a column when its edge is
+// at the viewport's, the slot from the pointer's height split into as many
+// equal bands as the column would then hold — the preview shows the exact
+// slot, this only picks it
+function snapTargetAt(left, right, y) {
+	const side = left <= SNAP_EDGE ? 'left' : right >= viewportWidth() - SNAP_EDGE ? 'right' : null;
 	if (!side) return null;
 	const col = snapColumns[side];
 	if (col.panes.length >= SNAP_MAX_PANES) return null;
 	const n = col.panes.length + 1;
-	const index = Math.min(n - 1, Math.floor(y / (window.innerHeight / n)));
+	const index = Math.min(n - 1, Math.floor(y / (viewportHeight() / n)));
 	return { side, index };
 }
 
@@ -1411,14 +1440,14 @@ function snapSlotRect(block, { side, index }) {
 	const col = snapColumns[side];
 	const width = col.panes.length
 		? snapColumnPx(col)
-		: clamp(block.offsetWidth, SNAP_MIN_WIDTH, window.innerWidth - snapColumnPx(otherSnapColumn(col)));
+		: clamp(block.offsetWidth, SNAP_MIN_WIDTH, viewportWidth() - snapColumnPx(otherSnapColumn(col)));
 	const n = col.panes.length + 1;
 	const before = col.panes.slice(0, index).reduce((sum, p) => sum + p.share, 0) * (n - 1) / n;
 	return {
-		left: side === 'left' ? 0 : window.innerWidth - width,
-		top: Math.round(before * window.innerHeight),
+		left: side === 'left' ? 0 : viewportWidth() - width,
+		top: Math.round(before * viewportHeight()),
 		width,
-		height: Math.round(window.innerHeight / n)
+		height: Math.round(viewportHeight() / n)
 	};
 }
 
@@ -1441,10 +1470,10 @@ function snapPane(block, side, index) {
 	if (col.panes.length >= SNAP_MAX_PANES) return;
 	const slot = snapSlotRect(block, { side, index });
 	if (!col.panes.length) {
-		col.width = slot.width / window.innerWidth;
+		col.width = slot.width / viewportWidth();
 		col.node = el('div', { class: `snap-col snap-${side}` });
 		col.ui = el('div', { class: `snap-ui snap-${side}` }, [
-			el('div', { class: 'snap-edge', 'data-side': side, title: 'Širina stupca' })
+			el('div', { class: 'snap-edge', 'data-side': side })
 		]);
 		document.body.append(col.node, col.ui);
 	}
@@ -1484,29 +1513,41 @@ function dropSnapColumn(col) {
 // the panes are gone with the tbody they were part of
 function resetSnapColumns() {
 	Object.values(snapColumns).forEach(dropSnapColumn);
+	snapPageWidths = null;
 	layoutSnapColumns();
 }
 
 function layoutSnapColumns() {
+	// first: with the page hidden its scrollbar goes, which widens the viewport the columns are laid out in
+	document.body.classList.toggle('snap-full', isSnapPageHidden());
 	const root = document.documentElement.style;
 	root.setProperty('--snap-l', `${snapColumnPx(snapColumns.left)}px`);
 	root.setProperty('--snap-r', `${snapColumnPx(snapColumns.right)}px`);
-	Object.values(snapColumns).forEach(layoutSnapColumn);
+	const seam = isSnapPageHidden() && snapColumns.left.panes.length && snapColumns.right.panes.length;
+	Object.values(snapColumns).forEach(col => layoutSnapColumn(col, seam));
 }
 
-function layoutSnapColumn(col) {
+// with two columns meeting, the left edge handle is the seam between them and
+// the right one steps aside
+function layoutSnapColumn(col, seam) {
 	const width = snapColumnPx(col);
 	if (!width) return;
-	const x = col.side === 'left' ? 0 : window.innerWidth - width;
+	const x = col.side === 'left' ? 0 : viewportWidth() - width;
 	[col.node, col.ui].forEach(node => {
 		node.style.left = `${x}px`;
 		node.style.width = `${width}px`;
 	});
+	const edge = col.ui.querySelector('.snap-edge');
+	edge.hidden = seam && col.side === 'right';
+	edge.classList.toggle('snap-seam', seam && col.side === 'left');
+	edge.title = seam ? 'Širina stupaca · dvoklik vraća stranicu'
+		: isSnapPageHidden() ? 'Širina stupca · dvoklik vraća stranicu'
+		: 'Širina stupca · dvoklik sakriva stranicu';
 	col.ui.querySelectorAll('.snap-div').forEach(d => d.remove());
 	let y = 0;
 	col.panes.forEach((pane, i) => {
 		const last = i === col.panes.length - 1;
-		const height = last ? window.innerHeight - y : Math.round(pane.share * window.innerHeight);
+		const height = last ? viewportHeight() - y : Math.round(pane.share * viewportHeight());
 		if (i > 0) {
 			col.ui.appendChild(el('div', {
 				class: 'snap-div', 'data-side': col.side, 'data-index': i, style: `top: ${y}px;`, title: 'Visina karata'
@@ -1520,7 +1561,10 @@ function layoutSnapColumn(col) {
 // a free pane fills the slot; a locked one sizes its height from its width,
 // so it gets the slot's width and is shrunk until its height fits — the title
 // bar's fixed height makes the scale slightly nonlinear, the second pass
-// settles it (the same fit the grid page used)
+// settles it (the same fit the grid page used). Then the block is pulled in
+// to what its content spans: an image stops at its natural width and a map
+// with a maxWidth at that, and the title bar and indicators must not run on
+// past them across a wider column
 function fitSnapPane(block, x, y, width, height) {
 	block.style.width = `${width}px`;
 	if (block.classList.contains('free')) {
@@ -1531,20 +1575,72 @@ function fitSnapPane(block, x, y, width, height) {
 			w = Math.floor(w * (height - POPOUT_TITLE_HEIGHT) / (block.offsetHeight - POPOUT_TITLE_HEIGHT));
 			block.style.width = `${w}px`;
 		}
+		const content = snapContentWidth(block);
+		if (content && content < block.offsetWidth - 1) block.style.width = `${Math.ceil(content)}px`;
 	}
 	block.style.left = `${Math.round(x + (width - block.offsetWidth) / 2)}px`;
 	block.style.top = `${Math.round(y + (height - block.offsetHeight) / 2)}px`;
 }
 
-// the inner edge: the column may take everything the other one leaves
+// the narrowest of what is on screen and constrained on its own: a title bar
+// carries the map's maxWidth, an image or video its natural width (an image
+// still loading measures 0 and does not count — the load listener below fits
+// again once it has)
+function snapContentWidth(block) {
+	const widths = [...block.querySelectorAll('.radartitle, img, video')]
+		.map(node => node.getBoundingClientRect().width)
+		.filter(w => w > 0);
+	return widths.length ? Math.min(...widths) : 0;
+}
+
+// the inner edge: the column may take everything the other one leaves, and
+// close to that it snaps shut, hiding the page (the widths from before are
+// kept for the double-click back)
 function resizeSnapColumn(col, e) {
 	const start = snapColumnPx(col);
-	const max = window.innerWidth - snapColumnPx(otherSnapColumn(col));
+	const max = viewportWidth() - snapColumnPx(otherSnapColumn(col));
+	const before = { left: snapColumnWidth(snapColumns.left), right: snapColumnWidth(snapColumns.right) };
 	trackPopoutPointer(e, (dx) => {
-		const px = clamp(col.side === 'left' ? start + dx : start - dx, SNAP_MIN_WIDTH, max);
-		col.width = px / window.innerWidth;
+		let px = clamp(col.side === 'left' ? start + dx : start - dx, SNAP_MIN_WIDTH, max);
+		if (px >= max - SNAP_EDGE) px = max;
+		const width = px / viewportWidth();
+		// exactly what the other leaves: the fractions have to sum to one for the hidden state to read
+		col.width = px === max ? 1 - snapColumnWidth(otherSnapColumn(col)) : width;
+		if (isSnapPageHidden() && !snapPageWidths && before.left + before.right < 0.999) snapPageWidths = before;
+		if (!isSnapPageHidden()) snapPageWidths = null;
 		layoutSnapColumns();
 	});
+}
+
+// the seam between two columns that meet moves width from one to the other
+function resizeSnapSeam(e) {
+	const { left, right } = snapColumns;
+	const start = snapColumnPx(left);
+	trackPopoutPointer(e, (dx) => {
+		const px = clamp(start + dx, SNAP_MIN_WIDTH, viewportWidth() - SNAP_MIN_WIDTH);
+		left.width = px / viewportWidth();
+		right.width = 1 - left.width;
+		layoutSnapColumns();
+	});
+}
+
+// double-click on an edge: hide the page behind the columns — this column
+// takes what the other leaves — or bring it back, to the widths from before
+// the page was hidden, else with a gap wide enough for the page's table
+function toggleSnapPage(col) {
+	const other = otherSnapColumn(col);
+	if (!isSnapPageHidden()) {
+		snapPageWidths = { left: snapColumnWidth(snapColumns.left), right: snapColumnWidth(snapColumns.right) };
+		col.width = 1 - snapColumnWidth(other);
+	} else if (snapPageWidths && snapPageWidths.left + snapPageWidths.right < 0.999) {
+		[snapColumns.left, snapColumns.right].forEach(c => { if (c.panes.length && snapPageWidths[c.side]) c.width = snapPageWidths[c.side]; });
+		snapPageWidths = null;
+	} else {
+		const gap = Math.min(0.5, POPOUT_MAX_WIDTH / viewportWidth());
+		[snapColumns.left, snapColumns.right].forEach(c => { if (c.panes.length) c.width *= 1 - gap; });
+		snapPageWidths = null;
+	}
+	layoutSnapColumns();
 }
 
 // the divider above pane i moves height between it and the pane above
@@ -1552,13 +1648,27 @@ function resizeSnapRow(col, i, e) {
 	const above = col.panes[i - 1], below = col.panes[i];
 	if (!above || !below) return;
 	const start = above.share, total = above.share + below.share;
-	const min = SNAP_MIN_HEIGHT / window.innerHeight;
+	const min = SNAP_MIN_HEIGHT / viewportHeight();
 	trackPopoutPointer(e, (dx, dy) => {
-		above.share = clamp(start + dy / window.innerHeight, min, total - min);
+		above.share = clamp(start + dy / viewportHeight(), min, total - min);
 		below.share = total - above.share;
 		layoutSnapColumns();
 	});
 }
+
+function snapHandlePointerDown(handle, e) {
+	const col = snapColumns[handle.dataset.side];
+	if (handle.classList.contains('snap-div')) resizeSnapRow(col, Number(handle.dataset.index), e);
+	else if (handle.classList.contains('snap-seam')) resizeSnapSeam(e);
+	else resizeSnapColumn(col, e);
+}
+
+// the drag's preventDefault on pointerdown leaves click and dblclick alone,
+// and the browser already tells a double-click from two drags apart
+document.addEventListener('dblclick', (e) => {
+	const edge = e.target.closest && e.target.closest('.snap-edge');
+	if (edge) toggleSnapPage(snapColumns[edge.dataset.side]);
+});
 
 // a locked pane's height can change under the fit: a titled slideshow takes
 // its width from the image (so the real height is there once it has loaded)
