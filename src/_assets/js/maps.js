@@ -1676,7 +1676,14 @@ document.addEventListener('dblclick', (e) => {
 // pane's side class); main.js says when one is toggled, so the column can
 // hide its dividers under it — and, when the page's scroll lock takes the
 // scrollbar, the viewport the columns are laid out in has changed width
-document.addEventListener('map-fullscreen', layoutSnapColumns);
+document.addEventListener('map-fullscreen', () => {
+	// only the bar and the map move to the fullscreen place; the widget's box
+	// would stay behind, an empty frame over whatever it was floating on
+	document.querySelectorAll('.map-block.popout').forEach(block => {
+		block.classList.toggle('fs-host', !!block.querySelector('.if1.fullscreen'));
+	});
+	layoutSnapColumns();
+});
 
 // a locked pane's height can change under the fit: a titled slideshow takes
 // its width from the image (so the real height is there once it has loaded)

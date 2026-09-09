@@ -61,10 +61,11 @@
 		.snap-div{left:0;right:0;height:8px;margin-top:-4px;cursor:ns-resize}body.snap-full .if1.fullscreen,body.snap-full .radartitle.fullscreen{
 		left:0;right:0}.map-block.snapped-left .if1.fullscreen,.map-block.snapped-left .radartitle.fullscreen{left:0;right:
 		calc(100% - var(--snap-l))}.map-block.snapped-right .if1.fullscreen,.map-block.snapped-right .radartitle.fullscreen{left:
-		calc(100% - var(--snap-r));right:0}.snap-ui.snap-fs .snap-div{display:none}body.snap-full{overflow:hidden}.map-block.popout.snapped{
-		box-shadow:none}.snap-preview{position:fixed;z-index:8500;box-sizing:border-box;border:2px dashed #4a8de6;background-color:
-		rgba(43,87,151,.25);pointer-events:none}}.links-bottom{display:none;text-align:left;background-color:#3a3f4a;box-sizing:border-box;padding:
-		5px 4px;white-space:nowrap;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;-ms-overflow-style:none}
+		calc(100% - var(--snap-r));right:0}.map-block.popout.fs-host{visibility:hidden}.map-block.popout.fs-host .if1.fullscreen,
+		.map-block.popout.fs-host .radartitle.fullscreen{visibility:visible}.snap-ui.snap-fs .snap-div{display:none}body.snap-full{overflow:hidden}
+		.map-block.popout.snapped{box-shadow:none}.snap-preview{position:fixed;z-index:8500;box-sizing:border-box;border:2px dashed #4a8de6;
+		background-color:rgba(43,87,151,.25);pointer-events:none}}.links-bottom{display:none;text-align:left;background-color:#3a3f4a;box-sizing:
+		border-box;padding:5px 4px;white-space:nowrap;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;-ms-overflow-style:none}
 		.links-bottom::-webkit-scrollbar{display:none}.links-bottom::after,.links-bottom::before{content:"";position:sticky;display:inline-block;
 		width:24px;height:1.4em;margin-top:-.3em;margin-bottom:-.3em;vertical-align:middle;pointer-events:none;opacity:0;transition:opacity .2s ease
 		}.links-bottom::before{left:-4px;margin-right:-24px;background:linear-gradient(to left,transparent,#3a3f4a)}.links-bottom::after{right:-4px;

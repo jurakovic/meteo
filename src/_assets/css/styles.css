@@ -436,6 +436,17 @@ body.fs-lock {
 		right: 0;
 	}
 
+	/* a fullscreen map leaves its widget's box (frame, shadow, handles) behind
+	   where it floated; only the bar and the map are to be seen */
+	.map-block.popout.fs-host {
+		visibility: hidden;
+	}
+
+		.map-block.popout.fs-host .radartitle.fullscreen,
+		.map-block.popout.fs-host .if1.fullscreen {
+			visibility: visible;
+		}
+
 	/* the dividers would cross a pane's fullscreen; the edge stays, the map follows it */
 	.snap-ui.snap-fs .snap-div {
 		display: none;
