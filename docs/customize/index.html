@@ -440,22 +440,41 @@
 		width:Math.max(...e.map(e=>e.right))-t,height:Math.max(...e.map(e=>e.bottom))-a}}function moveGroup(e,t,a,n){
 		const r=Math.min(Math.max(0,t.left+a),Math.max(0,viewportWidth()-t.width)),o=Math.min(Math.max(0,t.top+n),Math.max(0,viewportHeight()-t.height))
 		;a=Math.round(r-t.left),n=Math.round(o-t.top),e.forEach(e=>{e.block.style.left=`${Math.round(e.left+a)}px`,
-		e.block.style.top=`${Math.round(e.top+n)}px`})}function resizePopout(e,t,a){
-		const n=e.getBoundingClientRect(),r=e.classList.contains("free"),o=n.width/n.height,s=Math.min(875,viewportWidth()-16),i=viewportHeight()-16,l=snapColumnOf(e),p=l?[]:magnetRects(e)
-		;trackPopoutPointer(a,(a,d)=>{let c=n.width,u=n.height;if(t.includes("e")&&(c=n.width+a),t.includes("w")&&(c=n.width-a),
-		t.includes("s")&&(u=n.height+d),t.includes("n")&&(u=n.height-d),l){const a=paneMagnetEdges(l,[e]);if(t.includes("s")){
-		const e=magnetEdge(n.top+u,a);null!==e&&(u=e-n.top)}if(t.includes("n")){const e=magnetEdge(n.bottom-u,a);null!==e&&(u=n.bottom-e)}
-		u=clamp(u,120,viewportHeight());const r=snapPaneOf(e);return r.height=u/viewportHeight(),
-		r.top=(t.includes("n")?n.bottom-u:n.top)/viewportHeight(),void layoutSnapColumns()}
-		const m=t.includes("w")?n.right-c:n.left,h=t.includes("n")?n.bottom-u:n.top,g=p.filter(e=>h<e.bottom&&h+u>e.top),f=p.filter(e=>m<e.right&&m+c>e.left),w=(e,t,a)=>{
-		const n=magnetEdge(e,t.concat(a));return null===n?e:n};t.includes("e")&&(c=w(n.left+c,g.map(e=>e.left),f.map(e=>e.right))-n.left),
-		t.includes("w")&&(c=n.right-w(n.right-c,g.map(e=>e.right),f.map(e=>e.left))),
-		t.includes("s")&&(u=w(n.top+u,f.map(e=>e.top),g.map(e=>e.bottom))-n.top),
-		t.includes("n")&&(u=n.bottom-w(n.bottom-u,f.map(e=>e.bottom),g.map(e=>e.top))),r?(c=clamp(c,260,s),u=clamp(u,120,i),
-		e.style.height=`${Math.round(u)}px`):("n"===t||"s"===t?c=u*o:2===t.length&&(c=Math.max(c,u*o)),c=clamp(c,260,s)),
-		e.style.width=`${Math.round(c)}px`,u=e.offsetHeight,placePopout(e,t.includes("w")?n.right-c:n.left,t.includes("n")?n.bottom-u:n.top)
-		},persistSnapLayout)}document.addEventListener("pointerdown",e=>{const t=e.target.closest(".snap-edge");if(t){if(0!==e.button)return
-		;return e.preventDefault(),void snapHandlePointerDown(t,e)}const a=e.target.closest(".map-block.popout");if(!a)return
+		e.block.style.top=`${Math.round(e.top+n)}px`})}function resizePopout(e,t,a){const n=groupMembers(e),r=snapColumnOf(e)
+		;if(n.length>1&&!r)return resizeGroup(n,t,a)
+		;const o=e.getBoundingClientRect(),s=e.classList.contains("free"),i=o.width/o.height,l=Math.min(875,viewportWidth()-16),p=viewportHeight()-16,d=r?[]:magnetRects(e)
+		;trackPopoutPointer(a,(a,n)=>{let c=o.width,u=o.height;if(t.includes("e")&&(c=o.width+a),t.includes("w")&&(c=o.width-a),
+		t.includes("s")&&(u=o.height+n),t.includes("n")&&(u=o.height-n),r){const a=paneMagnetEdges(r,[e]);if(t.includes("s")){
+		const e=magnetEdge(o.top+u,a);null!==e&&(u=e-o.top)}if(t.includes("n")){const e=magnetEdge(o.bottom-u,a);null!==e&&(u=o.bottom-e)}
+		u=clamp(u,120,viewportHeight());const n=snapPaneOf(e);return n.height=u/viewportHeight(),
+		n.top=(t.includes("n")?o.bottom-u:o.top)/viewportHeight(),void layoutSnapColumns()}({w:c,h:u}=pullResizeEdges(d,t,o,c,u)),
+		s?(c=clamp(c,260,l),u=clamp(u,120,p),e.style.height=`${Math.round(u)}px`):("n"===t||"s"===t?c=u*i:2===t.length&&(c=Math.max(c,u*i)),
+		(t.includes("e")||t.includes("w"))&&2!==t.length||(c=pullResizeEdges(d,t.includes("w")?"w":"e",o,c,u).w),c=clamp(c,260,l)),
+		e.style.width=`${Math.round(c)}px`,u=e.offsetHeight,placePopout(e,t.includes("w")?o.right-c:o.left,t.includes("n")?o.bottom-u:o.top)
+		},persistSnapLayout)}function pullResizeEdges(e,t,a,n,r){
+		const o=t.includes("w")?a.right-n:a.left,s=t.includes("n")?a.bottom-r:a.top,i=e.filter(e=>s<e.bottom&&s+r>e.top),l=e.filter(e=>o<e.right&&o+n>e.left),p=(e,t,a)=>{
+		const n=magnetEdge(e,t.concat(a));return null===n?e:n};return t.includes("e")&&(n=p(a.left+n,i.map(e=>e.left),l.map(e=>e.right))-a.left),
+		t.includes("w")&&(n=a.right-p(a.right-n,i.map(e=>e.right),l.map(e=>e.left))),
+		t.includes("s")&&(r=p(a.top+r,l.map(e=>e.top),i.map(e=>e.bottom))-a.top),
+		t.includes("n")&&(r=a.bottom-p(a.bottom-r,l.map(e=>e.bottom),i.map(e=>e.top))),{w:n,h:r}}function resizeGroup(e,t,a){const n=groupStarts(e)
+		;n.forEach(e=>{e.width=e.right-e.left,e.height=e.bottom-e.top,e.free=e.block.classList.contains("free")});const r=groupBox(n)
+		;r.right=r.left+r.width,r.bottom=r.top+r.height
+		;const o=groupRelations(n),s=[...n].sort((e,t)=>e.top-t.top||e.left-t.left),i=magnetRects(e[0],e),l=t.includes("w")?r.right:r.left,p=t.includes("n")?r.bottom:r.top,d=Math.max(260/Math.min(...n.map(e=>e.width)),...n.filter(e=>e.free).map(e=>120/e.height)),c=Math.min(875/Math.max(...n.map(e=>e.width)),(t.includes("w")?r.right:viewportWidth()-r.left)/r.width,(t.includes("n")?r.bottom:viewportHeight()-r.top)/r.height)
+		;trackPopoutPointer(a,(e,a)=>{let u=r.width,m=r.height;t.includes("e")&&(u=r.width+e),t.includes("w")&&(u=r.width-e),
+		t.includes("s")&&(m=r.height+a),t.includes("n")&&(m=r.height-a),({w:u,h:m}=pullResizeEdges(i,t,r,u,m))
+		;let h="n"===t||"s"===t?m/r.height:2===t.length?Math.max(u/r.width,m/r.height):u/r.width;h=clamp(h,d,Math.max(d,c)),n.forEach(e=>{
+		e.block.style.width=`${Math.round(e.width*h)}px`,e.free&&(e.block.style.height=`${Math.round(e.height*h)}px`)});const g=[];s.forEach(e=>{
+		let t=l+(e.left-l)*h,a=p+(e.top-p)*h;const n=e.block.offsetWidth,r=e.block.offsetHeight
+		;o.filter(t=>t.to===e&&g.includes(t.from)).forEach(e=>{const o=e.from.block.getBoundingClientRect()
+		;"below"===e.kind?a=o.bottom:"above"===e.kind?a=o.top-r:"right"===e.kind?t=o.right:"left"===e.kind?t=o.left-n:"alignLeft"===e.kind?t=o.left:"alignRight"===e.kind?t=o.right-n:"alignTop"===e.kind?a=o.top:"alignBottom"===e.kind&&(a=o.bottom-r)
+		}),e.block.style.left=`${Math.round(t)}px`,e.block.style.top=`${Math.round(a)}px`,g.push(e)})},persistSnapLayout)}
+		function groupRelations(e){const t=(e,t)=>Math.abs(e-t)<=1,a=[];return e.forEach(n=>e.forEach(e=>{if(n===e)return
+		;const r=Math.min(n.right,e.right)-Math.max(n.left,e.left)>0,o=Math.min(n.bottom,e.bottom)-Math.max(n.top,e.top)>0,s=r&&(t(e.top,n.bottom)||t(e.bottom,n.top)),i=o&&(t(e.left,n.right)||t(e.right,n.left))
+		;s&&(t(e.left,n.left)&&a.push({from:n,to:e,kind:"alignLeft"}),t(e.right,n.right)&&a.push({from:n,to:e,kind:"alignRight"}),a.push({from:n,
+		to:e,kind:t(e.top,n.bottom)?"below":"above"})),i&&(t(e.top,n.top)&&a.push({from:n,to:e,kind:"alignTop"}),t(e.bottom,n.bottom)&&a.push({
+		from:n,to:e,kind:"alignBottom"}),a.push({from:n,to:e,kind:t(e.left,n.right)?"right":"left"}))})),a}
+		document.addEventListener("pointerdown",e=>{const t=e.target.closest(".snap-edge");if(t){if(0!==e.button)return;return e.preventDefault(),
+		void snapHandlePointerDown(t,e)}const a=e.target.closest(".map-block.popout");if(!a)return
 		;if(a.classList.contains("fs-host")||raisePopout(a),0!==e.button)return;const n=e.target.closest(".po-h"),r=e.target.closest(".radartitle")
 		;(n||r&&!e.target.closest("a")&&!r.classList.contains("fullscreen"))&&(e.preventDefault(),n?resizePopout(a,n.dataset.dir,e):dragPopout(a,e))
 		}),POPOUT_MQ.addEventListener("change",e=>{e.matches||(snapPersistPaused=!0,dockAllPopouts(),snapPersistPaused=!1)}),
@@ -587,14 +606,14 @@
 		m.appendChild(el("span",{class:"ms-fill"})),f()}function f(){m.querySelectorAll(".ms-origin").forEach(e=>e.classList.remove("ms-origin"))
 		;const e=allPresets().find(e=>e.id===h);if(!e||sameMapIds(e.maps,v()))return;const t=[...m.querySelectorAll("input")].find(e=>e.value===h)
 		;t&&t.nextElementSibling.classList.add("ms-origin")}function w(){const t=e.querySelector('input[name="msPreset"]:checked')
-		;return t?t.value:"zadano"}function v(){return[...t.children].map(e=>e.getAttribute("data-map-id"))}function P(){const e=w()
-		;return"custom"===e?{preset:"custom",maps:v()}:{preset:e}}function b(e){
+		;return t?t.value:"zadano"}function v(){return[...t.children].map(e=>e.getAttribute("data-map-id"))}function b(){const e=w()
+		;return"custom"===e?{preset:"custom",maps:v()}:{preset:e}}function P(e){
 		if("custom"===e.preset)return sanitizeSnapLayout(snapLayout(),prefsMapIds(e));const t=userPresets.find(t=>t.id===e.preset)
 		;return t?sanitizeSnapLayout(t.layout,prefsMapIds(e)):null}function y(){return sanitizeSnapLayout(snapLayout(),v())}u(resolveMapIds()),
-		g(activePresetId());const S=el("div",{class:"ms-layout"});function k(){S.replaceChildren();const e=snapLayout();if(S.hidden=!e,!e)return
+		g(activePresetId());const k=el("div",{class:"ms-layout"});function S(){k.replaceChildren();const e=snapLayout();if(k.hidden=!e,!e)return
 		;const t=[];e.left&&t.push(`lijevo ${e.left.panes.length}`),e.right&&t.push(`desno ${e.right.panes.length}`),
 		e.floating&&t.push(`u prozoru ${e.floating.length}`);const a=el("a",{text:"Vrati sve"});a.addEventListener("click",dockAllPopouts),
-		S.append(el("span",{text:`Izdvojene karte: ${t.join(", ")}`}),a)}k(),e._onLayoutChange=()=>{k(),j()};const M=el("div",{class:"ms-manage"})
+		k.append(el("span",{text:`Izdvojene karte: ${t.join(", ")}`}),a)}S(),e._onLayoutChange=()=>{S(),j()};const M=el("div",{class:"ms-manage"})
 		;let x=!1;const E=el("input",{type:"text",class:"ms-name",maxlength:String(40),placeholder:"Naziv predloška"}),_=el("button",{type:"button",
 		class:"btn",text:"Spremi"});function C(e){const t=storeUserPreset(e,v(),y());E.value="",x=!1,h=t.id,g(t.id),j()}
 		_.addEventListener("click",()=>{const e=cleanPresetName(E.value);e?C(e):E.focus()}),E.addEventListener("keydown",e=>{
@@ -628,11 +647,11 @@
 		}()),userPresets.length?userPresets.forEach(e=>M.appendChild(I(e))):M.appendChild(el("div",{class:"ms-manage-empty",
 		text:"Nema spremljenih predložaka"})),A&&(A=!1,L.focus(),L.select())}L.addEventListener("keydown",e=>{"Enter"===e.key?(e.preventDefault(),
 		H()):"Escape"===e.key&&R()}),L.addEventListener("input",()=>L.classList.remove("invalid")),j();const N=el("button",{type:"button",
-		class:"btn",text:"Primijeni"});N.addEventListener("click",()=>{const t=P(),a=b(t);a&&(t.layout=a),saveMapPrefs(t),clearSharedMapView(),
+		class:"btn",text:"Primijeni"});N.addEventListener("click",()=>{const t=b(),a=P(t);a&&(t.layout=a),saveMapPrefs(t),clearSharedMapView(),
 		setMapSettingsVisible(e,!1),renderMaps(),initDynamicContent(),applySnapLayout(a),scrollToTop()});const W=el("a",{text:"Podijeli"})
-		;W.addEventListener("click",()=>{copyMapViewLink(function(){const e=P(),t=userPresets.find(t=>t.id===e.preset)
-		;if(t)return presetSharePrefs(t);const a=b(e);return a&&(e.layout=a),e}(),()=>flashLabel(W,"Kopirano!","Podijeli"))}),e.appendChild(m),
-		e.appendChild(S),e.appendChild(t),e.appendChild(el("div",{class:"ms-actions"},[N,W])),e.appendChild(l),e.appendChild(a),e.appendChild(M)}
+		;W.addEventListener("click",()=>{copyMapViewLink(function(){const e=b(),t=userPresets.find(t=>t.id===e.preset)
+		;if(t)return presetSharePrefs(t);const a=P(e);return a&&(e.layout=a),e}(),()=>flashLabel(W,"Kopirano!","Podijeli"))}),e.appendChild(m),
+		e.appendChild(k),e.appendChild(t),e.appendChild(el("div",{class:"ms-actions"},[N,W])),e.appendChild(l),e.appendChild(a),e.appendChild(M)}
 		document.addEventListener("map-fullscreen",()=>{document.querySelectorAll(".map-block.popout").forEach(e=>{
 		const t=!!e.querySelector(".if1.fullscreen"),a=e.classList.contains("fs-host");e.classList.toggle("fs-host",t),
 		t?e.style.zIndex=4500:a&&raisePopout(e)}),layoutSnapColumns()}),["load","click","pointerup"].forEach(e=>{document.addEventListener(e,e=>{

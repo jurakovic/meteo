@@ -1510,16 +1510,21 @@ function moveGroup(starts, box, dx, dy) {
 // drawn by the other floating widgets too (magnets, as on drag): onto the
 // facing edge of one beside it — above or below it, for a top or bottom edge
 // — or into line with the like edge of one above or below it; exact for a
-// width, and through the aspect ratio for a locked widget's height. A free
-// pane in a column keeps the column's width: its top or bottom edge is drawn
-// to the column's ends and the other panes, and the top it carries follows
+// width, and through the aspect ratio for a locked widget's height — whose
+// width, once the height has asked for it, has a moving edge of its own to
+// pull, so the widget lines up with the one above it by that edge too. A
+// free pane in a column keeps the column's width: its top or bottom edge is
+// drawn to the column's ends and the other panes, and the top it carries
+// follows. A grouped widget's handles resize the whole group (resizeGroup)
 function resizePopout(block, dir, e) {
+	const members = groupMembers(block);
+	const col = snapColumnOf(block);
+	if (members.length > 1 && !col) return resizeGroup(members, dir, e);
 	const start = block.getBoundingClientRect();
 	const free = block.classList.contains('free');
 	const ratio = start.width / start.height;
 	const maxWidth = Math.min(POPOUT_MAX_WIDTH, viewportWidth() - POPOUT_MARGIN);
 	const maxHeight = viewportHeight() - POPOUT_MARGIN;
-	const col = snapColumnOf(block);
 	const magnets = col ? [] : magnetRects(block);
 	trackPopoutPointer(e, (dx, dy) => {
 		let w = start.width, h = start.height;
@@ -1538,15 +1543,7 @@ function resizePopout(block, dir, e) {
 			layoutSnapColumns();
 			return;
 		}
-		const left = dir.includes('w') ? start.right - w : start.left;
-		const top = dir.includes('n') ? start.bottom - h : start.top;
-		const beside = magnets.filter(r => top < r.bottom && top + h > r.top);
-		const stacked = magnets.filter(r => left < r.right && left + w > r.left);
-		const edge = (value, meet, align) => { const m = magnetEdge(value, meet.concat(align)); return m === null ? value : m; };
-		if (dir.includes('e')) w = edge(start.left + w, beside.map(r => r.left), stacked.map(r => r.right)) - start.left;
-		if (dir.includes('w')) w = start.right - edge(start.right - w, beside.map(r => r.right), stacked.map(r => r.left));
-		if (dir.includes('s')) h = edge(start.top + h, stacked.map(r => r.top), beside.map(r => r.bottom)) - start.top;
-		if (dir.includes('n')) h = start.bottom - edge(start.bottom - h, stacked.map(r => r.bottom), beside.map(r => r.top));
+		({ w, h } = pullResizeEdges(magnets, dir, start, w, h));
 		if (free) {
 			w = clamp(w, POPOUT_MIN_WIDTH, maxWidth);
 			h = clamp(h, POPOUT_MIN_HEIGHT, maxHeight);
@@ -1554,6 +1551,9 @@ function resizePopout(block, dir, e) {
 		} else {
 			if (dir === 'n' || dir === 's') w = h * ratio;
 			else if (dir.length === 2) w = Math.max(w, h * ratio);
+			// the width the height asked for moves the right edge (the left, pulled from the west)
+			if (!(dir.includes('e') || dir.includes('w')) || dir.length === 2)
+				w = pullResizeEdges(magnets, dir.includes('w') ? 'w' : 'e', start, w, h).w;
 			w = clamp(w, POPOUT_MIN_WIDTH, maxWidth);
 		}
 		block.style.width = `${Math.round(w)}px`;
@@ -1561,6 +1561,120 @@ function resizePopout(block, dir, e) {
 		h = block.offsetHeight;
 		placePopout(block, dir.includes('w') ? start.right - w : start.left, dir.includes('n') ? start.bottom - h : start.top);
 	}, persistSnapLayout);
+}
+
+// the pulled edges of something that started as start (left/top/right/
+// bottom) and is asked to be w by h, drawn by the magnets: onto the facing
+// edge of a widget beside it (above or below it, for a top or bottom edge)
+// or into line with the like edge of one above or below it (beside it, for a
+// top or bottom edge)
+function pullResizeEdges(magnets, dir, start, w, h) {
+	const left = dir.includes('w') ? start.right - w : start.left;
+	const top = dir.includes('n') ? start.bottom - h : start.top;
+	const beside = magnets.filter(r => top < r.bottom && top + h > r.top);
+	const stacked = magnets.filter(r => left < r.right && left + w > r.left);
+	const edge = (value, meet, align) => { const m = magnetEdge(value, meet.concat(align)); return m === null ? value : m; };
+	if (dir.includes('e')) w = edge(start.left + w, beside.map(r => r.left), stacked.map(r => r.right)) - start.left;
+	if (dir.includes('w')) w = start.right - edge(start.right - w, beside.map(r => r.right), stacked.map(r => r.left));
+	if (dir.includes('s')) h = edge(start.top + h, stacked.map(r => r.top), beside.map(r => r.bottom)) - start.top;
+	if (dir.includes('n')) h = start.bottom - edge(start.bottom - h, stacked.map(r => r.bottom), beside.map(r => r.top));
+	return { w, h };
+}
+
+// a group resizes as one thing: its box is pulled as a locked widget's is —
+// one scale for the whole, from the pulled axis, a corner following whichever
+// asks for more — from the edge or corner opposite the one pulled, the other
+// widgets its magnets. Every member is scaled by it (a free one in height
+// too; a locked one's height follows its width, with the title bar not
+// scaling along), then placed at its scaled offset and settled onto the
+// members it touched or lined up with before (groupRelations), so a stack
+// stays a stack whatever the title bars do
+function resizeGroup(members, dir, e) {
+	const starts = groupStarts(members);
+	starts.forEach(s => {
+		s.width = s.right - s.left;
+		s.height = s.bottom - s.top;
+		s.free = s.block.classList.contains('free');
+	});
+	const box = groupBox(starts);
+	box.right = box.left + box.width;
+	box.bottom = box.top + box.height;
+	const relations = groupRelations(starts);
+	const order = [...starts].sort((a, b) => a.top - b.top || a.left - b.left);
+	const magnets = magnetRects(members[0], members);
+	// the anchor: the box grows from the edge or corner opposite the one pulled
+	const ax = dir.includes('w') ? box.right : box.left;
+	const ay = dir.includes('n') ? box.bottom : box.top;
+	// no member under its minimum or over the widest a widget may be, and the box inside the viewport
+	const minScale = Math.max(
+		POPOUT_MIN_WIDTH / Math.min(...starts.map(s => s.width)),
+		...starts.filter(s => s.free).map(s => POPOUT_MIN_HEIGHT / s.height));
+	const maxScale = Math.min(
+		POPOUT_MAX_WIDTH / Math.max(...starts.map(s => s.width)),
+		(dir.includes('w') ? box.right : viewportWidth() - box.left) / box.width,
+		(dir.includes('n') ? box.bottom : viewportHeight() - box.top) / box.height);
+	trackPopoutPointer(e, (dx, dy) => {
+		let w = box.width, h = box.height;
+		if (dir.includes('e')) w = box.width + dx;
+		if (dir.includes('w')) w = box.width - dx;
+		if (dir.includes('s')) h = box.height + dy;
+		if (dir.includes('n')) h = box.height - dy;
+		({ w, h } = pullResizeEdges(magnets, dir, box, w, h));
+		let scale = dir === 'n' || dir === 's' ? h / box.height
+			: dir.length === 2 ? Math.max(w / box.width, h / box.height)
+			: w / box.width;
+		scale = clamp(scale, minScale, Math.max(minScale, maxScale));
+		starts.forEach(s => {
+			s.block.style.width = `${Math.round(s.width * scale)}px`;
+			if (s.free) s.block.style.height = `${Math.round(s.height * scale)}px`;
+		});
+		const placed = [];
+		order.forEach(s => {
+			let left = ax + (s.left - ax) * scale, top = ay + (s.top - ay) * scale;
+			const width = s.block.offsetWidth, height = s.block.offsetHeight;
+			relations.filter(r => r.to === s && placed.includes(r.from)).forEach(r => {
+				const a = r.from.block.getBoundingClientRect();
+				if (r.kind === 'below') top = a.bottom;
+				else if (r.kind === 'above') top = a.top - height;
+				else if (r.kind === 'right') left = a.right;
+				else if (r.kind === 'left') left = a.left - width;
+				else if (r.kind === 'alignLeft') left = a.left;
+				else if (r.kind === 'alignRight') left = a.right - width;
+				else if (r.kind === 'alignTop') top = a.top;
+				else if (r.kind === 'alignBottom') top = a.bottom - height;
+			});
+			s.block.style.left = `${Math.round(left)}px`;
+			s.block.style.top = `${Math.round(top)}px`;
+			placed.push(s);
+		});
+	}, persistSnapLayout);
+}
+
+// how the members stand to one another: for every ordered pair that touches,
+// which edge of `to` lies on which of `from` (below: to's top on from's
+// bottom, and so on), and, along that edge, which like edges line up. The
+// alignments come first, the touch last, so it wins where both pull one axis
+function groupRelations(starts) {
+	const near = (p, q) => Math.abs(p - q) <= GROUP_TOUCH;
+	const relations = [];
+	starts.forEach(from => starts.forEach(to => {
+		if (from === to) return;
+		const alongX = Math.min(from.right, to.right) - Math.max(from.left, to.left) > 0;
+		const alongY = Math.min(from.bottom, to.bottom) - Math.max(from.top, to.top) > 0;
+		const stacked = alongX && (near(to.top, from.bottom) || near(to.bottom, from.top));
+		const beside = alongY && (near(to.left, from.right) || near(to.right, from.left));
+		if (stacked) {
+			if (near(to.left, from.left)) relations.push({ from, to, kind: 'alignLeft' });
+			if (near(to.right, from.right)) relations.push({ from, to, kind: 'alignRight' });
+			relations.push({ from, to, kind: near(to.top, from.bottom) ? 'below' : 'above' });
+		}
+		if (beside) {
+			if (near(to.top, from.top)) relations.push({ from, to, kind: 'alignTop' });
+			if (near(to.bottom, from.bottom)) relations.push({ from, to, kind: 'alignBottom' });
+			relations.push({ from, to, kind: near(to.left, from.right) ? 'right' : 'left' });
+		}
+	}));
+	return relations;
 }
 
 document.addEventListener('pointerdown', (e) => {
