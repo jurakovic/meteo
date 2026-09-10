@@ -1238,6 +1238,33 @@ function isFreePopout(block) {
 	return !!block.querySelector('.if1, .if2');
 }
 
+// a popped-out widget's title would run under the button clusters, which sit
+// on the bar out of flow: it is centred in the gap between them instead,
+// from the pop-out on so it never jumps, and given the gap's width with an
+// ellipsis (CSS) for when it is too long. Measured after every gesture and
+// whenever a button comes or goes; a bar not on screen (a slide not shown)
+// is left for when it is
+const TITLE_GAP = 6; // kept between the title and a cluster
+function fitTitles(block) {
+	block.querySelectorAll('.radartitle:not(.fullscreen)').forEach(bar => {
+		if (!bar.clientWidth) return;
+		const title = [...bar.children].find(c => c.tagName === 'A' && !c.classList.contains('left') && !c.classList.contains('right'));
+		if (!title) return;
+		const cluster = (selector) => { const node = bar.querySelector(`:scope > ${selector}`); return node ? node.offsetWidth + 3 : 0; }; // with its margin
+		const left = cluster('.left'), right = cluster('.right');
+		const width = bar.clientWidth - 6; // less the padding
+		title.style.maxWidth = `${Math.max(0, width - left - right - 2 * TITLE_GAP)}px`;
+		title.style.setProperty('--title-shift', `${Math.round((left - right) / 2)}px`);
+	});
+}
+
+function unfitTitles(block) {
+	block.querySelectorAll('.radartitle a').forEach(a => {
+		a.style.removeProperty('max-width');
+		a.style.removeProperty('--title-shift');
+	});
+}
+
 function dockMap(block) {
 	dlog(`dockMap: ${block.dataset.mapId}`);
 	// a fullscreen iframe inside the widget is fixed on its own; take it down first
@@ -1251,6 +1278,7 @@ function dockMap(block) {
 	if (block._gap) block._gap.remove();
 	delete block._gap;
 	block.querySelectorAll('.po-btn').forEach(btn => setPopoutButton(btn, false));
+	unfitTitles(block);
 	persistSnapLayout();
 }
 
@@ -1502,6 +1530,7 @@ function updateGroups() {
 			btn.textContent = grouped ? '[-]' : '[+]';
 			btn.title = grouped ? 'Odvoji prozor od skupine' : 'Spoji prozor s prozorima koje dodiruje';
 		});
+		fitTitles(block); // the cluster may have changed width
 	});
 }
 
@@ -1590,6 +1619,7 @@ function resizePopout(block, dir, e) {
 		// the laid-out height, exact for locked widgets where it follows the width
 		h = block.offsetHeight;
 		placePopout(block, dir.includes('w') ? start.right - w : start.left, dir.includes('n') ? start.bottom - h : start.top);
+		fitTitles(block);
 	}, persistSnapLayout);
 }
 
@@ -1677,6 +1707,7 @@ function resizeGroup(members, dir, e) {
 			s.block.style.top = `${Math.round(top)}px`;
 			placed.push(s);
 		});
+		members.forEach(fitTitles);
 	}, persistSnapLayout);
 }
 
@@ -1952,7 +1983,10 @@ function layoutSnapColumns() {
 	root.setProperty('--snap-l', `${snapColumnPx(snapColumns.left)}px`);
 	root.setProperty('--snap-r', `${snapColumnPx(snapColumns.right)}px`);
 	const seam = isSnapPageHidden() && snapColumns.left.panes.length && snapColumns.right.panes.length;
-	Object.values(snapColumns).forEach(col => layoutSnapColumn(col, seam));
+	Object.values(snapColumns).forEach(col => {
+		layoutSnapColumn(col, seam);
+		col.panes.forEach(p => fitTitles(p.block)); // the column's width is theirs
+	});
 }
 
 // with two columns meeting, the left edge handle is the seam between them and
@@ -2318,10 +2352,15 @@ document.addEventListener('map-fullscreen', () => {
 // its width from the image (so the real height is there once it has loaded)
 // and changes aspect with the slide (arrows and swipe end in a click or a
 // pointerup) — fit again after the change has been applied
+// — and the same events bring a slide's title bar on screen, to be fitted
 ['load', 'click', 'pointerup'].forEach(type => {
 	document.addEventListener(type, (e) => {
-		const block = e.target.closest && e.target.closest('.map-block.snapped:not(.free)');
-		if (block) setTimeout(layoutSnapColumns, 0);
+		const block = e.target.closest && e.target.closest('.map-block.popout');
+		if (!block) return;
+		setTimeout(() => {
+			if (isSnapped(block) && !block.classList.contains('free')) layoutSnapColumns();
+			fitTitles(block);
+		}, 0);
 	}, true);
 });
 

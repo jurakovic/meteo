@@ -291,6 +291,23 @@ body.fs-lock {
 		display: none;
 	}
 
+	/* a popped-out widget's title keeps out from under the button clusters:
+	   maps.js measures the room they leave into max-width, and a shift into
+	   the gap between them when centred room runs out (fitTitles) */
+	.map-block.popout .radartitle:not(.fullscreen) > a:not(.left):not(.right) {
+		display: inline-block;
+		max-width: 100%;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		white-space: nowrap;
+		vertical-align: top;
+		transform: translateX(var(--title-shift, 0px));
+	}
+
+	.map-block.popout .radartitle:not(.fullscreen) > a.center {
+		transform: translateX(calc(-50% + var(--title-shift, 0px)));
+	}
+
 	/* a popped-out widget's [R] reloads its map */
 	.map-block.popout .radartitle:not(.fullscreen) .rl-btn {
 		display: inline;

@@ -47,7 +47,10 @@
 		}.radartitle .right-cluster{gap:14px}.radartitle.fullscreen .left{margin-left:10px}.radartitle.fullscreen .right{margin-right:10px}}.grp-btn
 		,.po-btn,.rl-btn{display:none}.map-gap{display:flex;align-items:center;justify-content:center;gap:6px;box-sizing:border-box;padding:8px;
 		background-color:#202c40;color:#8a94a8}.map-gap a{cursor:pointer}@media (min-width:801px) and (hover:hover) and (pointer:fine){.po-btn{
-		display:inline}.radartitle.fullscreen .po-btn{display:none}.map-block.popout .radartitle:not(.fullscreen) .rl-btn{display:inline}
+		display:inline}.radartitle.fullscreen .po-btn{display:none}.map-block.popout .radartitle:not(.fullscreen)>a:not(.left):not(.right){display:
+		inline-block;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;vertical-align:top;transform:
+		translateX(var(--title-shift,0))}.map-block.popout .radartitle:not(.fullscreen)>a.center{transform:
+		translateX(calc(-50% + var(--title-shift,0)))}.map-block.popout .radartitle:not(.fullscreen) .rl-btn{display:inline}
 		.map-block.popout .radartitle:not(.fullscreen) .grp-btn:not([hidden]){display:inline}.map-block.popout.grouped{outline-color:#4a8de6;
 		box-shadow:none}.map-block.popout{position:fixed;z-index:5000;background-color:#212f45;outline:1px solid #2b5797;box-shadow:0 6px 24px
 		rgba(0,0,0,.6)}.map-block.popout .radartitle:not(.fullscreen){cursor:move}.map-block.popout.free{display:flex;flex-direction:column}
@@ -396,12 +399,17 @@
 		e.after(n),e.classList.add("popout"),e.style.width=`${Math.min(420,t.width)}px`,isFreePopout(e)&&(e.style.height=`${e.offsetHeight}px`,
 		e.classList.add("free")),POPOUT_HANDLES.forEach(t=>e.appendChild(el("div",{class:`po-h po-h-${t}`,"data-dir":t}))),
 		placePopout(e,t.left,t.top),raisePopout(e),e.querySelectorAll(".po-btn").forEach(e=>setPopoutButton(e,!0)),persistSnapLayout()}
-		function isFreePopout(e){return!!e.querySelector(".if1, .if2")}function dockMap(e){dlog(`dockMap: ${e.dataset.mapId}`)
-		;const t=e.querySelector(".if1.fullscreen");t&&exitFullscreen(t),e._group&&leaveGroup(e),unsnapPane(e),
-		e.classList.remove("popout","free","grouped"),["left","top","width","height","z-index"].forEach(t=>e.style.removeProperty(t)),
-		e.querySelectorAll(".po-h").forEach(e=>e.remove()),e._gap&&e._gap.remove(),delete e._gap,
-		e.querySelectorAll(".po-btn").forEach(e=>setPopoutButton(e,!1)),persistSnapLayout()}function dockAllPopouts(){
-		document.querySelectorAll(".map-block.popout").forEach(dockMap)}function placePopout(e,t,a){
+		function isFreePopout(e){return!!e.querySelector(".if1, .if2")}const TITLE_GAP=6;function fitTitles(e){
+		e.querySelectorAll(".radartitle:not(.fullscreen)").forEach(e=>{if(!e.clientWidth)return
+		;const t=[...e.children].find(e=>"A"===e.tagName&&!e.classList.contains("left")&&!e.classList.contains("right"));if(!t)return;const a=t=>{
+		const a=e.querySelector(`:scope > ${t}`);return a?a.offsetWidth+3:0},n=a(".left"),r=a(".right"),o=e.clientWidth-6
+		;t.style.maxWidth=`${Math.max(0,o-n-r-12)}px`,t.style.setProperty("--title-shift",`${Math.round((n-r)/2)}px`)})}function unfitTitles(e){
+		e.querySelectorAll(".radartitle a").forEach(e=>{e.style.removeProperty("max-width"),e.style.removeProperty("--title-shift")})}
+		function dockMap(e){dlog(`dockMap: ${e.dataset.mapId}`);const t=e.querySelector(".if1.fullscreen");t&&exitFullscreen(t),
+		e._group&&leaveGroup(e),unsnapPane(e),e.classList.remove("popout","free","grouped"),
+		["left","top","width","height","z-index"].forEach(t=>e.style.removeProperty(t)),e.querySelectorAll(".po-h").forEach(e=>e.remove()),
+		e._gap&&e._gap.remove(),delete e._gap,e.querySelectorAll(".po-btn").forEach(e=>setPopoutButton(e,!1)),unfitTitles(e),persistSnapLayout()}
+		function dockAllPopouts(){document.querySelectorAll(".map-block.popout").forEach(dockMap)}function placePopout(e,t,a){
 		const n=Math.max(0,viewportWidth()-e.offsetWidth),r=Math.max(0,viewportHeight()-Math.max(e.offsetHeight,23))
 		;e.style.left=`${Math.round(Math.min(Math.max(0,t),n))}px`,e.style.top=`${Math.round(Math.min(Math.max(0,a),r))}px`}function raisePopout(e){
 		groupMembers(e).sort((e,t)=>(Number(e.style.zIndex)||0)-(Number(t.style.zIndex)||0)).forEach(e=>e.style.zIndex=++popoutZ)}
@@ -440,9 +448,9 @@
 		dlog(`leaveGroup: ${e.dataset.mapId}`);const t=e._group;delete e._group;const a=allPopouts().filter(e=>e._group===t)
 		;a.length<2&&a.forEach(e=>delete e._group),updateGroups()}function updateGroups(){allPopouts().forEach(e=>{const t=!!e._group
 		;e.classList.toggle("grouped",t);const a=t||touchingBlocks(e).length>0;e.querySelectorAll(".grp-btn").forEach(e=>{e.hidden=!a,
-		e.textContent=t?"[-]":"[+]",e.title=t?"Odvoji prozor od skupine":"Spoji prozor s prozorima koje dodiruje"})})}function groupStarts(e){
-		return e.map(e=>{const t=e.getBoundingClientRect();return{block:e,left:t.left,top:t.top,right:t.right,bottom:t.bottom}})}
-		function groupBox(e){const t=Math.min(...e.map(e=>e.left)),a=Math.min(...e.map(e=>e.top));return{left:t,top:a,
+		e.textContent=t?"[-]":"[+]",e.title=t?"Odvoji prozor od skupine":"Spoji prozor s prozorima koje dodiruje"}),fitTitles(e)})}
+		function groupStarts(e){return e.map(e=>{const t=e.getBoundingClientRect();return{block:e,left:t.left,top:t.top,right:t.right,
+		bottom:t.bottom}})}function groupBox(e){const t=Math.min(...e.map(e=>e.left)),a=Math.min(...e.map(e=>e.top));return{left:t,top:a,
 		width:Math.max(...e.map(e=>e.right))-t,height:Math.max(...e.map(e=>e.bottom))-a}}function moveGroup(e,t,a,n){
 		const r=Math.min(Math.max(0,t.left+a),Math.max(0,viewportWidth()-t.width)),o=Math.min(Math.max(0,t.top+n),Math.max(0,viewportHeight()-t.height))
 		;a=Math.round(r-t.left),n=Math.round(o-t.top),e.forEach(e=>{e.block.style.left=`${Math.round(e.left+a)}px`,
@@ -456,8 +464,8 @@
 		n.top=(t.includes("n")?o.bottom-u:o.top)/viewportHeight(),void layoutSnapColumns()}({w:c,h:u}=pullResizeEdges(d,t,o,c,u)),
 		s?(c=clamp(c,260,l),u=clamp(u,120,p),e.style.height=`${Math.round(u)}px`):("n"===t||"s"===t?c=u*i:2===t.length&&(c=Math.max(c,u*i)),
 		(t.includes("e")||t.includes("w"))&&2!==t.length||(c=pullResizeEdges(d,t.includes("w")?"w":"e",o,c,u).w),c=clamp(c,260,l)),
-		e.style.width=`${Math.round(c)}px`,u=e.offsetHeight,placePopout(e,t.includes("w")?o.right-c:o.left,t.includes("n")?o.bottom-u:o.top)
-		},persistSnapLayout)}function pullResizeEdges(e,t,a,n,r){
+		e.style.width=`${Math.round(c)}px`,u=e.offsetHeight,placePopout(e,t.includes("w")?o.right-c:o.left,t.includes("n")?o.bottom-u:o.top),
+		fitTitles(e)},persistSnapLayout)}function pullResizeEdges(e,t,a,n,r){
 		const o=t.includes("w")?a.right-n:a.left,s=t.includes("n")?a.bottom-r:a.top,i=e.filter(e=>s<e.bottom&&s+r>e.top),l=e.filter(e=>o<e.right&&o+n>e.left),p=(e,t,a)=>{
 		const n=magnetEdge(e,t.concat(a));return null===n?e:n};return t.includes("e")&&(n=p(a.left+n,i.map(e=>e.left),l.map(e=>e.right))-a.left),
 		t.includes("w")&&(n=a.right-p(a.right-n,i.map(e=>e.right),l.map(e=>e.left))),
@@ -466,14 +474,14 @@
 		;n.forEach(e=>{e.width=e.right-e.left,e.height=e.bottom-e.top,e.free=e.block.classList.contains("free")});const r=groupBox(n)
 		;r.right=r.left+r.width,r.bottom=r.top+r.height
 		;const o=groupRelations(n),s=[...n].sort((e,t)=>e.top-t.top||e.left-t.left),i=magnetRects(e[0],e),l=t.includes("w")?r.right:r.left,p=t.includes("n")?r.bottom:r.top,d=Math.max(260/Math.min(...n.map(e=>e.width)),...n.filter(e=>e.free).map(e=>120/e.height)),c=Math.min(875/Math.max(...n.map(e=>e.width)),(t.includes("w")?r.right:viewportWidth()-r.left)/r.width,(t.includes("n")?r.bottom:viewportHeight()-r.top)/r.height)
-		;trackPopoutPointer(a,(e,a)=>{let u=r.width,m=r.height;t.includes("e")&&(u=r.width+e),t.includes("w")&&(u=r.width-e),
-		t.includes("s")&&(m=r.height+a),t.includes("n")&&(m=r.height-a),({w:u,h:m}=pullResizeEdges(i,t,r,u,m))
-		;let h="n"===t||"s"===t?m/r.height:2===t.length?Math.max(u/r.width,m/r.height):u/r.width;h=clamp(h,d,Math.max(d,c)),n.forEach(e=>{
-		e.block.style.width=`${Math.round(e.width*h)}px`,e.free&&(e.block.style.height=`${Math.round(e.height*h)}px`)});const g=[];s.forEach(e=>{
-		let t=l+(e.left-l)*h,a=p+(e.top-p)*h;const n=e.block.offsetWidth,r=e.block.offsetHeight
-		;o.filter(t=>t.to===e&&g.includes(t.from)).forEach(e=>{const o=e.from.block.getBoundingClientRect()
+		;trackPopoutPointer(a,(a,u)=>{let m=r.width,h=r.height;t.includes("e")&&(m=r.width+a),t.includes("w")&&(m=r.width-a),
+		t.includes("s")&&(h=r.height+u),t.includes("n")&&(h=r.height-u),({w:m,h:h}=pullResizeEdges(i,t,r,m,h))
+		;let g="n"===t||"s"===t?h/r.height:2===t.length?Math.max(m/r.width,h/r.height):m/r.width;g=clamp(g,d,Math.max(d,c)),n.forEach(e=>{
+		e.block.style.width=`${Math.round(e.width*g)}px`,e.free&&(e.block.style.height=`${Math.round(e.height*g)}px`)});const f=[];s.forEach(e=>{
+		let t=l+(e.left-l)*g,a=p+(e.top-p)*g;const n=e.block.offsetWidth,r=e.block.offsetHeight
+		;o.filter(t=>t.to===e&&f.includes(t.from)).forEach(e=>{const o=e.from.block.getBoundingClientRect()
 		;"below"===e.kind?a=o.bottom:"above"===e.kind?a=o.top-r:"right"===e.kind?t=o.right:"left"===e.kind?t=o.left-n:"alignLeft"===e.kind?t=o.left:"alignRight"===e.kind?t=o.right-n:"alignTop"===e.kind?a=o.top:"alignBottom"===e.kind&&(a=o.bottom-r)
-		}),e.block.style.left=`${Math.round(t)}px`,e.block.style.top=`${Math.round(a)}px`,g.push(e)})},persistSnapLayout)}
+		}),e.block.style.left=`${Math.round(t)}px`,e.block.style.top=`${Math.round(a)}px`,f.push(e)}),e.forEach(fitTitles)},persistSnapLayout)}
 		function groupRelations(e){const t=(e,t)=>Math.abs(e-t)<=1,a=[];return e.forEach(n=>e.forEach(e=>{if(n===e)return
 		;const r=Math.min(n.right,e.right)-Math.max(n.left,e.left)>0,o=Math.min(n.bottom,e.bottom)-Math.max(n.top,e.top)>0,s=r&&(t(e.top,n.bottom)||t(e.bottom,n.top)),i=o&&(t(e.left,n.right)||t(e.right,n.left))
 		;s&&(t(e.left,n.left)&&a.push({from:n,to:e,kind:"alignLeft"}),t(e.right,n.right)&&a.push({from:n,to:e,kind:"alignRight"}),a.push({from:n,
@@ -514,8 +522,8 @@
 		layoutSnapColumns()}function layoutSnapColumns(){document.body.classList.toggle("snap-full",isSnapPageHidden())
 		;const e=document.documentElement.style;e.setProperty("--snap-l",`${snapColumnPx(snapColumns.left)}px`),
 		e.setProperty("--snap-r",`${snapColumnPx(snapColumns.right)}px`)
-		;const t=isSnapPageHidden()&&snapColumns.left.panes.length&&snapColumns.right.panes.length
-		;Object.values(snapColumns).forEach(e=>layoutSnapColumn(e,t))}function layoutSnapColumn(e,t){const a=snapColumnPx(e);if(!a)return
+		;const t=isSnapPageHidden()&&snapColumns.left.panes.length&&snapColumns.right.panes.length;Object.values(snapColumns).forEach(e=>{
+		layoutSnapColumn(e,t),e.panes.forEach(e=>fitTitles(e.block))})}function layoutSnapColumn(e,t){const a=snapColumnPx(e);if(!a)return
 		;const n="left"===e.side?0:viewportWidth()-a;[e.node,e.ui].forEach(e=>{e.style.left=`${n}px`,e.style.width=`${a}px`})
 		;const r=e.ui.querySelector(".snap-edge");r.hidden=t&&"right"===e.side,r.classList.toggle("snap-seam",t&&"left"===e.side),
 		r.title=t?"Širina stupaca · dvoklik vraća stranicu":isSnapPageHidden()?"Širina stupca · dvoklik vraća stranicu":"Širina stupca · dvoklik sakriva stranicu",
@@ -613,15 +621,15 @@
 		;const e=allPresets().find(e=>e.id===h);if(!e||sameMapIds(e.maps,v()))return;const t=[...m.querySelectorAll("input")].find(e=>e.value===h)
 		;t&&t.nextElementSibling.classList.add("ms-origin")}function w(){const t=e.querySelector('input[name="msPreset"]:checked')
 		;return t?t.value:"zadano"}function v(){return[...t.children].map(e=>e.getAttribute("data-map-id"))}function b(){const e=w()
-		;return"custom"===e?{preset:"custom",maps:v()}:{preset:e}}function P(e){
+		;return"custom"===e?{preset:"custom",maps:v()}:{preset:e}}function y(e){
 		if("custom"===e.preset)return sanitizeSnapLayout(snapLayout(),prefsMapIds(e));const t=userPresets.find(t=>t.id===e.preset)
-		;return t?sanitizeSnapLayout(t.layout,prefsMapIds(e)):null}function y(){return sanitizeSnapLayout(snapLayout(),v())}u(resolveMapIds()),
+		;return t?sanitizeSnapLayout(t.layout,prefsMapIds(e)):null}function P(){return sanitizeSnapLayout(snapLayout(),v())}u(resolveMapIds()),
 		g(activePresetId());const k=el("div",{class:"ms-layout"});function S(){k.replaceChildren();const e=snapLayout();if(k.hidden=!e,!e)return
 		;const t=[];e.left&&t.push(`lijevo ${e.left.panes.length}`),e.right&&t.push(`desno ${e.right.panes.length}`),
 		e.floating&&t.push(`u prozoru ${e.floating.length}`);const a=el("a",{text:"Vrati sve"});a.addEventListener("click",dockAllPopouts),
 		k.append(el("span",{text:`Izdvojene karte: ${t.join(", ")}`}),a)}S(),e._onLayoutChange=()=>{S(),j()};const M=el("div",{class:"ms-manage"})
 		;let E=!1;const x=el("input",{type:"text",class:"ms-name",maxlength:String(40),placeholder:"Naziv predloška"}),_=el("button",{type:"button",
-		class:"btn",text:"Spremi"});function C(e){const t=storeUserPreset(e,v(),y());x.value="",E=!1,h=t.id,g(t.id),j()}
+		class:"btn",text:"Spremi"});function C(e){const t=storeUserPreset(e,v(),P());x.value="",E=!1,h=t.id,g(t.id),j()}
 		_.addEventListener("click",()=>{const e=cleanPresetName(x.value);e?C(e):x.focus()}),x.addEventListener("keydown",e=>{
 		"Enter"===e.key?(e.preventDefault(),_.click()):"Escape"===e.key&&(E=!1,x.value="",j())});let z=null;const L=el("input",{type:"text",
 		class:"ms-name ms-rename",maxlength:String(40)});let A=!1;function H(){const e=userPresets.find(e=>e.id===z);if(!e)return
@@ -630,9 +638,9 @@
 		},e.map(e=>e||el("span")))}function I(e){if(e.id===z)return function(){const e=el("a",{text:"Potvrdi"}),t=el("a",{text:"Odustani"})
 		;return e.addEventListener("click",H),t.addEventListener("click",R),el("div",{class:"ms-manage-item"},[L,T([null,e,t])])}();const t=el("a",{
 		text:"Preimenuj"}),a=el("a",{text:"Obriši"});let n;!function(e){
-		return isUserPresetId(e.id)&&e.id===h&&(!sameMapIds(e.maps,v())||!sameSnapLayout(e.layout,y()))}(e)?n=function(e){const t=el("a",{
+		return isUserPresetId(e.id)&&e.id===h&&(!sameMapIds(e.maps,v())||!sameSnapLayout(e.layout,P()))}(e)?n=function(e){const t=el("a",{
 		text:"Podijeli"});return t.addEventListener("click",()=>{copyMapViewLink(e(),()=>flashLabel(t,"Kopirano!","Podijeli"))}),t
-		}(()=>presetSharePrefs(e)):(n=el("a",{text:"Ažuriraj"}),n.addEventListener("click",()=>{storeUserPreset(e.name,v(),y()),g(e.id),j()}))
+		}(()=>presetSharePrefs(e)):(n=el("a",{text:"Ažuriraj"}),n.addEventListener("click",()=>{storeUserPreset(e.name,v(),P()),g(e.id),j()}))
 		;const r=el("div",{class:"ms-manage-item"},[el("span",{class:"ms-manage-name",text:e.name}),T([n,t,a])])
 		;t.addEventListener("click",()=>function(e){z=e.id,L.value=e.name,L.classList.remove("invalid"),A=!0,j()}(e));let o=null;const s=()=>{
 		clearTimeout(o),o=null,a.textContent="Obriši",a.classList.remove("active")};return a.addEventListener("click",()=>{
@@ -652,16 +660,17 @@
 		text:`Podijeljen predložak "${sharedMapView.name}"`}),e])
 		}()),userPresets.length?userPresets.forEach(e=>M.appendChild(I(e))):M.appendChild(el("div",{class:"ms-manage-empty",
 		text:"Nema spremljenih predložaka"})),A&&(A=!1,L.focus(),L.select())}L.addEventListener("keydown",e=>{"Enter"===e.key?(e.preventDefault(),
-		H()):"Escape"===e.key&&R()}),L.addEventListener("input",()=>L.classList.remove("invalid")),j();const N=el("button",{type:"button",
-		class:"btn",text:"Primijeni"});N.addEventListener("click",()=>{const t=b(),a=P(t);a&&(t.layout=a),saveMapPrefs(t),clearSharedMapView(),
-		setMapSettingsVisible(e,!1),renderMaps(),initDynamicContent(),applySnapLayout(a),scrollToTop()});const W=el("a",{text:"Podijeli"})
-		;W.addEventListener("click",()=>{copyMapViewLink(function(){const e=b(),t=userPresets.find(t=>t.id===e.preset)
-		;if(t)return presetSharePrefs(t);const a=P(e);return a&&(e.layout=a),e}(),()=>flashLabel(W,"Kopirano!","Podijeli"))}),e.appendChild(m),
-		e.appendChild(k),e.appendChild(t),e.appendChild(el("div",{class:"ms-actions"},[N,W])),e.appendChild(l),e.appendChild(a),e.appendChild(M)}
+		H()):"Escape"===e.key&&R()}),L.addEventListener("input",()=>L.classList.remove("invalid")),j();const W=el("button",{type:"button",
+		class:"btn",text:"Primijeni"});W.addEventListener("click",()=>{const t=b(),a=y(t);a&&(t.layout=a),saveMapPrefs(t),clearSharedMapView(),
+		setMapSettingsVisible(e,!1),renderMaps(),initDynamicContent(),applySnapLayout(a),scrollToTop()});const N=el("a",{text:"Podijeli"})
+		;N.addEventListener("click",()=>{copyMapViewLink(function(){const e=b(),t=userPresets.find(t=>t.id===e.preset)
+		;if(t)return presetSharePrefs(t);const a=y(e);return a&&(e.layout=a),e}(),()=>flashLabel(N,"Kopirano!","Podijeli"))}),e.appendChild(m),
+		e.appendChild(k),e.appendChild(t),e.appendChild(el("div",{class:"ms-actions"},[W,N])),e.appendChild(l),e.appendChild(a),e.appendChild(M)}
 		document.addEventListener("map-fullscreen",()=>{document.querySelectorAll(".map-block.popout").forEach(e=>{
 		const t=!!e.querySelector(".if1.fullscreen"),a=e.classList.contains("fs-host");e.classList.toggle("fs-host",t),
 		t?e.style.zIndex=4500:a&&raisePopout(e)}),layoutSnapColumns()}),["load","click","pointerup"].forEach(e=>{document.addEventListener(e,e=>{
-		e.target.closest&&e.target.closest(".map-block.snapped:not(.free)")&&setTimeout(layoutSnapColumns,0)},!0)}),
+		const t=e.target.closest&&e.target.closest(".map-block.popout");t&&setTimeout(()=>{
+		isSnapped(t)&&!t.classList.contains("free")&&layoutSnapColumns(),fitTitles(t)},0)},!0)}),
 		"loading"===document.readyState?document.addEventListener("DOMContentLoaded",renderMaps):renderMaps(),
 		document.addEventListener("DOMContentLoaded",applyStoredSnapLayout);
 	</script>
