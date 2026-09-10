@@ -951,7 +951,7 @@ function maxWidthStyle(map) {
 function buildTitleBar(title, map = {}, popout = false) {
 	return el('div', { class: 'radartitle', style: maxWidthStyle(map) || undefined }, [
 		el('a', { href: title.href, target: '_blank', rel: 'nofollow', text: title.text }),
-		popout ? el('span', { class: 'right right-cluster' }, [buildPopoutButton()]) : null
+		popout ? el('span', { class: 'right right-cluster' }, [buildPopoutButton(), buildGroupButton()]) : null
 	]);
 }
 
@@ -1053,6 +1053,7 @@ function buildIframe(map) {
 		el('a', { class: 'center', href: map.titleHref, target: '_blank', rel: 'nofollow', text: map.name }),
 		el('span', { class: 'right right-cluster' }, [
 			buildPopoutButton(),
+			buildGroupButton(),
 			el('a', { id: `reset${pascal}Frame`, 'data-frame-id': frameId, style: 'display:none', text: '[X]' }),
 			fsBtn
 		])
@@ -1150,6 +1151,7 @@ const POPOUT_MARGIN = 16; // kept free of the viewport edge when sizing
 const POPOUT_TITLE_HEIGHT = 23; // .radartitle height; keeps the drag handle reachable
 const POPOUT_HANDLES = ['n', 'ne', 'e', 'se', 's', 'sw', 'w', 'nw'];
 const MAGNET = 12; // a dragged widget's edge this close to another floating widget's is pulled onto it
+const GROUP_TOUCH = 1; // widgets whose edges lie this close on each other touch, and can be grouped
 let popoutZ = 5000; // bumped on every raise so the last touched widget is on top
 const POPOUT_FS_Z = 4500; // a widget hosting a fullscreen map: under every other widget, over the columns' ground (CSS puts the page's fullscreen there too)
 
@@ -1211,8 +1213,9 @@ function dockMap(block) {
 	// a fullscreen iframe inside the widget is fixed on its own; take it down first
 	const fs = block.querySelector('.if1.fullscreen');
 	if (fs) exitFullscreen(fs);
+	if (block._group) leaveGroup(block);
 	unsnapPane(block);
-	block.classList.remove('popout', 'free');
+	block.classList.remove('popout', 'free', 'grouped');
 	['left', 'top', 'width', 'height', 'z-index'].forEach(p => block.style.removeProperty(p));
 	block.querySelectorAll('.po-h').forEach(h => h.remove());
 	if (block._gap) block._gap.remove();
@@ -1234,8 +1237,11 @@ function placePopout(block, left, top) {
 	block.style.top = `${Math.round(Math.min(Math.max(0, top), maxTop))}px`;
 }
 
+// a grouped widget comes up with its group, the order within it kept
 function raisePopout(block) {
-	block.style.zIndex = ++popoutZ;
+	groupMembers(block)
+		.sort((a, b) => (Number(a.style.zIndex) || 0) - (Number(b.style.zIndex) || 0))
+		.forEach(member => member.style.zIndex = ++popoutZ);
 }
 
 function clamp(value, min, max) {
@@ -1284,7 +1290,12 @@ function trackPopoutPointer(e, onMove, onEnd) {
 function dragPopout(block, e) {
 	const rect = block.getBoundingClientRect();
 	const grab = { x: e.clientX - rect.left, y: e.clientY - rect.top };
-	const magnets = magnetRects(block); // the others stay put for the drag
+	// a grouped widget takes its group along: the members move by the same
+	// offset, and magnets and the viewport see the group's bounding box. A
+	// group never snaps into a column — a single widget does
+	const group = block._group ? groupStarts(groupMembers(block)) : null;
+	const box = group ? groupBox(group) : null;
+	const magnets = magnetRects(block, group ? group.map(s => s.block) : []); // the others stay put for the drag
 	let snapped = isSnapped(block);
 	let target = null;
 	trackPopoutPointer(e, (dx, dy, ev) => {
@@ -1297,6 +1308,12 @@ function dragPopout(block, e) {
 		let left = ev.clientX - grab.x, top = ev.clientY - grab.y;
 		// a click on a parked widget must not snap or be pulled anywhere
 		const armed = Math.hypot(dx, dy) >= SNAP_ARM;
+		if (group) {
+			let boxLeft = box.left + left - rect.left, boxTop = box.top + top - rect.top;
+			if (armed) ({ left: boxLeft, top: boxTop } = magnetPosition(magnets, boxLeft, boxTop, box.width, box.height));
+			moveGroup(group, box, boxLeft - box.left, boxTop - box.top);
+			return;
+		}
 		target = armed ? snapTargetAt(left, left + block.offsetWidth, ev.clientY) : null;
 		if (armed && !target) ({ left, top } = magnetPosition(magnets, left, top, block.offsetWidth, block.offsetHeight));
 		placePopout(block, left, top);
@@ -1308,11 +1325,12 @@ function dragPopout(block, e) {
 	});
 }
 
-// the widgets floating over the page other than this one — a pane is out of
-// reach in its column, and a widget hosting a fullscreen map is not to be seen
-function magnetRects(block) {
-	return [...document.querySelectorAll('.map-block.popout:not(.snapped):not(.fs-host)')]
-		.filter(other => other !== block)
+// the widgets floating over the page other than this one and the others
+// moving with it — a pane is out of reach in its column, and a widget hosting
+// a fullscreen map is not to be seen
+function magnetRects(block, along = []) {
+	return floatingBlocks()
+		.filter(other => other !== block && !along.includes(other) && !other.classList.contains('fs-host'))
 		.map(other => other.getBoundingClientRect());
 }
 
@@ -1346,6 +1364,117 @@ function magnetEdge(value, edges) {
 		if (Math.abs(edge - value) <= MAGNET && (best === null || Math.abs(edge - value) < Math.abs(best - value))) best = edge;
 	});
 	return best;
+}
+
+// ---------- groups ----------
+
+// floating widgets that touch (an edge of one on an edge of the other, the
+// two overlapping along it — what the magnets leave) can be grouped: the
+// group drags and raises as one, each member still resizes on its own. The
+// title bar's [+] joins a widget with what it touches (and their groups, into
+// one), [-] takes it out again; a group left with one member is no group.
+// Explicit only: touching alone groups nothing. A group lives in block._group
+// (an id shared by its members) and rides in the stored layout as a group
+// number on each floating entry. Docking or snapping a member takes it out.
+let groupSeq = 0;
+
+function floatingBlocks() {
+	return [...document.querySelectorAll('.map-block.popout:not(.snapped)')];
+}
+
+function groupMembers(block) {
+	return block._group ? floatingBlocks().filter(b => b._group === block._group) : [block];
+}
+
+function buildGroupButton() {
+	const btn = el('a', { class: 'grp-btn', hidden: '' });
+	btn.addEventListener('click', () => toggleGroup(btn.closest('.map-block')));
+	return btn;
+}
+
+function toggleGroup(block) {
+	if (!block || !block.classList.contains('popout') || isSnapped(block)) return;
+	if (block._group) leaveGroup(block);
+	else joinGroup(block);
+	persistSnapLayout();
+}
+
+function rectsTouch(a, b) {
+	const alongY = Math.min(a.bottom, b.bottom) - Math.max(a.top, b.top) > 0;
+	const alongX = Math.min(a.right, b.right) - Math.max(a.left, b.left) > 0;
+	const near = (p, q) => Math.abs(p - q) <= GROUP_TOUCH;
+	return (alongY && (near(a.right, b.left) || near(a.left, b.right)))
+		|| (alongX && (near(a.bottom, b.top) || near(a.top, b.bottom)));
+}
+
+function touchingBlocks(block) {
+	const rect = block.getBoundingClientRect();
+	return floatingBlocks().filter(other =>
+		other !== block && !other.classList.contains('fs-host') && rectsTouch(rect, other.getBoundingClientRect()));
+}
+
+function joinGroup(block) {
+	dlog(`joinGroup: ${block.dataset.mapId}`);
+	const touched = touchingBlocks(block);
+	if (!touched.length) return;
+	// one group out of the widget, what it touches and the groups those are in
+	const ids = new Set(touched.map(b => b._group).filter(Boolean));
+	const id = ids.values().next().value || `g${++groupSeq}`;
+	floatingBlocks().forEach(b => { if (b._group && ids.has(b._group)) b._group = id; });
+	touched.forEach(b => b._group = id);
+	block._group = id;
+	updateGroups();
+}
+
+function leaveGroup(block) {
+	dlog(`leaveGroup: ${block.dataset.mapId}`);
+	const id = block._group;
+	delete block._group;
+	const rest = floatingBlocks().filter(b => b._group === id);
+	if (rest.length < 2) rest.forEach(b => delete b._group);
+	updateGroups();
+}
+
+// the grouped mark and the button on every widget: [-] on a member, [+] on a
+// widget touching another, nothing where there is nothing to do
+function updateGroups() {
+	document.querySelectorAll('.map-block.popout').forEach(block => {
+		const grouped = !!block._group && !isSnapped(block);
+		block.classList.toggle('grouped', grouped);
+		const can = grouped || (!isSnapped(block) && touchingBlocks(block).length > 0);
+		block.querySelectorAll('.grp-btn').forEach(btn => {
+			btn.hidden = !can;
+			btn.textContent = grouped ? '[-]' : '[+]';
+			btn.title = grouped ? 'Odvoji prozor od skupine' : 'Spoji prozor s prozorima koje dodiruje';
+		});
+	});
+}
+
+// where the members stand, to move them from
+function groupStarts(members) {
+	return members.map(block => {
+		const rect = block.getBoundingClientRect();
+		return { block, left: rect.left, top: rect.top, right: rect.right, bottom: rect.bottom };
+	});
+}
+
+function groupBox(starts) {
+	const left = Math.min(...starts.map(s => s.left)), top = Math.min(...starts.map(s => s.top));
+	const right = Math.max(...starts.map(s => s.right)), bottom = Math.max(...starts.map(s => s.bottom));
+	return { left, top, width: right - left, height: bottom - top };
+}
+
+// the members moved by one offset, the group's box kept inside the viewport
+// when it fits, else at least its top-left corner — placePopout()'s rule
+function moveGroup(starts, box, dx, dy) {
+	const left = Math.min(Math.max(0, box.left + dx), Math.max(0, viewportWidth() - box.width));
+	const top = Math.min(Math.max(0, box.top + dy), Math.max(0, viewportHeight() - box.height));
+	dx = Math.round(left - box.left);
+	dy = Math.round(top - box.top);
+	starts.forEach(s => {
+		s.block.style.left = `${Math.round(s.left + dx)}px`;
+		s.block.style.top = `${Math.round(s.top + dy)}px`;
+	});
 }
 
 // resizing from any side or corner. Width is the dimension every widget has;
@@ -1432,10 +1561,21 @@ window.addEventListener('resize', () => {
 	clearTimeout(window._popoutResizeTimeout);
 	window._popoutResizeTimeout = setTimeout(() => {
 		layoutSnapColumns();
-		document.querySelectorAll('.map-block.popout:not(.snapped)').forEach(block => {
-			const rect = block.getBoundingClientRect();
-			placePopout(block, rect.left, rect.top);
+		// a group is kept whole: moved by its box, not member by member
+		const done = new Set();
+		floatingBlocks().forEach(block => {
+			if (done.has(block)) return;
+			const members = groupMembers(block);
+			members.forEach(m => done.add(m));
+			if (members.length === 1) {
+				const rect = block.getBoundingClientRect();
+				placePopout(block, rect.left, rect.top);
+			} else {
+				const starts = groupStarts(members);
+				moveGroup(starts, groupBox(starts), 0, 0);
+			}
 		});
+		updateGroups();
 	}, 200);
 });
 
@@ -1543,6 +1683,7 @@ function showSnapPreview(rect) {
 
 function snapPane(block, side, index) {
 	dlog(`snapPane: ${block.dataset.mapId} → ${side} ${index}`);
+	if (block._group) leaveGroup(block);
 	unsnapPane(block);
 	const col = snapColumns[side];
 	if (col.panes.length >= SNAP_MAX_PANES) return;
@@ -1779,8 +1920,10 @@ function snapLayout() {
 		};
 	});
 	// widgets floating over the page, bottom to top, so they stack the same
-	// way again; a locked one has no height of its own to store
-	const floating = [...document.querySelectorAll('.map-block.popout:not(.snapped)')]
+	// way again; a locked one has no height of its own to store. A group is a
+	// number shared by its members, counted in order of appearance
+	const groupNumbers = new Map();
+	const floating = floatingBlocks()
 		.sort((a, b) => (Number(a.style.zIndex) || 0) - (Number(b.style.zIndex) || 0))
 		.map(block => {
 			const rect = block.getBoundingClientRect();
@@ -1791,6 +1934,10 @@ function snapLayout() {
 				width: roundFraction(rect.width / viewportWidth())
 			};
 			if (block.classList.contains('free')) entry.height = roundFraction(rect.height / viewportHeight());
+			if (block._group) {
+				if (!groupNumbers.has(block._group)) groupNumbers.set(block._group, groupNumbers.size + 1);
+				entry.group = groupNumbers.get(block._group);
+			}
 			return entry;
 		});
 	if (floating.length) layout.floating = floating;
@@ -1840,8 +1987,13 @@ function sanitizeSnapLayout(layout, mapIds) {
 				seen.add(f.id);
 				const entry = { id: f.id, left: roundFraction(Number(f.left)), top: roundFraction(Number(f.top)), width: roundFraction(Number(f.width)) };
 				if (fraction(Number(f.height)) && Number(f.height) > 0) entry.height = roundFraction(Number(f.height));
+				if (Number.isInteger(f.group) && f.group > 0) entry.group = f.group;
 				return entry;
 			});
+		// a group of one is no group
+		floating.forEach(f => {
+			if (f.group && floating.filter(o => o.group === f.group).length < 2) delete f.group;
+		});
 		if (floating.length) clean.floating = floating;
 	}
 	return Object.keys(clean).length ? clean : null;
@@ -1875,7 +2027,8 @@ function applySnapLayout(layout) {
 	const { left, right } = snapColumns;
 	if (left.panes.length && right.panes.length && left.width + right.width > 1) right.width = 1 - left.width;
 	layoutSnapColumns();
-	(layout.floating || []).forEach(({ id, left, top, width, height }) => {
+	const groupIds = new Map(); // stored group number → a fresh id
+	(layout.floating || []).forEach(({ id, left, top, width, height, group }) => {
 		const block = document.querySelector(`.map-block[data-map-id="${CSS.escape(id)}"]`);
 		if (!block || block.classList.contains('popout')) return;
 		popoutMap(block);
@@ -1884,7 +2037,12 @@ function applySnapLayout(layout) {
 			block.style.height = `${Math.round(clamp(height * viewportHeight(), POPOUT_MIN_HEIGHT, viewportHeight() - POPOUT_MARGIN))}px`;
 		placePopout(block, left * viewportWidth(), top * viewportHeight());
 		raisePopout(block); // in stored order, so the last one is on top again
+		if (group) {
+			if (!groupIds.has(group)) groupIds.set(group, `g${++groupSeq}`);
+			block._group = groupIds.get(group);
+		}
 	});
+	updateGroups();
 	snapPersistPaused = false;
 }
 
@@ -1902,6 +2060,8 @@ let snapPersistPaused = false;
 // written). Paused while the breakpoint docks everything: that is the window
 // changing, not the arrangement
 function persistSnapLayout() {
+	// every gesture ends here: what touches what may have changed
+	updateGroups();
 	if (snapPersistPaused) return;
 	const layout = snapLayout();
 	if (sharedMapView) {

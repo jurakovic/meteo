@@ -261,7 +261,7 @@ body.fs-lock {
 
 /* pop-out widgets (customize page): a map block lifted out of the table into a
    fixed, draggable, resizable box — desktop only, the button stays hidden elsewhere */
-.po-btn {
+.po-btn, .grp-btn {
 	display: none;
 }
 
@@ -289,6 +289,17 @@ body.fs-lock {
 	/* the fullscreen bar is pinned; no widget toggling from there */
 	.radartitle.fullscreen .po-btn {
 		display: none;
+	}
+
+	/* the grouping button of a floating widget, shown by maps.js only while
+	   there is something to do: [+] touching another widget, [-] in a group */
+	.map-block.popout:not(.snapped) .radartitle:not(.fullscreen) .grp-btn:not([hidden]) {
+		display: inline;
+	}
+
+	/* a grouped widget's frame in the snap blue, so the group reads as one */
+	.map-block.popout.grouped {
+		outline-color: #4a8de6;
 	}
 
 	.map-block.popout {
