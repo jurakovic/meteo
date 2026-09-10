@@ -447,6 +447,17 @@ body.fs-lock {
 			visibility: visible;
 		}
 
+	/* the widgets floating over the page stay in view over a fullscreen map:
+	   the page's fullscreen goes under them (above the columns' ground), and
+	   a widget hosting one is lowered to the same place by maps.js */
+	.radartitle.fullscreen {
+		z-index: 4501;
+	}
+
+	.if1.fullscreen {
+		z-index: 4500;
+	}
+
 	/* a free pane alone in its column already fills what fullscreen would; the
 	   button is kept on a fullscreen bar, or a pane left alone mid-fullscreen would have no way out */
 	.map-block.free.snapped-alone .radartitle:not(.fullscreen) .fs-btn {

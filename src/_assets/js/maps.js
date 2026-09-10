@@ -1150,6 +1150,7 @@ const POPOUT_MARGIN = 16; // kept free of the viewport edge when sizing
 const POPOUT_TITLE_HEIGHT = 23; // .radartitle height; keeps the drag handle reachable
 const POPOUT_HANDLES = ['n', 'ne', 'e', 'se', 's', 'sw', 'w', 'nw'];
 let popoutZ = 5000; // bumped on every raise so the last touched widget is on top
+const POPOUT_FS_Z = 4500; // a widget hosting a fullscreen map: under every other widget, over the columns' ground (CSS puts the page's fullscreen there too)
 
 function buildPopoutButton() {
 	const btn = el('a', { class: 'po-btn' });
@@ -1344,7 +1345,8 @@ document.addEventListener('pointerdown', (e) => {
 	}
 	const block = e.target.closest('.map-block.popout');
 	if (!block) return;
-	raisePopout(block);
+	// a widget hosting a fullscreen map stays under the others (see map-fullscreen)
+	if (!block.classList.contains('fs-host')) raisePopout(block);
 	if (e.button !== 0) return;
 	const handle = e.target.closest('.po-h');
 	const title = e.target.closest('.radartitle');
@@ -1865,9 +1867,16 @@ function persistSnapLayout() {
 // scrollbar, the viewport the columns are laid out in has changed width
 document.addEventListener('map-fullscreen', () => {
 	// only the bar and the map move to the fullscreen place; the widget's box
-	// would stay behind, an empty frame over whatever it was floating on
+	// would stay behind, an empty frame over whatever it was floating on.
+	// The widgets floating over the page stay in view over the fullscreen map:
+	// the host goes under every other widget for as long as it hosts one (the
+	// page's own fullscreen sits there through the CSS), then back on top
 	document.querySelectorAll('.map-block.popout').forEach(block => {
-		block.classList.toggle('fs-host', !!block.querySelector('.if1.fullscreen'));
+		const hosting = !!block.querySelector('.if1.fullscreen');
+		const wasHosting = block.classList.contains('fs-host');
+		block.classList.toggle('fs-host', hosting);
+		if (hosting) block.style.zIndex = POPOUT_FS_Z;
+		else if (wasHosting) raisePopout(block);
 	});
 	layoutSnapColumns();
 });
