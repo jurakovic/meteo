@@ -1149,6 +1149,7 @@ const POPOUT_MIN_HEIGHT = 120; // free (iframe) widgets only; the others follow 
 const POPOUT_MARGIN = 16; // kept free of the viewport edge when sizing
 const POPOUT_TITLE_HEIGHT = 23; // .radartitle height; keeps the drag handle reachable
 const POPOUT_HANDLES = ['n', 'ne', 'e', 'se', 's', 'sw', 'w', 'nw'];
+const MAGNET = 12; // a dragged widget's edge this close to another floating widget's is pulled onto it
 let popoutZ = 5000; // bumped on every raise so the last touched widget is on top
 const POPOUT_FS_Z = 4500; // a widget hosting a fullscreen map: under every other widget, over the columns' ground (CSS puts the page's fullscreen there too)
 
@@ -1278,10 +1279,12 @@ function trackPopoutPointer(e, onMove, onEnd) {
 // the edge still counts) it has a snap slot, previewed and taken on release;
 // a snapped pane holds its place until the drag is decidedly one, then floats
 // again at the size it had before it snapped, the title bar kept under the
-// pointer
+// pointer. Away from the viewport edges the other floating widgets are
+// magnets: an edge brought close to one of theirs is pulled onto it
 function dragPopout(block, e) {
 	const rect = block.getBoundingClientRect();
 	const grab = { x: e.clientX - rect.left, y: e.clientY - rect.top };
+	const magnets = magnetRects(block); // the others stay put for the drag
 	let snapped = isSnapped(block);
 	let target = null;
 	trackPopoutPointer(e, (dx, dy, ev) => {
@@ -1291,9 +1294,12 @@ function dragPopout(block, e) {
 			snapped = false;
 			grab.x = Math.min(grab.x, block.offsetWidth - POPOUT_TITLE_HEIGHT);
 		}
-		const left = ev.clientX - grab.x;
-		placePopout(block, left, ev.clientY - grab.y);
-		target = Math.hypot(dx, dy) >= SNAP_ARM ? snapTargetAt(left, left + block.offsetWidth, ev.clientY) : null;
+		let left = ev.clientX - grab.x, top = ev.clientY - grab.y;
+		// a click on a parked widget must not snap or be pulled anywhere
+		const armed = Math.hypot(dx, dy) >= SNAP_ARM;
+		target = armed ? snapTargetAt(left, left + block.offsetWidth, ev.clientY) : null;
+		if (armed && !target) ({ left, top } = magnetPosition(magnets, left, top, block.offsetWidth, block.offsetHeight));
+		placePopout(block, left, top);
 		showSnapPreview(target ? snapSlotRect(block, target) : null);
 	}, () => {
 		showSnapPreview(null);
@@ -1302,23 +1308,77 @@ function dragPopout(block, e) {
 	});
 }
 
+// the widgets floating over the page other than this one — a pane is out of
+// reach in its column, and a widget hosting a fullscreen map is not to be seen
+function magnetRects(block) {
+	return [...document.querySelectorAll('.map-block.popout:not(.snapped):not(.fs-host)')]
+		.filter(other => other !== block)
+		.map(other => other.getBoundingClientRect());
+}
+
+// where a widget of this size asked to left/top is pulled to. An edge within
+// MAGNET of another widget's opposite edge meets it — beside it when the two
+// overlap in height, above or below it when they overlap in width — and once
+// they meet on one axis the nearer of the like edges lines up on the other,
+// so a widget dropped below another sits flush with its left or right side.
+// The closest edge wins on each axis; nothing within reach leaves the widget
+// where it was asked
+function magnetPosition(rects, left, top, width, height) {
+	const right = left + width, bottom = top + height;
+	// the candidate carrying the closest edge within reach, with its widget
+	const pull = (value, candidates) => {
+		const edge = magnetEdge(value, candidates.map(c => c[0]));
+		return edge === null ? null : candidates.find(c => c[0] === edge);
+	};
+	const beside = rects.filter(r => top < r.bottom && bottom > r.top);
+	const stacked = rects.filter(r => left < r.right && right > r.left);
+	let x = pull(left, beside.flatMap(r => [[r.right, r], [r.left - width, r]]));
+	let y = pull(top, stacked.flatMap(r => [[r.bottom, r], [r.top - height, r]]));
+	if (x && !y) y = pull(top, [[x[1].top, x[1]], [x[1].bottom - height, x[1]]]);
+	if (y && !x) x = pull(left, [[y[1].left, y[1]], [y[1].right - width, y[1]]]);
+	return { left: x ? x[0] : left, top: y ? y[0] : top };
+}
+
+// the closest of the edges within MAGNET of value, null when none is
+function magnetEdge(value, edges) {
+	let best = null;
+	edges.forEach(edge => {
+		if (Math.abs(edge - value) <= MAGNET && (best === null || Math.abs(edge - value) < Math.abs(best - value))) best = edge;
+	});
+	return best;
+}
+
 // resizing from any side or corner. Width is the dimension every widget has;
 // a locked (aspect) widget derives its height from it, so a pull on its top or
 // bottom edge is turned into the width that gives that height, and a corner
 // follows whichever axis asks for more. Pulling the left or top edge keeps the
-// opposite edge where it is by moving the widget along.
+// opposite edge where it is by moving the widget along. The pulled edge is
+// drawn by the other floating widgets too (magnets, as on drag): onto the
+// facing edge of one beside it — above or below it, for a top or bottom edge
+// — or into line with the like edge of one above or below it; exact for a
+// width, and through the aspect ratio for a locked widget's height.
 function resizePopout(block, dir, e) {
 	const start = block.getBoundingClientRect();
 	const free = block.classList.contains('free');
 	const ratio = start.width / start.height;
 	const maxWidth = Math.min(POPOUT_MAX_WIDTH, viewportWidth() - POPOUT_MARGIN);
 	const maxHeight = viewportHeight() - POPOUT_MARGIN;
+	const magnets = magnetRects(block);
 	trackPopoutPointer(e, (dx, dy) => {
 		let w = start.width, h = start.height;
 		if (dir.includes('e')) w = start.width + dx;
 		if (dir.includes('w')) w = start.width - dx;
 		if (dir.includes('s')) h = start.height + dy;
 		if (dir.includes('n')) h = start.height - dy;
+		const left = dir.includes('w') ? start.right - w : start.left;
+		const top = dir.includes('n') ? start.bottom - h : start.top;
+		const beside = magnets.filter(r => top < r.bottom && top + h > r.top);
+		const stacked = magnets.filter(r => left < r.right && left + w > r.left);
+		const edge = (value, meet, align) => { const m = magnetEdge(value, meet.concat(align)); return m === null ? value : m; };
+		if (dir.includes('e')) w = edge(start.left + w, beside.map(r => r.left), stacked.map(r => r.right)) - start.left;
+		if (dir.includes('w')) w = start.right - edge(start.right - w, beside.map(r => r.right), stacked.map(r => r.left));
+		if (dir.includes('s')) h = edge(start.top + h, stacked.map(r => r.top), beside.map(r => r.bottom)) - start.top;
+		if (dir.includes('n')) h = start.bottom - edge(start.bottom - h, stacked.map(r => r.bottom), beside.map(r => r.top));
 		if (free) {
 			w = clamp(w, POPOUT_MIN_WIDTH, maxWidth);
 			h = clamp(h, POPOUT_MIN_HEIGHT, maxHeight);
