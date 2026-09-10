@@ -261,7 +261,7 @@ body.fs-lock {
 
 /* pop-out widgets (customize page): a map block lifted out of the table into a
    fixed, draggable, resizable box — desktop only, the button stays hidden elsewhere */
-.po-btn, .grp-btn {
+.po-btn, .grp-btn, .rl-btn {
 	display: none;
 }
 
@@ -289,6 +289,11 @@ body.fs-lock {
 	/* the fullscreen bar is pinned; no widget toggling from there */
 	.radartitle.fullscreen .po-btn {
 		display: none;
+	}
+
+	/* a popped-out widget's [R] reloads its map */
+	.map-block.popout .radartitle:not(.fullscreen) .rl-btn {
+		display: inline;
 	}
 
 	/* the grouping button of a widget, shown by maps.js only while there is

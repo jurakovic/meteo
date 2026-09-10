@@ -951,7 +951,7 @@ function maxWidthStyle(map) {
 function buildTitleBar(title, map = {}, popout = false) {
 	return el('div', { class: 'radartitle', style: maxWidthStyle(map) || undefined }, [
 		el('a', { href: title.href, target: '_blank', rel: 'nofollow', text: title.text }),
-		popout ? el('span', { class: 'right right-cluster' }, [buildGroupButton(), buildPopoutButton()]) : null
+		popout ? el('span', { class: 'right right-cluster' }, [buildReloadButton(), buildGroupButton(), buildPopoutButton()]) : null
 	]);
 }
 
@@ -1172,6 +1172,36 @@ function togglePopout(block) {
 	if (!block) return;
 	if (block.classList.contains('popout')) dockMap(block);
 	else if (POPOUT_MQ.matches) popoutMap(block);
+}
+
+// a widget's [R] fetches its map afresh — the page may have been open long
+// enough for new images to be out — without reloading the page. First in
+// the cluster, shown only on a popped-out widget (CSS). Not on an
+// interactive map, whose bar keeps its own [X]/[R] gate button
+function buildReloadButton() {
+	const btn = el('a', { class: 'rl-btn', text: '[R]', title: 'Ponovno učitaj kartu' });
+	btn.addEventListener('click', () => reloadMap(btn.closest('.map-block')));
+	return btn;
+}
+
+function reloadMap(block) {
+	if (!block) return;
+	dlog(`reloadMap: ${block.dataset.mapId}`);
+	// images and videos are re-fetched past the cache by a fresh query parameter
+	block.querySelectorAll('img[src]').forEach(img => { img.src = freshUrl(img.getAttribute('src')); });
+	block.querySelectorAll('video').forEach(video => {
+		video.querySelectorAll('source[src]').forEach(source => { source.src = freshUrl(source.getAttribute('src')); });
+		video.load();
+	});
+	// a plain iframe is navigated to its address again
+	block.querySelectorAll('.if2 iframe[src]').forEach(iframe => { iframe.src = iframe.getAttribute('src'); });
+}
+
+// the url with a reload parameter of its own set to now (replaced when there
+// is one already), so the browser fetches instead of serving its cache
+function freshUrl(url) {
+	const base = url.replace(/([?&])_r=\d+(&|$)/, (m, sep, next) => next ? sep : '');
+	return `${base}${base.includes('?') ? '&' : '?'}_r=${Date.now()}`;
 }
 
 function popoutMap(block) {
