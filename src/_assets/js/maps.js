@@ -951,7 +951,7 @@ function maxWidthStyle(map) {
 function buildTitleBar(title, map = {}, popout = false) {
 	return el('div', { class: 'radartitle', style: maxWidthStyle(map) || undefined }, [
 		el('a', { href: title.href, target: '_blank', rel: 'nofollow', text: title.text }),
-		popout ? el('span', { class: 'right right-cluster' }, [buildPopoutButton(), buildGroupButton()]) : null
+		popout ? el('span', { class: 'right right-cluster' }, [buildGroupButton(), buildPopoutButton()]) : null
 	]);
 }
 
@@ -1052,8 +1052,8 @@ function buildIframe(map) {
 		zoomBtn,
 		el('a', { class: 'center', href: map.titleHref, target: '_blank', rel: 'nofollow', text: map.name }),
 		el('span', { class: 'right right-cluster' }, [
-			buildPopoutButton(),
 			buildGroupButton(),
+			buildPopoutButton(),
 			el('a', { id: `reset${pascal}Frame`, 'data-frame-id': frameId, style: 'display:none', text: '[X]' }),
 			fsBtn
 		])
@@ -1282,46 +1282,59 @@ function trackPopoutPointer(e, onMove, onEnd) {
 // the widget follows the pointer by the point of the title bar it was grabbed
 // at. Once its edge reaches a viewport edge (wherever it is held — the place
 // the pointer asks for is checked, not the clamped one, so pushing on past
-// the edge still counts) it has a snap slot, previewed and taken on release;
-// a snapped pane holds its place until the drag is decidedly one, then floats
-// again at the size it had before it snapped, the title bar kept under the
+// the edge still counts) it has a snap slot, previewed and taken on release.
+// A snapped pane moves up and down its column until the drag is decidedly
+// sideways, then floats again as it stood, the title bar kept under the
 // pointer. Away from the viewport edges the other floating widgets are
-// magnets: an edge brought close to one of theirs is pulled onto it
+// magnets: an edge brought close to one of theirs is pulled onto it. A
+// grouped widget takes its group along: the members move by one offset, and
+// the magnets, the viewport and the column snap see the group's bounding
+// box in place of the widget held
 function dragPopout(block, e) {
-	const rect = block.getBoundingClientRect();
+	let rect = block.getBoundingClientRect();
 	const grab = { x: e.clientX - rect.left, y: e.clientY - rect.top };
-	// a grouped widget takes its group along: the members move by the same
-	// offset, and magnets and the viewport see the group's bounding box. A
-	// group never snaps into a column — a single widget does
-	const group = block._group ? groupStarts(groupMembers(block)) : null;
-	const box = group ? groupBox(group) : null;
-	const magnets = magnetRects(block, group ? group.map(s => s.block) : []); // the others stay put for the drag
-	let snapped = isSnapped(block);
+	const members = groupMembers(block); // the widget alone when not grouped
+	let starts = groupStarts(members), box = groupBox(starts);
+	let col = snapColumnOf(block); // a group's members share it
+	const magnets = magnetRects(block, members); // the others stay put for the drag
 	let target = null;
 	trackPopoutPointer(e, (dx, dy, ev) => {
-		if (snapped) {
-			if (Math.hypot(dx, dy) < SNAP_DETACH) return;
-			unsnapPane(block);
-			snapped = false;
-			grab.x = Math.min(grab.x, block.offsetWidth - POPOUT_TITLE_HEIGHT);
-		}
-		let left = ev.clientX - grab.x, top = ev.clientY - grab.y;
-		// a click on a parked widget must not snap or be pulled anywhere
+		// a click on a parked widget must not move, snap or be pulled anywhere
 		const armed = Math.hypot(dx, dy) >= SNAP_ARM;
-		if (group) {
-			let boxLeft = box.left + left - rect.left, boxTop = box.top + top - rect.top;
-			if (armed) ({ left: boxLeft, top: boxTop } = magnetPosition(magnets, boxLeft, boxTop, box.width, box.height));
-			moveGroup(group, box, boxLeft - box.left, boxTop - box.top);
-			return;
+		if (col) {
+			if (Math.abs(dx) < SNAP_DETACH) {
+				if (armed) movePanes(col, starts, box, dy);
+				return;
+			}
+			// out of the column: the members float where they stand, measured
+			// afresh, the title bar kept under the pointer
+			members.forEach(unsnapPane);
+			col = null;
+			rect = block.getBoundingClientRect();
+			grab.x = Math.min(grab.x, block.offsetWidth - POPOUT_TITLE_HEIGHT);
+			grab.y = clamp(ev.clientY - rect.top, 0, POPOUT_TITLE_HEIGHT);
+			starts = groupStarts(members);
+			box = groupBox(starts);
 		}
-		target = armed ? snapTargetAt(left, left + block.offsetWidth, ev.clientY) : null;
-		if (armed && !target) ({ left, top } = magnetPosition(magnets, left, top, block.offsetWidth, block.offsetHeight));
-		placePopout(block, left, top);
-		showSnapPreview(target ? snapSlotRect(block, target) : null);
+		// where the box is asked to go, off the widget held
+		let boxLeft = box.left + ev.clientX - grab.x - rect.left, boxTop = box.top + ev.clientY - grab.y - rect.top;
+		const side = armed ? snapSideAt(boxLeft, boxLeft + box.width) : null;
+		target = side ? { side, slot: snapSlot(members, side, boxTop) } : null;
+		if (armed && !target) ({ left: boxLeft, top: boxTop } = magnetPosition(magnets, boxLeft, boxTop, box.width, box.height));
+		moveGroup(starts, box, boxLeft - box.left, boxTop - box.top);
+		showSnapPreview(target ? target.slot : null);
 	}, () => {
 		showSnapPreview(null);
-		if (target) snapPane(block, target.side, target.index);
+		if (target) snapPanes(byPlace(members), target.side, target.slot);
 		else persistSnapLayout();
+	});
+}
+
+// top to bottom, then left to right: the order a stack is made in
+function byPlace(blocks) {
+	return [...blocks].sort((a, b) => {
+		const ra = a.getBoundingClientRect(), rb = b.getBoundingClientRect();
+		return ra.top - rb.top || ra.left - rb.left;
 	});
 }
 
@@ -1368,22 +1381,34 @@ function magnetEdge(value, edges) {
 
 // ---------- groups ----------
 
-// floating widgets that touch (an edge of one on an edge of the other, the
-// two overlapping along it — what the magnets leave) can be grouped: the
-// group drags and raises as one, each member still resizes on its own. The
-// title bar's [+] joins a widget with what it touches (and their groups, into
+// widgets that touch (an edge of one on an edge of the other, the two
+// overlapping along it — what the magnets leave) can be grouped: the group
+// drags and raises as one, each member still resizes on its own. The title
+// bar's [+] joins a widget with what it touches (and their groups, into
 // one), [-] takes it out again; a group left with one member is no group.
-// Explicit only: touching alone groups nothing. A group lives in block._group
-// (an id shared by its members) and rides in the stored layout as a group
-// number on each floating entry. Docking or snapping a member takes it out.
+// Explicit only: touching alone groups nothing. Widgets touch in one place —
+// floating over the page, or panes of the same column — so a group is always
+// in one place, and goes into or out of a column as one. A group lives in
+// block._group (an id shared by its members) and rides in the stored layout
+// as a group number on each member's entry. Docking a member takes it out.
 let groupSeq = 0;
+
+function allPopouts() {
+	return [...document.querySelectorAll('.map-block.popout')];
+}
 
 function floatingBlocks() {
 	return [...document.querySelectorAll('.map-block.popout:not(.snapped)')];
 }
 
 function groupMembers(block) {
-	return block._group ? floatingBlocks().filter(b => b._group === block._group) : [block];
+	return block._group ? allPopouts().filter(b => b._group === block._group) : [block];
+}
+
+// the widgets a block can touch: the others in its place
+function placeMates(block) {
+	const col = snapColumnOf(block);
+	return (col ? col.panes.map(p => p.block) : floatingBlocks()).filter(other => other !== block);
 }
 
 function buildGroupButton() {
@@ -1393,7 +1418,7 @@ function buildGroupButton() {
 }
 
 function toggleGroup(block) {
-	if (!block || !block.classList.contains('popout') || isSnapped(block)) return;
+	if (!block || !block.classList.contains('popout')) return;
 	if (block._group) leaveGroup(block);
 	else joinGroup(block);
 	persistSnapLayout();
@@ -1409,8 +1434,8 @@ function rectsTouch(a, b) {
 
 function touchingBlocks(block) {
 	const rect = block.getBoundingClientRect();
-	return floatingBlocks().filter(other =>
-		other !== block && !other.classList.contains('fs-host') && rectsTouch(rect, other.getBoundingClientRect()));
+	return placeMates(block).filter(other =>
+		!other.classList.contains('fs-host') && rectsTouch(rect, other.getBoundingClientRect()));
 }
 
 function joinGroup(block) {
@@ -1420,7 +1445,7 @@ function joinGroup(block) {
 	// one group out of the widget, what it touches and the groups those are in
 	const ids = new Set(touched.map(b => b._group).filter(Boolean));
 	const id = ids.values().next().value || `g${++groupSeq}`;
-	floatingBlocks().forEach(b => { if (b._group && ids.has(b._group)) b._group = id; });
+	allPopouts().forEach(b => { if (b._group && ids.has(b._group)) b._group = id; });
 	touched.forEach(b => b._group = id);
 	block._group = id;
 	updateGroups();
@@ -1430,7 +1455,7 @@ function leaveGroup(block) {
 	dlog(`leaveGroup: ${block.dataset.mapId}`);
 	const id = block._group;
 	delete block._group;
-	const rest = floatingBlocks().filter(b => b._group === id);
+	const rest = allPopouts().filter(b => b._group === id);
 	if (rest.length < 2) rest.forEach(b => delete b._group);
 	updateGroups();
 }
@@ -1438,10 +1463,10 @@ function leaveGroup(block) {
 // the grouped mark and the button on every widget: [-] on a member, [+] on a
 // widget touching another, nothing where there is nothing to do
 function updateGroups() {
-	document.querySelectorAll('.map-block.popout').forEach(block => {
-		const grouped = !!block._group && !isSnapped(block);
+	allPopouts().forEach(block => {
+		const grouped = !!block._group;
 		block.classList.toggle('grouped', grouped);
-		const can = grouped || (!isSnapped(block) && touchingBlocks(block).length > 0);
+		const can = grouped || touchingBlocks(block).length > 0;
 		block.querySelectorAll('.grp-btn').forEach(btn => {
 			btn.hidden = !can;
 			btn.textContent = grouped ? '[-]' : '[+]';
@@ -1485,20 +1510,34 @@ function moveGroup(starts, box, dx, dy) {
 // drawn by the other floating widgets too (magnets, as on drag): onto the
 // facing edge of one beside it — above or below it, for a top or bottom edge
 // — or into line with the like edge of one above or below it; exact for a
-// width, and through the aspect ratio for a locked widget's height.
+// width, and through the aspect ratio for a locked widget's height. A free
+// pane in a column keeps the column's width: its top or bottom edge is drawn
+// to the column's ends and the other panes, and the top it carries follows
 function resizePopout(block, dir, e) {
 	const start = block.getBoundingClientRect();
 	const free = block.classList.contains('free');
 	const ratio = start.width / start.height;
 	const maxWidth = Math.min(POPOUT_MAX_WIDTH, viewportWidth() - POPOUT_MARGIN);
 	const maxHeight = viewportHeight() - POPOUT_MARGIN;
-	const magnets = magnetRects(block);
+	const col = snapColumnOf(block);
+	const magnets = col ? [] : magnetRects(block);
 	trackPopoutPointer(e, (dx, dy) => {
 		let w = start.width, h = start.height;
 		if (dir.includes('e')) w = start.width + dx;
 		if (dir.includes('w')) w = start.width - dx;
 		if (dir.includes('s')) h = start.height + dy;
 		if (dir.includes('n')) h = start.height - dy;
+		if (col) {
+			const edges = paneMagnetEdges(col, [block]);
+			if (dir.includes('s')) { const m = magnetEdge(start.top + h, edges); if (m !== null) h = m - start.top; }
+			if (dir.includes('n')) { const m = magnetEdge(start.bottom - h, edges); if (m !== null) h = start.bottom - m; }
+			h = clamp(h, POPOUT_MIN_HEIGHT, viewportHeight());
+			const pane = snapPaneOf(block);
+			pane.height = h / viewportHeight();
+			pane.top = (dir.includes('n') ? start.bottom - h : start.top) / viewportHeight();
+			layoutSnapColumns();
+			return;
+		}
 		const left = dir.includes('w') ? start.right - w : start.left;
 		const top = dir.includes('n') ? start.bottom - h : start.top;
 		const beside = magnets.filter(r => top < r.bottom && top + h > r.top);
@@ -1525,7 +1564,7 @@ function resizePopout(block, dir, e) {
 }
 
 document.addEventListener('pointerdown', (e) => {
-	const snapHandle = e.target.closest('.snap-edge, .snap-div');
+	const snapHandle = e.target.closest('.snap-edge');
 	if (snapHandle) {
 		if (e.button !== 0) return;
 		e.preventDefault();
@@ -1582,29 +1621,31 @@ window.addEventListener('resize', () => {
 // ---------- snap columns (desktop) ----------
 
 // a widget dragged to the left or right edge of the viewport snaps into a
-// column there: a stack of up to SNAP_MAX_PANES panes filling the viewport
-// height, the page laid out in what is left between the columns (body
-// padding, through --snap-l/--snap-r). A pane is still a pop-out widget —
-// same block, same fixed positioning, nothing moves in the DOM — only its
-// place and size come from layoutSnapColumns() instead of a gesture: a column
-// has a width and each pane a share of the height, both fractions of the
-// viewport so a window resize keeps the proportions. The column's inner edge
-// and the dividers between panes are the resize handles (.snap-ui, above the
-// panes); .snap-col paints the column's ground below them. A free (iframe)
-// pane fills its slot; a locked one takes the slot's width, shrinks until its
-// height fits and sits centred in the slot.
+// column there: a strip of the viewport's height in which panes sit freely
+// one above another, the page laid out in what is left between the columns
+// (body padding, through --snap-l/--snap-r). A pane is still a pop-out
+// widget — same block, same fixed positioning, nothing moves in the DOM —
+// only its width is the column's and its place comes from
+// layoutSnapColumns(): a column has a width and each pane a top (a free pane
+// a height too), all fractions of the viewport so a window resize keeps the
+// proportions. Up and down the column a pane moves as a widget does over the
+// page, the column's ends and the other panes its magnets; pulled sideways
+// it floats again. The column's inner edge is its resize handle (.snap-ui,
+// above the panes); .snap-col paints the column's ground below them. A free
+// (iframe) pane keeps its own height and resizes by its top and bottom edge;
+// a locked one takes the column's width, pulled in to what its content
+// spans, and the height that gives it.
 //
 // The columns can take the whole width — two of them meeting, or one at full
 // width — which hides the page (body.snap-full also drops its scrollbar). An
 // edge dragged that close snaps shut; a double-click on an edge shuts it too,
 // or opens it back to the widths from before. Two columns that meet share one
 // seam handle that moves width between them.
-const SNAP_MAX_PANES = 3;
-const SNAP_EDGE = 24; // a widget edge this close to a viewport edge targets its column; a column edge this close to the far side shuts
-const SNAP_DETACH = 40; // drag distance before a snapped pane floats again
+const SNAP_EDGE = 5; // a widget edge this close to a viewport edge targets its column
+const SNAP_SHUT = 24; // a column edge this close to the far side shuts the page
+const SNAP_DETACH = 40; // sideways drag distance before a snapped pane floats again
 const SNAP_ARM = 4; // drag distance before a floating widget can snap (a click on a parked widget must not)
 const SNAP_MIN_WIDTH = POPOUT_MIN_WIDTH;
-const SNAP_MIN_HEIGHT = POPOUT_MIN_HEIGHT + POPOUT_TITLE_HEIGHT;
 const snapColumns = {
 	left: { side: 'left', width: null, panes: [], node: null, ui: null },
 	right: { side: 'right', width: null, panes: [], node: null, ui: null }
@@ -1618,6 +1659,11 @@ function isSnapped(block) {
 
 function snapColumnOf(block) {
 	return Object.values(snapColumns).find(col => col.panes.some(p => p.block === block)) || null;
+}
+
+function snapPaneOf(block) {
+	const col = snapColumnOf(block);
+	return col ? col.panes.find(p => p.block === block) : null;
 }
 
 function otherSnapColumn(col) {
@@ -1637,35 +1683,50 @@ function isSnapPageHidden() {
 	return snapColumnWidth(snapColumns.left) + snapColumnWidth(snapColumns.right) >= 0.999;
 }
 
-// where a widget spanning left..right would drop: a column when its edge is
-// at the viewport's, the slot from the pointer's height split into as many
-// equal bands as the column would then hold — the preview shows the exact
-// slot, this only picks it
-function snapTargetAt(left, right, y) {
-	const side = left <= SNAP_EDGE ? 'left' : right >= viewportWidth() - SNAP_EDGE ? 'right' : null;
-	if (!side) return null;
-	const col = snapColumns[side];
-	if (col.panes.length >= SNAP_MAX_PANES) return null;
-	const n = col.panes.length + 1;
-	const index = Math.min(n - 1, Math.floor(y / (viewportHeight() / n)));
-	return { side, index };
+// the column something spanning left..right is at: the one whose viewport
+// edge its own edge has reached, if any
+function snapSideAt(left, right) {
+	return left <= SNAP_EDGE ? 'left' : right >= viewportWidth() - SNAP_EDGE ? 'right' : null;
 }
 
-// the slot a block snapped at target would get: an empty column takes the
-// block's width, the new pane a 1/n share and the others shrink to make room
-// — the same split snapPane() applies
-function snapSlotRect(block, { side, index }) {
+// the edges a pane's top or bottom is drawn to in its column: the column's
+// ends and the other panes' tops and bottoms (every pane spans the column, so
+// all of them are in reach), the blocks given left out
+function paneMagnetEdges(col, exclude = []) {
+	const edges = [0, viewportHeight()];
+	col.panes.forEach(p => {
+		if (exclude.includes(p.block) || p.block.classList.contains('fs-host')) return;
+		const rect = p.block.getBoundingClientRect();
+		edges.push(rect.top, rect.bottom);
+	});
+	return edges;
+}
+
+// a top for something of this height in the column: pulled onto an edge by
+// its top or its bottom, then held inside the viewport
+function paneTop(col, top, height, exclude = []) {
+	const edges = paneMagnetEdges(col, exclude);
+	const pulled = magnetEdge(top, edges.concat(edges.map(edge => edge - height)));
+	return clamp(pulled === null ? top : pulled, 0, Math.max(0, viewportHeight() - height));
+}
+
+// the slot blocks dropped at side would take, the top their box asks for:
+// the column's width (a new column takes the box's own, held to what the
+// other column leaves) and the height the blocks stack to at that width — a
+// free one keeps its height, a locked one's follows the width
+function snapSlot(blocks, side, boxTop) {
 	const col = snapColumns[side];
+	const boxWidth = Math.max(...blocks.map(b => b.offsetWidth));
 	const width = col.panes.length
 		? snapColumnPx(col)
-		: clamp(block.offsetWidth, SNAP_MIN_WIDTH, viewportWidth() - snapColumnPx(otherSnapColumn(col)));
-	const n = col.panes.length + 1;
-	const before = col.panes.slice(0, index).reduce((sum, p) => sum + p.share, 0) * (n - 1) / n;
+		: clamp(boxWidth, SNAP_MIN_WIDTH, viewportWidth() - snapColumnPx(otherSnapColumn(col)));
+	const height = blocks.reduce((sum, b) =>
+		sum + (b.classList.contains('free') ? b.offsetHeight : Math.round(b.offsetHeight * width / b.offsetWidth)), 0);
 	return {
 		left: side === 'left' ? 0 : viewportWidth() - width,
-		top: Math.round(before * viewportHeight()),
+		top: Math.round(paneTop(col, boxTop, height, blocks)),
 		width,
-		height: Math.round(viewportHeight() / n)
+		height
 	};
 }
 
@@ -1681,24 +1742,26 @@ function showSnapPreview(rect) {
 	});
 }
 
-function snapPane(block, side, index) {
-	dlog(`snapPane: ${block.dataset.mapId} → ${side} ${index}`);
-	if (block._group) leaveGroup(block);
-	unsnapPane(block);
+// blocks dropped into the column at side, stacked from the slot's top in
+// their order: the first where the slot says, each next under the one before
+function snapPanes(blocks, side, slot) {
 	const col = snapColumns[side];
-	if (col.panes.length >= SNAP_MAX_PANES) return;
-	const slot = snapSlotRect(block, { side, index });
 	if (!col.panes.length) col.width = slot.width / viewportWidth();
-	const n = col.panes.length + 1;
-	col.panes.forEach(p => p.share *= (n - 1) / n);
-	attachSnapPane(col, block, index, 1 / n);
-	layoutSnapColumns();
+	let y = slot.top;
+	blocks.forEach(block => {
+		dlog(`snapPane: ${block.dataset.mapId} → ${side}`);
+		unsnapPane(block);
+		attachSnapPane(col, block, y / viewportHeight());
+		layoutSnapColumns();
+		y = block.getBoundingClientRect().bottom;
+	});
 	persistSnapLayout();
 }
 
-// a popped-out block becomes a pane of the column, at index with that height
-// share; the first one brings the column's ground and handles with it
-function attachSnapPane(col, block, index, share) {
+// a popped-out block becomes a pane of the column with its top there (a free
+// one bringing its height along, the one it has unless stored); the first
+// one brings the column's ground and handle with it
+function attachSnapPane(col, block, top, height) {
 	if (!col.node) {
 		col.node = el('div', { class: `snap-col snap-${col.side}` });
 		col.ui = el('div', { class: `snap-ui snap-${col.side}` }, [
@@ -1706,25 +1769,19 @@ function attachSnapPane(col, block, index, share) {
 		]);
 		document.body.append(col.node, col.ui);
 	}
-	// the floating size comes back when the pane leaves the column
-	block._float = { width: block.style.width, height: block.style.height };
-	col.panes.splice(index, 0, { block, share });
+	const pane = { block, top };
+	if (block.classList.contains('free')) pane.height = height || block.offsetHeight / viewportHeight();
+	col.panes.push(pane);
 	block.classList.add('snapped', `snapped-${col.side}`); // the side places the pane's fullscreen (CSS)
-	block.querySelectorAll('.po-h').forEach(h => h.remove());
 }
 
+// the pane floats again as it stood in the column, size and place kept
 function unsnapPane(block) {
 	const col = snapColumnOf(block);
 	if (!col) return;
 	dlog(`unsnapPane: ${block.dataset.mapId}`);
 	col.panes = col.panes.filter(p => p.block !== block);
-	const total = col.panes.reduce((sum, p) => sum + p.share, 0);
-	col.panes.forEach(p => p.share /= total);
-	block.classList.remove('snapped', `snapped-${col.side}`, 'snapped-alone');
-	block.style.width = block._float.width;
-	block.style.height = block._float.height;
-	delete block._float;
-	POPOUT_HANDLES.forEach(dir => block.appendChild(el('div', { class: `po-h po-h-${dir}`, 'data-dir': dir })));
+	block.classList.remove('snapped', `snapped-${col.side}`);
 	if (!col.panes.length) dropSnapColumn(col);
 	layoutSnapColumns();
 	// not persisted here: the callers (a drag, a dock, a move between columns) end in a state of their own
@@ -1766,51 +1823,30 @@ function layoutSnapColumn(col, seam) {
 	});
 	const edge = col.ui.querySelector('.snap-edge');
 	edge.hidden = seam && col.side === 'right';
-	// a pane's fullscreen fills the column; the dividers would cross it
-	col.ui.classList.toggle('snap-fs', col.panes.some(p => p.block.querySelector('.if1.fullscreen')));
 	edge.classList.toggle('snap-seam', seam && col.side === 'left');
 	edge.title = seam ? 'Širina stupaca · dvoklik vraća stranicu'
 		: isSnapPageHidden() ? 'Širina stupca · dvoklik vraća stranicu'
 		: 'Širina stupca · dvoklik sakriva stranicu';
-	col.ui.querySelectorAll('.snap-div').forEach(d => d.remove());
-	let y = 0;
-	col.panes.forEach((pane, i) => {
-		const last = i === col.panes.length - 1;
-		const height = last ? viewportHeight() - y : Math.round(pane.share * viewportHeight());
-		if (i > 0) {
-			col.ui.appendChild(el('div', {
-				class: 'snap-div', 'data-side': col.side, 'data-index': i, style: `top: ${y}px;`, title: 'Visina karata'
-			}));
-		}
-		// alone in its column a free pane already fills what fullscreen would (CSS hides the button)
-		pane.block.classList.toggle('snapped-alone', col.panes.length === 1);
-		fitSnapPane(pane.block, x, y, width, height);
-		y += height;
-	});
+	col.panes.forEach(pane => fitSnapPane(pane, x, width));
 }
 
-// a free pane fills the slot; a locked one sizes its height from its width,
-// so it gets the slot's width and is shrunk until its height fits — the title
-// bar's fixed height makes the scale slightly nonlinear, the second pass
-// settles it (the same fit the grid page used). Then the block is pulled in
-// to what its content spans: an image stops at its natural width and a map
-// with a maxWidth at that, and the title bar and indicators must not run on
-// past them across a wider column
-function fitSnapPane(block, x, y, width, height) {
+// a pane takes the column's width: a free one with the height it carries, a
+// locked one with the height its aspect gives at that width, pulled in to
+// what its content spans (an image stops at its natural width and a map with
+// a maxWidth at that, and the title bar and indicators must not run on past
+// them across a wider column) and centred in the column. Its top is the one
+// it carries, held inside the viewport
+function fitSnapPane(pane, x, width) {
+	const block = pane.block;
 	block.style.width = `${width}px`;
-	if (block.classList.contains('free')) {
-		block.style.height = `${height}px`;
+	if (pane.height !== undefined) {
+		block.style.height = `${Math.round(clamp(pane.height * viewportHeight(), POPOUT_MIN_HEIGHT, viewportHeight()))}px`;
 	} else {
-		let w = width;
-		for (let pass = 0; pass < 2 && block.offsetHeight > height; pass++) {
-			w = Math.floor(w * (height - POPOUT_TITLE_HEIGHT) / (block.offsetHeight - POPOUT_TITLE_HEIGHT));
-			block.style.width = `${w}px`;
-		}
 		const content = snapContentWidth(block);
 		if (content && content < block.offsetWidth - 1) block.style.width = `${Math.ceil(content)}px`;
 	}
 	block.style.left = `${Math.round(x + (width - block.offsetWidth) / 2)}px`;
-	block.style.top = `${Math.round(y + (height - block.offsetHeight) / 2)}px`;
+	block.style.top = `${Math.round(clamp(pane.top * viewportHeight(), 0, Math.max(0, viewportHeight() - block.offsetHeight)))}px`;
 }
 
 // the narrowest of what is on screen and constrained on its own: a title bar
@@ -1824,6 +1860,16 @@ function snapContentWidth(block) {
 	return widths.length ? Math.min(...widths) : 0;
 }
 
+// panes moved up or down their column by one offset from where they stood
+// (starts, their box): the box is drawn to the column's magnets and held
+// inside the viewport, and the tops the panes carry follow
+function movePanes(col, starts, box, dy) {
+	const top = paneTop(col, box.top + dy, box.height, starts.map(s => s.block));
+	dy = top - box.top;
+	starts.forEach(s => { snapPaneOf(s.block).top = (s.top + dy) / viewportHeight(); });
+	layoutSnapColumns();
+}
+
 // the inner edge: the column may take everything the other one leaves, and
 // close to that it snaps shut, hiding the page (the widths from before are
 // kept for the double-click back)
@@ -1833,7 +1879,7 @@ function resizeSnapColumn(col, e) {
 	const before = { left: snapColumnWidth(snapColumns.left), right: snapColumnWidth(snapColumns.right) };
 	trackPopoutPointer(e, (dx) => {
 		let px = clamp(col.side === 'left' ? start + dx : start - dx, SNAP_MIN_WIDTH, max);
-		if (px >= max - SNAP_EDGE) px = max;
+		if (px >= max - SNAP_SHUT) px = max;
 		const width = px / viewportWidth();
 		// exactly what the other leaves: the fractions have to sum to one for the hidden state to read
 		col.width = px === max ? 1 - snapColumnWidth(otherSnapColumn(col)) : width;
@@ -1875,24 +1921,9 @@ function toggleSnapPage(col) {
 	persistSnapLayout();
 }
 
-// the divider above pane i moves height between it and the pane above
-function resizeSnapRow(col, i, e) {
-	const above = col.panes[i - 1], below = col.panes[i];
-	if (!above || !below) return;
-	const start = above.share, total = above.share + below.share;
-	const min = SNAP_MIN_HEIGHT / viewportHeight();
-	trackPopoutPointer(e, (dx, dy) => {
-		above.share = clamp(start + dy / viewportHeight(), min, total - min);
-		below.share = total - above.share;
-		layoutSnapColumns();
-	}, persistSnapLayout);
-}
-
 function snapHandlePointerDown(handle, e) {
-	const col = snapColumns[handle.dataset.side];
-	if (handle.classList.contains('snap-div')) resizeSnapRow(col, Number(handle.dataset.index), e);
-	else if (handle.classList.contains('snap-seam')) resizeSnapSeam(e);
-	else resizeSnapColumn(col, e);
+	if (handle.classList.contains('snap-seam')) resizeSnapSeam(e);
+	else resizeSnapColumn(snapColumns[handle.dataset.side], e);
 }
 
 // the drag's preventDefault on pointerdown leaves click and dblclick alone,
@@ -1905,24 +1936,36 @@ document.addEventListener('dblclick', (e) => {
 // ---------- snap layout: remembered and shared ----------
 
 // the arrangement as data: per side the column width and the panes as map
-// ids with their height shares, every number a fraction of the viewport, so
-// another window or screen gets the proportions. Null when nothing is
-// snapped. It rides in mapPrefs next to the map list, in a saved preset next
-// to its maps, and in the ?v= payload — always a subset of the map list it
-// sits beside, which is what sanitizeSnapLayout() holds it to on the way back.
+// ids with their tops (and a free pane's height), every number a fraction of
+// the viewport, so another window or screen gets the proportions. Null when
+// nothing is snapped. It rides in mapPrefs next to the map list, in a saved
+// preset next to its maps, and in the ?v= payload — always a subset of the
+// map list it sits beside, which is what sanitizeSnapLayout() holds it to on
+// the way back. A group is a number shared by its members' entries, counted
+// in order of appearance across the columns and the floating widgets
 function snapLayout() {
 	const layout = {};
+	const groupNumbers = new Map();
+	const groupNumber = (block) => {
+		if (!block._group) return undefined;
+		if (!groupNumbers.has(block._group)) groupNumbers.set(block._group, groupNumbers.size + 1);
+		return groupNumbers.get(block._group);
+	};
 	Object.values(snapColumns).forEach(col => {
 		if (!col.panes.length) return;
 		layout[col.side] = {
 			width: roundFraction(col.width),
-			panes: col.panes.map(p => ({ id: p.block.dataset.mapId, share: roundFraction(p.share) }))
+			panes: [...col.panes].sort((a, b) => a.top - b.top).map(p => {
+				const entry = { id: p.block.dataset.mapId, top: roundFraction(p.top) };
+				if (p.height !== undefined) entry.height = roundFraction(p.height);
+				const group = groupNumber(p.block);
+				if (group) entry.group = group;
+				return entry;
+			})
 		};
 	});
 	// widgets floating over the page, bottom to top, so they stack the same
-	// way again; a locked one has no height of its own to store. A group is a
-	// number shared by its members, counted in order of appearance
-	const groupNumbers = new Map();
+	// way again; a locked one has no height of its own to store
 	const floating = floatingBlocks()
 		.sort((a, b) => (Number(a.style.zIndex) || 0) - (Number(b.style.zIndex) || 0))
 		.map(block => {
@@ -1934,10 +1977,8 @@ function snapLayout() {
 				width: roundFraction(rect.width / viewportWidth())
 			};
 			if (block.classList.contains('free')) entry.height = roundFraction(rect.height / viewportHeight());
-			if (block._group) {
-				if (!groupNumbers.has(block._group)) groupNumbers.set(block._group, groupNumbers.size + 1);
-				entry.group = groupNumbers.get(block._group);
-			}
+			const group = groupNumber(block);
+			if (group) entry.group = group;
 			return entry;
 		});
 	if (floating.length) layout.floating = floating;
@@ -1949,36 +1990,52 @@ function roundFraction(n) {
 }
 
 // rebuilt rather than trusted (storage, links, a saved entry): a pane must
-// name a map in the list, once across both columns, up to the cap; shares are
-// renormalised; the two widths are held to the viewport. A map dropped from
-// the list leaves the layout, and an emptied column with it
+// name a map in the list, once across both columns and the floating widgets,
+// and carry a top (a layout from before panes were placed freely carries a
+// height share instead: those are stacked from the top as they were); the
+// two widths are held to the viewport. A map dropped from the list leaves
+// the layout, and an emptied column with it. A group is its members' place
+// as much as their number: fewer than two, or spread over two places, is no
+// group
 function sanitizeSnapLayout(layout, mapIds) {
 	if (!layout || typeof layout !== 'object') return null;
 	const clean = {};
 	const seen = new Set();
+	const fraction = (n, max = 1) => Number.isFinite(n) && n >= 0 && n <= max;
+	const groupOf = (entry) => Number.isInteger(entry.group) && entry.group > 0 ? entry.group : undefined;
 	['left', 'right'].forEach(side => {
 		const col = layout[side];
 		if (!col || typeof col !== 'object' || !Array.isArray(col.panes)) return;
 		const width = Number(col.width);
 		if (!(width > 0 && width <= 1)) return;
-		const panes = col.panes
-			.filter(p => p && typeof p.id === 'string' && mapIds.includes(p.id) && !seen.has(p.id))
-			.slice(0, SNAP_MAX_PANES)
-			.map(p => {
-				seen.add(p.id);
-				const share = Number(p.share);
-				return { id: p.id, share: share > 0 && Number.isFinite(share) ? share : 1 };
-			});
+		const panes = [];
+		let stacked = 0;
+		col.panes.forEach(p => {
+			if (!(p && typeof p.id === 'string' && mapIds.includes(p.id) && !seen.has(p.id))) return;
+			const entry = { id: p.id };
+			const top = Number(p.top), height = Number(p.height), share = Number(p.share);
+			if (fraction(top)) {
+				entry.top = roundFraction(top);
+			} else if (share > 0 && share <= 1) {
+				entry.top = roundFraction(stacked);
+				entry.height = roundFraction(share);
+				stacked += share;
+			} else {
+				return;
+			}
+			if (fraction(height) && height > 0) entry.height = roundFraction(height);
+			const group = groupOf(p);
+			if (group) entry.group = group;
+			seen.add(p.id);
+			panes.push(entry);
+		});
 		if (!panes.length) return;
-		const total = panes.reduce((sum, p) => sum + p.share, 0);
-		panes.forEach(p => { p.share = roundFraction(p.share / total); });
 		clean[side] = { width: roundFraction(width), panes };
 	});
 	if (clean.left && clean.right && clean.left.width + clean.right.width > 1) {
 		clean.right.width = roundFraction(1 - clean.left.width);
 		if (clean.right.width <= 0) delete clean.right;
 	}
-	const fraction = (n, max = 1) => Number.isFinite(n) && n >= 0 && n <= max;
 	if (Array.isArray(layout.floating)) {
 		const floating = layout.floating
 			.filter(f => f && typeof f.id === 'string' && mapIds.includes(f.id) && !seen.has(f.id)
@@ -1987,15 +2044,24 @@ function sanitizeSnapLayout(layout, mapIds) {
 				seen.add(f.id);
 				const entry = { id: f.id, left: roundFraction(Number(f.left)), top: roundFraction(Number(f.top)), width: roundFraction(Number(f.width)) };
 				if (fraction(Number(f.height)) && Number(f.height) > 0) entry.height = roundFraction(Number(f.height));
-				if (Number.isInteger(f.group) && f.group > 0) entry.group = f.group;
+				const group = groupOf(f);
+				if (group) entry.group = group;
 				return entry;
 			});
-		// a group of one is no group
-		floating.forEach(f => {
-			if (f.group && floating.filter(o => o.group === f.group).length < 2) delete f.group;
-		});
 		if (floating.length) clean.floating = floating;
 	}
+	const lists = [clean.left && clean.left.panes, clean.right && clean.right.panes, clean.floating].filter(Boolean);
+	const groups = new Map(); // group number → how many members, over how many places
+	lists.forEach(list => list.forEach(entry => {
+		if (!entry.group) return;
+		if (!groups.has(entry.group)) groups.set(entry.group, { count: 0, places: new Set() });
+		groups.get(entry.group).count++;
+		groups.get(entry.group).places.add(list);
+	}));
+	lists.forEach(list => list.forEach(entry => {
+		const group = groups.get(entry.group);
+		if (group && (group.count < 2 || group.places.size > 1)) delete entry.group;
+	}));
 	return Object.keys(clean).length ? clean : null;
 }
 
@@ -2004,22 +2070,29 @@ function sameSnapLayout(a, b) {
 }
 
 // the columns from a (sanitized) layout, after a render: each pane is popped
-// out and attached to its column as it stands, then the widths and shares are
-// set as stored. Desktop only, like the gestures — on a phone the layout is
-// carried, not shown
+// out and attached to its column as stored, then the widths are set as
+// stored. Desktop only, like the gestures — on a phone the layout is carried,
+// not shown
 function applySnapLayout(layout) {
 	resetSnapColumns();
 	if (!layout || !POPOUT_MQ.matches) return;
 	snapPersistPaused = true; // what is being applied is already what is stored
+	const groupIds = new Map(); // stored group number → a fresh id
+	const setGroup = (block, group) => {
+		if (!group) return;
+		if (!groupIds.has(group)) groupIds.set(group, `g${++groupSeq}`);
+		block._group = groupIds.get(group);
+	};
 	['left', 'right'].forEach(side => {
 		const stored = layout[side];
 		if (!stored) return;
 		const col = snapColumns[side];
-		stored.panes.forEach(({ id, share }) => {
+		stored.panes.forEach(({ id, top, height, group }) => {
 			const block = document.querySelector(`.map-block[data-map-id="${CSS.escape(id)}"]`);
 			if (!block || block.classList.contains('popout')) return;
 			popoutMap(block);
-			attachSnapPane(col, block, col.panes.length, share);
+			attachSnapPane(col, block, top, height);
+			setGroup(block, group);
 		});
 		if (!col.panes.length) return;
 		col.width = clamp(stored.width * viewportWidth(), SNAP_MIN_WIDTH, viewportWidth()) / viewportWidth();
@@ -2027,7 +2100,6 @@ function applySnapLayout(layout) {
 	const { left, right } = snapColumns;
 	if (left.panes.length && right.panes.length && left.width + right.width > 1) right.width = 1 - left.width;
 	layoutSnapColumns();
-	const groupIds = new Map(); // stored group number → a fresh id
 	(layout.floating || []).forEach(({ id, left, top, width, height, group }) => {
 		const block = document.querySelector(`.map-block[data-map-id="${CSS.escape(id)}"]`);
 		if (!block || block.classList.contains('popout')) return;
@@ -2037,10 +2109,7 @@ function applySnapLayout(layout) {
 			block.style.height = `${Math.round(clamp(height * viewportHeight(), POPOUT_MIN_HEIGHT, viewportHeight() - POPOUT_MARGIN))}px`;
 		placePopout(block, left * viewportWidth(), top * viewportHeight());
 		raisePopout(block); // in stored order, so the last one is on top again
-		if (group) {
-			if (!groupIds.has(group)) groupIds.set(group, `g${++groupSeq}`);
-			block._group = groupIds.get(group);
-		}
+		setGroup(block, group);
 	});
 	updateGroups();
 	snapPersistPaused = false;

@@ -291,15 +291,17 @@ body.fs-lock {
 		display: none;
 	}
 
-	/* the grouping button of a floating widget, shown by maps.js only while
-	   there is something to do: [+] touching another widget, [-] in a group */
-	.map-block.popout:not(.snapped) .radartitle:not(.fullscreen) .grp-btn:not([hidden]) {
+	/* the grouping button of a widget, shown by maps.js only while there is
+	   something to do: [+] touching another widget, [-] in a group */
+	.map-block.popout .radartitle:not(.fullscreen) .grp-btn:not([hidden]) {
 		display: inline;
 	}
 
-	/* a grouped widget's frame in the snap blue, so the group reads as one */
+	/* a grouped widget's frame in the snap blue, so the group reads as one;
+	   no shadow, which would fall across the member under it */
 	.map-block.popout.grouped {
 		outline-color: #4a8de6;
+		box-shadow: none;
 	}
 
 	.map-block.popout {
@@ -399,33 +401,33 @@ body.fs-lock {
 		pointer-events: none;
 	}
 
-		.snap-edge, .snap-div {
+		.snap-edge {
 			position: absolute;
 			pointer-events: auto;
-		}
-
-			.snap-edge:hover, .snap-div:hover,
-			body.po-dragging .snap-edge, body.po-dragging .snap-div {
-				background-color: rgba(43, 87, 151, 0.6);
-			}
-
-		.snap-edge {
 			top: 0;
 			bottom: 0;
 			width: 8px;
 			cursor: ew-resize;
 		}
 
+			.snap-edge:hover,
+			body.po-dragging .snap-edge {
+				background-color: rgba(43, 87, 151, 0.6);
+			}
+
 		.snap-left .snap-edge { right: -4px; }
 		.snap-right .snap-edge { left: -4px; }
 
-		.snap-div {
-			left: 0;
-			right: 0;
-			height: 8px;
-			margin-top: -4px;
-			cursor: ns-resize;
-		}
+	/* a pane's width is the column's: only a free pane's top and bottom edge resize */
+	.map-block.popout.snapped .po-h-e,
+	.map-block.popout.snapped .po-h-w,
+	.map-block.popout.snapped .po-h-ne,
+	.map-block.popout.snapped .po-h-nw,
+	.map-block.popout.snapped .po-h-se,
+	.map-block.popout.snapped .po-h-sw,
+	.map-block.popout.snapped:not(.free) .po-h {
+		display: none;
+	}
 
 	/* a fullscreen map in a pane fills its column, and the page hidden behind
 	   the columns leaves a floating widget's fullscreen the whole viewport */
@@ -467,17 +469,6 @@ body.fs-lock {
 
 	.if1.fullscreen {
 		z-index: 4500;
-	}
-
-	/* a free pane alone in its column already fills what fullscreen would; the
-	   button is kept on a fullscreen bar, or a pane left alone mid-fullscreen would have no way out */
-	.map-block.free.snapped-alone .radartitle:not(.fullscreen) .fs-btn {
-		display: none;
-	}
-
-	/* the dividers would cross a pane's fullscreen; the edge stays, the map follows it */
-	.snap-ui.snap-fs .snap-div {
-		display: none;
 	}
 
 	/* the columns cover the page: no scrollbar for it, and nothing to scroll to */
