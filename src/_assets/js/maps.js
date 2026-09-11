@@ -627,6 +627,11 @@ function isUserPresetId(id) {
 	return typeof id === 'string' && id.startsWith(USER_PRESET_PREFIX);
 }
 
+// a saved preset that is a board: its layout carries the mode (popout.js)
+function isBoardPreset(preset) {
+	return !!(preset && preset.layout && preset.layout.dashboard === true);
+}
+
 function isValidPreset(preset) {
 	return preset && isUserPresetId(preset.id)
 		&& typeof preset.name === 'string' && Array.isArray(preset.maps);
@@ -1201,6 +1206,93 @@ document.addEventListener('keydown', (e) => {
 	else if (e.key === 'k' || e.key === 'K') { e.preventDefault(); toggleMapSettings(); }
 });
 
+// ---------- the tab: where and how wide the user put it ----------
+
+// the fixed tab to the dialog can be dragged along the top edge and pulled
+// wider or narrower by either side — no narrower than its name, no wider
+// than MS_TAB_MAX_WIDTH, held inside the viewport — and where it was put is
+// remembered in this browser only (msTab: the left as a fraction of the
+// viewport, the width in px), not in the arrangement; a click that did not
+// move opens the dialog
+const MS_TAB_KEY = 'msTab';
+const MS_TAB_MAX_WIDTH = 300;
+const MS_TAB_EDGE = 8; // a press this close to a side resizes; elsewhere drags
+let msTabMoved = false; // the release of a drag is no click
+
+function loadMsTab() {
+	try {
+		const tab = JSON.parse(localStorage.getItem(MS_TAB_KEY));
+		return tab && typeof tab === 'object' && Number.isFinite(tab.left) && Number.isFinite(tab.width) ? tab : null;
+	} catch {
+		return null;
+	}
+}
+
+function saveMsTab(tab) {
+	const rect = tab.getBoundingClientRect();
+	localStorage.setItem(MS_TAB_KEY, JSON.stringify({ left: roundFraction(rect.left / viewportWidth()), width: Math.round(rect.width) }));
+}
+
+// the width its name takes is the narrowest it goes: measured with the width unset (0 while it is not shown)
+function msTabMinWidth(tab) {
+	const width = tab.style.width;
+	tab.style.width = '';
+	const min = tab.offsetWidth;
+	tab.style.width = width;
+	return min;
+}
+
+function placeMsTab(tab, left, width) {
+	width = clamp(width, msTabMinWidth(tab), MS_TAB_MAX_WIDTH);
+	left = clamp(left, 0, Math.max(0, viewportWidth() - width));
+	tab.style.width = `${Math.round(width)}px`;
+	tab.style.left = `${Math.round(left)}px`;
+	tab.style.transform = 'none'; // off the centring
+}
+
+function applyStoredMsTab() {
+	const tab = document.querySelector('.ms-tab');
+	const stored = loadMsTab();
+	if (tab && stored) placeMsTab(tab, stored.left * viewportWidth(), stored.width);
+}
+
+function initMsTab() {
+	const tab = document.querySelector('.ms-tab');
+	if (!tab) return;
+	applyStoredMsTab();
+	tab.addEventListener('click', () => {
+		if (msTabMoved) { msTabMoved = false; return; }
+		toggleMapSettings();
+	});
+	// the cursor says which it will be
+	tab.addEventListener('pointermove', (e) => {
+		const rect = tab.getBoundingClientRect();
+		const side = e.clientX - rect.left <= MS_TAB_EDGE || rect.right - e.clientX <= MS_TAB_EDGE;
+		tab.style.cursor = side ? 'ew-resize' : '';
+	});
+	tab.addEventListener('pointerdown', (e) => {
+		if (e.button !== 0) return;
+		e.preventDefault();
+		const rect = tab.getBoundingClientRect();
+		const mode = e.clientX - rect.left <= MS_TAB_EDGE ? 'w' : rect.right - e.clientX <= MS_TAB_EDGE ? 'e' : 'move';
+		msTabMoved = false;
+		trackPopoutPointer(e, (dx) => {
+			if (!msTabMoved && Math.abs(dx) < SNAP_ARM) return; // a click must not move it
+			msTabMoved = true;
+			if (mode === 'move') placeMsTab(tab, rect.left + dx, rect.width);
+			else if (mode === 'e') placeMsTab(tab, rect.left, rect.width + dx);
+			else {
+				const width = clamp(rect.width - dx, msTabMinWidth(tab), MS_TAB_MAX_WIDTH);
+				placeMsTab(tab, rect.right - width, width); // the right side stays
+			}
+		}, () => { if (msTabMoved) saveMsTab(tab); });
+	});
+	window.addEventListener('resize', applyStoredMsTab); // held inside the viewport
+}
+
+if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', initMsTab);
+else initMsTab();
+
 // a press anywhere outside the dialog shuts it, dropping what was edited in
 // it (it is rebuilt from what is stored on the next open) — the page's button
 // and the tab excepted, whose click would open it right back
@@ -1399,10 +1491,11 @@ function buildMapSettings(panel) {
 			});
 			// a corner mark on the saved ones, so the two kinds stay apart in the
 			// bar the way the management list below already keeps them apart
-			const chipClass = 'ms-chip' + (isUserPresetId(preset.id) ? ' ms-user' : '');
+			// and the board's blue edge (the mode row's) on a preset that is a board
+			const chipClass = 'ms-chip' + (isUserPresetId(preset.id) ? ' ms-user' : '') + (isBoardPreset(preset) ? ' ms-board' : '');
 			// the name rides in a span rather than a bare text node so the chip
 			// styling can hang off the radio's :checked as a sibling selector
-			presetsDiv.appendChild(el('label', {}, [radio, el('span', { class: chipClass, text: preset.name })]));
+			presetsDiv.appendChild(el('label', {}, [radio, el('span', { class: chipClass, text: preset.name, title: isBoardPreset(preset) ? 'Nadzorna ploča' : undefined })]));
 		});
 		// carries no content: it exists so the last line has something to give
 		// its leftover width to, leaving those chips at their natural size
@@ -1458,9 +1551,7 @@ function buildMapSettings(panel) {
 	function layoutForPrefs(prefs) {
 		if (prefs.preset === 'custom') return sanitizeSnapLayout(snapLayout(), prefsMapIds(prefs));
 		const preset = userPresets.find(p => p.id === prefs.preset);
-		if (preset) return sanitizeSnapLayout(preset.layout, prefsMapIds(prefs));
-		// a built-in has no arrangement of its own: the page's — or the board's, when its maps are chosen on the board
-		return isDashboard() ? sanitizeSnapLayout(snapLayout(), prefsMapIds(prefs)) : null;
+		return preset ? sanitizeSnapLayout(preset.layout, prefsMapIds(prefs)) : null; // a built-in is the page, with nothing popped out
 	}
 
 	// the arrangement on screen, held to the list in the picker (a map unchecked
@@ -1717,7 +1808,7 @@ function buildMapSettings(panel) {
 		}
 
 		const row = el('div', { class: 'ms-manage-item' }, [
-			el('span', { class: 'ms-manage-name', text: preset.name }),
+			el('span', { class: 'ms-manage-name' + (isBoardPreset(preset) ? ' ms-board' : ''), text: preset.name, title: isBoardPreset(preset) ? 'Nadzorna ploča' : undefined }),
 			buildLinkCells([firstLink, renameLink, deleteLink])
 		]);
 

@@ -896,6 +896,12 @@ body.fs-lock {
 	background-color: #485871;
 	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
 	cursor: pointer;
+	/* dragged along the top and pulled wider by its sides (maps.js) */
+	box-sizing: border-box;
+	white-space: nowrap;
+	overflow: hidden;
+	touch-action: none;
+	user-select: none;
 }
 
 	.ms-tab:hover {
@@ -974,6 +980,18 @@ body.fs-lock {
 			   the edits came from. Left edge, clear of the corner triangle, which
 			   a saved preset carries at the same time. Grey like the triangle:
 			   both are marks about the chip, and orange stays "selected" */
+			/* a preset that is a board carries the board's mark, the blue edge of
+			   the mode row, on its chip and its row in the list; the origin dot
+			   sits inside it, in the padding */
+			.map-settings .ms-chip.ms-board,
+			.map-settings .ms-manage-name.ms-board {
+				border-left: 3px solid #4a8de6;
+			}
+
+			.map-settings .ms-manage-name.ms-board {
+				padding-left: 6px;
+			}
+
 			.map-settings .ms-chip.ms-origin::before {
 				content: '';
 				position: absolute;
