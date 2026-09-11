@@ -1112,6 +1112,12 @@ function buildMapContent(map) {
 function renderMaps() {
 	const tbody = document.querySelector('tbody[data-maps]');
 	if (!tbody) return;
+	// a fullscreen map goes with the tbody too, and would leave the page's
+	// scroll locked behind it; taken down as the arrangement it is part of
+	// is (what comes back is applied after the render)
+	snapPersistPaused = true;
+	document.querySelectorAll('.if1.fullscreen').forEach(if1 => exitFullscreen(if1));
+	snapPersistPaused = false;
 	resetSnapColumns(); // their panes go with the tbody
 	tbody.replaceChildren();
 	const maps = resolveMapIds().map(id => MAP_CATALOG.find(m => m.id === id)).filter(Boolean);
@@ -2219,6 +2225,7 @@ function snapLayout() {
 				if (p.height !== undefined) entry.height = roundFraction(p.height);
 				const group = groupNumber(p.block);
 				if (group) entry.group = group;
+				if (p.block.classList.contains('fs-host')) entry.fullscreen = true;
 				return entry;
 			})
 		};
@@ -2238,10 +2245,24 @@ function snapLayout() {
 			if (block.classList.contains('free')) entry.height = roundFraction(rect.height / viewportHeight());
 			const group = groupNumber(block);
 			if (group) entry.group = group;
+			if (block.classList.contains('fs-host')) entry.fullscreen = true;
 			return entry;
 		});
 	if (floating.length) layout.floating = floating;
 	return Object.keys(layout).length ? layout : null;
+}
+
+// only an interactive map has a fullscreen to be stored
+function hasFullscreen(mapId) {
+	const map = MAP_CATALOG.find(m => m.id === mapId);
+	return !!map && map.type === 'iframe';
+}
+
+// a map put fullscreen as stored: through its own button, so main.js does
+// everything a click does (the gate, the [R], the scroll lock, the event)
+function restoreFullscreen(block) {
+	const btn = block.querySelector('.fs-btn');
+	if (btn && !block.querySelector('.if1.fullscreen')) btn.click();
 }
 
 function roundFraction(n) {
@@ -2285,6 +2306,7 @@ function sanitizeSnapLayout(layout, mapIds) {
 			if (fraction(height) && height > 0) entry.height = roundFraction(height);
 			const group = groupOf(p);
 			if (group) entry.group = group;
+			if (p.fullscreen === true && hasFullscreen(p.id)) entry.fullscreen = true;
 			seen.add(p.id);
 			panes.push(entry);
 		});
@@ -2305,6 +2327,7 @@ function sanitizeSnapLayout(layout, mapIds) {
 				if (fraction(Number(f.height)) && Number(f.height) > 0) entry.height = roundFraction(Number(f.height));
 				const group = groupOf(f);
 				if (group) entry.group = group;
+				if (f.fullscreen === true && hasFullscreen(f.id)) entry.fullscreen = true;
 				return entry;
 			});
 		if (floating.length) clean.floating = floating;
@@ -2336,6 +2359,7 @@ function applySnapLayout(layout) {
 	resetSnapColumns();
 	if (!layout || !POPOUT_MQ.matches) return;
 	snapPersistPaused = true; // what is being applied is already what is stored
+	const toFullscreen = [];
 	const groupIds = new Map(); // stored group number → a fresh id
 	const setGroup = (block, group) => {
 		if (!group) return;
@@ -2346,12 +2370,13 @@ function applySnapLayout(layout) {
 		const stored = layout[side];
 		if (!stored) return;
 		const col = snapColumns[side];
-		stored.panes.forEach(({ id, top, height, group }) => {
+		stored.panes.forEach(({ id, top, height, group, fullscreen }) => {
 			const block = document.querySelector(`.map-block[data-map-id="${CSS.escape(id)}"]`);
 			if (!block || block.classList.contains('popout')) return;
 			popoutMap(block);
 			attachSnapPane(col, block, top, height);
 			setGroup(block, group);
+			if (fullscreen) toFullscreen.push(block);
 		});
 		if (!col.panes.length) return;
 		col.width = clamp(stored.width * viewportWidth(), SNAP_MIN_WIDTH, viewportWidth()) / viewportWidth();
@@ -2359,7 +2384,7 @@ function applySnapLayout(layout) {
 	const { left, right } = snapColumns;
 	if (left.panes.length && right.panes.length && left.width + right.width > 1) right.width = 1 - left.width;
 	layoutSnapColumns();
-	(layout.floating || []).forEach(({ id, left, top, width, height, group }) => {
+	(layout.floating || []).forEach(({ id, left, top, width, height, group, fullscreen }) => {
 		const block = document.querySelector(`.map-block[data-map-id="${CSS.escape(id)}"]`);
 		if (!block || block.classList.contains('popout')) return;
 		popoutMap(block);
@@ -2369,7 +2394,11 @@ function applySnapLayout(layout) {
 		placePopout(block, left * viewportWidth(), top * viewportHeight());
 		raisePopout(block); // in stored order, so the last one is on top again
 		setGroup(block, group);
+		if (fullscreen) toFullscreen.push(block);
 	});
+	// once everything stands where it belongs: a pane's fullscreen is placed
+	// by its column, and main.js reads off the pane whether to lock the page
+	toFullscreen.forEach(restoreFullscreen);
 	updateGroups();
 	snapPersistPaused = false;
 }
@@ -2427,6 +2456,9 @@ document.addEventListener('map-fullscreen', () => {
 		else if (wasHosting) raisePopout(block);
 	});
 	layoutSnapColumns();
+	// a widget's fullscreen is part of the arrangement (the fullscreen flag on
+	// its entry); on a phone there is no arrangement on screen to write
+	if (POPOUT_MQ.matches) persistSnapLayout();
 });
 
 // a locked pane's height can change under the fit: a titled slideshow takes
@@ -2451,6 +2483,10 @@ function setMapSettingsVisible(panel, visible) {
 	panel.hidden = !visible;
 	const arrow = document.querySelector('.buttons button.btn .arrow');
 	if (arrow) arrow.textContent = visible ? '▲' : '▼';
+	// the page holds still under the dialog (CSS); its scrollbar going and
+	// coming changes the viewport the columns are laid out in
+	document.body.classList.toggle('ms-open', visible);
+	layoutSnapColumns();
 }
 
 function toggleMapSettings() {
@@ -2463,6 +2499,28 @@ function toggleMapSettings() {
 		setMapSettingsVisible(panel, false);
 	}
 }
+
+// the dialog from the keyboard, for wherever the page's button is out of
+// reach: K opens or shuts it, Escape shuts it — not from a text field, whose
+// own Escape (the name and rename editors) is a way out of the field only
+document.addEventListener('keydown', (e) => {
+	const panel = document.getElementById('mapSettings');
+	if (!panel || e.altKey || e.ctrlKey || e.metaKey) return;
+	const typing = e.target.matches && e.target.matches('input:not([type="radio"]):not([type="checkbox"]), textarea, [contenteditable]');
+	if (typing) return;
+	if (e.key === 'Escape' && !panel.hidden) setMapSettingsVisible(panel, false);
+	else if (e.key === 'k' || e.key === 'K') { e.preventDefault(); toggleMapSettings(); }
+});
+
+// a press anywhere outside the dialog shuts it, dropping what was edited in
+// it (it is rebuilt from what is stored on the next open) — the page's button
+// and the tab excepted, whose click would open it right back
+document.addEventListener('pointerdown', (e) => {
+	const panel = document.getElementById('mapSettings');
+	if (!panel || panel.hidden || !e.target.closest) return;
+	if (e.target.closest('#mapSettings, .ms-toggle, .ms-tab')) return;
+	setMapSettingsVisible(panel, false);
+});
 
 function buildMapSettings(panel) {
 	panel.replaceChildren();
@@ -2547,10 +2605,12 @@ function buildMapSettings(panel) {
 				}
 			};
 
-			// keep scrolling (and reordering) while the pointer rests near a viewport edge
+			// keep scrolling (and reordering) while the pointer rests near an edge
+			// of the dialog's body, which is what scrolls (the page holds still)
+			const scroller = row.closest('.ms-body');
 			const autoScroll = () => {
 				if (scrollDir !== 0) {
-					window.scrollBy(0, scrollDir);
+					scroller.scrollBy(0, scrollDir);
 					reorder();
 				}
 				raf = requestAnimationFrame(autoScroll);
@@ -2560,7 +2620,8 @@ function buildMapSettings(panel) {
 				if (ev.buttons === 0) { onEnd(); return; } // pointerup was missed (released outside the window)
 				lastY = ev.clientY;
 				const margin = 60;
-				scrollDir = lastY < margin ? -8 : (lastY > window.innerHeight - margin ? 8 : 0);
+				const bounds = scroller.getBoundingClientRect();
+				scrollDir = lastY < bounds.top + margin ? -8 : (lastY > bounds.bottom - margin ? 8 : 0);
 				reorder();
 			};
 
@@ -3085,7 +3146,6 @@ function buildMapSettings(panel) {
 		renderMaps();
 		initDynamicContent();
 		applySnapLayout(layout); // the render dropped the panes; these are the ones to come back
-		scrollToTop(); // the panel collapse leaves the scroll offset mid-page
 	});
 
 	// a link, like the per-preset Podijeli it does the same job as; the filled
@@ -3095,15 +3155,22 @@ function buildMapSettings(panel) {
 		copyMapViewLink(readSharePrefs(), () => flashLabel(shareLink, 'Kopirano!', 'Podijeli'));
 	});
 
-	// the actions sit right under the render order they act on, rather than at
-	// the far end of the picker and the preset management below it
-	panel.appendChild(presetsDiv);
-	panel.appendChild(layoutDiv);
-	panel.appendChild(selectedDiv);
-	panel.appendChild(el('div', { class: 'ms-actions' }, [applyBtn, shareLink]));
-	panel.appendChild(sortDiv);
-	panel.appendChild(availableDiv);
-	panel.appendChild(manageDiv);
+	const closeLink = el('a', { text: 'Zatvori', title: 'Zatvori (Esc)' });
+	closeLink.addEventListener('click', () => setMapSettingsVisible(panel, false));
+
+	// the header stays put and the body under it scrolls (CSS); in the body
+	// the actions sit right under the render order they act on, rather than
+	// at the far end of the picker and the preset management below it
+	panel.appendChild(el('div', { class: 'ms-head' }, [el('span', { class: 'ms-title', text: 'Karte' }), closeLink]));
+	panel.appendChild(el('div', { class: 'ms-body' }, [
+		presetsDiv,
+		layoutDiv,
+		selectedDiv,
+		el('div', { class: 'ms-actions' }, [applyBtn, shareLink]),
+		sortDiv,
+		availableDiv,
+		manageDiv
+	]));
 }
 
 // in dev this is a deferred external script, so the DOM is already parsed and

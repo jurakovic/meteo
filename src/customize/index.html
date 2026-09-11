@@ -28,7 +28,7 @@
 					<td align="center">
 						<div class="buttons three">
 							<a href="/" style="text-decoration: none"><div class="btn">Početna</div></a>
-							<button type="button" class="btn" onclick="toggleMapSettings()">
+							<button type="button" class="btn ms-toggle" onclick="toggleMapSettings()">
 								<span>Karte</span>
 								<span class="arrow">▼</span>
 							</button>
@@ -37,11 +37,6 @@
 								<input type="checkbox" class="links-toggle" onchange="toggleLinksBottom(this)" title="Prikaži linkove ispod karata" />
 							</div>
 						</div>
-					</td>
-				</tr>
-				<tr>
-					<td align="center">
-						<div class="map-settings" id="mapSettings" hidden></div>
 					</td>
 				</tr>
 				<tr class="sp"></tr>
@@ -66,6 +61,9 @@
 			</tbody>
 		</table>
 	</div>
+	<!-- the settings dialog, over everything; the tab opens it where the page's own button is out of reach -->
+	<div class="map-settings" id="mapSettings" hidden></div>
+	<button type="button" class="ms-tab" onclick="toggleMapSettings()" title="Karte (K)">Karte</button>
 	<footer>
 		<a onclick="scrollToTop()" style="cursor: pointer">Povratak na vrh</a>
 		·

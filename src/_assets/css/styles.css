@@ -684,17 +684,134 @@ body.fs-lock {
 				height: 28px;
 			}
 
+/* the settings dialog: fixed over everything — the page, the columns, a
+   fullscreen map — and not modal, since the arrangement is changed behind it
+   while it is open; the table's width, or what the viewport leaves */
 .map-settings {
+	position: fixed;
+	z-index: 100000;
+	top: 24px;
+	left: 0;
+	right: 0;
+	margin: 0 auto;
+	width: 875px; /* the table's max-width */
+	max-width: calc(100% - 32px);
+	max-height: calc(100vh - 48px);
+	display: flex; /* the header stays, the body below it scrolls */
+	flex-direction: column;
+	box-sizing: border-box;
+	border: 1px solid #5F6F89;
+	box-shadow: 0 16px 48px rgba(0, 0, 0, 0.75), 0 2px 8px rgba(0, 0, 0, 0.5);
 	background-color: #202c40;
 	text-align: left;
-	padding: 10px;
-	margin-top: 5px;
 	font-size: 13px;
 	color: white;
 }
 
+	/* display: flex would beat the hidden attribute's display: none */
+	.map-settings[hidden] {
+		display: none;
+	}
+
+@media (max-width: 800px) {
+	.map-settings {
+		top: 0;
+		max-width: 100%;
+		max-height: 100vh;
+	}
+}
+
+	/* the page holds still under the dialog (the scroll goes to the dialog's
+	   body, and the wheel stops at its end rather than going on to the page) */
+	body.ms-open {
+		overflow: hidden;
+	}
+
+	.map-settings .ms-head {
+		display: flex;
+		justify-content: space-between;
+		align-items: baseline;
+		padding: 7px 10px;
+		background-color: #2c3b56;
+		border-bottom: 1px solid #3d4d6a;
+	}
+
+		.map-settings .ms-head .ms-title {
+			font-weight: bold;
+		}
+
+		.map-settings .ms-head a {
+			cursor: pointer;
+			color: #8fb4ff;
+		}
+
+	.map-settings .ms-body {
+		min-height: 0;
+		overflow-y: auto;
+		overscroll-behavior: contain;
+		scrollbar-gutter: stable;
+		padding: 10px;
+	}
+
+		/* a classic scrollbar, always there with its thumb: the overlay kind
+		   shows an empty track until hovered and lies over the row handles */
+		.map-settings .ms-body::-webkit-scrollbar {
+			width: 12px;
+		}
+
+		.map-settings .ms-body::-webkit-scrollbar-track {
+			background-color: #1a2536;
+		}
+
+		.map-settings .ms-body::-webkit-scrollbar-thumb {
+			background-color: #485871;
+			border: 3px solid #1a2536;
+			border-radius: 6px;
+		}
+
+			.map-settings .ms-body::-webkit-scrollbar-thumb:hover {
+				background-color: #5F6F89;
+			}
+
+		@supports not selector(::-webkit-scrollbar) {
+			.map-settings .ms-body {
+				scrollbar-width: thin;
+				scrollbar-color: #485871 #1a2536;
+			}
+		}
+
 	.map-settings label {
 		cursor: pointer;
+	}
+
+/* the way to the dialog where the page's own Karte button is out of reach:
+   under a fullscreen map covering the page, or with the page hidden behind
+   the columns; hangs from the top edge, over the title bars' middle */
+.ms-tab {
+	display: none;
+	position: fixed;
+	z-index: 100000;
+	top: 0;
+	left: 50%;
+	transform: translateX(-50%);
+	padding: 3px 12px;
+	border: none;
+	border-radius: 0 0 6px 6px;
+	font-family: inherit;
+	font-size: 13px;
+	color: white;
+	background-color: #485871;
+	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+	cursor: pointer;
+}
+
+	.ms-tab:hover {
+		background-color: #5F6F89;
+	}
+
+	body.fs-lock .ms-tab,
+	body.snap-full .ms-tab {
+		display: block;
 	}
 
 	/* the options wrap onto as many lines as they need — a saved-preset list
