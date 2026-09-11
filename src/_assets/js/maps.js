@@ -1509,12 +1509,23 @@ function joinGroup(block) {
 	updateGroups();
 }
 
+// a member leaves; what is left with one member is no group. In a column a
+// group is a stack, so a middle member leaving splits it in two, the members
+// above it and the ones below, each a group of its own if two or more
 function leaveGroup(block) {
 	dlog(`leaveGroup: ${block.dataset.mapId}`);
 	const id = block._group;
 	delete block._group;
 	const rest = allPopouts().filter(b => b._group === id);
-	if (rest.length < 2) rest.forEach(b => delete b._group);
+	const col = snapColumnOf(block);
+	const below = col ? rest.filter(b => snapPaneOf(b).top > snapPaneOf(block).top) : [];
+	if (below.length && below.length < rest.length) {
+		const split = `g${++groupSeq}`;
+		below.forEach(b => b._group = split);
+	}
+	[rest.filter(b => !below.includes(b)), below].forEach(part => {
+		if (part.length < 2) part.forEach(b => delete b._group);
+	});
 	updateGroups();
 }
 
@@ -1574,7 +1585,12 @@ function moveGroup(starts, box, dx, dy) {
 // pull, so the widget lines up with the one above it by that edge too. A
 // free pane in a column keeps the column's width: its top or bottom edge is
 // drawn to the column's ends and the other panes, and the top it carries
-// follows. A grouped widget's handles resize the whole group (resizeGroup)
+// follows; the pulled edge stops at the column's end. A grouped floating
+// widget's handles resize the whole group (resizeGroup); a grouped pane
+// resizes on its own in its stack, which keeps together: the members above
+// it move up with its top edge, the ones below move down with its bottom
+// edge (the settle in layoutSnapColumn), and the stack's ends stop at the
+// column's
 function resizePopout(block, dir, e) {
 	const members = groupMembers(block);
 	const col = snapColumnOf(block);
@@ -1585,6 +1601,10 @@ function resizePopout(block, dir, e) {
 	const maxWidth = Math.min(POPOUT_MAX_WIDTH, viewportWidth() - POPOUT_MARGIN);
 	const maxHeight = viewportHeight() - POPOUT_MARGIN;
 	const magnets = col ? [] : magnetRects(block);
+	const mates = col ? groupStarts(members.filter(m => m !== block)) : [];
+	const above = mates.filter(s => s.top < start.top), below = mates.filter(s => s.top > start.top);
+	const stackTop = Math.min(start.top, ...above.map(s => s.top));
+	const stackBottom = Math.max(start.bottom, ...below.map(s => s.bottom));
 	trackPopoutPointer(e, (dx, dy) => {
 		let w = start.width, h = start.height;
 		if (dir.includes('e')) w = start.width + dx;
@@ -1592,13 +1612,14 @@ function resizePopout(block, dir, e) {
 		if (dir.includes('s')) h = start.height + dy;
 		if (dir.includes('n')) h = start.height - dy;
 		if (col) {
-			const edges = paneMagnetEdges(col, [block]);
+			const edges = paneMagnetEdges(col, members); // the stack moves along, so it is no magnet
 			if (dir.includes('s')) { const m = magnetEdge(start.top + h, edges); if (m !== null) h = m - start.top; }
 			if (dir.includes('n')) { const m = magnetEdge(start.bottom - h, edges); if (m !== null) h = start.bottom - m; }
-			h = clamp(h, POPOUT_MIN_HEIGHT, viewportHeight());
+			h = clamp(h, POPOUT_MIN_HEIGHT, start.height + (dir.includes('n') ? stackTop : viewportHeight() - stackBottom));
 			const pane = snapPaneOf(block);
 			pane.height = h / viewportHeight();
 			pane.top = (dir.includes('n') ? start.bottom - h : start.top) / viewportHeight();
+			if (dir.includes('n')) above.forEach(s => { snapPaneOf(s.block).top = (s.top - (h - start.height)) / viewportHeight(); });
 			layoutSnapColumns();
 			return;
 		}
@@ -1809,7 +1830,11 @@ window.addEventListener('resize', () => {
 // above the panes); .snap-col paints the column's ground below them. A free
 // (iframe) pane keeps its own height and resizes by its top and bottom edge;
 // a locked one takes the column's width, pulled in to what its content
-// spans, and the height that gives it.
+// spans, and the height that gives it. A group in a column is a stack, kept
+// one under another by every layout (settleSnapStacks), so the column's
+// width or the window changing under it changes its members' heights and
+// not their touch. A fullscreen map in a pane fills what the column leaves
+// free around the pane (fitSnapFullscreen).
 //
 // The columns can take the whole width — two of them meeting, or one at full
 // width — which hides the page (body.snap-full also drops its scrollbar). An
@@ -2006,6 +2031,62 @@ function layoutSnapColumn(col, seam) {
 		: isSnapPageHidden() ? 'Širina stupca · dvoklik vraća stranicu'
 		: 'Širina stupca · dvoklik sakriva stranicu';
 	col.panes.forEach(pane => fitSnapPane(pane, x, width));
+	settleSnapStacks(col);
+	fitSnapFullscreen(col);
+}
+
+// a group in a column is a stack: the members sit one under another in the
+// order of their tops, from where the first one stands, whatever the fit
+// made of their heights (a locked pane's follows the column's width), and
+// the stack is held inside the viewport by its bottom — else by its top —
+// the tops the members carry following
+function settleSnapStacks(col) {
+	const stacks = new Map();
+	col.panes.forEach(p => {
+		if (!p.block._group) return;
+		if (!stacks.has(p.block._group)) stacks.set(p.block._group, []);
+		stacks.get(p.block._group).push(p);
+	});
+	stacks.forEach(panes => {
+		panes.sort((a, b) => a.top - b.top);
+		const height = panes.reduce((sum, p) => sum + p.block.offsetHeight, 0);
+		let y = clamp(panes[0].block.getBoundingClientRect().top, 0, Math.max(0, viewportHeight() - height));
+		panes.forEach(p => {
+			p.block.style.top = `${Math.round(y)}px`;
+			p.top = y / viewportHeight();
+			y += p.block.offsetHeight;
+		});
+	});
+}
+
+// a fullscreen map in a pane fills what its column leaves free around the
+// pane: from the bottom of the panes above it (their top over the pane's —
+// one lying over it counts, since it stays on top) to the top of the panes
+// below it, the column's ends where there are none, and at least a map's
+// minimum height whatever lies over it — the CSS reads the span off
+// --fs-top and --fs-bottom, the other panes' rects as laid out just now
+function fitSnapFullscreen(col) {
+	col.panes.forEach(pane => {
+		const block = pane.block;
+		if (!block.classList.contains('fs-host')) {
+			block.style.removeProperty('--fs-top');
+			block.style.removeProperty('--fs-bottom');
+			return;
+		}
+		const rect = block.getBoundingClientRect();
+		let top = 0, bottom = viewportHeight();
+		col.panes.forEach(p => {
+			if (p === pane || p.block.classList.contains('fs-host')) return;
+			const other = p.block.getBoundingClientRect();
+			if (other.top < rect.top) top = Math.max(top, other.bottom);
+			else bottom = Math.min(bottom, other.top);
+		});
+		const min = POPOUT_TITLE_HEIGHT + POPOUT_MIN_HEIGHT;
+		top = clamp(top, 0, viewportHeight() - min);
+		bottom = Math.max(bottom, top + min);
+		block.style.setProperty('--fs-top', `${Math.round(top)}px`);
+		block.style.setProperty('--fs-bottom', `${Math.round(viewportHeight() - bottom)}px`);
+	});
 }
 
 // a pane takes the column's width: a free one with the height it carries, a

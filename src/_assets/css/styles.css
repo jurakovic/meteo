@@ -451,8 +451,10 @@ body.fs-lock {
 		display: none;
 	}
 
-	/* a fullscreen map in a pane fills its column, and the page hidden behind
-	   the columns leaves a floating widget's fullscreen the whole viewport */
+	/* a fullscreen map in a pane fills its column — what the other panes leave
+	   free of it, above and below (--fs-top/--fs-bottom, set by maps.js) — and
+	   the page hidden behind the columns leaves a floating widget's fullscreen
+	   the whole viewport */
 	body.snap-full .radartitle.fullscreen,
 	body.snap-full .if1.fullscreen {
 		left: 0;
@@ -469,6 +471,15 @@ body.fs-lock {
 	.map-block.snapped-right .if1.fullscreen {
 		left: calc(100% - var(--snap-r));
 		right: 0;
+	}
+
+	.map-block.popout.snapped .radartitle.fullscreen {
+		top: var(--fs-top, 0px);
+	}
+
+	.map-block.popout.snapped .if1.fullscreen {
+		top: calc(var(--fs-top, 0px) + 23px); /* under the bar */
+		bottom: var(--fs-bottom, 0px);
 	}
 
 	/* a fullscreen map leaves its widget's box (frame, shadow, handles) behind
