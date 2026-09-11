@@ -814,6 +814,24 @@ function resolveMapIds() {
 	return prefsMapIds(getActiveMapPrefs());
 }
 
+// a map taken off the board (popout.js) leaves the list it is shown from:
+// the custom list without it, into the preferences — or into the shared
+// view, which stays a shared view, the arrangement written after it into
+// the address bar as always
+function removeMapFromList(mapId) {
+	const maps = resolveMapIds().filter(id => id !== mapId);
+	if (sharedMapView) {
+		sharedMapView.preset = 'custom';
+		sharedMapView.maps = maps;
+	} else {
+		const prefs = getMapPrefs();
+		prefs.preset = 'custom';
+		prefs.maps = maps;
+		saveMapPrefs(prefs);
+	}
+	persistSnapLayout();
+}
+
 // the list a preferences object names — deduped as well as filtered: a
 // hand-crafted ?v= can name the same map twice, and two rendered copies would
 // share one data-slideshow-id (the arrows drive whichever comes first while
@@ -1440,7 +1458,9 @@ function buildMapSettings(panel) {
 	function layoutForPrefs(prefs) {
 		if (prefs.preset === 'custom') return sanitizeSnapLayout(snapLayout(), prefsMapIds(prefs));
 		const preset = userPresets.find(p => p.id === prefs.preset);
-		return preset ? sanitizeSnapLayout(preset.layout, prefsMapIds(prefs)) : null;
+		if (preset) return sanitizeSnapLayout(preset.layout, prefsMapIds(prefs));
+		// a built-in has no arrangement of its own: the page's — or the board's, when its maps are chosen on the board
+		return isDashboard() ? sanitizeSnapLayout(snapLayout(), prefsMapIds(prefs)) : null;
 	}
 
 	// the arrangement on screen, held to the list in the picker (a map unchecked
@@ -1465,24 +1485,52 @@ function buildMapSettings(panel) {
 	// is part of the view a preset saves and a link carries
 	const layoutDiv = el('div', { class: 'ms-layout' });
 
-	function renderLayoutLine() {
-		layoutDiv.replaceChildren();
-		const layout = snapLayout();
-		layoutDiv.hidden = !layout;
-		if (!layout) return;
+	function layoutParts() {
+		const layout = snapLayout() || {};
 		const parts = [];
 		if (layout.left) parts.push(`lijevo ${layout.left.panes.length}`);
 		if (layout.right) parts.push(`desno ${layout.right.panes.length}`);
 		if (layout.floating) parts.push(`u prozoru ${layout.floating.length}`);
+		return parts;
+	}
+
+	// the board is another way of viewing altogether, so it gets a row of
+	// its own with a button, not a link among the others: the way onto it
+	// with a word on what it is, or — lit, as a state — the way off it and
+	// what is on it (both direct: the change comes back through _onLayoutChange)
+	const modeDiv = el('div', { class: 'ms-mode' });
+	function renderModeRow() {
+		modeDiv.replaceChildren();
+		modeDiv.hidden = !POPOUT_MQ.matches; // the widgets and the board are a desktop thing
+		const on = isDashboard();
+		modeDiv.classList.toggle('ms-on', on);
+		const btn = el('button', { type: 'button', class: 'btn', text: on ? 'Napusti ploču' : 'Nadzorna ploča' });
+		btn.addEventListener('click', on ? dockAllPopouts : enterDashboard);
+		const parts = layoutParts();
+		const text = on
+			? el('span', { class: 'ms-mode-text' }, [el('b', { text: 'Na nadzornoj ploči' }), el('span', { text: parts.length ? ` · ${parts.join(', ')}` : '' })])
+			: el('span', { class: 'ms-mode-text', text: 'Sve karte kao prozori preko cijelog zaslona, bez stranice' });
+		modeDiv.append(btn, text);
+	}
+	renderModeRow();
+
+	// what is popped out over the page, with the way back (on the board the
+	// mode row says it)
+	function renderLayoutLine() {
+		layoutDiv.replaceChildren();
+		const parts = layoutParts();
+		layoutDiv.hidden = isDashboard() || !parts.length;
+		if (layoutDiv.hidden) return;
 		const backLink = el('a', { text: 'Vrati sve' });
-		backLink.addEventListener('click', dockAllPopouts); // the change comes back through _onLayoutChange
+		backLink.addEventListener('click', dockAllPopouts);
 		layoutDiv.append(el('span', { text: `Izdvojene karte: ${parts.join(', ')}` }), backLink);
 	}
 	renderLayoutLine();
 
 	// the arrangement changes behind the open panel — a map popped out, a pane
-	// snapped, everything put back — and the line and Ažuriraj follow at once
+	// snapped, everything put back — and the rows and Ažuriraj follow at once
 	panel._onLayoutChange = () => {
+		renderModeRow();
 		renderLayoutLine();
 		renderManage();
 	};
@@ -1835,6 +1883,7 @@ function buildMapSettings(panel) {
 	panel.appendChild(el('div', { class: 'ms-head' }, [el('span', { class: 'ms-title', text: 'Karte' }), closeLink]));
 	panel.appendChild(el('div', { class: 'ms-body' }, [
 		presetsDiv,
+		modeDiv,
 		layoutDiv,
 		selectedDiv,
 		el('div', { class: 'ms-actions' }, [applyBtn, shareLink]),

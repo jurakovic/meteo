@@ -37,14 +37,16 @@ function buildPopoutButton() {
 
 function setPopoutButton(btn, popped) {
 	// ASCII only: an arrow glyph comes from a fallback font and sits off the baseline of [ ] and [X]
-	btn.textContent = popped ? '[=]' : '[^]';
-	btn.title = popped ? 'Vrati kartu na stranicu' : 'Izdvoji kartu u pomični prozor';
+	// on the board there is no page to go back to: the button takes the map off the board
+	btn.textContent = !popped ? '[^]' : dashboardMode ? '[x]' : '[=]';
+	btn.title = !popped ? 'Izdvoji kartu u pomični prozor' : dashboardMode ? 'Ukloni kartu s ploče' : 'Vrati kartu na stranicu';
 }
 
 function togglePopout(block) {
 	if (!block) return;
-	if (block.classList.contains('popout')) dockMap(block);
-	else if (POPOUT_MQ.matches) popoutMap(block);
+	if (!block.classList.contains('popout')) { if (POPOUT_MQ.matches) popoutMap(block); }
+	else if (dashboardMode) removeFromDashboard(block);
+	else dockMap(block);
 }
 
 // a widget's [R] fetches its map afresh — the page may have been open long
@@ -188,8 +190,88 @@ function dockMap(block) {
 	persistSnapLayout();
 }
 
+// everything back on the page — which is leaving the board, where every map
+// is a widget: the page comes back first, since its scrollbar changes the
+// viewport the widgets are docked from
 function dockAllPopouts() {
+	setDashboard(false);
+	layoutSnapColumns();
 	document.querySelectorAll('.map-block.popout').forEach(dockMap);
+	persistSnapLayout(); // also with nothing to dock: the mode may have changed
+}
+
+// ---------- dashboard (desktop) ----------
+
+// the page out of sight and every map of the list a widget, floating or in a
+// column — a mode of the view, `dashboard: true` on the layout, so it rides
+// with the list in the preferences, a saved preset and a share link, and
+// comes back with them (applySnapLayout). Entered from the dialog's layout
+// line, left by docking everything (the same line, Vrati sve's place). On
+// the board the widget's [=] is [x] and takes the map off the list; a map
+// added to the list comes onto the board at the next free step of a cascade
+// (popoutRest). Desktop only, like the widgets: the breakpoint docks
+// everything, with persistence paused, so the stored view keeps the mode
+let dashboardMode = false;
+const CASCADE_STEP = 32; // between widgets popped out one after another with no place of their own
+
+function isDashboard() {
+	return dashboardMode;
+}
+
+// the class first: the page's scrollbar goes with it, changing the viewport
+// everything after is measured in; the buttons read the mode
+function setDashboard(on) {
+	dashboardMode = on;
+	document.body.classList.toggle('dashboard', on);
+	document.querySelectorAll('.map-block.popout .po-btn').forEach(btn => setPopoutButton(btn, true));
+}
+
+function enterDashboard() {
+	if (dashboardMode || !POPOUT_MQ.matches) return;
+	dlog('enterDashboard');
+	snapPersistPaused = true;
+	setDashboard(true);
+	layoutSnapColumns();
+	popoutRest();
+	snapPersistPaused = false;
+	persistSnapLayout();
+}
+
+// every map of the list not popped out yet becomes a widget, one after
+// another down a cascade from the top left of what the columns leave; once
+// it would run off the bottom the next round starts at the top again, half
+// a widget further right
+function popoutRest() {
+	let k = 0;
+	document.querySelectorAll('.map-block:not(.popout)').forEach(block => {
+		popoutMap(block);
+		const steps = Math.max(1, Math.floor((viewportHeight() - POPOUT_MARGIN - block.offsetHeight) / CASCADE_STEP));
+		const step = k % steps, round = Math.floor(k / steps);
+		k++;
+		placePopout(block,
+			snapColumnPx(snapColumns.left) + POPOUT_MARGIN + step * CASCADE_STEP + round * POPOUT_WIDTH / 2,
+			POPOUT_MARGIN + step * CASCADE_STEP);
+		raisePopout(block);
+	});
+}
+
+// [x] on the board: the map leaves the list it is shown from — the widget
+// goes, with its rows in the (hidden) table, and the list is stored without
+// it (maps.js), as the dialog would store it after the map was unticked
+function removeFromDashboard(block) {
+	dlog(`removeFromDashboard: ${block.dataset.mapId}`);
+	const id = block.dataset.mapId;
+	snapPersistPaused = true;
+	dockMap(block); // out of its column and group, a fullscreen taken down
+	snapPersistPaused = false;
+	const row = block.closest('tr');
+	const next = row.nextElementSibling;
+	const links = next && next.querySelector('.links-bottom') ? next : null;
+	const last = links || row;
+	const spacer = row.previousElementSibling && row.previousElementSibling.classList.contains('sp20') ? row.previousElementSibling
+		: last.nextElementSibling && last.nextElementSibling.classList.contains('sp20') ? last.nextElementSibling : null;
+	[links, spacer, row].forEach(node => { if (node) node.remove(); });
+	removeMapFromList(id);
 }
 
 // keep the whole widget inside the viewport when it fits, else at least its
@@ -908,10 +990,12 @@ function dropSnapColumn(col) {
 	col.panes = [];
 }
 
-// the panes are gone with the tbody they were part of
+// the panes are gone with the tbody they were part of, and the board with
+// them (applySnapLayout sets it again from the layout)
 function resetSnapColumns() {
 	Object.values(snapColumns).forEach(dropSnapColumn);
 	snapPageWidths = null;
+	setDashboard(false);
 	layoutSnapColumns();
 }
 
@@ -1170,6 +1254,7 @@ function snapLayout() {
 			return entry;
 		});
 	if (floating.length) layout.floating = floating;
+	if (dashboardMode) layout.dashboard = true;
 	return Object.keys(layout).length ? layout : null;
 }
 
@@ -1265,6 +1350,7 @@ function sanitizeSnapLayout(layout, mapIds) {
 		const group = groups.get(entry.group);
 		if (group && (group.count < 2 || group.places.size > 1)) delete entry.group;
 	}));
+	if (layout.dashboard === true) clean.dashboard = true; // a board with nothing placed yet is still a board
 	return Object.keys(clean).length ? clean : null;
 }
 
@@ -1278,6 +1364,8 @@ function sameSnapLayout(a, b) {
 // not shown
 function applySnapLayout(layout) {
 	resetSnapColumns();
+	// the mode before anything is measured: the page's scrollbar goes with it
+	setDashboard(!!(layout && layout.dashboard && POPOUT_MQ.matches));
 	if (!layout || !POPOUT_MQ.matches) return;
 	snapPersistPaused = true; // what is being applied is already what is stored
 	const toFullscreen = [];
@@ -1319,6 +1407,7 @@ function applySnapLayout(layout) {
 		setGroup(block, group);
 		if (fullscreen) toFullscreen.push(block);
 	});
+	if (dashboardMode) popoutRest(); // the maps of the list the layout does not place: onto the board
 	// once everything stands where it belongs: a pane's fullscreen is placed
 	// by its column, and main.js reads off the pane whether to lock the page
 	toFullscreen.forEach(restoreFullscreen);

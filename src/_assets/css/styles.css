@@ -524,10 +524,28 @@ body.fs-lock {
 	   the page hidden behind the columns leaves a floating widget's fullscreen
 	   the whole viewport */
 	body.snap-full .radartitle.fullscreen,
-	body.snap-full .if1.fullscreen {
+	body.snap-full .if1.fullscreen,
+	body.dashboard .radartitle.fullscreen,
+	body.dashboard .if1.fullscreen {
 		left: 0;
 		right: 0;
 	}
+
+	/* the dashboard: the page — and all on it but the widgets, which are
+	   fixed and stay rendered — out of sight and out of reach, no scrollbar;
+	   the widgets, the columns and the dialog are all there is */
+	body.dashboard {
+		overflow: hidden;
+	}
+
+	body.dashboard .container,
+	body.dashboard footer {
+		visibility: hidden;
+	}
+
+		body.dashboard .map-block.popout:not(.fs-host) {
+			visibility: visible;
+		}
 
 	.map-block.snapped-left .radartitle.fullscreen,
 	.map-block.snapped-left .if1.fullscreen {
@@ -885,7 +903,8 @@ body.fs-lock {
 	}
 
 	body.fs-lock .ms-tab,
-	body.snap-full .ms-tab {
+	body.snap-full .ms-tab,
+	body.dashboard .ms-tab {
 		display: block;
 	}
 
@@ -1044,11 +1063,48 @@ body.fs-lock {
 		}
 
 	/* the snapped arrangement, named and undoable (desktop only, like the panes) */
+	/* the board is another way of viewing: its row stands out from the links
+	   around it — a button, a band with a blue edge, lit while on the board */
+	.map-settings .ms-mode {
+		display: flex;
+		align-items: center;
+		gap: 14px;
+		margin: 10px 0 4px;
+		padding: 8px 10px;
+		background-color: #1a2536;
+		border: 1px solid #3d4d6a;
+		border-left: 4px solid #4a8de6;
+	}
+
+		.map-settings .ms-mode.ms-on {
+			background-color: #22385c;
+			border-color: #4a8de6;
+		}
+		.map-settings .ms-mode .btn {
+			flex: none;
+			padding: 0 14px;
+		}
+
+		.map-settings .ms-mode-text {
+			color: #8a94a8;
+		}
+
+		.map-settings .ms-mode.ms-on .ms-mode-text {
+			color: white;
+		}
+
 	.map-settings .ms-layout {
 		display: flex;
 		gap: 14px;
 		padding: 6px 0;
 		color: #8a94a8;
+	}
+
+	/* both rows are hidden by attribute (on a phone, or with nothing to say),
+	   which their display: flex would otherwise beat */
+	.map-settings .ms-mode[hidden],
+	.map-settings .ms-layout[hidden] {
+		display: none;
 	}
 
 		.map-settings .ms-layout a {
