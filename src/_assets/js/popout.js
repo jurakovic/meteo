@@ -270,8 +270,8 @@ function removeFromDashboard(block) {
 function placePopout(block, left, top) {
 	const maxLeft = Math.max(0, viewportWidth() - block.offsetWidth);
 	const maxTop = Math.max(0, viewportHeight() - Math.max(block.offsetHeight, POPOUT_TITLE_HEIGHT));
-	block.style.left = `${Math.round(Math.min(Math.max(0, left), maxLeft))}px`;
-	block.style.top = `${Math.round(Math.min(Math.max(0, top), maxTop))}px`;
+	block.style.left = `${subpixel(Math.min(Math.max(0, left), maxLeft))}px`;
+	block.style.top = `${subpixel(Math.min(Math.max(0, top), maxTop))}px`;
 }
 
 // a grouped widget comes up with its group, the order within it kept
@@ -542,16 +542,29 @@ function groupBox(starts) {
 }
 
 // the members moved by one offset, the group's box kept inside the viewport
-// when it fits, else at least its top-left corner — placePopout()'s rule
+// when it fits, else at least its top-left corner — placePopout()'s rule.
+// The offset is not rounded to whole pixels: a locked widget's height is its
+// title bar plus the width over its aspect, so its bottom edge lands on a
+// fraction of a pixel, and a widget magneted under it would sit half a pixel
+// into it — both borders drawn, a seam of about one and a half. Only a landing
+// on such an edge carries a fraction (a width is whole, so the sides are too),
+// and it costs that widget's border the crispness of sitting on the grid,
+// which is the lesser of the two. Thousandths: the layout unit is 1/64px
 function moveGroup(starts, box, dx, dy) {
 	const left = Math.min(Math.max(0, box.left + dx), Math.max(0, viewportWidth() - box.width));
 	const top = Math.min(Math.max(0, box.top + dy), Math.max(0, viewportHeight() - box.height));
-	dx = Math.round(left - box.left);
-	dy = Math.round(top - box.top);
+	dx = left - box.left;
+	dy = top - box.top;
 	starts.forEach(s => {
-		s.block.style.left = `${Math.round(s.left + dx)}px`;
-		s.block.style.top = `${Math.round(s.top + dy)}px`;
+		s.block.style.left = `${subpixel(s.left + dx)}px`;
+		s.block.style.top = `${subpixel(s.top + dy)}px`;
 	});
+}
+
+// a position as written: thousandths of a pixel, the layout unit being 1/64px.
+// Whole pixels would cost the magnets their landing (see moveGroup)
+function subpixel(v) {
+	return Math.round(v * 1000) / 1000;
 }
 
 // resizing from any side or corner. Width is the dimension every widget has;
@@ -616,16 +629,32 @@ function resizePopout(block, dir, e) {
 			h = clamp(h, POPOUT_MIN_HEIGHT, maxHeight);
 			block.style.height = `${Math.round(h)}px`;
 		} else {
-			if (dir === 'n' || dir === 's') w = h * ratio;
-			else if (dir.length === 2) w = Math.max(w, h * ratio);
+			// the width the wanted height asks for, read off the widget rather
+			// than taken from the start ratio, so the pulled edge lands on its
+			// magnet and a plain drag follows the pointer (lockedWidthFor)
+			if (dir === 'n' || dir === 's') w = lockedWidthFor(block, h, h * ratio, ratio, maxWidth);
+			else if (dir.length === 2) w = Math.max(w, lockedWidthFor(block, h, h * ratio, ratio, maxWidth));
 			// the width the height asked for moves the right edge (the left, pulled from the west)
 			if (!(dir.includes('e') || dir.includes('w')) || dir.length === 2)
 				w = pullResizeEdges(magnets, dir.includes('w') ? 'w' : 'e', start, w, h).w;
 			w = clamp(w, POPOUT_MIN_WIDTH, maxWidth);
+			// and the same the other way about: a width pulled by a side handle
+			// carries the bottom edge down with it, since a locked height follows
+			// the width, so that edge is offered the same magnets and the width
+			// is taken back from the height that lands on one — which is how a
+			// widget widened beside a taller one stops level with its bottom
+			if (dir !== 'n' && dir !== 's') {
+				const vert = (dir.includes('n') ? 'n' : 's') + (dir.includes('w') ? 'w' : '');
+				const at = lockedHeightAt(block, w);
+				const want = pullResizeEdges(magnets, vert, start, w, at).h; // the height only; the width has had its pull
+				if (Math.abs(want - at) > 0.5) w = lockedWidthFor(block, want, w + (want - at) * ratio, ratio, maxWidth);
+			}
 		}
 		block.style.width = `${Math.round(w)}px`;
-		// the laid-out height, exact for locked widgets where it follows the width
-		h = block.offsetHeight;
+		// the laid-out height, exact for locked widgets where it follows the
+		// width — off the rect, like start, so the two can be subtracted without
+		// offsetHeight's rounding costing the north edge a pixel
+		h = block.getBoundingClientRect().height;
 		placePopout(block, dir.includes('w') ? start.right - w : start.left, dir.includes('n') ? start.bottom - h : start.top);
 		fitTitles(block);
 	}, persistSnapLayout);
@@ -647,6 +676,33 @@ function pullResizeEdges(magnets, dir, start, w, h) {
 	if (dir.includes('s')) h = edge(start.top + h, stacked.map(r => r.top), beside.map(r => r.bottom)) - start.top;
 	if (dir.includes('n')) h = start.bottom - edge(start.bottom - h, stacked.map(r => r.bottom), beside.map(r => r.top));
 	return { w, h };
+}
+
+// the width at which a locked widget stands exactly h high. Its height is its
+// title bar and indicators, which keep their height whatever the width, plus
+// the map, which scales with it — so height is not proportional to width, and
+// the start ratio only approximates the width a wanted height asks for: a pull
+// on the top or bottom edge landed beside its magnet by about the bar's share
+// of the height, a dozen pixels, which is the whole of MAGNET. Setting the
+// width and reading back the height it gave closes that, since the error left
+// is the bar's share of the error — under a tenth — so the second pass lands
+// on the pixel. Cheap enough per move: the height is read back once anyway
+function lockedWidthFor(block, h, w, ratio, maxWidth) {
+	for (let i = 0; i < 3; i++) {
+		w = clamp(w, POPOUT_MIN_WIDTH, maxWidth);
+		const got = lockedHeightAt(block, w);
+		if (Math.abs(got - h) < 0.5) break;
+		w += (h - got) * ratio;
+	}
+	return clamp(w, POPOUT_MIN_WIDTH, maxWidth);
+}
+
+// the height a locked widget stands at that width. Off the rect, not
+// offsetHeight: the width is a whole pixel and the height it gives is not, and
+// a rounded reading would keep a pixel of the error
+function lockedHeightAt(block, w) {
+	block.style.width = `${Math.round(w)}px`;
+	return block.getBoundingClientRect().height;
 }
 
 // a group resizes as one thing: its box is pulled as a locked widget's is —
