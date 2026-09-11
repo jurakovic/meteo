@@ -807,6 +807,21 @@ body.fs-lock {
 	}
 }
 
+/* on desktop the dialog is a window: dragged by its head and resized from any
+   side or corner through the widgets' own handles, which maps.js appends and
+   drives. Everything else about it stands — the page still holds still behind
+   it and a press outside still shuts it */
+@media (min-width: 801px) and (hover: hover) and (pointer: fine) {
+	.map-settings .po-h {
+		position: absolute;
+		z-index: 1;
+	}
+
+	.map-settings .ms-head {
+		cursor: move;
+	}
+}
+
 	/* the page holds still under the dialog (the scroll goes to the dialog's
 	   body, and the wheel stops at its end rather than going on to the page) */
 	body.ms-open {
