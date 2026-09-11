@@ -205,12 +205,14 @@ function dockAllPopouts() {
 // the page out of sight and every map of the list a widget, floating or in a
 // column — a mode of the view, `dashboard: true` on the layout, so it rides
 // with the list in the preferences, a saved preset and a share link, and
-// comes back with them (applySnapLayout). Entered from the dialog's layout
-// line, left by docking everything (the same line, Vrati sve's place). On
-// the board the widget's [=] is [x] and takes the map off the list; a map
-// added to the list comes onto the board at the next free step of a cascade
-// (popoutRest). Desktop only, like the widgets: the breakpoint docks
-// everything, with persistence paused, so the stored view keeps the mode
+// comes back with them (applySnapLayout). Which is also the only way onto it:
+// the dialog's mode row ticks the mode and Primijeni applies it with the list,
+// so nothing enters the board on its own. Left the same way, or by docking
+// everything (Vrati sve, the breakpoint). On the board the widget's [=] is [x]
+// and takes the map off the list; a map added to the list comes onto the board
+// at the next free step of a cascade (popoutRest). Desktop only, like the
+// widgets: the breakpoint docks everything, with persistence paused, so the
+// stored view keeps the mode
 let dashboardMode = false;
 const CASCADE_STEP = 32; // between widgets popped out one after another with no place of their own
 
@@ -224,17 +226,6 @@ function setDashboard(on) {
 	dashboardMode = on;
 	document.body.classList.toggle('dashboard', on);
 	document.querySelectorAll('.map-block.popout .po-btn').forEach(btn => setPopoutButton(btn, true));
-}
-
-function enterDashboard() {
-	if (dashboardMode || !POPOUT_MQ.matches) return;
-	dlog('enterDashboard');
-	snapPersistPaused = true;
-	setDashboard(true);
-	layoutSnapColumns();
-	popoutRest();
-	snapPersistPaused = false;
-	persistSnapLayout();
 }
 
 // every map of the list not popped out yet becomes a widget, one after

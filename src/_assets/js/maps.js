@@ -1469,6 +1469,12 @@ function buildMapSettings(panel) {
 	// list is nobody's — a stored custom view, or a shared one matching nothing.
 	let editingPresetId = activePresetId() === 'custom' ? null : activePresetId();
 
+	// the board is a mode of the view the panel edits, not a place it sends you:
+	// the mode row's button only ticks this, and Primijeni builds the view from
+	// it along with the list (layoutForPrefs). Starts at what is on screen, so
+	// opening the panel and applying anything unchanged changes nothing.
+	let dashboardChecked = isDashboard();
+
 	// rebuilt whenever the saved presets change, so they sit among the
 	// built-ins and stay selectable the same way
 	function renderPresets(selectedId) {
@@ -1481,8 +1487,13 @@ function buildMapSettings(panel) {
 			const radio = el('input', { type: 'radio', name: 'msPreset', value: preset.id });
 			radio.checked = preset.id === selectedId;
 			radio.addEventListener('change', () => {
-				// switching to a named preset previews its list; "custom" keeps the current list
-				if (preset.id !== 'custom') fillList(presetMapIds(preset.id));
+				// switching to a named preset previews its whole view: its list and
+				// its mode, since a preset saved as a board is a board and a built-in,
+				// carrying no layout, is the page. "Prilagođeno" keeps both as they are
+				if (preset.id !== 'custom') {
+					fillList(presetMapIds(preset.id));
+					setDashboardChecked(isBoardPreset(preset));
+				}
 				// picking "Prilagođeno" by hand detaches the list from wherever it
 				// came from: no dot, and no row offering to take the edits back
 				editingPresetId = preset.id === 'custom' ? null : preset.id;
@@ -1543,32 +1554,48 @@ function buildMapSettings(panel) {
 		return { preset: presetId };
 	}
 
+	// the mode is the panel's, not the arrangement's: whatever layout is going to
+	// be applied, the toggle decides whether it is a board. Ticked, it turns any
+	// layout into one — a built-in's nothing included, which applySnapLayout then
+	// fills with every map of the list. Unticked, a board loses its placements
+	// along with the flag: a board holds the whole list as widgets, and over the
+	// visible page that is a pile rather than an arrangement
+	function withDashboard(layout, on) {
+		if (!on) return layout && layout.dashboard ? null : layout;
+		const board = Object.assign({}, layout); // key order kept, so sameSnapLayout still compares
+		board.dashboard = true;
+		return board;
+	}
+
 	// the arrangement to go with a prefs object. A preset is a whole view:
 	// applying a saved one brings its own arrangement (none, if it was saved
 	// with nothing popped out), and a built-in has none, so everything docks.
 	// Only the custom list keeps what is on screen, as far as its maps allow —
 	// that is an edit of the current view, not a switch to another one
 	function layoutForPrefs(prefs) {
-		if (prefs.preset === 'custom') return sanitizeSnapLayout(snapLayout(), prefsMapIds(prefs));
-		const preset = userPresets.find(p => p.id === prefs.preset);
-		return preset ? sanitizeSnapLayout(preset.layout, prefsMapIds(prefs)) : null; // a built-in is the page, with nothing popped out
+		const stored = prefs.preset === 'custom'
+			? snapLayout()
+			: (userPresets.find(p => p.id === prefs.preset) || {}).layout; // a built-in has none
+		return withDashboard(sanitizeSnapLayout(stored, prefsMapIds(prefs)), dashboardChecked);
 	}
 
 	// the arrangement on screen, held to the list in the picker (a map unchecked
-	// there cannot stay a pane)
+	// there cannot stay a pane) and to the mode in the row, so what a preset
+	// saves and what Ažuriraj counts as an edit are the view Primijeni would build
 	function selectedLayout() {
-		return sanitizeSnapLayout(snapLayout(), selectedMapIds());
+		return withDashboard(sanitizeSnapLayout(snapLayout(), selectedMapIds()), dashboardChecked);
 	}
 
 	// the panel's own share button carries whatever is on screen, expanding a
-	// saved preset the same way the per-preset links do
+	// saved preset the same way the per-preset links do — with the panel's mode
+	// on it either way, since the link carries the view Primijeni would build
 	function readSharePrefs() {
 		const prefs = readPanelPrefs();
-		const preset = userPresets.find(p => p.id === prefs.preset);
-		if (preset) return presetSharePrefs(preset);
 		const layout = layoutForPrefs(prefs);
-		if (layout) prefs.layout = layout;
-		return prefs;
+		const preset = userPresets.find(p => p.id === prefs.preset);
+		const shared = preset ? presetSharePrefs(preset) : prefs;
+		if (layout) shared.layout = layout; else delete shared.layout;
+		return shared;
 	}
 
 	// what is snapped, and a way to put it all back; shown only while there is
@@ -1585,25 +1612,37 @@ function buildMapSettings(panel) {
 		return parts;
 	}
 
-	// the board is another way of viewing altogether, so it gets a row of
-	// its own with a button, not a link among the others: the way onto it
-	// with a word on what it is, or — lit, as a state — the way off it and
-	// what is on it (both direct: the change comes back through _onLayoutChange)
+	// the board is another way of viewing altogether, so it gets a row of its
+	// own with a button, not a link among the others — a toggle, though, not a
+	// way onto it: it ticks dashboardChecked and nothing moves until Primijeni,
+	// like the ticks in the list beside it. Lit (.ms-on) while ticked; the text
+	// says what the mode is, or, while the tick and the screen disagree, that
+	// Primijeni is what settles it
 	const modeDiv = el('div', { class: 'ms-mode' });
 	function renderModeRow() {
 		modeDiv.replaceChildren();
 		modeDiv.hidden = !POPOUT_MQ.matches; // the widgets and the board are a desktop thing
-		const on = isDashboard();
-		modeDiv.classList.toggle('ms-on', on);
-		const btn = el('button', { type: 'button', class: 'btn', text: on ? 'Napusti ploču' : 'Nadzorna ploča' });
-		btn.addEventListener('click', on ? dockAllPopouts : enterDashboard);
+		modeDiv.classList.toggle('ms-on', dashboardChecked);
+		const btn = el('button', { type: 'button', class: 'btn', text: 'Nadzorna ploča', 'aria-pressed': String(dashboardChecked) });
+		btn.addEventListener('click', () => setDashboardChecked(!dashboardChecked));
 		const parts = layoutParts();
-		const text = on
-			? el('span', { class: 'ms-mode-text' }, [el('b', { text: 'Na nadzornoj ploči' }), el('span', { text: parts.length ? ` · ${parts.join(', ')}` : '' })])
-			: el('span', { class: 'ms-mode-text', text: 'Sve karte kao prozori preko cijelog zaslona, bez stranice' });
+		const text = dashboardChecked !== isDashboard()
+			? el('span', { class: 'ms-mode-text' }, [el('b', { text: 'Primijeni' }), el('span', { text: dashboardChecked ? ' za prelazak na ploču' : ' za povratak na stranicu' })])
+			: dashboardChecked
+				? el('span', { class: 'ms-mode-text' }, [el('b', { text: 'Na nadzornoj ploči' }), el('span', { text: parts.length ? ` · ${parts.join(', ')}` : '' })])
+				: el('span', { class: 'ms-mode-text', text: 'Sve karte kao prozori preko cijelog zaslona, bez stranice' });
 		modeDiv.append(btn, text);
 	}
 	renderModeRow();
+
+	// the mode is part of the layout, so a changed tick is a pending edit like
+	// a changed list: the row, the line it speaks for and Ažuriraj all follow
+	function setDashboardChecked(on) {
+		dashboardChecked = on;
+		renderModeRow();
+		renderLayoutLine();
+		renderManage();
+	}
 
 	// what is popped out over the page, with the way back (on the board the
 	// mode row says it)
