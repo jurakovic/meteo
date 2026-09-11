@@ -431,6 +431,15 @@ body.fs-lock {
 			z-index: 1;
 		}
 
+		/* a widget with another lying over it hands the pointer back to the page:
+		   a press inside an iframe is the frame's own and the page never sees it,
+		   so the widget could not be clicked to the front (popout.js sets the
+		   class). The press lands on the widget instead and raises it, and the
+		   frame is live again for the next one */
+		.map-block.popout.covered iframe {
+			pointer-events: none;
+		}
+
 		.po-h-n, .po-h-s {
 			left: 6px;
 			right: 6px;

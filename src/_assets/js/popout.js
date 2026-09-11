@@ -180,7 +180,7 @@ function dockMap(block) {
 	if (fs) exitFullscreen(fs);
 	if (block._group) leaveGroup(block);
 	unsnapPane(block);
-	block.classList.remove('popout', 'free', 'grouped', 'letterbox');
+	block.classList.remove('popout', 'free', 'grouped', 'letterbox', 'covered');
 	['left', 'top', 'width', 'height', 'z-index', '--po-img'].forEach(p => block.style.removeProperty(p));
 	block.querySelectorAll('.po-h, .po-backdrop').forEach(h => h.remove());
 	if (block._gap) block._gap.remove();
@@ -279,6 +279,36 @@ function raisePopout(block) {
 	groupMembers(block)
 		.sort((a, b) => (Number(a.style.zIndex) || 0) - (Number(b.style.zIndex) || 0))
 		.forEach(member => member.style.zIndex = ++popoutZ);
+	updateCovered();
+}
+
+// An iframe takes the pointer itself, and a press inside it belongs to the
+// frame's document: the page never sees it, so the widget clicked into would
+// stay under the one over it. Most maps are spared by their gate, an .overlay
+// over the frame that takes the press, but a basic iframe (.if2) has none and
+// an interactive one loses its own once the gate is let through. Nor can the
+// page be told after the fact — the focus moving from one frame to another
+// raises no event it can hear (see the blur handler below, which catches only
+// the move in from the page itself). So a frame with another widget lying over
+// it stops taking the pointer at all (`covered`, the CSS): the press lands on
+// the widget instead and raises it, the class goes with the raise, and the
+// frame is live for the next press. Click it to the front, then work the map —
+// which is what a window does. A widget nothing overlaps is never covered, so
+// a map standing on its own is untouched
+function updateCovered() {
+	const boxes = allPopouts().map(block => ({
+		block,
+		rect: block.getBoundingClientRect(),
+		z: Number(block.style.zIndex) || 0
+	}));
+	boxes.forEach(a => {
+		const under = boxes.some(b => b.block !== a.block && b.z > a.z
+			&& b.rect.left < a.rect.right && b.rect.right > a.rect.left
+			&& b.rect.top < a.rect.bottom && b.rect.bottom > a.rect.top);
+		// a widget hosting a fullscreen map is deliberately under the others; its
+		// map fills the column or the page and is the one thing meant to be used
+		a.block.classList.toggle('covered', under && !a.block.classList.contains('fs-host'));
+	});
 }
 
 function clamp(value, min, max) {
@@ -826,6 +856,27 @@ document.addEventListener('pointerdown', (e) => {
 	else dragPopout(block, e);
 });
 
+// The covering widget's frame is dealt with by `covered` above, which is the
+// case that matters. This is the rest of it: a widget nothing lies over is
+// never covered, so its frame does take the press, and the page hears of it
+// only as its own window handing the focus to the frame. Raising it then keeps
+// the order honest for when something is later dragged over it. It catches the
+// move in from the page alone — the focus going from one frame straight to
+// another raises no event here at all, the window having none left to lose —
+// which is why the covered case cannot be built on this
+function raiseFocusedFrame() {
+	const frame = document.activeElement;
+	if (!frame || frame.tagName !== 'IFRAME') return;
+	const block = frame.closest('.map-block.popout');
+	// as above: a widget hosting a fullscreen map is kept under the others
+	if (block && !block.classList.contains('fs-host')) raisePopout(block);
+}
+
+// on a tick, the frame holding the focus only after the event. A blur that
+// went anywhere else — another tab, another window — leaves activeElement
+// something other than a frame, and raises nothing
+window.addEventListener('blur', () => setTimeout(raiseFocusedFrame));
+
 // widgets are a desktop thing: shrinking below the breakpoint puts them back
 POPOUT_MQ.addEventListener('change', (e) => {
 	if (e.matches) return;
@@ -854,6 +905,7 @@ window.addEventListener('resize', () => {
 			}
 		});
 		updateGroups();
+		updateCovered(); // the clamp may have moved a widget onto or off another
 	}, 200);
 });
 
@@ -1464,6 +1516,7 @@ function applySnapLayout(layout) {
 	// by its column, and main.js reads off the pane whether to lock the page
 	toFullscreen.forEach(restoreFullscreen);
 	updateGroups();
+	updateCovered(); // persistence is paused, so this is not reached through it
 	snapPersistPaused = false;
 }
 
@@ -1481,8 +1534,10 @@ let snapPersistPaused = false;
 // written). Paused while the breakpoint docks everything: that is the window
 // changing, not the arrangement
 function persistSnapLayout() {
-	// every gesture ends here: what touches what may have changed
+	// every gesture ends here: what touches what, and what lies over what, may
+	// both have changed
 	updateGroups();
+	updateCovered();
 	if (snapPersistPaused) return;
 	const layout = snapLayout();
 	if (sharedMapView) {
