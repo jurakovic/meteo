@@ -1244,6 +1244,39 @@ function isFreePopout(block) {
 	return !!block.querySelector('.if1, .if2');
 }
 
+// a locked widget freed of its aspect: it becomes a free widget (an inline
+// height, the column layout, the height stored in the layout) with the
+// media letterboxed in what the title bar leaves (.letterbox, CSS) over a
+// blurred and darkened copy of the image showing (.po-backdrop, the image
+// in --po-img), so the bars around it are of the map and not of the frame
+function unlockAspect(block) {
+	if (block.classList.contains('free')) return;
+	dlog(`unlockAspect: ${block.dataset.mapId}`);
+	block.style.height = `${block.offsetHeight}px`;
+	block.classList.add('free', 'letterbox');
+	if (!block.querySelector('.po-backdrop')) block.appendChild(el('div', { class: 'po-backdrop' }));
+	syncBackdrop(block);
+}
+
+// back to the height the aspect gives at the width it has
+function lockAspect(block) {
+	if (!block.classList.contains('letterbox')) return;
+	dlog(`lockAspect: ${block.dataset.mapId}`);
+	block.classList.remove('free', 'letterbox');
+	block.style.removeProperty('height');
+	block.style.removeProperty('--po-img');
+}
+
+// the backdrop shows the image on screen: the active slide's, or the map's
+// (a video has none, and the frame's own ground shows); followed on every
+// load and slide change, and through a reload's fresh address
+function syncBackdrop(block) {
+	if (!block.classList.contains('letterbox')) return;
+	const img = block.querySelector('.slide.active img') || block.querySelector('img');
+	const src = img && (img.currentSrc || img.src);
+	if (src) block.style.setProperty('--po-img', `url("${src}")`);
+}
+
 // a popped-out widget's title would run under the button clusters, which sit
 // on the bar out of flow: it is centred in the gap between them instead,
 // from the pop-out on so it never jumps, and given the gap's width with an
@@ -1278,9 +1311,9 @@ function dockMap(block) {
 	if (fs) exitFullscreen(fs);
 	if (block._group) leaveGroup(block);
 	unsnapPane(block);
-	block.classList.remove('popout', 'free', 'grouped');
-	['left', 'top', 'width', 'height', 'z-index'].forEach(p => block.style.removeProperty(p));
-	block.querySelectorAll('.po-h').forEach(h => h.remove());
+	block.classList.remove('popout', 'free', 'grouped', 'letterbox');
+	['left', 'top', 'width', 'height', 'z-index', '--po-img'].forEach(p => block.style.removeProperty(p));
+	block.querySelectorAll('.po-h, .po-backdrop').forEach(h => h.remove());
 	if (block._gap) block._gap.remove();
 	delete block._gap;
 	block.querySelectorAll('.po-btn').forEach(btn => setPopoutButton(btn, false));
@@ -1601,6 +1634,11 @@ function resizePopout(block, dir, e) {
 	const members = groupMembers(block);
 	const col = snapColumnOf(block);
 	if (members.length > 1 && !col) return resizeGroup(members, dir, e);
+	// the key decides per gesture, while the widget floats: Shift frees a
+	// locked widget's aspect, and a plain drag locks a freed one again (in a
+	// column the width is the column's, and a freed pane stays as it is)
+	if (!col && e.shiftKey && !block.classList.contains('free')) unlockAspect(block);
+	else if (!col && !e.shiftKey && block.classList.contains('letterbox')) lockAspect(block);
 	const start = block.getBoundingClientRect();
 	const free = block.classList.contains('free');
 	const ratio = start.width / start.height;
@@ -2194,8 +2232,21 @@ function snapHandlePointerDown(handle, e) {
 // the drag's preventDefault on pointerdown leaves click and dblclick alone,
 // and the browser already tells a double-click from two drags apart
 document.addEventListener('dblclick', (e) => {
-	const edge = e.target.closest && e.target.closest('.snap-edge');
+	if (!e.target.closest) return;
+	const edge = e.target.closest('.snap-edge');
 	if (edge) toggleSnapPage(snapColumns[edge.dataset.side]);
+	// a double-click on a freed widget's title bar (a link or button aside)
+	// locks it again, where it stands — a pane's height goes with it
+	const title = e.target.closest('.map-block.popout.letterbox .radartitle:not(.fullscreen)');
+	if (title && !e.target.closest('a')) {
+		const block = title.closest('.map-block');
+		lockAspect(block);
+		const pane = snapPaneOf(block);
+		if (pane) delete pane.height;
+		layoutSnapColumns();
+		fitTitles(block);
+		persistSnapLayout();
+	}
 });
 
 // ---------- snap layout: remembered and shared ----------
@@ -2374,6 +2425,7 @@ function applySnapLayout(layout) {
 			const block = document.querySelector(`.map-block[data-map-id="${CSS.escape(id)}"]`);
 			if (!block || block.classList.contains('popout')) return;
 			popoutMap(block);
+			if (height && !block.classList.contains('free')) unlockAspect(block); // a locked map stored with a height was freed
 			attachSnapPane(col, block, top, height);
 			setGroup(block, group);
 			if (fullscreen) toFullscreen.push(block);
@@ -2388,6 +2440,7 @@ function applySnapLayout(layout) {
 		const block = document.querySelector(`.map-block[data-map-id="${CSS.escape(id)}"]`);
 		if (!block || block.classList.contains('popout')) return;
 		popoutMap(block);
+		if (height && !block.classList.contains('free')) unlockAspect(block);
 		block.style.width = `${Math.round(clamp(width * viewportWidth(), POPOUT_MIN_WIDTH, Math.min(POPOUT_MAX_WIDTH, viewportWidth() - POPOUT_MARGIN)))}px`;
 		if (block.classList.contains('free') && height)
 			block.style.height = `${Math.round(clamp(height * viewportHeight(), POPOUT_MIN_HEIGHT, viewportHeight() - POPOUT_MARGIN))}px`;
@@ -2473,6 +2526,7 @@ document.addEventListener('map-fullscreen', () => {
 		setTimeout(() => {
 			if (isSnapped(block) && !block.classList.contains('free')) layoutSnapColumns();
 			fitTitles(block);
+			syncBackdrop(block); // the image on screen may be another
 		}, 0);
 	}, true);
 });
