@@ -22,6 +22,9 @@ function Main {
 	$mapsjs = Get-Content "$srcDir\_assets\js\maps.min.js" -Raw -Encoding "utf8"
 	$mapsjs = Prepend-Tabs -str $mapsjs -num 2
 
+	$popoutjs = Get-Content "$srcDir\_assets\js\popout.min.js" -Raw -Encoding "utf8"
+	$popoutjs = Prepend-Tabs -str $popoutjs -num 2
+
 	$seo = Get-Content "$srcDir\_components\seo.c.html" -Raw -Encoding "utf8"
 	$seo = Prepend-Tabs -str $seo -num 1 -skip 0
 
@@ -37,7 +40,7 @@ function Main {
 	# Print each file path
 	foreach ($file in $files) {
 		$relativePath = $file.FullName.Substring($srcDir.Length).TrimStart('\')
-		ProcessHtml $buildDir $relativePath $css $mainjs $mapsjs $seo $gtag $links
+		ProcessHtml $buildDir $relativePath $css $mainjs $mapsjs $popoutjs $seo $gtag $links
 	}
 }
 
@@ -49,6 +52,7 @@ function ProcessHtml() {
 		[string]$css,
 		[string]$mainjs,
 		[string]$mapsjs,
+		[string]$popoutjs,
 		[string]$seo,
 		[string]$gtag,
 		[string]$links
@@ -64,6 +68,7 @@ function ProcessHtml() {
 	$html = $html.Replace('<link rel="stylesheet" href="/_assets/css/styles.css">', "<style>`r`n$css`r`n`t</style>")
 	$html = $html.Replace("<script src=""/_assets/js/main.js"" defer></script>", "<script>`r`n$mainjs`r`n`t</script>")
 	$html = $html.Replace("<script src=""/_assets/js/maps.js"" defer></script>", "<script>`r`n$mapsjs`r`n`t</script>")
+	$html = $html.Replace("<script src=""/_assets/js/popout.js"" defer></script>", "<script>`r`n$popoutjs`r`n`t</script>")
 	$html = $html.Replace("<script src=""/_assets/js/include.js"" defer></script>", "")
 	$html = $html.Replace('<!-- seo -->', $seo)
 	$html = $html.Replace('<!-- gtag -->', $gtag)

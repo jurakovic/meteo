@@ -795,6 +795,13 @@ body.fs-lock {
 		overflow: hidden;
 	}
 
+	/* the lock drops the page's scrollbar, which would widen the page and
+	   shift what is centred in it: its gutter is kept while the page had one
+	   (maps.js sets the class only then) */
+	html.ms-gutter {
+		scrollbar-gutter: stable;
+	}
+
 	.map-settings .ms-head {
 		display: flex;
 		justify-content: space-between;
