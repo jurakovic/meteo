@@ -871,8 +871,11 @@ function isSnapPageHidden() {
 }
 
 // the column something spanning left..right is at: the one whose viewport
-// edge its own edge has reached, if any
+// edge its own edge has reached, if any. The board has no columns — a column
+// is a strip the page makes room for, and there is no page there — so on it
+// nothing targets one and a widget dragged to the edge simply stays a widget
 function snapSideAt(left, right) {
+	if (isDashboard()) return null;
 	return left <= SNAP_EDGE ? 'left' : right >= viewportWidth() - SNAP_EDGE ? 'right' : null;
 }
 
@@ -1280,7 +1283,9 @@ function sanitizeSnapLayout(layout, mapIds) {
 	const seen = new Set();
 	const fraction = (n, max = 1) => Number.isFinite(n) && n >= 0 && n <= max;
 	const groupOf = (entry) => Number.isInteger(entry.group) && entry.group > 0 ? entry.group : undefined;
+	const board = layout.dashboard === true;
 	['left', 'right'].forEach(side => {
+		if (board) return; // a board has no columns: its panes are dropped here and come back as widgets, through popoutRest
 		const col = layout[side];
 		if (!col || typeof col !== 'object' || !Array.isArray(col.panes)) return;
 		const width = Number(col.width);
@@ -1341,7 +1346,7 @@ function sanitizeSnapLayout(layout, mapIds) {
 		const group = groups.get(entry.group);
 		if (group && (group.count < 2 || group.places.size > 1)) delete entry.group;
 	}));
-	if (layout.dashboard === true) clean.dashboard = true; // a board with nothing placed yet is still a board
+	if (board) clean.dashboard = true; // a board with nothing placed yet is still a board
 	return Object.keys(clean).length ? clean : null;
 }
 

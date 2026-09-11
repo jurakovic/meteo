@@ -1559,10 +1559,13 @@ function buildMapSettings(panel) {
 	// layout into one — a built-in's nothing included, which applySnapLayout then
 	// fills with every map of the list. Unticked, a board loses its placements
 	// along with the flag: a board holds the whole list as widgets, and over the
-	// visible page that is a pile rather than an arrangement
+	// visible page that is a pile rather than an arrangement.
+	// It runs before sanitizeSnapLayout rather than after, so what it marks a
+	// board is held to what a board can hold — no columns — by the same guard
+	// every layout read back from storage or a link passes
 	function withDashboard(layout, on) {
 		if (!on) return layout && layout.dashboard ? null : layout;
-		const board = Object.assign({}, layout); // key order kept, so sameSnapLayout still compares
+		const board = Object.assign({}, layout);
 		board.dashboard = true;
 		return board;
 	}
@@ -1576,14 +1579,14 @@ function buildMapSettings(panel) {
 		const stored = prefs.preset === 'custom'
 			? snapLayout()
 			: (userPresets.find(p => p.id === prefs.preset) || {}).layout; // a built-in has none
-		return withDashboard(sanitizeSnapLayout(stored, prefsMapIds(prefs)), dashboardChecked);
+		return sanitizeSnapLayout(withDashboard(stored, dashboardChecked), prefsMapIds(prefs));
 	}
 
 	// the arrangement on screen, held to the list in the picker (a map unchecked
 	// there cannot stay a pane) and to the mode in the row, so what a preset
 	// saves and what Ažuriraj counts as an edit are the view Primijeni would build
 	function selectedLayout() {
-		return withDashboard(sanitizeSnapLayout(snapLayout(), selectedMapIds()), dashboardChecked);
+		return sanitizeSnapLayout(withDashboard(snapLayout(), dashboardChecked), selectedMapIds());
 	}
 
 	// the panel's own share button carries whatever is on screen, expanding a
@@ -1615,9 +1618,9 @@ function buildMapSettings(panel) {
 	// the board is another way of viewing altogether, so it gets a row of its
 	// own with a button, not a link among the others — a toggle, though, not a
 	// way onto it: it ticks dashboardChecked and nothing moves until Primijeni,
-	// like the ticks in the list beside it. Lit (.ms-on) while ticked; the text
-	// says what the mode is, or, while the tick and the screen disagree, that
-	// Primijeni is what settles it
+	// like the ticks in the list beside it. The text says what the mode is and
+	// stays put; whether it is ticked is the lit band's (.ms-on) to say, and
+	// what is on screen the layout line's, so the row never narrates
 	const modeDiv = el('div', { class: 'ms-mode' });
 	function renderModeRow() {
 		modeDiv.replaceChildren();
@@ -1625,13 +1628,7 @@ function buildMapSettings(panel) {
 		modeDiv.classList.toggle('ms-on', dashboardChecked);
 		const btn = el('button', { type: 'button', class: 'btn', text: 'Nadzorna ploča', 'aria-pressed': String(dashboardChecked) });
 		btn.addEventListener('click', () => setDashboardChecked(!dashboardChecked));
-		const parts = layoutParts();
-		const text = dashboardChecked !== isDashboard()
-			? el('span', { class: 'ms-mode-text' }, [el('b', { text: 'Primijeni' }), el('span', { text: dashboardChecked ? ' za prelazak na ploču' : ' za povratak na stranicu' })])
-			: dashboardChecked
-				? el('span', { class: 'ms-mode-text' }, [el('b', { text: 'Na nadzornoj ploči' }), el('span', { text: parts.length ? ` · ${parts.join(', ')}` : '' })])
-				: el('span', { class: 'ms-mode-text', text: 'Sve karte kao prozori preko cijelog zaslona, bez stranice' });
-		modeDiv.append(btn, text);
+		modeDiv.append(btn, el('span', { class: 'ms-mode-text', text: 'Sve karte kao prozori preko cijelog zaslona, bez stranice' }));
 	}
 	renderModeRow();
 
