@@ -310,6 +310,11 @@ function setGridPrefs(show, snap) {
 		localStorage.setItem(GRID_KEY, JSON.stringify({ show, snap }));
 	} catch (e) { /* storage disabled or full — the grid still works this session */ }
 	renderGrid();
+	// the switches can also be flipped from the keyboard (G), and an open
+	// dialog holds its own copy of them: it is re-read here, or its next tick
+	// would write the stale one back and undo the key
+	const panel = document.getElementById('mapSettings');
+	if (panel && !panel.hidden && panel._onGridChange) panel._onGridChange();
 }
 
 // the paper itself: one fixed layer under the widgets and over the columns'
@@ -1059,6 +1064,145 @@ function raiseFocusedFrame() {
 // something other than a frame, and raises nothing
 window.addEventListener('blur', () => setTimeout(raiseFocusedFrame));
 
+// ---------- the keyboard ----------
+
+// Keys for what the buttons cannot do in one gesture, and for backing out of
+// what covers the screen. The letters name the thing and not the word for it,
+// so they stand whatever language the page comes to speak: R is the [R] the
+// bar already carries, G is the grid. (K, which opens the dialog in maps.js —
+// which keeps that key and the dialog's own Escape — was here before this and
+// is the Croatian Karte.) None of this reaches the page while an iframe holds
+// the focus — a press inside a frame belongs to the frame's document, and
+// these maps are another origin — so a click on the page or on a title bar
+// comes first, as it does for the pointer (see updateCovered). The dialog's
+// guard is repeated here: not from a text field, whose own Escape is a way
+// out of the field, and not under a modifier, which belongs to the browser
+const NUDGE_KEYS = { ArrowLeft: [-1, 0], ArrowRight: [1, 0], ArrowUp: [0, -1], ArrowDown: [0, 1] };
+
+document.addEventListener('keydown', (e) => {
+	if (e.altKey || e.ctrlKey || e.metaKey) return;
+	if (e.target.matches && e.target.matches('input:not([type="radio"]):not([type="checkbox"]), textarea, [contenteditable]')) return;
+	// a fullscreen map is a class and not the browser's own fullscreen, so
+	// nothing takes Escape off it; wherever there is a keyboard, this does
+	if (e.key === 'Escape') { escapeFullscreen(); return; }
+	if (!POPOUT_MQ.matches) return; // the rest act on widgets, which are a desktop thing
+	if (e.key === 'r' || e.key === 'R') { e.preventDefault(); reloadAllMaps(); return; }
+	if (e.key === 'g' || e.key === 'G') { e.preventDefault(); toggleGrid(); return; }
+	const nudge = NUDGE_KEYS[e.key];
+	if (!nudge) return;
+	e.preventDefault(); // the page would scroll under it
+	const step = e.shiftKey ? 1 : GRID_CELL;
+	nudgePopout(nudge[0] * step, nudge[1] * step);
+});
+
+// the dialog is over everything and owns Escape while it is open; under it
+// Escape ends a fullscreen map, and under that it does nothing — backing out
+// is not a reason to take an arrangement apart
+function escapeFullscreen() {
+	const panel = document.getElementById('mapSettings');
+	if (panel && !panel.hidden) return;
+	const fs = document.querySelector('.if1.fullscreen');
+	if (fs) exitFullscreen(fs);
+}
+
+// every widget whose bar offers [R], once each — a titled slideshow carries
+// one on every slide. An interactive map carries none at all, and reloadMap()
+// reaches only a basic iframe (.if2) besides: its feed is live of its own
+// accord, and navigating its frame again would cost it its pan and its zoom
+// for nothing. So this is the images, the slideshows, the videos and the
+// basic frames, which is what has to be fetched to be new
+function reloadAllMaps() {
+	allPopouts().filter(block => block.querySelector('.rl-btn')).forEach(reloadMap);
+}
+
+// the grid is the board's: off it the dialog's own switch is greyed and
+// unclickable, and the key is as quiet — a switch flipped where nothing shows
+// it is a switch lost
+function toggleGrid() {
+	if (!isDashboard()) return;
+	setGridPrefs(!isGridShown(), isGridSnapped());
+}
+
+// the widget the keys move is the one on top. popoutZ already names it and the
+// shadow layer leaves it unmistakable, so it needs no mark of its own: the
+// press shows which it was, and a click on another picks another. A pane is
+// out of it (it lives in its column, where a top is not a place), and so is a
+// widget hosting a fullscreen map, whose box is not to be seen
+function topPopout() {
+	return floatingBlocks()
+		.filter(block => !block.classList.contains('fs-host'))
+		.reduce((top, block) => !top || (Number(block.style.zIndex) || 0) >= (Number(top.style.zIndex) || 0) ? block : top, null);
+}
+
+// one cell of the grid a press, so a board snapped to it stays snapped; one
+// pixel with Shift, for the placement the lines have none for. A group moves
+// whole, as it does under the pointer, and the viewport holds it the same way
+function nudgePopout(dx, dy) {
+	const block = topPopout();
+	if (!block) return;
+	const members = groupMembers(block);
+	if (members.length > 1) {
+		const starts = groupStarts(members);
+		moveGroup(starts, groupBox(starts), dx, dy);
+	} else {
+		const rect = block.getBoundingClientRect();
+		placePopout(block, rect.left + dx, rect.top + dy);
+	}
+	updateCovered(); // the shadows and the order follow at once; the writing waits
+	nudgePersist();
+}
+
+// a held arrow repeats, and each repeat would write the arrangement: it is
+// written once, when the widget has come to rest
+let nudgeTimer = 0;
+function nudgePersist() {
+	clearTimeout(nudgeTimer);
+	nudgeTimer = setTimeout(persistSnapLayout, 300);
+}
+
+// ---------- the title bar's other gestures ----------
+
+// A widget is a window, and its title bar is where a window is worked from.
+// Beside the drag it already is: a double-click on it puts the map in
+// fullscreen and takes it out again, and a middle click is the bar's own
+// [=]/[x] without having to aim at two characters. Both are on the bar alone,
+// never on the map — over a frame the page would never see them, and on an
+// interactive map a double-click is already the site's own gesture (the
+// overlay gate, main.js: "Dvostruki klik za pristup interaktivnoj karti") and
+// then the map's own zoom. A link or a button on the bar is itself, as it is
+// for the drag: the title is an <a> to the source, and a middle click on it
+// belongs to the browser
+function titleBarOf(e) {
+	if (!e.target.closest || e.target.closest('a, button, input')) return null;
+	return e.target.closest('.map-block.popout .radartitle');
+}
+
+// through the bar's own [ ] button, which keeps its label and the snapshot of
+// the overlay gate; toggleFullscreen() reads the class, so the one press both
+// enters and leaves, and the bar is still on screen in fullscreen to leave by.
+// Only an interactive map (.if1) has the button — this is the same element the
+// aspect lock below is on, and never the same widget: an iframe is always free
+// (isFreePopout) and so is never letterboxed
+function toggleBarFullscreen(bar) {
+	const fsBtn = bar.closest('.map-block').querySelector('.fs-btn');
+	if (fsBtn) fsBtn.click();
+}
+
+// the middle button raises the autoscroll cursor on press: the press is taken
+// here and the action left to auxclick, which is the click the middle button
+// makes
+document.addEventListener('mousedown', (e) => {
+	if (e.button === 1 && POPOUT_MQ.matches && titleBarOf(e)) e.preventDefault();
+});
+
+document.addEventListener('auxclick', (e) => {
+	if (e.button !== 1 || !POPOUT_MQ.matches) return;
+	const bar = titleBarOf(e);
+	if (!bar) return;
+	e.preventDefault();
+	togglePopout(bar.closest('.map-block')); // docks on the page, takes the map off the board
+});
+
 // widgets are a desktop thing: shrinking below the breakpoint puts them back
 POPOUT_MQ.addEventListener('change', (e) => {
 	if (e.matches) return;
@@ -1473,6 +1617,11 @@ document.addEventListener('dblclick', (e) => {
 	if (!e.target.closest) return;
 	const edge = e.target.closest('.snap-edge');
 	if (edge) toggleSnapPage(snapColumns[edge.dataset.side]);
+	// a double-click on a widget's title bar puts its map in fullscreen and
+	// takes it out again (toggleBarFullscreen: an interactive map only, which
+	// is never the letterboxed widget below)
+	const bar = titleBarOf(e);
+	if (bar) toggleBarFullscreen(bar);
 	// a double-click on a freed widget's title bar (a link or button aside)
 	// locks it again, where it stands — a pane's height goes with it
 	const title = e.target.closest('.map-block.popout.letterbox .radartitle:not(.fullscreen)');

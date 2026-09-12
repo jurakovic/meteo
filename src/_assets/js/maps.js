@@ -1789,6 +1789,15 @@ function buildMapSettings(panel) {
 	}
 	renderModeRow();
 
+	// G flips the grid from the keyboard (popout.js) through setGridPrefs, which
+	// calls this: the row is re-read from the prefs rather than left standing on
+	// the copy it took when it was built, which the next tick would write back
+	panel._onGridChange = () => {
+		gridChecked = isGridShown();
+		snapChecked = isGridSnapped();
+		renderModeRow();
+	};
+
 	// the mode is part of the layout, so a changed tick is a pending edit like
 	// a changed list: the row, the line it speaks for and Ažuriraj all follow
 	function setDashboardChecked(on) {
