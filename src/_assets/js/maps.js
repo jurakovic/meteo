@@ -1257,22 +1257,57 @@ function applyStoredMsTab() {
 	if (tab && stored) placeMsTab(tab, stored.left * viewportWidth(), stored.width);
 }
 
+// On a board the tab is the only chrome there is, so it carries the same glyph
+// cluster a widget's title bar does, and for the same reason: the common moves
+// without opening the dialog. [R] reloads every widget's map (popout.js), [G]
+// and [S] are the board's two grid switches — the dialog's own, through
+// setGridPrefs, so the three places cannot disagree. Each glyph is the key that
+// does the same thing, and says so in its title, the way the tab itself does.
+// They are <a> without href, as the title bars' glyphs are, so they are no
+// interactive content inside the button; their click is kept off the tab's own
+function buildMsTabCluster(tab) {
+	const reload = el('a', { class: 'ms-tab-btn', text: '[R]', title: 'Osvježi sve karte (R)' });
+	reload.addEventListener('click', () => reloadAllMaps());
+	const grid = el('a', { class: 'ms-tab-btn ms-tab-grid', 'data-grid': 'show', text: '[G]', title: 'Prikaži mrežu (G)' });
+	grid.addEventListener('click', () => setGridPrefs(!isGridShown(), isGridSnapped()));
+	const snap = el('a', { class: 'ms-tab-btn ms-tab-grid', 'data-grid': 'snap', text: '[S]', title: 'Poravnaj uz mrežu (S)' });
+	snap.addEventListener('click', () => setGridPrefs(isGridShown(), !isGridSnapped()));
+	tab.appendChild(el('span', { class: 'ms-tab-cluster' }, [reload, grid, snap]));
+	syncMsTab();
+}
+
+// the two switches say whether they are on by being lit or dimmed, as the
+// dialog's greys its own off the board. Called from setGridPrefs, wherever the
+// switch was flipped — the dialog, a key, or the glyph itself. [R] is an action
+// and has nothing to be on or off about
+function syncMsTab() {
+	const tab = document.querySelector('.ms-tab');
+	if (!tab) return;
+	const show = tab.querySelector('[data-grid="show"]');
+	const snap = tab.querySelector('[data-grid="snap"]');
+	if (show) show.classList.toggle('ms-tab-off', !isGridShown());
+	if (snap) snap.classList.toggle('ms-tab-off', !isGridSnapped());
+}
+
 function initMsTab() {
 	const tab = document.querySelector('.ms-tab');
 	if (!tab) return;
+	buildMsTabCluster(tab); // before the first measure: the glyphs are part of the width its name gives it
 	applyStoredMsTab();
-	tab.addEventListener('click', () => {
+	tab.addEventListener('click', (e) => {
+		if (e.target.closest('.ms-tab-btn')) return; // a glyph is itself, as on a title bar
 		if (msTabMoved) { msTabMoved = false; return; }
 		toggleMapSettings();
 	});
 	// the cursor says which it will be
 	tab.addEventListener('pointermove', (e) => {
+		if (e.target.closest('.ms-tab-btn')) { tab.style.cursor = ''; return; }
 		const rect = tab.getBoundingClientRect();
 		const side = e.clientX - rect.left <= MS_TAB_EDGE || rect.right - e.clientX <= MS_TAB_EDGE;
 		tab.style.cursor = side ? 'ew-resize' : '';
 	});
 	tab.addEventListener('pointerdown', (e) => {
-		if (e.button !== 0) return;
+		if (e.button !== 0 || e.target.closest('.ms-tab-btn')) return;
 		e.preventDefault();
 		const rect = tab.getBoundingClientRect();
 		const mode = e.clientX - rect.left <= MS_TAB_EDGE ? 'w' : rect.right - e.clientX <= MS_TAB_EDGE ? 'e' : 'move';

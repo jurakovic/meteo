@@ -115,16 +115,19 @@
 		.map-settings .ms-body{scrollbar-width:thin;scrollbar-color:#485871 #1a2536}}}.map-settings label{cursor:pointer}.ms-tab{display:none;
 		position:fixed;z-index:100000;top:0;left:50%;transform:translateX(-50%);padding:3px 12px;border:none;border-radius:0 0 6px 6px;font-family:
 		inherit;font-size:13px;color:#fff;background-color:#ff9800;box-shadow:0 2px 8px rgba(0,0,0,.4);cursor:pointer;box-sizing:border-box;
-		min-width:100px;white-space:nowrap;overflow:hidden;touch-action:none;user-select:none}.ms-tab:hover{background-color:#ffa726}
-		body.dashboard .ms-tab,body.fs-lock .ms-tab,body.snap-full .ms-tab{display:block}.map-settings .ms-presets{display:flex;flex-wrap:wrap;gap:
-		6px;padding-bottom:8px;margin-bottom:8px;border-bottom:1px solid #485871}.map-settings .ms-presets label{position:relative;flex:1 1 auto}
-		.map-settings .ms-presets .ms-fill{flex:1000 1 0;height:0}.map-settings .ms-presets input{position:absolute;margin:0;opacity:0}
-		.map-settings .ms-chip{display:block;position:relative;text-align:center;padding:3px 10px;background-color:#2b3a52;border:1px solid #485871;
-		user-select:none}.map-settings .ms-chip.ms-user::after{content:'';position:absolute;top:0;right:0;border-top:7px solid #93a4bd;border-left:
-		7px solid transparent}.map-settings .ms-chip.ms-board,.map-settings .ms-manage-name.ms-board{border-left:3px solid #4a8de6}
-		.map-settings .ms-manage-name.ms-board{padding-left:6px}.map-settings .ms-chip.ms-origin::before{content:'';position:absolute;left:4px;top:
-		50%;width:4px;height:4px;margin-top:-2px;border-radius:50%;background-color:#93a4bd}.map-settings .ms-presets label:hover .ms-chip{
-		background-color:#3a4a66}.map-settings .ms-presets input:checked+.ms-chip{color:#ff9800;background-color:#485871}
+		align-items:center;gap:10px;white-space:nowrap;overflow:hidden;touch-action:none;user-select:none}.ms-tab:hover{background-color:#ffa726}
+		.ms-tab-name{flex:1 1 auto;min-width:0;overflow:hidden;text-overflow:ellipsis;text-align:center}.ms-tab-cluster{flex:0 0 auto;display:
+		inline-flex;gap:8px}.ms-tab-cluster a{text-decoration:none;cursor:pointer}.ms-tab-cluster a.ms-tab-off{opacity:.55}.ms-tab-grid{display:none
+		}body.dashboard .ms-tab-grid{display:inline}body.dashboard .ms-tab,body.fs-lock .ms-tab,body.snap-full .ms-tab{display:flex}
+		.map-settings .ms-presets{display:flex;flex-wrap:wrap;gap:6px;padding-bottom:8px;margin-bottom:8px;border-bottom:1px solid #485871}
+		.map-settings .ms-presets label{position:relative;flex:1 1 auto}.map-settings .ms-presets .ms-fill{flex:1000 1 0;height:0}
+		.map-settings .ms-presets input{position:absolute;margin:0;opacity:0}.map-settings .ms-chip{display:block;position:relative;text-align:
+		center;padding:3px 10px;background-color:#2b3a52;border:1px solid #485871;user-select:none}.map-settings .ms-chip.ms-user::after{content:'';
+		position:absolute;top:0;right:0;border-top:7px solid #93a4bd;border-left:7px solid transparent}.map-settings .ms-chip.ms-board,
+		.map-settings .ms-manage-name.ms-board{border-left:3px solid #4a8de6}.map-settings .ms-manage-name.ms-board{padding-left:6px}
+		.map-settings .ms-chip.ms-origin::before{content:'';position:absolute;left:4px;top:50%;width:4px;height:4px;margin-top:-2px;border-radius:
+		50%;background-color:#93a4bd}.map-settings .ms-presets label:hover .ms-chip{background-color:#3a4a66}
+		.map-settings .ms-presets input:checked+.ms-chip{color:#ff9800;background-color:#485871}
 		.map-settings .ms-presets input:focus-visible+.ms-chip{outline:1px solid white;outline-offset:1px}.map-settings .ms-item{display:flex;
 		justify-content:space-between;align-items:center;padding:2px 0}.map-settings .ms-glyph{margin:0 6px 0 4px}
 		.map-settings .ms-list:empty::before{display:block;padding:2px 0;font-style:italic;opacity:.6}.map-settings .ms-selected:empty::before{
@@ -222,7 +225,7 @@
 		show:!1,snap:!1}}let gridShow=loadGridPrefs().show,gridSnap=loadGridPrefs().snap;function isGridShown(){return gridShow}
 		function isGridSnapped(){return gridSnap}function setGridPrefs(t,e){dlog(`setGridPrefs: show=${t} snap=${e}`),gridShow=t,gridSnap=e;try{
 		localStorage.setItem(GRID_KEY,JSON.stringify({show:t,snap:e}))}catch(t){}renderGrid();const o=document.getElementById("mapSettings")
-		;o&&!o.hidden&&o._onGridChange&&o._onGridChange()}function renderGrid(){const t=gridShow&&dashboardMode&&POPOUT_MQ.matches
+		;o&&!o.hidden&&o._onGridChange&&o._onGridChange(),syncMsTab()}function renderGrid(){const t=gridShow&&dashboardMode&&POPOUT_MQ.matches
 		;let e=document.querySelector(".po-grid");t?(e||(e=document.createElement("div"),e.className="po-grid",document.body.appendChild(e)),
 		e.style.setProperty("--grid-cell",`${GRID_CELL}px`)):e&&e.remove()}function gridLines(t){const e=[];for(let o=0;o<t;o+=GRID_CELL)e.push(o)
 		;return e[e.length-1]!==t&&e.push(t),e}function nearestLine(t,e){let o=0;for(let n=1;n<t.length;n++)Math.abs(t[n]-e)<Math.abs(t[o]-e)&&(o=n)
@@ -338,17 +341,19 @@
 		}),window.addEventListener("blur",()=>setTimeout(raiseFocusedFrame));const NUDGE_KEYS={ArrowLeft:[-1,0],ArrowRight:[1,0],ArrowUp:[0,-1],
 		ArrowDown:[0,1]};function escapeFullscreen(){const t=document.getElementById("mapSettings");if(t&&!t.hidden)return
 		;const e=document.querySelector(".if1.fullscreen");e&&exitFullscreen(e)}function reloadAllMaps(){
-		allPopouts().filter(t=>t.querySelector(".rl-btn")).forEach(reloadMap)}function toggleGrid(){
-		isDashboard()&&setGridPrefs(!isGridShown(),isGridSnapped())}function topPopout(){
+		allPopouts().filter(t=>t.querySelector(".rl-btn")).forEach(reloadMap)}function toggleGridShown(){
+		isDashboard()&&setGridPrefs(!isGridShown(),isGridSnapped())}function toggleGridSnapped(){
+		isDashboard()&&setGridPrefs(isGridShown(),!isGridSnapped())}function topPopout(){
 		return floatingBlocks().filter(t=>!t.classList.contains("fs-host")).reduce((t,e)=>!t||(Number(e.style.zIndex)||0)>=(Number(t.style.zIndex)||0)?e:t,null)
 		}function nudgePopout(t,e){const o=topPopout();if(!o)return;const n=groupMembers(o);if(n.length>1){const o=groupStarts(n)
 		;moveGroup(o,groupBox(o),t,e)}else{const n=o.getBoundingClientRect();placePopout(o,n.left+t,n.top+e)}updateCovered(),nudgePersist()}
 		document.addEventListener("keydown",t=>{if(t.altKey||t.ctrlKey||t.metaKey)return
 		;if(t.target.matches&&t.target.matches('input:not([type="radio"]):not([type="checkbox"]), textarea, [contenteditable]'))return
 		;if("Escape"===t.key)return void escapeFullscreen();if(!POPOUT_MQ.matches)return;if("r"===t.key||"R"===t.key)return t.preventDefault(),
-		void reloadAllMaps();if("g"===t.key||"G"===t.key)return t.preventDefault(),void toggleGrid();const e=NUDGE_KEYS[t.key];if(!e)return
-		;t.preventDefault();const o=t.shiftKey?1:GRID_CELL;nudgePopout(e[0]*o,e[1]*o)});let nudgeTimer=0;function nudgePersist(){
-		clearTimeout(nudgeTimer),nudgeTimer=setTimeout(persistSnapLayout,300)}function titleBarOf(t){
+		void reloadAllMaps();if("g"===t.key||"G"===t.key)return t.preventDefault(),void toggleGridShown()
+		;if("s"===t.key||"S"===t.key)return t.preventDefault(),void toggleGridSnapped();const e=NUDGE_KEYS[t.key];if(!e)return;t.preventDefault()
+		;const o=t.shiftKey?1:GRID_CELL;nudgePopout(e[0]*o,e[1]*o)});let nudgeTimer=0;function nudgePersist(){clearTimeout(nudgeTimer),
+		nudgeTimer=setTimeout(persistSnapLayout,300)}function titleBarOf(t){
 		return!t.target.closest||t.target.closest("a, button, input")?null:t.target.closest(".map-block.popout .radartitle")}
 		function toggleBarFullscreen(t){const e=t.closest(".map-block").querySelector(".fs-btn");e&&e.click()}
 		document.addEventListener("mousedown",t=>{1===t.button&&POPOUT_MQ.matches&&titleBarOf(t)&&t.preventDefault()}),
@@ -740,11 +745,19 @@
 		width:Math.round(t.width)}))}function msTabMinWidth(e){const t=e.style.width;e.style.width="";const a=e.offsetWidth;return e.style.width=t,a
 		}function placeMsTab(e,t,a){a=clamp(a,msTabMinWidth(e),300),t=clamp(t,0,Math.max(0,viewportWidth()-a)),e.style.width=`${Math.round(a)}px`,
 		e.style.left=`${Math.round(t)}px`,e.style.transform="none"}function applyStoredMsTab(){
-		const e=document.querySelector(".ms-tab"),t=loadMsTab();e&&t&&placeMsTab(e,t.left*viewportWidth(),t.width)}function initMsTab(){
-		const e=document.querySelector(".ms-tab");e&&(applyStoredMsTab(),e.addEventListener("click",()=>{
-		msTabMoved?msTabMoved=!1:toggleMapSettings()}),e.addEventListener("pointermove",t=>{
-		const a=e.getBoundingClientRect(),r=t.clientX-a.left<=8||a.right-t.clientX<=8;e.style.cursor=r?"ew-resize":""}),
-		e.addEventListener("pointerdown",t=>{if(0!==t.button)return;t.preventDefault()
+		const e=document.querySelector(".ms-tab"),t=loadMsTab();e&&t&&placeMsTab(e,t.left*viewportWidth(),t.width)}function buildMsTabCluster(e){
+		const t=el("a",{class:"ms-tab-btn",text:"[R]",title:"Osvježi sve karte (R)"});t.addEventListener("click",()=>reloadAllMaps())
+		;const a=el("a",{class:"ms-tab-btn ms-tab-grid","data-grid":"show",text:"[G]",title:"Prikaži mrežu (G)"})
+		;a.addEventListener("click",()=>setGridPrefs(!isGridShown(),isGridSnapped()));const r=el("a",{class:"ms-tab-btn ms-tab-grid",
+		"data-grid":"snap",text:"[S]",title:"Poravnaj uz mrežu (S)"});r.addEventListener("click",()=>setGridPrefs(isGridShown(),!isGridSnapped())),
+		e.appendChild(el("span",{class:"ms-tab-cluster"},[t,a,r])),syncMsTab()}function syncMsTab(){const e=document.querySelector(".ms-tab")
+		;if(!e)return;const t=e.querySelector('[data-grid="show"]'),a=e.querySelector('[data-grid="snap"]')
+		;t&&t.classList.toggle("ms-tab-off",!isGridShown()),a&&a.classList.toggle("ms-tab-off",!isGridSnapped())}function initMsTab(){
+		const e=document.querySelector(".ms-tab");e&&(buildMsTabCluster(e),applyStoredMsTab(),e.addEventListener("click",e=>{
+		e.target.closest(".ms-tab-btn")||(msTabMoved?msTabMoved=!1:toggleMapSettings())}),e.addEventListener("pointermove",t=>{
+		if(t.target.closest(".ms-tab-btn"))return void(e.style.cursor="")
+		;const a=e.getBoundingClientRect(),r=t.clientX-a.left<=8||a.right-t.clientX<=8;e.style.cursor=r?"ew-resize":""}),
+		e.addEventListener("pointerdown",t=>{if(0!==t.button||t.target.closest(".ms-tab-btn"))return;t.preventDefault()
 		;const a=e.getBoundingClientRect(),r=t.clientX-a.left<=8?"w":a.right-t.clientX<=8?"e":"move";msTabMoved=!1,trackPopoutPointer(t,t=>{
 		if(msTabMoved||!(Math.abs(t)<SNAP_ARM))if(msTabMoved=!0,
 		"move"===r)placeMsTab(e,a.left+t,a.width);else if("e"===r)placeMsTab(e,a.left,a.width+t);else{const r=clamp(a.width-t,msTabMinWidth(e),300)
@@ -781,21 +794,21 @@
 		;return"naziv"===r?a.name.localeCompare(i.name,"hr")*n:"vrsta"===r?(a.category.localeCompare(i.category,"hr")||a.name.localeCompare(i.name,"hr"))*n:(MAP_CATALOG.indexOf(a)-MAP_CATALOG.indexOf(i))*n
 		}function n(){[...a.children].sort(i).forEach(e=>a.appendChild(e))}const o={},l=el("div",{class:"ms-sort"},[el("span",{text:"Poredaj:"})])
 		;function d(){for(const[e,{link:t,label:a}]of Object.entries(o)){const i=e===r;t.classList.toggle("active",i),
-		t.textContent=i?`${a} ${s?"▲":"▼"}`:a}}function p(){e.querySelector('input[name="msPreset"][value="custom"]').checked=!0,b(),F()}
-		function c(e,r){const s=el("input",{type:"checkbox"});s.checked=r;const i=el("span",{class:"ms-handle",text:"≡",
+		t.textContent=i?`${a} ${s?"▲":"▼"}`:a}}function c(){e.querySelector('input[name="msPreset"][value="custom"]').checked=!0,b(),F()}
+		function p(e,r){const s=el("input",{type:"checkbox"});s.checked=r;const i=el("span",{class:"ms-handle",text:"≡",
 		title:"Povuci za premještanje"}),o=el("div",{class:"ms-item","data-map-id":e.id},[el("label",{},[s,el("span",{class:"ms-glyph",
 		text:CATEGORY_GLYPHS[e.category]||""}),document.createTextNode(e.name)]),i]);return s.addEventListener("change",()=>{
-		s.checked?t.appendChild(o):(a.appendChild(o),n()),p()}),function(e,a){e.addEventListener("pointerdown",r=>{r.preventDefault(),
+		s.checked?t.appendChild(o):(a.appendChild(o),n()),c()}),function(e,a){e.addEventListener("pointerdown",r=>{r.preventDefault(),
 		e.hasPointerCapture(r.pointerId)&&e.releasePointerCapture(r.pointerId),a.classList.add("dragging");const s=a.nextElementSibling
 		;let i=r.clientY,n=0,o=null;const l=()=>{const e=[...t.children].find(e=>e!==a&&i<e.getBoundingClientRect().top+e.offsetHeight/2)
-		;e?e.previousElementSibling!==a&&t.insertBefore(a,e):t.lastElementChild!==a&&t.appendChild(a)},d=a.closest(".ms-body"),c=()=>{
-		0!==n&&(d.scrollBy(0,n),l()),o=requestAnimationFrame(c)},m=e=>{if(0===e.buttons)return void h();i=e.clientY
+		;e?e.previousElementSibling!==a&&t.insertBefore(a,e):t.lastElementChild!==a&&t.appendChild(a)},d=a.closest(".ms-body"),p=()=>{
+		0!==n&&(d.scrollBy(0,n),l()),o=requestAnimationFrame(p)},m=e=>{if(0===e.buttons)return void h();i=e.clientY
 		;const t=d.getBoundingClientRect();n=i<t.top+60?-8:i>t.bottom-60?8:0,l()},h=()=>{document.removeEventListener("pointermove",m),
 		document.removeEventListener("pointerup",h),document.removeEventListener("pointercancel",h),cancelAnimationFrame(o),
-		a.classList.remove("dragging"),a.nextElementSibling!==s&&p()};document.addEventListener("pointermove",m),
-		document.addEventListener("pointerup",h),document.addEventListener("pointercancel",h),o=requestAnimationFrame(c)})}(i,o),o}function m(e){
-		t.replaceChildren(),a.replaceChildren(),e.forEach(e=>{const a=MAP_CATALOG.find(t=>t.id===e);a&&t.appendChild(c(a,!0))}),
-		MAP_CATALOG.filter(t=>!e.includes(t.id)).forEach(e=>a.appendChild(c(e,!1))),n()}
+		a.classList.remove("dragging"),a.nextElementSibling!==s&&c()};document.addEventListener("pointermove",m),
+		document.addEventListener("pointerup",h),document.addEventListener("pointercancel",h),o=requestAnimationFrame(p)})}(i,o),o}function m(e){
+		t.replaceChildren(),a.replaceChildren(),e.forEach(e=>{const a=MAP_CATALOG.find(t=>t.id===e);a&&t.appendChild(p(a,!0))}),
+		MAP_CATALOG.filter(t=>!e.includes(t.id)).forEach(e=>a.appendChild(p(e,!1))),n()}
 		[["zadano","Zadano"],["naziv","Naziv"],["vrsta","Vrsta"]].forEach(([e,t])=>{const a=el("a",{text:t});a.addEventListener("click",()=>{
 		r===e?s=!s:(r=e,s=!0),d(),n()}),o[e]={link:a,label:t},l.appendChild(a)}),d();const h=el("div",{class:"ms-presets"})
 		;let u="custom"===activePresetId()?null:activePresetId(),w=isDashboard(),g=isGridShown(),f=isGridSnapped();function v(e){h.replaceChildren()
@@ -855,12 +868,12 @@
 		text:"Nema spremljenih predložaka"})),O&&(O=!1,D.focus(),D.select())}D.addEventListener("keydown",e=>{"Enter"===e.key?(e.preventDefault(),
 		W()):"Escape"===e.key&&V()}),D.addEventListener("input",()=>D.classList.remove("invalid")),F();const K=el("button",{type:"button",
 		class:"btn",text:"Primijeni"});K.addEventListener("click",()=>{const t=P(),a=M(t);a&&(t.layout=a),saveMapPrefs(t),clearSharedMapView(),
-		setMapSettingsVisible(e,!1),renderMaps(),initDynamicContent(),applySnapLayout(a)});const $=el("a",{text:"Podijeli"})
-		;$.addEventListener("click",()=>{copyMapViewLink(function(){
+		setMapSettingsVisible(e,!1),renderMaps(),initDynamicContent(),applySnapLayout(a)});const G=el("a",{text:"Podijeli"})
+		;G.addEventListener("click",()=>{copyMapViewLink(function(){
 		const e=P(),t=M(e),a=userPresets.find(t=>t.id===e.preset),r=a?presetSharePrefs(a):e;return t?r.layout=t:delete r.layout,r
-		}(),()=>flashLabel($,"Kopirano!","Podijeli"))});const G=el("a",{text:"Zatvori",title:"Zatvori (Esc)"})
-		;G.addEventListener("click",()=>setMapSettingsVisible(e,!1)),e.appendChild(el("div",{class:"ms-head"},[el("span",{class:"ms-title",
-		text:"Karte"}),G])),e.appendChild(el("div",{class:"ms-body"},[h,_,E,t,el("div",{class:"ms-actions"},[K,$]),l,a,R])),
+		}(),()=>flashLabel(G,"Kopirano!","Podijeli"))});const $=el("a",{text:"Zatvori",title:"Zatvori (Esc)"})
+		;$.addEventListener("click",()=>setMapSettingsVisible(e,!1)),e.appendChild(el("div",{class:"ms-head"},[el("span",{class:"ms-title",
+		text:"Karte"}),$])),e.appendChild(el("div",{class:"ms-body"},[h,_,E,t,el("div",{class:"ms-actions"},[K,G]),l,a,R])),
 		POPOUT_HANDLES.forEach(t=>e.appendChild(el("div",{class:`po-h po-h-${t}`,"data-dir":t})))}
 		"loading"===document.readyState?document.addEventListener("DOMContentLoaded",initMsPanel):initMsPanel(),
 		document.addEventListener("pointerdown",e=>{const t=document.getElementById("mapSettings")
@@ -1206,7 +1219,7 @@
 	</div>
 
 	<div class="map-settings" id="mapSettings" hidden></div>
-	<button type="button" class="ms-tab" title="Karte (K)">Karte</button>
+	<button type="button" class="ms-tab" title="Karte (K)"><span class="ms-tab-name">Karte</span></button>
 	<footer>
 		<a onclick="scrollToTop()" style="cursor: pointer">Povratak na vrh</a>
 		·

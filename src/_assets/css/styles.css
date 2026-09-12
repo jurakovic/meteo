@@ -986,10 +986,11 @@ body.fs-lock {
 	cursor: pointer;
 	/* dragged along the top and pulled wider by its sides (maps.js) */
 	box-sizing: border-box;
-	/* wider than its word: this is also the narrowest it goes, msTabMinWidth()
-	   measuring it with the width unset, so the floor and the width it hangs
-	   there at to begin with are one and the same */
-	min-width: 100px;
+	/* its name and its glyphs in a row: the width they take together is also the
+	   narrowest it goes, msTabMinWidth() measuring it with the width unset, so
+	   the floor follows the cluster as [G] and [S] come and go with the board */
+	align-items: center;
+	gap: 10px;
 	white-space: nowrap;
 	overflow: hidden;
 	touch-action: none;
@@ -1000,10 +1001,46 @@ body.fs-lock {
 		background-color: #ffa726;
 	}
 
+	/* the name is what gives way when the tab is pulled narrower: it ellipsises
+	   and the glyphs stay, the way a widget's title keeps out of its clusters */
+	.ms-tab-name {
+		flex: 1 1 auto;
+		min-width: 0;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		text-align: center;
+	}
+
+	/* the title bars' cluster, on the tab */
+	.ms-tab-cluster {
+		flex: 0 0 auto;
+		display: inline-flex;
+		gap: 8px;
+	}
+
+		.ms-tab-cluster a {
+			text-decoration: none;
+			cursor: pointer;
+		}
+
+		/* a switch that is off is dimmed; [R] is an action and is always lit */
+		.ms-tab-cluster a.ms-tab-off {
+			opacity: 0.55;
+		}
+
+	/* the grid is the board's alone: elsewhere the tab shows its name and [R] */
+	.ms-tab-grid {
+		display: none;
+	}
+
+	body.dashboard .ms-tab-grid {
+		display: inline;
+	}
+
 	body.fs-lock .ms-tab,
 	body.snap-full .ms-tab,
 	body.dashboard .ms-tab {
-		display: block;
+		display: flex;
 	}
 
 	/* the options wrap onto as many lines as they need — a saved-preset list

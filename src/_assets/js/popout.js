@@ -310,11 +310,13 @@ function setGridPrefs(show, snap) {
 		localStorage.setItem(GRID_KEY, JSON.stringify({ show, snap }));
 	} catch (e) { /* storage disabled or full — the grid still works this session */ }
 	renderGrid();
-	// the switches can also be flipped from the keyboard (G), and an open
-	// dialog holds its own copy of them: it is re-read here, or its next tick
-	// would write the stale one back and undo the key
+	// the switches are in three places — the dialog's ticks, the tab's [G]/[S],
+	// and the keys — so the one that was not used is told. An open dialog holds
+	// its own copy of them and is re-read, or its next tick would write the
+	// stale one back and undo what the key or the glyph did
 	const panel = document.getElementById('mapSettings');
 	if (panel && !panel.hidden && panel._onGridChange) panel._onGridChange();
+	syncMsTab();
 }
 
 // the paper itself: one fixed layer under the widgets and over the columns'
@@ -1069,9 +1071,11 @@ window.addEventListener('blur', () => setTimeout(raiseFocusedFrame));
 // Keys for what the buttons cannot do in one gesture, and for backing out of
 // what covers the screen. The letters name the thing and not the word for it,
 // so they stand whatever language the page comes to speak: R is the [R] the
-// bar already carries, G is the grid. (K, which opens the dialog in maps.js —
-// which keeps that key and the dialog's own Escape — was here before this and
-// is the Croatian Karte.) None of this reaches the page while an iframe holds
+// bar already carries, G the grid and S its snap. (K, which opens the dialog in
+// maps.js — which keeps that key and the dialog's own Escape — was here before
+// this and is the Croatian Karte.) The three are also the tab's glyph cluster,
+// which is where they can be read off: [R] [G] [S], each titled with its key.
+// None of this reaches the page while an iframe holds
 // the focus — a press inside a frame belongs to the frame's document, and
 // these maps are another origin — so a click on the page or on a title bar
 // comes first, as it does for the pointer (see updateCovered). The dialog's
@@ -1087,7 +1091,8 @@ document.addEventListener('keydown', (e) => {
 	if (e.key === 'Escape') { escapeFullscreen(); return; }
 	if (!POPOUT_MQ.matches) return; // the rest act on widgets, which are a desktop thing
 	if (e.key === 'r' || e.key === 'R') { e.preventDefault(); reloadAllMaps(); return; }
-	if (e.key === 'g' || e.key === 'G') { e.preventDefault(); toggleGrid(); return; }
+	if (e.key === 'g' || e.key === 'G') { e.preventDefault(); toggleGridShown(); return; }
+	if (e.key === 's' || e.key === 'S') { e.preventDefault(); toggleGridSnapped(); return; }
 	const nudge = NUDGE_KEYS[e.key];
 	if (!nudge) return;
 	e.preventDefault(); // the page would scroll under it
@@ -1115,12 +1120,17 @@ function reloadAllMaps() {
 	allPopouts().filter(block => block.querySelector('.rl-btn')).forEach(reloadMap);
 }
 
-// the grid is the board's: off it the dialog's own switch is greyed and
-// unclickable, and the key is as quiet — a switch flipped where nothing shows
-// it is a switch lost
-function toggleGrid() {
+// the grid is the board's: off it the dialog's own switches are greyed and
+// unclickable, the tab's are not shown at all, and the keys are as quiet — a
+// switch flipped where nothing shows it is a switch lost
+function toggleGridShown() {
 	if (!isDashboard()) return;
 	setGridPrefs(!isGridShown(), isGridSnapped());
+}
+
+function toggleGridSnapped() {
+	if (!isDashboard()) return;
+	setGridPrefs(isGridShown(), !isGridSnapped());
 }
 
 // the widget the keys move is the one on top. popoutZ already names it and the
