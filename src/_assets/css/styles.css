@@ -826,7 +826,13 @@ body.fs-lock {
 	.map-settings {
 		top: 0;
 		max-width: 100%;
+		/* the visible viewport, not the taller one a collapsible URL bar is
+		   measured out of: at 100vh the dialog's foot hangs below the screen
+		   and the body's scroll ends where it cannot be reached, so the last
+		   of the presets is out of sight for good. dvh follows the bar */
 		max-height: 100vh;
+		max-height: 100dvh;
+		border: none; /* it fills the screen: there is nothing left for an edge to divide it from */
 	}
 }
 
@@ -876,38 +882,65 @@ body.fs-lock {
 			color: #8fb4ff;
 		}
 
+	/* a word is a target for a cursor, not for a finger: on touch the head
+	   gives its padding to its children instead, so Zatvori is tapped
+	   anywhere in the right end of the bar and the title anywhere in the
+	   left. Both keep the same top padding, so the baseline they are aligned
+	   on does not move and the bar reads as it did */
+	@media (max-width: 800px) {
+		.map-settings .ms-head {
+			padding: 0;
+		}
+
+			.map-settings .ms-head .ms-title {
+				padding: 11px 10px;
+			}
+
+			.map-settings .ms-head a {
+				padding: 11px 14px;
+			}
+	}
+
 	.map-settings .ms-body {
 		min-height: 0;
 		overflow-y: auto;
 		overscroll-behavior: contain;
-		scrollbar-gutter: stable;
 		padding: 10px;
 	}
 
-		/* a classic scrollbar, always there with its thumb: the overlay kind
-		   shows an empty track until hovered and lies over the row handles */
-		.map-settings .ms-body::-webkit-scrollbar {
-			width: 12px;
-		}
-
-		.map-settings .ms-body::-webkit-scrollbar-track {
-			background-color: #1a2536;
-		}
-
-		.map-settings .ms-body::-webkit-scrollbar-thumb {
-			background-color: #485871;
-			border: 3px solid #1a2536;
-			border-radius: 6px;
-		}
-
-			.map-settings .ms-body::-webkit-scrollbar-thumb:hover {
-				background-color: #5F6F89;
+		/* a classic scrollbar, always there with its thumb: on the desktop the
+		   overlay kind shows an empty track until hovered and lies over the row
+		   handles. A touch screen has no hover to miss and no handles to cover,
+		   and its overlay scrollbar is what everything else there looks like —
+		   so the native one is left alone below the breakpoint, gutter and all */
+		@media (min-width: 801px) and (hover: hover) and (pointer: fine) {
+			.map-settings .ms-body {
+				scrollbar-gutter: stable;
 			}
 
-		@supports not selector(::-webkit-scrollbar) {
-			.map-settings .ms-body {
-				scrollbar-width: thin;
-				scrollbar-color: #485871 #1a2536;
+			.map-settings .ms-body::-webkit-scrollbar {
+				width: 12px;
+			}
+
+			.map-settings .ms-body::-webkit-scrollbar-track {
+				background-color: #1a2536;
+			}
+
+			.map-settings .ms-body::-webkit-scrollbar-thumb {
+				background-color: #485871;
+				border: 3px solid #1a2536;
+				border-radius: 6px;
+			}
+
+				.map-settings .ms-body::-webkit-scrollbar-thumb:hover {
+					background-color: #5F6F89;
+				}
+
+			@supports not selector(::-webkit-scrollbar) {
+				.map-settings .ms-body {
+					scrollbar-width: thin;
+					scrollbar-color: #485871 #1a2536;
+				}
 			}
 		}
 
