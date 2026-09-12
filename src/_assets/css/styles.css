@@ -194,11 +194,13 @@ iframe, video {
 }
 
 /* fullscreen takeover: title row pinned to top, map fills the rest */
+/* fullscreen fills the map's container: the page between the snap columns
+   (customize page, the variables are 0 elsewhere), or a snapped pane's column */
 .radartitle.fullscreen {
 	position: fixed;
 	top: 0;
-	left: 0;
-	right: 0;
+	left: var(--snap-l, 0px);
+	right: var(--snap-r, 0px);
 	z-index: 10000;
 	display: flex;
 	align-items: center; /* vertically center the title items in a taller bar */
@@ -220,8 +222,9 @@ iframe, video {
 .if1.fullscreen {
 	position: fixed;
 	top: 23px; /* matches .radartitle height */
-	left: 0;
-	right: 0;
+	left: var(--snap-l, 0px);
+	right: var(--snap-r, 0px);
+	width: auto; /* the .if1 width: 100% would win over right */
 	bottom: 0;
 	padding-top: 0;
 	z-index: 9999;
@@ -253,6 +256,395 @@ body.fs-lock {
 
 	.radartitle.fullscreen .right {
 		margin-right: 10px;
+	}
+}
+
+/* pop-out widgets (customize page): a map block lifted out of the table into a
+   fixed, draggable, resizable box — desktop only, the button stays hidden elsewhere */
+.po-btn, .grp-btn, .rl-btn {
+	display: none;
+}
+
+/* holds the block's place in the table while it floats */
+.map-gap {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: 6px;
+	box-sizing: border-box;
+	padding: 8px;
+	background-color: #202c40;
+	color: #8a94a8;
+}
+
+	.map-gap a {
+		cursor: pointer;
+	}
+
+@media (min-width: 801px) and (hover: hover) and (pointer: fine) {
+	.po-btn {
+		display: inline;
+	}
+
+	/* the fullscreen bar is pinned; no widget toggling from there */
+	.radartitle.fullscreen .po-btn {
+		display: none;
+	}
+
+	/* a popped-out widget's title keeps out from under the button clusters:
+	   maps.js measures the room they leave into max-width, and a shift into
+	   the gap between them when centred room runs out (fitTitles) */
+	.map-block.popout .radartitle:not(.fullscreen) > a:not(.left):not(.right) {
+		display: inline-block;
+		max-width: 100%;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		white-space: nowrap;
+		vertical-align: top;
+		transform: translateX(var(--title-shift, 0px));
+	}
+
+	.map-block.popout .radartitle:not(.fullscreen) > a.center {
+		transform: translateX(calc(-50% + var(--title-shift, 0px)));
+	}
+
+	/* a popped-out widget's [R] reloads its map */
+	.map-block.popout .radartitle:not(.fullscreen) .rl-btn {
+		display: inline;
+	}
+
+	/* the grouping button of a widget, shown by maps.js only while there is
+	   something to do: [+] touching another widget, [-] in a group */
+	.map-block.popout .radartitle:not(.fullscreen) .grp-btn:not([hidden]) {
+		display: inline;
+	}
+
+	/* a grouped widget's frame in the snap blue, so the group reads as one */
+	.map-block.popout.grouped {
+		outline-color: #4a8de6;
+	}
+
+	/* no shadow of its own: it is cast for it in the layer below every widget
+	   (.po-shadows), so it never falls across the widget beside it */
+	.map-block.popout {
+		position: fixed;
+		z-index: 5000;
+		background-color: #212f45;
+		outline: 1px solid #2b5797;
+	}
+
+		.map-block.popout .radartitle:not(.fullscreen) {
+			cursor: move;
+		}
+
+		/* an interactive map has no aspect of its own: the block carries an inline
+		   height and lays out as a column, the map takes what the title bar leaves */
+		.map-block.popout.free {
+			display: flex;
+			flex-direction: column;
+		}
+
+			.map-block.popout.free > .radartitle {
+				flex: none;
+			}
+
+			.map-block.popout.free .if1,
+			.map-block.popout.free .if2 {
+				flex: 1;
+				min-height: 0;
+				padding-top: 0;
+			}
+
+		/* a locked widget freed of its aspect (Shift-drag, maps.js): the media
+		   is letterboxed in what the title bar leaves — the placeholder's inline
+		   aspect and max-width undone — and a blurred, darkened copy of the image
+		   (--po-img) fills the frame behind it, so the bars are of the map */
+		.map-block.popout.letterbox .placeholder {
+			flex: 1;
+			min-height: 0;
+			display: flex;
+			flex-direction: column;
+			aspect-ratio: auto !important;
+			max-width: none !important;
+			background-color: transparent;
+		}
+
+			.map-block.popout.letterbox .placeholder img {
+				width: 100%;
+				height: 100%;
+				object-fit: contain;
+			}
+
+		.map-block.popout.letterbox .slideshow {
+			flex: 1;
+			min-height: 0;
+		}
+
+			/* fills the slideshow, a column itself when untitled (it is a placeholder) */
+			.map-block.popout.letterbox .slide.active {
+				display: flex;
+				flex-direction: column;
+				flex: 1;
+				width: 100%;
+				min-height: 0;
+			}
+
+				.map-block.popout.letterbox .slide > img {
+					flex: 1;
+					min-height: 0;
+					width: 100%;
+					object-fit: contain;
+				}
+
+		.map-block.popout.letterbox .vid1,
+		.map-block.popout.letterbox .vid2 {
+			flex: 1;
+			min-height: 0;
+			padding-top: 0;
+		}
+
+		.map-block.popout .po-backdrop {
+			display: none;
+		}
+
+		.map-block.popout.letterbox .po-backdrop {
+			display: block;
+			position: absolute;
+			inset: 0;
+			overflow: hidden; /* the blur bleeds past the image's edges */
+			z-index: -1; /* under the content, over the frame's ground */
+		}
+
+			.map-block.popout.letterbox .po-backdrop::before {
+				content: '';
+				position: absolute;
+				inset: -24px;
+				background: var(--po-img) center / cover no-repeat;
+				filter: blur(14px) brightness(0.45);
+			}
+
+		/* resize handles: thin strips along the sides, squares in the corners,
+		   straddling the edge so they are easy to hit without eating the title bar */
+		.map-block.popout .po-h {
+			position: absolute;
+			z-index: 1;
+		}
+
+		/* a widget with another lying over it hands the pointer back to the page:
+		   a press inside an iframe is the frame's own and the page never sees it,
+		   so the widget could not be clicked to the front (popout.js sets the
+		   class). The press lands on the widget instead and raises it, and the
+		   frame is live again for the next one */
+		.map-block.popout.covered iframe {
+			pointer-events: none;
+		}
+
+		.po-h-n, .po-h-s {
+			left: 6px;
+			right: 6px;
+			height: 8px;
+			cursor: ns-resize;
+		}
+
+		.po-h-e, .po-h-w {
+			top: 6px;
+			bottom: 6px;
+			width: 8px;
+			cursor: ew-resize;
+		}
+
+		.po-h-ne, .po-h-se, .po-h-sw, .po-h-nw {
+			width: 10px;
+			height: 10px;
+		}
+
+		.po-h-n, .po-h-ne, .po-h-nw { top: -4px; }
+		.po-h-s, .po-h-se, .po-h-sw { bottom: -4px; }
+		.po-h-e, .po-h-ne, .po-h-se { right: -4px; }
+		.po-h-w, .po-h-nw, .po-h-sw { left: -4px; }
+		.po-h-ne, .po-h-sw { cursor: nesw-resize; }
+		.po-h-nw, .po-h-se { cursor: nwse-resize; }
+
+	body.po-dragging {
+		user-select: none;
+	}
+
+		/* iframes would swallow the pointer while a widget is dragged across them */
+		body.po-dragging iframe {
+			pointer-events: none;
+		}
+
+	/* snap columns: the page keeps to the space between them */
+	body {
+		padding-left: var(--snap-l, 0px);
+		padding-right: var(--snap-r, 0px);
+	}
+
+	/* the column's ground, below the panes; a locked pane leaves some of it showing */
+	.snap-col {
+		position: fixed;
+		top: 0;
+		bottom: 0;
+		z-index: 3999;
+		background-color: #1a2536;
+		pointer-events: none;
+	}
+
+	/* the handles, above the panes: the wrapper lets the pointer through, the strips catch it */
+	.snap-ui {
+		position: fixed;
+		top: 0;
+		bottom: 0;
+		z-index: 8000;
+		pointer-events: none;
+	}
+
+		.snap-edge {
+			position: absolute;
+			pointer-events: auto;
+			top: 0;
+			bottom: 0;
+			width: 8px;
+			cursor: ew-resize;
+		}
+
+			.snap-edge:hover,
+			body.po-dragging .snap-edge {
+				background-color: rgba(43, 87, 151, 0.6);
+			}
+
+		.snap-left .snap-edge { right: -4px; }
+		.snap-right .snap-edge { left: -4px; }
+
+	/* a pane's width is the column's: only a free pane's top and bottom edge resize */
+	.map-block.popout.snapped .po-h-e,
+	.map-block.popout.snapped .po-h-w,
+	.map-block.popout.snapped .po-h-ne,
+	.map-block.popout.snapped .po-h-nw,
+	.map-block.popout.snapped .po-h-se,
+	.map-block.popout.snapped .po-h-sw,
+	.map-block.popout.snapped:not(.free) .po-h {
+		display: none;
+	}
+
+	/* a fullscreen map in a pane fills its column — what the other panes leave
+	   free of it, above and below (--fs-top/--fs-bottom, set by maps.js) — and
+	   the page hidden behind the columns leaves a floating widget's fullscreen
+	   the whole viewport */
+	body.snap-full .radartitle.fullscreen,
+	body.snap-full .if1.fullscreen,
+	body.dashboard .radartitle.fullscreen,
+	body.dashboard .if1.fullscreen {
+		left: 0;
+		right: 0;
+	}
+
+	/* the dashboard: the page — and all on it but the widgets, which are
+	   fixed and stay rendered — out of sight and out of reach, no scrollbar;
+	   the widgets, the columns and the dialog are all there is */
+	body.dashboard {
+		overflow: hidden;
+	}
+
+	body.dashboard .container,
+	body.dashboard footer {
+		visibility: hidden;
+	}
+
+		body.dashboard .map-block.popout:not(.fs-host) {
+			visibility: visible;
+		}
+
+	/* the widgets' shadows, all of them in one layer under all of the widgets,
+	   so a widget's shadow falls on what is behind the widgets and never on
+	   the widget beside it. Over everything that is not a widget — the page
+	   and the docked maps on it, the columns' ground, the board's graph paper,
+	   a fullscreen map at 4500/4501 — and under the widget range, which starts
+	   at 5000 and climbs from there. Each box is a widget's own rect placed by
+	   popout.js; an outer box-shadow is clipped out of its own border box, so
+	   a box paints the halo and nothing else, and takes no pointer */
+	.po-shadows {
+		position: fixed;
+		inset: 0;
+		z-index: 4900;
+		pointer-events: none;
+	}
+
+		.po-shadow {
+			position: absolute;
+			box-shadow: 0 6px 24px rgba(0, 0, 0, 0.6);
+		}
+
+	/* the board's graph paper: under the widgets and over the columns' ground,
+	   its lines the multiples of the cell popout.js snaps to (--grid-cell). It
+	   hangs off body rather than the container the board hides, and takes no
+	   pointer: it is something to see, not to touch */
+	.po-grid {
+		position: fixed;
+		inset: 0;
+		z-index: 4000;
+		pointer-events: none;
+		background-image:
+			repeating-linear-gradient(to right, rgba(255, 255, 255, 0.08) 0 1px, transparent 1px var(--grid-cell)),
+			repeating-linear-gradient(to bottom, rgba(255, 255, 255, 0.08) 0 1px, transparent 1px var(--grid-cell));
+	}
+
+	.map-block.snapped-left .radartitle.fullscreen,
+	.map-block.snapped-left .if1.fullscreen {
+		left: 0;
+		right: calc(100% - var(--snap-l));
+	}
+
+	.map-block.snapped-right .radartitle.fullscreen,
+	.map-block.snapped-right .if1.fullscreen {
+		left: calc(100% - var(--snap-r));
+		right: 0;
+	}
+
+	.map-block.popout.snapped .radartitle.fullscreen {
+		top: var(--fs-top, 0px);
+	}
+
+	.map-block.popout.snapped .if1.fullscreen {
+		top: calc(var(--fs-top, 0px) + 23px); /* under the bar */
+		bottom: var(--fs-bottom, 0px);
+	}
+
+	/* a fullscreen map leaves its widget's box (frame, shadow, handles) behind
+	   where it floated; only the bar and the map are to be seen */
+	.map-block.popout.fs-host {
+		visibility: hidden;
+	}
+
+		.map-block.popout.fs-host .radartitle.fullscreen,
+		.map-block.popout.fs-host .if1.fullscreen {
+			visibility: visible;
+		}
+
+	/* the widgets floating over the page stay in view over a fullscreen map:
+	   the page's fullscreen goes under them (above the columns' ground), and
+	   a widget hosting one is lowered to the same place by maps.js */
+	.radartitle.fullscreen {
+		z-index: 4501;
+	}
+
+	.if1.fullscreen {
+		z-index: 4500;
+	}
+
+	/* the columns cover the page: no scrollbar for it, and nothing to scroll to */
+	body.snap-full {
+		overflow: hidden;
+	}
+
+	/* the slot a dragged widget would take */
+	.snap-preview {
+		position: fixed;
+		z-index: 8500;
+		box-sizing: border-box;
+		border: 2px dashed #4a8de6;
+		background-color: rgba(43, 87, 151, 0.25);
+		pointer-events: none;
 	}
 }
 
@@ -416,17 +808,239 @@ body.fs-lock {
 				height: 28px;
 			}
 
+/* the settings dialog: fixed over everything — the page, the columns, a
+   fullscreen map — and not modal, since the arrangement is changed behind it
+   while it is open; the table's width, or what the viewport leaves */
 .map-settings {
+	position: fixed;
+	z-index: 100000;
+	top: 24px;
+	left: 0;
+	right: 0;
+	margin: 0 auto;
+	width: 875px; /* the table's max-width */
+	max-width: calc(100% - 32px);
+	max-height: calc(100vh - 48px);
+	display: flex; /* the header stays, the body below it scrolls */
+	flex-direction: column;
+	box-sizing: border-box;
+	border: 1px solid #5F6F89;
+	box-shadow: 0 16px 48px rgba(0, 0, 0, 0.75), 0 2px 8px rgba(0, 0, 0, 0.5);
 	background-color: #202c40;
 	text-align: left;
-	padding: 10px;
-	margin-top: 5px;
 	font-size: 13px;
 	color: white;
 }
 
+	/* display: flex would beat the hidden attribute's display: none */
+	.map-settings[hidden] {
+		display: none;
+	}
+
+@media (max-width: 800px) {
+	.map-settings {
+		top: 0;
+		max-width: 100%;
+		/* the visible viewport, not the taller one a collapsible URL bar is
+		   measured out of: at 100vh the dialog's foot hangs below the screen
+		   and the body's scroll ends where it cannot be reached, so the last
+		   of the presets is out of sight for good. dvh follows the bar */
+		max-height: 100vh;
+		max-height: 100dvh;
+		border: none; /* it fills the screen: there is nothing left for an edge to divide it from */
+	}
+}
+
+/* on desktop the dialog is a window: dragged by its head and resized from any
+   side or corner through the widgets' own handles, which maps.js appends and
+   drives. Everything else about it stands — the page still holds still behind
+   it and a press outside still shuts it */
+@media (min-width: 801px) and (hover: hover) and (pointer: fine) {
+	.map-settings .po-h {
+		position: absolute;
+		z-index: 1;
+	}
+
+	.map-settings .ms-head {
+		cursor: move;
+	}
+}
+
+	/* the page holds still under the dialog (the scroll goes to the dialog's
+	   body, and the wheel stops at its end rather than going on to the page) */
+	body.ms-open {
+		overflow: hidden;
+	}
+
+	/* the lock drops the page's scrollbar, which would widen the page and
+	   shift what is centred in it: its gutter is kept while the page had one
+	   (maps.js sets the class only then) */
+	html.ms-gutter {
+		scrollbar-gutter: stable;
+	}
+
+	.map-settings .ms-head {
+		display: flex;
+		justify-content: space-between;
+		align-items: baseline;
+		padding: 7px 10px;
+		background-color: #2c3b56;
+		border-bottom: 1px solid #3d4d6a;
+	}
+
+		.map-settings .ms-head .ms-title {
+			font-weight: bold;
+		}
+
+		.map-settings .ms-head a {
+			cursor: pointer;
+			color: #8fb4ff;
+		}
+
+	/* a word is a target for a cursor, not for a finger: on touch the head
+	   gives its padding to its children instead, so Zatvori is tapped
+	   anywhere in the right end of the bar and the title anywhere in the
+	   left. Both keep the same top padding, so the baseline they are aligned
+	   on does not move and the bar reads as it did */
+	@media (max-width: 800px) {
+		.map-settings .ms-head {
+			padding: 0;
+		}
+
+			.map-settings .ms-head .ms-title {
+				padding: 11px 10px;
+			}
+
+			.map-settings .ms-head a {
+				padding: 11px 14px;
+			}
+	}
+
+	.map-settings .ms-body {
+		min-height: 0;
+		overflow-y: auto;
+		overscroll-behavior: contain;
+		padding: 10px;
+	}
+
+		/* a classic scrollbar, always there with its thumb: on the desktop the
+		   overlay kind shows an empty track until hovered and lies over the row
+		   handles. A touch screen has no hover to miss and no handles to cover,
+		   and its overlay scrollbar is what everything else there looks like —
+		   so the native one is left alone below the breakpoint, gutter and all */
+		@media (min-width: 801px) and (hover: hover) and (pointer: fine) {
+			.map-settings .ms-body {
+				scrollbar-gutter: stable;
+			}
+
+			.map-settings .ms-body::-webkit-scrollbar {
+				width: 12px;
+			}
+
+			.map-settings .ms-body::-webkit-scrollbar-track {
+				background-color: #1a2536;
+			}
+
+			.map-settings .ms-body::-webkit-scrollbar-thumb {
+				background-color: #485871;
+				border: 3px solid #1a2536;
+				border-radius: 6px;
+			}
+
+				.map-settings .ms-body::-webkit-scrollbar-thumb:hover {
+					background-color: #5F6F89;
+				}
+
+			@supports not selector(::-webkit-scrollbar) {
+				.map-settings .ms-body {
+					scrollbar-width: thin;
+					scrollbar-color: #485871 #1a2536;
+				}
+			}
+		}
+
 	.map-settings label {
 		cursor: pointer;
+	}
+
+/* the way to the dialog where the page's own Karte button is out of reach:
+   under a fullscreen map covering the page, or with the page hidden behind
+   the columns; hangs from the top edge, over the title bars' middle */
+.ms-tab {
+	display: none;
+	position: fixed;
+	z-index: 100000;
+	top: 0;
+	left: 50%;
+	transform: translateX(-50%);
+	padding: 3px 12px;
+	border: none;
+	border-radius: 0 0 6px 6px;
+	font-family: inherit;
+	font-size: 13px;
+	color: white;
+	/* the site's orange: the one way to the dialog from a board that has no
+	   page to carry the button, so it is the accent rather than the furniture */
+	background-color: #ff9800;
+	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+	cursor: pointer;
+	/* dragged along the top and pulled wider by its sides (maps.js) */
+	box-sizing: border-box;
+	/* its name and its glyphs in a row: the width they take together is also the
+	   narrowest it goes, msTabMinWidth() measuring it with the width unset, so
+	   the floor follows the cluster as [G] and [S] come and go with the board */
+	align-items: center;
+	gap: 10px;
+	white-space: nowrap;
+	overflow: hidden;
+	touch-action: none;
+	user-select: none;
+}
+
+	.ms-tab:hover {
+		background-color: #ffa726;
+	}
+
+	/* the name is what gives way when the tab is pulled narrower: it ellipsises
+	   and the glyphs stay, the way a widget's title keeps out of its clusters */
+	.ms-tab-name {
+		flex: 1 1 auto;
+		min-width: 0;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		text-align: center;
+	}
+
+	/* the title bars' cluster, on the tab */
+	.ms-tab-cluster {
+		flex: 0 0 auto;
+		display: inline-flex;
+		gap: 8px;
+	}
+
+		.ms-tab-cluster a {
+			text-decoration: none;
+			cursor: pointer;
+		}
+
+		/* a switch that is off is dimmed; [R] is an action and is always lit */
+		.ms-tab-cluster a.ms-tab-off {
+			opacity: 0.55;
+		}
+
+	/* the grid is the board's alone: elsewhere the tab shows its name and [R] */
+	.ms-tab-grid {
+		display: none;
+	}
+
+	body.dashboard .ms-tab-grid {
+		display: inline;
+	}
+
+	body.fs-lock .ms-tab,
+	body.snap-full .ms-tab,
+	body.dashboard .ms-tab {
+		display: flex;
 	}
 
 	/* the options wrap onto as many lines as they need — a saved-preset list
@@ -495,6 +1109,18 @@ body.fs-lock {
 			   the edits came from. Left edge, clear of the corner triangle, which
 			   a saved preset carries at the same time. Grey like the triangle:
 			   both are marks about the chip, and orange stays "selected" */
+			/* a preset that is a board carries the board's mark, the blue edge of
+			   the mode row, on its chip and its row in the list; the origin dot
+			   sits inside it, in the padding */
+			.map-settings .ms-chip.ms-board,
+			.map-settings .ms-manage-name.ms-board {
+				border-left: 3px solid #4a8de6;
+			}
+
+			.map-settings .ms-manage-name.ms-board {
+				padding-left: 6px;
+			}
+
 			.map-settings .ms-chip.ms-origin::before {
 				content: '';
 				position: absolute;
@@ -581,6 +1207,71 @@ body.fs-lock {
 
 		.map-settings .ms-sort a.active {
 			color: #ff9800;
+		}
+
+	/* the snapped arrangement, named and undoable (desktop only, like the panes) */
+	/* the board is another way of viewing: its row stands out from the links
+	   around it — a button, a band with a blue edge, lit while on the board */
+	.map-settings .ms-mode {
+		display: flex;
+		align-items: center;
+		gap: 14px;
+		margin: 10px 0 4px;
+		padding: 8px 10px;
+		background-color: #1a2536;
+		border: 1px solid #3d4d6a;
+		border-left: 4px solid #4a8de6;
+	}
+
+		.map-settings .ms-mode.ms-on {
+			background-color: #22385c;
+			border-color: #4a8de6;
+		}
+		.map-settings .ms-mode .btn {
+			flex: none;
+			padding: 0 14px;
+		}
+
+		/* the grid switches ride in the mode row, and are the board's: greyed and
+		   unclickable while it is off, their state kept all the same */
+		.map-settings .ms-grid {
+			display: flex;
+			align-items: center;
+			gap: 6px;
+			color: #8a94a8;
+			cursor: pointer;
+			user-select: none;
+		}
+
+		.map-settings .ms-mode.ms-on .ms-grid {
+			color: white;
+		}
+
+		/* by class rather than :has(input:disabled), which is newer than the
+		   rest of this sheet leans on; maps.js sets it with the disabled state */
+		.map-settings .ms-grid.ms-off {
+			opacity: 0.45;
+			cursor: default;
+		}
+
+	.map-settings .ms-layout {
+		display: flex;
+		gap: 14px;
+		padding: 6px 0;
+		color: #8a94a8;
+	}
+
+	/* both rows are hidden by attribute (on a phone, or with nothing to say),
+	   which their display: flex would otherwise beat */
+	.map-settings .ms-mode[hidden],
+	.map-settings .ms-layout[hidden] {
+		display: none;
+	}
+
+		.map-settings .ms-layout a {
+			cursor: pointer;
+			user-select: none;
+			text-decoration: none;
 		}
 
 	.map-settings .ms-handle {
