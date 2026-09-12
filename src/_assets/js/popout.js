@@ -198,6 +198,7 @@ function dockAllPopouts() {
 	layoutSnapColumns();
 	document.querySelectorAll('.map-block.popout').forEach(dockMap);
 	persistSnapLayout(); // also with nothing to dock: the mode may have changed
+	syncShadows(); // the breakpoint docks with persistence paused, so the sweep is not reached through it
 }
 
 // ---------- dashboard (desktop) ----------
@@ -436,6 +437,56 @@ function updateCovered() {
 		// map fills the column or the page and is the one thing meant to be used
 		a.block.classList.toggle('covered', under && !a.block.classList.contains('fs-host'));
 	});
+	syncShadows(); // the same call sites: wherever a widget's rect or its order can have changed
+}
+
+// ---------- the shadow layer (desktop) ----------
+
+// A widget's shadow belongs to what is behind the widgets, not to the widget
+// beside it. Drawn by the widget itself it was painted in the widget's own
+// place in the order, so of two widgets side by side the raised one laid its
+// shadow across its neighbour, and the only way to be rid of it was to raise
+// the neighbour in turn — which puts its shadow on the first one. So no widget
+// carries a shadow any more: each one has a box of its own size in a single
+// layer under the whole widget range (.po-shadows, over the page and the
+// docked maps on it, the columns' ground, the graph paper and a fullscreen
+// map), and that box carries the shadow. An outer box-shadow is clipped out of
+// its own border box, so the box paints the halo alone and the widget sits on
+// it exactly. Every widget is then over every shadow, whatever the order among
+// themselves — which is what was wanted, and it lets a grouped widget have its
+// shadow back: a member's now falls under the member beside it, not across it.
+// A pane in a column has none (docked into the column's ground rather than
+// floating over it), nor has a widget hosting a fullscreen map, whose box is
+// not to be seen.
+function shadowLayer() {
+	let layer = document.querySelector('.po-shadows');
+	if (!layer) document.body.appendChild(layer = el('div', { class: 'po-shadows' }));
+	return layer;
+}
+
+function castsShadow(block) {
+	return !isSnapped(block) && !block.classList.contains('fs-host');
+}
+
+// every widget's box placed on its rect, and any box left without a widget —
+// one docked, or gone with the tbody — swept out of the layer
+function syncShadows() {
+	const live = new Set();
+	allPopouts().forEach(block => {
+		if (!castsShadow(block)) return;
+		if (!block._shadow || !block._shadow.isConnected) {
+			block._shadow = el('div', { class: 'po-shadow' });
+			shadowLayer().appendChild(block._shadow);
+		}
+		// the rect as it is: a widget's place carries thousandths of a pixel
+		// (subpixel(), moveGroup) and its shadow is to stand exactly on it
+		const rect = block.getBoundingClientRect();
+		block._shadow.style.cssText =
+			`left: ${rect.left}px; top: ${rect.top}px; width: ${rect.width}px; height: ${rect.height}px;`;
+		live.add(block._shadow);
+	});
+	const layer = document.querySelector('.po-shadows');
+	if (layer) [...layer.children].forEach(box => { if (!live.has(box)) box.remove(); });
 }
 
 function clamp(value, min, max) {
@@ -462,7 +513,10 @@ function viewportHeight() {
 // released (or the gesture cancelled)
 function trackPopoutPointer(e, onMove, onEnd) {
 	const startX = e.clientX, startY = e.clientY;
-	const move = (ev) => onMove(ev.clientX - startX, ev.clientY - startY, ev);
+	// the shadows follow the gesture live: every drag and resize of a widget, a
+	// group, a pane and a column comes through here, and updateCovered — which
+	// syncs them otherwise — runs only once the gesture is over
+	const move = (ev) => { onMove(ev.clientX - startX, ev.clientY - startY, ev); syncShadows(); };
 	const stop = () => {
 		document.removeEventListener('pointermove', move);
 		document.removeEventListener('pointerup', stop);
@@ -1721,6 +1775,7 @@ document.addEventListener('map-fullscreen', () => {
 			if (isSnapped(block) && !block.classList.contains('free')) layoutSnapColumns();
 			fitTitles(block);
 			syncBackdrop(block); // the image on screen may be another
+			syncShadows(); // a floating locked widget's height changed with it, and its shadow is its size
 		}, 0);
 	}, true);
 });

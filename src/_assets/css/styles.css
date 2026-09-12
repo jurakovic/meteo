@@ -319,19 +319,18 @@ body.fs-lock {
 		display: inline;
 	}
 
-	/* a grouped widget's frame in the snap blue, so the group reads as one;
-	   no shadow, which would fall across the member under it */
+	/* a grouped widget's frame in the snap blue, so the group reads as one */
 	.map-block.popout.grouped {
 		outline-color: #4a8de6;
-		box-shadow: none;
 	}
 
+	/* no shadow of its own: it is cast for it in the layer below every widget
+	   (.po-shadows), so it never falls across the widget beside it */
 	.map-block.popout {
 		position: fixed;
 		z-index: 5000;
 		background-color: #212f45;
 		outline: 1px solid #2b5797;
-		box-shadow: 0 6px 24px rgba(0, 0, 0, 0.6);
 	}
 
 		.map-block.popout .radartitle:not(.fullscreen) {
@@ -556,6 +555,26 @@ body.fs-lock {
 			visibility: visible;
 		}
 
+	/* the widgets' shadows, all of them in one layer under all of the widgets,
+	   so a widget's shadow falls on what is behind the widgets and never on
+	   the widget beside it. Over everything that is not a widget — the page
+	   and the docked maps on it, the columns' ground, the board's graph paper,
+	   a fullscreen map at 4500/4501 — and under the widget range, which starts
+	   at 5000 and climbs from there. Each box is a widget's own rect placed by
+	   popout.js; an outer box-shadow is clipped out of its own border box, so
+	   a box paints the halo and nothing else, and takes no pointer */
+	.po-shadows {
+		position: fixed;
+		inset: 0;
+		z-index: 4900;
+		pointer-events: none;
+	}
+
+		.po-shadow {
+			position: absolute;
+			box-shadow: 0 6px 24px rgba(0, 0, 0, 0.6);
+		}
+
 	/* the board's graph paper: under the widgets and over the columns' ground,
 	   its lines the multiples of the cell popout.js snaps to (--grid-cell). It
 	   hangs off body rather than the container the board hides, and takes no
@@ -616,10 +635,6 @@ body.fs-lock {
 	/* the columns cover the page: no scrollbar for it, and nothing to scroll to */
 	body.snap-full {
 		overflow: hidden;
-	}
-
-	.map-block.popout.snapped {
-		box-shadow: none;
 	}
 
 	/* the slot a dragged widget would take */
@@ -964,11 +979,17 @@ body.fs-lock {
 	font-family: inherit;
 	font-size: 13px;
 	color: white;
-	background-color: #485871;
+	/* the site's orange: the one way to the dialog from a board that has no
+	   page to carry the button, so it is the accent rather than the furniture */
+	background-color: #ff9800;
 	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
 	cursor: pointer;
 	/* dragged along the top and pulled wider by its sides (maps.js) */
 	box-sizing: border-box;
+	/* wider than its word: this is also the narrowest it goes, msTabMinWidth()
+	   measuring it with the width unset, so the floor and the width it hangs
+	   there at to begin with are one and the same */
+	min-width: 100px;
 	white-space: nowrap;
 	overflow: hidden;
 	touch-action: none;
@@ -976,7 +997,7 @@ body.fs-lock {
 }
 
 	.ms-tab:hover {
-		background-color: #5F6F89;
+		background-color: #ffa726;
 	}
 
 	body.fs-lock .ms-tab,
