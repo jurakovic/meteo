@@ -165,3 +165,25 @@ Hard-won details worth keeping in mind when touching the drag/scroll code:
 - the drag handle must not be `display: inline` — `touch-action` is ignored on non-replaced inline elements, so touches would scroll the page instead of dragging
 - pointer capture cannot be used for the drag: touch pointers implicitly capture the handle, and any capture breaks once the row is moved in the DOM (`insertBefore`). The implicit capture is released on `pointerdown` and move/up listeners live on `document` instead
 - `scrollIntoView` scrolls *all* ancestors, so it cannot be used to reveal something inside the panel — it drags the page back up to the panel too. The preset bar used to scroll horizontally and needed a hand-rolled reveal for this reason; it now wraps its options as chips instead, growing in the axis the page already scrolls, and the reveal is gone
+
+### The manual
+
+[`MANUAL.md`](./MANUAL.md) is the user-facing document: what the site does and how to work it, in Croatian, which is what the site speaks. It sits at the root beside `README.md` and this file, and is named to match them — *what it is*, *how to use it*, *how it works*. It deliberately cannot live in `docs/`, the conventional place for it, because `docs/` is the built site and `build.ps1` deletes it on every run. The file name stays English for the same reason the rest of the repo is, and to leave room for a `MANUAL.en.md` beside it.
+
+It shares no prose with this file on purpose: this one explains mechanism to someone reading the code, that one answers *how do I keep two radars side by side while I scroll?* Every UI label it quotes is the label the code renders, so a label that changes is one grep from the line that quotes it.
+
+#### The manual on the site (not built yet)
+
+The plan is that the Markdown stays the only source and the build makes a page of it — one new step, since the component machinery already does this job. What is prepared for it: the document uses `##` and `###` only, so a contents list can be made of it; its internal anchors are slugged the way GitHub slugs them (diacritics kept — `#nadzorna-ploča`), so the same links work in both renderings; and every ASCII glyph is in backticks (`` `[R]` ``, `` `[=]` ``), which keeps them out of link syntax and renders them monospaced, as they look in the title bars.
+
+What is left to write:
+
+- A page, `src/help/index.html`, built like `customize/index.html`, with a `<!-- manual -->` placeholder — the same shape as `<!-- seo -->` and `<!-- gtag -->`.
+- A converter, `src/md.ps1`, dot-sourced by `build.ps1`, which reads `../MANUAL.md` and returns HTML. In memory: writing a generated `.c.html` back into `src/` would put build output in the source tree. `build.ps1` grows by about four lines; the converter is around a hundred.
+- The converter handles a fixed subset — `##`/`###` with slug ids, paragraphs, `-` and `1.` lists, `**bold**`, `*italic*`, `` `code` ``, `[text](url)`, and tables — and **throws on anything it does not recognise**, so the manual cannot silently render wrong. The subset is what the document uses; both sides are ours, so that is a contract rather than a shortcut. Implementing CommonMark in PowerShell is not the job.
+- Rendering it client-side from the raw `.md` was considered and rejected: it needs a Markdown library or a hand-rolled parser, against the no-dependency grain, and leaves the page empty without JS.
+
+Two things in `build.ps1` the step has to respect:
+
+- **The injection must happen above the path rewrites.** `href="/"` → `/meteo/"` and the rest run before the `<!-- seo -->` replacement, so a manual injected at the usual place would ship its `/customize/` link unrewritten and 404 under `/meteo/`.
+- **The comment strip runs after injection** (`(?s)<!--.*?-->`), so the converter must emit no comments. It must also escape `&`, `<` and `>` out of the Markdown's text.
