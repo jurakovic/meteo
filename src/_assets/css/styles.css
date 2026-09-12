@@ -556,6 +556,20 @@ body.fs-lock {
 			visibility: visible;
 		}
 
+	/* the board's graph paper: under the widgets and over the columns' ground,
+	   its lines the multiples of the cell popout.js snaps to (--grid-cell). It
+	   hangs off body rather than the container the board hides, and takes no
+	   pointer: it is something to see, not to touch */
+	.po-grid {
+		position: fixed;
+		inset: 0;
+		z-index: 4000;
+		pointer-events: none;
+		background-image:
+			repeating-linear-gradient(to right, rgba(255, 255, 255, 0.08) 0 1px, transparent 1px var(--grid-cell)),
+			repeating-linear-gradient(to bottom, rgba(255, 255, 255, 0.08) 0 1px, transparent 1px var(--grid-cell));
+	}
+
 	.map-block.snapped-left .radartitle.fullscreen,
 	.map-block.snapped-left .if1.fullscreen {
 		left: 0;
@@ -1127,12 +1141,26 @@ body.fs-lock {
 			padding: 0 14px;
 		}
 
-		.map-settings .ms-mode-text {
+		/* the grid switches ride in the mode row, and are the board's: greyed and
+		   unclickable while it is off, their state kept all the same */
+		.map-settings .ms-grid {
+			display: flex;
+			align-items: center;
+			gap: 6px;
 			color: #8a94a8;
+			cursor: pointer;
+			user-select: none;
 		}
 
-		.map-settings .ms-mode.ms-on .ms-mode-text {
+		.map-settings .ms-mode.ms-on .ms-grid {
 			color: white;
+		}
+
+		/* by class rather than :has(input:disabled), which is newer than the
+		   rest of this sheet leans on; maps.js sets it with the disabled state */
+		.map-settings .ms-grid.ms-off {
+			opacity: 0.45;
+			cursor: default;
 		}
 
 	.map-settings .ms-layout {

@@ -225,6 +225,7 @@ function isDashboard() {
 function setDashboard(on) {
 	dashboardMode = on;
 	document.body.classList.toggle('dashboard', on);
+	renderGrid(); // the paper is the board's
 	document.querySelectorAll('.map-block.popout .po-btn').forEach(btn => setPopoutButton(btn, true));
 }
 
@@ -263,6 +264,132 @@ function removeFromDashboard(block) {
 		: last.nextElementSibling && last.nextElementSibling.classList.contains('sp20') ? last.nextElementSibling : null;
 	[links, spacer, row].forEach(node => { if (node) node.remove(); });
 	removeMapFromList(id);
+}
+
+// ---------- the grid (desktop, on the board) ----------
+
+// Graph paper under the widgets, and the lines a widget settles onto when let
+// go. The cell is a size, not a count: the lines are its multiples, so they are
+// whole pixels by construction whatever the window, the cells stay square on
+// every screen, and the paper is one repeating gradient however fine it gets.
+// Two edges land on the same line whenever they lie within half a cell of each
+// other, so at 16 the grid forgives 8px — many times the fraction of a pixel an
+// aspect-derived height used to leave between two widgets, which is what makes
+// a snapped board exact where a placed one was not. Both switches are the
+// browser's, not the view's (mapGrid, like msTab and msPanel): they are a way
+// of working, so they do not travel in a preset or a link, and they keep their
+// state while the board is off, when they do nothing
+const GRID_CELL = 16;
+const GRID_KEY = 'mapGrid';
+
+function loadGridPrefs() {
+	try {
+		const stored = JSON.parse(localStorage.getItem(GRID_KEY));
+		if (stored && typeof stored === 'object') return { show: stored.show === true, snap: stored.snap === true };
+	} catch (e) { /* unreadable is off */ }
+	return { show: false, snap: false };
+}
+
+let gridShow = loadGridPrefs().show;
+let gridSnap = loadGridPrefs().snap;
+
+function isGridShown() {
+	return gridShow;
+}
+
+function isGridSnapped() {
+	return gridSnap;
+}
+
+function setGridPrefs(show, snap) {
+	dlog(`setGridPrefs: show=${show} snap=${snap}`);
+	gridShow = show;
+	gridSnap = snap;
+	try {
+		localStorage.setItem(GRID_KEY, JSON.stringify({ show, snap }));
+	} catch (e) { /* storage disabled or full — the grid still works this session */ }
+	renderGrid();
+}
+
+// the paper itself: one fixed layer under the widgets and over the columns'
+// ground, drawn by the CSS from the cell. The page's own far edge is no
+// multiple of the cell and is not drawn — it is the edge of the screen
+function renderGrid() {
+	const on = gridShow && dashboardMode && POPOUT_MQ.matches;
+	let grid = document.querySelector('.po-grid');
+	if (!on) {
+		if (grid) grid.remove();
+		return;
+	}
+	if (!grid) {
+		grid = document.createElement('div');
+		grid.className = 'po-grid';
+		// outside .container, which the board hides, and before the widgets in
+		// the stacking order by its z-index rather than by where it sits
+		document.body.appendChild(grid);
+	}
+	grid.style.setProperty('--grid-cell', `${GRID_CELL}px`);
+}
+
+// every multiple of the cell across the extent, and the far edge itself: the
+// page's edges are lines too, and the last multiple rarely lands on one
+function gridLines(extent) {
+	const lines = [];
+	for (let at = 0; at < extent; at += GRID_CELL) lines.push(at);
+	if (lines[lines.length - 1] !== extent) lines.push(extent);
+	return lines;
+}
+
+function nearestLine(lines, value) {
+	let best = 0;
+	for (let i = 1; i < lines.length; i++) {
+		if (Math.abs(lines[i] - value) < Math.abs(lines[best] - value)) best = i;
+	}
+	return best;
+}
+
+// each of the four edges to its nearest line, so the widget grows or shrinks
+// to fit rather than being moved as it is. The aspect is freed first: a locked
+// widget's height follows its width and could never reach a line of its own,
+// and at this cell the letterbox that leaves is a few pixels at most. Held to
+// the widget's minimum by taking the next line out, and to at least one cell
+function snapBlockToGrid(block) {
+	const xs = gridLines(viewportWidth()), ys = gridLines(viewportHeight());
+	const rect = block.getBoundingClientRect();
+	let left = nearestLine(xs, rect.left), right = nearestLine(xs, rect.right);
+	let top = nearestLine(ys, rect.top), bottom = nearestLine(ys, rect.bottom);
+	if (right <= left) right = Math.min(left + 1, xs.length - 1);
+	if (bottom <= top) bottom = Math.min(top + 1, ys.length - 1);
+	while (xs[right] - xs[left] < POPOUT_MIN_WIDTH && (right < xs.length - 1 || left > 0)) {
+		if (right < xs.length - 1) right++;
+		else left--;
+	}
+	while (ys[bottom] - ys[top] < POPOUT_MIN_HEIGHT && (bottom < ys.length - 1 || top > 0)) {
+		if (bottom < ys.length - 1) bottom++;
+		else top--;
+	}
+	if (!block.classList.contains('free')) unlockAspect(block);
+	block.style.width = `${xs[right] - xs[left]}px`;
+	block.style.height = `${ys[bottom] - ys[top]}px`;
+	placePopout(block, xs[left], ys[top]);
+	syncBackdrop(block);
+	fitTitles(block);
+}
+
+// on release only, never while the gesture runs: the widget follows the
+// pointer and settles onto the grid when it is let go
+function snapToGrid(blocks) {
+	if (!gridSnap || !dashboardMode || !POPOUT_MQ.matches) return;
+	blocks.forEach(block => {
+		if (!block.classList.contains('fs-host')) snapBlockToGrid(block);
+	});
+}
+
+// the widest a widget goes: the table's width over the page, which is where
+// that cap comes from, and the whole viewport on the board, which has no table
+// to relate to — a board of half-width tiles needs more than 875 of a wide screen
+function popoutMaxWidth() {
+	return dashboardMode ? viewportWidth() : Math.min(POPOUT_MAX_WIDTH, viewportWidth() - POPOUT_MARGIN);
 }
 
 // keep the whole widget inside the viewport when it fits, else at least its
@@ -395,8 +522,9 @@ function dragPopout(block, e) {
 		showSnapPreview(target ? target.slot : null);
 	}, () => {
 		showSnapPreview(null);
-		if (target) snapPanes(byPlace(members), target.side, target.slot);
-		else persistSnapLayout();
+		if (target) { snapPanes(byPlace(members), target.side, target.slot); return; }
+		snapToGrid(members); // on release, not during: the drag itself stays free
+		persistSnapLayout();
 	});
 }
 
@@ -628,7 +756,7 @@ function resizePopout(block, dir, e) {
 	const start = block.getBoundingClientRect();
 	const free = block.classList.contains('free');
 	const ratio = start.width / start.height;
-	const maxWidth = Math.min(POPOUT_MAX_WIDTH, viewportWidth() - POPOUT_MARGIN);
+	const maxWidth = popoutMaxWidth();
 	const maxHeight = viewportHeight() - POPOUT_MARGIN;
 	const magnets = col ? [] : magnetRects(block);
 	const mates = col ? groupStarts(members.filter(m => m !== block)) : [];
@@ -687,7 +815,7 @@ function resizePopout(block, dir, e) {
 		h = block.getBoundingClientRect().height;
 		placePopout(block, dir.includes('w') ? start.right - w : start.left, dir.includes('n') ? start.bottom - h : start.top);
 		fitTitles(block);
-	}, persistSnapLayout);
+	}, () => { snapToGrid([block]); persistSnapLayout(); });
 }
 
 // the pulled edges of something that started as start (left/top/right/
@@ -764,7 +892,7 @@ function resizeGroup(members, dir, e) {
 		POPOUT_MIN_WIDTH / Math.min(...starts.map(s => s.width)),
 		...starts.filter(s => s.free).map(s => POPOUT_MIN_HEIGHT / s.height));
 	const maxScale = Math.min(
-		POPOUT_MAX_WIDTH / Math.max(...starts.map(s => s.width)),
+		popoutMaxWidth() / Math.max(...starts.map(s => s.width)),
 		(dir.includes('w') ? box.right : viewportWidth() - box.left) / box.width,
 		(dir.includes('n') ? box.bottom : viewportHeight() - box.top) / box.height);
 	trackPopoutPointer(e, (dx, dy) => {
@@ -802,7 +930,7 @@ function resizeGroup(members, dir, e) {
 			placed.push(s);
 		});
 		members.forEach(fitTitles);
-	}, persistSnapLayout);
+	}, () => { snapToGrid(members); persistSnapLayout(); });
 }
 
 // how the members stand to one another: for every ordered pair that touches,
@@ -1503,7 +1631,7 @@ function applySnapLayout(layout) {
 		if (!block || block.classList.contains('popout')) return;
 		popoutMap(block);
 		if (height && !block.classList.contains('free')) unlockAspect(block);
-		block.style.width = `${Math.round(clamp(width * viewportWidth(), POPOUT_MIN_WIDTH, Math.min(POPOUT_MAX_WIDTH, viewportWidth() - POPOUT_MARGIN)))}px`;
+		block.style.width = `${Math.round(clamp(width * viewportWidth(), POPOUT_MIN_WIDTH, popoutMaxWidth()))}px`;
 		if (block.classList.contains('free') && height)
 			block.style.height = `${Math.round(clamp(height * viewportHeight(), POPOUT_MIN_HEIGHT, viewportHeight() - POPOUT_MARGIN))}px`;
 		placePopout(block, left * viewportWidth(), top * viewportHeight());

@@ -1609,6 +1609,13 @@ function buildMapSettings(panel) {
 	// opening the panel and applying anything unchanged changes nothing.
 	let dashboardChecked = isDashboard();
 
+	// the board's grid. Unlike the mode beside them these take effect at once —
+	// they are a way of working, not a view to be applied — and they are the
+	// browser's rather than the view's (popout.js stores them), so they start at
+	// what is set and keep it whether or not the board is on
+	let gridChecked = isGridShown();
+	let snapChecked = isGridSnapped();
+
 	// rebuilt whenever the saved presets change, so they sit among the
 	// built-ins and stay selectable the same way
 	function renderPresets(selectedId) {
@@ -1752,17 +1759,33 @@ function buildMapSettings(panel) {
 	// the board is another way of viewing altogether, so it gets a row of its
 	// own with a button, not a link among the others — a toggle, though, not a
 	// way onto it: it ticks dashboardChecked and nothing moves until Primijeni,
-	// like the ticks in the list beside it. The text says what the mode is and
-	// stays put; whether it is ticked is the lit band's (.ms-on) to say, and
-	// what is on screen the layout line's, so the row never narrates
+	// like the ticks in the list beside it. Whether it is ticked is the lit
+	// band's (.ms-on) to say, and what is on screen the layout line's, so the
+	// row never narrates. Beside it the board's two grid switches, which only
+	// mean anything on it: greyed and unclickable while it is off, their state
+	// kept all the same, since they are a way of working rather than a view
 	const modeDiv = el('div', { class: 'ms-mode' });
+
+	function buildGridToggle(label, checked, onChange) {
+		const box = el('input', { type: 'checkbox' });
+		box.checked = checked;
+		box.disabled = !dashboardChecked;
+		box.addEventListener('change', () => onChange(box.checked));
+		return el('label', { class: 'ms-grid' + (dashboardChecked ? '' : ' ms-off') }, [box, el('span', { text: label })]);
+	}
+
 	function renderModeRow() {
 		modeDiv.replaceChildren();
 		modeDiv.hidden = !POPOUT_MQ.matches; // the widgets and the board are a desktop thing
 		modeDiv.classList.toggle('ms-on', dashboardChecked);
 		const btn = el('button', { type: 'button', class: 'btn', text: 'Nadzorna ploča', 'aria-pressed': String(dashboardChecked) });
 		btn.addEventListener('click', () => setDashboardChecked(!dashboardChecked));
-		modeDiv.append(btn, el('span', { class: 'ms-mode-text', text: 'Sve karte kao prozori preko cijelog zaslona, bez stranice' }));
+		// these take effect on the tick, not on Primijeni: they are a way of
+		// working on the board rather than part of the view it shows, so there is
+		// nothing to hold back — tick the grid on, see it, shut the dialog
+		modeDiv.append(btn,
+			buildGridToggle('Prikaži mrežu', gridChecked, (on) => { gridChecked = on; setGridPrefs(gridChecked, snapChecked); }),
+			buildGridToggle('Poravnaj uz mrežu', snapChecked, (on) => { snapChecked = on; setGridPrefs(gridChecked, snapChecked); }));
 	}
 	renderModeRow();
 
