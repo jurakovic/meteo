@@ -746,10 +746,10 @@ document.addEventListener("keydown",e=>{const t=document.getElementById("mapSett
 toggleMapSettings()):setMapSettingsVisible(t,!1))});const MS_TAB_KEY="msTab",MS_TAB_MAX_WIDTH=300,MS_TAB_EDGE=8;let msTabMoved=!1
 ;function loadMsTab(){try{const e=JSON.parse(localStorage.getItem("msTab"))
 ;return e&&"object"==typeof e&&Number.isFinite(e.left)&&Number.isFinite(e.width)?e:null}catch{return null}}function saveMsTab(e){
-const t=e.getBoundingClientRect();localStorage.setItem("msTab",JSON.stringify({left:roundFraction(t.left/viewportWidth()),
-width:Math.round(t.width)}))}function msTabMinWidth(e){const t=e.style.width;e.style.width="";const a=e.offsetWidth;return e.style.width=t,a
-}function placeMsTab(e,t,a){a=clamp(a,msTabMinWidth(e),300),t=clamp(t,0,Math.max(0,viewportWidth()-a)),e.style.width=`${Math.round(a)}px`,
-e.style.left=`${Math.round(t)}px`,e.style.transform="none"}function applyStoredMsTab(){
+const t=e.getBoundingClientRect();try{localStorage.setItem("msTab",JSON.stringify({left:roundFraction(t.left/viewportWidth()),
+width:Math.round(t.width)}))}catch(e){}}function msTabMinWidth(e){const t=e.style.width;e.style.width="";const a=e.offsetWidth
+;return e.style.width=t,a}function placeMsTab(e,t,a){a=clamp(a,msTabMinWidth(e),300),t=clamp(t,0,Math.max(0,viewportWidth()-a)),
+e.style.width=`${Math.round(a)}px`,e.style.left=`${Math.round(t)}px`,e.style.transform="none"}function applyStoredMsTab(){
 const e=document.querySelector(".ms-tab"),t=loadMsTab();e&&t&&placeMsTab(e,t.left*viewportWidth(),t.width)}function buildMsTabCluster(e){
 const t=el("a",{class:"ms-tab-btn",text:"[R]",title:"Osvježi sve karte (R)"});t.addEventListener("click",()=>reloadAllMaps())
 ;const a=el("a",{class:"ms-tab-btn","data-grid":"show",text:"[G]",title:"Prikaži mrežu (G)"})

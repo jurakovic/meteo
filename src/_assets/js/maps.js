@@ -1245,7 +1245,9 @@ function loadMsTab() {
 
 function saveMsTab(tab) {
 	const rect = tab.getBoundingClientRect();
-	localStorage.setItem(MS_TAB_KEY, JSON.stringify({ left: roundFraction(rect.left / viewportWidth()), width: Math.round(rect.width) }));
+	try {
+		localStorage.setItem(MS_TAB_KEY, JSON.stringify({ left: roundFraction(rect.left / viewportWidth()), width: Math.round(rect.width) }));
+	} catch (e) { /* storage disabled or full — the tab still moves this session */ }
 }
 
 // the width its name takes is the narrowest it goes: measured with the width unset (0 while it is not shown)
