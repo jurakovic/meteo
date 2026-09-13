@@ -1811,7 +1811,12 @@ function applySnapLayout(layout) {
 	resetSnapColumns();
 	// the mode before anything is measured: the page's scrollbar goes with it
 	setDashboard(!!(layout && layout.dashboard && POPOUT_MQ.matches));
-	if (!layout || !POPOUT_MQ.matches) return;
+	// nothing to place, but the sweep still has to run: the widgets this
+	// replaces went with the tbody (renderMaps) instead of being docked, so
+	// their shadows are left in the layer with no widget to own them, and the
+	// updateCovered that would have swept them is below this return. Leaving
+	// the board with nothing placed is exactly this case
+	if (!layout || !POPOUT_MQ.matches) { syncShadows(); return; }
 	snapPersistPaused = true; // what is being applied is already what is stored
 	const toFullscreen = [];
 	const groupIds = new Map(); // stored group number → a fresh id
