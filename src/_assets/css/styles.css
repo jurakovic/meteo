@@ -1035,6 +1035,12 @@ body.fs-lock {
 	background-color: #ff9800;
 	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
 	cursor: pointer;
+	/* it hangs over the board the whole time it is shown, and the board is the
+	   maps: faint until it is wanted, so the widgets under it are not read
+	   through a strip of orange, and lit the moment the pointer reaches it or
+	   the dialog it opens is up — where it is the button that is pressed in */
+	opacity: 0.55;
+	transition: opacity 0.15s ease;
 	/* dragged along the top and pulled wider by its sides (maps.js) */
 	box-sizing: border-box;
 	/* its name and its glyphs in a row: the width they take together is also the
@@ -1050,6 +1056,11 @@ body.fs-lock {
 
 	.ms-tab:hover {
 		background-color: #ffa726;
+	}
+
+	.ms-tab:hover,
+	body.ms-open .ms-tab {
+		opacity: 1;
 	}
 
 	/* the name is what gives way when the tab is pulled narrower: it ellipsises

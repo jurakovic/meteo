@@ -1225,12 +1225,11 @@ document.addEventListener('keydown', (e) => {
 
 // the fixed tab to the dialog can be dragged along the top edge and pulled
 // wider or narrower by either side — no narrower than its name, no wider
-// than MS_TAB_MAX_WIDTH, held inside the viewport — and where it was put is
+// than msTabMaxWidth(), held inside the viewport — and where it was put is
 // remembered in this browser only (msTab: the left as a fraction of the
 // viewport, the width in px), not in the arrangement; a click that did not
 // move opens the dialog
 const MS_TAB_KEY = 'msTab';
-const MS_TAB_MAX_WIDTH = 300;
 const MS_TAB_EDGE = 8; // a press this close to a side resizes; elsewhere drags
 let msTabMoved = false; // the release of a drag is no click
 
@@ -1259,8 +1258,24 @@ function msTabMinWidth(tab) {
 	return min;
 }
 
+// half the viewport rather than a fixed number of pixels: the tab is the one
+// way to the dialog and not a bar of its own, so how much of the top edge it
+// may take is a share of that edge. Read on every place instead of stored, so
+// a window resized under it holds it to the half it has now
+function msTabMaxWidth() {
+	return viewportWidth() / 2;
+}
+
+// the floor beats the ceiling: on a narrow window the name and the cluster can
+// take more than half of it, and a tab cut below what they need would ellipsise
+// its own name for nothing
+function msTabWidth(tab, width) {
+	const min = msTabMinWidth(tab);
+	return clamp(width, min, Math.max(min, msTabMaxWidth()));
+}
+
 function placeMsTab(tab, left, width) {
-	width = clamp(width, msTabMinWidth(tab), MS_TAB_MAX_WIDTH);
+	width = msTabWidth(tab, width);
 	left = clamp(left, 0, Math.max(0, viewportWidth() - width));
 	tab.style.width = `${Math.round(width)}px`;
 	tab.style.left = `${Math.round(left)}px`;
@@ -1334,7 +1349,7 @@ function initMsTab() {
 			if (mode === 'move') placeMsTab(tab, rect.left + dx, rect.width);
 			else if (mode === 'e') placeMsTab(tab, rect.left, rect.width + dx);
 			else {
-				const width = clamp(rect.width - dx, msTabMinWidth(tab), MS_TAB_MAX_WIDTH);
+				const width = msTabWidth(tab, rect.width - dx);
 				placeMsTab(tab, rect.right - width, width); // the right side stays
 			}
 		}, () => { if (msTabMoved) saveMsTab(tab); });
