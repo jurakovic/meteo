@@ -932,6 +932,20 @@ function getActiveMapPrefs() {
 	return sharedMapView || getMapPrefs();
 }
 
+// A board is known long before there is one. The list and its arrangement are
+// in storage or in the `?v=` above, and this file is read in <head> — the build
+// inlines it there — so the answer is in hand while the body is still being
+// parsed. The board itself cannot be: every map of it is a widget, and there
+// are no maps until the render on DOMContentLoaded. On a slow load the browser
+// paints what it has well before that, so the page appeared in its ordinary
+// layout for a moment and was then taken away. The cloak hides the same two
+// things body.dashboard does, from now until the arrangement is applied.
+function cloakBoard() {
+	const layout = getActiveMapPrefs().layout;
+	if (layout && layout.dashboard && POPOUT_MQ.matches) document.documentElement.classList.add('board-boot');
+}
+cloakBoard();
+
 // which chip the panel opens on. Only a shared list is matched back to a
 // preset: saved preferences hold "custom" because the user applied a list
 // without saving it, and binding that to a preset id behind their back would
@@ -2238,3 +2252,8 @@ if (document.readyState === 'loading') {
 // the remembered arrangement, once the maps are there — registered after the
 // render above, and DOMContentLoaded is also when main.js (dlog) has run in dev
 document.addEventListener('DOMContentLoaded', applyStoredSnapLayout);
+// and the cloak comes off, whatever the arrangement turned out to be — in a
+// listener of its own rather than at the end of the apply, since listeners run
+// independently of one another and a throw in that one must not leave the page
+// hidden behind a board that never arrived
+document.addEventListener('DOMContentLoaded', () => document.documentElement.classList.remove('board-boot'));

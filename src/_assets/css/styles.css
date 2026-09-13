@@ -578,6 +578,21 @@ body.fs-lock {
 	/* the dashboard: the page — and all on it but the widgets, which are
 	   fixed and stay rendered — out of sight and out of reach, no scrollbar;
 	   the widgets, the columns and the dialog are all there is */
+	/* the board before the board is there: maps.js reads the view out of storage
+	   or the address while <head> is parsing and sets this on <html>, since the
+	   arrangement itself waits on the render and cannot be applied until
+	   DOMContentLoaded (cloakBoard). The same two things hidden as below, and
+	   the scrollbar with them, so what shows meanwhile is the ground the widgets
+	   are about to stand on rather than the page they are not going to be in */
+	html.board-boot {
+		overflow: hidden;
+	}
+
+		html.board-boot .container,
+		html.board-boot footer {
+			visibility: hidden;
+		}
+
 	body.dashboard {
 		overflow: hidden;
 	}
