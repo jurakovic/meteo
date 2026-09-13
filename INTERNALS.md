@@ -58,9 +58,11 @@ cd src
 ./build.sh
 ```
 
+`build.sh` runs `unix2dos` over all four minified assets before calling `build.ps1`, and over the built `.html` afterwards. The first pass is not cosmetic: terser and clean-css write LF, and `Prepend-Tabs` splits on CRLF, so an asset left at LF is one single line to it and reaches `docs/` with only its first line indented. The list has to name every asset — `maps.min.js` and `popout.min.js` were missing from it, which is why their inlined bodies used to sit unindented in the built page.
+
 `build.ps1` produces `docs/` from `src/` by processing every `.html` file (except `_components/`):
 
-1. inlines the minified assets (`styles.min.css`, `main.min.js`, `maps.min.js`, `popout.min.js`) in place of their `<link>`/`<script>` tags
+1. inlines the minified assets (`styles.min.css`, `main.min.js`, `maps.min.js`, `popout.min.js`) in place of their `<link>`/`<script>` tags, each line indented by `Prepend-Tabs`
 2. injects `_components/*.c.html` (seo, gtag, links) at their placeholders
 3. rewrites dev paths to GitHub Pages paths (`href="/customize/index.html` → `/meteo/customize/`, `href="/"` → `/meteo/"`, image paths, the extras stub's `url=`)
 4. strips HTML comments, trims trailing whitespace, collapses blank lines
