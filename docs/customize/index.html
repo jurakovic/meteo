@@ -214,10 +214,9 @@ t.querySelectorAll(".po-btn").forEach(t=>setPopoutButton(t,!1)),unfitTitles(t),p
 setDashboard(!1),layoutSnapColumns(),document.querySelectorAll(".map-block.popout").forEach(dockMap),persistSnapLayout(),syncShadows()}
 let dashboardMode=!1;const CASCADE_STEP=32;function isDashboard(){return dashboardMode}function setDashboard(t){dashboardMode=t,
 document.body.classList.toggle("dashboard",t),
-renderGrid(),document.querySelectorAll(".map-block.popout .po-btn").forEach(t=>setPopoutButton(t,!0))}function popoutRest(){let t=0
-;document.querySelectorAll(".map-block:not(.popout)").forEach(e=>{popoutMap(e)
-;const o=Math.max(1,Math.floor((viewportHeight()-16-e.offsetHeight)/32)),n=t%o,s=Math.floor(t/o);t++,
-placePopout(e,snapColumnPx(snapColumns.left)+16+32*n+420*s/2,16+32*n),raisePopout(e)})}function removeFromDashboard(t){
+renderGrid(),document.querySelectorAll(".map-block.popout .po-btn").forEach(t=>setPopoutButton(t,!0))}function popoutRest(){let t=16,e=0
+;document.querySelectorAll(".map-block:not(.popout)").forEach(o=>{popoutMap(o),t>16&&t+o.offsetHeight>viewportHeight()&&(t=16,e++),
+placePopout(o,snapColumnPx(snapColumns.left)+16+(t-16)+420*e/2,t),raisePopout(o),t+=32})}function removeFromDashboard(t){
 dlog(`removeFromDashboard: ${t.dataset.mapId}`);const e=t.dataset.mapId;snapPersistPaused=!0,dockMap(t),snapPersistPaused=!1
 ;const o=t.closest("tr"),n=o.nextElementSibling,s=n&&n.querySelector(".links-bottom")?n:null,a=s||o
 ;[s,o.previousElementSibling&&o.previousElementSibling.classList.contains("sp20")?o.previousElementSibling:a.nextElementSibling&&a.nextElementSibling.classList.contains("sp20")?a.nextElementSibling:null,o].forEach(t=>{

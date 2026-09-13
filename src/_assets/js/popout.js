@@ -235,16 +235,24 @@ function setDashboard(on) {
 // it would run off the bottom the next round starts at the top again, half
 // a widget further right
 function popoutRest() {
-	let k = 0;
+	let top = POPOUT_MARGIN, round = 0;
 	document.querySelectorAll('.map-block:not(.popout)').forEach(block => {
 		popoutMap(block);
-		const steps = Math.max(1, Math.floor((viewportHeight() - POPOUT_MARGIN - block.offsetHeight) / CASCADE_STEP));
-		const step = k % steps, round = Math.floor(k / steps);
-		k++;
+		// the widget's own height says whether it still fits, but the step it
+		// lands on is the cascade's own count and not a number of steps derived
+		// from that height: widgets are of every height, so a per-widget count
+		// is a different modulus for each and lands several of them on the very
+		// same place. The first of a round goes down whatever its height, or one
+		// taller than the viewport would start a round of its own for ever
+		if (top > POPOUT_MARGIN && top + block.offsetHeight > viewportHeight()) {
+			top = POPOUT_MARGIN;
+			round++;
+		}
 		placePopout(block,
-			snapColumnPx(snapColumns.left) + POPOUT_MARGIN + step * CASCADE_STEP + round * POPOUT_WIDTH / 2,
-			POPOUT_MARGIN + step * CASCADE_STEP);
+			snapColumnPx(snapColumns.left) + POPOUT_MARGIN + (top - POPOUT_MARGIN) + round * POPOUT_WIDTH / 2,
+			top);
 		raisePopout(block);
+		top += CASCADE_STEP;
 	});
 }
 
