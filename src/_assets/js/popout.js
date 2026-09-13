@@ -1649,44 +1649,70 @@ function fitSnapFullscreen(col) {
 
 // The board's answer to the same question. A column gives a pane one axis to
 // grow in — the strip is the width, the panes above and below are the ends —
-// and the board gives a widget four sides and nothing to bound them but the
-// other widgets. So the widget's own rect is grown against them until each
-// side meets one, which leaves the largest rectangle about it that no other
-// widget stands in — and that is what the map fills, rather than the whole
-// viewport it used to take from everything around it.
+// and the board gives a widget four sides. The map takes the whole viewport
+// there, and a side comes in only where another widget *walls it off*: where
+// the widgets on that side, together, cover the rectangle from end to end of
+// its other axis. A wall is what makes a region a region — a widget down the
+// left of the screen leaves the right half a place of its own, and a map
+// filling it is filling what it is in.
 //
-// A side is grown against the widgets that lie across the span being grown, so
-// the two axes have to be done in turn, and which goes first decides the
-// answer: a widget with room to its right and room below reaches a wide short
-// rectangle one way and a tall narrow one the other. Both are worked out and
-// the larger of the two kept, which is deterministic and needs nothing
-// remembered between one fullscreen and the next.
+// A widget that does not reach across walls nothing off, and is floated over:
+// one in a corner leaves no region behind it, and taking a whole screen's map
+// down to the space beside it would be giving up the screen to a tile. Nothing
+// is lost by covering it — the widgets keep their z-index range above the
+// fullscreen map, so it stays where it is, over the corner of what is now a
+// map of the whole board.
 //
-// A widget already lying over the host is no bound: it is over the fullscreen
-// map as it was over the widget (the widgets keep their z-index range above
-// it), and there is nothing to be done about that by making the map smaller.
+// The walls are looked for again once the sides have come in, since narrowing
+// the rectangle is what lets a widget reach across it: a widget over the right
+// half alone walls off nothing of the viewport, and walls off the top of a
+// rectangle that is already the right half. It settles in a pass or two —
+// every pass only narrows — and stops when nothing moves.
+//
+// A widget lying over the host is on no side of it and so is never a wall,
+// which is the same answer for the same reason.
 function freeRectAround(rect, blockers, bounds) {
-	const spanH = (r) => {
-		let left = bounds.left, right = bounds.right;
-		blockers.forEach(b => {
-			if (b.bottom <= r.top || b.top >= r.bottom) return; // not across this span
-			if (b.right <= r.left) left = Math.max(left, b.right);
-			else if (b.left >= r.right) right = Math.min(right, b.left);
+	// the spans, laid end to end, reach from one side of the rectangle to the
+	// other. A gap no wider than POPOUT_MARGIN is no gap: that is the margin the
+	// sizing clamp keeps off the viewport edge, so a widget stored at the full
+	// height comes back exactly that much short of it and would otherwise stop
+	// walling anything the moment the page was reloaded. It is the grid's cell
+	// besides, so widgets stacked on the grid wall as the eye reads them
+	const covers = (spans, from, to) => {
+		let at = from;
+		spans.sort((a, b) => a[0] - b[0]).forEach(([lo, hi]) => {
+			if (lo <= at + POPOUT_MARGIN) at = Math.max(at, hi);
 		});
-		return { left, right, top: r.top, bottom: r.bottom };
+		return at >= to - POPOUT_MARGIN;
 	};
-	const spanV = (r) => {
-		let top = bounds.top, bottom = bounds.bottom;
-		blockers.forEach(b => {
-			if (b.right <= r.left || b.left >= r.right) return;
-			if (b.bottom <= r.top) top = Math.max(top, b.bottom);
-			else if (b.top >= r.bottom) bottom = Math.min(bottom, b.top);
-		});
-		return { left: r.left, right: r.right, top, bottom };
+	// the nearest line to the host's left that the widgets beyond it cover from
+	// `from` to `to`; the other three sides are this one under a mirror or a
+	// transpose, so there is one of these and not four
+	const leftWall = (host, walls, from, to, fallback) => {
+		const beyond = walls.filter(b => b.right <= host.left + 1);
+		const lines = [...new Set(beyond.map(b => b.right))].sort((a, b) => b - a); // nearest first
+		for (const line of lines) {
+			const across = beyond.filter(b => b.left < line - 0.5 && b.right >= line - 0.5);
+			if (covers(across.map(b => [b.top, b.bottom]), from, to)) return line;
+		}
+		return fallback;
 	};
-	const area = (r) => (r.right - r.left) * (r.bottom - r.top);
-	const wide = spanV(spanH(rect)), tall = spanH(spanV(rect));
-	return area(wide) >= area(tall) ? wide : tall;
+	const mirror = (r) => ({ left: -r.right, right: -r.left, top: r.top, bottom: r.bottom });
+	const flip = (r) => ({ left: r.top, right: r.bottom, top: r.left, bottom: r.right });
+	const both = (r) => mirror(flip(r));
+	const mirrored = blockers.map(mirror), flipped = blockers.map(flip), bothed = blockers.map(both);
+	let out = { ...bounds };
+	for (let pass = 0; pass < 4; pass++) {
+		const next = {
+			left: leftWall(rect, blockers, out.top, out.bottom, bounds.left),
+			right: -leftWall(mirror(rect), mirrored, out.top, out.bottom, -bounds.right),
+			top: leftWall(flip(rect), flipped, out.left, out.right, bounds.top),
+			bottom: -leftWall(both(rect), bothed, out.left, out.right, -bounds.bottom)
+		};
+		if (next.left === out.left && next.right === out.right && next.top === out.top && next.bottom === out.bottom) break;
+		out = next;
+	}
+	return out;
 }
 
 function fitBoardFullscreen() {
