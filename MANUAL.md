@@ -104,7 +104,7 @@ Interaktivne karte nemaju `[R]` — one same dohvaćaju najnovije podatke, pa ih
 
 Prozori se međusobno privlače: kad se rub približi rubu drugog prozora, sam sjedne na njega. Tako se lako slaže uredna mreža bez mjerkanja.
 
-Slike i videa zadržavaju svoj omjer, pa im se mijenja samo širina. Ako želite slobodnu visinu, **držite Shift dok počinjete povlačiti rub** — karta se tada uklapa unutar okvira, s neoštrom kopijom slike kao podlogom. Povlačenje bez Shifta, ili dvoklik na naslovnu traku, vraća omjer.
+Slike i videa zadržavaju svoj omjer, pa im se mijenja samo širina. Šire se do veličine same slike — dalje se ne ide jer bi karta prestala rasti, a prozor bi se nastavio širiti oko nje. Ako želite slobodnu visinu, **držite Shift dok počinjete povlačiti rub** — karta se tada uklapa unutar okvira, s neoštrom kopijom slike kao podlogom. Povlačenje bez Shifta, ili dvoklik na naslovnu traku, vraća omjer.
 
 Kad je karta tako razvučena, naslovna traka ide cijelom širinom prozora, a slika stoji sredinom. Strelice `❮` i `❯` i kvadratići ispod nje drže se same slike, a ne cijelog prozora, pa pokazuju na ono što i jesu.
 

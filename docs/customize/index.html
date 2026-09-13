@@ -216,9 +216,9 @@
 		function fitLetterbox(t){
 		const e=["--lb-l","--lb-r","--lb-t","--lb-b","--lb-w"],o=t.querySelector(".slideshow"),n=t.querySelector(".slide.active img")||t.querySelector(".placeholder img")
 		;if(!(t.classList.contains("letterbox")&&o&&n&&n.naturalWidth&&n.clientWidth))return void e.forEach(e=>t.style.removeProperty(e))
-		;const s=n.getBoundingClientRect(),i=o.getBoundingClientRect(),a=n.naturalWidth/n.naturalHeight,r=Math.min(s.width,s.height*a),l=Math.min(s.height,s.width/a),p=s.left+(s.width-r)/2,u=s.top+(s.height-l)/2,c=t=>`${Math.round(Math.max(0,t))}px`
-		;t.style.setProperty("--lb-l",c(p-i.left)),t.style.setProperty("--lb-r",c(i.right-(p+r))),t.style.setProperty("--lb-t",c(u-i.top)),
-		t.style.setProperty("--lb-b",c(i.bottom-(u+l))),t.style.setProperty("--lb-w",c(r))}function fitWidget(t){fitTitles(t),fitLetterbox(t)}
+		;const s=n.getBoundingClientRect(),i=o.getBoundingClientRect(),a=n.naturalWidth/n.naturalHeight,r=Math.min(s.width,s.height*a),l=Math.min(s.height,s.width/a),p=s.left+(s.width-r)/2,c=s.top+(s.height-l)/2,u=t=>`${Math.round(Math.max(0,t))}px`
+		;t.style.setProperty("--lb-l",u(p-i.left)),t.style.setProperty("--lb-r",u(i.right-(p+r))),t.style.setProperty("--lb-t",u(c-i.top)),
+		t.style.setProperty("--lb-b",u(i.bottom-(c+l))),t.style.setProperty("--lb-w",u(r))}function fitWidget(t){fitTitles(t),fitLetterbox(t)}
 		function dockMap(t){dlog(`dockMap: ${t.dataset.mapId}`);const e=t.querySelector(".if1.fullscreen");e&&exitFullscreen(e),
 		t._group&&leaveGroup(t),unsnapPane(t),t.classList.remove("popout","free","grouped","letterbox","covered"),
 		["left","top","width","height","z-index","--po-img","--lb-l","--lb-r","--lb-t","--lb-b","--lb-w"].forEach(e=>t.style.removeProperty(e)),
@@ -268,10 +268,10 @@
 		document.body.classList.remove("po-dragging"),o&&o()};document.body.classList.add("po-dragging"),document.addEventListener("pointermove",i),
 		document.addEventListener("pointerup",a),document.addEventListener("pointercancel",a)}function dragPopout(t,e){
 		let o=t.getBoundingClientRect();const n={x:e.clientX-o.left,y:e.clientY-o.top},s=groupMembers(t)
-		;let i=groupStarts(s),a=groupBox(i),r=snapColumnOf(t);const l=magnetRects(t,s);let p=null;trackPopoutPointer(e,(e,u,c)=>{
-		const d=Math.hypot(e,u)>=SNAP_ARM;if(r){if(Math.abs(e)<SNAP_DETACH)return void(d&&movePanes(r,i,a,u));s.forEach(unsnapPane),r=null,
-		o=t.getBoundingClientRect(),n.x=Math.min(n.x,t.offsetWidth-23),n.y=clamp(c.clientY-o.top,0,23),i=groupStarts(s),a=groupBox(i)}
-		let h=a.left+c.clientX-n.x-o.left,f=a.top+c.clientY-n.y-o.top;const g=d?snapSideAt(h,h+a.width):null;p=g?{side:g,slot:snapSlot(s,g,f)}:null,
+		;let i=groupStarts(s),a=groupBox(i),r=snapColumnOf(t);const l=magnetRects(t,s);let p=null;trackPopoutPointer(e,(e,c,u)=>{
+		const d=Math.hypot(e,c)>=SNAP_ARM;if(r){if(Math.abs(e)<SNAP_DETACH)return void(d&&movePanes(r,i,a,c));s.forEach(unsnapPane),r=null,
+		o=t.getBoundingClientRect(),n.x=Math.min(n.x,t.offsetWidth-23),n.y=clamp(u.clientY-o.top,0,23),i=groupStarts(s),a=groupBox(i)}
+		let h=a.left+u.clientX-n.x-o.left,f=a.top+u.clientY-n.y-o.top;const g=d?snapSideAt(h,h+a.width):null;p=g?{side:g,slot:snapSlot(s,g,f)}:null,
 		d&&!p&&({left:h,top:f}=magnetPosition(l,h,f,a.width,a.height)),moveGroup(i,a,h-a.left,f-a.top),showSnapPreview(p?p.slot:null)},()=>{
 		showSnapPreview(null),p?snapPanes(byPlace(s),p.side,p.slot):(snapToGrid(s),persistSnapLayout())})}function byPlace(t){
 		return[...t].sort((t,e)=>{const o=t.getBoundingClientRect(),n=e.getBoundingClientRect();return o.top-n.top||o.left-n.left})}
@@ -279,9 +279,9 @@
 		return floatingBlocks().filter(o=>o!==t&&!e.includes(o)&&!o.classList.contains("fs-host")).map(t=>t.getBoundingClientRect())}
 		function magnetPosition(t,e,o,n,s){const i=e+n,a=o+s,r=(t,e)=>{const o=magnetEdge(t,e.map(t=>t[0]));return null===o?null:e.find(t=>t[0]===o)
 		},l=t.filter(t=>o<t.bottom&&a>t.top),p=t.filter(t=>e<t.right&&i>t.left)
-		;let u=r(e,l.flatMap(t=>[[t.right,t],[t.left-n,t]])),c=r(o,p.flatMap(t=>[[t.bottom,t],[t.top-s,t]]))
-		;return u&&!c&&(c=r(o,[[u[1].top,u[1]],[u[1].bottom-s,u[1]]])),c&&!u&&(u=r(e,[[c[1].left,c[1]],[c[1].right-n,c[1]]])),{left:u?u[0]:e,
-		top:c?c[0]:o}}function magnetEdge(t,e){let o=null;return e.forEach(e=>{Math.abs(e-t)<=12&&(null===o||Math.abs(e-t)<Math.abs(o-t))&&(o=e)}),o
+		;let c=r(e,l.flatMap(t=>[[t.right,t],[t.left-n,t]])),u=r(o,p.flatMap(t=>[[t.bottom,t],[t.top-s,t]]))
+		;return c&&!u&&(u=r(o,[[c[1].top,c[1]],[c[1].bottom-s,c[1]]])),u&&!c&&(c=r(e,[[u[1].left,u[1]],[u[1].right-n,u[1]]])),{left:c?c[0]:e,
+		top:u?u[0]:o}}function magnetEdge(t,e){let o=null;return e.forEach(e=>{Math.abs(e-t)<=12&&(null===o||Math.abs(e-t)<Math.abs(o-t))&&(o=e)}),o
 		}let groupSeq=0;function allPopouts(){return[...document.querySelectorAll(".map-block.popout")]}function floatingBlocks(){
 		return[...document.querySelectorAll(".map-block.popout:not(.snapped)")]}function groupMembers(t){
 		return t._group?allPopouts().filter(e=>e._group===t._group):[t]}function placeMates(t){const e=snapColumnOf(t)
@@ -308,17 +308,17 @@
 		function subpixel(t){return Math.round(1e3*t)/1e3}function resizePopout(t,e,o){const n=groupMembers(t),s=snapColumnOf(t)
 		;if(n.length>1&&!s)return resizeGroup(n,e,o)
 		;s||!o.shiftKey||t.classList.contains("free")?s||o.shiftKey||!t.classList.contains("letterbox")||lockAspect(t):unlockAspect(t)
-		;const i=t.getBoundingClientRect(),a=t.classList.contains("free"),r=i.width/i.height,l=popoutMaxWidth(),p=viewportHeight()-16,u=s?[]:magnetRects(t),c=s?groupStarts(n.filter(e=>e!==t)):[],d=c.filter(t=>t.top<i.top),h=c.filter(t=>t.top>i.top),f=Math.min(i.top,...d.map(t=>t.top)),g=Math.max(i.bottom,...h.map(t=>t.bottom))
-		;trackPopoutPointer(o,(o,c)=>{let h=i.width,m=i.height;if(e.includes("e")&&(h=i.width+o),e.includes("w")&&(h=i.width-o),
-		e.includes("s")&&(m=i.height+c),e.includes("n")&&(m=i.height-c),s){const o=paneMagnetEdges(s,n);if(e.includes("s")){
+		;const i=t.getBoundingClientRect(),a=t.classList.contains("free"),r=i.width/i.height,l=lockedMaxWidth(t,popoutMaxWidth()),p=viewportHeight()-16,c=s?[]:magnetRects(t),u=s?groupStarts(n.filter(e=>e!==t)):[],d=u.filter(t=>t.top<i.top),h=u.filter(t=>t.top>i.top),f=Math.min(i.top,...d.map(t=>t.top)),g=Math.max(i.bottom,...h.map(t=>t.bottom))
+		;trackPopoutPointer(o,(o,u)=>{let h=i.width,m=i.height;if(e.includes("e")&&(h=i.width+o),e.includes("w")&&(h=i.width-o),
+		e.includes("s")&&(m=i.height+u),e.includes("n")&&(m=i.height-u),s){const o=paneMagnetEdges(s,n);if(e.includes("s")){
 		const t=magnetEdge(i.top+m,o);null!==t&&(m=t-i.top)}if(e.includes("n")){const t=magnetEdge(i.bottom-m,o);null!==t&&(m=i.bottom-t)}
 		m=clamp(m,120,i.height+(e.includes("n")?f:viewportHeight()-g));const a=snapPaneOf(t);return a.height=m/viewportHeight(),
 		a.top=(e.includes("n")?i.bottom-m:i.top)/viewportHeight(),e.includes("n")&&d.forEach(t=>{
-		snapPaneOf(t.block).top=(t.top-(m-i.height))/viewportHeight()}),void layoutSnapColumns()}if(({w:h,h:m}=pullResizeEdges(u,e,i,h,m)),
+		snapPaneOf(t.block).top=(t.top-(m-i.height))/viewportHeight()}),void layoutSnapColumns()}if(({w:h,h:m}=pullResizeEdges(c,e,i,h,m)),
 		a)h=clamp(h,260,l),
 		m=clamp(m,120,p),t.style.height=`${Math.round(m)}px`;else if("n"===e||"s"===e?h=lockedWidthFor(t,m,m*r,r,l):2===e.length&&(h=Math.max(h,lockedWidthFor(t,m,m*r,r,l))),
-		(e.includes("e")||e.includes("w"))&&2!==e.length||(h=pullResizeEdges(u,e.includes("w")?"w":"e",i,h,m).w),h=clamp(h,260,l),"n"!==e&&"s"!==e){
-		const o=(e.includes("n")?"n":"s")+(e.includes("w")?"w":""),n=lockedHeightAt(t,h),s=pullResizeEdges(u,o,i,h,n).h
+		(e.includes("e")||e.includes("w"))&&2!==e.length||(h=pullResizeEdges(c,e.includes("w")?"w":"e",i,h,m).w),h=clamp(h,260,l),"n"!==e&&"s"!==e){
+		const o=(e.includes("n")?"n":"s")+(e.includes("w")?"w":""),n=lockedHeightAt(t,h),s=pullResizeEdges(c,o,i,h,n).h
 		;Math.abs(s-n)>.5&&(h=lockedWidthFor(t,s,h+(s-n)*r,r,l))}t.style.width=`${Math.round(h)}px`,m=t.getBoundingClientRect().height,
 		placePopout(t,e.includes("w")?i.right-h:i.left,e.includes("n")?i.bottom-m:i.top),fitWidget(t)},()=>{snapToGrid([t]),persistSnapLayout()})}
 		function pullResizeEdges(t,e,o,n,s){
@@ -328,13 +328,19 @@
 		e.includes("s")&&(s=p(o.top+s,l.map(t=>t.top),r.map(t=>t.bottom))-o.top),
 		e.includes("n")&&(s=o.bottom-p(o.bottom-s,l.map(t=>t.bottom),r.map(t=>t.top))),{w:n,h:s}}function lockedWidthFor(t,e,o,n,s){
 		for(let i=0;i<3;i++){const i=lockedHeightAt(t,o=clamp(o,260,s));if(Math.abs(i-e)<.5)break;o+=(e-i)*n}return clamp(o,260,s)}
-		function lockedHeightAt(t,e){return t.style.width=`${Math.round(e)}px`,t.getBoundingClientRect().height}function resizeGroup(t,e,o){
-		const n=groupStarts(t);n.forEach(t=>{t.width=t.right-t.left,t.height=t.bottom-t.top,t.free=t.block.classList.contains("free")})
-		;const s=groupBox(n);s.right=s.left+s.width,s.bottom=s.top+s.height
-		;const i=groupRelations(n),a=[...n].sort((t,e)=>t.top-e.top||t.left-e.left),r=magnetRects(t[0],t),l=e.includes("w")?s.right:s.left,p=e.includes("n")?s.bottom:s.top,u=Math.max(260/Math.min(...n.map(t=>t.width)),...n.filter(t=>t.free).map(t=>120/t.height)),c=Math.min(popoutMaxWidth()/Math.max(...n.map(t=>t.width)),(e.includes("w")?s.right:viewportWidth()-s.left)/s.width,(e.includes("n")?s.bottom:viewportHeight()-s.top)/s.height)
+		function lockedHeightAt(t,e){return t.style.width=`${Math.round(e)}px`,t.getBoundingClientRect().height}function lockedMaxWidth(t,e){
+		if(t.classList.contains("free"))return e;const o=t.style.width;t.style.width=`${Math.round(e)}px`;const n=snapContentWidth(t)
+		;return t.style.width=o,n>0?Math.max(260,Math.min(e,n)):e}function holdLockedWidth(t){if(t.classList.contains("free")||isSnapped(t))return
+		;const e=t.querySelector(".slide.active img")||t.querySelector(".placeholder img");if(e&&(!e.complete||!e.naturalWidth))return
+		;const o=lockedMaxWidth(t,popoutMaxWidth())
+		;t.getBoundingClientRect().width>o+.5&&(dlog(`holdLockedWidth: ${t.dataset.mapId} → ${Math.round(o)}`),t.style.width=`${Math.round(o)}px`,
+		placePopout(t,t.getBoundingClientRect().left,t.getBoundingClientRect().top))}function resizeGroup(t,e,o){const n=groupStarts(t)
+		;n.forEach(t=>{t.width=t.right-t.left,t.height=t.bottom-t.top,t.free=t.block.classList.contains("free")});const s=groupBox(n)
+		;s.right=s.left+s.width,s.bottom=s.top+s.height
+		;const i=groupRelations(n),a=[...n].sort((t,e)=>t.top-e.top||t.left-e.left),r=magnetRects(t[0],t),l=e.includes("w")?s.right:s.left,p=e.includes("n")?s.bottom:s.top,c=Math.max(260/Math.min(...n.map(t=>t.width)),...n.filter(t=>t.free).map(t=>120/t.height)),u=Math.min(...n.map(t=>lockedMaxWidth(t.block,popoutMaxWidth())/t.width),(e.includes("w")?s.right:viewportWidth()-s.left)/s.width,(e.includes("n")?s.bottom:viewportHeight()-s.top)/s.height)
 		;trackPopoutPointer(o,(o,d)=>{let h=s.width,f=s.height;e.includes("e")&&(h=s.width+o),e.includes("w")&&(h=s.width-o),
 		e.includes("s")&&(f=s.height+d),e.includes("n")&&(f=s.height-d),({w:h,h:f}=pullResizeEdges(r,e,s,h,f))
-		;let g="n"===e||"s"===e?f/s.height:2===e.length?Math.max(h/s.width,f/s.height):h/s.width;g=clamp(g,u,Math.max(u,c)),n.forEach(t=>{
+		;let g="n"===e||"s"===e?f/s.height:2===e.length?Math.max(h/s.width,f/s.height):h/s.width;g=clamp(g,c,Math.max(c,u)),n.forEach(t=>{
 		t.block.style.width=`${Math.round(t.width*g)}px`,t.free&&(t.block.style.height=`${Math.round(t.height*g)}px`)});const m=[];a.forEach(t=>{
 		let e=l+(t.left-l)*g,o=p+(t.top-p)*g;const n=t.block.offsetWidth,s=t.block.offsetHeight
 		;i.filter(e=>e.to===t&&m.includes(e.from)).forEach(t=>{const i=t.from.block.getBoundingClientRect()
@@ -465,10 +471,10 @@
 		if(!t||"object"!=typeof t)return null
 		;const o={},n=new Set,s=(t,e=1)=>Number.isFinite(t)&&t>=0&&t<=e,i=t=>Number.isInteger(t.group)&&t.group>0?t.group:void 0,a=!0===t.dashboard
 		;if(["left","right"].forEach(r=>{if(a)return;const l=t[r];if(!l||"object"!=typeof l||!Array.isArray(l.panes))return;const p=Number(l.width)
-		;if(!(p>0&&p<=1))return;const u=[];let c=0;l.panes.forEach(t=>{if(!t||"string"!=typeof t.id||!e.includes(t.id)||n.has(t.id))return;const o={
+		;if(!(p>0&&p<=1))return;const c=[];let u=0;l.panes.forEach(t=>{if(!t||"string"!=typeof t.id||!e.includes(t.id)||n.has(t.id))return;const o={
 		id:t.id},a=Number(t.top),r=Number(t.height),l=Number(t.share);if(s(a))o.top=roundFraction(a);else{if(!(l>0&&l<=1))return
-		;o.top=roundFraction(c),o.height=roundFraction(l),c+=l}s(r)&&r>0&&(o.height=roundFraction(r));const p=i(t);p&&(o.group=p),
-		!0===t.fullscreen&&hasFullscreen(t.id)&&(o.fullscreen=!0),n.add(t.id),u.push(o)}),u.length&&(o[r]={width:roundFraction(p),panes:u})}),
+		;o.top=roundFraction(u),o.height=roundFraction(l),u+=l}s(r)&&r>0&&(o.height=roundFraction(r));const p=i(t);p&&(o.group=p),
+		!0===t.fullscreen&&hasFullscreen(t.id)&&(o.fullscreen=!0),n.add(t.id),c.push(o)}),c.length&&(o[r]={width:roundFraction(p),panes:c})}),
 		o.left&&o.right&&o.left.width+o.right.width>1&&(o.right.width=roundFraction(1-o.left.width),o.right.width<=0&&delete o.right),
 		Array.isArray(t.floating)){
 		const a=t.floating.filter(t=>t&&"string"==typeof t.id&&e.includes(t.id)&&!n.has(t.id)&&s(Number(t.left))&&s(Number(t.top))&&s(Number(t.width))&&Number(t.width)>0).map(t=>{
@@ -508,7 +514,7 @@
 		;t.classList.toggle("fs-host",e),e?t.style.zIndex=4500:o&&raisePopout(t)}),fitBoardFullscreen(),layoutSnapColumns(),
 		POPOUT_MQ.matches&&persistSnapLayout()}),["load","click","pointerup"].forEach(t=>{document.addEventListener(t,t=>{
 		const e=t.target.closest&&t.target.closest(".map-block.popout");e&&setTimeout(()=>{
-		isSnapped(e)&&!e.classList.contains("free")&&layoutSnapColumns(),fitWidget(e),syncBackdrop(e),syncShadows()},0)},!0)});
+		isSnapped(e)&&!e.classList.contains("free")&&layoutSnapColumns(),holdLockedWidth(e),fitWidget(e),syncBackdrop(e),syncShadows()},0)},!0)});
 	</script>
 	<script>
 		const RADAR_HR_LINKS=[{text:"Windy",href:"https://www.windy.com/-Weather-radar-radar?radar,44.5,16.5,7"},{text:"Zoom Earth",
