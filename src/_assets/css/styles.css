@@ -320,8 +320,8 @@ body.fs-lock {
 	}
 
 	/* a grouped widget's frame in the snap blue, so the group reads as one */
-	.map-block.popout.grouped {
-		outline-color: #4a8de6;
+	.map-block.popout.grouped::after {
+		border-color: #4a8de6;
 	}
 
 	/* no shadow of its own: it is cast for it in the layer below every widget
@@ -330,8 +330,44 @@ body.fs-lock {
 		position: fixed;
 		z-index: 5000;
 		background-color: #212f45;
-		outline: 1px solid #2b5797;
 	}
+
+		/* the frame, laid over the widget by a pseudo rather than drawn by a
+		   border or an outline.
+		   Not a border: a border is laid out, and every height here is read back
+		   off the box (lockedHeightAt, the inline height of a free widget), so
+		   one would have to be accounted for in all of them.
+		   Not an outline either, though that is what this was. An outline is
+		   painted outside the border box, so two widgets set flush drew their
+		   edges one pixel inside each other: the edge missed the grid line its
+		   box had landed on, and which of the two showed depended on the order
+		   they had been clicked in. Pulling it back in with outline-offset: -1px
+		   put the edge where the snap had put the box — and lost it: Chromium
+		   paints an element's outline with its own background, under every
+		   positioned descendant, and .radartitle, .if1 and the letterboxed
+		   media are all positioned. The frame survived only in the gaps no
+		   content reached.
+		   A pseudo is a positioned descendant itself, and the last one in tree
+		   order, so it paints over the content while laying nothing out. It
+		   inherits the visibility: hidden of .fs-host, which is what takes the
+		   frame away under a fullscreen map.
+		   Two widgets set flush therefore show a two pixel seam, one edge of
+		   each, and a grouped one beside a loose one shows both colours. That
+		   is wanted: every widget's frame is its own, drawn the same whatever
+		   stands beside it. Collapsing the seam to one pixel would mean asking,
+		   on every drag, resize, group and snap, which edges have a neighbour
+		   and which of the pair gives way — the order-dependence this got rid
+		   of, put back by hand. Each edge lands on the box edge, so a snapped
+		   widget's left and top cover their grid line and its right and bottom
+		   sit the one pixel inside it that a one pixel line leaves. */
+		.map-block.popout::after {
+			content: '';
+			position: absolute;
+			inset: 0;
+			border: 1px solid #2b5797;
+			z-index: 2; /* over .po-h, which straddles these edges at 1 */
+			pointer-events: none; /* and must keep catching the drag */
+		}
 
 		.map-block.popout .radartitle:not(.fullscreen) {
 			cursor: move;
