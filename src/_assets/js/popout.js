@@ -1101,19 +1101,30 @@ document.addEventListener('keydown', (e) => {
 	if (e.key === 'r' || e.key === 'R') { e.preventDefault(); reloadAllMaps(); return; }
 	if (e.key === 'g' || e.key === 'G') { e.preventDefault(); toggleGridShown(); return; }
 	if (e.key === 's' || e.key === 'S') { e.preventDefault(); toggleGridSnapped(); return; }
+	// the arrows belong to whatever is on top. While the dialog is open that is
+	// the dialog: its body is the only thing that scrolls there, and a widget
+	// behind it is not what an arrow pressed on the map list is aimed at. The
+	// grid keys above are another matter — those two switches are the dialog's
+	// own as well, and it is re-read when they change (setGridPrefs)
 	const nudge = NUDGE_KEYS[e.key];
-	if (!nudge) return;
+	if (!nudge || mapSettingsOpen()) return;
 	e.preventDefault(); // the page would scroll under it
 	const step = e.shiftKey ? 1 : GRID_CELL;
 	nudgePopout(nudge[0] * step, nudge[1] * step);
 });
 
-// the dialog is over everything and owns Escape while it is open; under it
-// Escape ends a fullscreen map, and under that it does nothing — backing out
-// is not a reason to take an arrangement apart
-function escapeFullscreen() {
+// the dialog is over everything, so the keys it owns are its own while it is
+// there — Escape, and the arrows its body scrolls by
+function mapSettingsOpen() {
 	const panel = document.getElementById('mapSettings');
-	if (panel && !panel.hidden) return;
+	return !!panel && !panel.hidden;
+}
+
+// the dialog owns Escape while it is open; under it Escape ends a fullscreen
+// map, and under that it does nothing — backing out is not a reason to take
+// an arrangement apart
+function escapeFullscreen() {
+	if (mapSettingsOpen()) return;
 	const fs = document.querySelector('.if1.fullscreen');
 	if (fs) exitFullscreen(fs);
 }

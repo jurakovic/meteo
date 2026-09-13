@@ -171,7 +171,7 @@ Karta u bočnom stupcu se ne širi preko cijelog ekrana nego popuni svoj stupac,
 | strelice | pomiču prozor koji je na vrhu za jedno polje mreže |
 | <kbd>Shift</kbd> + strelice | isto, ali za jedan piksel |
 
-Strelice pomiču onaj prozor koji je posljednji podignut, dakle onaj koji je vidljivo iznad ostalih. Ako se pomaknuo krivi, kliknite na onaj koji ste htjeli i ponovite.
+Strelice pomiču onaj prozor koji je posljednji podignut, dakle onaj koji je vidljivo iznad ostalih. Ako se pomaknuo krivi, kliknite na onaj koji ste htjeli i ponovite. Dok je dijalog *Karte* otvoren, strelice pripadaju njemu — listaju njegov popis i ne pomiču prozor ispod njega. <kbd>G</kbd> i <kbd>S</kbd> rade i tada, jer su ta dva prekidača i u samom dijalogu.
 
 > **Tipke ne rade dok je fokus u interaktivnoj karti.** Kad kliknete u Windy ili Blitzortung, tipke prima ta karta, a ne stranica. Kliknite na naslovnu traku ili bilo gdje po stranici i tipke ponovno rade.
 
