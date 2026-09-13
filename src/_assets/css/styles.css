@@ -1619,7 +1619,31 @@ body.fs-lock {
 
 	.slide.active {
 		display: block;
+		/* the slide is the slideshow's width, not its image's. A slide is a flex
+		   item and was sized by its content, which is the image — and an image
+		   that fails to load is 0x0 (img carries max-width and no width), so the
+		   slide fell in to the width of the words in its title bar and the map
+		   became a small blue tile. An untitled slideshow never had this: its
+		   container is the .placeholder itself and carries the aspect-ratio, so
+		   it keeps its box whatever becomes of the image, which is why a failed
+		   ESSL or ESTOFEX leaves a full-size one and a failed ČHMÚ or meteoblue
+		   did not. Titled slides get the same by taking the width from above
+		   instead of from below, which leaves the .placeholder's own aspect and
+		   max-width to say how tall and how wide the map is. */
+		width: 100%;
 	}
+
+		.slide > .placeholder {
+			width: 100%;
+		}
+
+			/* the placeholder is the full width now, so an image narrower than it
+			   — its natural size under the map's cap — is centred in it rather
+			   than left against its edge, which is where the shrink-to-fit slide
+			   used to put it by being centred itself */
+			.slide > .placeholder > img {
+				margin-inline: auto;
+			}
 
 .prev, .next {
 	cursor: pointer;
