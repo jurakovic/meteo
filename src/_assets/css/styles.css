@@ -700,6 +700,25 @@ body.fs-lock {
 		bottom: var(--fs-bottom, 0px);
 	}
 
+	/* on the board the map fills the largest rectangle about its widget that no
+	   other widget stands in (fitBoardFullscreen), rather than the whole
+	   viewport: the board has no page for it to fill and no column to bound it,
+	   so the widgets around it are what bounds it. All four sides, where a pane
+	   in a column has only its two ends — and over the rule above, which gives
+	   a board's fullscreen the viewport when nothing has been fitted */
+	body.dashboard .map-block.popout.fs-host .radartitle.fullscreen {
+		left: var(--fs-left, 0px);
+		right: var(--fs-right, 0px);
+		top: var(--fs-top, 0px);
+	}
+
+	body.dashboard .map-block.popout.fs-host .if1.fullscreen {
+		left: var(--fs-left, 0px);
+		right: var(--fs-right, 0px);
+		top: calc(var(--fs-top, 0px) + 23px); /* under the bar */
+		bottom: var(--fs-bottom, 0px);
+	}
+
 	/* a fullscreen map leaves its widget's box (frame, shadow, handles) behind
 	   where it floated; only the bar and the map are to be seen */
 	.map-block.popout.fs-host {

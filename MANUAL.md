@@ -159,6 +159,8 @@ Izlazi se istim gumbom, ponovnim dvoklikom na traku ili tipkom <kbd>Esc</kbd>.
 
 Karta u bočnom stupcu se ne širi preko cijelog ekrana nego popuni svoj stupac, pa stranica pokraj nje ostaje u upotrebi.
 
+Na [nadzornoj ploči](#nadzorna-ploča) karta popuni najveći slobodan pravokutnik oko svog prozora — širi se na sve četiri strane dok ne naiđe na druge prozore. Prozor sam na ploči tako dobije cijeli ekran, a prozor uz koji stoji drugi dobije samo svoju stranu. Ostali prozori ostaju vidljivi iznad karte.
+
 ## Tipke i geste
 
 *Samo na računalu.*

@@ -493,6 +493,9 @@ function updateCovered() {
 		// map fills the column or the page and is the one thing meant to be used
 		a.block.classList.toggle('covered', under && !a.block.classList.contains('fs-host'));
 	});
+	// the same call sites, and the same reason: a widget moved or raised beside
+	// a fullscreen map on the board changes the rectangle that map is to fill
+	fitBoardFullscreen();
 	syncShadows(); // the same call sites: wherever a widget's rect or its order can have changed
 }
 
@@ -1589,6 +1592,76 @@ function fitSnapFullscreen(col) {
 	});
 }
 
+// The board's answer to the same question. A column gives a pane one axis to
+// grow in — the strip is the width, the panes above and below are the ends —
+// and the board gives a widget four sides and nothing to bound them but the
+// other widgets. So the widget's own rect is grown against them until each
+// side meets one, which leaves the largest rectangle about it that no other
+// widget stands in — and that is what the map fills, rather than the whole
+// viewport it used to take from everything around it.
+//
+// A side is grown against the widgets that lie across the span being grown, so
+// the two axes have to be done in turn, and which goes first decides the
+// answer: a widget with room to its right and room below reaches a wide short
+// rectangle one way and a tall narrow one the other. Both are worked out and
+// the larger of the two kept, which is deterministic and needs nothing
+// remembered between one fullscreen and the next.
+//
+// A widget already lying over the host is no bound: it is over the fullscreen
+// map as it was over the widget (the widgets keep their z-index range above
+// it), and there is nothing to be done about that by making the map smaller.
+function freeRectAround(rect, blockers, bounds) {
+	const spanH = (r) => {
+		let left = bounds.left, right = bounds.right;
+		blockers.forEach(b => {
+			if (b.bottom <= r.top || b.top >= r.bottom) return; // not across this span
+			if (b.right <= r.left) left = Math.max(left, b.right);
+			else if (b.left >= r.right) right = Math.min(right, b.left);
+		});
+		return { left, right, top: r.top, bottom: r.bottom };
+	};
+	const spanV = (r) => {
+		let top = bounds.top, bottom = bounds.bottom;
+		blockers.forEach(b => {
+			if (b.right <= r.left || b.left >= r.right) return;
+			if (b.bottom <= r.top) top = Math.max(top, b.bottom);
+			else if (b.top >= r.bottom) bottom = Math.min(bottom, b.top);
+		});
+		return { left: r.left, right: r.right, top, bottom };
+	};
+	const area = (r) => (r.right - r.left) * (r.bottom - r.top);
+	const wide = spanV(spanH(rect)), tall = spanH(spanV(rect));
+	return area(wide) >= area(tall) ? wide : tall;
+}
+
+function fitBoardFullscreen() {
+	const props = ['--fs-left', '--fs-right', '--fs-top', '--fs-bottom'];
+	const blocks = floatingBlocks();
+	const board = isDashboard();
+	blocks.forEach(block => {
+		if (!board || !block.classList.contains('fs-host')) {
+			props.forEach(p => block.style.removeProperty(p));
+			return;
+		}
+		const width = viewportWidth(), height = viewportHeight();
+		// the widget's box is still there to read under its own fullscreen: the
+		// bar and the map have gone position: fixed, but every map with a [ ] is
+		// an interactive one, and an interactive map's widget is always free
+		// (isFreePopout) and so carries an inline height of its own
+		const rect = block.getBoundingClientRect();
+		const blockers = blocks
+			.filter(b => b !== block && !b.classList.contains('fs-host'))
+			.map(b => b.getBoundingClientRect());
+		const free = freeRectAround(
+			{ left: rect.left, right: rect.right, top: rect.top, bottom: rect.bottom },
+			blockers, { left: 0, top: 0, right: width, bottom: height });
+		block.style.setProperty('--fs-left', `${Math.round(free.left)}px`);
+		block.style.setProperty('--fs-right', `${Math.round(width - free.right)}px`);
+		block.style.setProperty('--fs-top', `${Math.round(free.top)}px`);
+		block.style.setProperty('--fs-bottom', `${Math.round(height - free.bottom)}px`);
+	});
+}
+
 // a pane takes the column's width: a free one with the height it carries, a
 // locked one with the height its aspect gives at that width, pulled in to
 // what its content spans (an image stops at its natural width and a map with
@@ -2014,6 +2087,7 @@ document.addEventListener('map-fullscreen', () => {
 		if (hosting) block.style.zIndex = POPOUT_FS_Z;
 		else if (wasHosting) raisePopout(block);
 	});
+	fitBoardFullscreen(); // on the board there is no column to fit it, and no page either
 	layoutSnapColumns();
 	// a widget's fullscreen is part of the arrangement (the fullscreen flag on
 	// its entry); on a phone there is no arrangement on screen to write
