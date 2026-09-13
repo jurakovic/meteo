@@ -1213,9 +1213,13 @@ document.addEventListener('auxclick', (e) => {
 	togglePopout(bar.closest('.map-block')); // docks on the page, takes the map off the board
 });
 
-// widgets are a desktop thing: shrinking below the breakpoint puts them back
+// widgets are a desktop thing: shrinking below the breakpoint puts them back,
+// and widening brings back what was put away — the arrangement belongs to the
+// view, not to the window, so it waits out a narrow one rather than being
+// unmade by it
 POPOUT_MQ.addEventListener('change', (e) => {
-	if (e.matches) return;
+	if (e.matches) { applySnapLayout(unappliedSnapLayout); return; }
+	unappliedSnapLayout = snapLayout(); // read before the dock empties the board
 	snapPersistPaused = true; // the stored arrangement is kept for a desktop window
 	dockAllPopouts();
 	snapPersistPaused = false;
@@ -1816,7 +1820,15 @@ function applySnapLayout(layout) {
 	// their shadows are left in the layer with no widget to own them, and the
 	// updateCovered that would have swept them is below this return. Leaving
 	// the board with nothing placed is exactly this case
-	if (!layout || !POPOUT_MQ.matches) { syncShadows(); return; }
+	if (!layout || !POPOUT_MQ.matches) {
+		// a narrow window is not a change of mind: the arrangement it cannot
+		// show is kept whole, to be written on the view's behalf and applied
+		// once there is a desktop window again
+		unappliedSnapLayout = POPOUT_MQ.matches ? null : layout;
+		syncShadows();
+		return;
+	}
+	unappliedSnapLayout = null;
 	snapPersistPaused = true; // what is being applied is already what is stored
 	const toFullscreen = [];
 	const groupIds = new Map(); // stored group number → a fresh id
@@ -1872,6 +1884,28 @@ function applyStoredSnapLayout() {
 
 let snapPersistPaused = false;
 
+// the arrangement the view holds but the window is too narrow to show. Below
+// the breakpoint applySnapLayout() places nothing, so the board stands empty
+// while the preferences still describe a desktop arrangement — and snapLayout(),
+// which reads the screen, would describe that emptiness. Everything that writes
+// the arrangement, or asks the dialog what the view holds, goes through
+// currentSnapLayout() instead, so a narrow window never writes the empty board
+// over what a desktop window put there. Cleared the moment it is applied
+let unappliedSnapLayout = null;
+
+// what is on screen, or — where none of it is placed — what is stored waiting
+// for a desktop window
+function currentSnapLayout() {
+	return unappliedSnapLayout || snapLayout();
+}
+
+// the mode the view holds, which below the breakpoint is the stored one: the
+// board is not on screen there, but it is still what the view says, and the
+// dialog's mode row would otherwise tick itself off and apply that
+function isDashboardView() {
+	return unappliedSnapLayout ? unappliedSnapLayout.dashboard === true : isDashboard();
+}
+
 // the arrangement is written as it changes — it is direct manipulation, not
 // a form with an apply button — next to the map list it belongs to: into the
 // preferences, or, while a shared view is on, into that view and back into
@@ -1885,7 +1919,7 @@ function persistSnapLayout() {
 	updateGroups();
 	updateCovered();
 	if (snapPersistPaused) return;
-	const layout = snapLayout();
+	const layout = currentSnapLayout();
 	if (sharedMapView) {
 		if (layout) sharedMapView.layout = layout;
 		else delete sharedMapView.layout;

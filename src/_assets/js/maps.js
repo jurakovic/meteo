@@ -1656,7 +1656,7 @@ function buildMapSettings(panel) {
 	// the mode row's button only ticks this, and Primijeni builds the view from
 	// it along with the list (layoutForPrefs). Starts at what is on screen, so
 	// opening the panel and applying anything unchanged changes nothing.
-	let dashboardChecked = isDashboard();
+	let dashboardChecked = isDashboardView();
 
 	// the board's grid. Unlike the mode beside them these take effect at once —
 	// they are a way of working, not a view to be applied — and they are the
@@ -1767,7 +1767,7 @@ function buildMapSettings(panel) {
 	// that is an edit of the current view, not a switch to another one
 	function layoutForPrefs(prefs) {
 		const stored = prefs.preset === 'custom'
-			? snapLayout()
+			? currentSnapLayout()
 			: (userPresets.find(p => p.id === prefs.preset) || {}).layout; // a built-in has none
 		return sanitizeSnapLayout(withDashboard(stored, dashboardChecked), prefsMapIds(prefs));
 	}
@@ -1776,7 +1776,7 @@ function buildMapSettings(panel) {
 	// there cannot stay a pane) and to the mode in the row, so what a preset
 	// saves and what Ažuriraj counts as an edit are the view Primijeni would build
 	function selectedLayout() {
-		return sanitizeSnapLayout(withDashboard(snapLayout(), dashboardChecked), selectedMapIds());
+		return sanitizeSnapLayout(withDashboard(currentSnapLayout(), dashboardChecked), selectedMapIds());
 	}
 
 	// the panel's own share button carries whatever is on screen, expanding a
@@ -1797,7 +1797,7 @@ function buildMapSettings(panel) {
 	const layoutDiv = el('div', { class: 'ms-layout' });
 
 	function layoutParts() {
-		const layout = snapLayout() || {};
+		const layout = currentSnapLayout() || {};
 		const parts = [];
 		if (layout.left) parts.push(`lijevo ${layout.left.panes.length}`);
 		if (layout.right) parts.push(`desno ${layout.right.panes.length}`);
