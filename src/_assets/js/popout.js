@@ -173,6 +173,46 @@ function unfitTitles(block) {
 	});
 }
 
+// A letterboxed image is painted smaller than the box it is centred in —
+// object-fit does that inside the element and lays nothing out, so the arrows,
+// which are absolute in the .slideshow, and the indicators, which are as wide
+// as it, went on spanning the whole widget: the arrows hung over the bars
+// beside the image and the indicators measured something wider than what they
+// index. CSS cannot see a contain-fitted image's rect, so it is worked out
+// here — the natural ratio against the element's box — and published as the
+// four insets from the .slideshow the arrows are positioned in (which takes
+// the slide's own title bar off the top for free, where .shorter used to) and
+// the painted width for the indicators to take and centre themselves in.
+// Measured wherever the title is, and for the same reasons: the box changes
+// with every gesture, and the image itself with a slide or a reload
+function fitLetterbox(block) {
+	const props = ['--lb-l', '--lb-r', '--lb-t', '--lb-b', '--lb-w'];
+	const box = block.querySelector('.slideshow');
+	const img = block.querySelector('.slide.active img') || block.querySelector('.placeholder img');
+	if (!block.classList.contains('letterbox') || !box || !img || !img.naturalWidth || !img.clientWidth) {
+		props.forEach(p => block.style.removeProperty(p));
+		return;
+	}
+	const rect = img.getBoundingClientRect(), outer = box.getBoundingClientRect();
+	const ratio = img.naturalWidth / img.naturalHeight;
+	const width = Math.min(rect.width, rect.height * ratio);
+	const height = Math.min(rect.height, rect.width / ratio);
+	const left = rect.left + (rect.width - width) / 2, top = rect.top + (rect.height - height) / 2;
+	const px = (n) => `${Math.round(Math.max(0, n))}px`;
+	block.style.setProperty('--lb-l', px(left - outer.left));
+	block.style.setProperty('--lb-r', px(outer.right - (left + width)));
+	block.style.setProperty('--lb-t', px(top - outer.top));
+	block.style.setProperty('--lb-b', px(outer.bottom - (top + height)));
+	block.style.setProperty('--lb-w', px(width));
+}
+
+// the two go together everywhere: both are the widget's chrome fitted to the
+// box it has now, and every gesture that changes the box changes both
+function fitWidget(block) {
+	fitTitles(block);
+	fitLetterbox(block);
+}
+
 function dockMap(block) {
 	dlog(`dockMap: ${block.dataset.mapId}`);
 	// a fullscreen iframe inside the widget is fixed on its own; take it down first
@@ -181,7 +221,8 @@ function dockMap(block) {
 	if (block._group) leaveGroup(block);
 	unsnapPane(block);
 	block.classList.remove('popout', 'free', 'grouped', 'letterbox', 'covered');
-	['left', 'top', 'width', 'height', 'z-index', '--po-img'].forEach(p => block.style.removeProperty(p));
+	['left', 'top', 'width', 'height', 'z-index', '--po-img', '--lb-l', '--lb-r', '--lb-t', '--lb-b', '--lb-w']
+		.forEach(p => block.style.removeProperty(p));
 	block.querySelectorAll('.po-h, .po-backdrop').forEach(h => h.remove());
 	if (block._gap) block._gap.remove();
 	delete block._gap;
@@ -389,7 +430,7 @@ function snapBlockToGrid(block) {
 	block.style.height = `${ys[bottom] - ys[top]}px`;
 	placePopout(block, xs[left], ys[top]);
 	syncBackdrop(block);
-	fitTitles(block);
+	fitWidget(block);
 }
 
 // on release only, never while the gesture runs: the widget follows the
@@ -750,7 +791,7 @@ function updateGroups() {
 			btn.textContent = grouped ? '[-]' : '[+]';
 			btn.title = grouped ? 'Odvoji prozor od skupine' : 'Spoji prozor s prozorima koje dodiruje';
 		});
-		fitTitles(block); // the cluster may have changed width
+		fitWidget(block); // the cluster may have changed width
 	});
 }
 
@@ -883,7 +924,7 @@ function resizePopout(block, dir, e) {
 		// offsetHeight's rounding costing the north edge a pixel
 		h = block.getBoundingClientRect().height;
 		placePopout(block, dir.includes('w') ? start.right - w : start.left, dir.includes('n') ? start.bottom - h : start.top);
-		fitTitles(block);
+		fitWidget(block);
 	}, () => { snapToGrid([block]); persistSnapLayout(); });
 }
 
@@ -1469,7 +1510,7 @@ function layoutSnapColumns() {
 	const seam = isSnapPageHidden() && snapColumns.left.panes.length && snapColumns.right.panes.length;
 	Object.values(snapColumns).forEach(col => {
 		layoutSnapColumn(col, seam);
-		col.panes.forEach(p => fitTitles(p.block)); // the column's width is theirs
+		col.panes.forEach(p => fitWidget(p.block)); // the column's width is theirs
 	});
 }
 
@@ -1664,7 +1705,7 @@ document.addEventListener('dblclick', (e) => {
 		const pane = snapPaneOf(block);
 		if (pane) delete pane.height;
 		layoutSnapColumns();
-		fitTitles(block);
+		fitWidget(block);
 		persistSnapLayout();
 	}
 });
@@ -1990,7 +2031,7 @@ document.addEventListener('map-fullscreen', () => {
 		if (!block) return;
 		setTimeout(() => {
 			if (isSnapped(block) && !block.classList.contains('free')) layoutSnapColumns();
-			fitTitles(block);
+			fitWidget(block);
 			syncBackdrop(block); // the image on screen may be another
 			syncShadows(); // a floating locked widget's height changed with it, and its shadow is its size
 		}, 0);

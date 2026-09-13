@@ -450,9 +450,32 @@ body.fs-lock {
 		}
 
 		/* and the third place the same inline cap is written (maxWidthStyle):
-		   the indicators run under the map and are as wide as it is */
+		   the indicators run under the map and are as wide as it is — which,
+		   letterboxed, is the painted image and not the box it is centred in */
 		.map-block.popout.letterbox .indicators-container {
 			max-width: none !important;
+			width: var(--lb-w, 100%);
+			margin-left: auto;
+			margin-right: auto;
+		}
+
+		/* the arrows belong to the image too, not to the bars beside it. The
+		   insets are from the .slideshow they are positioned in, so the slide's
+		   own title bar is already off the top and .shorter has nothing left to
+		   do here; the width stays the share of the image it always was */
+		.map-block.popout.letterbox .prev,
+		.map-block.popout.letterbox .next {
+			top: var(--lb-t, 0px);
+			bottom: var(--lb-b, 0px);
+			width: calc(0.15 * var(--lb-w, 100%));
+		}
+
+		.map-block.popout.letterbox .prev {
+			left: var(--lb-l, 0px);
+		}
+
+		.map-block.popout.letterbox .next {
+			right: var(--lb-r, 0px);
 		}
 
 		.map-block.popout .po-backdrop {
@@ -1591,7 +1614,11 @@ body.fs-lock {
 	opacity: 0.7;
 	font-weight: bold;
 	font-size: 36px;
-	transition: 0.6s ease;
+	/* the hover fade only. It was `0.6s ease` — every property — which was
+	   nothing while the arrows were fixed to their container, and is a lag the
+	   moment they follow a letterboxed image: they would slide to the new place
+	   over half a second behind a resize that had already finished */
+	transition: color 0.6s ease, background-image 0.6s ease;
 	user-select: none;
 }
 

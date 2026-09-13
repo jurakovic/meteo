@@ -106,6 +106,8 @@ Prozori se međusobno privlače: kad se rub približi rubu drugog prozora, sam s
 
 Slike i videa zadržavaju svoj omjer, pa im se mijenja samo širina. Ako želite slobodnu visinu, **držite Shift dok počinjete povlačiti rub** — karta se tada uklapa unutar okvira, s neoštrom kopijom slike kao podlogom. Povlačenje bez Shifta, ili dvoklik na naslovnu traku, vraća omjer.
 
+Kad je karta tako razvučena, naslovna traka ide cijelom širinom prozora, a slika stoji sredinom. Strelice `❮` i `❯` i kvadratići ispod nje drže se same slike, a ne cijelog prozora, pa pokazuju na ono što i jesu.
+
 ### Grupe
 
 Dva prozora koja se dodiruju mogu se spojiti u grupu gumbom `[+]`. Grupa se pomiče i mijenja veličinu kao cjelina, a rubovi članova ostaju spojeni. `[-]` vadi prozor iz grupe. Samo dodirivanje nije dovoljno — grupa nastaje tek klikom.
