@@ -116,7 +116,7 @@ Prozor povučen do lijevog ili desnog ruba ekrana uskoči u stupac uz taj rub. S
 
 - **Širina stupca** se mijenja povlačenjem njegovog unutarnjeg ruba.
 - **Kad se stupci dodiruju**, jedan zajednički rub premješta širinu s jednog na drugi.
-- **Dvoklik na rub stupca** sakriva stranicu (stupci preuzmu cijelu širinu); ponovni dvoklik je vraća na prijašnje širine.
+- **Dvoklik na rub stupca** sakriva stranicu (stupci preuzmu cijelu širinu); ponovni dvoklik je vraća na prijašnje širine. Dok je stranica sakrivena, na vrhu ekrana visi narančasta pločica **Karte** — put do dijaloga dok gumba na stranici nema. Na njoj tada stoji samo ime; gumbe nosi samo na [nadzornoj ploči](#nadzorna-ploča).
 - **Karta izlazi iz stupca** povlačenjem u stranu.
 
 ## Nadzorna ploča
@@ -132,7 +132,7 @@ Na ploči:
 - Gumb `[=]` u traci postaje `[x]` i **miče kartu s popisa** — na ploči nema stranice u koju bi se vratila.
 - Karta dodana u popis pojavi se na ploči na prvom slobodnom mjestu.
 - Bočnih stupaca nema; stupac je traka koju stranica ustupa, a stranice ovdje nema.
-- Na vrhu ekrana visi narančasta pločica **Karte**. Ona je jedini put natrag do dijaloga jer je gumb na stranici sakriven. Pločica se povlači lijevo-desno i razvlači za rubove.
+- Na vrhu ekrana visi narančasta pločica **Karte**. Ona je jedini put natrag do dijaloga jer je gumb na stranici sakriven. Pločica se povlači lijevo-desno i razvlači za rubove. Samo ovdje uz ime nosi i gumbe `[R]`, `[G]` i `[S]`.
 
 Ploča se sprema kao i svaki drugi prikaz — u predložak ili u poveznicu za dijeljenje — pa se može imati više različitih ploča.
 

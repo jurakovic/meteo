@@ -1268,9 +1268,9 @@ function applyStoredMsTab() {
 function buildMsTabCluster(tab) {
 	const reload = el('a', { class: 'ms-tab-btn', text: '[R]', title: 'Osvježi sve karte (R)' });
 	reload.addEventListener('click', () => reloadAllMaps());
-	const grid = el('a', { class: 'ms-tab-btn ms-tab-grid', 'data-grid': 'show', text: '[G]', title: 'Prikaži mrežu (G)' });
+	const grid = el('a', { class: 'ms-tab-btn', 'data-grid': 'show', text: '[G]', title: 'Prikaži mrežu (G)' });
 	grid.addEventListener('click', () => setGridPrefs(!isGridShown(), isGridSnapped()));
-	const snap = el('a', { class: 'ms-tab-btn ms-tab-grid', 'data-grid': 'snap', text: '[S]', title: 'Poravnaj uz mrežu (S)' });
+	const snap = el('a', { class: 'ms-tab-btn', 'data-grid': 'snap', text: '[S]', title: 'Poravnaj uz mrežu (S)' });
 	snap.addEventListener('click', () => setGridPrefs(isGridShown(), !isGridSnapped()));
 	tab.appendChild(el('span', { class: 'ms-tab-cluster' }, [reload, grid, snap]));
 	syncMsTab();

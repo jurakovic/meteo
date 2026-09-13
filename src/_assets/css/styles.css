@@ -1047,12 +1047,32 @@ body.fs-lock {
 		text-align: center;
 	}
 
-	/* the title bars' cluster, on the tab */
+	/* the title bars' cluster, on the tab — and the board's alone. There the tab
+	   is the only chrome there is, so it carries the moves a title bar would;
+	   beside the columns the page is hidden but everything else is where it was,
+	   and the three glyphs have nothing to add: [G] and [S] are the board's grid
+	   and do nothing here, and [R] is on every widget's own bar and on its key.
+	   So the tab keeps its name alone, and the floor msTabMinWidth measures
+	   follows the cluster down as it did when only [G] and [S] came and went */
 	.ms-tab-cluster {
 		flex: 0 0 auto;
-		display: inline-flex;
+		display: none;
 		gap: 8px;
 	}
+
+	body.dashboard .ms-tab-cluster {
+		display: inline-flex;
+	}
+
+		/* a rule between the name and the glyphs: both are text on one strip of
+		   orange, and without it [R] reads as the end of the name. In the cluster
+		   and not beside it, so it goes off the board with the glyphs it divides
+		   and counts in the floor msTabMinWidth measures. Dimmed like a switch
+		   that is off: it separates, it is nothing to press */
+		.ms-tab-cluster::before {
+			content: '|';
+			opacity: 0.55;
+		}
 
 		.ms-tab-cluster a {
 			text-decoration: none;
@@ -1064,16 +1084,12 @@ body.fs-lock {
 			opacity: 0.55;
 		}
 
-	/* the grid is the board's alone: elsewhere the tab shows its name and [R] */
-	.ms-tab-grid {
-		display: none;
-	}
-
-	body.dashboard .ms-tab-grid {
-		display: inline;
-	}
-
-	body.fs-lock .ms-tab,
+	/* not under a fullscreen map, though the page is just as far out of reach
+	   there: that map is one thing to look at and it has its own way out, in
+	   the bar that stays on screen, in Escape and in the double-click. A tab
+	   over it is chrome in front of the one view that asked for none — and it
+	   arrived on the phone too, where fs-lock is the only one of these three a
+	   touch screen can reach at all */
 	body.snap-full .ms-tab,
 	body.dashboard .ms-tab {
 		display: flex;
