@@ -411,9 +411,19 @@ body.fs-lock {
 				object-fit: contain;
 			}
 
+		/* the same cap undone one level up. buildSlideshow() puts the map's
+		   maxWidth inline on the container, and an untitled slideshow is a
+		   .placeholder itself so the rule above reaches it — a titled one is
+		   not, and kept the cap. Past that width it stopped growing, and a
+		   capped stretch in this flex column falls back to the start edge, so
+		   the widget stretched on and the slideshow stayed at the left of it,
+		   taking the slide's own title bar and the image with it. The title
+		   belongs to the widget and spans it; the image is centred in it by
+		   the contain below */
 		.map-block.popout.letterbox .slideshow {
 			flex: 1;
 			min-height: 0;
+			max-width: none !important;
 		}
 
 			/* fills the slideshow, a column itself when untitled (it is a placeholder) */
@@ -437,6 +447,12 @@ body.fs-lock {
 			flex: 1;
 			min-height: 0;
 			padding-top: 0;
+		}
+
+		/* and the third place the same inline cap is written (maxWidthStyle):
+		   the indicators run under the map and are as wide as it is */
+		.map-block.popout.letterbox .indicators-container {
+			max-width: none !important;
 		}
 
 		.map-block.popout .po-backdrop {
