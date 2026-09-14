@@ -391,6 +391,20 @@ body.fs-lock {
 				padding-top: 0;
 			}
 
+		/* the first of the four places maxWidthStyle() writes the map's width
+		   inline: the widget's own title bar (buildMapTitleBar passes the map,
+		   the per-slide bars do not). On the page the bar stands above a map
+		   held to that width and is held to it too; in a widget the map's width
+		   is the widget's, and the bar spans it. Capped, it stopped at the cap
+		   and — a capped stretch in this flex column falling back to the start
+		   edge — sat at the left of a widget stretched past it. Every map with
+		   both a top-level bar and a maxWidth was in this: dhmz, estofex, essl,
+		   meteo-si, dwd, idokep-radar-eu, istramet, dhmz-sinopticka. The four
+		   that looked right had one or the other and not both */
+		.map-block.popout.letterbox > .radartitle {
+			max-width: none !important;
+		}
+
 		/* a locked widget freed of its aspect (Shift-drag, maps.js): the media
 		   is letterboxed in what the title bar leaves — the placeholder's inline
 		   aspect and max-width undone — and a blurred, darkened copy of the image
@@ -449,7 +463,7 @@ body.fs-lock {
 			padding-top: 0;
 		}
 
-		/* and the third place the same inline cap is written (maxWidthStyle):
+		/* and the last place the same inline cap is written (maxWidthStyle):
 		   the indicators run under the map and are as wide as it is — which,
 		   letterboxed, is the painted image and not the box it is centred in */
 		.map-block.popout.letterbox .indicators-container {
