@@ -1143,7 +1143,13 @@ function resizeGroup(members, dir, e) {
 			s.block.style.top = `${Math.round(top)}px`;
 			placed.push(s);
 		});
-		members.forEach(fitTitles);
+		// fitWidget, not fitTitles alone: a letterboxed member's arrows and
+		// indicators are held to the image's rect (--lb-*, fitLetterbox), and
+		// left unmeasured through the gesture they kept the width the image had
+		// before it — the whole group shrinking under indicators that did not,
+		// until the release put them right. A plain pull frees a widget now, so
+		// far more of them are letterboxed and carry these
+		members.forEach(fitWidget);
 	}, () => { snapToGrid(members); persistSnapLayout(); });
 }
 

@@ -348,7 +348,7 @@
 		let e=l+(t.left-l)*g,o=p+(t.top-p)*g;const n=t.block.offsetWidth,s=t.block.offsetHeight
 		;i.filter(e=>e.to===t&&m.includes(e.from)).forEach(t=>{const i=t.from.block.getBoundingClientRect()
 		;"below"===t.kind?o=i.bottom:"above"===t.kind?o=i.top-s:"right"===t.kind?e=i.right:"left"===t.kind?e=i.left-n:"alignLeft"===t.kind?e=i.left:"alignRight"===t.kind?e=i.right-n:"alignTop"===t.kind?o=i.top:"alignBottom"===t.kind&&(o=i.bottom-s)
-		}),t.block.style.left=`${Math.round(e)}px`,t.block.style.top=`${Math.round(o)}px`,m.push(t)}),t.forEach(fitTitles)},()=>{snapToGrid(t),
+		}),t.block.style.left=`${Math.round(e)}px`,t.block.style.top=`${Math.round(o)}px`,m.push(t)}),t.forEach(fitWidget)},()=>{snapToGrid(t),
 		persistSnapLayout()})}function groupRelations(t){const e=(t,e)=>Math.abs(t-e)<=1,o=[];return t.forEach(n=>t.forEach(t=>{if(n===t)return
 		;const s=Math.min(n.right,t.right)-Math.max(n.left,t.left)>0,i=Math.min(n.bottom,t.bottom)-Math.max(n.top,t.top)>0,a=s&&(e(t.top,n.bottom)||e(t.bottom,n.top)),r=i&&(e(t.left,n.right)||e(t.right,n.left))
 		;a&&(e(t.left,n.left)&&o.push({from:n,to:t,kind:"alignLeft"}),e(t.right,n.right)&&o.push({from:n,to:t,kind:"alignRight"}),o.push({from:n,
