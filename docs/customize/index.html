@@ -204,6 +204,10 @@
 		function isFreePopout(t){return!!t.querySelector(".if1, .if2")}function unlockAspect(t){
 		t.classList.contains("free")||(dlog(`unlockAspect: ${t.dataset.mapId}`),t.style.height=`${t.offsetHeight}px`,
 		t.classList.add("free","letterbox"),t.querySelector(".po-backdrop")||t.appendChild(el("div",{class:"po-backdrop"})),syncBackdrop(t))}
+		function lockToImage(t){const e=t.getBoundingClientRect();if(lockAspect(t),isSnapped(t))return
+		;const o=t.querySelector(".slide.active img")||t.querySelector(".placeholder img");if(o&&(!o.complete||!o.naturalWidth))return
+		;const n=lockedMaxWidth(t,popoutMaxWidth()),s=Math.min(e.width,n),i=lockedHeightAt(t,s);if(i>e.height+.5){
+		const o=s/i,a=lockedWidthFor(t,e.height,e.height*o,o,n);t.style.width=`${Math.round(a)}px`}placePopout(t,e.left,e.top)}
 		function lockAspect(t){t.classList.contains("letterbox")&&(dlog(`lockAspect: ${t.dataset.mapId}`),t.classList.remove("free","letterbox"),
 		t.style.removeProperty("height"),t.style.removeProperty("--po-img"))}function syncBackdrop(t){if(!t.classList.contains("letterbox"))return
 		;const e=t.querySelector(".slide.active img")||t.querySelector("img"),o=MAP_CATALOG.find(e=>e.id===t.dataset.mapId),n=e&&(e.currentSrc||e.src)||o&&o.backdrop
@@ -508,7 +512,7 @@
 		applySnapLayout(sanitizeSnapLayout(getActiveMapPrefs().layout,resolveMapIds()))}document.addEventListener("dblclick",t=>{
 		if(!t.target.closest)return;const e=t.target.closest(".snap-edge");e&&toggleSnapPage(snapColumns[e.dataset.side]);const o=titleBarOf(t)
 		;o&&toggleBarFullscreen(o);const n=t.target.closest(".map-block.popout.letterbox .radartitle:not(.fullscreen)")
-		;if(n&&!t.target.closest("a")){const t=n.closest(".map-block");lockAspect(t);const e=snapPaneOf(t);e&&delete e.height,layoutSnapColumns(),
+		;if(n&&!t.target.closest("a")){const t=n.closest(".map-block");lockToImage(t);const e=snapPaneOf(t);e&&delete e.height,layoutSnapColumns(),
 		fitWidget(t),persistSnapLayout()}});let snapPersistPaused=!1,unappliedSnapLayout=null;function currentSnapLayout(){
 		return unappliedSnapLayout||snapLayout()}function isDashboardView(){
 		return unappliedSnapLayout?!0===unappliedSnapLayout.dashboard:isDashboard()}function persistSnapLayout(){if(updateGroups(),updateCovered(),

@@ -106,7 +106,9 @@ Prozori se međusobno privlače: kad se rub približi rubu drugog prozora, sam s
 
 Rub se povlači slobodno: širina i visina idu svaka za svojim. Karta se tada uklapa unutar okvira, s neoštrom kopijom slike kao podlogom. **Držite Shift** i prozor zadržava omjer slike, pa mu se mijenja samo širina — kao u programima za slike. Tako zadržan, širi se do veličine same slike i ne dalje, jer bi karta prestala rasti, a prozor bi se nastavio širiti oko nje.
 
-Shift vrijedi i usred povlačenja, ne samo na početku: pritisnite ga dok vučete i prozor se vraća na omjer, pustite ga i opet je slobodan. Miš se pritom ne mora micati. Ono što prozor na kraju ostane odlučuje tipka u trenutku puštanja ruba. Dvoklik na naslovnu traku također vraća omjer.
+Shift vrijedi i usred povlačenja, ne samo na početku: pritisnite ga dok vučete i prozor se vraća na omjer, pustite ga i opet je slobodan. Miš se pritom ne mora micati. Ono što prozor na kraju ostane odlučuje tipka u trenutku puštanja ruba.
+
+**Dvoklik na naslovnu traku** također vraća omjer, ali na svoj način: prozor se stisne oko karte kakva jest, umjesto da kartu rastegne na svoju širinu. Od dvije mjere uzima manju — praznina sa strane ili odozgo nestaje, a karta ostaje iste veličine. Prozor se pritom nikad ne poveća i ostaje na svom mjestu.
 
 Kad je karta tako razvučena, naslovna traka ide cijelom širinom prozora, a slika stoji sredinom. Strelice `❮` i `❯` i kvadratići ispod nje drže se same slike, a ne cijelog prozora, pa pokazuju na ono što i jesu.
 
@@ -187,7 +189,7 @@ Geste na naslovnoj traci prozora:
 | Gesta | Radnja |
 |---|---|
 | povlačenje | pomiče prozor |
-| dvoklik | cijeli zaslon (interaktivne karte) ili vraćanje omjera (slike) |
+| dvoklik | cijeli zaslon (interaktivne karte) ili stiskanje prozora oko karte (slike) |
 | srednji klik | vraća kartu u stranicu; na ploči je miče s popisa |
 
 ## Što se pamti

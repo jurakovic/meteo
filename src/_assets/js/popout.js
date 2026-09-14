@@ -127,6 +127,39 @@ function unlockAspect(block) {
 	syncBackdrop(block);
 }
 
+// the double-click's lock: the widget comes in to the image as it is painted,
+// rather than the image being blown up to whatever width the widget happens to
+// have. A letterboxed image is contained in its box, so one axis is the
+// image's and the other is ground beside it — taking the aspect back at the
+// width it had keeps the ground and grows the other axis to match it, and a
+// wide, short widget becomes a tall one on a gesture that asked for nothing of
+// the sort. The width that gives the height it already has is the other answer,
+// and the smaller of the two is the image: whichever axis was holding the
+// contain is the one kept, and the widget only ever comes in. In a column the
+// width is the column's, so a pane takes the aspect back as it always did
+function lockToImage(block) {
+	const rect = block.getBoundingClientRect();
+	lockAspect(block);
+	if (isSnapped(block)) return;
+	// an image not yet there has no painted size to come in to (holdLockedWidth)
+	const img = block.querySelector('.slide.active img') || block.querySelector('.placeholder img');
+	if (img && !(img.complete && img.naturalWidth)) return;
+	// measured from inside the content's hold, never at the width the widget
+	// happens to have: past that hold the map has stopped growing and the
+	// height with it, so a ratio taken there is of the ground beside the map
+	// and not of the map — dhmz stretched to 1100 gave 1.42 where the content
+	// is 0.93, a seed lockedWidthFor cannot close in the passes it is given
+	const cap = lockedMaxWidth(block, popoutMaxWidth());
+	const from = Math.min(rect.width, cap);
+	const tall = lockedHeightAt(block, from);
+	if (tall > rect.height + 0.5) {
+		const ratio = from / tall;
+		const w = lockedWidthFor(block, rect.height, rect.height * ratio, ratio, cap);
+		block.style.width = `${Math.round(w)}px`;
+	}
+	placePopout(block, rect.left, rect.top);
+}
+
 // back to the height the aspect gives at the width it has
 function lockAspect(block) {
 	if (!block.classList.contains('letterbox')) return;
@@ -1895,11 +1928,12 @@ document.addEventListener('dblclick', (e) => {
 	const bar = titleBarOf(e);
 	if (bar) toggleBarFullscreen(bar);
 	// a double-click on a freed widget's title bar (a link or button aside)
-	// locks it again, where it stands — a pane's height goes with it
+	// locks it again, coming in to the image where it stands (lockToImage) —
+	// a pane's height goes with it
 	const title = e.target.closest('.map-block.popout.letterbox .radartitle:not(.fullscreen)');
 	if (title && !e.target.closest('a')) {
 		const block = title.closest('.map-block');
-		lockAspect(block);
+		lockToImage(block);
 		const pane = snapPaneOf(block);
 		if (pane) delete pane.height;
 		layoutSnapColumns();
