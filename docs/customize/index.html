@@ -76,13 +76,13 @@
 		top:0;bottom:0;z-index:8000;pointer-events:none}.snap-edge{position:absolute;pointer-events:auto;top:0;bottom:0;width:8px;cursor:ew-resize}
 		.snap-edge:hover,body.po-dragging .snap-edge{background-color:rgba(43,87,151,.6)}.snap-left .snap-edge{right:-4px}.snap-right .snap-edge{
 		left:-4px}.map-block.popout.snapped .po-h-e,.map-block.popout.snapped .po-h-ne,.map-block.popout.snapped .po-h-nw,
-		.map-block.popout.snapped .po-h-se,.map-block.popout.snapped .po-h-sw,.map-block.popout.snapped .po-h-w,
-		.map-block.popout.snapped:not(.free) .po-h{display:none}body.dashboard .if1.fullscreen,body.dashboard .radartitle.fullscreen,
-		body.snap-full .if1.fullscreen,body.snap-full .radartitle.fullscreen{left:0;right:0}html.board-boot{overflow:hidden}
-		html.board-boot .container,html.board-boot footer{visibility:hidden}body.dashboard{overflow:hidden}body.dashboard .container,
-		body.dashboard footer{visibility:hidden}body.dashboard .map-block.popout:not(.fs-host){visibility:visible}.po-shadows{position:fixed;inset:0
-		;z-index:4900;pointer-events:none}.po-shadow{position:absolute;box-shadow:0 6px 24px rgba(0,0,0,.6)}.po-grid{position:fixed;inset:0;z-index:
-		4000;pointer-events:none;background-image:repeating-linear-gradient(to right,rgba(255,255,255,.08) 0 1px,transparent 1px var(--grid-cell)),
+		.map-block.popout.snapped .po-h-se,.map-block.popout.snapped .po-h-sw,.map-block.popout.snapped .po-h-w{display:none}
+		body.dashboard .if1.fullscreen,body.dashboard .radartitle.fullscreen,body.snap-full .if1.fullscreen,body.snap-full .radartitle.fullscreen{
+		left:0;right:0}html.board-boot{overflow:hidden}html.board-boot .container,html.board-boot footer{visibility:hidden}body.dashboard{overflow:
+		hidden}body.dashboard .container,body.dashboard footer{visibility:hidden}body.dashboard .map-block.popout:not(.fs-host){visibility:visible}
+		.po-shadows{position:fixed;inset:0;z-index:4900;pointer-events:none}.po-shadow{position:absolute;box-shadow:0 6px 24px rgba(0,0,0,.6)}
+		.po-grid{position:fixed;inset:0;z-index:4000;pointer-events:none;background-image:
+		repeating-linear-gradient(to right,rgba(255,255,255,.08) 0 1px,transparent 1px var(--grid-cell)),
 		repeating-linear-gradient(to bottom,rgba(255,255,255,.08) 0 1px,transparent 1px var(--grid-cell))}.map-block.snapped-left .if1.fullscreen,
 		.map-block.snapped-left .radartitle.fullscreen{left:0;right:calc(100% - var(--snap-l))}.map-block.snapped-right .if1.fullscreen,
 		.map-block.snapped-right .radartitle.fullscreen{left:calc(100% - var(--snap-r));right:0}.map-block.popout.snapped .radartitle.fullscreen{top
@@ -315,13 +315,14 @@
 		const s=Math.min(Math.max(0,e.left+o),Math.max(0,viewportWidth()-e.width)),i=Math.min(Math.max(0,e.top+n),Math.max(0,viewportHeight()-e.height))
 		;o=s-e.left,n=i-e.top,t.forEach(t=>{t.block.style.left=`${subpixel(t.left+o)}px`,t.block.style.top=`${subpixel(t.top+n)}px`})}
 		function subpixel(t){return Math.round(1e3*t)/1e3}function resizePopout(t,e,o){const n=groupMembers(t),s=snapColumnOf(t)
-		;if(n.length>1&&!s)return resizeGroup(n,e,o);let i;const a=e=>{if(!s)if(e||t.classList.contains("free")){
-		if(e&&t.classList.contains("letterbox")){lockAspect(t);const e=t.getBoundingClientRect();i=e.width/e.height}}else unlockAspect(t)}
-		;a(o.shiftKey);const r=t.getBoundingClientRect();i=r.width/r.height
+		;if(n.length>1&&!s)return resizeGroup(n,e,o);let i;const a=e=>{if(s){if(e||t.classList.contains("free"))return;return unlockAspect(t),
+		void(snapPaneOf(t).height=t.offsetHeight/viewportHeight())}if(e||t.classList.contains("free")){if(e&&t.classList.contains("letterbox")){
+		lockAspect(t);const e=t.getBoundingClientRect();i=e.width/e.height}}else unlockAspect(t)};a(o.shiftKey);const r=t.getBoundingClientRect()
+		;i=r.width/r.height
 		;const l=popoutMaxWidth(),p=Math.min(l,e.includes("w")?r.right:viewportWidth()-r.left),c=e.includes("n")?r.bottom:viewportHeight()-r.top,u=s?[]:magnetRects(t),d=s?groupStarts(n.filter(e=>e!==t)):[],h=d.filter(t=>t.top<r.top),f=d.filter(t=>t.top>r.top),g=Math.min(r.top,...h.map(t=>t.top)),m=Math.max(r.bottom,...f.map(t=>t.bottom))
 		;trackPopoutPointer(o,(o,l,d)=>{a(d.shiftKey);const f=t.classList.contains("free");let b=r.width,y=r.height
 		;if(e.includes("e")&&(b=r.width+o),e.includes("w")&&(b=r.width-o),e.includes("s")&&(y=r.height+l),e.includes("n")&&(y=r.height-l),s){
-		const o=paneMagnetEdges(s,n);if(e.includes("s")){const t=magnetEdge(r.top+y,o);null!==t&&(y=t-r.top)}if(e.includes("n")){
+		if(!f)return;const o=paneMagnetEdges(s,n);if(e.includes("s")){const t=magnetEdge(r.top+y,o);null!==t&&(y=t-r.top)}if(e.includes("n")){
 		const t=magnetEdge(r.bottom-y,o);null!==t&&(y=r.bottom-t)}y=clamp(y,120,r.height+(e.includes("n")?g:viewportHeight()-m))
 		;const i=snapPaneOf(t);return i.height=y/viewportHeight(),i.top=(e.includes("n")?r.bottom-y:r.top)/viewportHeight(),
 		e.includes("n")&&h.forEach(t=>{snapPaneOf(t.block).top=(t.top-(y-r.height))/viewportHeight()}),void layoutSnapColumns()}

@@ -121,6 +121,7 @@ Dva prozora koja se dodiruju mogu se spojiti u grupu gumbom `[+]`. Grupa se pomi
 Prozor povučen do lijevog ili desnog ruba ekrana uskoči u stupac uz taj rub. Stupac je traka visine ekrana u kojoj karte stoje jedna ispod druge, a stranica se preslaguje u preostalu širinu.
 
 - **Širina stupca** se mijenja povlačenjem njegovog unutarnjeg ruba.
+- **Visina karte u stupcu** se mijenja povlačenjem njenog gornjeg ili donjeg ruba. Širinu daje stupac, pa karta pritom pusti omjer i uklopi se u okvir, isto kao pri slobodnom povlačenju ruba izvan stupca; **dvoklik na naslovnu traku** vraća omjer. Držite li Shift, omjer se zadržava — a s njim i visina, jer je ona tada stupčeva.
 - **Kad se stupci dodiruju**, jedan zajednički rub premješta širinu s jednog na drugi.
 - **Dvoklik na rub stupca** sakriva stranicu (stupci preuzmu cijelu širinu); ponovni dvoklik je vraća na prijašnje širine. Dok je stranica sakrivena, na vrhu ekrana visi narančasta pločica **Karte** — put do dijaloga dok gumba na stranici nema. Na njoj tada stoji samo ime; gumbe nosi samo na [nadzornoj ploči](#nadzorna-ploča).
 - **Karta izlazi iz stupca** povlačenjem u stranu.

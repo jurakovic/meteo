@@ -911,11 +911,19 @@ function resizePopout(block, dir, e) {
 	// the widget taking its aspect back or letting it go where it stands, so what
 	// it is left as is what the key said when it was let go. The pointer need not
 	// move for this — trackPopoutPointer repeats the last move on the key itself.
-	// (In a column the width is the column's, so the key says nothing there and
-	// a pane is left as it is, freed or locked.)
+	// In a column the width is the column's, so the height is the only thing a
+	// pull can change and letting the aspect go is the only way to change it: a
+	// plain pull frees a locked pane, as it does over the page, and Shift holds
+	// the aspect and with it the pane. The double-click on the title bar is the
+	// way back to the aspect, there as anywhere.
 	let ratio;
 	const setMode = (shift) => {
-		if (col) return;
+		if (col) {
+			if (shift || block.classList.contains('free')) return;
+			unlockAspect(block);
+			snapPaneOf(block).height = block.offsetHeight / viewportHeight(); // a free pane carries its own
+			return;
+		}
 		if (!shift && !block.classList.contains('free')) unlockAspect(block);
 		else if (shift && block.classList.contains('letterbox')) {
 			lockAspect(block);
@@ -954,6 +962,7 @@ function resizePopout(block, dir, e) {
 		if (dir.includes('s')) h = start.height + dy;
 		if (dir.includes('n')) h = start.height - dy;
 		if (col) {
+			if (!free) return; // Shift is holding the aspect, so the column gives the height
 			const edges = paneMagnetEdges(col, members); // the stack moves along, so it is no magnet
 			if (dir.includes('s')) { const m = magnetEdge(start.top + h, edges); if (m !== null) h = m - start.top; }
 			if (dir.includes('n')) { const m = magnetEdge(start.bottom - h, edges); if (m !== null) h = start.bottom - m; }
@@ -1405,11 +1414,13 @@ window.addEventListener('resize', () => {
 // pane moves as a widget does over the page, the column's ends and the other
 // panes its magnets; pulled sideways it floats again. The column's inner edge is
 // its resize handle (.snap-ui, above the panes); .snap-col paints the column's
-// ground below them. A free (iframe) pane keeps its own height and resizes by
-// its top and bottom edge; a locked one takes the column's width whole and the
-// height its aspect gives at it. A group is a stack, kept one under another by
-// every layout (settleSnapStacks). A fullscreen map in a pane fills what the
-// column leaves free around it (fitSnapFullscreen).
+// ground below them. A free (iframe) pane keeps its own height; a locked one
+// takes the column's width whole and the height its aspect gives at it. Either
+// resizes by its top and bottom edge, a pull on a locked one letting the aspect
+// go, since at a width that is not the pane's to give that is the only way a
+// height changes. A group is a stack, kept one under another by every layout
+// (settleSnapStacks). A fullscreen map in a pane fills what the column leaves
+// free around it (fitSnapFullscreen).
 //
 // The columns can take the whole width — two of them meeting, or one at full
 // width — which hides the page (body.snap-full also drops its scrollbar). An

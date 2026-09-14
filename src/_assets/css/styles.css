@@ -615,14 +615,15 @@ body.fs-lock {
 		.snap-left .snap-edge { right: -4px; }
 		.snap-right .snap-edge { left: -4px; }
 
-	/* a pane's width is the column's: only a free pane's top and bottom edge resize */
+	/* a pane's width is the column's, so only its top and bottom edge resize —
+	   a locked pane's as well: a pull there lets the aspect go (popout.js), which
+	   is the only way a height changes at a width that is not the pane's to give */
 	.map-block.popout.snapped .po-h-e,
 	.map-block.popout.snapped .po-h-w,
 	.map-block.popout.snapped .po-h-ne,
 	.map-block.popout.snapped .po-h-nw,
 	.map-block.popout.snapped .po-h-se,
-	.map-block.popout.snapped .po-h-sw,
-	.map-block.popout.snapped:not(.free) .po-h {
+	.map-block.popout.snapped .po-h-sw {
 		display: none;
 	}
 
