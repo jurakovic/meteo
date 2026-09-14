@@ -2194,8 +2194,9 @@ function persistSnapLayout() {
 		saveMapPrefs(prefs);
 	}
 	// the settings panel, if open, names the arrangement and offers Ažuriraj off
-	// it. A press outside the dialog shuts it, so what reaches this with the
-	// panel still up is what the panel itself drives: Vrati sve on the layout line
+	// it. A press outside the dialog is taken by the backdrop and shuts it, so
+	// what reaches this with the panel still up is what the panel itself drives:
+	// Vrati sve on the layout line
 	const panel = document.getElementById('mapSettings');
 	if (panel && !panel.hidden && panel._onLayoutChange) panel._onLayoutChange();
 }

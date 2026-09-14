@@ -1201,6 +1201,11 @@ function setMapSettingsVisible(panel, visible) {
 	const keepGutter = visible && scrollbar > 0;
 	document.documentElement.classList.toggle('ms-gutter', keepGutter);
 	document.body.classList.toggle('ms-open', visible);
+	const backdrop = document.querySelector('.ms-backdrop');
+	if (backdrop) {
+		backdrop.hidden = !visible;
+		if (visible) backdrop.classList.remove('ms-spent'); // it paints again for a dialog that is back
+	}
 	viewportGutter = keepGutter ? scrollbar : 0; // clientWidth counts the kept gutter; the columns must not
 	layoutSnapColumns(); // in case the viewport did change
 	if (visible) applyStoredMsPanel(panel); // where the user put it, measurable only now it is shown
@@ -1500,15 +1505,52 @@ function initMsPanel() {
 if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', initMsPanel);
 else initMsPanel();
 
-// a press anywhere outside the dialog shuts it, dropping what was edited in
-// it (it is rebuilt from what is stored on the next open) — the page's button
-// and the tab excepted, whose click would open it right back
-document.addEventListener('pointerdown', (e) => {
-	const panel = document.getElementById('mapSettings');
-	if (!panel || panel.hidden || !e.target.closest) return;
-	if (e.target.closest('#mapSettings, .ms-toggle, .ms-tab')) return;
-	setMapSettingsVisible(panel, false);
-});
+// A press anywhere outside the dialog shuts it, dropping what was edited in it
+// (it is rebuilt from what is stored on the next open). The press lands on the
+// backdrop, which is over everything the dialog is over, so it shuts the dialog
+// and does nothing else: it follows no link, presses no button, takes no widget.
+// The tab stands above the backdrop and keeps its own click, which shuts the
+// dialog the same way.
+//
+// A press is a pointerdown, a release and a click, and all three belong to the
+// dismissal: the backdrop stands until the click has been taken, so none of them
+// can be completed on what the dialog was covering. It stops painting the moment
+// it is pressed, the dialog it dimmed for being on its way out, and the click is
+// swallowed in the capture phase, which is ahead of every listener on the page
+// whatever order they were bound in. The release arms a short fallback for the
+// gestures no click follows — a pointer let go outside the window, a drag
+function initMsBackdrop() {
+	const backdrop = document.querySelector('.ms-backdrop');
+	if (!backdrop) return;
+	backdrop.addEventListener('pointerdown', (e) => {
+		const panel = document.getElementById('mapSettings');
+		if (!panel || panel.hidden) return;
+		e.preventDefault();
+		setMapSettingsVisible(panel, false);
+		backdrop.hidden = false;
+		backdrop.classList.add('ms-spent');
+		let timer = 0;
+		const done = () => {
+			clearTimeout(timer);
+			backdrop.classList.remove('ms-spent');
+			// the dialog may have been opened again meanwhile (K, the tab), and
+			// then the ground it stands on is not this gesture's to take away
+			const open = document.getElementById('mapSettings');
+			backdrop.hidden = !open || open.hidden;
+			document.removeEventListener('click', swallow, true);
+			document.removeEventListener('pointerup', release);
+			document.removeEventListener('pointercancel', done);
+		};
+		const swallow = (ev) => { ev.stopPropagation(); ev.preventDefault(); done(); };
+		const release = () => { timer = setTimeout(done, 400); };
+		document.addEventListener('click', swallow, true);
+		document.addEventListener('pointerup', release);
+		document.addEventListener('pointercancel', done);
+	});
+}
+
+if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', initMsBackdrop);
+else initMsBackdrop();
 
 function buildMapSettings(panel) {
 	panel.replaceChildren();
@@ -1895,7 +1937,7 @@ function buildMapSettings(panel) {
 
 	// the arrangement changes from inside the open panel — Vrati sve on the
 	// layout line — and the rows and Ažuriraj follow at once. A gesture on a
-	// widget is a press outside the dialog, which shuts it
+	// widget cannot: it is a press outside, which the backdrop takes
 	panel._onLayoutChange = () => {
 		renderModeRow();
 		renderLayoutLine();

@@ -954,9 +954,29 @@ body.fs-lock {
 				height: 28px;
 			}
 
+/* the ground the dialog stands on, over everything the dialog is over and
+   under the dialog and its tab. It takes the press that dismisses the dialog,
+   so that press reaches no link, no button and no widget under it — the page is
+   already held still while the dialog is up, and this is the rest of that. It
+   dims rather than blurs: the maps behind are what the list in front is being
+   picked for, and a blur would cost the view its point as well as compositing
+   every live frame on the page */
+.ms-backdrop {
+	position: fixed;
+	inset: 0;
+	z-index: 99999;
+	background-color: rgba(10, 16, 28, 0.45);
+}
+
+	/* still there to take the rest of the press that dismissed the dialog, but
+	   no longer painting: the dialog it dims for has gone with that press */
+	.ms-backdrop.ms-spent {
+		background-color: transparent;
+	}
+
 /* the settings dialog: fixed over everything — the page, the columns, a
-   fullscreen map — and not modal, since the arrangement is changed behind it
-   while it is open; the table's width, or what the viewport leaves */
+   fullscreen map — and over the backdrop that makes the page inert while it is
+   up; the table's width, or what the viewport leaves */
 .map-settings {
 	position: fixed;
 	z-index: 100000;
@@ -999,8 +1019,8 @@ body.fs-lock {
 
 /* on desktop the dialog is a window: dragged by its head and resized from any
    side or corner through the widgets' own handles, which maps.js appends and
-   drives. Everything else about it stands — the page still holds still behind
-   it and a press outside still shuts it */
+   drives — inside the panel, so the press that grabs one is a press inside the
+   dialog and misses the backdrop that would shut it */
 @media (min-width: 801px) and (hover: hover) and (pointer: fine) {
 	.map-settings .po-h {
 		position: absolute;

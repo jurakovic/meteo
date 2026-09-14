@@ -62,7 +62,9 @@
 			</tbody>
 		</table>
 	</div>
-	<!-- the settings dialog, over everything; the tab opens it where the page's own button is out of reach -->
+	<!-- the settings dialog, over everything; the tab opens it where the page's own button is out of reach.
+	     The backdrop under it takes the press that dismisses it, so that press reaches nothing else -->
+	<div class="ms-backdrop" hidden></div>
 	<div class="map-settings" id="mapSettings" hidden></div>
 	<button type="button" class="ms-tab" title="Karte (K)"><span class="ms-tab-name">Karte</span></button>
 	<footer>
