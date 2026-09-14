@@ -104,7 +104,9 @@ Interaktivne karte nemaju `[R]` — one same dohvaćaju najnovije podatke, pa ih
 
 Prozori se međusobno privlače: kad se rub približi rubu drugog prozora, sam sjedne na njega. Tako se lako slaže uredna mreža bez mjerkanja.
 
-Slike i videa zadržavaju svoj omjer, pa im se mijenja samo širina. Šire se do veličine same slike — dalje se ne ide jer bi karta prestala rasti, a prozor bi se nastavio širiti oko nje. Ako želite slobodnu visinu, **držite Shift dok počinjete povlačiti rub** — karta se tada uklapa unutar okvira, s neoštrom kopijom slike kao podlogom. Povlačenje bez Shifta, ili dvoklik na naslovnu traku, vraća omjer.
+Rub se povlači slobodno: širina i visina idu svaka za svojim. Karta se tada uklapa unutar okvira, s neoštrom kopijom slike kao podlogom. **Držite Shift** i prozor zadržava omjer slike, pa mu se mijenja samo širina — kao u programima za slike. Tako zadržan, širi se do veličine same slike i ne dalje, jer bi karta prestala rasti, a prozor bi se nastavio širiti oko nje.
+
+Shift vrijedi i usred povlačenja, ne samo na početku: pritisnite ga dok vučete i prozor se vraća na omjer, pustite ga i opet je slobodan. Miš se pritom ne mora micati. Ono što prozor na kraju ostane odlučuje tipka u trenutku puštanja ruba. Dvoklik na naslovnu traku također vraća omjer.
 
 Kad je karta tako razvučena, naslovna traka ide cijelom širinom prozora, a slika stoji sredinom. Strelice `❮` i `❯` i kvadratići ispod nje drže se same slike, a ne cijelog prozora, pa pokazuju na ono što i jesu.
 
@@ -174,6 +176,7 @@ Na [nadzornoj ploči](#nadzorna-ploča) karta uzme cijeli ekran, osim sa strane 
 | <kbd>S</kbd> | poravnavanje uz mrežu (na ploči) |
 | strelice | pomiču prozor koji je na vrhu za jedno polje mreže |
 | <kbd>Shift</kbd> + strelice | isto, ali za jedan piksel |
+| <kbd>Shift</kbd> + povlačenje ruba | zadržava omjer slike; vrijedi i usred povlačenja |
 
 Strelice pomiču onaj prozor koji je posljednji podignut, dakle onaj koji je vidljivo iznad ostalih. Ako se pomaknuo krivi, kliknite na onaj koji ste htjeli i ponovite. Dok je dijalog *Karte* otvoren, strelice pripadaju njemu — listaju njegov popis i ne pomiču prozor ispod njega. <kbd>G</kbd> i <kbd>S</kbd> rade i tada, jer su ta dva prekidača i u samom dijalogu.
 

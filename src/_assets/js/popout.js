@@ -576,14 +576,28 @@ function viewportHeight() {
 // released (or the gesture cancelled)
 function trackPopoutPointer(e, onMove, onEnd) {
 	const startX = e.clientX, startY = e.clientY;
+	let dx = 0, dy = 0, at = e; // where the pointer was left, for the key to repeat
 	// the shadows follow the gesture live: every drag and resize of a widget, a
 	// group, a pane and a column comes through here, and updateCovered — which
 	// syncs them otherwise — runs only once the gesture is over
-	const move = (ev) => { onMove(ev.clientX - startX, ev.clientY - startY, ev); syncShadows(); };
+	const move = (ev) => { at = ev; dx = ev.clientX - startX; dy = ev.clientY - startY; onMove(dx, dy, ev); syncShadows(); };
+	// Shift is answered while the gesture runs and not only as it stood when it
+	// began (resizePopout): the last move is made again with the key as it now
+	// is, so a pull already under way changes what it does the moment the key
+	// goes down or comes up, with the pointer held still. A KeyboardEvent
+	// carries no coordinates, so the pointer's last stand in — the same move
+	// over again, which every onMove here takes without moving anything
+	const key = (ev) => {
+		if (ev.key !== 'Shift' || ev.repeat) return;
+		onMove(dx, dy, { clientX: at.clientX, clientY: at.clientY, shiftKey: ev.type === 'keydown' });
+		syncShadows();
+	};
 	const stop = () => {
 		document.removeEventListener('pointermove', move);
 		document.removeEventListener('pointerup', stop);
 		document.removeEventListener('pointercancel', stop);
+		document.removeEventListener('keydown', key);
+		document.removeEventListener('keyup', key);
 		document.body.classList.remove('po-dragging');
 		if (onEnd) onEnd();
 	};
@@ -591,6 +605,8 @@ function trackPopoutPointer(e, onMove, onEnd) {
 	document.addEventListener('pointermove', move);
 	document.addEventListener('pointerup', stop);
 	document.addEventListener('pointercancel', stop);
+	document.addEventListener('keydown', key);
+	document.addEventListener('keyup', key);
 }
 
 // the widget follows the pointer by the point of the title bar it was grabbed
@@ -865,24 +881,47 @@ function resizePopout(block, dir, e) {
 	const members = groupMembers(block);
 	const col = snapColumnOf(block);
 	if (members.length > 1 && !col) return resizeGroup(members, dir, e);
-	// the key decides per gesture, while the widget floats: Shift frees a
-	// locked widget's aspect, and a plain drag locks a freed one again (in a
-	// column the width is the column's, and a freed pane stays as it is)
-	if (!col && e.shiftKey && !block.classList.contains('free')) unlockAspect(block);
-	else if (!col && !e.shiftKey && block.classList.contains('letterbox')) lockAspect(block);
+	// Shift holds the aspect and a plain pull is free of it, which is the way
+	// round an image editor has it and the way round a window has none at all.
+	// The key is read through the gesture rather than at the start of it: press
+	// or release it mid-pull and the rest of the pull answers, the widget taking
+	// its aspect back or letting it go where it stands, so what it is left as is
+	// what the key said when it was let go. Mid-pull the pointer need not move
+	// for this — trackPopoutPointer repeats the last move on the key itself.
+	// (In a column the width is the column's, so the key says nothing there and
+	// a pane is left as it is, freed or locked.)
+	let ratio;
+	const setMode = (shift) => {
+		if (col) return;
+		if (!shift && !block.classList.contains('free')) unlockAspect(block);
+		else if (shift && block.classList.contains('letterbox')) {
+			lockAspect(block);
+			// the aspect it takes back is its content's, not the shape a free
+			// pull left it in, so lockedWidthFor is re-seeded from what it now is
+			const r = block.getBoundingClientRect();
+			ratio = r.width / r.height;
+		}
+	};
+	setMode(e.shiftKey);
 	const start = block.getBoundingClientRect();
-	const free = block.classList.contains('free');
-	const ratio = start.width / start.height;
+	ratio = start.width / start.height;
 	// a locked widget stops where its content does, so the map fills it at every
-	// width it can be pulled to and the aspect stays locked to something
-	const maxWidth = lockedMaxWidth(block, popoutMaxWidth());
+	// width it can be pulled to and the aspect stays locked to something. Free,
+	// there is no content to be held to (lockedMaxWidth) — and the hold cannot
+	// be measured until the gesture is locked, so it is taken the first time it
+	// is and kept, the content not changing under a pull
+	const ceiling = popoutMaxWidth();
+	let lockedCeiling = 0;
+	const lockedCap = () => (lockedCeiling || (lockedCeiling = lockedMaxWidth(block, ceiling)));
 	const maxHeight = viewportHeight() - POPOUT_MARGIN;
 	const magnets = col ? [] : magnetRects(block);
 	const mates = col ? groupStarts(members.filter(m => m !== block)) : [];
 	const above = mates.filter(s => s.top < start.top), below = mates.filter(s => s.top > start.top);
 	const stackTop = Math.min(start.top, ...above.map(s => s.top));
 	const stackBottom = Math.max(start.bottom, ...below.map(s => s.bottom));
-	trackPopoutPointer(e, (dx, dy) => {
+	trackPopoutPointer(e, (dx, dy, ev) => {
+		setMode(ev.shiftKey); // the key as it is now, not as it was at the start
+		const free = block.classList.contains('free');
 		let w = start.width, h = start.height;
 		if (dir.includes('e')) w = start.width + dx;
 		if (dir.includes('w')) w = start.width - dx;
@@ -902,10 +941,11 @@ function resizePopout(block, dir, e) {
 		}
 		({ w, h } = pullResizeEdges(magnets, dir, start, w, h));
 		if (free) {
-			w = clamp(w, POPOUT_MIN_WIDTH, maxWidth);
+			w = clamp(w, POPOUT_MIN_WIDTH, ceiling);
 			h = clamp(h, POPOUT_MIN_HEIGHT, maxHeight);
 			block.style.height = `${Math.round(h)}px`;
 		} else {
+			const maxWidth = lockedCap();
 			// the width the wanted height asks for, read off the widget rather
 			// than taken from the start ratio, so the pulled edge lands on its
 			// magnet and a plain drag follows the pointer (lockedWidthFor)
