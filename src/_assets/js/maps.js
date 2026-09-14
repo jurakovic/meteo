@@ -944,10 +944,10 @@ function getActiveMapPrefs() {
 // in storage or in the `?v=` above, and this file is read in <head> — the build
 // inlines it there — so the answer is in hand while the body is still being
 // parsed. The board itself cannot be: every map of it is a widget, and there
-// are no maps until the render on DOMContentLoaded. On a slow load the browser
-// paints what it has well before that, so the page appeared in its ordinary
-// layout for a moment and was then taken away. The cloak hides the same two
-// things body.dashboard does, from now until the arrangement is applied.
+// are no maps until the render on DOMContentLoaded — and on a slow load the
+// browser paints what it has well before that, which would show the page in its
+// ordinary layout for a moment before taking it away. The cloak hides the same
+// two things body.dashboard does, from now until the arrangement is applied.
 function cloakBoard() {
 	const layout = getActiveMapPrefs().layout;
 	if (layout && layout.dashboard && POPOUT_MQ.matches) document.documentElement.classList.add('board-boot');
@@ -1371,16 +1371,15 @@ else initMsTab();
 // ---------- the dialog: where and how big the user put it ----------
 
 // On desktop the dialog is a window: dragged by its head and resized from any
-// side or corner through the widgets' own handles. Nothing else about it
-// changes — the page is still held still behind it, a press outside still
-// shuts it, and it is still rebuilt on every open (replaceChildren leaves the
-// panel's own inline styles, so where it was put outlives the rebuild).
+// side or corner through the widgets' own handles. It is rebuilt on every open,
+// and replaceChildren leaves the panel's own inline styles, so where it was put
+// outlives the rebuild.
 // Where and how big is remembered in this browser only (msPanel: the left and
 // top as fractions of the viewport, the width in px, and the height in px
 // once it has been resized), not in the arrangement, since it is about this
 // screen and not the view — the same footing as the tab above. Until it is
-// resized the height stays the content's, as the CSS had it, capped to what
-// is left below wherever the top now is; a double-click on the head drops the
+// resized the height stays the content's, capped to what is left below wherever
+// the top now is; a double-click on the head drops the
 // lot and gives the CSS its dialog back
 const MS_PANEL_KEY = 'msPanel';
 const MS_PANEL_MIN_WIDTH = 360;
@@ -1894,8 +1893,9 @@ function buildMapSettings(panel) {
 	}
 	renderLayoutLine();
 
-	// the arrangement changes behind the open panel — a map popped out, a pane
-	// snapped, everything put back — and the rows and Ažuriraj follow at once
+	// the arrangement changes from inside the open panel — Vrati sve on the
+	// layout line — and the rows and Ažuriraj follow at once. A gesture on a
+	// widget is a press outside the dialog, which shuts it
 	panel._onLayoutChange = () => {
 		renderModeRow();
 		renderLayoutLine();

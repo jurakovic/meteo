@@ -128,15 +128,13 @@ function unlockAspect(block) {
 }
 
 // the double-click's lock: the widget comes in to the image as it is painted,
-// rather than the image being blown up to whatever width the widget happens to
-// have. A letterboxed image is contained in its box, so one axis is the
-// image's and the other is ground beside it — taking the aspect back at the
-// width it had keeps the ground and grows the other axis to match it, and a
-// wide, short widget becomes a tall one on a gesture that asked for nothing of
-// the sort. The width that gives the height it already has is the other answer,
-// and the smaller of the two is the image: whichever axis was holding the
-// contain is the one kept, and the widget only ever comes in. In a column the
-// width is the column's, so a pane takes the aspect back as it always did
+// rather than the image being blown up to the width the widget happens to have.
+// A letterboxed image is contained in its box, so one axis is the image's and
+// the other is ground beside it. Of the two ways to take the aspect back — at
+// the width it has, or at the width that gives the height it has — the smaller
+// is the image: whichever axis was holding the contain is the one kept, and the
+// widget only ever comes in. In a column the width is the column's, so a pane
+// simply takes the aspect back
 function lockToImage(block) {
 	const rect = block.getBoundingClientRect();
 	lockAspect(block);
@@ -144,10 +142,8 @@ function lockToImage(block) {
 	// an image not yet there has no painted size to come in to
 	const img = block.querySelector('.slide.active img') || block.querySelector('.placeholder img');
 	if (img && !(img.complete && img.naturalWidth)) return;
-	// the seed is taken at the width the widget has, which the map now follows
-	// at every width: while a locked map stopped at its own, a ratio read past
-	// that point was of the ground beside it and not of the map — dhmz at 1100
-	// gave 1.42 where its content was 0.93, which lockedWidthFor cannot close
+	// the seed is taken at the width the widget has, which the map follows at
+	// every width, so the ratio read there is the map's and not the ground's
 	const cap = popoutMaxWidth();
 	const tall = lockedHeightAt(block, Math.min(rect.width, cap));
 	if (tall > rect.height + 0.5) {
@@ -208,18 +204,17 @@ function unfitTitles(block) {
 	});
 }
 
-// A letterboxed image is painted smaller than the box it is centred in —
-// object-fit does that inside the element and lays nothing out, so the arrows,
-// which are absolute in the .slideshow, and the indicators, which are as wide
-// as it, went on spanning the whole widget: the arrows hung over the bars
-// beside the image and the indicators measured something wider than what they
-// index. CSS cannot see a contain-fitted image's rect, so it is worked out
-// here — the natural ratio against the element's box — and published as the
-// four insets from the .slideshow the arrows are positioned in (which takes
-// the slide's own title bar off the top for free, where .shorter used to) and
-// the painted width for the indicators to take and centre themselves in.
-// Measured wherever the title is, and for the same reasons: the box changes
-// with every gesture, and the image itself with a slide or a reload
+// A letterboxed image is painted smaller than the box it is centred in:
+// object-fit contains it inside the element and lays nothing out, so the arrows
+// (absolute in the .slideshow) and the indicators (as wide as it) would span the
+// whole widget rather than the image they belong to. CSS cannot see a
+// contain-fitted image's rect, so it is worked out here — the natural ratio
+// against the element's box — and published as the four insets from the
+// .slideshow the arrows are positioned in (which takes the slide's own title bar
+// off the top for free) and the painted width for the indicators to take and
+// centre themselves in. Measured wherever the title is, and for the same
+// reasons: the box changes with every gesture, and the image with a slide or a
+// reload
 function fitLetterbox(block) {
 	const props = ['--lb-l', '--lb-r', '--lb-t', '--lb-b', '--lb-w'];
 	const box = block.querySelector('.slideshow');
@@ -272,7 +267,12 @@ function dockMap(block) {
 function dockAllPopouts() {
 	setDashboard(false);
 	layoutSnapColumns();
+	// one write for the lot: every dockMap would otherwise store the arrangement
+	// on its way out, and the only one worth storing is the last
+	const paused = snapPersistPaused;
+	snapPersistPaused = true;
 	document.querySelectorAll('.map-block.popout').forEach(dockMap);
+	snapPersistPaused = paused;
 	persistSnapLayout(); // also with nothing to dock: the mode may have changed
 	syncShadows(); // the breakpoint docks with persistence paused, so the sweep is not reached through it
 }
@@ -315,11 +315,11 @@ function popoutRest() {
 	document.querySelectorAll('.map-block:not(.popout)').forEach(block => {
 		popoutMap(block);
 		// the widget's own height says whether it still fits, but the step it
-		// lands on is the cascade's own count and not a number of steps derived
-		// from that height: widgets are of every height, so a per-widget count
-		// is a different modulus for each and lands several of them on the very
-		// same place. The first of a round goes down whatever its height, or one
-		// taller than the viewport would start a round of its own for ever
+		// lands on is the cascade's own count rather than a number of steps
+		// derived from that height: widgets are of every height, so a per-widget
+		// count is a different modulus for each and lands several of them on the
+		// very same place. The first of a round goes down whatever its height, or
+		// one taller than the viewport would start a round of its own for ever
 		if (top > POPOUT_MARGIN && top + block.offsetHeight > viewportHeight()) {
 			top = POPOUT_MARGIN;
 			round++;
@@ -359,8 +359,8 @@ function removeFromDashboard(block) {
 // every screen, and the paper is one repeating gradient however fine it gets.
 // Two edges land on the same line whenever they lie within half a cell of each
 // other, so at 16 the grid forgives 8px — many times the fraction of a pixel an
-// aspect-derived height used to leave between two widgets, which is what makes
-// a snapped board exact where a placed one was not. Both switches are the
+// aspect-derived height leaves between two widgets, which is what makes a
+// snapped board exact where a placed one is only nearly so. Both switches are the
 // browser's, not the view's (mapGrid, like msTab and msPanel): they are a way
 // of working, so they do not travel in a preset or a link, and they keep their
 // state while the board is off, when they do nothing
@@ -375,8 +375,7 @@ function loadGridPrefs() {
 	return { show: false, snap: false };
 }
 
-let gridShow = loadGridPrefs().show;
-let gridSnap = loadGridPrefs().snap;
+let { show: gridShow, snap: gridSnap } = loadGridPrefs();
 
 function isGridShown() {
 	return gridShow;
@@ -502,18 +501,18 @@ function raisePopout(block) {
 }
 
 // An iframe takes the pointer itself, and a press inside it belongs to the
-// frame's document: the page never sees it, so the widget clicked into would
-// stay under the one over it. Most maps are spared by their gate, an .overlay
-// over the frame that takes the press, but a basic iframe (.if2) has none and
-// an interactive one loses its own once the gate is let through. Nor can the
-// page be told after the fact — the focus moving from one frame to another
-// raises no event it can hear (see the blur handler below, which catches only
-// the move in from the page itself). So a frame with another widget lying over
-// it stops taking the pointer at all (`covered`, the CSS): the press lands on
-// the widget instead and raises it, the class goes with the raise, and the
-// frame is live for the next press. Click it to the front, then work the map —
-// which is what a window does. A widget nothing overlaps is never covered, so
-// a map standing on its own is untouched
+// frame's document: the page never sees it, so a widget clicked into would stay
+// under the one over it. Most maps are spared by their gate, an .overlay over
+// the frame that takes the press, but a basic iframe (.if2) has none and an
+// interactive one loses its own once the gate is let through. Nor can the page
+// be told after the fact — the focus moving from one frame to another raises no
+// event it can hear (see the blur handler below, which catches only the move in
+// from the page itself). So a frame with another widget lying over it stops
+// taking the pointer at all (`covered`, the CSS): the press lands on the widget
+// instead and raises it, the class goes with the raise, and the frame is live
+// for the next press. Click it to the front, then work the map — which is what a
+// window does. A widget nothing overlaps is never covered, so a map standing on
+// its own is untouched
 function updateCovered() {
 	const boxes = allPopouts().map(block => ({
 		block,
@@ -537,21 +536,18 @@ function updateCovered() {
 // ---------- the shadow layer (desktop) ----------
 
 // A widget's shadow belongs to what is behind the widgets, not to the widget
-// beside it. Drawn by the widget itself it was painted in the widget's own
-// place in the order, so of two widgets side by side the raised one laid its
-// shadow across its neighbour, and the only way to be rid of it was to raise
-// the neighbour in turn — which puts its shadow on the first one. So no widget
-// carries a shadow any more: each one has a box of its own size in a single
-// layer under the whole widget range (.po-shadows, over the page and the
-// docked maps on it, the columns' ground, the graph paper and a fullscreen
+// beside it: a shadow drawn by the widget itself paints in that widget's place
+// in the order, so of two widgets side by side the raised one lays its shadow
+// across its neighbour. So no widget carries one. Each has a box of its own size
+// in a single layer under the whole widget range (.po-shadows, over the page and
+// the docked maps on it, the columns' ground, the graph paper and a fullscreen
 // map), and that box carries the shadow. An outer box-shadow is clipped out of
-// its own border box, so the box paints the halo alone and the widget sits on
-// it exactly. Every widget is then over every shadow, whatever the order among
-// themselves — which is what was wanted, and it lets a grouped widget have its
-// shadow back: a member's now falls under the member beside it, not across it.
-// A pane in a column has none (docked into the column's ground rather than
-// floating over it), nor has a widget hosting a fullscreen map, whose box is
-// not to be seen.
+// its own border box, so the box paints the halo alone and the widget sits on it
+// exactly. Every widget is then over every shadow whatever the order among
+// themselves, which also lets a grouped widget keep a shadow: a member's falls
+// under the member beside it, not across it. A pane in a column has none (docked
+// into the column's ground rather than floating over it), nor has a widget
+// hosting a fullscreen map, whose box is not to be seen.
 function shadowLayer() {
 	let layer = document.querySelector('.po-shadows');
 	if (!layer) document.body.appendChild(layer = el('div', { class: 'po-shadows' }));
@@ -870,8 +866,8 @@ function groupBox(starts) {
 // fraction of a pixel, and a widget magneted under it would sit half a pixel
 // into it — both borders drawn, a seam of about one and a half. Only a landing
 // on such an edge carries a fraction (a width is whole, so the sides are too),
-// and it costs that widget's border the crispness of sitting on the grid,
-// which is the lesser of the two. Thousandths: the layout unit is 1/64px
+// and it costs that widget's border no more than the crispness of sitting on
+// the grid. Thousandths: the layout unit is 1/64px
 function moveGroup(starts, box, dx, dy) {
 	const left = Math.min(Math.max(0, box.left + dx), Math.max(0, viewportWidth() - box.width));
 	const top = Math.min(Math.max(0, box.top + dy), Math.max(0, viewportHeight() - box.height));
@@ -889,36 +885,32 @@ function subpixel(v) {
 	return Math.round(v * 1000) / 1000;
 }
 
-// resizing from any side or corner. Width is the dimension every widget has;
-// a locked (aspect) widget derives its height from it, so a pull on its top or
+// resizing from any side or corner. Width is the dimension every widget has; a
+// locked (aspect) widget derives its height from it, so a pull on its top or
 // bottom edge is turned into the width that gives that height, and a corner
 // follows whichever axis asks for more. Pulling the left or top edge keeps the
-// opposite edge where it is by moving the widget along. The pulled edge is
-// drawn by the other floating widgets too (magnets, as on drag): onto the
-// facing edge of one beside it — above or below it, for a top or bottom edge
-// — or into line with the like edge of one above or below it; exact for a
-// width, and through the aspect ratio for a locked widget's height — whose
-// width, once the height has asked for it, has a moving edge of its own to
-// pull, so the widget lines up with the one above it by that edge too. A
-// free pane in a column keeps the column's width: its top or bottom edge is
-// drawn to the column's ends and the other panes, and the top it carries
-// follows; the pulled edge stops at the column's end. A grouped floating
-// widget's handles resize the whole group (resizeGroup); a grouped pane
-// resizes on its own in its stack, which keeps together: the members above
-// it move up with its top edge, the ones below move down with its bottom
-// edge (the settle in layoutSnapColumn), and the stack's ends stop at the
-// column's
+// opposite edge where it is by moving the widget along. The pulled edge is drawn
+// by the other floating widgets too (magnets, as on drag): onto the facing edge
+// of one beside it, or into line with the like edge of one above or below it —
+// exact for a width, and through the aspect ratio for a locked widget's height,
+// whose width then has a moving edge of its own to pull, so the widget lines up
+// by that edge too. A free pane in a column keeps the column's width: its top or
+// bottom edge is drawn to the column's ends and the other panes, and the top it
+// carries follows. A grouped floating widget's handles resize the whole group
+// (resizeGroup); a grouped pane resizes on its own in its stack, which keeps
+// together — the members above it move up with its top edge, the ones below down
+// with its bottom edge (the settle in layoutSnapColumn), and the stack's ends
+// stop at the column's
 function resizePopout(block, dir, e) {
 	const members = groupMembers(block);
 	const col = snapColumnOf(block);
 	if (members.length > 1 && !col) return resizeGroup(members, dir, e);
-	// Shift holds the aspect and a plain pull is free of it, which is the way
-	// round an image editor has it and the way round a window has none at all.
-	// The key is read through the gesture rather than at the start of it: press
-	// or release it mid-pull and the rest of the pull answers, the widget taking
-	// its aspect back or letting it go where it stands, so what it is left as is
-	// what the key said when it was let go. Mid-pull the pointer need not move
-	// for this — trackPopoutPointer repeats the last move on the key itself.
+	// Shift holds the aspect and a plain pull is free of it, the way round an
+	// image editor has it. The key is read through the gesture rather than at the
+	// start of it: press or release it mid-pull and the rest of the pull answers,
+	// the widget taking its aspect back or letting it go where it stands, so what
+	// it is left as is what the key said when it was let go. The pointer need not
+	// move for this — trackPopoutPointer repeats the last move on the key itself.
 	// (In a column the width is the column's, so the key says nothing there and
 	// a pane is left as it is, freed or locked.)
 	let ratio;
@@ -936,27 +928,15 @@ function resizePopout(block, dir, e) {
 	setMode(e.shiftKey);
 	const start = block.getBoundingClientRect();
 	ratio = start.width / start.height;
-	// one ceiling for both, the map following the widget to any width it is
-	// pulled to — locked, it used to stop at what its own content spanned.
-	//
-	// What the pulled edge may reach is the room between the edge that is not
-	// moving and the viewport edge it is pulled towards, and it is the size
-	// that is held to that room rather than the widget put back inside the
-	// viewport afterwards. Clamping the size against a maximum of its own let
-	// the widget outgrow its room, and placePopout took the overflow back by
-	// moving the widget — which moves the edge that is not being dragged: a
-	// south pull carried past the bottom of the screen drew the top up the
-	// screen after it, into whatever stood above. An absolute cap cannot reach
-	// the far edge from the near one either. At the top of the viewport the
-	// height stopped POPOUT_MARGIN short of the bottom and no pull would close
-	// it, where a width has always been free to touch the right edge
-	// (popoutMaxWidth), which is the whole of why one axis could be filled and
-	// the other could not. The margin is off the sizing clamp for that reason;
-	// placePopout keeps its own clamp, which now has nothing left to correct.
-	//
-	// A widget always starts inside the viewport (placePopout sees to it), so
-	// the room is never less than the side it is the room for, and no gesture
-	// is forced to shrink one
+	// one ceiling for both axes, the map following the widget to any width it is
+	// pulled to. What the pulled edge may reach is the room between the edge that
+	// is not moving and the viewport edge it is pulled towards, and it is the
+	// size that is held to that room rather than the widget put back inside the
+	// viewport afterwards — which would move the edge that is not being dragged.
+	// No margin is kept off the viewport edge here, so either axis can be filled
+	// to it; placePopout keeps its own clamp. A widget always starts inside the
+	// viewport (placePopout sees to it), so the room is never less than the side
+	// it is the room for, and no gesture is forced to shrink one
 	const ceiling = popoutMaxWidth();
 	const maxWidth = Math.min(ceiling, dir.includes('w') ? start.right : viewportWidth() - start.left);
 	const maxHeight = dir.includes('n') ? start.bottom : viewportHeight() - start.top;
@@ -1012,12 +992,8 @@ function resizePopout(block, dir, e) {
 				if (Math.abs(want - at) > 0.5) w = lockedWidthFor(block, want, w + (want - at) * ratio, ratio, maxWidth);
 			}
 			// and the room is a height, which locked is a width as well: the
-			// widest the widget stands inside it. Nothing held this before —
-			// only the width was clamped and the height went wherever the aspect
-			// took it, off the bottom of the screen and well past it. What kept
-			// that from being seen was the content's own width, which stopped a
-			// locked widget long before the viewport did; it is the last thing
-			// the hold was doing, and the last of it to go
+			// widest the widget stands inside it, so the aspect cannot carry the
+			// height off the bottom of the screen
 			if (lockedHeightAt(block, w) > maxHeight + 0.5)
 				w = lockedWidthFor(block, maxHeight, maxHeight * ratio, ratio, maxWidth);
 		}
@@ -1052,12 +1028,12 @@ function pullResizeEdges(magnets, dir, start, w, h) {
 // the width at which a locked widget stands exactly h high. Its height is its
 // title bar and indicators, which keep their height whatever the width, plus
 // the map, which scales with it — so height is not proportional to width, and
-// the start ratio only approximates the width a wanted height asks for: a pull
-// on the top or bottom edge landed beside its magnet by about the bar's share
-// of the height, a dozen pixels, which is the whole of MAGNET. Setting the
-// width and reading back the height it gave closes that, since the error left
-// is the bar's share of the error — under a tenth — so the second pass lands
-// on the pixel. Cheap enough per move: the height is read back once anyway
+// a ratio only approximates the width a wanted height asks for: it is out by
+// about the bar's share of the height, a dozen pixels, which is the whole of
+// MAGNET. Setting the width and reading back the height it gave closes that,
+// since the error left is the bar's share of the error — under a tenth — so
+// the second pass lands on the pixel. Cheap enough per move: the height is read
+// back once anyway
 function lockedWidthFor(block, h, w, ratio, maxWidth) {
 	for (let i = 0; i < 3; i++) {
 		w = clamp(w, POPOUT_MIN_WIDTH, maxWidth);
@@ -1144,11 +1120,9 @@ function resizeGroup(members, dir, e) {
 			placed.push(s);
 		});
 		// fitWidget, not fitTitles alone: a letterboxed member's arrows and
-		// indicators are held to the image's rect (--lb-*, fitLetterbox), and
-		// left unmeasured through the gesture they kept the width the image had
-		// before it — the whole group shrinking under indicators that did not,
-		// until the release put them right. A plain pull frees a widget now, so
-		// far more of them are letterboxed and carry these
+		// indicators are held to the image's rect (--lb-*, fitLetterbox), so left
+		// unmeasured through the gesture they keep the width the image had before
+		// it — the group shrinking under indicators that do not
 		members.forEach(fitWidget);
 	}, () => { snapToGrid(members); persistSnapLayout(); });
 }
@@ -1229,17 +1203,16 @@ window.addEventListener('blur', () => setTimeout(raiseFocusedFrame));
 
 // Keys for what the buttons cannot do in one gesture, and for backing out of
 // what covers the screen. The letters name the thing and not the word for it,
-// so they stand whatever language the page comes to speak: R is the [R] the
-// bar already carries, G the grid and S its snap. (K, which opens the dialog in
-// maps.js — which keeps that key and the dialog's own Escape — was here before
-// this and is the Croatian Karte.) The three are also the tab's glyph cluster,
-// which is where they can be read off: [R] [G] [S], each titled with its key.
-// None of this reaches the page while an iframe holds
-// the focus — a press inside a frame belongs to the frame's document, and
-// these maps are another origin — so a click on the page or on a title bar
-// comes first, as it does for the pointer (see updateCovered). The dialog's
-// guard is repeated here: not from a text field, whose own Escape is a way
-// out of the field, and not under a modifier, which belongs to the browser
+// so they stand whatever language the page comes to speak: R is the [R] the bar
+// already carries, G the grid and S its snap. (K, which opens the dialog, lives
+// in maps.js with the dialog's own Escape, and is the Croatian Karte.) The three
+// are also the tab's glyph cluster, which is where they can be read off:
+// [R] [G] [S], each titled with its key. None of this reaches the page while an
+// iframe holds the focus — a press inside a frame belongs to the frame's
+// document, and these maps are another origin — so a click on the page or on a
+// title bar comes first, as it does for the pointer (see updateCovered). The
+// dialog's guard is repeated here: not from a text field, whose own Escape is a
+// way out of the field, and not under a modifier, which belongs to the browser
 const NUDGE_KEYS = { ArrowLeft: [-1, 0], ArrowRight: [1, 0], ArrowUp: [0, -1], ArrowDown: [0, 1] };
 
 document.addEventListener('keydown', (e) => {
@@ -1422,30 +1395,27 @@ window.addEventListener('resize', () => {
 // ---------- snap columns (desktop) ----------
 
 // a widget dragged to the left or right edge of the viewport snaps into a
-// column there: a strip of the viewport's height in which panes sit freely
-// one above another, the page laid out in what is left between the columns
-// (body padding, through --snap-l/--snap-r). A pane is still a pop-out
-// widget — same block, same fixed positioning, nothing moves in the DOM —
-// only its width is the column's and its place comes from
-// layoutSnapColumns(): a column has a width and each pane a top (a free pane
-// a height too), all fractions of the viewport so a window resize keeps the
-// proportions. Up and down the column a pane moves as a widget does over the
-// page, the column's ends and the other panes its magnets; pulled sideways
-// it floats again. The column's inner edge is its resize handle (.snap-ui,
-// above the panes); .snap-col paints the column's ground below them. A free
-// (iframe) pane keeps its own height and resizes by its top and bottom edge;
-// a locked one takes the column's width, pulled in to what its content
-// spans, and the height that gives it. A group in a column is a stack, kept
-// one under another by every layout (settleSnapStacks), so the column's
-// width or the window changing under it changes its members' heights and
-// not their touch. A fullscreen map in a pane fills what the column leaves
-// free around the pane (fitSnapFullscreen).
+// column there: a strip of the viewport's height in which panes sit freely one
+// above another, the page laid out in what is left between the columns (body
+// padding, through --snap-l/--snap-r). A pane is still a pop-out widget — same
+// block, same fixed positioning, nothing moves in the DOM — only its width is
+// the column's and its place comes from layoutSnapColumns(): a column has a
+// width and each pane a top (a free pane a height too), all fractions of the
+// viewport so a window resize keeps the proportions. Up and down the column a
+// pane moves as a widget does over the page, the column's ends and the other
+// panes its magnets; pulled sideways it floats again. The column's inner edge is
+// its resize handle (.snap-ui, above the panes); .snap-col paints the column's
+// ground below them. A free (iframe) pane keeps its own height and resizes by
+// its top and bottom edge; a locked one takes the column's width whole and the
+// height its aspect gives at it. A group is a stack, kept one under another by
+// every layout (settleSnapStacks). A fullscreen map in a pane fills what the
+// column leaves free around it (fitSnapFullscreen).
 //
 // The columns can take the whole width — two of them meeting, or one at full
 // width — which hides the page (body.snap-full also drops its scrollbar). An
-// edge dragged that close snaps shut; a double-click on an edge shuts it too,
-// or opens it back to the widths from before. Two columns that meet share one
-// seam handle that moves width between them.
+// edge dragged that close snaps shut; a double-click on an edge shuts it too, or
+// opens it back to the widths from before. Two columns that meet share one seam
+// handle that moves width between them.
 const SNAP_EDGE = 5; // a widget edge this close to a viewport edge targets its column
 const SNAP_SHUT = 24; // a column edge this close to the far side shuts the page
 const SNAP_DETACH = 40; // sideways drag distance before a snapped pane floats again
@@ -1701,37 +1671,26 @@ function fitSnapFullscreen(col) {
 
 // The board's answer to the same question. A column gives a pane one axis to
 // grow in — the strip is the width, the panes above and below are the ends —
-// and the board gives a widget four sides. The map takes the whole viewport
-// there, and a side comes in only where another widget *walls it off*: where
-// the widgets on that side, together, cover the rectangle from end to end of
-// its other axis. A wall is what makes a region a region — a widget down the
-// left of the screen leaves the right half a place of its own, and a map
-// filling it is filling what it is in.
-//
-// A widget that does not reach across walls nothing off, and is floated over:
-// one in a corner leaves no region behind it, and taking a whole screen's map
-// down to the space beside it would be giving up the screen to a tile. Nothing
-// is lost by covering it — the widgets keep their z-index range above the
-// fullscreen map, so it stays where it is, over the corner of what is now a
-// map of the whole board.
+// and the board gives a widget four sides: the map takes the whole viewport,
+// and a side comes in only where another widget *walls it off*, that is where
+// the widgets on that side together cover the rectangle from end to end of its
+// other axis. A widget that does not reach across walls nothing off and is
+// floated over; the widgets keep their z-index range above the fullscreen map,
+// so one in a corner stays where it is, over the corner of a map of the whole
+// board. A widget lying over the host is on no side of it and so is never a
+// wall.
 //
 // The walls are looked for again once the sides have come in, since narrowing
 // the rectangle is what lets a widget reach across it: a widget over the right
 // half alone walls off nothing of the viewport, and walls off the top of a
 // rectangle that is already the right half. It settles in a pass or two —
 // every pass only narrows — and stops when nothing moves.
-//
-// A widget lying over the host is on no side of it and so is never a wall,
-// which is the same answer for the same reason.
 function freeRectAround(rect, blockers, bounds) {
 	// the spans, laid end to end, reach from one side of the rectangle to the
 	// other. A gap no wider than POPOUT_MARGIN is no gap: it is the grid's cell,
 	// so widgets stacked on the grid wall as the eye reads them, and it is the
 	// slack a wall wants anyway — a widget a few pixels off one still shuts the
-	// region behind it as far as the eye is concerned. (It was also exactly what
-	// the sizing clamp kept off the viewport edge, which is why a widget stored
-	// at the full height used to come back that much short of walling; the clamp
-	// reaches the edge now and that reason has gone, the tolerance has not)
+	// region behind it as far as the eye is concerned.
 	const covers = (spans, from, to) => {
 		let at = from;
 		spans.sort((a, b) => a[0] - b[0]).forEach(([lo, hi]) => {
@@ -2068,11 +2027,10 @@ function applySnapLayout(layout) {
 	resetSnapColumns();
 	// the mode before anything is measured: the page's scrollbar goes with it
 	setDashboard(!!(layout && layout.dashboard && POPOUT_MQ.matches));
-	// nothing to place, but the sweep still has to run: the widgets this
-	// replaces went with the tbody (renderMaps) instead of being docked, so
-	// their shadows are left in the layer with no widget to own them, and the
-	// updateCovered that would have swept them is below this return. Leaving
-	// the board with nothing placed is exactly this case
+	// nothing to place, but the sweep still has to run: the widgets this replaces
+	// go with the tbody (renderMaps) rather than being docked, so their shadows
+	// are left in the layer with no widget to own them, and the updateCovered
+	// that sweeps them is below this return
 	if (!layout || !POPOUT_MQ.matches) {
 		// a narrow window is not a change of mind: the arrangement it cannot
 		// show is kept whole, to be written on the view's behalf and applied
@@ -2186,7 +2144,9 @@ function persistSnapLayout() {
 		else delete prefs.layout;
 		saveMapPrefs(prefs);
 	}
-	// the settings panel, if open, names the arrangement and offers Ažuriraj off it
+	// the settings panel, if open, names the arrangement and offers Ažuriraj off
+	// it. A press outside the dialog shuts it, so what reaches this with the
+	// panel still up is what the panel itself drives: Vrati sve on the layout line
 	const panel = document.getElementById('mapSettings');
 	if (panel && !panel.hidden && panel._onLayoutChange) panel._onLayoutChange();
 }

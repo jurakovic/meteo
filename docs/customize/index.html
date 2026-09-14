@@ -230,8 +230,9 @@
 		["left","top","width","height","z-index","--po-img","--lb-l","--lb-r","--lb-t","--lb-b","--lb-w"].forEach(e=>t.style.removeProperty(e)),
 		t.querySelectorAll(".po-h, .po-backdrop").forEach(t=>t.remove()),t._gap&&t._gap.remove(),delete t._gap,
 		t.querySelectorAll(".po-btn").forEach(t=>setPopoutButton(t,!1)),unfitTitles(t),persistSnapLayout()}function dockAllPopouts(){
-		setDashboard(!1),layoutSnapColumns(),document.querySelectorAll(".map-block.popout").forEach(dockMap),persistSnapLayout(),syncShadows()}
-		let dashboardMode=!1;const CASCADE_STEP=32;function isDashboard(){return dashboardMode}function setDashboard(t){dashboardMode=t,
+		setDashboard(!1),layoutSnapColumns();const t=snapPersistPaused;snapPersistPaused=!0,
+		document.querySelectorAll(".map-block.popout").forEach(dockMap),snapPersistPaused=t,persistSnapLayout(),syncShadows()}let dashboardMode=!1
+		;const CASCADE_STEP=32;function isDashboard(){return dashboardMode}function setDashboard(t){dashboardMode=t,
 		document.body.classList.toggle("dashboard",t),
 		renderGrid(),document.querySelectorAll(".map-block.popout .po-btn").forEach(t=>setPopoutButton(t,!0))}function popoutRest(){let t=16,e=0
 		;document.querySelectorAll(".map-block:not(.popout)").forEach(o=>{popoutMap(o),t>16&&t+o.offsetHeight>viewportHeight()&&(t=16,e++),
@@ -241,8 +242,8 @@
 		;[s,o.previousElementSibling&&o.previousElementSibling.classList.contains("sp20")?o.previousElementSibling:i.nextElementSibling&&i.nextElementSibling.classList.contains("sp20")?i.nextElementSibling:null,o].forEach(t=>{
 		t&&t.remove()}),removeMapFromList(e)}const GRID_CELL=16,GRID_KEY="mapGrid";function loadGridPrefs(){try{
 		const t=JSON.parse(localStorage.getItem(GRID_KEY));if(t&&"object"==typeof t)return{show:!0===t.show,snap:!0===t.snap}}catch(t){}return{
-		show:!1,snap:!1}}let gridShow=loadGridPrefs().show,gridSnap=loadGridPrefs().snap;function isGridShown(){return gridShow}
-		function isGridSnapped(){return gridSnap}function setGridPrefs(t,e){dlog(`setGridPrefs: show=${t} snap=${e}`),gridShow=t,gridSnap=e;try{
+		show:!1,snap:!1}}let{show:gridShow,snap:gridSnap}=loadGridPrefs();function isGridShown(){return gridShow}function isGridSnapped(){
+		return gridSnap}function setGridPrefs(t,e){dlog(`setGridPrefs: show=${t} snap=${e}`),gridShow=t,gridSnap=e;try{
 		localStorage.setItem(GRID_KEY,JSON.stringify({show:t,snap:e}))}catch(t){}renderGrid();const o=document.getElementById("mapSettings")
 		;o&&!o.hidden&&o._onGridChange&&o._onGridChange(),syncMsTab()}function renderGrid(){const t=gridShow&&dashboardMode&&POPOUT_MQ.matches
 		;let e=document.querySelector(".po-grid");t?(e||(e=document.createElement("div"),e.className="po-grid",document.body.appendChild(e)),

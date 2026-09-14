@@ -29,7 +29,7 @@ Svaka karta ima naslovnu traku s imenom izvora. Ime je ujedno i poveznica na izv
 
 ## Odabir karata
 
-Gumb **Karte** otvara dijalog u kojem se bira što se prikazuje. Dijalog nije modalan — stranica iza njega ostaje vidljiva, a na računalu se prozori mogu razmještati dok je otvoren.
+Gumb **Karte** otvara dijalog u kojem se bira što se prikazuje. Stranica iza njega ostaje vidljiva, ali miruje — lista se samo sadržaj dijaloga. Klik bilo gdje izvan dijaloga zatvara ga i odbacuje što je u njemu mijenjano; klik na prozor tako ga istovremeno zatvara i hvata prozor, pa se prozori razmještaju s dijalogom sklonjenim s puta.
 
 Dijalog ima dva popisa:
 
