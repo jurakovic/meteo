@@ -466,13 +466,21 @@ body.fs-lock {
 			padding-top: 0;
 		}
 
-		/* and the last place the same inline cap is written (maxWidthStyle):
-		   the indicators run under the map and are as wide as it is — which,
-		   letterboxed, is the painted image and not the box it is centred in */
+		/* the indicators run under the map and are as wide as it is — which,
+		   letterboxed, is the painted image and not the box it is centred in.
+		   They sit under it too: the media box takes all the height the bars
+		   leave, so in a widget much taller than its image the contain leaves
+		   ground below it and the indicators were left at the foot of the
+		   frame, a long way from what they index. --lb-b is how far the image's
+		   bottom is off the box's, the same inset the arrows are held to, and
+		   they are lifted by it — by a transform, laying nothing out: a margin
+		   would take the height out of the column the media box is measured in,
+		   which would move the image, which would move the indicators again */
 		.map-block.popout.letterbox .indicators-container {
 			width: var(--lb-w, 100%);
 			margin-left: auto;
 			margin-right: auto;
+			transform: translateY(calc(-1 * var(--lb-b, 0px)));
 		}
 
 		/* the arrows belong to the image too, not to the bars beside it. The
