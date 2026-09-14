@@ -20,7 +20,7 @@ const POPOUT_WIDTH = 420;
 const POPOUT_MIN_WIDTH = 260;
 const POPOUT_MAX_WIDTH = 875; // the table's max-width
 const POPOUT_MIN_HEIGHT = 120; // free (iframe) widgets only; the others follow their aspect
-const POPOUT_MARGIN = 16; // kept free of the viewport edge when sizing
+const POPOUT_MARGIN = 16; // the gutter a widget is cascaded into, and the gap that still counts as none
 const POPOUT_TITLE_HEIGHT = 23; // .radartitle height; keeps the drag handle reachable
 const POPOUT_HANDLES = ['n', 'ne', 'e', 'se', 's', 'sw', 'w', 'nw'];
 const MAGNET = 12; // a dragged widget's edge this close to another floating widget's is pulled onto it
@@ -937,9 +937,29 @@ function resizePopout(block, dir, e) {
 	const start = block.getBoundingClientRect();
 	ratio = start.width / start.height;
 	// one ceiling for both, the map following the widget to any width it is
-	// pulled to — locked, it used to stop at what its own content spanned
+	// pulled to — locked, it used to stop at what its own content spanned.
+	//
+	// What the pulled edge may reach is the room between the edge that is not
+	// moving and the viewport edge it is pulled towards, and it is the size
+	// that is held to that room rather than the widget put back inside the
+	// viewport afterwards. Clamping the size against a maximum of its own let
+	// the widget outgrow its room, and placePopout took the overflow back by
+	// moving the widget — which moves the edge that is not being dragged: a
+	// south pull carried past the bottom of the screen drew the top up the
+	// screen after it, into whatever stood above. An absolute cap cannot reach
+	// the far edge from the near one either. At the top of the viewport the
+	// height stopped POPOUT_MARGIN short of the bottom and no pull would close
+	// it, where a width has always been free to touch the right edge
+	// (popoutMaxWidth), which is the whole of why one axis could be filled and
+	// the other could not. The margin is off the sizing clamp for that reason;
+	// placePopout keeps its own clamp, which now has nothing left to correct.
+	//
+	// A widget always starts inside the viewport (placePopout sees to it), so
+	// the room is never less than the side it is the room for, and no gesture
+	// is forced to shrink one
 	const ceiling = popoutMaxWidth();
-	const maxHeight = viewportHeight() - POPOUT_MARGIN;
+	const maxWidth = Math.min(ceiling, dir.includes('w') ? start.right : viewportWidth() - start.left);
+	const maxHeight = dir.includes('n') ? start.bottom : viewportHeight() - start.top;
 	const magnets = col ? [] : magnetRects(block);
 	const mates = col ? groupStarts(members.filter(m => m !== block)) : [];
 	const above = mates.filter(s => s.top < start.top), below = mates.filter(s => s.top > start.top);
@@ -967,11 +987,10 @@ function resizePopout(block, dir, e) {
 		}
 		({ w, h } = pullResizeEdges(magnets, dir, start, w, h));
 		if (free) {
-			w = clamp(w, POPOUT_MIN_WIDTH, ceiling);
+			w = clamp(w, POPOUT_MIN_WIDTH, maxWidth);
 			h = clamp(h, POPOUT_MIN_HEIGHT, maxHeight);
 			block.style.height = `${Math.round(h)}px`;
 		} else {
-			const maxWidth = ceiling;
 			// the width the wanted height asks for, read off the widget rather
 			// than taken from the start ratio, so the pulled edge lands on its
 			// magnet and a plain drag follows the pointer (lockedWidthFor)
@@ -992,6 +1011,15 @@ function resizePopout(block, dir, e) {
 				const want = pullResizeEdges(magnets, vert, start, w, at).h; // the height only; the width has had its pull
 				if (Math.abs(want - at) > 0.5) w = lockedWidthFor(block, want, w + (want - at) * ratio, ratio, maxWidth);
 			}
+			// and the room is a height, which locked is a width as well: the
+			// widest the widget stands inside it. Nothing held this before —
+			// only the width was clamped and the height went wherever the aspect
+			// took it, off the bottom of the screen and well past it. What kept
+			// that from being seen was the content's own width, which stopped a
+			// locked widget long before the viewport did; it is the last thing
+			// the hold was doing, and the last of it to go
+			if (lockedHeightAt(block, w) > maxHeight + 0.5)
+				w = lockedWidthFor(block, maxHeight, maxHeight * ratio, ratio, maxWidth);
 		}
 		block.style.width = `${Math.round(w)}px`;
 		// the laid-out height, exact for locked widgets where it follows the
@@ -1691,11 +1719,13 @@ function fitSnapFullscreen(col) {
 // which is the same answer for the same reason.
 function freeRectAround(rect, blockers, bounds) {
 	// the spans, laid end to end, reach from one side of the rectangle to the
-	// other. A gap no wider than POPOUT_MARGIN is no gap: that is the margin the
-	// sizing clamp keeps off the viewport edge, so a widget stored at the full
-	// height comes back exactly that much short of it and would otherwise stop
-	// walling anything the moment the page was reloaded. It is the grid's cell
-	// besides, so widgets stacked on the grid wall as the eye reads them
+	// other. A gap no wider than POPOUT_MARGIN is no gap: it is the grid's cell,
+	// so widgets stacked on the grid wall as the eye reads them, and it is the
+	// slack a wall wants anyway — a widget a few pixels off one still shuts the
+	// region behind it as far as the eye is concerned. (It was also exactly what
+	// the sizing clamp kept off the viewport edge, which is why a widget stored
+	// at the full height used to come back that much short of walling; the clamp
+	// reaches the edge now and that reason has gone, the tolerance has not)
 	const covers = (spans, from, to) => {
 		let at = from;
 		spans.sort((a, b) => a[0] - b[0]).forEach(([lo, hi]) => {
@@ -2081,7 +2111,7 @@ function applySnapLayout(layout) {
 		// the stored width as stored, held to the widget limits
 		block.style.width = `${Math.round(clamp(width * viewportWidth(), POPOUT_MIN_WIDTH, popoutMaxWidth()))}px`;
 		if (block.classList.contains('free') && height)
-			block.style.height = `${Math.round(clamp(height * viewportHeight(), POPOUT_MIN_HEIGHT, viewportHeight() - POPOUT_MARGIN))}px`;
+			block.style.height = `${Math.round(clamp(height * viewportHeight(), POPOUT_MIN_HEIGHT, viewportHeight()))}px`;
 		placePopout(block, left * viewportWidth(), top * viewportHeight());
 		raisePopout(block); // in stored order, so the last one is on top again
 		setGroup(block, group);
