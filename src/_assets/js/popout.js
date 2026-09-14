@@ -136,13 +136,17 @@ function lockAspect(block) {
 	block.style.removeProperty('--po-img');
 }
 
-// the backdrop shows the image on screen: the active slide's, or the map's
-// (a video has none, and the frame's own ground shows); followed on every
-// load and slide change, and through a reload's fresh address
+// the backdrop shows the image on screen: the active slide's, or the map's;
+// followed on every load and slide change, and through a reload's fresh
+// address. A video has no image to take, and neither can one be read off it
+// (the catalog entry says why), so where the map gives a `backdrop` that still
+// frame stands in — which also covers a lazy slide whose src is not swapped in
+// yet, an img carrying its address even when the load then fails
 function syncBackdrop(block) {
 	if (!block.classList.contains('letterbox')) return;
 	const img = block.querySelector('.slide.active img') || block.querySelector('img');
-	const src = img && (img.currentSrc || img.src);
+	const map = MAP_CATALOG.find(m => m.id === block.dataset.mapId);
+	const src = (img && (img.currentSrc || img.src)) || (map && map.backdrop);
 	if (src) block.style.setProperty('--po-img', `url("${src}")`);
 }
 
