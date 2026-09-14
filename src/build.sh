@@ -2,6 +2,8 @@
 
 # fix min.js line ending after terser processing
 unix2dos -q "./_assets/js/main.min.js"
+unix2dos -q "./_assets/js/maps.min.js"
+unix2dos -q "./_assets/js/popout.min.js"
 unix2dos -q "./_assets/css/styles.min.css"
 
 # powershell better handles multiline string..

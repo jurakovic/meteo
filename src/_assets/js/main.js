@@ -329,7 +329,11 @@ function toggleFullscreen(frameId, btn) {
 		if1._fsOverlayVisible = !overlay || overlay.style.display !== 'none';
 		if1.classList.add('fullscreen');
 		if1.previousElementSibling.classList.add('fullscreen');
-		document.body.classList.add('fs-lock');
+		// the page scroll is locked under a map covering it — not under one
+		// filling a snap column beside it (customize page), where the page
+		// stays in use
+		if (!if1.closest('.map-block.snapped')) document.body.classList.add('fs-lock');
+		document.dispatchEvent(new Event('map-fullscreen'));
 		btn.textContent = '[-]';
 		// unlock interactivity: drop the overlay gate
 		if (overlay) overlay.style.display = 'none';
@@ -345,8 +349,9 @@ function exitFullscreen(if1) {
 	title.classList.remove('fullscreen');
 	const btn = title.querySelector('.fs-btn');
 	if (btn) btn.textContent = '[ ]';
-	if (!document.querySelector('.if1.fullscreen'))
+	if (![...document.querySelectorAll('.if1.fullscreen')].some(f => !f.closest('.map-block.snapped')))
 		document.body.classList.remove('fs-lock');
+	document.dispatchEvent(new Event('map-fullscreen'));
 	// restore the overlay gate to its pre-fullscreen lock state (tracked on enter)
 	const wasUnlocked = if1._fsOverlayVisible === false;
 	delete if1._fsOverlayVisible;

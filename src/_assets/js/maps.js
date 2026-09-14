@@ -1,7 +1,9 @@
-// Map catalog, renderer and user preferences (presets + custom pick/order)
-// for the customize page. Loaded before main.js; renders maps into
-// <tbody data-maps> at parse time so main.js's DOMContentLoaded wiring sees
-// the finished DOM. The static landing page does not load this file.
+// Map catalog, renderer, user preferences (presets + custom pick/order) and
+// the settings dialog for the customize page. Loaded after popout.js (the
+// pop-out widgets and snap columns, which the render calls into) and before
+// main.js; renders maps into <tbody data-maps> at parse time so main.js's
+// DOMContentLoaded wiring sees the finished DOM. The static landing page
+// does not load this file.
 
 // ---------- shared link groups ----------
 
@@ -478,6 +480,14 @@ const MAP_CATALOG = [
 		titleHref: 'https://www.idokep.hu/muhold',
 		aspect: '1070 / 713',
 		src: 'https://www.idokep.hu/radar/sat-eu.mp4',
+		// a video has no image for the letterbox backdrop to take (syncBackdrop),
+		// and its frame cannot be read out of a canvas either: the source sends
+		// Access-Control-Allow-Origin for idokep.hu alone, so drawImage taints the
+		// canvas and crossorigin='anonymous' would stop the video loading at all.
+		// One frame, stored here instead. It is scaled to cover and blurred by 14px,
+		// which leaves colour and coarse shape and nothing else, so 64x43 at q60 is
+		// indistinguishable from the full frame and costs 1.8 kB
+		backdrop: 'data:image/jpeg;base64,/9j/4AAQSkZJRgABAQEAYABgAAD/2wBDAA0JCgsKCA0LCwsPDg0QFCEVFBISFCgdHhghMCoyMS8qLi00O0tANDhHOS0uQllCR05QVFVUMz9dY1xSYktTVFH/2wBDAQ4PDxQRFCcVFSdRNi42UVFRUVFRUVFRUVFRUVFRUVFRUVFRUVFRUVFRUVFRUVFRUVFRUVFRUVFRUVFRUVFRUVH/wAARCAArAEADASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9oADAMBAAIRAxEAPwBljPoksUEElnNNdFRuYRLgnufvdK1reHR5XKx20qjH3hEMfh81YmgR5hN2UB3MU4OSOK1rGdCGcrsEJHU85JNXzsjkibEIW0t1nk3FBjaAvzGp7u5huNPcSBDGM5IGQR7VkSXQkkhQuqgEuRuwcHnHuKgF5vJjlHlgJ/eyAST+uRUFjNbjhbSVSMboUP8ADjPI/n7e9YOl28+oRbLaGMeXkZZif0rbNkZ1MKTERFAH2nkMMFSD6g/yrQKC0sv3hKqgyzJwSPSjS2orFXTLF7ZZleMFnxuJIC4A6AVoLd2rMqNPGHz3HANZV1qiJuS3XCkgeY3zHp1rLjSaU7IkaRc8HZ+tZuaWhSRV0W6EeiSNISI97HjqRxwPrUltes7mWVwkbHJwOnpisC4l8pIrWNiNo+cH19DVmOOXcipISdu45rUR201zYGEec3y/dG3r0/Q1C1zYXLAxoc/x5XPGMAn1rmLaKdHk8wjBxgZ708aolm22OT94xIIAHyjuTn0qG3eyH0OzsonhgcRwMDuwD656tz29qpalLK141oD5keBuI4JA5wfSoLPWbSzELSSs8jJnezZVR6ZPrVa5v2/tQ3iL8zHofpUTmkkNK5v6Bp0ElqbmVY8lioHbGayNX1O5tr7bGvlhSOCOn+NWYdZj1CGC3s7SaKJZA87qQAvqc+9ZOqyreahIwY5VtrAnPAPGPanJ8sdCoW5veOKy4fIBJ6k1q6c4Vg0gPTj2rIikdhtLEgDIrd0hQ7fMM4Ga1ZmS3juUaKMOZDxkf41nrYXIlZhGgJQrhm4GeDXTQxo0XIzzViOCJraQlBkZqG3ayNVFPVmXpvhjV9T0hpo5VdWUKkbgLjBI4/AfrVe6uHs1jinLpPG4SdMcAAY9OM9fwre0+WWyvES3ldEjj+RdxIXLjOAa5Lxa7ya1PI7Es+/cc9cdKHFMjU1k1ZZLfyIJ08pRghDkE56mmzyzJE1xNOSsQycsTxXJaZzqNuhJ2tIoYZ6810Ws3Ev9nLFlSjNkgoDnr3xUOF3ZmkZaXP/Z',
 		links: SAT_EU_LINKS
 	},
 	/*
@@ -625,6 +635,11 @@ function isUserPresetId(id) {
 	return typeof id === 'string' && id.startsWith(USER_PRESET_PREFIX);
 }
 
+// a saved preset that is a board: its layout carries the mode (popout.js)
+function isBoardPreset(preset) {
+	return !!(preset && preset.layout && preset.layout.dashboard === true);
+}
+
 function isValidPreset(preset) {
 	return preset && isUserPresetId(preset.id)
 		&& typeof preset.name === 'string' && Array.isArray(preset.maps);
@@ -668,14 +683,17 @@ function findUserPresetByName(name) {
 }
 
 // saving under an existing name updates that preset — the way to amend a saved
-// view is to edit the list and save it again under the same name
-function storeUserPreset(name, maps) {
+// view is to edit the list and save it again under the same name. The layout
+// (the snapped arrangement, null for none) is part of what is saved: a preset
+// is the whole view, and applying it brings the arrangement back
+function storeUserPreset(name, maps, layout = null) {
 	const existing = findUserPresetByName(name);
 	if (existing) {
 		existing.name = name;
 		existing.maps = maps;
+		existing.layout = layout;
 	} else {
-		userPresets.push({ id: newPresetId(), name: name, maps: maps });
+		userPresets.push({ id: newPresetId(), name: name, maps: maps, layout: layout });
 	}
 	saveUserPresets();
 	return existing || userPresets[userPresets.length - 1];
@@ -704,7 +722,7 @@ function uniquePresetName(name) {
 function deleteUserPreset(id) {
 	const preset = userPresets.find(p => p.id === id);
 	if (preset && getMapPrefs().preset === id)
-		saveMapPrefs({ preset: 'custom', maps: preset.maps.slice() });
+		saveMapPrefs({ preset: 'custom', maps: preset.maps.slice(), layout: getMapPrefs().layout });
 	userPresets = userPresets.filter(p => p.id !== id);
 	saveUserPresets();
 }
@@ -806,10 +824,32 @@ function presetMapIds(presetId) {
 }
 
 function resolveMapIds() {
-	const prefs = getActiveMapPrefs();
-	// deduped as well as filtered: a hand-crafted ?v= can name the same map
-	// twice, and two rendered copies would share one data-slideshow-id — the
-	// arrows drive whichever comes first while both sets of indicators light up
+	return prefsMapIds(getActiveMapPrefs());
+}
+
+// a map taken off the board (popout.js) leaves the list it is shown from:
+// the custom list without it, into the preferences — or into the shared
+// view, which stays a shared view, the arrangement written after it into
+// the address bar as always
+function removeMapFromList(mapId) {
+	const maps = resolveMapIds().filter(id => id !== mapId);
+	if (sharedMapView) {
+		sharedMapView.preset = 'custom';
+		sharedMapView.maps = maps;
+	} else {
+		const prefs = getMapPrefs();
+		prefs.preset = 'custom';
+		prefs.maps = maps;
+		saveMapPrefs(prefs);
+	}
+	persistSnapLayout();
+}
+
+// the list a preferences object names — deduped as well as filtered: a
+// hand-crafted ?v= can name the same map twice, and two rendered copies would
+// share one data-slideshow-id (the arrows drive whichever comes first while
+// both sets of indicators light up)
+function prefsMapIds(prefs) {
 	if (prefs.preset === 'custom' && Array.isArray(prefs.maps))
 		return [...new Set(prefs.maps)].filter(id => MAP_CATALOG.some(map => map.id === id));
 	return presetMapIds(prefs.preset) || presetMapIds('zadano');
@@ -847,7 +887,9 @@ function decodeMapView(value) {
 // a saved preset's id means nothing to a recipient, so it travels as its
 // contents plus its name — the name is only a label to save it under
 function presetSharePrefs(preset) {
-	return { preset: 'custom', maps: preset.maps.slice(), name: preset.name };
+	const prefs = { preset: 'custom', maps: preset.maps.slice(), name: preset.name };
+	if (preset.layout) prefs.layout = preset.layout;
+	return prefs;
 }
 
 // same maps in the same order: the render order is part of what a preset is,
@@ -898,6 +940,20 @@ function getActiveMapPrefs() {
 	return sharedMapView || getMapPrefs();
 }
 
+// A board is known long before there is one. The list and its arrangement are
+// in storage or in the `?v=` above, and this file is read in <head> — the build
+// inlines it there — so the answer is in hand while the body is still being
+// parsed. The board itself cannot be: every map of it is a widget, and there
+// are no maps until the render on DOMContentLoaded — and on a slow load the
+// browser paints what it has well before that, which would show the page in its
+// ordinary layout for a moment before taking it away. The cloak hides the same
+// two things body.dashboard does, from now until the arrangement is applied.
+function cloakBoard() {
+	const layout = getActiveMapPrefs().layout;
+	if (layout && layout.dashboard && POPOUT_MQ.matches) document.documentElement.classList.add('board-boot');
+}
+cloakBoard();
+
 // which chip the panel opens on. Only a shared list is matched back to a
 // preset: saved preferences hold "custom" because the user applied a list
 // without saving it, and binding that to a preset id behind their back would
@@ -937,17 +993,19 @@ function maxWidthStyle(map) {
 }
 
 // map is optional and only supplies the width: slide title bars are
-// unconstrained, their max-width sits on the .placeholder wrapper below
-function buildTitleBar(title, map = {}) {
+// unconstrained, their max-width sits on the .placeholder wrapper below;
+// popout adds the pop-out button (desktop only, see the pop-out section)
+function buildTitleBar(title, map = {}, popout = false) {
 	return el('div', { class: 'radartitle', style: maxWidthStyle(map) || undefined }, [
-		el('a', { href: title.href, target: '_blank', rel: 'nofollow', text: title.text })
+		el('a', { href: title.href, target: '_blank', rel: 'nofollow', text: title.text }),
+		popout ? el('span', { class: 'right right-cluster' }, [buildReloadButton(), buildGroupButton(), buildPopoutButton()]) : null
 	]);
 }
 
 // top-level title bars show the map's picker name; only slide titles
 // carry their own text (it differs per slide)
 function buildMapTitleBar(map) {
-	return buildTitleBar({ text: map.name, href: map.titleHref }, map);
+	return buildTitleBar({ text: map.name, href: map.titleHref }, map, true);
 }
 
 function buildSlideshow(map) {
@@ -971,9 +1029,10 @@ function buildSlideshow(map) {
 		const slideDiv = el('div', { class: 'slide fade' + (active ? ' active' : '') });
 		if (titled) {
 			const width = slide.maxWidth || map.maxWidth;
-			// a slide may omit its title text to inherit the map name (its href still differs per slide)
+			// a slide may omit its title text to inherit the map name (its href still differs per slide);
+			// without a map-level title bar the slide bars carry the pop-out button instead
 			const title = { text: slide.title.text || map.name, href: slide.title.href };
-			slideDiv.appendChild(buildTitleBar(title));
+			slideDiv.appendChild(buildTitleBar(title, {}, !map.titleHref));
 			slideDiv.appendChild(el('div', {
 				class: 'placeholder',
 				style: `${width ? `max-width: ${width}px; ` : ''}aspect-ratio: ${slide.aspect};`
@@ -1040,6 +1099,8 @@ function buildIframe(map) {
 		zoomBtn,
 		el('a', { class: 'center', href: map.titleHref, target: '_blank', rel: 'nofollow', text: map.name }),
 		el('span', { class: 'right right-cluster' }, [
+			buildGroupButton(),
+			buildPopoutButton(),
 			el('a', { id: `reset${pascal}Frame`, 'data-frame-id': frameId, style: 'display:none', text: '[X]' }),
 			fsBtn
 		])
@@ -1098,6 +1159,13 @@ function buildMapContent(map) {
 function renderMaps() {
 	const tbody = document.querySelector('tbody[data-maps]');
 	if (!tbody) return;
+	// a fullscreen map goes with the tbody too, and would leave the page's
+	// scroll locked behind it; taken down as the arrangement it is part of
+	// is (what comes back is applied after the render)
+	snapPersistPaused = true;
+	document.querySelectorAll('.if1.fullscreen').forEach(if1 => exitFullscreen(if1));
+	snapPersistPaused = false;
+	resetSnapColumns(); // their panes go with the tbody
 	tbody.replaceChildren();
 	const maps = resolveMapIds().map(id => MAP_CATALOG.find(m => m.id === id)).filter(Boolean);
 	if (!maps.length) {
@@ -1110,11 +1178,9 @@ function renderMaps() {
 	}
 	maps.forEach((map, i) => {
 		if (i > 0) tbody.appendChild(el('tr', { class: 'sp20' }));
-		const td = el('td', { align: 'center' });
-		buildMapContent(map).forEach(node => {
-			if (node) td.appendChild(node);
-		});
-		tbody.appendChild(el('tr', {}, [td]));
+		// one block per map so the pop-out can lift title, map and indicators together
+		const block = el('div', { class: 'map-block', 'data-map-id': map.id }, buildMapContent(map));
+		tbody.appendChild(el('tr', {}, [el('td', { align: 'center' }, [block])]));
 		if (map.links && map.links.length) {
 			tbody.appendChild(el('tr', {}, [el('td', { align: 'center' }, [buildLinksBottom(map)])]));
 		}
@@ -1127,6 +1193,22 @@ function setMapSettingsVisible(panel, visible) {
 	panel.hidden = !visible;
 	const arrow = document.querySelector('.buttons button.btn .arrow');
 	if (arrow) arrow.textContent = visible ? '▲' : '▼';
+	// the page holds still under the dialog (CSS), with the gutter of the
+	// scrollbar it had kept, so nothing centred in it shifts; where it had
+	// none (hidden behind the columns, under a fullscreen, or short) the
+	// viewport is left as it is
+	const scrollbar = window.innerWidth - document.documentElement.clientWidth;
+	const keepGutter = visible && scrollbar > 0;
+	document.documentElement.classList.toggle('ms-gutter', keepGutter);
+	document.body.classList.toggle('ms-open', visible);
+	const backdrop = document.querySelector('.ms-backdrop');
+	if (backdrop) {
+		backdrop.hidden = !visible;
+		if (visible) backdrop.classList.remove('ms-spent'); // it paints again for a dialog that is back
+	}
+	viewportGutter = keepGutter ? scrollbar : 0; // clientWidth counts the kept gutter; the columns must not
+	layoutSnapColumns(); // in case the viewport did change
+	if (visible) applyStoredMsPanel(panel); // where the user put it, measurable only now it is shown
 }
 
 function toggleMapSettings() {
@@ -1139,6 +1221,336 @@ function toggleMapSettings() {
 		setMapSettingsVisible(panel, false);
 	}
 }
+
+// the dialog from the keyboard, for wherever the page's button is out of
+// reach: K opens or shuts it, Escape shuts it — not from a text field, whose
+// own Escape (the name and rename editors) is a way out of the field only
+document.addEventListener('keydown', (e) => {
+	const panel = document.getElementById('mapSettings');
+	if (!panel || e.altKey || e.ctrlKey || e.metaKey) return;
+	const typing = e.target.matches && e.target.matches('input:not([type="radio"]):not([type="checkbox"]), textarea, [contenteditable]');
+	if (typing) return;
+	if (e.key === 'Escape' && !panel.hidden) setMapSettingsVisible(panel, false);
+	else if (e.key === 'k' || e.key === 'K') { e.preventDefault(); toggleMapSettings(); }
+});
+
+// ---------- the tab: where and how wide the user put it ----------
+
+// the fixed tab to the dialog can be dragged along the top edge and pulled
+// wider or narrower by either side — no narrower than its name, no wider
+// than msTabMaxWidth(), held inside the viewport — and where it was put is
+// remembered in this browser only (msTab: the left as a fraction of the
+// viewport, the width in px), not in the arrangement; a click that did not
+// move opens the dialog
+const MS_TAB_KEY = 'msTab';
+const MS_TAB_EDGE = 8; // a press this close to a side resizes; elsewhere drags
+let msTabMoved = false; // the release of a drag is no click
+
+function loadMsTab() {
+	try {
+		const tab = JSON.parse(localStorage.getItem(MS_TAB_KEY));
+		return tab && typeof tab === 'object' && Number.isFinite(tab.left) && Number.isFinite(tab.width) ? tab : null;
+	} catch {
+		return null;
+	}
+}
+
+function saveMsTab(tab) {
+	const rect = tab.getBoundingClientRect();
+	try {
+		localStorage.setItem(MS_TAB_KEY, JSON.stringify({ left: roundFraction(rect.left / viewportWidth()), width: Math.round(rect.width) }));
+	} catch (e) { /* storage disabled or full — the tab still moves this session */ }
+}
+
+// the width its name takes is the narrowest it goes: measured with the width unset (0 while it is not shown)
+function msTabMinWidth(tab) {
+	const width = tab.style.width;
+	tab.style.width = '';
+	const min = tab.offsetWidth;
+	tab.style.width = width;
+	return min;
+}
+
+// half the viewport rather than a fixed number of pixels: the tab is the one
+// way to the dialog and not a bar of its own, so how much of the top edge it
+// may take is a share of that edge. Read on every place instead of stored, so
+// a window resized under it holds it to the half it has now
+function msTabMaxWidth() {
+	return viewportWidth() / 2;
+}
+
+// the floor beats the ceiling: on a narrow window the name and the cluster can
+// take more than half of it, and a tab cut below what they need would ellipsise
+// its own name for nothing
+function msTabWidth(tab, width) {
+	const min = msTabMinWidth(tab);
+	return clamp(width, min, Math.max(min, msTabMaxWidth()));
+}
+
+function placeMsTab(tab, left, width) {
+	width = msTabWidth(tab, width);
+	left = clamp(left, 0, Math.max(0, viewportWidth() - width));
+	tab.style.width = `${Math.round(width)}px`;
+	tab.style.left = `${Math.round(left)}px`;
+	tab.style.transform = 'none'; // off the centring
+}
+
+function applyStoredMsTab() {
+	const tab = document.querySelector('.ms-tab');
+	const stored = loadMsTab();
+	if (tab && stored) placeMsTab(tab, stored.left * viewportWidth(), stored.width);
+}
+
+// On a board the tab is the only chrome there is, so it carries the same glyph
+// cluster a widget's title bar does, and for the same reason: the common moves
+// without opening the dialog. [R] reloads every widget's map (popout.js), [G]
+// and [S] are the board's two grid switches — the dialog's own, through
+// setGridPrefs, so the three places cannot disagree. Each glyph is the key that
+// does the same thing, and says so in its title, the way the tab itself does.
+// They are <a> without href, as the title bars' glyphs are, so they are no
+// interactive content inside the button; their click is kept off the tab's own
+function buildMsTabCluster(tab) {
+	const reload = el('a', { class: 'ms-tab-btn', text: '[R]', title: 'Osvježi sve karte (R)' });
+	reload.addEventListener('click', () => reloadAllMaps());
+	const grid = el('a', { class: 'ms-tab-btn', 'data-grid': 'show', text: '[G]', title: 'Prikaži mrežu (G)' });
+	grid.addEventListener('click', () => setGridPrefs(!isGridShown(), isGridSnapped()));
+	const snap = el('a', { class: 'ms-tab-btn', 'data-grid': 'snap', text: '[S]', title: 'Poravnaj uz mrežu (S)' });
+	snap.addEventListener('click', () => setGridPrefs(isGridShown(), !isGridSnapped()));
+	tab.appendChild(el('span', { class: 'ms-tab-cluster' }, [reload, grid, snap]));
+	syncMsTab();
+}
+
+// the two switches say whether they are on by being lit or dimmed, as the
+// dialog's greys its own off the board. Called from setGridPrefs, wherever the
+// switch was flipped — the dialog, a key, or the glyph itself. [R] is an action
+// and has nothing to be on or off about
+function syncMsTab() {
+	const tab = document.querySelector('.ms-tab');
+	if (!tab) return;
+	const show = tab.querySelector('[data-grid="show"]');
+	const snap = tab.querySelector('[data-grid="snap"]');
+	if (show) show.classList.toggle('ms-tab-off', !isGridShown());
+	if (snap) snap.classList.toggle('ms-tab-off', !isGridSnapped());
+}
+
+function initMsTab() {
+	const tab = document.querySelector('.ms-tab');
+	if (!tab) return;
+	buildMsTabCluster(tab); // before the first measure: the glyphs are part of the width its name gives it
+	applyStoredMsTab();
+	tab.addEventListener('click', (e) => {
+		if (e.target.closest('.ms-tab-btn')) return; // a glyph is itself, as on a title bar
+		if (msTabMoved) { msTabMoved = false; return; }
+		toggleMapSettings();
+	});
+	// the cursor says which it will be
+	tab.addEventListener('pointermove', (e) => {
+		if (e.target.closest('.ms-tab-btn')) { tab.style.cursor = ''; return; }
+		const rect = tab.getBoundingClientRect();
+		const side = e.clientX - rect.left <= MS_TAB_EDGE || rect.right - e.clientX <= MS_TAB_EDGE;
+		tab.style.cursor = side ? 'ew-resize' : '';
+	});
+	tab.addEventListener('pointerdown', (e) => {
+		if (e.button !== 0 || e.target.closest('.ms-tab-btn')) return;
+		e.preventDefault();
+		const rect = tab.getBoundingClientRect();
+		const mode = e.clientX - rect.left <= MS_TAB_EDGE ? 'w' : rect.right - e.clientX <= MS_TAB_EDGE ? 'e' : 'move';
+		msTabMoved = false;
+		trackPopoutPointer(e, (dx) => {
+			if (!msTabMoved && Math.abs(dx) < SNAP_ARM) return; // a click must not move it
+			msTabMoved = true;
+			if (mode === 'move') placeMsTab(tab, rect.left + dx, rect.width);
+			else if (mode === 'e') placeMsTab(tab, rect.left, rect.width + dx);
+			else {
+				const width = msTabWidth(tab, rect.width - dx);
+				placeMsTab(tab, rect.right - width, width); // the right side stays
+			}
+		}, () => { if (msTabMoved) saveMsTab(tab); });
+	});
+	window.addEventListener('resize', applyStoredMsTab); // held inside the viewport
+}
+
+if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', initMsTab);
+else initMsTab();
+
+// ---------- the dialog: where and how big the user put it ----------
+
+// On desktop the dialog is a window: dragged by its head and resized from any
+// side or corner through the widgets' own handles. It is rebuilt on every open,
+// and replaceChildren leaves the panel's own inline styles, so where it was put
+// outlives the rebuild.
+// Where and how big is remembered in this browser only (msPanel: the left and
+// top as fractions of the viewport, the width in px, and the height in px
+// once it has been resized), not in the arrangement, since it is about this
+// screen and not the view — the same footing as the tab above. Until it is
+// resized the height stays the content's, capped to what is left below wherever
+// the top now is; a double-click on the head drops the
+// lot and gives the CSS its dialog back
+const MS_PANEL_KEY = 'msPanel';
+const MS_PANEL_MIN_WIDTH = 360;
+const MS_PANEL_MIN_HEIGHT = 120;
+const MS_PANEL_MARGIN = 8; // kept free of the viewport edge when sizing
+
+function loadMsPanel() {
+	try {
+		const stored = JSON.parse(localStorage.getItem(MS_PANEL_KEY));
+		if (!stored || typeof stored !== 'object') return null;
+		if (!Number.isFinite(stored.left) || !Number.isFinite(stored.top) || !(stored.width > 0)) return null;
+		return { left: stored.left, top: stored.top, width: stored.width, height: stored.height > 0 ? stored.height : null };
+	} catch (e) {
+		return null;
+	}
+}
+
+function saveMsPanel(panel) {
+	const rect = panel.getBoundingClientRect();
+	const stored = {
+		left: roundFraction(rect.left / viewportWidth()),
+		top: roundFraction(rect.top / viewportHeight()),
+		width: Math.round(rect.width)
+	};
+	if (panel.style.height) stored.height = Math.round(rect.height); // only once it has been resized; else the content's
+	try {
+		localStorage.setItem(MS_PANEL_KEY, JSON.stringify(stored));
+	} catch (e) { /* storage disabled or full — the dialog still moves this session */ }
+}
+
+function msPanelMaxWidth() {
+	return Math.max(MS_PANEL_MIN_WIDTH, viewportWidth() - MS_PANEL_MARGIN * 2);
+}
+
+function msPanelMaxHeight() {
+	return Math.max(MS_PANEL_MIN_HEIGHT, viewportHeight() - MS_PANEL_MARGIN * 2);
+}
+
+// height null leaves it the content's. The CSS's max-height assumes the top
+// the CSS set, and the dialog may be anywhere now, so it is recomputed from
+// where the top is asked to be; the top is then held to the height that gave
+function placeMsPanel(panel, left, top, width, height) {
+	width = clamp(width, MS_PANEL_MIN_WIDTH, msPanelMaxWidth());
+	panel.style.width = `${Math.round(width)}px`;
+	panel.style.maxWidth = 'none';
+	panel.style.right = 'auto'; // off the centring
+	panel.style.margin = '0';
+	if (height === null) {
+		panel.style.height = '';
+		panel.style.maxHeight = `${Math.round(Math.max(MS_PANEL_MIN_HEIGHT, viewportHeight() - Math.max(0, top) - MS_PANEL_MARGIN))}px`;
+	} else {
+		panel.style.maxHeight = 'none';
+		panel.style.height = `${Math.round(clamp(height, MS_PANEL_MIN_HEIGHT, msPanelMaxHeight()))}px`;
+	}
+	panel.style.left = `${Math.round(clamp(left, 0, Math.max(0, viewportWidth() - panel.offsetWidth)))}px`;
+	panel.style.top = `${Math.round(clamp(top, 0, Math.max(0, viewportHeight() - panel.offsetHeight)))}px`;
+}
+
+function clearMsPanel(panel) {
+	['left', 'top', 'width', 'height', 'maxWidth', 'maxHeight', 'right', 'margin'].forEach(prop => panel.style[prop] = '');
+}
+
+// on open, and on a window resize, so it cannot be stranded off screen. A
+// phone gets the CSS's dialog, like it gets no widgets
+function applyStoredMsPanel(panel) {
+	panel = panel || document.getElementById('mapSettings');
+	if (!panel || panel.hidden) return;
+	const stored = POPOUT_MQ.matches ? loadMsPanel() : null;
+	if (!stored) { clearMsPanel(panel); return; }
+	placeMsPanel(panel, stored.left * viewportWidth(), stored.top * viewportHeight(), stored.width, stored.height);
+}
+
+// one listener on the panel, which outlives the rebuild its children do not
+function initMsPanel() {
+	const panel = document.getElementById('mapSettings');
+	if (!panel) return;
+	panel.addEventListener('pointerdown', (e) => {
+		if (e.button !== 0 || !POPOUT_MQ.matches) return;
+		const handle = e.target.closest('.po-h');
+		// the head is the grip, but a link or a button on it is itself
+		const head = !handle && e.target.closest('.ms-head') && !e.target.closest('a, button, input');
+		if (!handle && !head) return;
+		e.preventDefault();
+		const start = panel.getBoundingClientRect();
+		const dir = handle ? handle.dataset.dir : null;
+		const kept = panel.style.height ? start.height : null; // a drag leaves the height as it was found
+		let moved = false;
+		trackPopoutPointer(e, (dx, dy) => {
+			if (!moved && !dx && !dy) return; // a press that never moved stores nothing
+			moved = true;
+			if (!dir) {
+				placeMsPanel(panel, start.left + dx, start.top + dy, start.width, kept);
+				return;
+			}
+			let width = start.width, height = start.height;
+			if (dir.includes('e')) width = start.width + dx;
+			if (dir.includes('w')) width = start.width - dx;
+			if (dir.includes('s')) height = start.height + dy;
+			if (dir.includes('n')) height = start.height - dy;
+			// clamped here as well as in placeMsPanel, so the edge that stays put does
+			width = clamp(width, MS_PANEL_MIN_WIDTH, msPanelMaxWidth());
+			height = clamp(height, MS_PANEL_MIN_HEIGHT, msPanelMaxHeight());
+			placeMsPanel(panel, dir.includes('w') ? start.right - width : start.left,
+				dir.includes('n') ? start.bottom - height : start.top, width, height);
+		}, () => { if (moved) saveMsPanel(panel); });
+	});
+	// the way back to the dialog the CSS draws, the head's spare gesture
+	panel.addEventListener('dblclick', (e) => {
+		if (!POPOUT_MQ.matches || !e.target.closest('.ms-head') || e.target.closest('a, button, input')) return;
+		clearMsPanel(panel);
+		try {
+			localStorage.removeItem(MS_PANEL_KEY);
+		} catch (e2) { /* nothing stored is nothing to drop */ }
+	});
+	window.addEventListener('resize', () => applyStoredMsPanel(panel));
+}
+
+if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', initMsPanel);
+else initMsPanel();
+
+// A press anywhere outside the dialog shuts it, dropping what was edited in it
+// (it is rebuilt from what is stored on the next open). The press lands on the
+// backdrop, which is over everything the dialog is over, so it shuts the dialog
+// and does nothing else: it follows no link, presses no button, takes no widget.
+// The tab stands above the backdrop and keeps its own click, which shuts the
+// dialog the same way.
+//
+// A press is a pointerdown, a release and a click, and all three belong to the
+// dismissal: the backdrop stands until the click has been taken, so none of them
+// can be completed on what the dialog was covering. It stops painting the moment
+// it is pressed, the dialog it dimmed for being on its way out, and the click is
+// swallowed in the capture phase, which is ahead of every listener on the page
+// whatever order they were bound in. The release arms a short fallback for the
+// gestures no click follows — a pointer let go outside the window, a drag
+function initMsBackdrop() {
+	const backdrop = document.querySelector('.ms-backdrop');
+	if (!backdrop) return;
+	backdrop.addEventListener('pointerdown', (e) => {
+		const panel = document.getElementById('mapSettings');
+		if (!panel || panel.hidden) return;
+		e.preventDefault();
+		setMapSettingsVisible(panel, false);
+		backdrop.hidden = false;
+		backdrop.classList.add('ms-spent');
+		let timer = 0;
+		const done = () => {
+			clearTimeout(timer);
+			backdrop.classList.remove('ms-spent');
+			// the dialog may have been opened again meanwhile (K, the tab), and
+			// then the ground it stands on is not this gesture's to take away
+			const open = document.getElementById('mapSettings');
+			backdrop.hidden = !open || open.hidden;
+			document.removeEventListener('click', swallow, true);
+			document.removeEventListener('pointerup', release);
+			document.removeEventListener('pointercancel', done);
+		};
+		const swallow = (ev) => { ev.stopPropagation(); ev.preventDefault(); done(); };
+		const release = () => { timer = setTimeout(done, 400); };
+		document.addEventListener('click', swallow, true);
+		document.addEventListener('pointerup', release);
+		document.addEventListener('pointercancel', done);
+	});
+}
+
+if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', initMsBackdrop);
+else initMsBackdrop();
 
 function buildMapSettings(panel) {
 	panel.replaceChildren();
@@ -1223,10 +1635,12 @@ function buildMapSettings(panel) {
 				}
 			};
 
-			// keep scrolling (and reordering) while the pointer rests near a viewport edge
+			// keep scrolling (and reordering) while the pointer rests near an edge
+			// of the dialog's body, which is what scrolls (the page holds still)
+			const scroller = row.closest('.ms-body');
 			const autoScroll = () => {
 				if (scrollDir !== 0) {
-					window.scrollBy(0, scrollDir);
+					scroller.scrollBy(0, scrollDir);
 					reorder();
 				}
 				raf = requestAnimationFrame(autoScroll);
@@ -1236,7 +1650,8 @@ function buildMapSettings(panel) {
 				if (ev.buttons === 0) { onEnd(); return; } // pointerup was missed (released outside the window)
 				lastY = ev.clientY;
 				const margin = 60;
-				scrollDir = lastY < margin ? -8 : (lastY > window.innerHeight - margin ? 8 : 0);
+				const bounds = scroller.getBoundingClientRect();
+				scrollDir = lastY < bounds.top + margin ? -8 : (lastY > bounds.bottom - margin ? 8 : 0);
 				reorder();
 			};
 
@@ -1303,6 +1718,19 @@ function buildMapSettings(panel) {
 	// list is nobody's — a stored custom view, or a shared one matching nothing.
 	let editingPresetId = activePresetId() === 'custom' ? null : activePresetId();
 
+	// the board is a mode of the view the panel edits, not a place it sends you:
+	// the mode row's button only ticks this, and Primijeni builds the view from
+	// it along with the list (layoutForPrefs). Starts at what is on screen, so
+	// opening the panel and applying anything unchanged changes nothing.
+	let dashboardChecked = isDashboardView();
+
+	// the board's grid. Unlike the mode beside them these take effect at once —
+	// they are a way of working, not a view to be applied — and they are the
+	// browser's rather than the view's (popout.js stores them), so they start at
+	// what is set and keep it whether or not the board is on
+	let gridChecked = isGridShown();
+	let snapChecked = isGridSnapped();
+
 	// rebuilt whenever the saved presets change, so they sit among the
 	// built-ins and stay selectable the same way
 	function renderPresets(selectedId) {
@@ -1315,8 +1743,13 @@ function buildMapSettings(panel) {
 			const radio = el('input', { type: 'radio', name: 'msPreset', value: preset.id });
 			radio.checked = preset.id === selectedId;
 			radio.addEventListener('change', () => {
-				// switching to a named preset previews its list; "custom" keeps the current list
-				if (preset.id !== 'custom') fillList(presetMapIds(preset.id));
+				// switching to a named preset previews its whole view: its list and
+				// its mode, since a preset saved as a board is a board and a built-in,
+				// carrying no layout, is the page. "Prilagođeno" keeps both as they are
+				if (preset.id !== 'custom') {
+					fillList(presetMapIds(preset.id));
+					setDashboardChecked(isBoardPreset(preset));
+				}
 				// picking "Prilagođeno" by hand detaches the list from wherever it
 				// came from: no dot, and no row offering to take the edits back
 				editingPresetId = preset.id === 'custom' ? null : preset.id;
@@ -1325,10 +1758,11 @@ function buildMapSettings(panel) {
 			});
 			// a corner mark on the saved ones, so the two kinds stay apart in the
 			// bar the way the management list below already keeps them apart
-			const chipClass = 'ms-chip' + (isUserPresetId(preset.id) ? ' ms-user' : '');
+			// and the board's blue edge (the mode row's) on a preset that is a board
+			const chipClass = 'ms-chip' + (isUserPresetId(preset.id) ? ' ms-user' : '') + (isBoardPreset(preset) ? ' ms-board' : '');
 			// the name rides in a span rather than a bare text node so the chip
 			// styling can hang off the radio's :checked as a sibling selector
-			presetsDiv.appendChild(el('label', {}, [radio, el('span', { class: chipClass, text: preset.name })]));
+			presetsDiv.appendChild(el('label', {}, [radio, el('span', { class: chipClass, text: preset.name, title: isBoardPreset(preset) ? 'Nadzorna ploča' : undefined })]));
 		});
 		// carries no content: it exists so the last line has something to give
 		// its leftover width to, leaving those chips at their natural size
@@ -1376,13 +1810,142 @@ function buildMapSettings(panel) {
 		return { preset: presetId };
 	}
 
+	// the mode is the panel's, not the arrangement's: whatever layout is going to
+	// be applied, the toggle decides whether it is a board. Ticked, it turns any
+	// layout into one — a built-in's nothing included, which applySnapLayout then
+	// fills with every map of the list. Unticked, a board loses its placements
+	// along with the flag: a board holds the whole list as widgets, and over the
+	// visible page that is a pile rather than an arrangement.
+	// It runs before sanitizeSnapLayout rather than after, so what it marks a
+	// board is held to what a board can hold — no columns — by the same guard
+	// every layout read back from storage or a link passes
+	function withDashboard(layout, on) {
+		if (!on) return layout && layout.dashboard ? null : layout;
+		const board = Object.assign({}, layout);
+		board.dashboard = true;
+		return board;
+	}
+
+	// the arrangement to go with a prefs object. A preset is a whole view:
+	// applying a saved one brings its own arrangement (none, if it was saved
+	// with nothing popped out), and a built-in has none, so everything docks.
+	// Only the custom list keeps what is on screen, as far as its maps allow —
+	// that is an edit of the current view, not a switch to another one
+	function layoutForPrefs(prefs) {
+		const stored = prefs.preset === 'custom'
+			? currentSnapLayout()
+			: (userPresets.find(p => p.id === prefs.preset) || {}).layout; // a built-in has none
+		return sanitizeSnapLayout(withDashboard(stored, dashboardChecked), prefsMapIds(prefs));
+	}
+
+	// the arrangement on screen, held to the list in the picker (a map unchecked
+	// there cannot stay a pane) and to the mode in the row, so what a preset
+	// saves and what Ažuriraj counts as an edit are the view Primijeni would build
+	function selectedLayout() {
+		return sanitizeSnapLayout(withDashboard(currentSnapLayout(), dashboardChecked), selectedMapIds());
+	}
+
 	// the panel's own share button carries whatever is on screen, expanding a
-	// saved preset the same way the per-preset links do
+	// saved preset the same way the per-preset links do — with the panel's mode
+	// on it either way, since the link carries the view Primijeni would build
 	function readSharePrefs() {
 		const prefs = readPanelPrefs();
+		const layout = layoutForPrefs(prefs);
 		const preset = userPresets.find(p => p.id === prefs.preset);
-		return preset ? presetSharePrefs(preset) : prefs;
+		const shared = preset ? presetSharePrefs(preset) : prefs;
+		if (layout) shared.layout = layout; else delete shared.layout;
+		return shared;
 	}
+
+	// what is snapped, and a way to put it all back; shown only while there is
+	// something to say. The line is the panel's only sign that the arrangement
+	// is part of the view a preset saves and a link carries
+	const layoutDiv = el('div', { class: 'ms-layout' });
+
+	function layoutParts() {
+		const layout = currentSnapLayout() || {};
+		const parts = [];
+		if (layout.left) parts.push(`lijevo ${layout.left.panes.length}`);
+		if (layout.right) parts.push(`desno ${layout.right.panes.length}`);
+		if (layout.floating) parts.push(`u prozoru ${layout.floating.length}`);
+		return parts;
+	}
+
+	// the board is another way of viewing altogether, so it gets a row of its
+	// own with a button, not a link among the others — a toggle, though, not a
+	// way onto it: it ticks dashboardChecked and nothing moves until Primijeni,
+	// like the ticks in the list beside it. Whether it is ticked is the lit
+	// band's (.ms-on) to say, and what is on screen the layout line's, so the
+	// row never narrates. Beside it the board's two grid switches, which only
+	// mean anything on it: greyed and unclickable while it is off, their state
+	// kept all the same, since they are a way of working rather than a view
+	const modeDiv = el('div', { class: 'ms-mode' });
+
+	function buildGridToggle(label, checked, onChange) {
+		const box = el('input', { type: 'checkbox' });
+		box.checked = checked;
+		box.disabled = !dashboardChecked;
+		box.addEventListener('change', () => onChange(box.checked));
+		return el('label', { class: 'ms-grid' + (dashboardChecked ? '' : ' ms-off') }, [box, el('span', { text: label })]);
+	}
+
+	function renderModeRow() {
+		modeDiv.replaceChildren();
+		modeDiv.hidden = !POPOUT_MQ.matches; // the widgets and the board are a desktop thing
+		modeDiv.classList.toggle('ms-on', dashboardChecked);
+		const btn = el('button', { type: 'button', class: 'btn', 'aria-pressed': String(dashboardChecked) }, [
+			document.createTextNode('Nadzorna ploča '),
+			el('span', { class: 'beta', text: 'beta' })
+		]);
+		btn.addEventListener('click', () => setDashboardChecked(!dashboardChecked));
+		// these take effect on the tick, not on Primijeni: they are a way of
+		// working on the board rather than part of the view it shows, so there is
+		// nothing to hold back — tick the grid on, see it, shut the dialog
+		modeDiv.append(btn,
+			buildGridToggle('Prikaži mrežu', gridChecked, (on) => { gridChecked = on; setGridPrefs(gridChecked, snapChecked); }),
+			buildGridToggle('Poravnaj uz mrežu', snapChecked, (on) => { snapChecked = on; setGridPrefs(gridChecked, snapChecked); }));
+	}
+	renderModeRow();
+
+	// G flips the grid from the keyboard (popout.js) through setGridPrefs, which
+	// calls this: the row is re-read from the prefs rather than left standing on
+	// the copy it took when it was built, which the next tick would write back
+	panel._onGridChange = () => {
+		gridChecked = isGridShown();
+		snapChecked = isGridSnapped();
+		renderModeRow();
+	};
+
+	// the mode is part of the layout, so a changed tick is a pending edit like
+	// a changed list: the row, the line it speaks for and Ažuriraj all follow
+	function setDashboardChecked(on) {
+		dashboardChecked = on;
+		renderModeRow();
+		renderLayoutLine();
+		renderManage();
+	}
+
+	// what is popped out over the page, with the way back (on the board the
+	// mode row says it)
+	function renderLayoutLine() {
+		layoutDiv.replaceChildren();
+		const parts = layoutParts();
+		layoutDiv.hidden = isDashboard() || !parts.length;
+		if (layoutDiv.hidden) return;
+		const backLink = el('a', { text: 'Vrati sve' });
+		backLink.addEventListener('click', dockAllPopouts);
+		layoutDiv.append(el('span', { text: `Izdvojene karte: ${parts.join(', ')}` }), backLink);
+	}
+	renderLayoutLine();
+
+	// the arrangement changes from inside the open panel — Vrati sve on the
+	// layout line — and the rows and Ažuriraj follow at once. A gesture on a
+	// widget cannot: it is a press outside, which the backdrop takes
+	panel._onLayoutChange = () => {
+		renderModeRow();
+		renderLayoutLine();
+		renderManage();
+	};
 
 	// ----- saved preset management -----
 
@@ -1399,7 +1962,7 @@ function buildMapSettings(panel) {
 	const saveBtn = el('button', { type: 'button', class: 'btn', text: 'Spremi' });
 
 	function saveCurrentAs(name) {
-		const preset = storeUserPreset(name, selectedMapIds());
+		const preset = storeUserPreset(name, selectedMapIds(), selectedLayout());
 		nameInput.value = '';
 		addingPreset = false; // the form has done its job
 		editingPresetId = preset.id; // the list is now this preset's, so edits from here go back to it
@@ -1491,9 +2054,13 @@ function buildMapSettings(panel) {
 	// redundant: editingPresetId also holds built-in ids (they carry the origin
 	// dot), and a built-in reaching storeUserPreset would fork a saved copy of
 	// itself under its own name rather than update anything.
+	// The arrangement counts as an edit too — it is part of what the preset
+	// stores — but only here: the origin dot on the chip marks a changed list,
+	// which is what the panel itself edits, and a rearranged page still shows
+	// the preset's maps.
 	function hasPendingEdits(preset) {
 		return isUserPresetId(preset.id) && preset.id === editingPresetId
-			&& !sameMapIds(preset.maps, selectedMapIds());
+			&& (!sameMapIds(preset.maps, selectedMapIds()) || !sameSnapLayout(preset.layout, selectedLayout()));
 	}
 
 	// shares the preset as saved — the panel's Podijeli button is the one that
@@ -1553,7 +2120,7 @@ function buildMapSettings(panel) {
 		if (hasPendingEdits(preset)) {
 			firstLink = el('a', { text: 'Ažuriraj' });
 			firstLink.addEventListener('click', () => {
-				storeUserPreset(preset.name, selectedMapIds()); // by name, the one write path
+				storeUserPreset(preset.name, selectedMapIds(), selectedLayout()); // by name, the one write path
 				renderPresets(preset.id); // the list is this preset again, so its chip comes back
 				renderManage();
 			});
@@ -1562,7 +2129,7 @@ function buildMapSettings(panel) {
 		}
 
 		const row = el('div', { class: 'ms-manage-item' }, [
-			el('span', { class: 'ms-manage-name', text: preset.name }),
+			el('span', { class: 'ms-manage-name' + (isBoardPreset(preset) ? ' ms-board' : ''), text: preset.name, title: isBoardPreset(preset) ? 'Nadzorna ploča' : undefined }),
 			buildLinkCells([firstLink, renameLink, deleteLink])
 		]);
 
@@ -1701,12 +2268,15 @@ function buildMapSettings(panel) {
 
 	const applyBtn = el('button', { type: 'button', class: 'btn', text: 'Primijeni' });
 	applyBtn.addEventListener('click', () => {
-		saveMapPrefs(readPanelPrefs());
+		const prefs = readPanelPrefs();
+		const layout = layoutForPrefs(prefs);
+		if (layout) prefs.layout = layout;
+		saveMapPrefs(prefs);
 		clearSharedMapView(); // the saved preferences take over from the shared link
 		setMapSettingsVisible(panel, false);
 		renderMaps();
 		initDynamicContent();
-		scrollToTop(); // the panel collapse leaves the scroll offset mid-page
+		applySnapLayout(layout); // the render dropped the panes; these are the ones to come back
 	});
 
 	// a link, like the per-preset Podijeli it does the same job as; the filled
@@ -1716,14 +2286,28 @@ function buildMapSettings(panel) {
 		copyMapViewLink(readSharePrefs(), () => flashLabel(shareLink, 'Kopirano!', 'Podijeli'));
 	});
 
-	// the actions sit right under the render order they act on, rather than at
-	// the far end of the picker and the preset management below it
-	panel.appendChild(presetsDiv);
-	panel.appendChild(selectedDiv);
-	panel.appendChild(el('div', { class: 'ms-actions' }, [applyBtn, shareLink]));
-	panel.appendChild(sortDiv);
-	panel.appendChild(availableDiv);
-	panel.appendChild(manageDiv);
+	const closeLink = el('a', { text: 'Zatvori', title: 'Zatvori (Esc)' });
+	closeLink.addEventListener('click', () => setMapSettingsVisible(panel, false));
+
+	// the header stays put and the body under it scrolls (CSS); in the body
+	// the actions sit right under the render order they act on, rather than
+	// at the far end of the picker and the preset management below it
+	panel.appendChild(el('div', { class: 'ms-head' }, [el('span', { class: 'ms-title', text: 'Karte' }), closeLink]));
+	panel.appendChild(el('div', { class: 'ms-body' }, [
+		presetsDiv,
+		modeDiv,
+		layoutDiv,
+		selectedDiv,
+		el('div', { class: 'ms-actions' }, [applyBtn, shareLink]),
+		sortDiv,
+		availableDiv,
+		manageDiv
+	]));
+
+	// the window handles, the widgets' own (CSS gates them to desktop). They go
+	// in the panel rather than beside it so the press that grabs one is a press
+	// inside the dialog, which is what keeps it from shutting itself
+	POPOUT_HANDLES.forEach(dir => panel.appendChild(el('div', { class: `po-h po-h-${dir}`, 'data-dir': dir })));
 }
 
 // in dev this is a deferred external script, so the DOM is already parsed and
@@ -1735,3 +2319,11 @@ if (document.readyState === 'loading') {
 } else {
 	renderMaps();
 }
+// the remembered arrangement, once the maps are there — registered after the
+// render above, and DOMContentLoaded is also when main.js (dlog) has run in dev
+document.addEventListener('DOMContentLoaded', applyStoredSnapLayout);
+// and the cloak comes off, whatever the arrangement turned out to be — in a
+// listener of its own rather than at the end of the apply, since listeners run
+// independently of one another and a throw in that one must not leave the page
+// hidden behind a board that never arrived
+document.addEventListener('DOMContentLoaded', () => document.documentElement.classList.remove('board-boot'));
