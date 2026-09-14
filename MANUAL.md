@@ -104,7 +104,7 @@ Interaktivne karte nemaju `[R]` — one same dohvaćaju najnovije podatke, pa ih
 
 Prozori se međusobno privlače: kad se rub približi rubu drugog prozora, sam sjedne na njega. Tako se lako slaže uredna mreža bez mjerkanja.
 
-Rub se povlači slobodno: širina i visina idu svaka za svojim. Karta se tada uklapa unutar okvira, s neoštrom kopijom slike kao podlogom. **Držite Shift** i prozor zadržava omjer slike, pa mu se mijenja samo širina — kao u programima za slike. Tako zadržan, širi se do veličine same slike i ne dalje, jer bi karta prestala rasti, a prozor bi se nastavio širiti oko nje.
+Rub se povlači slobodno: širina i visina idu svaka za svojim. Karta se tada uklapa unutar okvira, s neoštrom kopijom slike kao podlogom. **Držite Shift** i prozor zadržava omjer slike, pa mu se mijenja samo širina — kao u programima za slike. Karta ga prati do koje god širine ga povučete; veća od svoje izvorne veličine postaje mekša, kao i svaka uvećana slika.
 
 Shift vrijedi i usred povlačenja, ne samo na početku: pritisnite ga dok vučete i prozor se vraća na omjer, pustite ga i opet je slobodan. Miš se pritom ne mora micati. Ono što prozor na kraju ostane odlučuje tipka u trenutku puštanja ruba.
 

@@ -373,6 +373,31 @@ body.fs-lock {
 			cursor: move;
 		}
 
+		/* the map's own width — written inline by maxWidthStyle() on the title
+		   bar, the slideshow and the indicators, and by buildSlideshow() on the
+		   slide placeholders — is the page's answer to a wide screen: the map is
+		   laid out at the width it was made for and the page keeps the rest. A
+		   widget is not the page. It is sized by hand and its width is the map's,
+		   so the caps come off throughout it, letterboxed or not */
+		.map-block.popout > .radartitle,
+		.map-block.popout .placeholder,
+		.map-block.popout .slideshow,
+		.map-block.popout .indicators-container {
+			max-width: none !important;
+		}
+
+			/* and the map fills what it is given, past its natural width where
+			   the widget asks for that: an img carries max-width and no width,
+			   so it stopped there and sat in the middle of a frame grown past
+			   it, the frame's own ground either side. A locked widget was held
+			   to what its content spanned for want of this — a limit on the
+			   widget to hide that the map had none. Freed, the rules below take
+			   over: the box is filled in both axes and the contain gives the
+			   aspect back to the image, which is the letterbox */
+			.map-block.popout .placeholder img {
+				width: 100%;
+			}
+
 		/* an interactive map has no aspect of its own: the block carries an inline
 		   height and lays out as a column, the map takes what the title bar leaves */
 		.map-block.popout.free {
@@ -391,20 +416,6 @@ body.fs-lock {
 				padding-top: 0;
 			}
 
-		/* the first of the four places maxWidthStyle() writes the map's width
-		   inline: the widget's own title bar (buildMapTitleBar passes the map,
-		   the per-slide bars do not). On the page the bar stands above a map
-		   held to that width and is held to it too; in a widget the map's width
-		   is the widget's, and the bar spans it. Capped, it stopped at the cap
-		   and — a capped stretch in this flex column falling back to the start
-		   edge — sat at the left of a widget stretched past it. Every map with
-		   both a top-level bar and a maxWidth was in this: dhmz, estofex, essl,
-		   meteo-si, dwd, idokep-radar-eu, istramet, dhmz-sinopticka. The four
-		   that looked right had one or the other and not both */
-		.map-block.popout.letterbox > .radartitle {
-			max-width: none !important;
-		}
-
 		/* a locked widget freed of its aspect (Shift-drag, maps.js): the media
 		   is letterboxed in what the title bar leaves — the placeholder's inline
 		   aspect and max-width undone — and a blurred, darkened copy of the image
@@ -415,7 +426,6 @@ body.fs-lock {
 			display: flex;
 			flex-direction: column;
 			aspect-ratio: auto !important;
-			max-width: none !important;
 			background-color: transparent;
 		}
 
@@ -425,19 +435,12 @@ body.fs-lock {
 				object-fit: contain;
 			}
 
-		/* the same cap undone one level up. buildSlideshow() puts the map's
-		   maxWidth inline on the container, and an untitled slideshow is a
-		   .placeholder itself so the rule above reaches it — a titled one is
-		   not, and kept the cap. Past that width it stopped growing, and a
-		   capped stretch in this flex column falls back to the start edge, so
-		   the widget stretched on and the slideshow stayed at the left of it,
-		   taking the slide's own title bar and the image with it. The title
-		   belongs to the widget and spans it; the image is centred in it by
-		   the contain below */
+		/* the slideshow takes what the bars leave, as the placeholder above does
+		   — the same rule one level up, a titled slideshow's container not
+		   being a .placeholder itself (an untitled one is, and is reached by it) */
 		.map-block.popout.letterbox .slideshow {
 			flex: 1;
 			min-height: 0;
-			max-width: none !important;
 		}
 
 			/* fills the slideshow, a column itself when untitled (it is a placeholder) */
@@ -467,7 +470,6 @@ body.fs-lock {
 		   the indicators run under the map and are as wide as it is — which,
 		   letterboxed, is the painted image and not the box it is centred in */
 		.map-block.popout.letterbox .indicators-container {
-			max-width: none !important;
 			width: var(--lb-w, 100%);
 			margin-left: auto;
 			margin-right: auto;

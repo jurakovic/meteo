@@ -141,19 +141,17 @@ function lockToImage(block) {
 	const rect = block.getBoundingClientRect();
 	lockAspect(block);
 	if (isSnapped(block)) return;
-	// an image not yet there has no painted size to come in to (holdLockedWidth)
+	// an image not yet there has no painted size to come in to
 	const img = block.querySelector('.slide.active img') || block.querySelector('.placeholder img');
 	if (img && !(img.complete && img.naturalWidth)) return;
-	// measured from inside the content's hold, never at the width the widget
-	// happens to have: past that hold the map has stopped growing and the
-	// height with it, so a ratio taken there is of the ground beside the map
-	// and not of the map — dhmz stretched to 1100 gave 1.42 where the content
-	// is 0.93, a seed lockedWidthFor cannot close in the passes it is given
-	const cap = lockedMaxWidth(block, popoutMaxWidth());
-	const from = Math.min(rect.width, cap);
-	const tall = lockedHeightAt(block, from);
+	// the seed is taken at the width the widget has, which the map now follows
+	// at every width: while a locked map stopped at its own, a ratio read past
+	// that point was of the ground beside it and not of the map — dhmz at 1100
+	// gave 1.42 where its content was 0.93, which lockedWidthFor cannot close
+	const cap = popoutMaxWidth();
+	const tall = lockedHeightAt(block, Math.min(rect.width, cap));
 	if (tall > rect.height + 0.5) {
-		const ratio = from / tall;
+		const ratio = rect.width / tall;
 		const w = lockedWidthFor(block, rect.height, rect.height * ratio, ratio, cap);
 		block.style.width = `${Math.round(w)}px`;
 	}
@@ -938,14 +936,9 @@ function resizePopout(block, dir, e) {
 	setMode(e.shiftKey);
 	const start = block.getBoundingClientRect();
 	ratio = start.width / start.height;
-	// a locked widget stops where its content does, so the map fills it at every
-	// width it can be pulled to and the aspect stays locked to something. Free,
-	// there is no content to be held to (lockedMaxWidth) — and the hold cannot
-	// be measured until the gesture is locked, so it is taken the first time it
-	// is and kept, the content not changing under a pull
+	// one ceiling for both, the map following the widget to any width it is
+	// pulled to — locked, it used to stop at what its own content spanned
 	const ceiling = popoutMaxWidth();
-	let lockedCeiling = 0;
-	const lockedCap = () => (lockedCeiling || (lockedCeiling = lockedMaxWidth(block, ceiling)));
 	const maxHeight = viewportHeight() - POPOUT_MARGIN;
 	const magnets = col ? [] : magnetRects(block);
 	const mates = col ? groupStarts(members.filter(m => m !== block)) : [];
@@ -978,7 +971,7 @@ function resizePopout(block, dir, e) {
 			h = clamp(h, POPOUT_MIN_HEIGHT, maxHeight);
 			block.style.height = `${Math.round(h)}px`;
 		} else {
-			const maxWidth = lockedCap();
+			const maxWidth = ceiling;
 			// the width the wanted height asks for, read off the widget rather
 			// than taken from the start ratio, so the pulled edge lands on its
 			// magnet and a plain drag follows the pointer (lockedWidthFor)
@@ -1055,56 +1048,6 @@ function lockedHeightAt(block, w) {
 	return block.getBoundingClientRect().height;
 }
 
-// The widest a locked widget goes. Its height is its content's, so the aspect
-// is only locked to anything for as long as the content is still growing with
-// it — and the content stops: at the map's maxWidth, which the title bars and
-// the placeholder carry inline (meteociel's 768, so the whole widget froze at
-// that height and went on widening under a lock on nothing), or, where the map
-// sets none, at the image's natural width, which an img with no width of its
-// own will not pass (neverin's 800, where the height did keep following but
-// the image sat in the middle of a widget it no longer filled). Either way
-// what grows past that point is ground beside the map: not a letterbox, which
-// is the freed widget's answer and has the backdrop to show for it, but the
-// frame's own colour, which reads as the widget having come loose from its map.
-// So a locked widget is held to what its content spans, the way a locked pane
-// in a column already is (fitSnapPane, snapContentWidth) — the map fills it at
-// every width, and the lock is on something the whole way out.
-//
-// Measured by asking for the ceiling and seeing what the content took, since
-// that is where both limits are written; the widget is put back as it was, so
-// a rect taken before this still holds. Free widgets have no content to be
-// held to: an iframe fills whatever it is given.
-function lockedMaxWidth(block, ceiling) {
-	if (block.classList.contains('free')) return ceiling;
-	const width = block.style.width;
-	block.style.width = `${Math.round(ceiling)}px`;
-	const span = snapContentWidth(block);
-	block.style.width = width;
-	// never under the floor the callers clamp against, which would leave them
-	// clamping to a minimum above their maximum
-	return span > 0 ? Math.max(POPOUT_MIN_WIDTH, Math.min(ceiling, span)) : ceiling;
-}
-
-// the same hold, applied to a widget that is already standing rather than to
-// the width a gesture is asking for: a locked widget wider than its content is
-// taken in to it. Only ever narrows, so a widget inside its content is left
-// where it is — and it waits for the image, since until then there is nothing
-// to measure: an unloaded image gives its title bar the shrink-to-fit width of
-// the words in it, which would take the widget in to almost nothing. This is
-// what holds a stored width, laid out before the images arrive, and a slide
-// change to a narrower image
-function holdLockedWidth(block) {
-	if (block.classList.contains('free') || isSnapped(block)) return;
-	const img = block.querySelector('.slide.active img') || block.querySelector('.placeholder img');
-	if (img && !(img.complete && img.naturalWidth)) return;
-	const max = lockedMaxWidth(block, popoutMaxWidth());
-	if (block.getBoundingClientRect().width > max + 0.5) {
-		dlog(`holdLockedWidth: ${block.dataset.mapId} → ${Math.round(max)}`);
-		block.style.width = `${Math.round(max)}px`;
-		placePopout(block, block.getBoundingClientRect().left, block.getBoundingClientRect().top);
-	}
-}
-
 // a group resizes as one thing: its box is pulled as a locked widget's is —
 // one scale for the whole, from the pulled axis, a corner following whichever
 // asks for more — from the edge or corner opposite the one pulled, the other
@@ -1134,10 +1077,8 @@ function resizeGroup(members, dir, e) {
 		POPOUT_MIN_WIDTH / Math.min(...starts.map(s => s.width)),
 		...starts.filter(s => s.free).map(s => POPOUT_MIN_HEIGHT / s.height));
 	const maxScale = Math.min(
-		// each member against its own ceiling: a locked one stops where its
-		// content does, so the scale the group takes is the one none of them
-		// outgrows its map by
-		...starts.map(s => lockedMaxWidth(s.block, popoutMaxWidth()) / s.width),
+		// no member past the widest a widget may be
+		popoutMaxWidth() / Math.max(...starts.map(s => s.width)),
 		(dir.includes('w') ? box.right : viewportWidth() - box.left) / box.width,
 		(dir.includes('n') ? box.bottom : viewportHeight() - box.top) / box.height);
 	trackPopoutPointer(e, (dx, dy) => {
@@ -1820,34 +1761,18 @@ function fitBoardFullscreen() {
 	});
 }
 
-// a pane takes the column's width: a free one with the height it carries, a
-// locked one with the height its aspect gives at that width, pulled in to
-// what its content spans (an image stops at its natural width and a map with
-// a maxWidth at that, and the title bar and indicators must not run on past
-// them across a wider column) and centred in the column. Its top is the one
-// it carries, held inside the viewport
+// a pane takes the column's width — a free one with the height it carries, a
+// locked one with the height its aspect gives at that width, the map following
+// the column however wide it is pulled. Its top is the one it carries, held
+// inside the viewport
 function fitSnapPane(pane, x, width) {
 	const block = pane.block;
 	block.style.width = `${width}px`;
 	if (pane.height !== undefined) {
 		block.style.height = `${Math.round(clamp(pane.height * viewportHeight(), POPOUT_MIN_HEIGHT, viewportHeight()))}px`;
-	} else {
-		const content = snapContentWidth(block);
-		if (content && content < block.offsetWidth - 1) block.style.width = `${Math.ceil(content)}px`;
 	}
 	block.style.left = `${Math.round(x + (width - block.offsetWidth) / 2)}px`;
 	block.style.top = `${Math.round(clamp(pane.top * viewportHeight(), 0, Math.max(0, viewportHeight() - block.offsetHeight)))}px`;
-}
-
-// the narrowest of what is on screen and constrained on its own: a title bar
-// carries the map's maxWidth, an image or video its natural width (an image
-// still loading measures 0 and does not count — the load listener below fits
-// again once it has)
-function snapContentWidth(block) {
-	const widths = [...block.querySelectorAll('.radartitle, img, video')]
-		.map(node => node.getBoundingClientRect().width)
-		.filter(w => w > 0);
-	return widths.length ? Math.min(...widths) : 0;
 }
 
 // panes moved up or down their column by one offset from where they stood
@@ -2153,10 +2078,7 @@ function applySnapLayout(layout) {
 		if (!block || block.classList.contains('popout')) return;
 		popoutMap(block);
 		if (height && !block.classList.contains('free')) unlockAspect(block);
-		// the stored width as stored, held only to the widget limits: what its
-		// content spans cannot be measured yet — an image still loading gives
-		// the title bar its shrink-to-fit width and nothing its real one — so
-		// holdLockedWidth() takes it in when the image arrives
+		// the stored width as stored, held to the widget limits
 		block.style.width = `${Math.round(clamp(width * viewportWidth(), POPOUT_MIN_WIDTH, popoutMaxWidth()))}px`;
 		if (block.classList.contains('free') && height)
 			block.style.height = `${Math.round(clamp(height * viewportHeight(), POPOUT_MIN_HEIGHT, viewportHeight() - POPOUT_MARGIN))}px`;
@@ -2268,7 +2190,6 @@ document.addEventListener('map-fullscreen', () => {
 		if (!block) return;
 		setTimeout(() => {
 			if (isSnapped(block) && !block.classList.contains('free')) layoutSnapColumns();
-			holdLockedWidth(block); // the image is here now, so what it spans can be measured
 			fitWidget(block);
 			syncBackdrop(block); // the image on screen may be another
 			syncShadows(); // a floating locked widget's height changed with it, and its shadow is its size
