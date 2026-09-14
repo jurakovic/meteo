@@ -1425,6 +1425,15 @@ body.fs-lock {
 			padding: 0 14px;
 		}
 
+			/* this button is shrink-to-fit in a flex row rather than centred text
+			   in a fixed cell, so the tag has no centering to shift and is better
+			   left in flow: out of flow it hangs past the button's right edge and
+			   all but closes the gap before the grid switches */
+			.map-settings .ms-mode .btn .beta {
+				position: static;
+				transform: none;
+			}
+
 		/* the grid switches ride in the mode row, and are the board's: greyed and
 		   unclickable while it is off, their state kept all the same */
 		.map-settings .ms-grid {

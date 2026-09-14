@@ -1893,7 +1893,10 @@ function buildMapSettings(panel) {
 		modeDiv.replaceChildren();
 		modeDiv.hidden = !POPOUT_MQ.matches; // the widgets and the board are a desktop thing
 		modeDiv.classList.toggle('ms-on', dashboardChecked);
-		const btn = el('button', { type: 'button', class: 'btn', text: 'Nadzorna ploča', 'aria-pressed': String(dashboardChecked) });
+		const btn = el('button', { type: 'button', class: 'btn', 'aria-pressed': String(dashboardChecked) }, [
+			document.createTextNode('Nadzorna ploča '),
+			el('span', { class: 'beta', text: 'beta' })
+		]);
 		btn.addEventListener('click', () => setDashboardChecked(!dashboardChecked));
 		// these take effect on the tick, not on Primijeni: they are a way of
 		// working on the board rather than part of the view it shows, so there is
