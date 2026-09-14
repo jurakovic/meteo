@@ -539,18 +539,28 @@ function updateCovered() {
 // beside it: a shadow drawn by the widget itself paints in that widget's place
 // in the order, so of two widgets side by side the raised one lays its shadow
 // across its neighbour. So no widget carries one. Each has a box of its own size
-// in a single layer under the whole widget range (.po-shadows, over the page and
-// the docked maps on it, the columns' ground, the graph paper and a fullscreen
-// map), and that box carries the shadow. An outer box-shadow is clipped out of
-// its own border box, so the box paints the halo alone and the widget sits on it
-// exactly. Every widget is then over every shadow whatever the order among
-// themselves, which also lets a grouped widget keep a shadow: a member's falls
-// under the member beside it, not across it. A pane in a column has none (docked
-// into the column's ground rather than floating over it), nor has a widget
-// hosting a fullscreen map, whose box is not to be seen.
-function shadowLayer() {
-	let layer = document.querySelector('.po-shadows');
-	if (!layer) document.body.appendChild(layer = el('div', { class: 'po-shadows' }));
+// in a layer under the whole widget range, over the page and the docked maps on
+// it, the columns' ground and the graph paper, and that box carries the shadow.
+// An outer box-shadow is clipped out of its own border box, so the box paints
+// the halo alone and the widget sits on it exactly. Every widget is then over
+// every shadow whatever the order among themselves, which also lets a grouped
+// widget keep a shadow: a member's falls under the member beside it, not across
+// it. A pane in a column has none (docked into the column's ground rather than
+// floating over it), nor has a widget hosting a fullscreen map, whose box is not
+// to be seen.
+//
+// There are two such layers because a fullscreen map lies between them, and a
+// shadow falls on whatever is behind its own widget: a widget standing on that
+// map casts onto it, as it would onto the page, while one standing beside it —
+// one that walled the map off, so the map begins where the widget ends — casts
+// under, and the map covers the halo exactly as the host's own box did. Which
+// layer a box belongs in is syncShadows(); the CSS gives them their z-index.
+
+// over is the layer over a fullscreen map, and the only one while none is up
+function shadowLayer(over) {
+	const cls = over ? 'po-shadows' : 'po-shadows-under';
+	let layer = document.querySelector(`.${cls}`);
+	if (!layer) document.body.appendChild(layer = el('div', { class: cls }));
 	return layer;
 }
 
@@ -558,25 +568,53 @@ function castsShadow(block) {
 	return !isSnapped(block) && !block.classList.contains('fs-host');
 }
 
-// every widget's box placed on its rect, and any box left without a widget —
-// one docked, or gone with the tbody — swept out of the layer
+// what a fullscreen map and its bar are painted in, null when none is up. They
+// are fixed and placed by the CSS off the --fs-* properties, so their own rects
+// are the answer wherever the extent came from — the viewport, the room between
+// the columns, a column, or what the board's widgets leave
+function fullscreenRect() {
+	const map = document.querySelector('.if1.fullscreen');
+	if (!map) return null;
+	const bar = document.querySelector('.radartitle.fullscreen');
+	const r = map.getBoundingClientRect();
+	if (!bar) return r;
+	const b = bar.getBoundingClientRect();
+	return {
+		left: Math.min(r.left, b.left), right: Math.max(r.right, b.right),
+		top: Math.min(r.top, b.top), bottom: Math.max(r.bottom, b.bottom)
+	};
+}
+
+// every widget's box placed on its rect, in the layer its standing asks for,
+// and any box left without a widget — one docked, or gone with the tbody —
+// swept out of both
 function syncShadows() {
 	const live = new Set();
+	const fs = fullscreenRect();
+	const layers = new Map(); // looked up once each, not once per widget
+	const layerFor = (over) => layers.get(over) || layers.set(over, shadowLayer(over)).get(over);
 	allPopouts().forEach(block => {
 		if (!castsShadow(block)) return;
-		if (!block._shadow || !block._shadow.isConnected) {
-			block._shadow = el('div', { class: 'po-shadow' });
-			shadowLayer().appendChild(block._shadow);
-		}
 		// the rect as it is: a widget's place carries thousandths of a pixel
 		// (subpixel(), moveGroup) and its shadow is to stand exactly on it
 		const rect = block.getBoundingClientRect();
+		// a widget standing on the map casts onto it, as it would onto the page;
+		// one standing beside it casts under, so the halo of a widget that walled
+		// the map off does not spill over the map it made room for
+		const over = !fs || (rect.left < fs.right && rect.right > fs.left
+			&& rect.top < fs.bottom && rect.bottom > fs.top);
+		const layer = layerFor(over);
+		if (!block._shadow || block._shadow.parentElement !== layer) {
+			if (block._shadow) block._shadow.remove();
+			block._shadow = el('div', { class: 'po-shadow' });
+			layer.appendChild(block._shadow);
+		}
 		block._shadow.style.cssText =
 			`left: ${rect.left}px; top: ${rect.top}px; width: ${rect.width}px; height: ${rect.height}px;`;
 		live.add(block._shadow);
 	});
-	const layer = document.querySelector('.po-shadows');
-	if (layer) [...layer.children].forEach(box => { if (!live.has(box)) box.remove(); });
+	document.querySelectorAll('.po-shadows, .po-shadows-under').forEach(layer =>
+		[...layer.children].forEach(box => { if (!live.has(box)) box.remove(); }));
 }
 
 function clamp(value, min, max) {

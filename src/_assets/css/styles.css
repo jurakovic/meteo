@@ -670,19 +670,31 @@ body.fs-lock {
 			visibility: visible;
 		}
 
-	/* the widgets' shadows, all of them in one layer under all of the widgets,
-	   so a widget's shadow falls on what is behind the widgets and never on
-	   the widget beside it. Over everything that is not a widget — the page
-	   and the docked maps on it, the columns' ground, the board's graph paper,
-	   a fullscreen map at 4500/4501 — and under the widget range, which starts
-	   at 5000 and climbs from there. Each box is a widget's own rect placed by
-	   popout.js; an outer box-shadow is clipped out of its own border box, so
-	   a box paints the halo and nothing else, and takes no pointer */
-	.po-shadows {
+	/* the widgets' shadows, drawn for them rather than by them, so a widget's
+	   shadow falls on what is behind the widgets and never on the widget beside
+	   it. Each box is a widget's own rect placed by popout.js; an outer box-shadow
+	   is clipped out of its own border box, so a box paints the halo and nothing
+	   else, and takes no pointer. Both layers are under the widget range, which
+	   starts at 5000 and climbs from there, and over the page and the docked maps
+	   on it, the columns' ground and the board's graph paper.
+	   A fullscreen map at 4500/4501 lies between them, and popout.js sorts the
+	   boxes either side of it: the shadow of a widget standing on that map goes
+	   over it, as it would over the page, and the shadow of one merely standing
+	   beside it goes under, so a halo cannot spill onto a map that begins where
+	   its widget ends */
+	.po-shadows,
+	.po-shadows-under {
 		position: fixed;
 		inset: 0;
-		z-index: 4900;
 		pointer-events: none;
+	}
+
+	.po-shadows {
+		z-index: 4900;
+	}
+
+	.po-shadows-under {
+		z-index: 4400;
 	}
 
 		.po-shadow {
