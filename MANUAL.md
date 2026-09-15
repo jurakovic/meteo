@@ -106,11 +106,18 @@ Kad je karta izdvojena, u traci se pojavljuju dodatni gumbi:
 
 | Gumb | Značenje |
 |---|---|
+| `[D]` | otvara još jedan prozor s istom kartom |
 | `[R]` | ponovno učitava kartu — korisno kad je stranica dugo otvorena i slike su zastarjele; vidi i [Automatsko osvježavanje](#automatsko-osvježavanje) |
 | `[+]` / `[-]` | spaja prozor sa susjednim u grupu, odnosno vadi ga iz nje |
 | `[=]` | vraća kartu u stranicu |
 
 Interaktivne karte nemaju `[R]` — one same dohvaćaju najnovije podatke, pa ih nema smisla ponovno učitavati.
+
+**Kopije.** Gumb `[D]` (ili tipka <kbd>D</kbd>, koja kopira prozor na vrhu) otvara još jedan prozor s istom kartom. Ima ga i karta koja još stoji u stranici, pa se kopija može napraviti i bez prethodnog izdvajanja. Ista karta tako može stajati na ekranu više puta — npr. ista sinoptička karta u dvije veličine, ili isti niz slika zaustavljen na dvije različite slike.
+
+Kopija je **samo prozor**: u stranici i dalje postoji jedan red po karti, koliko god kopija plutalo iznad nje. Zato `[=]` (na ploči `[x]`) na kopiji nju jednostavno makne, a karta i njena osnovna pojava ostaju. Svaka kopija ima svoje strelice i svoje kvadratiće, pa se niz slika u jednoj pomiče neovisno o drugoj.
+
+Kopije su dio razmještaja — spremaju se u predložak i putuju u poveznici za dijeljenje, kao i položaj svakog drugog prozora. Ako se karta makne s popisa, s njom odlaze i njene kopije.
 
 ### Pomicanje i veličina
 
@@ -202,6 +209,7 @@ Na [nadzornoj ploči](#nadzorna-ploča) karta uzme cijeli ekran, osim sa strane 
 | <kbd>Esc</kbd> | zatvara dijalog; ako je zatvoren, izlazi iz cijelog zaslona |
 | <kbd>R</kbd> | ponovno učitava sve karte |
 | <kbd>A</kbd> | slaže karte u mrežu (na ploči) |
+| <kbd>D</kbd> | kopira prozor koji je na vrhu |
 | <kbd>G</kbd> | prikaz mreže (na ploči) |
 | <kbd>S</kbd> | poravnavanje uz mrežu (na ploči) |
 | strelice | pomiču prozor koji je na vrhu za jedno polje mreže |

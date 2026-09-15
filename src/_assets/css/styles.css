@@ -261,7 +261,7 @@ body.fs-lock {
 
 /* pop-out widgets (customize page): a map block lifted out of the table into a
    fixed, draggable, resizable box — desktop only, the button stays hidden elsewhere */
-.po-btn, .grp-btn, .rl-btn {
+.po-btn, .grp-btn, .rl-btn, .dup-btn {
 	display: none;
 }
 
@@ -286,8 +286,15 @@ body.fs-lock {
 		display: inline;
 	}
 
+	/* [D] copies the map into a widget of its own, from the page as well as
+	   from a widget: what it makes is a widget either way */
+	.dup-btn {
+		display: inline;
+	}
+
 	/* the fullscreen bar is pinned; no widget toggling from there */
-	.radartitle.fullscreen .po-btn {
+	.radartitle.fullscreen .po-btn,
+	.radartitle.fullscreen .dup-btn {
 		display: none;
 	}
 

@@ -158,10 +158,14 @@ function handleSwipe(slideshow, startX, endX) {
 	}
 }
 
+// bound once per slideshow: a copy made at runtime (popout.js) wires itself
+// through here, and the sweep must pass over everything already bound rather
+// than hang a second set of handlers on it
 function addSwipeEvents() {
-	const slideshows = document.querySelectorAll('.slideshow');
+	const slideshows = document.querySelectorAll('.slideshow:not([data-swipe])');
 
 	slideshows.forEach(slideshow => {
+		slideshow.setAttribute('data-swipe', '');
 		let startX = 0;
 		let startY = 0;
 		let endX = 0;
@@ -371,10 +375,12 @@ function exitFullscreen(if1) {
 	}
 }
 
+// bound once per overlay, for the reason above
 function hideOverlayOnDoubleTap() {
-	const overlays = document.querySelectorAll('.if1 .overlay');
+	const overlays = document.querySelectorAll('.if1 .overlay:not([data-tap])');
 
 	overlays.forEach((overlay) => {
+		overlay.setAttribute('data-tap', '');
 		let lastTap = 0;
 		let multiTouch = false;
 

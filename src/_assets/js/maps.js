@@ -974,6 +974,38 @@ function clearSharedMapView() {
 
 // ---------- rendering ----------
 
+// A map can be on screen more than once: the widget's [D] makes a copy of it
+// (popout.js), and a copy is a widget and nothing else — the page keeps one row
+// per map however many copies float over it. So a block is named twice: by the
+// map it shows (`data-map-id`, which is the catalog's) and by which showing of
+// it this is (`data-inst`). The first copy of a map is the map itself, so its
+// instance key is the plain id and every layout written before copies existed
+// still reads; a further one carries `#2`, `#3`.
+//
+// The parts inside a block that carry a name of their own — a slideshow and
+// its indicators, a frame and the ids built off it — take a suffix from the
+// index instead of the key, since a frame's id is also pasted into other ids
+// and read back with getElementById, where a `#` has no business being.
+const INST_SEP = '#';
+
+function instKey(mapId, index) {
+	return index > 1 ? `${mapId}${INST_SEP}${index}` : mapId;
+}
+
+function instMapId(inst) {
+	return String(inst).split(INST_SEP)[0];
+}
+
+function instIndex(inst) {
+	const index = Number(String(inst).split(INST_SEP)[1]);
+	return index > 1 ? index : 1;
+}
+
+function instSuffix(inst) {
+	const index = instIndex(inst);
+	return index > 1 ? `Copy${index}` : '';
+}
+
 function el(tag, attrs = {}, children = []) {
 	const node = document.createElement(tag);
 	for (const [key, value] of Object.entries(attrs)) {
@@ -998,7 +1030,8 @@ function maxWidthStyle(map) {
 function buildTitleBar(title, map = {}, popout = false) {
 	return el('div', { class: 'radartitle', style: maxWidthStyle(map) || undefined }, [
 		el('a', { href: title.href, target: '_blank', rel: 'nofollow', text: title.text }),
-		popout ? el('span', { class: 'right right-cluster' }, [buildReloadButton(), buildGroupButton(), buildPopoutButton()]) : null
+		popout ? el('span', { class: 'right right-cluster' },
+			[buildDuplicateButton(), buildReloadButton(), buildGroupButton(), buildPopoutButton()]) : null
 	]);
 }
 
@@ -1008,13 +1041,14 @@ function buildMapTitleBar(map) {
 	return buildTitleBar({ text: map.name, href: map.titleHref }, map, true);
 }
 
-function buildSlideshow(map) {
+function buildSlideshow(map, inst) {
+	const slideshowId = map.id + instSuffix(inst);
 	const start = map.startSlide || 1;
 	const titled = map.slides.some(slide => slide.title);
 
 	const container = el('div', {
 		class: titled ? 'slideshow' : 'slideshow placeholder',
-		'data-slideshow-id': map.id,
+		'data-slideshow-id': slideshowId,
 		'data-current-slide': start,
 		'data-dynamic-width': map.dynamicWidth ? '' : undefined,
 		style: (maxWidthStyle(map) + (titled ? '' : ` aspect-ratio: ${map.aspect};`)).trim() || undefined
@@ -1044,15 +1078,15 @@ function buildSlideshow(map) {
 	});
 
 	const prev = el('a', { class: 'prev' + (titled ? ' shorter' : ''), html: '&#10094;' });
-	prev.addEventListener('click', () => plusSlides(map.id, -1));
+	prev.addEventListener('click', () => plusSlides(slideshowId, -1));
 	const next = el('a', { class: 'next' + (titled ? ' shorter' : ''), html: '&#10095;' });
-	next.addEventListener('click', () => plusSlides(map.id, 1));
+	next.addEventListener('click', () => plusSlides(slideshowId, 1));
 	container.appendChild(prev);
 	container.appendChild(next);
 
 	const indicators = el('div', {
 		class: 'indicators-container',
-		'data-slideshow-id': map.id,
+		'data-slideshow-id': slideshowId,
 		style: `${maxWidthStyle(map)} grid-template-columns: repeat(${map.slides.length}, 1fr);`.trim()
 	});
 	map.slides.forEach((slide, i) => {
@@ -1086,8 +1120,8 @@ function buildVideo(map) {
 	];
 }
 
-function buildIframe(map) {
-	const frameId = map.frameId;
+function buildIframe(map, inst) {
+	const frameId = map.frameId + instSuffix(inst);
 	const pascal = frameId[0].toUpperCase() + frameId.slice(1);
 
 	const zoomBtn = el('a', { class: 'left zoom-btn', 'data-mode': 'hr', text: '[HR]' });
@@ -1099,6 +1133,7 @@ function buildIframe(map) {
 		zoomBtn,
 		el('a', { class: 'center', href: map.titleHref, target: '_blank', rel: 'nofollow', text: map.name }),
 		el('span', { class: 'right right-cluster' }, [
+			buildDuplicateButton(),
 			buildGroupButton(),
 			buildPopoutButton(),
 			el('a', { id: `reset${pascal}Frame`, 'data-frame-id': frameId, style: 'display:none', text: '[X]' }),
@@ -1145,12 +1180,12 @@ function buildLinksBottom(map) {
 	return bar;
 }
 
-function buildMapContent(map) {
+function buildMapContent(map, inst = map.id) {
 	switch (map.type) {
-		case 'slideshow': return buildSlideshow(map);
+		case 'slideshow': return buildSlideshow(map, inst);
 		case 'image': return buildImage(map);
 		case 'video': return buildVideo(map);
-		case 'iframe': return buildIframe(map);
+		case 'iframe': return buildIframe(map, inst);
 		case 'iframe-basic': return buildBasicIframe(map);
 	}
 	return [];
@@ -1179,7 +1214,7 @@ function renderMaps() {
 	maps.forEach((map, i) => {
 		if (i > 0) tbody.appendChild(el('tr', { class: 'sp20' }));
 		// one block per map so the pop-out can lift title, map and indicators together
-		const block = el('div', { class: 'map-block', 'data-map-id': map.id }, buildMapContent(map));
+		const block = el('div', { class: 'map-block', 'data-map-id': map.id, 'data-inst': map.id }, buildMapContent(map));
 		tbody.appendChild(el('tr', {}, [el('td', { align: 'center' }, [block])]));
 		if (map.links && map.links.length) {
 			tbody.appendChild(el('tr', {}, [el('td', { align: 'center' }, [buildLinksBottom(map)])]));

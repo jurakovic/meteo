@@ -53,6 +53,110 @@ function togglePopout(block) {
 // enough for new images to be out — without reloading the page. First in
 // the cluster, shown only on a popped-out widget (CSS). Not on an
 // interactive map, whose bar keeps its own [X]/[R] gate button
+// ---------- copies ----------
+
+// A map can be on screen more than once. [D] makes a copy of the widget, and a
+// copy is a widget and nothing else: the page keeps one row per map however
+// many float over it, so there is no question of where a copy sits in a list
+// it was never in, and [=] on one simply takes it away. The original is what
+// docks, once, whatever its copies were doing.
+//
+// A copy is built from the catalog rather than cloned from the DOM, so the
+// names its parts carry are its own (maps.js: instSuffix). Two renderings
+// sharing one slideshow id is the very thing prefsMapIds() dedupes to avoid —
+// the arrows would drive whichever came first while both sets of indicators
+// lit up.
+function buildDuplicateButton() {
+	const btn = el('a', { class: 'dup-btn', text: '[D]', title: 'Udvostruči kartu (D)' });
+	btn.addEventListener('click', () => duplicateMap(btn.closest('.map-block')));
+	return btn;
+}
+
+function isDuplicate(block) {
+	return !!block && block.dataset.inst !== block.dataset.mapId;
+}
+
+function blockByInst(inst) {
+	return document.querySelector(`.map-block[data-inst="${CSS.escape(inst)}"]`);
+}
+
+// the lowest free index for this map, so closing the middle copy of three and
+// making another gives back the name that was freed rather than climbing
+function freeInstance(mapId) {
+	for (let index = 2; ; index++) {
+		const inst = instKey(mapId, index);
+		if (!blockByInst(inst)) return inst;
+	}
+}
+
+// the copy's own wiring and only its own. initDynamicContent() sweeps the page,
+// and setting an iframe's src again reloads every interactive map already on
+// screen, costing each of them its pan and its zoom; the two sweeps below are
+// safe because they bind once per node and skip what is bound (main.js)
+function wireDuplicate(block) {
+	block.querySelectorAll('img.lazy').forEach(img => {
+		img.src = img.getAttribute('data-src');
+		img.classList.remove('lazy');
+	});
+	block.querySelectorAll('iframe[data-zoom-hr-desktop]').forEach(iframe => setIframeSrc(iframe));
+	addSwipeEvents();
+	hideOverlayOnDoubleTap();
+	updateHintText();
+}
+
+function makeDuplicate(mapId, inst) {
+	const map = MAP_CATALOG.find(m => m.id === mapId);
+	const origin = blockByInst(mapId);
+	if (!map || !origin) return null;
+	const block = el('div', { class: 'map-block duplicate', 'data-map-id': mapId, 'data-inst': inst },
+		buildMapContent(map, inst));
+	// beside the map it copies, so the list's order still reads off the DOM
+	// (arrangeBoard) and a map dropped from the list takes its copies with it.
+	// It never docks, so it asks the page for no room
+	origin.after(block);
+	wireDuplicate(block);
+	return block;
+}
+
+function duplicateMap(block) {
+	if (!block || !POPOUT_MQ.matches) return null;
+	const mapId = block.dataset.mapId;
+	const inst = freeInstance(mapId);
+	dlog(`duplicateMap: ${mapId} -> ${inst}`);
+	const copy = makeDuplicate(mapId, inst);
+	if (!copy) return null;
+	popoutMap(copy);
+	// a step off the widget it came from, the way a cascade steps, so it is
+	// plainly a second thing and not the first one having jumped
+	const from = block.classList.contains('popout') ? block.getBoundingClientRect() : copy.getBoundingClientRect();
+	placePopout(copy, from.left + CASCADE_STEP, from.top + CASCADE_STEP);
+	raisePopout(copy);
+	fitWidget(copy);
+	updateGroups();
+	syncShadows();
+	persistSnapLayout();
+	return copy;
+}
+
+// the block a stored entry names: the map's own rendering, or a copy, which
+// exists only in the arrangement and so is made here as the arrangement is laid
+// out. A copy of a map the list no longer holds has nothing to be made from,
+// and sanitizeSnapLayout has already dropped it
+function instanceFor(inst) {
+	return blockByInst(inst) || (instIndex(inst) > 1 ? makeDuplicate(instMapId(inst), inst) : null);
+}
+
+function removeDuplicate(block) {
+	dlog(`removeDuplicate: ${block.dataset.inst}`);
+	if (block._group) leaveGroup(block);
+	unsnapPane(block);
+	if (block._shadow) block._shadow.remove();
+	block.remove();
+	updateGroups();
+	syncShadows();
+	persistSnapLayout();
+}
+
 function buildReloadButton() {
 	const btn = el('a', { class: 'rl-btn', text: '[R]', title: 'Ponovno učitaj kartu' });
 	btn.addEventListener('click', () => {
@@ -85,14 +189,17 @@ function freshUrl(url) {
 function popoutMap(block) {
 	dlog(`popoutMap: ${block.dataset.mapId}`);
 	const rect = block.getBoundingClientRect();
-	const back = el('a', { text: 'Vrati' });
-	back.addEventListener('click', () => dockMap(block));
-	const gap = el('div', { class: 'map-gap', style: `height: ${rect.height}px;` }, [
-		el('span', { text: 'Karta je izdvojena u prozor ·' }),
-		back
-	]);
-	block._gap = gap;
-	block.after(gap);
+	// a copy was never in the page, so it leaves nothing behind in it
+	if (!isDuplicate(block)) {
+		const back = el('a', { text: 'Vrati' });
+		back.addEventListener('click', () => dockMap(block));
+		const gap = el('div', { class: 'map-gap', style: `height: ${rect.height}px;` }, [
+			el('span', { text: 'Karta je izdvojena u prozor ·' }),
+			back
+		]);
+		block._gap = gap;
+		block.after(gap);
+	}
 	block.classList.add('popout');
 	block.style.width = `${Math.min(POPOUT_WIDTH, rect.width)}px`;
 	// an interactive map is sized freely in both dimensions: it starts at the
@@ -248,6 +355,8 @@ function fitWidget(block) {
 
 function dockMap(block) {
 	dlog(`dockMap: ${block.dataset.mapId}`);
+	// a copy has no place in the page to go back to, so [=] takes it away
+	if (isDuplicate(block)) return removeDuplicate(block);
 	// a fullscreen iframe inside the widget is fixed on its own; take it down first
 	const fs = block.querySelector('.if1.fullscreen');
 	if (fs) exitFullscreen(fs);
@@ -340,6 +449,8 @@ function popoutRest() {
 // it (maps.js), as the dialog would store it after the map was unticked
 function removeFromDashboard(block) {
 	dlog(`removeFromDashboard: ${block.dataset.mapId}`);
+	// the copy alone; the map stays on the list for the original to show
+	if (isDuplicate(block)) return removeDuplicate(block);
 	const id = block.dataset.mapId;
 	snapPersistPaused = true;
 	dockMap(block); // out of its column and group, a fullscreen taken down
@@ -1444,6 +1555,7 @@ document.addEventListener('keydown', (e) => {
 	if (e.key === 'g' || e.key === 'G') { e.preventDefault(); toggleGridShown(); return; }
 	if (e.key === 's' || e.key === 'S') { e.preventDefault(); toggleGridSnapped(); return; }
 	if (e.key === 'a' || e.key === 'A') { e.preventDefault(); arrangeBoard(); return; }
+	if (e.key === 'd' || e.key === 'D') { e.preventDefault(); duplicateMap(topPopout()); return; }
 	// the arrows belong to whatever is on top. While the dialog is open that is
 	// the dialog: its body is the only thing that scrolls there, and a widget
 	// behind it is not what an arrow pressed on the map list is aimed at. The
@@ -2201,7 +2313,7 @@ function snapLayout() {
 		layout[col.side] = {
 			width: roundFraction(col.width),
 			panes: [...col.panes].sort((a, b) => a.top - b.top).map(p => {
-				const entry = { id: p.block.dataset.mapId, top: roundFraction(p.top) };
+				const entry = { id: p.block.dataset.inst, top: roundFraction(p.top) };
 				if (p.height !== undefined) entry.height = roundFraction(p.height);
 				const group = groupNumber(p.block);
 				if (group) entry.group = group;
@@ -2217,7 +2329,7 @@ function snapLayout() {
 		.map(block => {
 			const rect = block.getBoundingClientRect();
 			const entry = {
-				id: block.dataset.mapId,
+				id: block.dataset.inst,
 				left: roundFraction(rect.left / viewportWidth()),
 				top: roundFraction(rect.top / viewportHeight()),
 				width: roundFraction(rect.width / viewportWidth())
@@ -2234,8 +2346,8 @@ function snapLayout() {
 }
 
 // only an interactive map has a fullscreen to be stored
-function hasFullscreen(mapId) {
-	const map = MAP_CATALOG.find(m => m.id === mapId);
+function hasFullscreen(inst) {
+	const map = MAP_CATALOG.find(m => m.id === instMapId(inst));
 	return !!map && map.type === 'iframe';
 }
 
@@ -2274,7 +2386,7 @@ function sanitizeSnapLayout(layout, mapIds) {
 		const panes = [];
 		let stacked = 0;
 		col.panes.forEach(p => {
-			if (!(p && typeof p.id === 'string' && mapIds.includes(p.id) && !seen.has(p.id))) return;
+			if (!(p && typeof p.id === 'string' && mapIds.includes(instMapId(p.id)) && !seen.has(p.id))) return;
 			const entry = { id: p.id };
 			const top = Number(p.top), height = Number(p.height), share = Number(p.share);
 			if (fraction(top)) {
@@ -2302,7 +2414,7 @@ function sanitizeSnapLayout(layout, mapIds) {
 	}
 	if (Array.isArray(layout.floating)) {
 		const floating = layout.floating
-			.filter(f => f && typeof f.id === 'string' && mapIds.includes(f.id) && !seen.has(f.id)
+			.filter(f => f && typeof f.id === 'string' && mapIds.includes(instMapId(f.id)) && !seen.has(f.id)
 				&& fraction(Number(f.left)) && fraction(Number(f.top)) && fraction(Number(f.width)) && Number(f.width) > 0)
 			.map(f => {
 				seen.add(f.id);
@@ -2369,7 +2481,7 @@ function applySnapLayout(layout) {
 		if (!stored) return;
 		const col = snapColumns[side];
 		stored.panes.forEach(({ id, top, height, group, fullscreen }) => {
-			const block = document.querySelector(`.map-block[data-map-id="${CSS.escape(id)}"]`);
+			const block = instanceFor(id);
 			if (!block || block.classList.contains('popout')) return;
 			popoutMap(block);
 			if (height && !block.classList.contains('free')) unlockAspect(block); // a locked map stored with a height was freed
@@ -2384,7 +2496,7 @@ function applySnapLayout(layout) {
 	if (left.panes.length && right.panes.length && left.width + right.width > 1) right.width = 1 - left.width;
 	layoutSnapColumns();
 	(layout.floating || []).forEach(({ id, left, top, width, height, group, fullscreen }) => {
-		const block = document.querySelector(`.map-block[data-map-id="${CSS.escape(id)}"]`);
+		const block = instanceFor(id);
 		if (!block || block.classList.contains('popout')) return;
 		popoutMap(block);
 		if (height && !block.classList.contains('free')) unlockAspect(block);
