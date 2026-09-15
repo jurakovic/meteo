@@ -1216,9 +1216,31 @@ body.fs-lock {
 		gap: 8px;
 	}
 
-	body.dashboard .ms-tab-cluster {
+	body.dashboard .ms-tab-cluster,
+	body.refresh-on .ms-tab-cluster {
 		display: inline-flex;
 	}
+
+		/* the grid switches do nothing off the board, so they are not offered
+		   there; [R] and the countdown belong wherever the tab shows */
+		.ms-tab-cluster [data-grid] {
+			display: none;
+		}
+
+		body.dashboard .ms-tab-cluster [data-grid] {
+			display: inline;
+		}
+
+		/* tabular figures, so the width does not walk as the seconds come down */
+		.ms-tab-count {
+			min-width: 4ch;
+			text-align: right;
+			font-variant-numeric: tabular-nums;
+		}
+
+		body:not(.refresh-on) .ms-tab-count {
+			display: none;
+		}
 
 		/* a rule between the name and the glyphs: both are text on one strip of
 		   orange, and without it [R] reads as the end of the name. In the cluster
@@ -1247,7 +1269,11 @@ body.fs-lock {
 	   arrived on the phone too, where fs-lock is the only one of these three a
 	   touch screen can reach at all */
 	body.snap-full .ms-tab,
-	body.dashboard .ms-tab {
+	body.dashboard .ms-tab,
+	/* and wherever the clock runs, which is the countdown's only place to be
+	   read: off the board the page carries its own Karte button, so the tab is
+	   there for the time rather than for the way in */
+	body.refresh-on .ms-tab {
 		display: flex;
 	}
 
@@ -1534,6 +1560,52 @@ body.fs-lock {
 		.map-settings .ms-grid.ms-off {
 			opacity: 0.45;
 			cursor: default;
+		}
+
+	/* the clock's own row, under the mode row and built like it, but not the
+	   board's: a page left open goes stale on a phone too, so it stands at
+	   every width */
+	.map-settings .ms-refresh {
+		display: flex;
+		align-items: center;
+		gap: 10px;
+		margin: 4px 0;
+		padding: 8px 10px;
+		background-color: #1a2536;
+		border: 1px solid #3d4d6a;
+		border-left: 4px solid #4a8de6;
+		color: #8a94a8;
+	}
+
+		.map-settings .ms-refresh.ms-on {
+			background-color: #22385c;
+			border-color: #4a8de6;
+			color: white;
+		}
+
+		.map-settings .ms-refresh label {
+			display: flex;
+			align-items: center;
+			gap: 6px;
+			cursor: pointer;
+			user-select: none;
+		}
+
+		.map-settings .ms-refresh-every {
+			padding: 2px 4px;
+			border: 1px solid #485871;
+			border-radius: 3px;
+			background-color: #1b2735;
+			color: inherit;
+			font-family: inherit;
+			font-size: inherit;
+		}
+
+		/* pushed to the far end, where it is read rather than stepped over on
+		   the way to the switch */
+		.map-settings .ms-refresh-left {
+			margin-left: auto;
+			font-variant-numeric: tabular-nums;
 		}
 
 	.map-settings .ms-layout {

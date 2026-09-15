@@ -1312,7 +1312,8 @@ function buildMsTabCluster(tab) {
 	grid.addEventListener('click', () => setGridPrefs(!isGridShown(), isGridSnapped()));
 	const snap = el('a', { class: 'ms-tab-btn', 'data-grid': 'snap', text: '[S]', title: 'Poravnaj uz mrežu (S)' });
 	snap.addEventListener('click', () => setGridPrefs(isGridShown(), !isGridSnapped()));
-	tab.appendChild(el('span', { class: 'ms-tab-cluster' }, [reload, grid, snap]));
+	const count = el('span', { class: 'ms-tab-count', title: 'Do sljedećeg osvježavanja' });
+	tab.appendChild(el('span', { class: 'ms-tab-cluster' }, [reload, grid, snap, count]));
 	syncMsTab();
 }
 
@@ -1327,6 +1328,17 @@ function syncMsTab() {
 	const snap = tab.querySelector('[data-grid="snap"]');
 	if (show) show.classList.toggle('ms-tab-off', !isGridShown());
 	if (snap) snap.classList.toggle('ms-tab-off', !isGridSnapped());
+	syncRefreshLabels();
+}
+
+// the countdown reads in two places — the tab, which shows for it wherever the
+// clock runs, and the dialog's own row — and the tick writes both
+function syncRefreshLabels() {
+	const left = isRefreshOn() ? refreshLabel() : '';
+	const count = document.querySelector('.ms-tab .ms-tab-count');
+	if (count) count.textContent = left;
+	const row = document.querySelector('.ms-refresh-left');
+	if (row) row.textContent = left ? `još ${left}` : '';
 }
 
 function initMsTab() {
@@ -1781,6 +1793,41 @@ function buildMapSettings(panel) {
 	}
 	renderModeRow();
 
+	// the clock. Its own row and not the mode row above: that one is the board's
+	// and stands down on a phone, where a page left open goes just as stale
+	const refreshDiv = el('div', { class: 'ms-refresh' });
+
+	function renderRefreshRow() {
+		refreshDiv.replaceChildren();
+		refreshDiv.classList.toggle('ms-on', isRefreshOn());
+		const every = el('select', { class: 'ms-refresh-every', 'aria-label': 'Razmak osvježavanja' });
+		REFRESH_CHOICES.forEach(minutes => {
+			const option = el('option', { value: String(minutes), text: `${minutes} min` });
+			if (minutes === refreshEveryMinutes()) option.selected = true;
+			every.appendChild(option);
+		});
+		const box = el('input', { type: 'checkbox' });
+		box.checked = isRefreshOn();
+		// as with the grid, this takes effect on the tick and not on Primijeni:
+		// it is a way of working, so there is nothing to hold back
+		const apply = () => setRefreshPrefs(box.checked, Number(every.value));
+		box.addEventListener('change', apply);
+		every.addEventListener('change', apply);
+		// the time is written here rather than left to the next tick: the row is
+		// not in the document yet, so the sweep that writes both labels cannot
+		// find it, and it would read empty for the first second it is on screen
+		const left = isRefreshOn() ? refreshLabel() : '';
+		refreshDiv.append(
+			el('label', {}, [box, el('span', { text: 'Osvježavaj svakih' })]),
+			every,
+			el('span', { class: 'ms-refresh-left', text: left ? `još ${left}` : '' }));
+	}
+	renderRefreshRow();
+
+	// the clock is in two places, this row and the tab's countdown, so a change
+	// made at the other one is read back here rather than left standing
+	panel._onRefreshChange = renderRefreshRow;
+
 	// G flips the grid from the keyboard (popout.js) through setGridPrefs, which
 	// calls this: the row is re-read from the prefs rather than left standing on
 	// the copy it took when it was built, which the next tick would write back
@@ -2170,6 +2217,7 @@ function buildMapSettings(panel) {
 	panel.appendChild(el('div', { class: 'ms-body' }, [
 		presetsDiv,
 		modeDiv,
+		refreshDiv,
 		layoutDiv,
 		selectedDiv,
 		el('div', { class: 'ms-actions' }, [applyBtn, shareLink]),

@@ -128,8 +128,10 @@
 		rgba(0,0,0,.4);cursor:pointer;opacity:.55;transition:opacity .15s ease;box-sizing:border-box;align-items:center;gap:10px;white-space:nowrap;
 		overflow:hidden;touch-action:none;user-select:none}.ms-tab:hover{background-color:#ffa726}.ms-tab:hover,body.ms-open .ms-tab{opacity:1}
 		.ms-tab-name{flex:1 1 auto;min-width:0;overflow:hidden;text-overflow:ellipsis;text-align:center}.ms-tab-cluster{flex:0 0 auto;display:none;
-		gap:8px}body.dashboard .ms-tab-cluster{display:inline-flex}.ms-tab-cluster::before{content:'|';opacity:.55}.ms-tab-cluster a{text-decoration
-		:none;cursor:pointer}.ms-tab-cluster a.ms-tab-off{opacity:.55}body.dashboard .ms-tab,body.snap-full .ms-tab{display:flex}
+		gap:8px}body.dashboard .ms-tab-cluster,body.refresh-on .ms-tab-cluster{display:inline-flex}.ms-tab-cluster [data-grid]{display:none}
+		body.dashboard .ms-tab-cluster [data-grid]{display:inline}.ms-tab-count{min-width:4ch;text-align:right;font-variant-numeric:tabular-nums}
+		body:not(.refresh-on) .ms-tab-count{display:none}.ms-tab-cluster::before{content:'|';opacity:.55}.ms-tab-cluster a{text-decoration:none;
+		cursor:pointer}.ms-tab-cluster a.ms-tab-off{opacity:.55}body.dashboard .ms-tab,body.refresh-on .ms-tab,body.snap-full .ms-tab{display:flex}
 		.map-settings .ms-presets{display:flex;flex-wrap:wrap;gap:6px;padding-bottom:8px;margin-bottom:8px;border-bottom:1px solid #485871}
 		.map-settings .ms-presets label{position:relative;flex:1 1 auto}.map-settings .ms-presets .ms-fill{flex:1000 1 0;height:0}
 		.map-settings .ms-presets input{position:absolute;margin:0;opacity:0}.map-settings .ms-chip{display:block;position:relative;text-align:
@@ -156,7 +158,12 @@
 		 #3d4d6a;border-left:4px solid #4a8de6}.map-settings .ms-mode.ms-on{background-color:#22385c;border-color:#4a8de6}
 		.map-settings .ms-mode .btn{flex:none;padding:0 14px}.map-settings .ms-mode .btn .beta{position:static;transform:none}.map-settings .ms-grid
 		{display:flex;align-items:center;gap:6px;color:#8a94a8;cursor:pointer;user-select:none}.map-settings .ms-mode.ms-on .ms-grid{color:#fff}
-		.map-settings .ms-grid.ms-off{opacity:.45;cursor:default}.map-settings .ms-layout{display:flex;gap:14px;padding:6px 0;color:#8a94a8}
+		.map-settings .ms-grid.ms-off{opacity:.45;cursor:default}.map-settings .ms-refresh{display:flex;align-items:center;gap:10px;margin:4px 0;
+		padding:8px 10px;background-color:#1a2536;border:1px solid #3d4d6a;border-left:4px solid #4a8de6;color:#8a94a8}
+		.map-settings .ms-refresh.ms-on{background-color:#22385c;border-color:#4a8de6;color:#fff}.map-settings .ms-refresh label{display:flex;
+		align-items:center;gap:6px;cursor:pointer;user-select:none}.map-settings .ms-refresh-every{padding:2px 4px;border:1px solid #485871;
+		border-radius:3px;background-color:#1b2735;color:inherit;font-family:inherit;font-size:inherit}.map-settings .ms-refresh-left{margin-left:
+		auto;font-variant-numeric:tabular-nums}.map-settings .ms-layout{display:flex;gap:14px;padding:6px 0;color:#8a94a8}
 		.map-settings .ms-layout[hidden],.map-settings .ms-mode[hidden]{display:none}.map-settings .ms-layout a{cursor:pointer;user-select:none;
 		text-decoration:none}.map-settings .ms-handle{display:inline-block;cursor:grab;touch-action:none;padding:2px 8px;user-select:none}
 		.map-settings .ms-item.dragging{background-color:#2b5797}.map-settings .ms-item.dragging .ms-handle{cursor:grabbing}.map-settings .ms-manage
@@ -1235,6 +1242,7 @@
 						<nav class="manual-toc">
 			<ul>
 			<li class="toc-2"><a href="#osnovno-korištenje">Osnovno korištenje</a></li>
+			<li class="toc-2"><a href="#automatsko-osvježavanje">Automatsko osvježavanje</a></li>
 			<li class="toc-2"><a href="#odabir-karata">Odabir karata</a></li>
 			<li class="toc-2"><a href="#predlošci">Predlošci</a></li>
 			<li class="toc-3"><a href="#vlastiti-predlošci">Vlastiti predlošci</a></li>
@@ -1275,6 +1283,11 @@
 			</table>
 			<p><strong>Linkovi.</strong> Gumb <em>Linkovi</em> vodi na popis dodatnih izvora na dnu stranice. Kvadratić pokraj njega uključuje prikaz linkova ispod svake karte.</p>
 			<p><strong>Upute.</strong> Gumb <code>?</code> u redu gumba otvara ovaj tekst, kao i poveznica <em>Upute</em> u podnožju i tipka <kbd>?</kbd>. Otvara se u prozoru preko stranice, pa se upute čitaju uz karte, a ne umjesto njih; zatvara se natpisom <em>Zatvori</em> ili tipkom <kbd>Esc</kbd>. Poveznica koja završava s <code>#upute</code> otvara ih odmah pri otvaranju stranice.</p>
+			<h2 id="automatsko-osvježavanje">Automatsko osvježavanje</h2>
+			<p>Slike zastare na stranici koja je dugo otvorena. U dijalogu <em>Karte</em> je red <strong>Osvježavaj svakih</strong> s kvadratićem i razmakom — 1, 2, 5, 10, 15, 30 ili 60 minuta. Isključeno je dok se ne uključi, a početni razmak je 5 minuta.</p>
+			<p>Osvježavaju se slike, nizovi slika, videa i jednostavne karte — sve ono što ima gumb <code>[R]</code>. Interaktivne karte (Windy, Blitzortung i slične) se preskaču: one same dohvaćaju najnovije podatke, a ponovno učitavanje bi im samo poništilo pomak i zumiranje.</p>
+			<p><strong>Odbrojavanje.</strong> Dok je osvježavanje uključeno, na vrhu ekrana visi pločica s vremenom do sljedećeg osvježavanja. Tu je i gumb <code>[R]</code> koji osvježava odmah. Vrijeme se vraća na puni razmak pri svakom osvježavanju — automatskom, ručnom (<code>[R]</code>, tipka <kbd>R</kbd> ili <code>[R]</code> na pojedinoj karti) i pri ponovnom otvaranju stranice.</p>
+			<p>Kao i prekidači mreže, ova postavka <strong>ne putuje</strong> u predlošku ni u poveznici — vrijedi samo u ovom pregledniku.</p>
 			<h2 id="odabir-karata">Odabir karata</h2>
 			<p>Gumb <strong>Karte</strong> otvara dijalog u kojem se bira što se prikazuje. Dok je otvoren, stranica iza njega se vidi ali se ne dira — malo je zatamnjena, ne lista se i ništa se na njoj ne može kliknuti. Klik bilo gdje izvan dijaloga samo ga zatvara i odbacuje što je u njemu mijenjano; taj klik ne ide dalje, pa neće usput otvoriti poveznicu ni pomaknuti prozor. Zatvara ga i tipka <kbd>Esc</kbd>.</p>
 			<p>Dijalog ima dva popisa:</p>
@@ -1327,7 +1340,7 @@
 			<tr><th>Gumb</th><th>Značenje</th></tr>
 			</thead>
 			<tbody>
-			<tr><td><code>[R]</code></td><td>ponovno učitava kartu — korisno kad je stranica dugo otvorena i slike su zastarjele</td></tr>
+			<tr><td><code>[R]</code></td><td>ponovno učitava kartu — korisno kad je stranica dugo otvorena i slike su zastarjele; vidi i <a href="#automatsko-osvježavanje">Automatsko osvježavanje</a></td></tr>
 			<tr><td><code>[+]</code> / <code>[-]</code></td><td>spaja prozor sa susjednim u grupu, odnosno vadi ga iz nje</td></tr>
 			<tr><td><code>[=]</code></td><td>vraća kartu u stranicu</td></tr>
 			</tbody>
@@ -1395,7 +1408,7 @@
 			<tr><td><kbd>K</kbd></td><td>otvara i zatvara dijalog <em>Karte</em></td></tr>
 			<tr><td><kbd>?</kbd></td><td>otvara i zatvara <em>Upute</em></td></tr>
 			<tr><td><kbd>Esc</kbd></td><td>zatvara dijalog; ako je zatvoren, izlazi iz cijelog zaslona</td></tr>
-			<tr><td><kbd>R</kbd></td><td>ponovno učitava sve izdvojene karte</td></tr>
+			<tr><td><kbd>R</kbd></td><td>ponovno učitava sve karte</td></tr>
 			<tr><td><kbd>G</kbd></td><td>prikaz mreže (na ploči)</td></tr>
 			<tr><td><kbd>S</kbd></td><td>poravnavanje uz mrežu (na ploči)</td></tr>
 			<tr><td>strelice</td><td>pomiču prozor koji je na vrhu za jedno polje mreže</td></tr>
@@ -1419,7 +1432,7 @@
 			<h2 id="što-se-pamti">Što se pamti</h2>
 			<p>Stranica pamti na tri različita načina i vrijedi znati koji je koji.</p>
 			<p><strong>1. Prikaz</strong> — popis karata, njihov redoslijed i razmještaj prozora. Sprema se pritiskom na <em>Primijeni</em> i vraća se pri sljedećem otvaranju stranice. Ovo je ono što ide u spremljeni predložak i u poveznicu za dijeljenje.</p>
-			<p><strong>2. Samo ovaj preglednik</strong> — položaj i veličina dijaloga, položaj i širina pločice <em>Karte</em>, te dva prekidača mreže. To se tiče ovog ekrana, a ne prikaza, pa <strong>ne putuje</strong> ni u predlošku ni u poveznici. Dvoklik na zaglavlje dijaloga vraća ga na zadano mjesto i veličinu.</p>
+			<p><strong>2. Samo ovaj preglednik</strong> — položaj i veličina dijaloga, položaj i širina pločice <em>Karte</em>, dva prekidača mreže te automatsko osvježavanje. To se tiče ovog ekrana, a ne prikaza, pa <strong>ne putuje</strong> ni u predlošku ni u poveznici. Dvoklik na zaglavlje dijaloga vraća ga na zadano mjesto i veličinu.</p>
 			<p><strong>3. Podijeljena poveznica</strong> — nosi cijeli prikaz u adresi, bez da išta sprema kod onoga tko je otvori. Njegove postavke ostaju netaknute dok ne pritisne <em>Primijeni</em>.</p>
 			<p>Sve se sprema lokalno u pregledniku. Ništa se ne šalje nikamo i ništa ne prelazi na drugi uređaj osim poveznicom koju sami podijelite. Brisanje podataka preglednika briše i ovo.</p>
 			<h2 id="na-mobitelu">Na mobitelu</h2>

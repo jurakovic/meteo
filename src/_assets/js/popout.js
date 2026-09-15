@@ -55,7 +55,10 @@ function togglePopout(block) {
 // interactive map, whose bar keeps its own [X]/[R] gate button
 function buildReloadButton() {
 	const btn = el('a', { class: 'rl-btn', text: '[R]', title: 'Ponovno učitaj kartu' });
-	btn.addEventListener('click', () => reloadMap(btn.closest('.map-block')));
+	btn.addEventListener('click', () => {
+		reloadMap(btn.closest('.map-block'));
+		restartRefresh(); // a refresh by hand is still a refresh: the interval runs from it
+	});
 	return btn;
 }
 
@@ -1302,15 +1305,110 @@ function escapeFullscreen() {
 	if (fs) exitFullscreen(fs);
 }
 
-// every widget whose bar offers [R], once each — a titled slideshow carries
-// one on every slide. An interactive map carries none at all, and reloadMap()
-// reaches only a basic iframe (.if2) besides: its feed is live of its own
-// accord, and navigating its frame again would cost it its pan and its zoom
-// for nothing. So this is the images, the slideshows, the videos and the
-// basic frames, which is what has to be fetched to be new
-function reloadAllMaps() {
-	allPopouts().filter(block => block.querySelector('.rl-btn')).forEach(reloadMap);
+// every map with something to re-fetch, popped out or still in the page: the
+// images, the slideshows, the videos and the basic frames. An interactive map
+// is left out — its feed is live of its own accord, and navigating its frame
+// again would cost it its pan and its zoom for nothing — which is the same
+// rule that decides whether a title bar gets an [R] at all, read off the
+// content here rather than off the button, since a docked map carries none
+function reloadableBlocks() {
+	return [...document.querySelectorAll('.map-block')]
+		.filter(block => block.querySelector('img[src], video, .if2 iframe[src]'));
 }
+
+function reloadAllMaps() {
+	reloadableBlocks().forEach(reloadMap);
+	restartRefresh(); // the interval runs from the last time the maps were actually new
+}
+
+// ---------- auto-refresh (this browser's) ----------
+
+// Images go stale on a page left open, and on a board left running for the
+// room to glance at they are the whole point. This re-fetches what [R] does,
+// on an interval — off until it is asked for, and a way of working rather than
+// part of the view, so it travels in neither a preset nor a link and keeps the
+// same footing as the grid switches.
+const REFRESH_KEY = 'mapRefresh';
+const REFRESH_CHOICES = [1, 2, 5, 10, 15, 30, 60];
+const REFRESH_DEFAULT = 5;
+
+function loadRefreshPrefs() {
+	try {
+		const stored = JSON.parse(localStorage.getItem(REFRESH_KEY));
+		if (stored && typeof stored === 'object') return {
+			on: stored.on === true,
+			minutes: REFRESH_CHOICES.includes(stored.minutes) ? stored.minutes : REFRESH_DEFAULT
+		};
+	} catch (e) { /* unreadable is off */ }
+	return { on: false, minutes: REFRESH_DEFAULT };
+}
+
+let { on: refreshOn, minutes: refreshMinutes } = loadRefreshPrefs();
+let refreshDeadline = 0;
+let refreshTicker = 0;
+
+function isRefreshOn() {
+	return refreshOn;
+}
+
+function refreshEveryMinutes() {
+	return refreshMinutes;
+}
+
+// m:ss of what is left, which is what both labels read
+function refreshLabel() {
+	if (!refreshOn || !refreshDeadline) return '';
+	const left = Math.max(0, Math.ceil((refreshDeadline - Date.now()) / 1000));
+	return `${Math.floor(left / 60)}:${String(left % 60).padStart(2, '0')}`;
+}
+
+// counted off a deadline rather than by stepping a number down: a background
+// tab throttles its timers to about one a minute, and a counter stepped down
+// would lose exactly the time the page spent unattended — which is the page
+// this is for. The clock starts over here, so every way of refreshing by hand
+// (the key, the tab's [R], a widget's own) puts the interval back to full
+function restartRefresh() {
+	clearInterval(refreshTicker);
+	refreshTicker = 0;
+	refreshDeadline = refreshOn ? Date.now() + refreshMinutes * 60000 : 0;
+	if (refreshOn) refreshTicker = setInterval(refreshTick, 1000);
+	syncRefreshLabels();
+}
+
+function refreshTick() {
+	if (!refreshOn) return;
+	if (Date.now() >= refreshDeadline) reloadAllMaps(); // which sets the clock going again
+	else syncRefreshLabels();
+}
+
+function setRefreshPrefs(on, minutes) {
+	dlog(`setRefreshPrefs: on=${on} minutes=${minutes}`);
+	refreshOn = on === true;
+	refreshMinutes = REFRESH_CHOICES.includes(minutes) ? minutes : REFRESH_DEFAULT;
+	try {
+		localStorage.setItem(REFRESH_KEY, JSON.stringify({ on: refreshOn, minutes: refreshMinutes }));
+	} catch (e) { /* storage disabled or full — the clock still runs this session */ }
+	// the countdown hangs off the body, since the tab shows for it off the board
+	document.body.classList.toggle('refresh-on', refreshOn);
+	restartRefresh();
+	const panel = document.getElementById('mapSettings');
+	if (panel && !panel.hidden && panel._onRefreshChange) panel._onRefreshChange();
+	applyStoredMsTab(); // the countdown coming or going changes how narrow the tab may be
+}
+
+function initRefresh() {
+	document.body.classList.toggle('refresh-on', refreshOn);
+	restartRefresh();
+}
+
+// on DOMContentLoaded in both cases, unlike the inits elsewhere that run at
+// once when the DOM is already parsed: this one reaches into maps.js for the
+// labels and into this file's own later declarations, and in dev — where the
+// scripts are deferred rather than inlined, so the DOM is ready as this file
+// is read — running it here would be ahead of both, and the throw would take
+// the rest of this file down with it
+if (document.readyState === 'complete') initRefresh();
+else document.addEventListener('DOMContentLoaded', initRefresh);
 
 // the grid is the board's: off it the dialog's own switches are greyed and
 // unclickable, the tab's are not shown at all, and the keys are as quiet — a

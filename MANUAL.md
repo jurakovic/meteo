@@ -29,6 +29,16 @@ Svaka karta ima naslovnu traku s imenom izvora. Ime je ujedno i poveznica na izv
 
 **Upute.** Gumb `?` u redu gumba otvara ovaj tekst, kao i poveznica *Upute* u podnožju i tipka <kbd>?</kbd>. Otvara se u prozoru preko stranice, pa se upute čitaju uz karte, a ne umjesto njih; zatvara se natpisom *Zatvori* ili tipkom <kbd>Esc</kbd>. Poveznica koja završava s `#upute` otvara ih odmah pri otvaranju stranice.
 
+## Automatsko osvježavanje
+
+Slike zastare na stranici koja je dugo otvorena. U dijalogu *Karte* je red **Osvježavaj svakih** s kvadratićem i razmakom — 1, 2, 5, 10, 15, 30 ili 60 minuta. Isključeno je dok se ne uključi, a početni razmak je 5 minuta.
+
+Osvježavaju se slike, nizovi slika, videa i jednostavne karte — sve ono što ima gumb `[R]`. Interaktivne karte (Windy, Blitzortung i slične) se preskaču: one same dohvaćaju najnovije podatke, a ponovno učitavanje bi im samo poništilo pomak i zumiranje.
+
+**Odbrojavanje.** Dok je osvježavanje uključeno, na vrhu ekrana visi pločica s vremenom do sljedećeg osvježavanja. Tu je i gumb `[R]` koji osvježava odmah. Vrijeme se vraća na puni razmak pri svakom osvježavanju — automatskom, ručnom (`[R]`, tipka <kbd>R</kbd> ili `[R]` na pojedinoj karti) i pri ponovnom otvaranju stranice.
+
+Kao i prekidači mreže, ova postavka **ne putuje** u predlošku ni u poveznici — vrijedi samo u ovom pregledniku.
+
 ## Odabir karata
 
 Gumb **Karte** otvara dijalog u kojem se bira što se prikazuje. Dok je otvoren, stranica iza njega se vidi ali se ne dira — malo je zatamnjena, ne lista se i ništa se na njoj ne može kliknuti. Klik bilo gdje izvan dijaloga samo ga zatvara i odbacuje što je u njemu mijenjano; taj klik ne ide dalje, pa neće usput otvoriti poveznicu ni pomaknuti prozor. Zatvara ga i tipka <kbd>Esc</kbd>.
@@ -96,7 +106,7 @@ Kad je karta izdvojena, u traci se pojavljuju dodatni gumbi:
 
 | Gumb | Značenje |
 |---|---|
-| `[R]` | ponovno učitava kartu — korisno kad je stranica dugo otvorena i slike su zastarjele |
+| `[R]` | ponovno učitava kartu — korisno kad je stranica dugo otvorena i slike su zastarjele; vidi i [Automatsko osvježavanje](#automatsko-osvježavanje) |
 | `[+]` / `[-]` | spaja prozor sa susjednim u grupu, odnosno vadi ga iz nje |
 | `[=]` | vraća kartu u stranicu |
 
@@ -181,7 +191,7 @@ Na [nadzornoj ploči](#nadzorna-ploča) karta uzme cijeli ekran, osim sa strane 
 | <kbd>K</kbd> | otvara i zatvara dijalog *Karte* |
 | <kbd>?</kbd> | otvara i zatvara *Upute* |
 | <kbd>Esc</kbd> | zatvara dijalog; ako je zatvoren, izlazi iz cijelog zaslona |
-| <kbd>R</kbd> | ponovno učitava sve izdvojene karte |
+| <kbd>R</kbd> | ponovno učitava sve karte |
 | <kbd>G</kbd> | prikaz mreže (na ploči) |
 | <kbd>S</kbd> | poravnavanje uz mrežu (na ploči) |
 | strelice | pomiču prozor koji je na vrhu za jedno polje mreže |
@@ -206,7 +216,7 @@ Stranica pamti na tri različita načina i vrijedi znati koji je koji.
 
 **1. Prikaz** — popis karata, njihov redoslijed i razmještaj prozora. Sprema se pritiskom na *Primijeni* i vraća se pri sljedećem otvaranju stranice. Ovo je ono što ide u spremljeni predložak i u poveznicu za dijeljenje.
 
-**2. Samo ovaj preglednik** — položaj i veličina dijaloga, položaj i širina pločice *Karte*, te dva prekidača mreže. To se tiče ovog ekrana, a ne prikaza, pa **ne putuje** ni u predlošku ni u poveznici. Dvoklik na zaglavlje dijaloga vraća ga na zadano mjesto i veličinu.
+**2. Samo ovaj preglednik** — položaj i veličina dijaloga, položaj i širina pločice *Karte*, dva prekidača mreže te automatsko osvježavanje. To se tiče ovog ekrana, a ne prikaza, pa **ne putuje** ni u predlošku ni u poveznici. Dvoklik na zaglavlje dijaloga vraća ga na zadano mjesto i veličinu.
 
 **3. Podijeljena poveznica** — nosi cijeli prikaz u adresi, bez da išta sprema kod onoga tko je otvori. Njegove postavke ostaju netaknute dok ne pritisne *Primijeni*.
 
