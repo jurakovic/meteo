@@ -623,11 +623,13 @@ function clamp(value, min, max) {
 
 // the layout viewport: innerWidth counts the vertical scrollbar, under which
 // a widget's right edge (and a right column) would then land — and so does
-// clientWidth while the settings dialog keeps the scrollbar's gutter in its
-// place (maps.js sets viewportGutter to its width for as long as it does)
-let viewportGutter = 0;
+// clientWidth while a dialog keeps the scrollbar's gutter in its place. The
+// gutter is the dialog chrome's (main.js) and is asked for rather than read:
+// this file runs before that one, and a call made in between gets the 0 that
+// is true of a page with no dialog up
 function viewportWidth() {
-	return document.documentElement.clientWidth - viewportGutter;
+	return document.documentElement.clientWidth
+		- (typeof dialogGutterPx === 'function' ? dialogGutterPx() : 0);
 }
 
 function viewportHeight() {
@@ -1284,11 +1286,11 @@ document.addEventListener('keydown', (e) => {
 	nudgePopout(nudge[0] * step, nudge[1] * step);
 });
 
-// the dialog is over everything, so the keys it owns are its own while it is
-// there — Escape, and the arrows its body scrolls by
+// a dialog is over everything, so the keys it owns are its own while it is
+// there — Escape, and the arrows its body scrolls by. Either of them counts:
+// the manual covers the widgets as the picker does
 function mapSettingsOpen() {
-	const panel = document.getElementById('mapSettings');
-	return !!panel && !panel.hidden;
+	return [...document.querySelectorAll('.map-settings')].some(panel => !panel.hidden);
 }
 
 // the dialog owns Escape while it is open; under it Escape ends a fullscreen

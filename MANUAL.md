@@ -27,6 +27,8 @@ Svaka karta ima naslovnu traku s imenom izvora. Ime je ujedno i poveznica na izv
 
 **Linkovi.** Gumb *Linkovi* vodi na popis dodatnih izvora na dnu stranice. Kvadratić pokraj njega uključuje prikaz linkova ispod svake karte.
 
+**Upute.** Gumb `?` u redu gumba otvara ovaj tekst, kao i poveznica *Upute* u podnožju i tipka <kbd>?</kbd>. Otvara se u prozoru preko stranice, pa se upute čitaju uz karte, a ne umjesto njih; zatvara se natpisom *Zatvori* ili tipkom <kbd>Esc</kbd>. Poveznica koja završava s `#upute` otvara ih odmah pri otvaranju stranice.
+
 ## Odabir karata
 
 Gumb **Karte** otvara dijalog u kojem se bira što se prikazuje. Dok je otvoren, stranica iza njega se vidi ali se ne dira — malo je zatamnjena, ne lista se i ništa se na njoj ne može kliknuti. Klik bilo gdje izvan dijaloga samo ga zatvara i odbacuje što je u njemu mijenjano; taj klik ne ide dalje, pa neće usput otvoriti poveznicu ni pomaknuti prozor. Zatvara ga i tipka <kbd>Esc</kbd>.
@@ -177,6 +179,7 @@ Na [nadzornoj ploči](#nadzorna-ploča) karta uzme cijeli ekran, osim sa strane 
 | Tipka | Radnja |
 |---|---|
 | <kbd>K</kbd> | otvara i zatvara dijalog *Karte* |
+| <kbd>?</kbd> | otvara i zatvara *Upute* |
 | <kbd>Esc</kbd> | zatvara dijalog; ako je zatvoren, izlazi iz cijelog zaslona |
 | <kbd>R</kbd> | ponovno učitava sve izdvojene karte |
 | <kbd>G</kbd> | prikaz mreže (na ploči) |

@@ -900,6 +900,21 @@ body.fs-lock {
 		grid-template-columns: repeat(3, 1fr);
 	}
 
+	/* the help button is one glyph and takes a column of its own width, so the
+	   named buttons beside it keep their equal shares */
+	.buttons.with-help {
+		grid-template-columns: 1fr 1fr 32px;
+	}
+
+	.buttons.three.with-help {
+		grid-template-columns: repeat(3, 1fr) 32px;
+	}
+
+		.buttons .help-btn {
+			font-size: 15px;
+			line-height: 1;
+		}
+
 	/* same expand affordance as the .expandable "Linkovi" button */
 	.buttons button.btn {
 		position: relative;
@@ -1729,6 +1744,129 @@ body.fs-lock {
 		.map-settings .ms-actions + .ms-sort {
 			margin-top: 0;
 		}
+
+/* the manual, built into the page from MANUAL.md (md.ps1). It is a document
+   and not a picker, so the body it sits in gets reading measure and the
+   spacing prose wants; everything else about the dialog is the shared chrome */
+.manual-dialog .ms-body {
+	padding: 4px 14px 16px;
+	line-height: 1.5;
+}
+
+	.manual-dialog .ms-body h2,
+	.manual-dialog .ms-body h3 {
+		margin: 22px 0 8px;
+		font-weight: normal;
+		color: #ff9800;
+	}
+
+	.manual-dialog .ms-body h2 {
+		font-size: 16px;
+		padding-bottom: 4px;
+		border-bottom: 1px solid #485871;
+	}
+
+	.manual-dialog .ms-body h3 {
+		font-size: 14px;
+	}
+
+	.manual-dialog .ms-body p,
+	.manual-dialog .ms-body ul {
+		margin: 8px 0;
+	}
+
+	.manual-dialog .ms-body ul {
+		padding-left: 20px;
+	}
+
+	.manual-dialog .ms-body li {
+		margin: 3px 0;
+	}
+
+	.manual-dialog .ms-body code,
+	.manual-dialog .ms-body kbd {
+		padding: 0 4px;
+		border-radius: 3px;
+		background-color: #1b2735;
+		font-family: inherit;
+		white-space: nowrap;
+	}
+
+	.manual-dialog .ms-body kbd {
+		border: 1px solid #5F6F89;
+	}
+
+	.manual-dialog .ms-body a {
+		color: #ff9800;
+	}
+
+	/* the aside the document sets off from the run of the text */
+	.manual-dialog .ms-body blockquote {
+		margin: 12px 0;
+		padding: 2px 12px;
+		border-left: 3px solid #485871;
+	}
+
+	/* a table can be wider than the dialog once it is pulled narrow, and it is
+	   the table that scrolls then rather than the document under it */
+	.manual-dialog .ms-body table {
+		display: block;
+		overflow-x: auto;
+		margin: 10px 0;
+		border-collapse: collapse;
+	}
+
+		.manual-dialog .ms-body th,
+		.manual-dialog .ms-body td {
+			padding: 4px 10px 4px 0;
+			border-bottom: 1px solid #2b3a52;
+			text-align: left;
+			vertical-align: top;
+		}
+
+		.manual-dialog .ms-body th {
+			font-weight: normal;
+			opacity: 0.7;
+		}
+
+	/* the contents, made of the document's own headings; the indent is the only
+	   thing that tells a section from a subsection, so it carries the level */
+	.manual-dialog .manual-toc {
+		margin: 10px 0 18px;
+		padding: 8px 0;
+		border-top: 1px solid #485871;
+		border-bottom: 1px solid #485871;
+	}
+
+		.manual-dialog .manual-toc ul {
+			margin: 0;
+			padding: 0;
+			list-style: none;
+			columns: 2;
+		}
+
+		.manual-dialog .manual-toc li {
+			margin: 2px 0;
+			break-inside: avoid;
+		}
+
+		.manual-dialog .manual-toc .toc-3 {
+			padding-left: 16px;
+		}
+
+		.manual-dialog .manual-toc a {
+			text-decoration: none;
+		}
+
+			.manual-dialog .manual-toc a:hover {
+				text-decoration: underline;
+			}
+
+@media (max-width: 800px) {
+	.manual-dialog .manual-toc ul {
+		columns: 1;
+	}
+}
 
 /* stands in for the maps when the view resolves to none ("Ništa") */
 .maps-empty {

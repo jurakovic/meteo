@@ -24,12 +24,13 @@
 		<table border="0" align="center" cellpadding="0" cellspacing="0">
 			<tr>
 				<td align="center">
-					<div class="buttons">
+					<div class="buttons with-help">
 						<a href="/customize/index.html" style="text-decoration: none"><div class="btn">Prilagodi <span class="beta">beta</span></div></a>
 						<div class="links-btn">
 							<button type="button" class="btn" onclick="scrollToElement('links')">Linkovi</button>
 							<input type="checkbox" class="links-toggle" onchange="toggleLinksBottom(this)" title="Prikaži linkove ispod karata" />
 						</div>
+						<button type="button" class="btn help-btn" onclick="toggleManual()" title="Upute (?)">?</button>
 					</div>
 				</td>
 			</tr>
@@ -692,8 +693,22 @@
 		</table>
 		<!-- cnt -->
 	</div>
+	<div class="ms-backdrop" hidden></div>
+	<!-- the manual, built in from MANUAL.md; the landing page carries it too,
+	     which is why the dialog chrome lives in main.js and not in maps.js -->
+	<div class="map-settings manual-dialog" id="manualDialog" data-dialog-key="manualPanel" hidden>
+		<div class="ms-head">
+			<span class="ms-title">Upute</span>
+			<a class="ms-close" title="Zatvori (Esc)">Zatvori</a>
+		</div>
+		<div class="ms-body">
+			<!-- manual -->
+		</div>
+	</div>
 	<footer>
 		<a onclick="scrollToTop()" style="cursor: pointer">Povratak na vrh</a>
+		·
+		<a onclick="toggleManual()" style="cursor: pointer">Upute</a>
 		·
 		<a href="/customize/index.html">Prilagodi <span class="beta">beta</span></a>
 		|

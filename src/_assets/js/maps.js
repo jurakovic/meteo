@@ -1198,49 +1198,36 @@ function foldText(text) {
 	return text.toLowerCase().normalize('NFD').replace(/\p{Diacritic}/gu, '').replace(/đ/g, 'd');
 }
 
+// opening and shutting — the lock, the gutter, the backdrop, the stored
+// geometry — is the chrome both dialogs share (main.js). The arrow is not set
+// here but off the event below, so a shut this function never made (the
+// backdrop, Escape, the manual opening over it) moves it just the same
 function setMapSettingsVisible(panel, visible) {
-	panel.hidden = !visible;
-	const arrow = document.querySelector('.buttons button.btn .arrow');
-	if (arrow) arrow.textContent = visible ? '▲' : '▼';
-	// the page holds still under the dialog (CSS), with the gutter of the
-	// scrollbar it had kept, so nothing centred in it shifts; where it had
-	// none (hidden behind the columns, under a fullscreen, or short) the
-	// viewport is left as it is
-	const scrollbar = window.innerWidth - document.documentElement.clientWidth;
-	const keepGutter = visible && scrollbar > 0;
-	document.documentElement.classList.toggle('ms-gutter', keepGutter);
-	document.body.classList.toggle('ms-open', visible);
-	const backdrop = document.querySelector('.ms-backdrop');
-	if (backdrop) {
-		backdrop.hidden = !visible;
-		if (visible) backdrop.classList.remove('ms-spent'); // it paints again for a dialog that is back
-	}
-	viewportGutter = keepGutter ? scrollbar : 0; // clientWidth counts the kept gutter; the columns must not
-	layoutSnapColumns(); // in case the viewport did change
-	if (visible) applyStoredMsPanel(panel); // where the user put it, measurable only now it is shown
+	setDialogVisible(panel, visible);
 }
 
 function toggleMapSettings() {
 	const panel = document.getElementById('mapSettings');
 	if (!panel) return;
-	if (panel.hidden) {
-		buildMapSettings(panel);
-		setMapSettingsVisible(panel, true);
-	} else {
-		setMapSettingsVisible(panel, false);
-	}
+	if (panel.hidden) buildMapSettings(panel); // rebuilt from what is stored, so a dismissal drops the edits
+	setMapSettingsVisible(panel, panel.hidden);
 }
 
-// the dialog from the keyboard, for wherever the page's button is out of
-// reach: K opens or shuts it, Escape shuts it — not from a text field, whose
-// own Escape (the name and rename editors) is a way out of the field only
+// the picker from the keyboard, for wherever the page's button is out of reach.
+// Escape is the shared chrome's, since it shuts whichever dialog is up
 document.addEventListener('keydown', (e) => {
-	const panel = document.getElementById('mapSettings');
-	if (!panel || e.altKey || e.ctrlKey || e.metaKey) return;
-	const typing = e.target.matches && e.target.matches('input:not([type="radio"]):not([type="checkbox"]), textarea, [contenteditable]');
-	if (typing) return;
-	if (e.key === 'Escape' && !panel.hidden) setMapSettingsVisible(panel, false);
-	else if (e.key === 'k' || e.key === 'K') { e.preventDefault(); toggleMapSettings(); }
+	if (e.altKey || e.ctrlKey || e.metaKey) return;
+	if (e.key !== 'k' && e.key !== 'K') return;
+	if (e.target.matches && e.target.matches('input:not([type="radio"]):not([type="checkbox"]), textarea, [contenteditable]')) return;
+	e.preventDefault();
+	toggleMapSettings();
+});
+
+// the page's Karte button wears the picker's state as an arrow
+document.addEventListener('dialog-toggled', (e) => {
+	if (e.detail.panel.id !== 'mapSettings') return;
+	const arrow = document.querySelector('.buttons button.btn .arrow');
+	if (arrow) arrow.textContent = e.detail.visible ? '▲' : '▼';
 });
 
 // ---------- the tab: where and how wide the user put it ----------
@@ -1381,185 +1368,6 @@ function initMsTab() {
 
 if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', initMsTab);
 else initMsTab();
-
-// ---------- the dialog: where and how big the user put it ----------
-
-// On desktop the dialog is a window: dragged by its head and resized from any
-// side or corner through the widgets' own handles. It is rebuilt on every open,
-// and replaceChildren leaves the panel's own inline styles, so where it was put
-// outlives the rebuild.
-// Where and how big is remembered in this browser only (msPanel: the left and
-// top as fractions of the viewport, the width in px, and the height in px
-// once it has been resized), not in the arrangement, since it is about this
-// screen and not the view — the same footing as the tab above. Until it is
-// resized the height stays the content's, capped to what is left below wherever
-// the top now is; a double-click on the head drops the
-// lot and gives the CSS its dialog back
-const MS_PANEL_KEY = 'msPanel';
-const MS_PANEL_MIN_WIDTH = 360;
-const MS_PANEL_MIN_HEIGHT = 120;
-const MS_PANEL_MARGIN = 8; // kept free of the viewport edge when sizing
-
-function loadMsPanel() {
-	try {
-		const stored = JSON.parse(localStorage.getItem(MS_PANEL_KEY));
-		if (!stored || typeof stored !== 'object') return null;
-		if (!Number.isFinite(stored.left) || !Number.isFinite(stored.top) || !(stored.width > 0)) return null;
-		return { left: stored.left, top: stored.top, width: stored.width, height: stored.height > 0 ? stored.height : null };
-	} catch (e) {
-		return null;
-	}
-}
-
-function saveMsPanel(panel) {
-	const rect = panel.getBoundingClientRect();
-	const stored = {
-		left: roundFraction(rect.left / viewportWidth()),
-		top: roundFraction(rect.top / viewportHeight()),
-		width: Math.round(rect.width)
-	};
-	if (panel.style.height) stored.height = Math.round(rect.height); // only once it has been resized; else the content's
-	try {
-		localStorage.setItem(MS_PANEL_KEY, JSON.stringify(stored));
-	} catch (e) { /* storage disabled or full — the dialog still moves this session */ }
-}
-
-function msPanelMaxWidth() {
-	return Math.max(MS_PANEL_MIN_WIDTH, viewportWidth() - MS_PANEL_MARGIN * 2);
-}
-
-function msPanelMaxHeight() {
-	return Math.max(MS_PANEL_MIN_HEIGHT, viewportHeight() - MS_PANEL_MARGIN * 2);
-}
-
-// height null leaves it the content's. The CSS's max-height assumes the top
-// the CSS set, and the dialog may be anywhere now, so it is recomputed from
-// where the top is asked to be; the top is then held to the height that gave
-function placeMsPanel(panel, left, top, width, height) {
-	width = clamp(width, MS_PANEL_MIN_WIDTH, msPanelMaxWidth());
-	panel.style.width = `${Math.round(width)}px`;
-	panel.style.maxWidth = 'none';
-	panel.style.right = 'auto'; // off the centring
-	panel.style.margin = '0';
-	if (height === null) {
-		panel.style.height = '';
-		panel.style.maxHeight = `${Math.round(Math.max(MS_PANEL_MIN_HEIGHT, viewportHeight() - Math.max(0, top) - MS_PANEL_MARGIN))}px`;
-	} else {
-		panel.style.maxHeight = 'none';
-		panel.style.height = `${Math.round(clamp(height, MS_PANEL_MIN_HEIGHT, msPanelMaxHeight()))}px`;
-	}
-	panel.style.left = `${Math.round(clamp(left, 0, Math.max(0, viewportWidth() - panel.offsetWidth)))}px`;
-	panel.style.top = `${Math.round(clamp(top, 0, Math.max(0, viewportHeight() - panel.offsetHeight)))}px`;
-}
-
-function clearMsPanel(panel) {
-	['left', 'top', 'width', 'height', 'maxWidth', 'maxHeight', 'right', 'margin'].forEach(prop => panel.style[prop] = '');
-}
-
-// on open, and on a window resize, so it cannot be stranded off screen. A
-// phone gets the CSS's dialog, like it gets no widgets
-function applyStoredMsPanel(panel) {
-	panel = panel || document.getElementById('mapSettings');
-	if (!panel || panel.hidden) return;
-	const stored = POPOUT_MQ.matches ? loadMsPanel() : null;
-	if (!stored) { clearMsPanel(panel); return; }
-	placeMsPanel(panel, stored.left * viewportWidth(), stored.top * viewportHeight(), stored.width, stored.height);
-}
-
-// one listener on the panel, which outlives the rebuild its children do not
-function initMsPanel() {
-	const panel = document.getElementById('mapSettings');
-	if (!panel) return;
-	panel.addEventListener('pointerdown', (e) => {
-		if (e.button !== 0 || !POPOUT_MQ.matches) return;
-		const handle = e.target.closest('.po-h');
-		// the head is the grip, but a link or a button on it is itself
-		const head = !handle && e.target.closest('.ms-head') && !e.target.closest('a, button, input');
-		if (!handle && !head) return;
-		e.preventDefault();
-		const start = panel.getBoundingClientRect();
-		const dir = handle ? handle.dataset.dir : null;
-		const kept = panel.style.height ? start.height : null; // a drag leaves the height as it was found
-		let moved = false;
-		trackPopoutPointer(e, (dx, dy) => {
-			if (!moved && !dx && !dy) return; // a press that never moved stores nothing
-			moved = true;
-			if (!dir) {
-				placeMsPanel(panel, start.left + dx, start.top + dy, start.width, kept);
-				return;
-			}
-			let width = start.width, height = start.height;
-			if (dir.includes('e')) width = start.width + dx;
-			if (dir.includes('w')) width = start.width - dx;
-			if (dir.includes('s')) height = start.height + dy;
-			if (dir.includes('n')) height = start.height - dy;
-			// clamped here as well as in placeMsPanel, so the edge that stays put does
-			width = clamp(width, MS_PANEL_MIN_WIDTH, msPanelMaxWidth());
-			height = clamp(height, MS_PANEL_MIN_HEIGHT, msPanelMaxHeight());
-			placeMsPanel(panel, dir.includes('w') ? start.right - width : start.left,
-				dir.includes('n') ? start.bottom - height : start.top, width, height);
-		}, () => { if (moved) saveMsPanel(panel); });
-	});
-	// the way back to the dialog the CSS draws, the head's spare gesture
-	panel.addEventListener('dblclick', (e) => {
-		if (!POPOUT_MQ.matches || !e.target.closest('.ms-head') || e.target.closest('a, button, input')) return;
-		clearMsPanel(panel);
-		try {
-			localStorage.removeItem(MS_PANEL_KEY);
-		} catch (e2) { /* nothing stored is nothing to drop */ }
-	});
-	window.addEventListener('resize', () => applyStoredMsPanel(panel));
-}
-
-if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', initMsPanel);
-else initMsPanel();
-
-// A press anywhere outside the dialog shuts it, dropping what was edited in it
-// (it is rebuilt from what is stored on the next open). The press lands on the
-// backdrop, which is over everything the dialog is over, so it shuts the dialog
-// and does nothing else: it follows no link, presses no button, takes no widget.
-// The tab stands above the backdrop and keeps its own click, which shuts the
-// dialog the same way.
-//
-// A press is a pointerdown, a release and a click, and all three belong to the
-// dismissal: the backdrop stands until the click has been taken, so none of them
-// can be completed on what the dialog was covering. It stops painting the moment
-// it is pressed, the dialog it dimmed for being on its way out, and the click is
-// swallowed in the capture phase, which is ahead of every listener on the page
-// whatever order they were bound in. The release arms a short fallback for the
-// gestures no click follows — a pointer let go outside the window, a drag
-function initMsBackdrop() {
-	const backdrop = document.querySelector('.ms-backdrop');
-	if (!backdrop) return;
-	backdrop.addEventListener('pointerdown', (e) => {
-		const panel = document.getElementById('mapSettings');
-		if (!panel || panel.hidden) return;
-		e.preventDefault();
-		setMapSettingsVisible(panel, false);
-		backdrop.hidden = false;
-		backdrop.classList.add('ms-spent');
-		let timer = 0;
-		const done = () => {
-			clearTimeout(timer);
-			backdrop.classList.remove('ms-spent');
-			// the dialog may have been opened again meanwhile (K, the tab), and
-			// then the ground it stands on is not this gesture's to take away
-			const open = document.getElementById('mapSettings');
-			backdrop.hidden = !open || open.hidden;
-			document.removeEventListener('click', swallow, true);
-			document.removeEventListener('pointerup', release);
-			document.removeEventListener('pointercancel', done);
-		};
-		const swallow = (ev) => { ev.stopPropagation(); ev.preventDefault(); done(); };
-		const release = () => { timer = setTimeout(done, 400); };
-		document.addEventListener('click', swallow, true);
-		document.addEventListener('pointerup', release);
-		document.addEventListener('pointercancel', done);
-	});
-}
-
-if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', initMsBackdrop);
-else initMsBackdrop();
 
 function buildMapSettings(panel) {
 	panel.replaceChildren();
@@ -2371,10 +2179,8 @@ function buildMapSettings(panel) {
 		manageDiv
 	]));
 
-	// the window handles, the widgets' own (CSS gates them to desktop). They go
-	// in the panel rather than beside it so the press that grabs one is a press
-	// inside the dialog, which is what keeps it from shutting itself
-	POPOUT_HANDLES.forEach(dir => panel.appendChild(el('div', { class: `po-h po-h-${dir}`, 'data-dir': dir })));
+	// the window handles again: replaceChildren above took the last set with it
+	buildDialogHandles(panel);
 }
 
 // in dev this is a deferred external script, so the DOM is already parsed and

@@ -1,4 +1,6 @@
 
+. "$((Get-Location).Path)\md.ps1"
+
 function Main {
 	$srcDir = (Get-Location).Path
 	$buildDir = "$(Split-Path (Get-Location).Path -Parent)\docs"
@@ -34,13 +36,18 @@ function Main {
 	$links = Get-Content "$srcDir\_components\links.c.html" -Raw -Encoding "utf8"
 	$links = Prepend-Tabs -str $links -num 6
 
+	# MANUAL.md stays the one source; the converter returns the HTML and nothing
+	# is written back into src/, which would put build output in the source tree
+	$manual = Convert-Manual -Path "$(Split-Path $srcDir -Parent)\MANUAL.md"
+	$manual = Prepend-Tabs -str $manual -num 3
+
 	# Find all .html files excluding those in _components directories
 	$files = Get-ChildItem -Path $directory -Recurse -Filter *.html | Where-Object { $_.FullName -notmatch "\\_components\\" }
 
 	# Print each file path
 	foreach ($file in $files) {
 		$relativePath = $file.FullName.Substring($srcDir.Length).TrimStart('\')
-		ProcessHtml $buildDir $relativePath $css $mainjs $mapsjs $popoutjs $seo $gtag $links
+		ProcessHtml $buildDir $relativePath $css $mainjs $mapsjs $popoutjs $seo $gtag $links $manual
 	}
 }
 
@@ -55,12 +62,15 @@ function ProcessHtml() {
 		[string]$popoutjs,
 		[string]$seo,
 		[string]$gtag,
-		[string]$links
+		[string]$links,
+		[string]$manual
 	)
 
 	$publishFile = "$buildDir\$file"
 
 	$html = Get-Content "$file" -Raw -Encoding "utf8"
+	# above the rewrites below, so a path the manual grows later is rewritten too
+	$html = $html.Replace('<!-- manual -->', $manual)
 	$html = $html.Replace('href="/_assets/img', 'href="/meteo/img')
 	$html = $html.Replace('href="/customize/index.html', 'href="/meteo/customize/')
 	$html = $html.Replace('url=/customize/index.html', 'url=/meteo/customize/')
