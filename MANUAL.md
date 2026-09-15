@@ -120,6 +120,12 @@ Interaktivne karte nemaju `[R]` — one same dohvaćaju najnovije podatke, pa ih
 
 Prozori se međusobno privlače: kad se rub približi rubu drugog prozora, sam sjedne na njega. Tako se lako slaže uredna mreža bez mjerkanja.
 
+**Zajednički rub.** Kad dva prozora stoje jedan uz drugi i dodiruju se cijelom dužinom — jednako visoki jedan pored drugog, ili jednako široki jedan ispod drugog — taj rub je **šav**. Povlačenjem šava se ne mijenja jedan prozor nego oba: koliko jedan dobije, toliko drugi ustupi, a par zadrži isti prostor i ostatak razmještaja se ne pomiče. Svejedno je za koji se od dva prozora rub uhvati.
+
+Šav radi i za spojene i za nespojene prozore. Kod grupe vrijedi za **unutarnje** rubove; vanjski rub grupe i dalje razvlači cijelu grupu. Prozori se pritom oslobode omjera, jer se inače širina i visina ne mogu mijenjati odvojeno i šav bi se raspao usred povlačenja.
+
+Rub koji nije zajednički cijelom dužinom nije šav i ponaša se kao i prije — mijenja samo svoj prozor.
+
 Rub se povlači slobodno: širina i visina idu svaka za svojim. Karta se tada uklapa unutar okvira, s neoštrom kopijom slike kao podlogom. **Držite Shift** i prozor zadržava omjer slike, pa mu se mijenja samo širina — kao u programima za slike. Karta ga prati do koje god širine ga povučete; veća od svoje izvorne veličine postaje mekša, kao i svaka uvećana slika.
 
 Shift vrijedi i usred povlačenja, ne samo na početku: pritisnite ga dok vučete i prozor se vraća na omjer, pustite ga i opet je slobodan. Miš se pritom ne mora micati. Ono što prozor na kraju ostane odlučuje tipka u trenutku puštanja ruba.
@@ -152,6 +158,8 @@ Uključuje se u dijalogu *Karte*, gumbom **Nadzorna ploča**, i primjenjuje zaje
 
 Na ploči:
 
+- Gumb **Posloži** u dijalogu (ili `[A]` na pločici, ili tipka <kbd>A</kbd>) razmjesti sve karte u pravilnu mrežu, jednakih veličina i bez razmaka. Broj stupaca i redova se odabire prema broju karata i obliku ekrana — četiri karte daju 2x2, šest 3x2, dvanaest 4x3. Isto se dogodi i pri prvom ulasku na ploču.
+- Karte se pritom **oslobode omjera** i uklope u svoje polje, s neoštrom kopijom slike kao podlogom. Drukčije i ne može: uz jednaku širinu svaka bi karta imala svoju visinu i nijedan red se ne bi poklapao. Dvoklik na naslovnu traku vraća pojedinu kartu u njen omjer.
 - Gumb `[=]` u traci postaje `[x]` i **miče kartu s popisa** — na ploči nema stranice u koju bi se vratila.
 - Karta dodana u popis pojavi se na ploči na prvom slobodnom mjestu.
 - Bočnih stupaca nema; stupac je traka koju stranica ustupa, a stranice ovdje nema.
@@ -165,6 +173,7 @@ Na ploči se karte mogu slagati po mreži. Dva prekidača, u dijalogu i na ploč
 
 | Prekidač | Pločica | Tipka | Značenje |
 |---|---|---|---|
+| *Posloži* | `[A]` | <kbd>A</kbd> | slaže karte u pravilnu mrežu |
 | *Prikaži mrežu* | `[G]` | <kbd>G</kbd> | crta mrežu po podlozi |
 | *Poravnaj uz mrežu* | `[S]` | <kbd>S</kbd> | karta puštena iz ruke sjeda na najbliže crte |
 
@@ -192,6 +201,7 @@ Na [nadzornoj ploči](#nadzorna-ploča) karta uzme cijeli ekran, osim sa strane 
 | <kbd>?</kbd> | otvara i zatvara *Upute* |
 | <kbd>Esc</kbd> | zatvara dijalog; ako je zatvoren, izlazi iz cijelog zaslona |
 | <kbd>R</kbd> | ponovno učitava sve karte |
+| <kbd>A</kbd> | slaže karte u mrežu (na ploči) |
 | <kbd>G</kbd> | prikaz mreže (na ploči) |
 | <kbd>S</kbd> | poravnavanje uz mrežu (na ploči) |
 | strelice | pomiču prozor koji je na vrhu za jedno polje mreže |

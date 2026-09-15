@@ -479,6 +479,92 @@ function snapToGrid(blocks) {
 	});
 }
 
+// ---------- arranging the board ----------
+
+// Every widget the same size, tiled edge to edge over the whole board. It is
+// what a board left running for the room to glance at wants — none of the
+// screen spent on gaps, and nothing to line up by hand — and it is what makes
+// the seams useful: tiled with no gap, every inside edge is one.
+//
+// The widgets are freed on the way. "The same size" and "the shape its image
+// has" cannot both hold: given one width, locked widgets come out at as many
+// heights as there are maps and no row would line up. A freed widget
+// letterboxes its map over a blurred copy of it, and the double-click on the
+// bar is the way back to its own shape, one map at a time.
+const ARRANGE_ASPECT = 4 / 3; // a map's shape, near enough, when there are none to measure
+const ARRANGE_HOLE = 1; // what an empty cell costs, against how wrong the cell's shape is
+
+// how many columns n widgets go in: the shape whose cell comes closest to what
+// the maps themselves are, counting an empty cell as a cost of its own so a
+// tidy 3x3 is not passed over for a 4x3 with a hole in it. Falls out as 2x2 for
+// four, 3x2 for six and 4x3 for twelve, and on a wide screen puts two side by
+// side rather than one above the other, which is the whole reason the board's
+// own shape is in it
+function arrangeShape(n, width, height, aspect) {
+	let best = { cols: 1, rows: n, score: Infinity };
+	for (let cols = 1; cols <= n; cols++) {
+		const rows = Math.ceil(n / cols);
+		const cell = (width / cols) / (height / rows);
+		const off = Math.max(cell / aspect, aspect / cell); // a ratio either way, so 1 is exact
+		const score = off + (cols * rows - n) * ARRANGE_HOLE;
+		if (score < best.score) best = { cols, rows, score };
+	}
+	return best;
+}
+
+// the shape the maps are, so the cells are cut to fit what goes in them; one
+// already letterboxed is measured as it stands, which is what the eye sees
+function arrangeAspect(blocks) {
+	const ratios = blocks
+		.map(block => { const r = block.getBoundingClientRect(); return r.height > 0 ? r.width / r.height : 0; })
+		.filter(ratio => ratio > 0);
+	return ratios.length ? ratios.reduce((sum, ratio) => sum + ratio, 0) / ratios.length : ARRANGE_ASPECT;
+}
+
+// n whole numbers summing to total, the remainder over the first of them: a
+// fraction left on any cell would leave a hairline between two tiles, and a
+// hairline is the difference between an edge that is a seam and one that is not
+function shareOut(total, n) {
+	const base = Math.floor(total / n);
+	const extra = Math.round(total) - base * n;
+	return Array.from({ length: n }, (_, i) => base + (i < extra ? 1 : 0));
+}
+
+function runningTotal(sizes, upTo) {
+	return sizes.slice(0, upTo).reduce((sum, size) => sum + size, 0);
+}
+
+// left to right and top to bottom in the order of the list, so the board reads
+// the way the picker does. The last row carries the remainder and is not
+// stretched to fill it: a wider tile there would be the one thing on the board
+// unlike the others
+function arrangeBoard() {
+	if (!isDashboard() || !POPOUT_MQ.matches) return;
+	// in the list's order, which is the DOM's; on a board every map is a widget
+	const blocks = [...document.querySelectorAll('.map-block.popout')]
+		.filter(block => !isSnapped(block) && !block.classList.contains('fs-host'));
+	if (!blocks.length) return;
+	dlog(`arrangeBoard: ${blocks.length} widgets`);
+	const width = viewportWidth(), height = viewportHeight();
+	const { cols, rows } = arrangeShape(blocks.length, width, height, arrangeAspect(blocks));
+	const widths = shareOut(width, cols);
+	const heights = shareOut(height, rows);
+	blocks.forEach((block, i) => {
+		unlockAspect(block);
+		block.style.width = `${widths[i % cols]}px`;
+		block.style.height = `${heights[Math.floor(i / cols)]}px`;
+	});
+	// placed after every size is set, so the reads below are one layout and not
+	// one per widget, and each tile is placed against sizes that are already final
+	blocks.forEach((block, i) => {
+		placePopout(block, runningTotal(widths, i % cols), runningTotal(heights, Math.floor(i / cols)));
+		fitWidget(block);
+	});
+	updateGroups();
+	syncShadows();
+	persistSnapLayout();
+}
+
 // the widest a widget goes: the table's width over the page, which is where
 // that cap comes from, and the whole viewport on the board, which has no table
 // to relate to — a board of half-width tiles needs more than 875 of a wide screen
@@ -944,6 +1030,79 @@ function subpixel(v) {
 // together — the members above it move up with its top edge, the ones below down
 // with its bottom edge (the settle in layoutSnapColumn), and the stack's ends
 // stop at the column's
+// ---------- seams ----------
+
+// Two widgets edge to edge with the shared edge running the whole of both
+// sides: then it is a seam, and dragging it moves it — one side giving what
+// the other takes, the pair keeping the room it had and everything around them
+// left where it stands. It is what a tiled board is for, and it settles a press
+// that was always ambiguous: the two widgets' handles lie on top of each other
+// along that edge, so which of them was grabbed came down to which was raised
+// last. Either one now means the same thing.
+//
+// A side handle only, never a corner: a corner belongs to two edges at once and
+// to however many widgets meet there. And whole edges only — a seam between
+// sides of unequal length cannot move without tearing one of them off the
+// neighbours it meets further along.
+const SEAM_ALIGN = GROUP_TOUCH;
+
+function seamNeighbour(block, dir) {
+	if (dir.length !== 1 || isSnapped(block) || block.classList.contains('fs-host')) return null;
+	const a = block.getBoundingClientRect();
+	const near = (p, q) => Math.abs(p - q) <= SEAM_ALIGN;
+	const found = floatingBlocks().filter(other => {
+		if (other === block || other.classList.contains('fs-host')) return false;
+		const b = other.getBoundingClientRect();
+		if (dir === 'e' || dir === 'w') {
+			const meets = dir === 'e' ? near(b.left, a.right) : near(b.right, a.left);
+			return meets && near(b.top, a.top) && near(b.bottom, a.bottom);
+		}
+		const meets = dir === 's' ? near(b.top, a.bottom) : near(b.bottom, a.top);
+		return meets && near(b.left, a.left) && near(b.right, a.right);
+	});
+	// two of them is no seam: the edge would be one widget's on one side and
+	// two widgets' on the other, and there would be no saying which to move
+	return found.length === 1 ? found[0] : null;
+}
+
+function resizeSeam(block, other, dir, e) {
+	dlog(`resizeSeam: ${block.dataset.mapId} | ${other.dataset.mapId} (${dir})`);
+	const sideways = dir === 'e' || dir === 'w';
+	// the two sizes have to move on their own here, and a locked widget's height
+	// follows its width — the seam would come apart under the gesture that moves it
+	unlockAspect(block);
+	unlockAspect(other);
+	const ra = block.getBoundingClientRect(), rb = other.getBoundingClientRect();
+	// named by where they lie and not by which was grabbed, so the arithmetic
+	// below is the same whichever of the two handles the press landed on
+	const [first, second] = sideways
+		? (ra.left <= rb.left ? [block, other] : [other, block])
+		: (ra.top <= rb.top ? [block, other] : [other, block]);
+	const rf = first.getBoundingClientRect(), rs = second.getBoundingClientRect();
+	const firstSize = sideways ? rf.width : rf.height;
+	const secondSize = sideways ? rs.width : rs.height;
+	const secondAt = sideways ? rs.left : rs.top;
+	const min = sideways ? POPOUT_MIN_WIDTH : POPOUT_MIN_HEIGHT;
+	trackPopoutPointer(e, (dx, dy) => {
+		// held so neither side goes under its minimum, which is what keeps the
+		// seam inside the pair rather than pushing it out the far end
+		const move = clamp(sideways ? dx : dy, min - firstSize, secondSize - min);
+		if (sideways) {
+			first.style.width = `${Math.round(firstSize + move)}px`;
+			second.style.width = `${Math.round(secondSize - move)}px`;
+			second.style.left = `${Math.round(secondAt + move)}px`;
+		} else {
+			first.style.height = `${Math.round(firstSize + move)}px`;
+			second.style.height = `${Math.round(secondSize - move)}px`;
+			second.style.top = `${Math.round(secondAt + move)}px`;
+		}
+		// both, and fitWidget rather than fitTitles: a letterboxed widget holds
+		// its arrows and indicators to the image's rect, which has just moved
+		fitWidget(first);
+		fitWidget(second);
+	}, () => { updateGroups(); persistSnapLayout(); });
+}
+
 function resizePopout(block, dir, e) {
 	const members = groupMembers(block);
 	const col = snapColumnOf(block);
@@ -1226,8 +1385,15 @@ document.addEventListener('pointerdown', (e) => {
 	// also suppresses the compatibility mousedown, so a slide title bar drag
 	// cannot register as a swipe on the slideshow around it
 	e.preventDefault();
-	if (handle) resizePopout(block, handle.dataset.dir, e);
-	else dragPopout(block, e);
+	if (handle) {
+		// a shared whole edge is a seam and moves as one, which is ahead of both
+		// the single widget's pull and the group's scale: it is an inside edge,
+		// and those two are what an outside edge means
+		const dir = handle.dataset.dir;
+		const mate = seamNeighbour(block, dir);
+		if (mate) resizeSeam(block, mate, dir, e);
+		else resizePopout(block, dir, e);
+	} else dragPopout(block, e);
 });
 
 // The covering widget's frame is dealt with by `covered` above, which is the
@@ -1277,6 +1443,7 @@ document.addEventListener('keydown', (e) => {
 	if (e.key === 'r' || e.key === 'R') { e.preventDefault(); reloadAllMaps(); return; }
 	if (e.key === 'g' || e.key === 'G') { e.preventDefault(); toggleGridShown(); return; }
 	if (e.key === 's' || e.key === 'S') { e.preventDefault(); toggleGridSnapped(); return; }
+	if (e.key === 'a' || e.key === 'A') { e.preventDefault(); arrangeBoard(); return; }
 	// the arrows belong to whatever is on top. While the dialog is open that is
 	// the dialog: its body is the only thing that scrolls there, and a widget
 	// behind it is not what an arrow pressed on the map list is aimed at. The
@@ -2230,13 +2397,21 @@ function applySnapLayout(layout) {
 		setGroup(block, group);
 		if (fullscreen) toFullscreen.push(block);
 	});
+	// a board the layout places nothing on is a new one, and a new board is
+	// tiled rather than cascaded. Where it does place some, the rest cascade in
+	// beside them: an arrangement already made is not taken apart to make room
+	const tiled = dashboardMode && !(layout.floating || []).length;
 	if (dashboardMode) popoutRest(); // the maps of the list the layout does not place: onto the board
+	if (tiled) arrangeBoard();
 	// once everything stands where it belongs: a pane's fullscreen is placed
 	// by its column, and main.js reads off the pane whether to lock the page
 	toFullscreen.forEach(restoreFullscreen);
 	updateGroups();
 	updateCovered(); // persistence is paused, so this is not reached through it
 	snapPersistPaused = false;
+	// the tiling was decided here rather than read from the layout, so it is
+	// the one thing this function has to write back
+	if (tiled) persistSnapLayout();
 }
 
 function applyStoredSnapLayout() {

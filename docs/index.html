@@ -128,8 +128,8 @@
 		rgba(0,0,0,.4);cursor:pointer;opacity:.55;transition:opacity .15s ease;box-sizing:border-box;align-items:center;gap:10px;white-space:nowrap;
 		overflow:hidden;touch-action:none;user-select:none}.ms-tab:hover{background-color:#ffa726}.ms-tab:hover,body.ms-open .ms-tab{opacity:1}
 		.ms-tab-name{flex:1 1 auto;min-width:0;overflow:hidden;text-overflow:ellipsis;text-align:center}.ms-tab-cluster{flex:0 0 auto;display:none;
-		gap:8px}body.dashboard .ms-tab-cluster,body.refresh-on .ms-tab-cluster{display:inline-flex}.ms-tab-cluster [data-grid]{display:none}
-		body.dashboard .ms-tab-cluster [data-grid]{display:inline}.ms-tab-count{min-width:4ch;text-align:right;font-variant-numeric:tabular-nums}
+		gap:8px}body.dashboard .ms-tab-cluster,body.refresh-on .ms-tab-cluster{display:inline-flex}.ms-tab-cluster .ms-tab-board{display:none}
+		body.dashboard .ms-tab-cluster .ms-tab-board{display:inline}.ms-tab-count{min-width:4ch;text-align:right;font-variant-numeric:tabular-nums}
 		body:not(.refresh-on) .ms-tab-count{display:none}.ms-tab-cluster::before{content:'|';opacity:.55}.ms-tab-cluster a{text-decoration:none;
 		cursor:pointer}.ms-tab-cluster a.ms-tab-off{opacity:.55}body.dashboard .ms-tab,body.refresh-on .ms-tab,body.snap-full .ms-tab{display:flex}
 		.map-settings .ms-presets{display:flex;flex-wrap:wrap;gap:6px;padding-bottom:8px;margin-bottom:8px;border-bottom:1px solid #485871}
@@ -158,8 +158,9 @@
 		 #3d4d6a;border-left:4px solid #4a8de6}.map-settings .ms-mode.ms-on{background-color:#22385c;border-color:#4a8de6}
 		.map-settings .ms-mode .btn{flex:none;padding:0 14px}.map-settings .ms-mode .btn .beta{position:static;transform:none}.map-settings .ms-grid
 		{display:flex;align-items:center;gap:6px;color:#8a94a8;cursor:pointer;user-select:none}.map-settings .ms-mode.ms-on .ms-grid{color:#fff}
-		.map-settings .ms-grid.ms-off{opacity:.45;cursor:default}.map-settings .ms-refresh{display:flex;align-items:center;gap:10px;margin:4px 0;
-		padding:8px 10px;background-color:#1a2536;border:1px solid #3d4d6a;border-left:4px solid #4a8de6;color:#8a94a8}
+		.map-settings .ms-grid.ms-off{opacity:.45;cursor:default}.map-settings .ms-mode .ms-arrange{flex:none;margin-left:auto;padding:0 14px}
+		.map-settings .ms-mode .ms-arrange:disabled{opacity:.45;cursor:default}.map-settings .ms-refresh{display:flex;align-items:center;gap:10px;
+		margin:4px 0;padding:8px 10px;background-color:#1a2536;border:1px solid #3d4d6a;border-left:4px solid #4a8de6;color:#8a94a8}
 		.map-settings .ms-refresh.ms-on{background-color:#22385c;border-color:#4a8de6;color:#fff}.map-settings .ms-refresh label{display:flex;
 		align-items:center;gap:6px;cursor:pointer;user-select:none}.map-settings .ms-refresh-every{padding:2px 4px;border:1px solid #485871;
 		border-radius:3px;background-color:#1b2735;color:inherit;font-family:inherit;font-size:inherit}.map-settings .ms-refresh-left{margin-left:
@@ -1353,6 +1354,9 @@
 			<li><strong>Klik na prozor</strong> podiže ga iznad ostalih. Ako je interaktivna karta prekrivena drugim prozorom, prvi klik podiže prozor, a tek sljedeći radi s kartom — kao kod prozora u operativnom sustavu. Karta koju ništa ne prekriva prima klik odmah.</li>
 			</ul>
 			<p>Prozori se međusobno privlače: kad se rub približi rubu drugog prozora, sam sjedne na njega. Tako se lako slaže uredna mreža bez mjerkanja.</p>
+			<p><strong>Zajednički rub.</strong> Kad dva prozora stoje jedan uz drugi i dodiruju se cijelom dužinom — jednako visoki jedan pored drugog, ili jednako široki jedan ispod drugog — taj rub je <strong>šav</strong>. Povlačenjem šava se ne mijenja jedan prozor nego oba: koliko jedan dobije, toliko drugi ustupi, a par zadrži isti prostor i ostatak razmještaja se ne pomiče. Svejedno je za koji se od dva prozora rub uhvati.</p>
+			<p>Šav radi i za spojene i za nespojene prozore. Kod grupe vrijedi za <strong>unutarnje</strong> rubove; vanjski rub grupe i dalje razvlači cijelu grupu. Prozori se pritom oslobode omjera, jer se inače širina i visina ne mogu mijenjati odvojeno i šav bi se raspao usred povlačenja.</p>
+			<p>Rub koji nije zajednički cijelom dužinom nije šav i ponaša se kao i prije — mijenja samo svoj prozor.</p>
 			<p>Rub se povlači slobodno: širina i visina idu svaka za svojim. Karta se tada uklapa unutar okvira, s neoštrom kopijom slike kao podlogom. <strong>Držite Shift</strong> i prozor zadržava omjer slike, pa mu se mijenja samo širina — kao u programima za slike. Karta ga prati do koje god širine ga povučete; veća od svoje izvorne veličine postaje mekša, kao i svaka uvećana slika.</p>
 			<p>Shift vrijedi i usred povlačenja, ne samo na početku: pritisnite ga dok vučete i prozor se vraća na omjer, pustite ga i opet je slobodan. Miš se pritom ne mora micati. Ono što prozor na kraju ostane odlučuje tipka u trenutku puštanja ruba.</p>
 			<p><strong>Dvoklik na naslovnu traku</strong> također vraća omjer, ali na svoj način: prozor se stisne oko karte kakva jest, umjesto da kartu rastegne na svoju širinu. Od dvije mjere uzima manju — praznina sa strane ili odozgo nestaje, a karta ostaje iste veličine. Prozor se pritom nikad ne poveća i ostaje na svom mjestu.</p>
@@ -1374,6 +1378,8 @@
 			<p>Uključuje se u dijalogu <em>Karte</em>, gumbom <strong>Nadzorna ploča</strong>, i primjenjuje zajedno s popisom pritiskom na <em>Primijeni</em>. Isključuje se isto tako, ili gumbom <em>Vrati sve</em>.</p>
 			<p>Na ploči:</p>
 			<ul>
+			<li>Gumb <strong>Posloži</strong> u dijalogu (ili <code>[A]</code> na pločici, ili tipka <kbd>A</kbd>) razmjesti sve karte u pravilnu mrežu, jednakih veličina i bez razmaka. Broj stupaca i redova se odabire prema broju karata i obliku ekrana — četiri karte daju 2x2, šest 3x2, dvanaest 4x3. Isto se dogodi i pri prvom ulasku na ploču.</li>
+			<li>Karte se pritom <strong>oslobode omjera</strong> i uklope u svoje polje, s neoštrom kopijom slike kao podlogom. Drukčije i ne može: uz jednaku širinu svaka bi karta imala svoju visinu i nijedan red se ne bi poklapao. Dvoklik na naslovnu traku vraća pojedinu kartu u njen omjer.</li>
 			<li>Gumb <code>[=]</code> u traci postaje <code>[x]</code> i <strong>miče kartu s popisa</strong> — na ploči nema stranice u koju bi se vratila.</li>
 			<li>Karta dodana u popis pojavi se na ploči na prvom slobodnom mjestu.</li>
 			<li>Bočnih stupaca nema; stupac je traka koju stranica ustupa, a stranice ovdje nema.</li>
@@ -1387,6 +1393,7 @@
 			<tr><th>Prekidač</th><th>Pločica</th><th>Tipka</th><th>Značenje</th></tr>
 			</thead>
 			<tbody>
+			<tr><td><em>Posloži</em></td><td><code>[A]</code></td><td><kbd>A</kbd></td><td>slaže karte u pravilnu mrežu</td></tr>
 			<tr><td><em>Prikaži mrežu</em></td><td><code>[G]</code></td><td><kbd>G</kbd></td><td>crta mrežu po podlozi</td></tr>
 			<tr><td><em>Poravnaj uz mrežu</em></td><td><code>[S]</code></td><td><kbd>S</kbd></td><td>karta puštena iz ruke sjeda na najbliže crte</td></tr>
 			</tbody>
@@ -1409,6 +1416,7 @@
 			<tr><td><kbd>?</kbd></td><td>otvara i zatvara <em>Upute</em></td></tr>
 			<tr><td><kbd>Esc</kbd></td><td>zatvara dijalog; ako je zatvoren, izlazi iz cijelog zaslona</td></tr>
 			<tr><td><kbd>R</kbd></td><td>ponovno učitava sve karte</td></tr>
+			<tr><td><kbd>A</kbd></td><td>slaže karte u mrežu (na ploči)</td></tr>
 			<tr><td><kbd>G</kbd></td><td>prikaz mreže (na ploči)</td></tr>
 			<tr><td><kbd>S</kbd></td><td>poravnavanje uz mrežu (na ploči)</td></tr>
 			<tr><td>strelice</td><td>pomiču prozor koji je na vrhu za jedno polje mreže</td></tr>

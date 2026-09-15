@@ -1221,13 +1221,13 @@ body.fs-lock {
 		display: inline-flex;
 	}
 
-		/* the grid switches do nothing off the board, so they are not offered
-		   there; [R] and the countdown belong wherever the tab shows */
-		.ms-tab-cluster [data-grid] {
+		/* arranging and the grid switches do nothing off the board, so they are
+		   not offered there; [R] and the countdown belong wherever the tab shows */
+		.ms-tab-cluster .ms-tab-board {
 			display: none;
 		}
 
-		body.dashboard .ms-tab-cluster [data-grid] {
+		body.dashboard .ms-tab-cluster .ms-tab-board {
 			display: inline;
 		}
 
@@ -1558,6 +1558,19 @@ body.fs-lock {
 		/* by class rather than :has(input:disabled), which is newer than the
 		   rest of this sheet leans on; maps.js sets it with the disabled state */
 		.map-settings .ms-grid.ms-off {
+			opacity: 0.45;
+			cursor: default;
+		}
+
+		/* pushed to the far end of the row: it is the one thing there that acts
+		   at once on what is already on screen rather than setting something */
+		.map-settings .ms-mode .ms-arrange {
+			flex: none;
+			margin-left: auto;
+			padding: 0 14px;
+		}
+
+		.map-settings .ms-mode .ms-arrange:disabled {
 			opacity: 0.45;
 			cursor: default;
 		}

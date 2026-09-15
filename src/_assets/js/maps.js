@@ -1308,12 +1308,15 @@ function applyStoredMsTab() {
 function buildMsTabCluster(tab) {
 	const reload = el('a', { class: 'ms-tab-btn', text: '[R]', title: 'Osvježi sve karte (R)' });
 	reload.addEventListener('click', () => reloadAllMaps());
-	const grid = el('a', { class: 'ms-tab-btn', 'data-grid': 'show', text: '[G]', title: 'Prikaži mrežu (G)' });
+	// the board's three, which do nothing off it and are not offered there
+	const arrange = el('a', { class: 'ms-tab-btn ms-tab-board', text: '[A]', title: 'Posloži u mrežu (A)' });
+	arrange.addEventListener('click', () => arrangeBoard());
+	const grid = el('a', { class: 'ms-tab-btn ms-tab-board', 'data-grid': 'show', text: '[G]', title: 'Prikaži mrežu (G)' });
 	grid.addEventListener('click', () => setGridPrefs(!isGridShown(), isGridSnapped()));
-	const snap = el('a', { class: 'ms-tab-btn', 'data-grid': 'snap', text: '[S]', title: 'Poravnaj uz mrežu (S)' });
+	const snap = el('a', { class: 'ms-tab-btn ms-tab-board', 'data-grid': 'snap', text: '[S]', title: 'Poravnaj uz mrežu (S)' });
 	snap.addEventListener('click', () => setGridPrefs(isGridShown(), !isGridSnapped()));
 	const count = el('span', { class: 'ms-tab-count', title: 'Do sljedećeg osvježavanja' });
-	tab.appendChild(el('span', { class: 'ms-tab-cluster' }, [reload, grid, snap, count]));
+	tab.appendChild(el('span', { class: 'ms-tab-cluster' }, [reload, arrange, grid, snap, count]));
 	syncMsTab();
 }
 
@@ -1787,9 +1790,18 @@ function buildMapSettings(panel) {
 		// these take effect on the tick, not on Primijeni: they are a way of
 		// working on the board rather than part of the view it shows, so there is
 		// nothing to hold back — tick the grid on, see it, shut the dialog
+		// arranging acts on the board that is up, not on the tick that may yet be
+		// applied: with the mode ticked but not yet applied there is no board to
+		// arrange, so it waits for Primijeni rather than doing nothing on a press
+		const tile = el('button', { type: 'button', class: 'btn ms-arrange', title: 'Posloži u mrežu (A)' }, [
+			document.createTextNode('Posloži')
+		]);
+		tile.disabled = !isDashboard();
+		tile.addEventListener('click', () => arrangeBoard());
 		modeDiv.append(btn,
 			buildGridToggle('Prikaži mrežu', gridChecked, (on) => { gridChecked = on; setGridPrefs(gridChecked, snapChecked); }),
-			buildGridToggle('Poravnaj uz mrežu', snapChecked, (on) => { snapChecked = on; setGridPrefs(gridChecked, snapChecked); }));
+			buildGridToggle('Poravnaj uz mrežu', snapChecked, (on) => { snapChecked = on; setGridPrefs(gridChecked, snapChecked); }),
+			tile);
 	}
 	renderModeRow();
 
