@@ -1402,6 +1402,71 @@ body.fs-lock {
 			color: #ff9800;
 		}
 
+	/* the box sits on the list it narrows, under the sort row that heads the
+	   section — the two work the same surface and read as one band */
+	.map-settings .ms-find {
+		position: relative;
+		display: flex;
+		padding: 0 0 6px;
+	}
+
+		.map-settings .ms-find-input {
+			flex: 1;
+			min-width: 0;
+			padding: 4px 22px 4px 6px;
+			border: 1px solid #485871;
+			border-radius: 3px;
+			background-color: #1b2735;
+			color: inherit;
+			font-family: inherit;
+			font-size: inherit;
+		}
+
+		.map-settings .ms-find-input:focus {
+			outline: none;
+			border-color: #ff9800;
+		}
+
+		/* only once there is something to clear; the room it takes is held by the
+		   input's padding either way, so the text does not shift under it */
+		.map-settings .ms-find-clear {
+			position: absolute;
+			top: 50%;
+			right: 6px;
+			transform: translateY(-50%);
+			display: none;
+			cursor: pointer;
+			user-select: none;
+			line-height: 1;
+			text-decoration: none;
+			opacity: 0.7;
+		}
+
+		.map-settings .ms-find.ms-find-set .ms-find-clear {
+			display: block;
+		}
+
+		.map-settings .ms-find-clear:hover {
+			opacity: 1;
+		}
+
+	/* a row the term does not reach. Scoped to the available section: a row
+	   carries the class over to the order above when it is ticked, where
+	   nothing is ever hidden */
+	.map-settings .ms-available .ms-item.ms-filtered {
+		display: none;
+	}
+
+	/* the list is not empty here — every row is filtered out of sight — so
+	   :empty cannot speak for it */
+	.map-settings .ms-available.ms-no-hits::after {
+		content: "Nema karte za taj pojam";
+		display: block;
+		padding: 2px 0;
+		font-style: italic;
+		opacity: 0.6;
+	}
+
 	/* the snapped arrangement, named and undoable (desktop only, like the panes) */
 	/* the board is another way of viewing: its row stands out from the links
 	   around it — a button, a band with a blue edge, lit while on the board */

@@ -1189,6 +1189,15 @@ function renderMaps() {
 
 // ---------- settings panel ----------
 
+// what a typed term and a map's text are both put through before they are
+// compared, so the box answers to a keyboard without the letters: NFD splits
+// a diacritic off the letter it sits on and the combining mark is dropped
+// ("cesk" finds ČHMÚ). A stroke is not a combining mark and survives that —
+// đ is one code point of its own — so it is spelled out
+function foldText(text) {
+	return text.toLowerCase().normalize('NFD').replace(/\p{Diacritic}/gu, '').replace(/đ/g, 'd');
+}
+
 function setMapSettingsVisible(panel, visible) {
 	panel.hidden = !visible;
 	const arrow = document.querySelector('.buttons button.btn .arrow');
@@ -1599,6 +1608,59 @@ function buildMapSettings(panel) {
 	}
 	updateSortLinks();
 
+	// the box narrows the available list alone. The order above it is the page's
+	// own and is reordered by dragging, which a list with rows missing out of it
+	// could not be: a row dropped between two neighbours would land somewhere
+	// else entirely once the term was cleared
+	const findInput = el('input', { type: 'text', class: 'ms-find-input', placeholder: 'Traži karte…', 'aria-label': 'Traži karte' });
+	const findClear = el('a', { class: 'ms-find-clear', text: '×', title: 'Očisti (Esc)' });
+	const findDiv = el('div', { class: 'ms-find' }, [findInput, findClear]);
+
+	// the category as well as the name, so a kind of map ("satelit", "munje")
+	// narrows the list the way a source does; every term has to hit somewhere,
+	// which is what lets two words ("neverin radar") come down to one map
+	function matchesFind(map, terms) {
+		const haystack = foldText(`${map.name} ${map.category}`);
+		return terms.every(term => haystack.includes(term));
+	}
+
+	// hidden by a class rather than taken out of the list: a row carries its
+	// checkbox and its drag handler, and the term is cleared far more often
+	// than the catalog changes
+	function applyFind() {
+		const terms = foldText(findInput.value).split(/\s+/).filter(Boolean);
+		let hits = 0;
+		[...availableDiv.children].forEach(row => {
+			const map = MAP_CATALOG.find(m => m.id === row.getAttribute('data-map-id'));
+			const hit = !map || matchesFind(map, terms);
+			row.classList.toggle('ms-filtered', !hit);
+			if (hit) hits++;
+		});
+		findDiv.classList.toggle('ms-find-set', terms.length > 0);
+		availableDiv.classList.toggle('ms-no-hits', terms.length > 0 && hits === 0);
+	}
+
+	findInput.addEventListener('input', applyFind);
+
+	findInput.addEventListener('keydown', (e) => {
+		if (e.key !== 'Escape') return;
+		// the dialog's own Escape stands down inside a text field, so both ways
+		// out are this handler's: the term first, the dialog once there is none
+		e.preventDefault();
+		if (findInput.value) {
+			findInput.value = '';
+			applyFind();
+		} else {
+			setMapSettingsVisible(panel, false);
+		}
+	});
+
+	findClear.addEventListener('click', () => {
+		findInput.value = '';
+		applyFind();
+		findInput.focus();
+	});
+
 	function markCustom() {
 		panel.querySelector('input[name="msPreset"][value="custom"]').checked = true;
 		// the edit may have just put the list out of step with the preset it came
@@ -1690,6 +1752,7 @@ function buildMapSettings(panel) {
 			} else {
 				availableDiv.appendChild(row);
 				sortAvailable();
+				applyFind(); // the row arrives unjudged, and a term may be standing
 			}
 			markCustom();
 		});
@@ -1707,6 +1770,9 @@ function buildMapSettings(panel) {
 		MAP_CATALOG.filter(map => !selectedIds.includes(map.id))
 			.forEach(map => availableDiv.appendChild(buildRow(map, false)));
 		sortAvailable();
+		// the term outlives the list it was typed over: picking a preset is not
+		// the end of looking for something, and the rows are built anew here
+		applyFind();
 	}
 
 	const presetsDiv = el('div', { class: 'ms-presets' });
@@ -2300,6 +2366,7 @@ function buildMapSettings(panel) {
 		selectedDiv,
 		el('div', { class: 'ms-actions' }, [applyBtn, shareLink]),
 		sortDiv,
+		findDiv,
 		availableDiv,
 		manageDiv
 	]));

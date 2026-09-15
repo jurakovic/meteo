@@ -40,6 +40,10 @@ Ispred svakog imena stoji znak vrste karte: 📡 radar, 🛰️ satelit, ⚡ mun
 
 Donji popis se može poredati po *Zadano*, *Naziv* ili *Vrsta*; ponovni klik na isti okreće smjer. To ne mijenja redoslijed prikaza, samo pomaže u traženju.
 
+Ispod reda za poredak je **okvir za traženje**. Upisano se traži i po imenu i po vrsti karte, pa *munje* izdvoji sve munje kao što *neverin* izdvoji sve karte tog izvora. Više riječi sužava popis — *neverin radar* nađe oba Neverinova radara, *neverin radar hrvatska* samo jedan. Kvačice i naša slova nisu obavezni: *chmu* nalazi *ČHMÚ*, *sinopticka* nalazi *Sinoptička*.
+
+Traženje se tiče samo donjeg popisa — gornji je redoslijed prikaza i u njemu se karte povlače, što se ne bi moglo kad bi neke bile sakrivene. Upisani pojam ostaje i nakon odabira karte ili drugog predloška; briše se znakom `×` u okviru ili tipkom <kbd>Esc</kbd>, koja praznim okvirom zatvara dijalog.
+
 Ništa se ne primjenjuje dok se ne pritisne **Primijeni**. Zatvaranje dijaloga bez toga poništava promjene.
 
 > Ako se dijalog zatvori a stranica ostane prazna, na njoj piše *Nema odabranih karata*. To znači da je popis prazan — otvorite *Karte* i odaberite barem jednu.
