@@ -633,7 +633,7 @@ function anyDialogOpen() {
 // switches): it is about this screen and travels in neither a preset nor a
 // link. The left and top go as fractions of the viewport, the width in px, and
 // the height in px only once it has been resized — until when it stays the
-// content's, capped to what is left below wherever the top now is
+// CSS's, capped to what is left below wherever the top now is
 function dialogStorageKey(panel) {
 	return panel.getAttribute('data-dialog-key');
 }
@@ -660,7 +660,7 @@ function saveDialogGeometry(panel) {
 		top: dialogFraction(rect.top / dialogViewportHeight()),
 		width: Math.round(rect.width)
 	};
-	if (panel.style.height) stored.height = Math.round(rect.height); // only once resized; else the content's
+	if (panel.style.height) stored.height = Math.round(rect.height); // only once resized; else the CSS's
 	try {
 		localStorage.setItem(key, JSON.stringify(stored));
 	} catch (e) { /* storage disabled or full — the dialog still moves this session */ }
@@ -682,7 +682,7 @@ function dialogMaxHeight() {
 	return Math.max(DIALOG_MIN_HEIGHT, dialogViewportHeight() - DIALOG_MARGIN * 2);
 }
 
-// height null leaves it the content's. The CSS's max-height assumes the top the
+// height null leaves it the CSS's. The CSS's max-height assumes the top the
 // CSS set, and the dialog may be anywhere now, so it is recomputed from where
 // the top is asked to be; the top is then held to the height that gave
 function placeDialog(panel, left, top, width, height) {

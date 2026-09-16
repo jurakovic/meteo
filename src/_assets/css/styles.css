@@ -998,7 +998,7 @@ body.fs-lock {
 
 /* the settings dialog: fixed over everything — the page, the columns, a
    fullscreen map — and over the backdrop that makes the page inert while it is
-   up; the table's width, or what the viewport leaves */
+   up; 750 by 750 to begin with, or what the viewport leaves */
 .map-settings {
 	position: fixed;
 	z-index: 100000;
@@ -1006,7 +1006,8 @@ body.fs-lock {
 	left: 0;
 	right: 0;
 	margin: 0 auto;
-	width: 875px; /* the table's max-width */
+	width: 750px;
+	height: 750px;
 	max-width: calc(100% - 32px);
 	max-height: calc(100vh - 48px);
 	display: flex; /* the header stays, the body below it scrolls */
@@ -1029,6 +1030,7 @@ body.fs-lock {
 	.map-settings {
 		top: 0;
 		max-width: 100%;
+		height: auto; /* the content's, up to the screen */
 		/* the visible viewport, not the taller one a collapsible URL bar is
 		   measured out of: at 100vh the dialog's foot hangs below the screen
 		   and the body's scroll ends where it cannot be reached, so the last
@@ -1934,12 +1936,10 @@ body.fs-lock {
 			margin: 0;
 			padding: 0;
 			list-style: none;
-			columns: 2;
 		}
 
 		.manual-dialog .manual-toc li {
 			margin: 2px 0;
-			break-inside: avoid;
 		}
 
 		.manual-dialog .manual-toc .toc-3 {
@@ -1953,12 +1953,6 @@ body.fs-lock {
 			.manual-dialog .manual-toc a:hover {
 				text-decoration: underline;
 			}
-
-@media (max-width: 800px) {
-	.manual-dialog .manual-toc ul {
-		columns: 1;
-	}
-}
 
 /* stands in for the maps when the view resolves to none ("Ništa") */
 .maps-empty {
