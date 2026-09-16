@@ -1,2 +1,3 @@
 ﻿.vs
 /src/node_modules
+/src/_components/manual.c.html

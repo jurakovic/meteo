@@ -62,7 +62,7 @@ cd src
 
 `build.ps1` produces `docs/` from `src/` by processing every `.html` file (except `_components/`):
 
-1. injects the manual (`md.ps1`) at `<!-- manual -->`, above the rewrites below so a path it grows later is rewritten with every other
+1. injects the manual (`md.ps1`) at `<!-- manual -->` and drops the dialog body's dev-only include (the fragment is also written to `_components/manual.c.html` for the dev pages), above the rewrites below so a path it grows later is rewritten with every other
 2. inlines the minified assets (`styles.min.css`, `main.min.js`, `maps.min.js`, `popout.min.js`) in place of their `<link>`/`<script>` tags, each line indented by `Prepend-Tabs`
 3. injects `_components/*.c.html` (seo, gtag, links) at their placeholders
 4. rewrites dev paths to GitHub Pages paths (`href="/customize/index.html` → `/meteo/customize/`, `href="/"` → `/meteo/"`, image paths, the extras stub's `url=`)
@@ -239,7 +239,7 @@ It shares no prose with this file on purpose: this one explains mechanism to som
 
 #### The manual on the site
 
-The Markdown stays the only source and the build makes HTML of it — [`src/md.ps1`](./src/md.ps1), dot-sourced by `build.ps1`, which reads `../MANUAL.md` and returns a fragment. Nothing is written back into `src/`: a generated `.c.html` there would be build output sitting in the source tree.
+The Markdown stays the only source and the build makes HTML of it — [`src/md.ps1`](./src/md.ps1), dot-sourced by `build.ps1`, which reads `../MANUAL.md` and returns a fragment. The built pages get it inlined; the build also writes it to `src/_components/manual.c.html`, which the dev pages fetch through `include.js` (the `data-include-html` on the dialog's `.ms-body`, stripped from the built pages). That file is build output, so it is git-ignored, and a page served from `src/` shows the manual as of the last build — run the build again after editing `MANUAL.md`.
 
 It is shown in a **dialog** rather than on a page of its own, so the manual can be read beside the maps it describes instead of in place of them. Both pages carry it (`#manualDialog`, the `<!-- manual -->` placeholder inside its `.ms-body`), reached by the `?` button in the button row, the *Upute* link in the footer, or the `?` key. A dialog has no address, which a page would have given for free, so `#upute` stands in: it opens the dialog on arrival, and the dialog writes it and takes it away again through `replaceState` — assigning to `location.hash` would stack a history entry per open, and Back would walk out through them one at a time.
 

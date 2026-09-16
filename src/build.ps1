@@ -36,9 +36,11 @@ function Main {
 	$links = Get-Content "$srcDir\_components\links.c.html" -Raw -Encoding "utf8"
 	$links = Prepend-Tabs -str $links -num 6
 
-	# MANUAL.md stays the one source; the converter returns the HTML and nothing
-	# is written back into src/, which would put build output in the source tree
+	# MANUAL.md stays the one source; the converter returns the HTML. A copy goes
+	# to _components/ for the dev pages to fetch -- git-ignored, since it is build
+	# output -- and the built pages get it inlined
 	$manual = Convert-Manual -Path "$(Split-Path $srcDir -Parent)\MANUAL.md"
+	Set-Content -NoNewline -Path "$srcDir\_components\manual.c.html" -Value $manual -Encoding "utf8"
 	$manual = Prepend-Tabs -str $manual -num 3
 
 	# Find all .html files excluding those in _components directories
@@ -70,6 +72,7 @@ function ProcessHtml() {
 
 	$html = Get-Content "$file" -Raw -Encoding "utf8"
 	# above the rewrites below, so a path the manual grows later is rewritten too
+	$html = $html.Replace('<div class="ms-body" data-include-html="/_components/manual.c.html">', '<div class="ms-body">')
 	$html = $html.Replace('<!-- manual -->', $manual)
 	$html = $html.Replace('href="/_assets/img', 'href="/meteo/img')
 	$html = $html.Replace('href="/customize/index.html', 'href="/meteo/customize/')
