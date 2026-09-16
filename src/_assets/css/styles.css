@@ -297,29 +297,34 @@ body.fs-lock {
 	.radartitle.fullscreen .dup-btn {
 		display: none;
 	}
+}
 
-	/* a popped-out widget's title keeps out from under the button clusters:
-	   popout.js measures the room they leave into max-width, and a shift into
-	   the gap between them when centred room runs out (fitTitles) */
-	.map-block.popout .radartitle:not(.fullscreen) > a:not(.left):not(.right) {
-		display: inline-block;
-		max-width: 100%;
-		overflow: hidden;
-		text-overflow: ellipsis;
-		white-space: nowrap;
-		vertical-align: top;
-		transform: translateX(var(--title-shift, 0px));
-	}
+/* the rules below match only once popout.js has made widgets, which it does
+   on the desktop and, as a tiled board and nothing more, on a touch screen
+   (body.touch-board); the gestures and the columns stay the desktop's */
+/* a popped-out widget's title keeps out from under the button clusters:
+   popout.js measures the room they leave into max-width, and a shift into
+   the gap between them when centred room runs out (fitTitles) */
+.map-block.popout .radartitle:not(.fullscreen) > a:not(.left):not(.right) {
+	display: inline-block;
+	max-width: 100%;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	vertical-align: top;
+	transform: translateX(var(--title-shift, 0px));
+}
 
-	.map-block.popout .radartitle:not(.fullscreen) > a.center {
-		transform: translateX(calc(-50% + var(--title-shift, 0px)));
-	}
+.map-block.popout .radartitle:not(.fullscreen) > a.center {
+	transform: translateX(calc(-50% + var(--title-shift, 0px)));
+}
 
-	/* a popped-out widget's [R] reloads its map */
-	.map-block.popout .radartitle:not(.fullscreen) .rl-btn {
-		display: inline;
-	}
+/* a popped-out widget's [R] reloads its map */
+.map-block.popout .radartitle:not(.fullscreen) .rl-btn {
+	display: inline;
+}
 
+@media (min-width: 801px) and (hover: hover) and (pointer: fine) {
 	/* the grouping button of a widget, shown by popout.js only while there is
 	   something to do: [+] touching another widget, [-] in a group */
 	.map-block.popout .radartitle:not(.fullscreen) .grp-btn:not([hidden]) {
@@ -330,205 +335,207 @@ body.fs-lock {
 	.map-block.popout.grouped::after {
 		border-color: #4a8de6;
 	}
+}
 
-	/* no shadow of its own: it is cast for it in the layer below every widget
-	   (.po-shadows), so it never falls across the widget beside it */
-	.map-block.popout {
-		position: fixed;
-		z-index: 5000;
-		background-color: #212f45;
+/* no shadow of its own: it is cast for it in the layer below every widget
+   (.po-shadows), so it never falls across the widget beside it */
+.map-block.popout {
+	position: fixed;
+	z-index: 5000;
+	background-color: #212f45;
+}
+
+	/* the frame, laid over the widget by a pseudo rather than drawn by a
+	   border or an outline.
+	   Not a border: a border is laid out, and every height here is read back
+	   off the box (lockedHeightAt, the inline height of a free widget), so
+	   one would have to be accounted for in all of them.
+	   Not an outline: an outline is painted outside the border box, so two
+	   widgets set flush draw their edges one pixel inside each other, the
+	   edge missing the grid line its box landed on, and which of the two
+	   shows depending on the order they were clicked in. outline-offset: -1px
+	   puts the edge where the snap put the box but loses it, since Chromium
+	   paints an element's outline with its own background, under every
+	   positioned descendant — and .radartitle, .if1 and the letterboxed
+	   media are all positioned, leaving the frame only in the gaps no
+	   content reaches.
+	   A pseudo is a positioned descendant itself, and the last one in tree
+	   order, so it paints over the content while laying nothing out. It
+	   inherits the visibility: hidden of .fs-host, which is what takes the
+	   frame away under a fullscreen map.
+	   Two widgets set flush therefore show a two pixel seam, one edge of
+	   each, and a grouped one beside a loose one shows both colours. That
+	   is wanted: every widget's frame is its own, drawn the same whatever
+	   stands beside it. Collapsing the seam to one pixel would mean asking,
+	   on every drag, resize, group and snap, which edges have a neighbour
+	   and which of the pair gives way — the order-dependence a pseudo has
+	   none of, put back by hand. Each edge lands on the box edge, so a snapped
+	   widget's left and top cover their grid line and its right and bottom
+	   sit the one pixel inside it that a one pixel line leaves. */
+	.map-block.popout::after {
+		content: '';
+		position: absolute;
+		inset: 0;
+		border: 1px solid #2b5797;
+		z-index: 2; /* over .po-h, which straddles these edges at 1 */
+		pointer-events: none; /* and must keep catching the drag */
 	}
 
-		/* the frame, laid over the widget by a pseudo rather than drawn by a
-		   border or an outline.
-		   Not a border: a border is laid out, and every height here is read back
-		   off the box (lockedHeightAt, the inline height of a free widget), so
-		   one would have to be accounted for in all of them.
-		   Not an outline: an outline is painted outside the border box, so two
-		   widgets set flush draw their edges one pixel inside each other, the
-		   edge missing the grid line its box landed on, and which of the two
-		   shows depending on the order they were clicked in. outline-offset: -1px
-		   puts the edge where the snap put the box but loses it, since Chromium
-		   paints an element's outline with its own background, under every
-		   positioned descendant — and .radartitle, .if1 and the letterboxed
-		   media are all positioned, leaving the frame only in the gaps no
-		   content reaches.
-		   A pseudo is a positioned descendant itself, and the last one in tree
-		   order, so it paints over the content while laying nothing out. It
-		   inherits the visibility: hidden of .fs-host, which is what takes the
-		   frame away under a fullscreen map.
-		   Two widgets set flush therefore show a two pixel seam, one edge of
-		   each, and a grouped one beside a loose one shows both colours. That
-		   is wanted: every widget's frame is its own, drawn the same whatever
-		   stands beside it. Collapsing the seam to one pixel would mean asking,
-		   on every drag, resize, group and snap, which edges have a neighbour
-		   and which of the pair gives way — the order-dependence a pseudo has
-		   none of, put back by hand. Each edge lands on the box edge, so a snapped
-		   widget's left and top cover their grid line and its right and bottom
-		   sit the one pixel inside it that a one pixel line leaves. */
-		.map-block.popout::after {
-			content: '';
-			position: absolute;
-			inset: 0;
-			border: 1px solid #2b5797;
-			z-index: 2; /* over .po-h, which straddles these edges at 1 */
-			pointer-events: none; /* and must keep catching the drag */
+	.map-block.popout .radartitle:not(.fullscreen) {
+		cursor: move;
+	}
+
+	/* the map's own width — written inline by maxWidthStyle() on the title
+	   bar, the slideshow and the indicators, and by buildSlideshow() on the
+	   slide placeholders — is the page's answer to a wide screen: the map is
+	   laid out at the width it was made for and the page keeps the rest. A
+	   widget is not the page. It is sized by hand and its width is the map's,
+	   so the caps come off throughout it, letterboxed or not */
+	.map-block.popout > .radartitle,
+	.map-block.popout .placeholder,
+	.map-block.popout .slideshow,
+	.map-block.popout .indicators-container {
+		max-width: none !important;
+	}
+
+		/* and the map fills what it is given, past its natural width where
+		   the widget asks for that: an img carries max-width and no width,
+		   so it stopped there and sat in the middle of a frame grown past
+		   it, the frame's own ground either side. A locked widget was held
+		   to what its content spanned for want of this — a limit on the
+		   widget to hide that the map had none. Freed, the rules below take
+		   over: the box is filled in both axes and the contain gives the
+		   aspect back to the image, which is the letterbox */
+		.map-block.popout .placeholder img {
+			width: 100%;
 		}
 
-		.map-block.popout .radartitle:not(.fullscreen) {
-			cursor: move;
+	/* an interactive map has no aspect of its own: the block carries an inline
+	   height and lays out as a column, the map takes what the title bar leaves */
+	.map-block.popout.free {
+		display: flex;
+		flex-direction: column;
+	}
+
+		.map-block.popout.free > .radartitle {
+			flex: none;
 		}
 
-		/* the map's own width — written inline by maxWidthStyle() on the title
-		   bar, the slideshow and the indicators, and by buildSlideshow() on the
-		   slide placeholders — is the page's answer to a wide screen: the map is
-		   laid out at the width it was made for and the page keeps the rest. A
-		   widget is not the page. It is sized by hand and its width is the map's,
-		   so the caps come off throughout it, letterboxed or not */
-		.map-block.popout > .radartitle,
-		.map-block.popout .placeholder,
-		.map-block.popout .slideshow,
-		.map-block.popout .indicators-container {
-			max-width: none !important;
-		}
-
-			/* and the map fills what it is given, past its natural width where
-			   the widget asks for that: an img carries max-width and no width,
-			   so it stopped there and sat in the middle of a frame grown past
-			   it, the frame's own ground either side. A locked widget was held
-			   to what its content spanned for want of this — a limit on the
-			   widget to hide that the map had none. Freed, the rules below take
-			   over: the box is filled in both axes and the contain gives the
-			   aspect back to the image, which is the letterbox */
-			.map-block.popout .placeholder img {
-				width: 100%;
-			}
-
-		/* an interactive map has no aspect of its own: the block carries an inline
-		   height and lays out as a column, the map takes what the title bar leaves */
-		.map-block.popout.free {
-			display: flex;
-			flex-direction: column;
-		}
-
-			.map-block.popout.free > .radartitle {
-				flex: none;
-			}
-
-			.map-block.popout.free .if1,
-			.map-block.popout.free .if2 {
-				flex: 1;
-				min-height: 0;
-				padding-top: 0;
-			}
-
-		/* a widget freed of its aspect (a plain pull of an edge, popout.js; Shift
-		   holds the aspect instead): the media is letterboxed in what the title
-		   bar leaves — the placeholder's inline aspect and max-width undone —
-		   and a blurred, darkened copy of the image (--po-img) fills the frame
-		   behind it, so the bars are of the map */
-		.map-block.popout.letterbox .placeholder {
-			flex: 1;
-			min-height: 0;
-			display: flex;
-			flex-direction: column;
-			aspect-ratio: auto !important;
-			background-color: transparent;
-		}
-
-			.map-block.popout.letterbox .placeholder img {
-				width: 100%;
-				height: 100%;
-				object-fit: contain;
-			}
-
-		/* the slideshow takes what the bars leave, as the placeholder above does
-		   — the same rule one level up, a titled slideshow's container not
-		   being a .placeholder itself (an untitled one is, and is reached by it) */
-		.map-block.popout.letterbox .slideshow {
-			flex: 1;
-			min-height: 0;
-		}
-
-			/* fills the slideshow, a column itself when untitled (it is a placeholder) */
-			.map-block.popout.letterbox .slide.active {
-				display: flex;
-				flex-direction: column;
-				flex: 1;
-				width: 100%;
-				min-height: 0;
-			}
-
-				.map-block.popout.letterbox .slide > img {
-					flex: 1;
-					min-height: 0;
-					width: 100%;
-					object-fit: contain;
-				}
-
-		.map-block.popout.letterbox .vid1,
-		.map-block.popout.letterbox .vid2 {
+		.map-block.popout.free .if1,
+		.map-block.popout.free .if2 {
 			flex: 1;
 			min-height: 0;
 			padding-top: 0;
 		}
 
-		/* the indicators run under the map and are as wide as it is — which,
-		   letterboxed, is the painted image and not the box it is centred in.
-		   They sit under it too: the media box takes all the height the bars
-		   leave, so in a widget much taller than its image the contain leaves
-		   ground below it and the indicators were left at the foot of the
-		   frame, a long way from what they index. --lb-b is how far the image's
-		   bottom is off the box's, the same inset the arrows are held to, and
-		   they are lifted by it — by a transform, laying nothing out: a margin
-		   would take the height out of the column the media box is measured in,
-		   which would move the image, which would move the indicators again */
-		.map-block.popout.letterbox .indicators-container {
-			width: var(--lb-w, 100%);
-			margin-left: auto;
-			margin-right: auto;
-			transform: translateY(calc(-1 * var(--lb-b, 0px)));
+	/* a widget freed of its aspect (a plain pull of an edge, popout.js; Shift
+	   holds the aspect instead): the media is letterboxed in what the title
+	   bar leaves — the placeholder's inline aspect and max-width undone —
+	   and a blurred, darkened copy of the image (--po-img) fills the frame
+	   behind it, so the bars are of the map */
+	.map-block.popout.letterbox .placeholder {
+		flex: 1;
+		min-height: 0;
+		display: flex;
+		flex-direction: column;
+		aspect-ratio: auto !important;
+		background-color: transparent;
+	}
+
+		.map-block.popout.letterbox .placeholder img {
+			width: 100%;
+			height: 100%;
+			object-fit: contain;
 		}
 
-		/* the arrows belong to the image too, not to the bars beside it. The
-		   insets are from the .slideshow they are positioned in, so the slide's
-		   own title bar is already off the top and .shorter has nothing left to
-		   do here; the width stays the share of the image it always was */
-		.map-block.popout.letterbox .prev,
-		.map-block.popout.letterbox .next {
-			top: var(--lb-t, 0px);
-			bottom: var(--lb-b, 0px);
-			width: calc(0.15 * var(--lb-w, 100%));
+	/* the slideshow takes what the bars leave, as the placeholder above does
+	   — the same rule one level up, a titled slideshow's container not
+	   being a .placeholder itself (an untitled one is, and is reached by it) */
+	.map-block.popout.letterbox .slideshow {
+		flex: 1;
+		min-height: 0;
+	}
+
+		/* fills the slideshow, a column itself when untitled (it is a placeholder) */
+		.map-block.popout.letterbox .slide.active {
+			display: flex;
+			flex-direction: column;
+			flex: 1;
+			width: 100%;
+			min-height: 0;
 		}
 
-		.map-block.popout.letterbox .prev {
-			left: var(--lb-l, 0px);
-		}
-
-		.map-block.popout.letterbox .next {
-			right: var(--lb-r, 0px);
-		}
-
-		.map-block.popout .po-backdrop {
-			display: none;
-		}
-
-		.map-block.popout.letterbox .po-backdrop {
-			display: block;
-			position: absolute;
-			inset: 0;
-			overflow: hidden; /* the blur bleeds past the image's edges */
-			z-index: -1; /* under the content, over the frame's ground */
-		}
-
-			.map-block.popout.letterbox .po-backdrop::before {
-				content: '';
-				position: absolute;
-				inset: -24px;
-				background: var(--po-img) center / cover no-repeat;
-				filter: blur(14px) brightness(0.45);
+			.map-block.popout.letterbox .slide > img {
+				flex: 1;
+				min-height: 0;
+				width: 100%;
+				object-fit: contain;
 			}
 
+	.map-block.popout.letterbox .vid1,
+	.map-block.popout.letterbox .vid2 {
+		flex: 1;
+		min-height: 0;
+		padding-top: 0;
+	}
+
+	/* the indicators run under the map and are as wide as it is — which,
+	   letterboxed, is the painted image and not the box it is centred in.
+	   They sit under it too: the media box takes all the height the bars
+	   leave, so in a widget much taller than its image the contain leaves
+	   ground below it and the indicators were left at the foot of the
+	   frame, a long way from what they index. --lb-b is how far the image's
+	   bottom is off the box's, the same inset the arrows are held to, and
+	   they are lifted by it — by a transform, laying nothing out: a margin
+	   would take the height out of the column the media box is measured in,
+	   which would move the image, which would move the indicators again */
+	.map-block.popout.letterbox .indicators-container {
+		width: var(--lb-w, 100%);
+		margin-left: auto;
+		margin-right: auto;
+		transform: translateY(calc(-1 * var(--lb-b, 0px)));
+	}
+
+	/* the arrows belong to the image too, not to the bars beside it. The
+	   insets are from the .slideshow they are positioned in, so the slide's
+	   own title bar is already off the top and .shorter has nothing left to
+	   do here; the width stays the share of the image it always was */
+	.map-block.popout.letterbox .prev,
+	.map-block.popout.letterbox .next {
+		top: var(--lb-t, 0px);
+		bottom: var(--lb-b, 0px);
+		width: calc(0.15 * var(--lb-w, 100%));
+	}
+
+	.map-block.popout.letterbox .prev {
+		left: var(--lb-l, 0px);
+	}
+
+	.map-block.popout.letterbox .next {
+		right: var(--lb-r, 0px);
+	}
+
+	.map-block.popout .po-backdrop {
+		display: none;
+	}
+
+	.map-block.popout.letterbox .po-backdrop {
+		display: block;
+		position: absolute;
+		inset: 0;
+		overflow: hidden; /* the blur bleeds past the image's edges */
+		z-index: -1; /* under the content, over the frame's ground */
+	}
+
+		.map-block.popout.letterbox .po-backdrop::before {
+			content: '';
+			position: absolute;
+			inset: -24px;
+			background: var(--po-img) center / cover no-repeat;
+			filter: blur(14px) brightness(0.45);
+		}
+
+@media (min-width: 801px) and (hover: hover) and (pointer: fine) {
 		/* resize handles: thin strips along the sides, squares in the corners,
 		   straddling the edge so they are easy to hit without eating the title bar */
 		.map-block.popout .po-h {
@@ -633,96 +640,98 @@ body.fs-lock {
 	.map-block.popout.snapped .po-h-sw {
 		display: none;
 	}
+}
 
-	/* a fullscreen map in a pane fills its column — what the other panes leave
-	   free of it, above and below (--fs-top/--fs-bottom, set by popout.js) — and
-	   the page hidden behind the columns leaves a floating widget's fullscreen
-	   the whole viewport */
-	body.snap-full .radartitle.fullscreen,
-	body.snap-full .if1.fullscreen,
-	body.dashboard .radartitle.fullscreen,
-	body.dashboard .if1.fullscreen {
-		left: 0;
-		right: 0;
-	}
+/* a fullscreen map in a pane fills its column — what the other panes leave
+   free of it, above and below (--fs-top/--fs-bottom, set by popout.js) — and
+   the page hidden behind the columns leaves a floating widget's fullscreen
+   the whole viewport */
+body.snap-full .radartitle.fullscreen,
+body.snap-full .if1.fullscreen,
+body.dashboard .radartitle.fullscreen,
+body.dashboard .if1.fullscreen {
+	left: 0;
+	right: 0;
+}
 
-	/* the dashboard: the page — and all on it but the widgets, which are
-	   fixed and stay rendered — out of sight and out of reach, no scrollbar;
-	   the widgets, the columns and the dialog are all there is */
-	/* the board before the board is there: maps.js reads the view out of storage
-	   or the address while <head> is parsing and sets this on <html>, since the
-	   arrangement itself waits on the render and cannot be applied until
-	   DOMContentLoaded (cloakBoard). The same two things hidden as below, and
-	   the scrollbar with them, so what shows meanwhile is the ground the widgets
-	   are about to stand on rather than the page they are not going to be in */
-	html.board-boot {
-		overflow: hidden;
-	}
+/* the dashboard: the page — and all on it but the widgets, which are
+   fixed and stay rendered — out of sight and out of reach, no scrollbar;
+   the widgets, the columns and the dialog are all there is */
+/* the board before the board is there: maps.js reads the view out of storage
+   or the address while <head> is parsing and sets this on <html>, since the
+   arrangement itself waits on the render and cannot be applied until
+   DOMContentLoaded (cloakBoard). The same two things hidden as below, and
+   the scrollbar with them, so what shows meanwhile is the ground the widgets
+   are about to stand on rather than the page they are not going to be in */
+html.board-boot {
+	overflow: hidden;
+}
 
-		html.board-boot .container,
-		html.board-boot footer {
-			visibility: hidden;
-		}
-
-	body.dashboard {
-		overflow: hidden;
-	}
-
-	body.dashboard .container,
-	body.dashboard footer {
+	html.board-boot .container,
+	html.board-boot footer {
 		visibility: hidden;
 	}
 
-		body.dashboard .map-block.popout:not(.fs-host) {
-			visibility: visible;
-		}
+body.dashboard {
+	overflow: hidden;
+}
 
-	/* the widgets' shadows, drawn for them rather than by them, so a widget's
-	   shadow falls on what is behind the widgets and never on the widget beside
-	   it. Each box is a widget's own rect placed by popout.js; an outer box-shadow
-	   is clipped out of its own border box, so a box paints the halo and nothing
-	   else, and takes no pointer. Both layers are under the widget range, which
-	   starts at 5000 and climbs from there, and over the page and the docked maps
-	   on it, the columns' ground and the board's graph paper.
-	   A fullscreen map at 4500/4501 lies between them, and popout.js sorts the
-	   boxes either side of it: the shadow of a widget standing on that map goes
-	   over it, as it would over the page, and the shadow of one merely standing
-	   beside it goes under, so a halo cannot spill onto a map that begins where
-	   its widget ends */
-	.po-shadows,
-	.po-shadows-under {
-		position: fixed;
-		inset: 0;
-		pointer-events: none;
+body.dashboard .container,
+body.dashboard footer {
+	visibility: hidden;
+}
+
+	body.dashboard .map-block.popout:not(.fs-host) {
+		visibility: visible;
 	}
 
-	.po-shadows {
-		z-index: 4900;
+/* the widgets' shadows, drawn for them rather than by them, so a widget's
+   shadow falls on what is behind the widgets and never on the widget beside
+   it. Each box is a widget's own rect placed by popout.js; an outer box-shadow
+   is clipped out of its own border box, so a box paints the halo and nothing
+   else, and takes no pointer. Both layers are under the widget range, which
+   starts at 5000 and climbs from there, and over the page and the docked maps
+   on it, the columns' ground and the board's graph paper.
+   A fullscreen map at 4500/4501 lies between them, and popout.js sorts the
+   boxes either side of it: the shadow of a widget standing on that map goes
+   over it, as it would over the page, and the shadow of one merely standing
+   beside it goes under, so a halo cannot spill onto a map that begins where
+   its widget ends */
+.po-shadows,
+.po-shadows-under {
+	position: fixed;
+	inset: 0;
+	pointer-events: none;
+}
+
+.po-shadows {
+	z-index: 4900;
+}
+
+.po-shadows-under {
+	z-index: 4400;
+}
+
+	.po-shadow {
+		position: absolute;
+		box-shadow: 0 6px 24px rgba(0, 0, 0, 0.6);
 	}
 
-	.po-shadows-under {
-		z-index: 4400;
-	}
+/* the board's graph paper: under the widgets and over the columns' ground,
+   its lines the multiples of the cell popout.js snaps to (--grid-cell). It
+   hangs off body rather than the container the board hides, and takes no
+   pointer: it is something to see, not to touch */
+.po-grid {
+	position: fixed;
+	inset: 0;
+	z-index: 4000;
+	pointer-events: none;
+	background-image:
+		repeating-linear-gradient(to right, rgba(255, 255, 255, 0.08) 0 1px, transparent 1px var(--grid-cell)),
+		repeating-linear-gradient(to bottom, rgba(255, 255, 255, 0.08) 0 1px, transparent 1px var(--grid-cell));
+}
 
-		.po-shadow {
-			position: absolute;
-			box-shadow: 0 6px 24px rgba(0, 0, 0, 0.6);
-		}
-
-	/* the board's graph paper: under the widgets and over the columns' ground,
-	   its lines the multiples of the cell popout.js snaps to (--grid-cell). It
-	   hangs off body rather than the container the board hides, and takes no
-	   pointer: it is something to see, not to touch */
-	.po-grid {
-		position: fixed;
-		inset: 0;
-		z-index: 4000;
-		pointer-events: none;
-		background-image:
-			repeating-linear-gradient(to right, rgba(255, 255, 255, 0.08) 0 1px, transparent 1px var(--grid-cell)),
-			repeating-linear-gradient(to bottom, rgba(255, 255, 255, 0.08) 0 1px, transparent 1px var(--grid-cell));
-	}
-
+@media (min-width: 801px) and (hover: hover) and (pointer: fine) {
 	.map-block.snapped-left .radartitle.fullscreen,
 	.map-block.snapped-left .if1.fullscreen {
 		left: 0;
@@ -743,37 +752,39 @@ body.fs-lock {
 		top: calc(var(--fs-top, 0px) + 23px); /* under the bar */
 		bottom: var(--fs-bottom, 0px);
 	}
+}
 
-	/* on the board the map fills the largest rectangle about its widget that no
-	   other widget stands in (fitBoardFullscreen), rather than the whole
-	   viewport: the board has no page for it to fill and no column to bound it,
-	   so the widgets around it are what bounds it. All four sides, where a pane
-	   in a column has only its two ends — and over the rule above, which gives
-	   a board's fullscreen the viewport when nothing has been fitted */
-	body.dashboard .map-block.popout.fs-host .radartitle.fullscreen {
-		left: var(--fs-left, 0px);
-		right: var(--fs-right, 0px);
-		top: var(--fs-top, 0px);
+/* on the board the map fills the largest rectangle about its widget that no
+   other widget stands in (fitBoardFullscreen), rather than the whole
+   viewport: the board has no page for it to fill and no column to bound it,
+   so the widgets around it are what bounds it. All four sides, where a pane
+   in a column has only its two ends — and over the rule above, which gives
+   a board's fullscreen the viewport when nothing has been fitted */
+body.dashboard .map-block.popout.fs-host .radartitle.fullscreen {
+	left: var(--fs-left, 0px);
+	right: var(--fs-right, 0px);
+	top: var(--fs-top, 0px);
+}
+
+body.dashboard .map-block.popout.fs-host .if1.fullscreen {
+	left: var(--fs-left, 0px);
+	right: var(--fs-right, 0px);
+	top: calc(var(--fs-top, 0px) + 23px); /* under the bar */
+	bottom: var(--fs-bottom, 0px);
+}
+
+/* a fullscreen map leaves its widget's box (frame, shadow, handles) behind
+   where it floated; only the bar and the map are to be seen */
+.map-block.popout.fs-host {
+	visibility: hidden;
+}
+
+	.map-block.popout.fs-host .radartitle.fullscreen,
+	.map-block.popout.fs-host .if1.fullscreen {
+		visibility: visible;
 	}
 
-	body.dashboard .map-block.popout.fs-host .if1.fullscreen {
-		left: var(--fs-left, 0px);
-		right: var(--fs-right, 0px);
-		top: calc(var(--fs-top, 0px) + 23px); /* under the bar */
-		bottom: var(--fs-bottom, 0px);
-	}
-
-	/* a fullscreen map leaves its widget's box (frame, shadow, handles) behind
-	   where it floated; only the bar and the map are to be seen */
-	.map-block.popout.fs-host {
-		visibility: hidden;
-	}
-
-		.map-block.popout.fs-host .radartitle.fullscreen,
-		.map-block.popout.fs-host .if1.fullscreen {
-			visibility: visible;
-		}
-
+@media (min-width: 801px) and (hover: hover) and (pointer: fine) {
 	/* the widgets floating over the page stay in view over a fullscreen map:
 	   the page's fullscreen goes under them (above the columns' ground), and
 	   a widget hosting one is lowered to the same place by popout.js */
@@ -798,6 +809,26 @@ body.fs-lock {
 		border: 2px dashed #4a8de6;
 		background-color: rgba(43, 87, 151, 0.25);
 		pointer-events: none;
+	}
+}
+
+/* the board on a touch screen: tiled by arrangeBoard() and nothing more, so
+   no handles, no grouping and no grid, and on the tab only what does
+   something there. A fullscreen map takes the whole screen rather than the
+   rectangle the other tiles leave it, which on a tiled board is its own cell */
+body.touch-board .map-block.popout .po-h,
+body.dashboard.touch-board .ms-tab-cluster .ms-tab-board { /* over the board's own, further down */
+	display: none;
+}
+
+body.touch-board .map-block.popout .radartitle:not(.fullscreen) {
+	cursor: auto;
+}
+
+@media (max-width: 800px) {
+	/* under the taller bar a phone gives a fullscreen map */
+	body.touch-board .map-block.popout.fs-host .if1.fullscreen {
+		top: 32px;
 	}
 }
 

@@ -414,11 +414,28 @@ function isDashboard() {
 	return dashboardMode;
 }
 
+// A board below the desktop breakpoint (a phone, a tablet, a narrow window) is
+// the board with nothing to move by hand: every map a widget, tiled by
+// arrangeBoard() and tiled again whenever the screen changes shape. It shows
+// the view's mode and never writes an arrangement of its own — the stored one
+// stays unapplied for a desktop window (unappliedSnapLayout), so a phone's
+// tiling cannot overwrite what was laid out by hand
+function isTouchBoard() {
+	return dashboardMode && !POPOUT_MQ.matches;
+}
+
+function enterTouchBoard() {
+	setDashboard(true);
+	popoutRest();
+	arrangeBoard();
+}
+
 // the class first: the page's scrollbar goes with it, changing the viewport
 // everything after is measured in; the buttons read the mode
 function setDashboard(on) {
 	dashboardMode = on;
 	document.body.classList.toggle('dashboard', on);
+	document.body.classList.toggle('touch-board', on && !POPOUT_MQ.matches);
 	renderGrid(); // the paper is the board's
 	document.querySelectorAll('.map-block.popout .po-btn').forEach(btn => setPopoutButton(btn, true));
 }
@@ -674,7 +691,7 @@ function runningTotal(sizes, upTo) {
 // stretched to fill it: a wider tile there would be the one thing on the board
 // unlike the others
 function arrangeBoard() {
-	if (!isDashboard() || !POPOUT_MQ.matches) return;
+	if (!isDashboard()) return;
 	// in the list's order, which is the DOM's; on a board every map is a widget
 	const blocks = [...document.querySelectorAll('.map-block.popout')]
 		.filter(block => !isSnapped(block) && !block.classList.contains('fs-host'));
@@ -1525,7 +1542,7 @@ document.addEventListener('pointerdown', (e) => {
 	if (!block) return;
 	// a widget hosting a fullscreen map stays under the others (see map-fullscreen)
 	if (!block.classList.contains('fs-host')) raisePopout(block);
-	if (e.button !== 0) return;
+	if (e.button !== 0 || isTouchBoard()) return; // a tiled board is not moved by hand
 	const handle = e.target.closest('.po-h');
 	const title = e.target.closest('.radartitle');
 	// links and buttons keep working; a fullscreen bar is pinned, not a handle
@@ -1840,11 +1857,22 @@ document.addEventListener('auxclick', (e) => {
 // view, not to the window, so it waits out a narrow one rather than being
 // unmade by it
 POPOUT_MQ.addEventListener('change', (e) => {
-	if (e.matches) { applySnapLayout(unappliedSnapLayout); return; }
+	if (e.matches) {
+		const layout = unappliedSnapLayout;
+		// a touch board's tiles are not the arrangement: they go, and the stored one comes
+		if (isDashboard()) {
+			snapPersistPaused = true;
+			dockAllPopouts();
+			snapPersistPaused = false;
+		}
+		applySnapLayout(layout);
+		return;
+	}
 	unappliedSnapLayout = snapLayout(); // read before the dock empties the board
 	snapPersistPaused = true; // the stored arrangement is kept for a desktop window
 	dockAllPopouts();
 	snapPersistPaused = false;
+	if (unappliedSnapLayout && unappliedSnapLayout.dashboard) enterTouchBoard();
 });
 
 // a smaller window must not strand a widget off-screen
@@ -1868,8 +1896,13 @@ window.addEventListener('resize', () => {
 		});
 		updateGroups();
 		updateCovered(); // the clamp may have moved a widget onto or off another
+		if (isTouchBoard()) arrangeBoard(); // a phone turned on its side is another board
 	}, 200);
 });
+
+// the shape a touch board is cut to is the maps', which the images only give
+// once they are in: until then a widget is measured by its bar alone
+window.addEventListener('load', () => { if (isTouchBoard()) arrangeBoard(); });
 
 // ---------- snap columns (desktop) ----------
 
@@ -2212,7 +2245,7 @@ function freeRectAround(rect, blockers, bounds) {
 function fitBoardFullscreen() {
 	const props = ['--fs-left', '--fs-right', '--fs-top', '--fs-bottom'];
 	const blocks = floatingBlocks();
-	const board = isDashboard();
+	const board = isDashboard() && !isTouchBoard(); // a touch board's fullscreen is the whole screen
 	blocks.forEach(block => {
 		if (!board || !block.classList.contains('fs-host')) {
 			props.forEach(p => block.style.removeProperty(p));
@@ -2507,7 +2540,7 @@ function sameSnapLayout(a, b) {
 function applySnapLayout(layout) {
 	resetSnapColumns();
 	// the mode before anything is measured: the page's scrollbar goes with it
-	setDashboard(!!(layout && layout.dashboard && POPOUT_MQ.matches));
+	setDashboard(!!(layout && layout.dashboard));
 	// nothing to place, but the sweep still has to run: the widgets this replaces
 	// go with the tbody (renderMaps) rather than being docked, so their shadows
 	// are left in the layer with no widget to own them, and the updateCovered
@@ -2517,6 +2550,7 @@ function applySnapLayout(layout) {
 		// show is kept whole, to be written on the view's behalf and applied
 		// once there is a desktop window again
 		unappliedSnapLayout = POPOUT_MQ.matches ? null : layout;
+		if (isTouchBoard()) enterTouchBoard();
 		syncShadows();
 		return;
 	}
@@ -2655,7 +2689,8 @@ document.addEventListener('map-fullscreen', () => {
 		const hosting = !!block.querySelector('.if1.fullscreen');
 		const wasHosting = block.classList.contains('fs-host');
 		block.classList.toggle('fs-host', hosting);
-		if (hosting) block.style.zIndex = POPOUT_FS_Z;
+		// on a touch board the map takes the screen, over every tile
+		if (hosting) block.style.zIndex = isTouchBoard() ? ++popoutZ : POPOUT_FS_Z;
 		else if (wasHosting) raisePopout(block);
 	});
 	fitBoardFullscreen(); // on the board there is no column to fit it, and no page either

@@ -950,7 +950,7 @@ function getActiveMapPrefs() {
 // two things body.dashboard does, from now until the arrangement is applied.
 function cloakBoard() {
 	const layout = getActiveMapPrefs().layout;
-	if (layout && layout.dashboard && POPOUT_MQ.matches) document.documentElement.classList.add('board-boot');
+	if (layout && layout.dashboard) document.documentElement.classList.add('board-boot');
 }
 cloakBoard();
 
@@ -1815,7 +1815,9 @@ function buildMapSettings(panel) {
 
 	function renderModeRow() {
 		modeDiv.replaceChildren();
-		modeDiv.hidden = !POPOUT_MQ.matches; // the widgets and the board are a desktop thing
+		// a touch screen gets the board as tiles, so the mode but not the grid, and
+		// no Posloži: it arranges itself
+		const touch = !POPOUT_MQ.matches;
 		modeDiv.classList.toggle('ms-on', dashboardChecked);
 		const btn = el('button', { type: 'button', class: 'btn', 'aria-pressed': String(dashboardChecked) }, [
 			document.createTextNode('Nadzorna ploča '),
@@ -1833,6 +1835,7 @@ function buildMapSettings(panel) {
 		]);
 		tile.disabled = !isDashboard();
 		tile.addEventListener('click', () => arrangeBoard());
+		if (touch) { modeDiv.append(btn); return; }
 		modeDiv.append(btn,
 			buildGridToggle('Prikaži mrežu', gridChecked, (on) => { gridChecked = on; setGridPrefs(gridChecked, snapChecked); }),
 			buildGridToggle('Poravnaj uz mrežu', snapChecked, (on) => { snapChecked = on; setGridPrefs(gridChecked, snapChecked); }),
