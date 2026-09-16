@@ -603,32 +603,51 @@ function snapToGrid(blocks) {
 // letterboxes its map over a blurred copy of it, and the double-click on the
 // bar is the way back to its own shape, one map at a time.
 const ARRANGE_ASPECT = 4 / 3; // a map's shape, near enough, when there are none to measure
-const ARRANGE_HOLE = 1; // what an empty cell costs, against how wrong the cell's shape is
+const ARRANGE_HOLE = 0.01; // the share of a map's size an empty cell costs: a tie-breaker, no more
 
-// how many columns n widgets go in: the shape whose cell comes closest to what
-// the maps themselves are, counting an empty cell as a cost of its own so a
-// tidy 3x3 is not passed over for a 4x3 with a hole in it. Falls out as 2x2 for
-// four, 3x2 for six and 4x3 for twelve, and on a wide screen puts two side by
-// side rather than one above the other, which is the whole reason the board's
-// own shape is in it
+// how many columns n widgets go in: the shape that shows each map biggest. A
+// map is contained in what its cell leaves under the title bar, so its size is
+// the cell's area only when the cell has the map's shape, and too wide or too
+// tall a cell is spent on ground. That is what the eye asks of a board — ten
+// maps go 4x3 with two holes rather than 2x5 in strips too thin to read, or
+// 5x2 when the maps are square enough to be bigger that way. An empty cell
+// costs a hair, so a tidy 3x3 is not passed over for a 4x3 whose maps come
+// out the same size. Falls out as 2x2 for four, 3x2 for six and 4x3 for
+// twelve, and on a wide screen puts two side by side rather than one above
+// the other
 function arrangeShape(n, width, height, aspect) {
-	let best = { cols: 1, rows: n, score: Infinity };
+	let best = { cols: 1, rows: n, score: -Infinity };
 	for (let cols = 1; cols <= n; cols++) {
 		const rows = Math.ceil(n / cols);
-		const cell = (width / cols) / (height / rows);
-		const off = Math.max(cell / aspect, aspect / cell); // a ratio either way, so 1 is exact
-		const score = off + (cols * rows - n) * ARRANGE_HOLE;
-		if (score < best.score) best = { cols, rows, score };
+		const w = width / cols, h = height / rows - POPOUT_TITLE_HEIGHT;
+		if (h <= 0) continue;
+		const mapWidth = Math.min(w, h * aspect);
+		const score = mapWidth * (mapWidth / aspect) * (1 - (cols * rows - n) * ARRANGE_HOLE);
+		if (score > best.score) best = { cols, rows, score };
 	}
 	return best;
 }
 
-// the shape the maps are, so the cells are cut to fit what goes in them; one
-// already letterboxed is measured as it stands, which is what the eye sees
+// the shape of what a widget shows: the image's or the video's own, or, for a
+// locked widget of anything else, what its map takes of it under the bar. A
+// freed widget's rect is not measured — it is the cell a previous arrangement
+// cut, and reading it back would hand the next one the same shape whatever the
+// maps are. A freed frame has no shape of its own and fills any cell, so it
+// has no say
+function mapAspect(block) {
+	const img = block.querySelector('.slide.active img') || block.querySelector('.placeholder img');
+	if (img && img.naturalWidth && img.naturalHeight) return img.naturalWidth / img.naturalHeight;
+	const video = block.querySelector('video');
+	if (video && video.videoWidth && video.videoHeight) return video.videoWidth / video.videoHeight;
+	if (block.classList.contains('free')) return 0;
+	const r = block.getBoundingClientRect();
+	const h = r.height - POPOUT_TITLE_HEIGHT;
+	return h > 0 ? r.width / h : 0;
+}
+
+// the maps' shape, averaged, so the cells are cut to fit what goes in them
 function arrangeAspect(blocks) {
-	const ratios = blocks
-		.map(block => { const r = block.getBoundingClientRect(); return r.height > 0 ? r.width / r.height : 0; })
-		.filter(ratio => ratio > 0);
+	const ratios = blocks.map(mapAspect).filter(ratio => ratio > 0);
 	return ratios.length ? ratios.reduce((sum, ratio) => sum + ratio, 0) / ratios.length : ARRANGE_ASPECT;
 }
 
@@ -1194,10 +1213,17 @@ function resizeSeam(block, other, dir, e) {
 	const secondSize = sideways ? rs.width : rs.height;
 	const secondAt = sideways ? rs.left : rs.top;
 	const min = sideways ? POPOUT_MIN_WIDTH : POPOUT_MIN_HEIGHT;
+	// the seam is pulled onto the like edges of the rest of the board, as a
+	// single edge is: a seam lined up with the one in the row above is most of
+	// what a tiled board asks of it
+	const edges = magnetRects(first, [second]).flatMap(r => sideways ? [r.left, r.right] : [r.top, r.bottom]);
 	trackPopoutPointer(e, (dx, dy) => {
+		let move = sideways ? dx : dy;
+		const pulled = magnetEdge(secondAt + move, edges);
+		if (pulled !== null) move = pulled - secondAt;
 		// held so neither side goes under its minimum, which is what keeps the
 		// seam inside the pair rather than pushing it out the far end
-		const move = clamp(sideways ? dx : dy, min - firstSize, secondSize - min);
+		move = clamp(move, min - firstSize, secondSize - min);
 		if (sideways) {
 			first.style.width = `${Math.round(firstSize + move)}px`;
 			second.style.width = `${Math.round(secondSize - move)}px`;
@@ -1211,7 +1237,13 @@ function resizeSeam(block, other, dir, e) {
 		// its arrows and indicators to the image's rect, which has just moved
 		fitWidget(first);
 		fitWidget(second);
-	}, () => { updateGroups(); persistSnapLayout(); });
+	}, () => {
+		// each edge to its nearest line, and the shared one is the same value
+		// for both, so the two land on the same line and stay a seam
+		snapToGrid([first, second]);
+		updateGroups();
+		persistSnapLayout();
+	});
 }
 
 function resizePopout(block, dir, e) {
@@ -1502,8 +1534,24 @@ document.addEventListener('pointerdown', (e) => {
 		// and those two are what an outside edge means
 		const dir = handle.dataset.dir;
 		const mate = seamNeighbour(block, dir);
-		if (mate) resizeSeam(block, mate, dir, e);
-		else resizePopout(block, dir, e);
+		if (!mate) resizePopout(block, dir, e);
+		else if (!(e.ctrlKey || e.metaKey)) resizeSeam(block, mate, dir, e);
+		else {
+			// Ctrl pulls one side of the seam alone: the widget the press is
+			// on the side of. The handles straddle the edge, so a press just
+			// inside a widget is a press on its edge, whichever handle took it
+			const r = block.getBoundingClientRect();
+			const inside = dir === 'e' ? e.clientX < r.right
+				: dir === 'w' ? e.clientX >= r.left
+				: dir === 's' ? e.clientY < r.bottom
+				: e.clientY >= r.top;
+			const opposite = { e: 'w', w: 'e', n: 's', s: 'n' };
+			if (inside) resizePopout(block, dir, e);
+			else {
+				raisePopout(mate); // the one that moves is the one in front
+				resizePopout(mate, opposite[dir], e);
+			}
+		}
 	} else dragPopout(block, e);
 });
 
@@ -1608,7 +1656,7 @@ function reloadAllMaps() {
 // part of the view, so it travels in neither a preset nor a link and keeps the
 // same footing as the grid switches.
 const REFRESH_KEY = 'mapRefresh';
-const REFRESH_CHOICES = [1, 2, 5, 10, 15, 30, 60];
+const REFRESH_CHOICES = [5, 10, 15, 30, 60];
 const REFRESH_DEFAULT = 5;
 
 function loadRefreshPrefs() {

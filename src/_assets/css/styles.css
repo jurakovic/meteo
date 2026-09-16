@@ -1457,7 +1457,7 @@ body.fs-lock {
 	.map-settings .ms-find {
 		position: relative;
 		display: flex;
-		padding: 0 0 6px;
+		margin-bottom: 6px; /* not padding: the clear button is centred on this box, which has to be the input's */
 	}
 
 		.map-settings .ms-find-input {
@@ -1485,12 +1485,29 @@ body.fs-lock {
 			right: 6px;
 			transform: translateY(-50%);
 			display: none;
+			width: 8px;
+			height: 8px;
 			cursor: pointer;
 			user-select: none;
-			line-height: 1;
-			text-decoration: none;
+			font-size: 0; /* the × is drawn below: the glyph sits low in its line, by the font's say */
 			opacity: 0.7;
 		}
+
+			.map-settings .ms-find-clear::before,
+			.map-settings .ms-find-clear::after {
+				content: '';
+				position: absolute;
+				top: 3.25px;
+				left: -1px;
+				width: 10px;
+				height: 1.5px;
+				background-color: currentColor;
+				transform: rotate(45deg);
+			}
+
+			.map-settings .ms-find-clear::after {
+				transform: rotate(-45deg);
+			}
 
 		.map-settings .ms-find.ms-find-set .ms-find-clear {
 			display: block;

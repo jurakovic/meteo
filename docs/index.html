@@ -148,11 +148,13 @@
 		content:"Nema odabranih karata"}.map-settings .ms-available:empty::before{content:"Sve su karte odabrane"}
 		.map-settings .ms-available .ms-handle{display:none}.map-settings .ms-sort{display:flex;align-items:baseline;gap:14px;padding:6px 0;margin:
 		6px 0 0;border-top:1px solid #485871}.map-settings .ms-sort a{cursor:pointer;user-select:none;text-decoration:none}
-		.map-settings .ms-sort a.active{color:#ff9800}.map-settings .ms-find{position:relative;display:flex;padding:0 0 6px}
+		.map-settings .ms-sort a.active{color:#ff9800}.map-settings .ms-find{position:relative;display:flex;margin-bottom:6px}
 		.map-settings .ms-find-input{flex:1;min-width:0;padding:4px 22px 4px 6px;border:1px solid #485871;border-radius:3px;background-color:#1b2735
 		;color:inherit;font-family:inherit;font-size:inherit}.map-settings .ms-find-input:focus{outline:0;border-color:#ff9800}
-		.map-settings .ms-find-clear{position:absolute;top:50%;right:6px;transform:translateY(-50%);display:none;cursor:pointer;user-select:none;
-		line-height:1;text-decoration:none;opacity:.7}.map-settings .ms-find.ms-find-set .ms-find-clear{display:block}
+		.map-settings .ms-find-clear{position:absolute;top:50%;right:6px;transform:translateY(-50%);display:none;width:8px;height:8px;cursor:pointer
+		;user-select:none;font-size:0;opacity:.7}.map-settings .ms-find-clear::after,.map-settings .ms-find-clear::before{content:'';position:
+		absolute;top:3.25px;left:-1px;width:10px;height:1.5px;background-color:currentColor;transform:rotate(45deg)}
+		.map-settings .ms-find-clear::after{transform:rotate(-45deg)}.map-settings .ms-find.ms-find-set .ms-find-clear{display:block}
 		.map-settings .ms-find-clear:hover{opacity:1}.map-settings .ms-available .ms-item.ms-filtered{display:none}
 		.map-settings .ms-available.ms-no-hits::after{content:"Nema karte za taj pojam";display:block;padding:2px 0;font-style:italic;opacity:.6}
 		.map-settings .ms-mode{display:flex;align-items:center;gap:14px;margin:10px 0 4px;padding:8px 10px;background-color:#1a2536;border:1px solid
@@ -1287,7 +1289,7 @@
 			<p><strong>Linkovi.</strong> Gumb <em>Linkovi</em> vodi na popis dodatnih izvora na dnu stranice. Kvadratić pokraj njega uključuje prikaz linkova ispod svake karte.</p>
 			<p><strong>Upute.</strong> Gumb <code>?</code> u redu gumba otvara ovaj tekst, kao i poveznica <em>Upute</em> u podnožju i tipka <kbd>?</kbd>. Otvara se u prozoru preko stranice, pa se upute čitaju uz karte, a ne umjesto njih; zatvara se natpisom <em>Zatvori</em> ili tipkom <kbd>Esc</kbd>. Poveznica koja završava s <code>#upute</code> otvara ih odmah pri otvaranju stranice.</p>
 			<h2 id="automatsko-osvježavanje">Automatsko osvježavanje</h2>
-			<p>Slike zastare na stranici koja je dugo otvorena. U dijalogu <em>Karte</em> je red <strong>Osvježavaj svakih</strong> s kvadratićem i razmakom — 1, 2, 5, 10, 15, 30 ili 60 minuta. Isključeno je dok se ne uključi, a početni razmak je 5 minuta.</p>
+			<p>Slike zastare na stranici koja je dugo otvorena. U dijalogu <em>Karte</em> je red <strong>Osvježavaj svakih</strong> s kvadratićem i razmakom — 5, 10, 15, 30 ili 60 minuta. Isključeno je dok se ne uključi, a početni razmak je 5 minuta.</p>
 			<p>Osvježavaju se slike, nizovi slika, videa i jednostavne karte — sve ono što ima gumb <code>[R]</code>. Interaktivne karte (Windy, Blitzortung i slične) se preskaču: one same dohvaćaju najnovije podatke, a ponovno učitavanje bi im samo poništilo pomak i zumiranje.</p>
 			<p><strong>Odbrojavanje.</strong> Dok je osvježavanje uključeno, na vrhu ekrana visi pločica s vremenom do sljedećeg osvježavanja. Tu je i gumb <code>[R]</code> koji osvježava odmah. Vrijeme se vraća na puni razmak pri svakom osvježavanju — automatskom, ručnom (<code>[R]</code>, tipka <kbd>R</kbd> ili <code>[R]</code> na pojedinoj karti) i pri ponovnom otvaranju stranice.</p>
 			<p>Kao i prekidači mreže, ova postavka <strong>ne putuje</strong> u predlošku ni u poveznici — vrijedi samo u ovom pregledniku.</p>
@@ -1360,7 +1362,8 @@
 			<li><strong>Klik na prozor</strong> podiže ga iznad ostalih. Ako je interaktivna karta prekrivena drugim prozorom, prvi klik podiže prozor, a tek sljedeći radi s kartom — kao kod prozora u operativnom sustavu. Karta koju ništa ne prekriva prima klik odmah.</li>
 			</ul>
 			<p>Prozori se međusobno privlače: kad se rub približi rubu drugog prozora, sam sjedne na njega. Tako se lako slaže uredna mreža bez mjerkanja.</p>
-			<p><strong>Zajednički rub.</strong> Kad dva prozora stoje jedan uz drugi i dodiruju se cijelom dužinom — jednako visoki jedan pored drugog, ili jednako široki jedan ispod drugog — taj rub je <strong>šav</strong>. Povlačenjem šava se ne mijenja jedan prozor nego oba: koliko jedan dobije, toliko drugi ustupi, a par zadrži isti prostor i ostatak razmještaja se ne pomiče. Svejedno je za koji se od dva prozora rub uhvati.</p>
+			<p><strong>Zajednički rub.</strong> Kad dva prozora stoje jedan uz drugi i dodiruju se cijelom dužinom — jednako visoki jedan pored drugog, ili jednako široki jedan ispod drugog — taj rub je <strong>šav</strong>. Povlačenjem šava se ne mijenja jedan prozor nego oba: koliko jedan dobije, toliko drugi ustupi, a par zadrži isti prostor i ostatak razmještaja se ne pomiče. Svejedno je za koji se od dva prozora rub uhvati. Šav se privlači rubovima ostalih prozora kao i obični rub, a uz uključeno <em>Poravnaj uz mrežu</em> sjedne na mrežu kad se pusti.</p>
+			<p><strong>Samo jedan prozor.</strong> Držite <kbd>Ctrl</kbd> dok hvatate šav i pomiče se rub samo jednog prozora — onoga s čije je strane šava pokazivač. Uhvatite rub malo unutar prozora koji želite mijenjati; drugi ostaje kakav jest.</p>
 			<p>Šav radi i za spojene i za nespojene prozore. Kod grupe vrijedi za <strong>unutarnje</strong> rubove; vanjski rub grupe i dalje razvlači cijelu grupu. Prozori se pritom oslobode omjera, jer se inače širina i visina ne mogu mijenjati odvojeno i šav bi se raspao usred povlačenja.</p>
 			<p>Rub koji nije zajednički cijelom dužinom nije šav i ponaša se kao i prije — mijenja samo svoj prozor.</p>
 			<p>Rub se povlači slobodno: širina i visina idu svaka za svojim. Karta se tada uklapa unutar okvira, s neoštrom kopijom slike kao podlogom. <strong>Držite Shift</strong> i prozor zadržava omjer slike, pa mu se mijenja samo širina — kao u programima za slike. Karta ga prati do koje god širine ga povučete; veća od svoje izvorne veličine postaje mekša, kao i svaka uvećana slika.</p>
@@ -1384,7 +1387,7 @@
 			<p>Uključuje se u dijalogu <em>Karte</em>, gumbom <strong>Nadzorna ploča</strong>, i primjenjuje zajedno s popisom pritiskom na <em>Primijeni</em>. Isključuje se isto tako, ili gumbom <em>Vrati sve</em>.</p>
 			<p>Na ploči:</p>
 			<ul>
-			<li>Gumb <strong>Posloži</strong> u dijalogu (ili <code>[A]</code> na pločici, ili tipka <kbd>A</kbd>) razmjesti sve karte u pravilnu mrežu, jednakih veličina i bez razmaka. Broj stupaca i redova se odabire prema broju karata i obliku ekrana — četiri karte daju 2x2, šest 3x2, dvanaest 4x3. Isto se dogodi i pri prvom ulasku na ploču.</li>
+			<li>Gumb <strong>Posloži</strong> u dijalogu (ili <code>[A]</code> na pločici, ili tipka <kbd>A</kbd>) razmjesti sve karte u pravilnu mrežu, jednakih veličina i bez razmaka. Broj stupaca i redova se odabire tako da karte budu što veće, prema broju karata, njihovom obliku i obliku ekrana — četiri karte daju 2x2, šest 3x2, deset 4x3 (s dva prazna mjesta), dvanaest 4x3. Isto se dogodi i pri prvom ulasku na ploču.</li>
 			<li>Karte se pritom <strong>oslobode omjera</strong> i uklope u svoje polje, s neoštrom kopijom slike kao podlogom. Drukčije i ne može: uz jednaku širinu svaka bi karta imala svoju visinu i nijedan red se ne bi poklapao. Dvoklik na naslovnu traku vraća pojedinu kartu u njen omjer.</li>
 			<li>Gumb <code>[=]</code> u traci postaje <code>[x]</code> i <strong>miče kartu s popisa</strong> — na ploči nema stranice u koju bi se vratila.</li>
 			<li>Karta dodana u popis pojavi se na ploči na prvom slobodnom mjestu.</li>

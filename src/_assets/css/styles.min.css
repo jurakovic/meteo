@@ -121,11 +121,13 @@ justify-content:space-between;align-items:center;padding:2px 0}.map-settings .ms
 content:"Nema odabranih karata"}.map-settings .ms-available:empty::before{content:"Sve su karte odabrane"}
 .map-settings .ms-available .ms-handle{display:none}.map-settings .ms-sort{display:flex;align-items:baseline;gap:14px;padding:6px 0;margin:
 6px 0 0;border-top:1px solid #485871}.map-settings .ms-sort a{cursor:pointer;user-select:none;text-decoration:none}
-.map-settings .ms-sort a.active{color:#ff9800}.map-settings .ms-find{position:relative;display:flex;padding:0 0 6px}
+.map-settings .ms-sort a.active{color:#ff9800}.map-settings .ms-find{position:relative;display:flex;margin-bottom:6px}
 .map-settings .ms-find-input{flex:1;min-width:0;padding:4px 22px 4px 6px;border:1px solid #485871;border-radius:3px;background-color:#1b2735
 ;color:inherit;font-family:inherit;font-size:inherit}.map-settings .ms-find-input:focus{outline:0;border-color:#ff9800}
-.map-settings .ms-find-clear{position:absolute;top:50%;right:6px;transform:translateY(-50%);display:none;cursor:pointer;user-select:none;
-line-height:1;text-decoration:none;opacity:.7}.map-settings .ms-find.ms-find-set .ms-find-clear{display:block}
+.map-settings .ms-find-clear{position:absolute;top:50%;right:6px;transform:translateY(-50%);display:none;width:8px;height:8px;cursor:pointer
+;user-select:none;font-size:0;opacity:.7}.map-settings .ms-find-clear::after,.map-settings .ms-find-clear::before{content:'';position:
+absolute;top:3.25px;left:-1px;width:10px;height:1.5px;background-color:currentColor;transform:rotate(45deg)}
+.map-settings .ms-find-clear::after{transform:rotate(-45deg)}.map-settings .ms-find.ms-find-set .ms-find-clear{display:block}
 .map-settings .ms-find-clear:hover{opacity:1}.map-settings .ms-available .ms-item.ms-filtered{display:none}
 .map-settings .ms-available.ms-no-hits::after{content:"Nema karte za taj pojam";display:block;padding:2px 0;font-style:italic;opacity:.6}
 .map-settings .ms-mode{display:flex;align-items:center;gap:14px;margin:10px 0 4px;padding:8px 10px;background-color:#1a2536;border:1px solid

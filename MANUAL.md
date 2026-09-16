@@ -31,7 +31,7 @@ Svaka karta ima naslovnu traku s imenom izvora. Ime je ujedno i poveznica na izv
 
 ## Automatsko osvježavanje
 
-Slike zastare na stranici koja je dugo otvorena. U dijalogu *Karte* je red **Osvježavaj svakih** s kvadratićem i razmakom — 1, 2, 5, 10, 15, 30 ili 60 minuta. Isključeno je dok se ne uključi, a početni razmak je 5 minuta.
+Slike zastare na stranici koja je dugo otvorena. U dijalogu *Karte* je red **Osvježavaj svakih** s kvadratićem i razmakom — 5, 10, 15, 30 ili 60 minuta. Isključeno je dok se ne uključi, a početni razmak je 5 minuta.
 
 Osvježavaju se slike, nizovi slika, videa i jednostavne karte — sve ono što ima gumb `[R]`. Interaktivne karte (Windy, Blitzortung i slične) se preskaču: one same dohvaćaju najnovije podatke, a ponovno učitavanje bi im samo poništilo pomak i zumiranje.
 
@@ -127,7 +127,9 @@ Kopije su dio razmještaja — spremaju se u predložak i putuju u poveznici za 
 
 Prozori se međusobno privlače: kad se rub približi rubu drugog prozora, sam sjedne na njega. Tako se lako slaže uredna mreža bez mjerkanja.
 
-**Zajednički rub.** Kad dva prozora stoje jedan uz drugi i dodiruju se cijelom dužinom — jednako visoki jedan pored drugog, ili jednako široki jedan ispod drugog — taj rub je **šav**. Povlačenjem šava se ne mijenja jedan prozor nego oba: koliko jedan dobije, toliko drugi ustupi, a par zadrži isti prostor i ostatak razmještaja se ne pomiče. Svejedno je za koji se od dva prozora rub uhvati.
+**Zajednički rub.** Kad dva prozora stoje jedan uz drugi i dodiruju se cijelom dužinom — jednako visoki jedan pored drugog, ili jednako široki jedan ispod drugog — taj rub je **šav**. Povlačenjem šava se ne mijenja jedan prozor nego oba: koliko jedan dobije, toliko drugi ustupi, a par zadrži isti prostor i ostatak razmještaja se ne pomiče. Svejedno je za koji se od dva prozora rub uhvati. Šav se privlači rubovima ostalih prozora kao i obični rub, a uz uključeno *Poravnaj uz mrežu* sjedne na mrežu kad se pusti.
+
+**Samo jedan prozor.** Držite <kbd>Ctrl</kbd> dok hvatate šav i pomiče se rub samo jednog prozora — onoga s čije je strane šava pokazivač. Uhvatite rub malo unutar prozora koji želite mijenjati; drugi ostaje kakav jest.
 
 Šav radi i za spojene i za nespojene prozore. Kod grupe vrijedi za **unutarnje** rubove; vanjski rub grupe i dalje razvlači cijelu grupu. Prozori se pritom oslobode omjera, jer se inače širina i visina ne mogu mijenjati odvojeno i šav bi se raspao usred povlačenja.
 
@@ -165,7 +167,7 @@ Uključuje se u dijalogu *Karte*, gumbom **Nadzorna ploča**, i primjenjuje zaje
 
 Na ploči:
 
-- Gumb **Posloži** u dijalogu (ili `[A]` na pločici, ili tipka <kbd>A</kbd>) razmjesti sve karte u pravilnu mrežu, jednakih veličina i bez razmaka. Broj stupaca i redova se odabire prema broju karata i obliku ekrana — četiri karte daju 2x2, šest 3x2, dvanaest 4x3. Isto se dogodi i pri prvom ulasku na ploču.
+- Gumb **Posloži** u dijalogu (ili `[A]` na pločici, ili tipka <kbd>A</kbd>) razmjesti sve karte u pravilnu mrežu, jednakih veličina i bez razmaka. Broj stupaca i redova se odabire tako da karte budu što veće, prema broju karata, njihovom obliku i obliku ekrana — četiri karte daju 2x2, šest 3x2, deset 4x3 (s dva prazna mjesta), dvanaest 4x3. Isto se dogodi i pri prvom ulasku na ploču.
 - Karte se pritom **oslobode omjera** i uklope u svoje polje, s neoštrom kopijom slike kao podlogom. Drukčije i ne može: uz jednaku širinu svaka bi karta imala svoju visinu i nijedan red se ne bi poklapao. Dvoklik na naslovnu traku vraća pojedinu kartu u njen omjer.
 - Gumb `[=]` u traci postaje `[x]` i **miče kartu s popisa** — na ploči nema stranice u koju bi se vratila.
 - Karta dodana u popis pojavi se na ploči na prvom slobodnom mjestu.
