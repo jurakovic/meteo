@@ -56,7 +56,7 @@ Ispod reda za poredak je **okvir za traženje**. Upisano se traži i po imenu i 
 
 Traženje se tiče samo donjeg popisa — gornji je redoslijed prikaza i u njemu se karte povlače, što se ne bi moglo kad bi neke bile sakrivene. Upisani pojam ostaje i nakon odabira karte ili drugog predloška; briše se znakom `×` u okviru ili tipkom <kbd>Esc</kbd>, koja praznim okvirom zatvara dijalog.
 
-Ništa se ne primjenjuje dok se ne pritisne **Primijeni**. Zatvaranje dijaloga bez toga poništava promjene.
+Ništa se ne primjenjuje dok se ne pritisne **Primijeni** ili tipka <kbd>Enter</kbd>. Zatvaranje dijaloga bez toga poništava promjene.
 
 > Ako se dijalog zatvori a stranica ostane prazna, na njoj piše *Nema odabranih karata*. To znači da je popis prazan — otvorite *Karte* i odaberite barem jednu.
 
@@ -207,6 +207,7 @@ Na [nadzornoj ploči](#nadzorna-ploča) karta uzme cijeli ekran, osim sa strane 
 | Tipka | Radnja |
 |---|---|
 | <kbd>K</kbd> | otvara i zatvara dijalog *Karte* |
+| <kbd>Enter</kbd> | u dijalogu *Karte* primjenjuje promjene (kao *Primijeni*) |
 | <kbd>H</kbd> | otvara i zatvara *Upute* |
 | <kbd>Esc</kbd> | zatvara dijalog; ako je zatvoren, izlazi iz cijelog zaslona |
 | <kbd>R</kbd> | ponovno učitava sve karte |

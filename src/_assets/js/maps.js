@@ -1258,6 +1258,24 @@ document.addEventListener('keydown', (e) => {
 	toggleMapSettings();
 });
 
+// Enter is Primijeni while the picker is up, wherever the focus is in it — a
+// chip, a checkbox, a button just pressed. Captured and kept from the focused
+// button, which would otherwise take it as its own click: a press on Nadzorna
+// ploča followed by Enter would tick the mode back off instead of applying it
+// (Space still presses a button). A text field keeps its own Enter (the preset
+// name editors), and so does the interval list
+document.addEventListener('keydown', (e) => {
+	if (e.key !== 'Enter' || e.altKey || e.ctrlKey || e.metaKey || e.shiftKey || e.isComposing) return;
+	const panel = document.getElementById('mapSettings');
+	if (!panel || panel.hidden) return;
+	if (e.target.matches && e.target.matches('input:not([type="radio"]):not([type="checkbox"]), textarea, select, [contenteditable]')) return;
+	const apply = panel.querySelector('.ms-apply');
+	if (!apply) return;
+	e.preventDefault();
+	e.stopPropagation();
+	apply.click();
+}, true);
+
 // the page's Karte button wears the picker's state as an arrow
 document.addEventListener('dialog-toggled', (e) => {
 	if (e.detail.panel.id !== 'mapSettings') return;
@@ -2234,7 +2252,7 @@ function buildMapSettings(panel) {
 
 	renderManage();
 
-	const applyBtn = el('button', { type: 'button', class: 'btn', text: 'Primijeni' });
+	const applyBtn = el('button', { type: 'button', class: 'btn ms-apply', text: 'Primijeni', title: 'Primijeni (Enter)' });
 	applyBtn.addEventListener('click', () => {
 		const prefs = readPanelPrefs();
 		const layout = layoutForPrefs(prefs);
