@@ -1311,12 +1311,17 @@ function saveMsTab(tab) {
 	} catch (e) { /* storage disabled or full — the tab still moves this session */ }
 }
 
-// the width its name takes is the narrowest it goes: measured with the width unset (0 while it is not shown)
+// the width its name takes is the narrowest it goes: measured with the width
+// unset (0 while it is not shown), and as a sized tab, without the room the
+// name is given while nobody has sized it
 function msTabMinWidth(tab) {
 	const width = tab.style.width;
+	const sized = tab.classList.contains('ms-tab-sized');
 	tab.style.width = '';
-	const min = tab.offsetWidth;
+	tab.classList.add('ms-tab-sized');
+	const min = Math.ceil(tab.getBoundingClientRect().width); // up: offsetWidth rounds, and a fraction short ellipsises the name
 	tab.style.width = width;
+	tab.classList.toggle('ms-tab-sized', sized);
 	return min;
 }
 
@@ -1342,6 +1347,7 @@ function placeMsTab(tab, left, width) {
 	tab.style.width = `${Math.round(width)}px`;
 	tab.style.left = `${Math.round(left)}px`;
 	tab.style.transform = 'none'; // off the centring
+	tab.classList.add('ms-tab-sized'); // the width is this one now, not the name's plus its room
 }
 
 function applyStoredMsTab() {
@@ -1352,7 +1358,7 @@ function applyStoredMsTab() {
 
 // On a board the tab is the only chrome there is, so it carries the same glyph
 // cluster a widget's title bar does, and for the same reason: the common moves
-// without opening the dialog. [R] reloads every widget's map (popout.js), [G]
+// without opening the dialog, and on the board the way back to the landing page. [R] reloads every widget's map (popout.js), [G]
 // and [S] are the board's two grid switches — the dialog's own, through
 // setGridPrefs, so the three places cannot disagree. Each glyph is the key that
 // does the same thing, and says so in its title, the way the tab itself does.
@@ -1370,6 +1376,19 @@ function buildMsTabCluster(tab) {
 	snap.addEventListener('click', () => setGridPrefs(isGridShown(), !isGridSnapped()));
 	const count = el('span', { class: 'ms-tab-count', title: 'Do sljedećeg osvježavanja' });
 	tab.appendChild(el('span', { class: 'ms-tab-cluster' }, [reload, arrange, grid, snap, count]));
+	// and on the far side the way home, which the board hides with the rest of
+	// the page. Resolved off this page's own address rather than written as /,
+	// since the built site lives under /meteo/; Ctrl or the middle button opens
+	// it beside the board, as a link would
+	const home = el('a', { class: 'ms-tab-btn', text: '[⌂]', title: 'Početna' });
+	const homeUrl = () => new URL('../', window.location.href).href;
+	home.addEventListener('click', (e) => {
+		if (e.ctrlKey || e.metaKey) window.open(homeUrl(), '_blank');
+		else window.location.href = homeUrl();
+	});
+	home.addEventListener('mousedown', (e) => { if (e.button === 1) e.preventDefault(); }); // no autoscroll
+	home.addEventListener('auxclick', (e) => { if (e.button === 1) window.open(homeUrl(), '_blank'); });
+	tab.prepend(el('span', { class: 'ms-tab-home' }, [home]));
 	syncMsTab();
 }
 

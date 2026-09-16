@@ -172,7 +172,7 @@ Na ploči:
 - Gumb `[=]` u traci postaje `[x]` i **miče kartu s popisa** — na ploči nema stranice u koju bi se vratila.
 - Karta dodana u popis pojavi se na ploči na prvom slobodnom mjestu.
 - Bočnih stupaca nema; stupac je traka koju stranica ustupa, a stranice ovdje nema.
-- Na vrhu ekrana visi narančasta pločica **Karte**. Ona je jedini put natrag do dijaloga jer je gumb na stranici sakriven. Pločica se povlači lijevo-desno i razvlači za rubove, najviše do polovice širine ekrana. Blijeda je dok se ne treba — pune boje postaje pod mišem i dok je dijalog otvoren. Samo ovdje uz ime nosi i gumbe `[R]`, `[G]` i `[S]`.
+- Na vrhu ekrana visi narančasta pločica **Karte**. Ona je jedini put natrag do dijaloga jer je gumb na stranici sakriven. Pločica se povlači lijevo-desno i razvlači za rubove, najviše do polovice širine ekrana. Blijeda je dok se ne treba — pune boje postaje pod mišem i dok je dijalog otvoren. Samo ovdje uz ime nosi i gumbe `[R]`, `[A]`, `[G]` i `[S]`, a na lijevom kraju `[⌂]`, koji vodi na početnu stranicu (s <kbd>Ctrl</kbd> ili srednjim klikom u novoj kartici).
 
 Ploča se sprema kao i svaki drugi prikaz — u predložak ili u poveznicu za dijeljenje — pa se može imati više različitih ploča.
 

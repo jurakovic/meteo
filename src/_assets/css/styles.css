@@ -1212,6 +1212,36 @@ body.fs-lock {
 		text-align: center;
 	}
 
+	/* room either side of the name until the tab is sized by hand, so it starts
+	   out wider than the least it can be; msTabMinWidth measures the floor as a
+	   sized tab, without this */
+	.ms-tab:not(.ms-tab-sized) .ms-tab-name {
+		padding: 0 24px;
+	}
+
+	/* the way home, at the far left and on the board alone: beside the columns
+	   the page is only hidden, a double-click on an edge away. Divided from the
+	   name as the cluster is, mirrored */
+	.ms-tab-home {
+		flex: 0 0 auto;
+		display: none;
+		gap: 8px;
+	}
+
+	body.dashboard .ms-tab-home {
+		display: inline-flex;
+	}
+
+		.ms-tab-home::after {
+			content: '|';
+			opacity: 0.55;
+		}
+
+		.ms-tab-home a {
+			text-decoration: none;
+			cursor: pointer;
+		}
+
 	/* the title bars' cluster, on the tab — and the board's alone. There the tab
 	   is the only chrome there is, so it carries the moves a title bar would;
 	   beside the columns the page is hidden but everything else is where it was,

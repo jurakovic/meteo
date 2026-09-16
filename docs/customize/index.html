@@ -128,8 +128,10 @@
 		12px;border:none;border-radius:0 0 6px 6px;font-family:inherit;font-size:13px;color:#fff;background-color:#ff9800;box-shadow:0 2px 8px
 		rgba(0,0,0,.4);cursor:pointer;opacity:.55;transition:opacity .15s ease;box-sizing:border-box;align-items:center;gap:10px;white-space:nowrap;
 		overflow:hidden;touch-action:none;user-select:none}.ms-tab:hover{background-color:#ffa726}.ms-tab:hover,body.ms-open .ms-tab{opacity:1}
-		.ms-tab-name{flex:1 1 auto;min-width:0;overflow:hidden;text-overflow:ellipsis;text-align:center}.ms-tab-cluster{flex:0 0 auto;display:none;
-		gap:8px}body.dashboard .ms-tab-cluster,body.refresh-on .ms-tab-cluster{display:inline-flex}.ms-tab-cluster .ms-tab-board{display:none}
+		.ms-tab-name{flex:1 1 auto;min-width:0;overflow:hidden;text-overflow:ellipsis;text-align:center}.ms-tab:not(.ms-tab-sized) .ms-tab-name{
+		padding:0 24px}.ms-tab-home{flex:0 0 auto;display:none;gap:8px}body.dashboard .ms-tab-home{display:inline-flex}.ms-tab-home::after{content:
+		'|';opacity:.55}.ms-tab-home a{text-decoration:none;cursor:pointer}.ms-tab-cluster{flex:0 0 auto;display:none;gap:8px}
+		body.dashboard .ms-tab-cluster,body.refresh-on .ms-tab-cluster{display:inline-flex}.ms-tab-cluster .ms-tab-board{display:none}
 		body.dashboard .ms-tab-cluster .ms-tab-board{display:inline}.ms-tab-count{min-width:4ch;text-align:right;font-variant-numeric:tabular-nums}
 		body:not(.refresh-on) .ms-tab-count{display:none}.ms-tab-cluster::before{content:'|';opacity:.55}.ms-tab-cluster a{text-decoration:none;
 		cursor:pointer}.ms-tab-cluster a.ms-tab-off{opacity:.55}body.dashboard .ms-tab,body.refresh-on .ms-tab,body.snap-full .ms-tab{display:flex}
@@ -894,18 +896,23 @@
 		;const MS_TAB_KEY="msTab",MS_TAB_EDGE=8;let msTabMoved=!1;function loadMsTab(){try{const e=JSON.parse(localStorage.getItem("msTab"))
 		;return e&&"object"==typeof e&&Number.isFinite(e.left)&&Number.isFinite(e.width)?e:null}catch{return null}}function saveMsTab(e){
 		const t=e.getBoundingClientRect();try{localStorage.setItem("msTab",JSON.stringify({left:roundFraction(t.left/viewportWidth()),
-		width:Math.round(t.width)}))}catch(e){}}function msTabMinWidth(e){const t=e.style.width;e.style.width="";const a=e.offsetWidth
-		;return e.style.width=t,a}function msTabMaxWidth(){return viewportWidth()/2}function msTabWidth(e,t){const a=msTabMinWidth(e)
+		width:Math.round(t.width)}))}catch(e){}}function msTabMinWidth(e){const t=e.style.width,a=e.classList.contains("ms-tab-sized")
+		;e.style.width="",e.classList.add("ms-tab-sized");const r=Math.ceil(e.getBoundingClientRect().width);return e.style.width=t,
+		e.classList.toggle("ms-tab-sized",a),r}function msTabMaxWidth(){return viewportWidth()/2}function msTabWidth(e,t){const a=msTabMinWidth(e)
 		;return clamp(t,a,Math.max(a,msTabMaxWidth()))}function placeMsTab(e,t,a){a=msTabWidth(e,a),t=clamp(t,0,Math.max(0,viewportWidth()-a)),
-		e.style.width=`${Math.round(a)}px`,e.style.left=`${Math.round(t)}px`,e.style.transform="none"}function applyStoredMsTab(){
-		const e=document.querySelector(".ms-tab"),t=loadMsTab();e&&t&&placeMsTab(e,t.left*viewportWidth(),t.width)}function buildMsTabCluster(e){
-		const t=el("a",{class:"ms-tab-btn",text:"[R]",title:"Osvježi sve karte (R)"});t.addEventListener("click",()=>reloadAllMaps())
-		;const a=el("a",{class:"ms-tab-btn ms-tab-board",text:"[A]",title:"Posloži u mrežu (A)"});a.addEventListener("click",()=>arrangeBoard())
-		;const r=el("a",{class:"ms-tab-btn ms-tab-board","data-grid":"show",text:"[G]",title:"Prikaži mrežu (G)"})
-		;r.addEventListener("click",()=>setGridPrefs(!isGridShown(),isGridSnapped()));const s=el("a",{class:"ms-tab-btn ms-tab-board",
-		"data-grid":"snap",text:"[S]",title:"Poravnaj uz mrežu (S)"});s.addEventListener("click",()=>setGridPrefs(isGridShown(),!isGridSnapped()))
-		;const n=el("span",{class:"ms-tab-count",title:"Do sljedećeg osvježavanja"});e.appendChild(el("span",{class:"ms-tab-cluster"},[t,a,r,s,n])),
-		syncMsTab()}function syncMsTab(){const e=document.querySelector(".ms-tab");if(!e)return
+		e.style.width=`${Math.round(a)}px`,e.style.left=`${Math.round(t)}px`,e.style.transform="none",e.classList.add("ms-tab-sized")}
+		function applyStoredMsTab(){const e=document.querySelector(".ms-tab"),t=loadMsTab();e&&t&&placeMsTab(e,t.left*viewportWidth(),t.width)}
+		function buildMsTabCluster(e){const t=el("a",{class:"ms-tab-btn",text:"[R]",title:"Osvježi sve karte (R)"})
+		;t.addEventListener("click",()=>reloadAllMaps());const a=el("a",{class:"ms-tab-btn ms-tab-board",text:"[A]",title:"Posloži u mrežu (A)"})
+		;a.addEventListener("click",()=>arrangeBoard());const r=el("a",{class:"ms-tab-btn ms-tab-board","data-grid":"show",text:"[G]",
+		title:"Prikaži mrežu (G)"});r.addEventListener("click",()=>setGridPrefs(!isGridShown(),isGridSnapped()));const s=el("a",{
+		class:"ms-tab-btn ms-tab-board","data-grid":"snap",text:"[S]",title:"Poravnaj uz mrežu (S)"})
+		;s.addEventListener("click",()=>setGridPrefs(isGridShown(),!isGridSnapped()));const n=el("span",{class:"ms-tab-count",
+		title:"Do sljedećeg osvježavanja"});e.appendChild(el("span",{class:"ms-tab-cluster"},[t,a,r,s,n]));const i=el("a",{class:"ms-tab-btn",
+		text:"[⌂]",title:"Početna"}),o=()=>new URL("../",window.location.href).href;i.addEventListener("click",e=>{
+		e.ctrlKey||e.metaKey?window.open(o(),"_blank"):window.location.href=o()}),i.addEventListener("mousedown",e=>{
+		1===e.button&&e.preventDefault()}),i.addEventListener("auxclick",e=>{1===e.button&&window.open(o(),"_blank")}),e.prepend(el("span",{
+		class:"ms-tab-home"},[i])),syncMsTab()}function syncMsTab(){const e=document.querySelector(".ms-tab");if(!e)return
 		;const t=e.querySelector('[data-grid="show"]'),a=e.querySelector('[data-grid="snap"]');t&&t.classList.toggle("ms-tab-off",!isGridShown()),
 		a&&a.classList.toggle("ms-tab-off",!isGridSnapped()),syncRefreshLabels()}function syncRefreshLabels(){
 		const e=isRefreshOn()?refreshLabel():"",t=document.querySelector(".ms-tab .ms-tab-count");t&&(t.textContent=e)
@@ -932,7 +939,7 @@
 		;[...a.children].forEach(a=>{const r=MAP_CATALOG.find(e=>e.id===a.getAttribute("data-map-id")),s=!r||function(e,t){
 		const a=foldText(`${e.name} ${e.category}`);return t.every(e=>a.includes(e))}(r,e);a.classList.toggle("ms-filtered",!s),s&&t++}),
 		m.classList.toggle("ms-find-set",e.length>0),a.classList.toggle("ms-no-hits",e.length>0&&0===t)}function h(){
-		e.querySelector('input[name="msPreset"][value="custom"]').checked=!0,P(),X()}function f(e,r){const s=el("input",{type:"checkbox"})
+		e.querySelector('input[name="msPreset"][value="custom"]').checked=!0,P(),X()}function w(e,r){const s=el("input",{type:"checkbox"})
 		;s.checked=r;const n=el("span",{class:"ms-handle",text:"≡",title:"Povuci za premještanje"}),o=el("div",{class:"ms-item","data-map-id":e.id
 		},[el("label",{},[s,el("span",{class:"ms-glyph",text:CATEGORY_GLYPHS[e.category]||""}),document.createTextNode(e.name)]),n])
 		;return s.addEventListener("change",()=>{s.checked?t.appendChild(o):(a.appendChild(o),i(),u()),h()}),function(e,a){
@@ -944,15 +951,15 @@
 		;const t=d.getBoundingClientRect();i=n<t.top+60?-8:n>t.bottom-60?8:0,l()},m=()=>{document.removeEventListener("pointermove",p),
 		document.removeEventListener("pointerup",m),document.removeEventListener("pointercancel",m),cancelAnimationFrame(o),
 		a.classList.remove("dragging"),a.nextElementSibling!==s&&h()};document.addEventListener("pointermove",p),
-		document.addEventListener("pointerup",m),document.addEventListener("pointercancel",m),o=requestAnimationFrame(c)})}(n,o),o}function w(e){
-		t.replaceChildren(),a.replaceChildren(),e.forEach(e=>{const a=MAP_CATALOG.find(t=>t.id===e);a&&t.appendChild(f(a,!0))}),
-		MAP_CATALOG.filter(t=>!e.includes(t.id)).forEach(e=>a.appendChild(f(e,!1))),i(),u()}c.addEventListener("input",u),
+		document.addEventListener("pointerup",m),document.addEventListener("pointercancel",m),o=requestAnimationFrame(c)})}(n,o),o}function f(e){
+		t.replaceChildren(),a.replaceChildren(),e.forEach(e=>{const a=MAP_CATALOG.find(t=>t.id===e);a&&t.appendChild(w(a,!0))}),
+		MAP_CATALOG.filter(t=>!e.includes(t.id)).forEach(e=>a.appendChild(w(e,!1))),i(),u()}c.addEventListener("input",u),
 		c.addEventListener("keydown",t=>{"Escape"===t.key&&(t.preventDefault(),c.value?(c.value="",u()):setMapSettingsVisible(e,!1))}),
 		p.addEventListener("click",()=>{c.value="",u(),c.focus()});const g=el("div",{class:"ms-presets"})
 		;let v="custom"===activePresetId()?null:activePresetId(),b=isDashboardView(),y=isGridShown(),k=isGridSnapped();function S(e){
 		g.replaceChildren();const t=[...visiblePresets(),{id:"custom",name:"Prilagođeno"}];t.some(t=>t.id===e)||(e="custom"),t.forEach(t=>{
 		const a=el("input",{type:"radio",name:"msPreset",value:t.id});a.checked=t.id===e,a.addEventListener("change",()=>{
-		"custom"!==t.id&&(w(presetMapIds(t.id)),H(isBoardPreset(t))),v="custom"===t.id?null:t.id,P(),X()})
+		"custom"!==t.id&&(f(presetMapIds(t.id)),H(isBoardPreset(t))),v="custom"===t.id?null:t.id,P(),X()})
 		;const r="ms-chip"+(isUserPresetId(t.id)?" ms-user":"")+(isBoardPreset(t)?" ms-board":"");g.appendChild(el("label",{},[a,el("span",{class:r,
 		text:t.name,title:isBoardPreset(t)?"Nadzorna ploča":void 0})]))}),g.appendChild(el("span",{class:"ms-fill"})),P()}function P(){
 		g.querySelectorAll(".ms-origin").forEach(e=>e.classList.remove("ms-origin"));const e=allPresets().find(e=>e.id===v)
@@ -961,27 +968,27 @@
 		;return t?t.value:"zadano"}function x(){return[...t.children].map(e=>e.getAttribute("data-map-id"))}function A(){const e=E()
 		;return"custom"===e?{preset:"custom",maps:x()}:{preset:e}}function M(e,t){if(!t)return e&&e.dashboard?null:e;const a=Object.assign({},e)
 		;return a.dashboard=!0,a}function z(e){const t="custom"===e.preset?currentSnapLayout():(userPresets.find(t=>t.id===e.preset)||{}).layout
-		;return sanitizeSnapLayout(M(t,b),prefsMapIds(e))}function R(){return sanitizeSnapLayout(M(currentSnapLayout(),b),x())}w(resolveMapIds()),
-		S(activePresetId());const _=el("div",{class:"ms-layout"});const L=el("div",{class:"ms-mode"});function T(e,t,a){const r=el("input",{
+		;return sanitizeSnapLayout(M(t,b),prefsMapIds(e))}function L(){return sanitizeSnapLayout(M(currentSnapLayout(),b),x())}f(resolveMapIds()),
+		S(activePresetId());const R=el("div",{class:"ms-layout"});const _=el("div",{class:"ms-mode"});function C(e,t,a){const r=el("input",{
 		type:"checkbox"});return r.checked=t,r.disabled=!b,r.addEventListener("change",()=>a(r.checked)),el("label",{
-		class:"ms-grid"+(b?"":" ms-off")},[r,el("span",{text:e})])}function C(){L.replaceChildren(),L.hidden=!POPOUT_MQ.matches,
-		L.classList.toggle("ms-on",b);const e=el("button",{type:"button",class:"btn","aria-pressed":String(b)
+		class:"ms-grid"+(b?"":" ms-off")},[r,el("span",{text:e})])}function T(){_.replaceChildren(),_.hidden=!POPOUT_MQ.matches,
+		_.classList.toggle("ms-on",b);const e=el("button",{type:"button",class:"btn","aria-pressed":String(b)
 		},[document.createTextNode("Nadzorna ploča "),el("span",{class:"beta",text:"beta"})]);e.addEventListener("click",()=>H(!b))
 		;const t=el("button",{type:"button",class:"btn ms-arrange",title:"Posloži u mrežu (A)"},[document.createTextNode("Posloži")])
-		;t.disabled=!isDashboard(),t.addEventListener("click",()=>arrangeBoard()),L.append(e,T("Prikaži mrežu",y,e=>{y=e,setGridPrefs(y,k)
-		}),T("Poravnaj uz mrežu",k,e=>{k=e,setGridPrefs(y,k)}),t)}C();const j=el("div",{class:"ms-refresh"});function I(){j.replaceChildren(),
+		;t.disabled=!isDashboard(),t.addEventListener("click",()=>arrangeBoard()),_.append(e,C("Prikaži mrežu",y,e=>{y=e,setGridPrefs(y,k)
+		}),C("Poravnaj uz mrežu",k,e=>{k=e,setGridPrefs(y,k)}),t)}T();const j=el("div",{class:"ms-refresh"});function I(){j.replaceChildren(),
 		j.classList.toggle("ms-on",isRefreshOn());const e=el("select",{class:"ms-refresh-every","aria-label":"Razmak osvježavanja"})
 		;REFRESH_CHOICES.forEach(t=>{const a=el("option",{value:String(t),text:`${t} min`});t===refreshEveryMinutes()&&(a.selected=!0),
 		e.appendChild(a)});const t=el("input",{type:"checkbox"});t.checked=isRefreshOn();const a=()=>setRefreshPrefs(t.checked,Number(e.value))
 		;t.addEventListener("change",a),e.addEventListener("change",a);const r=isRefreshOn()?refreshLabel():"";j.append(el("label",{},[t,el("span",{
-		text:"Osvježavaj svakih"})]),e,el("span",{class:"ms-refresh-left",text:r?`još ${r}`:""}))}function H(e){b=e,C(),D(),X()}function D(){
-		_.replaceChildren();const e=function(){const e=currentSnapLayout()||{},t=[];return e.left&&t.push(`lijevo ${e.left.panes.length}`),
+		text:"Osvježavaj svakih"})]),e,el("span",{class:"ms-refresh-left",text:r?`još ${r}`:""}))}function H(e){b=e,T(),D(),X()}function D(){
+		R.replaceChildren();const e=function(){const e=currentSnapLayout()||{},t=[];return e.left&&t.push(`lijevo ${e.left.panes.length}`),
 		e.right&&t.push(`desno ${e.right.panes.length}`),e.floating&&t.push(`u prozoru ${e.floating.length}`),t}()
-		;if(_.hidden=isDashboard()||!e.length,_.hidden)return;const t=el("a",{text:"Vrati sve"});t.addEventListener("click",dockAllPopouts),
-		_.append(el("span",{text:`Izdvojene karte: ${e.join(", ")}`}),t)}I(),e._onRefreshChange=I,e._onGridChange=()=>{y=isGridShown(),
-		k=isGridSnapped(),C()},D(),e._onLayoutChange=()=>{C(),D(),X()};const N=el("div",{class:"ms-manage"});let O=!1;const V=el("input",{
+		;if(R.hidden=isDashboard()||!e.length,R.hidden)return;const t=el("a",{text:"Vrati sve"});t.addEventListener("click",dockAllPopouts),
+		R.append(el("span",{text:`Izdvojene karte: ${e.join(", ")}`}),t)}I(),e._onRefreshChange=I,e._onGridChange=()=>{y=isGridShown(),
+		k=isGridSnapped(),T()},D(),e._onLayoutChange=()=>{T(),D(),X()};const N=el("div",{class:"ms-manage"});let O=!1;const V=el("input",{
 		type:"text",class:"ms-name",maxlength:String(40),placeholder:"Naziv predloška"}),B=el("button",{type:"button",class:"btn",text:"Spremi"})
-		;function U(e){const t=storeUserPreset(e,x(),R());V.value="",O=!1,v=t.id,S(t.id),X()}B.addEventListener("click",()=>{
+		;function U(e){const t=storeUserPreset(e,x(),L());V.value="",O=!1,v=t.id,S(t.id),X()}B.addEventListener("click",()=>{
 		const e=cleanPresetName(V.value);e?U(e):V.focus()}),V.addEventListener("keydown",e=>{"Enter"===e.key?(e.preventDefault(),
 		B.click()):"Escape"===e.key&&(O=!1,V.value="",X())});let F=null;const W=el("input",{type:"text",class:"ms-name ms-rename",
 		maxlength:String(40)});let K=!1;function G(){const e=userPresets.find(e=>e.id===F);if(!e)return
@@ -990,9 +997,9 @@
 		},e.map(e=>e||el("span")))}function Q(e){if(e.id===F)return function(){const e=el("a",{text:"Potvrdi"}),t=el("a",{text:"Odustani"})
 		;return e.addEventListener("click",G),t.addEventListener("click",Z),el("div",{class:"ms-manage-item"},[W,q([null,e,t])])}();const t=el("a",{
 		text:"Preimenuj"}),a=el("a",{text:"Obriši"});let r;!function(e){
-		return isUserPresetId(e.id)&&e.id===v&&(!sameMapIds(e.maps,x())||!sameSnapLayout(e.layout,R()))}(e)?r=function(e){const t=el("a",{
+		return isUserPresetId(e.id)&&e.id===v&&(!sameMapIds(e.maps,x())||!sameSnapLayout(e.layout,L()))}(e)?r=function(e){const t=el("a",{
 		text:"Podijeli"});return t.addEventListener("click",()=>{copyMapViewLink(e(),()=>flashLabel(t,"Kopirano!","Podijeli"))}),t
-		}(()=>presetSharePrefs(e)):(r=el("a",{text:"Ažuriraj"}),r.addEventListener("click",()=>{storeUserPreset(e.name,x(),R()),S(e.id),X()}))
+		}(()=>presetSharePrefs(e)):(r=el("a",{text:"Ažuriraj"}),r.addEventListener("click",()=>{storeUserPreset(e.name,x(),L()),S(e.id),X()}))
 		;const s=el("div",{class:"ms-manage-item"},[el("span",{class:"ms-manage-name"+(isBoardPreset(e)?" ms-board":""),text:e.name,
 		title:isBoardPreset(e)?"Nadzorna ploča":void 0}),q([r,t,a])]);t.addEventListener("click",()=>function(e){F=e.id,W.value=e.name,
 		W.classList.remove("invalid"),K=!0,X()}(e));let n=null;const i=()=>{clearTimeout(n),n=null,a.textContent="Obriši",
@@ -1019,7 +1026,7 @@
 		const e=A(),t=z(e),a=userPresets.find(t=>t.id===e.preset),r=a?presetSharePrefs(a):e;return t?r.layout=t:delete r.layout,r
 		}(),()=>flashLabel(J,"Kopirano!","Podijeli"))});const $=el("a",{text:"Zatvori",title:"Zatvori (Esc)"})
 		;$.addEventListener("click",()=>setMapSettingsVisible(e,!1)),e.appendChild(el("div",{class:"ms-head"},[el("span",{class:"ms-title",
-		text:"Karte"}),$])),e.appendChild(el("div",{class:"ms-body"},[g,L,j,_,t,el("div",{class:"ms-actions"},[Y,J]),l,m,a,N])),
+		text:"Karte"}),$])),e.appendChild(el("div",{class:"ms-body"},[g,_,j,R,t,el("div",{class:"ms-actions"},[Y,J]),l,m,a,N])),
 		buildDialogHandles(e)}"loading"===document.readyState?document.addEventListener("DOMContentLoaded",initMsTab):initMsTab(),
 		"loading"===document.readyState?document.addEventListener("DOMContentLoaded",renderMaps):renderMaps(),
 		document.addEventListener("DOMContentLoaded",applyStoredSnapLayout),
@@ -1590,7 +1597,7 @@
 			<li>Gumb <code>[=]</code> u traci postaje <code>[x]</code> i <strong>miče kartu s popisa</strong> — na ploči nema stranice u koju bi se vratila.</li>
 			<li>Karta dodana u popis pojavi se na ploči na prvom slobodnom mjestu.</li>
 			<li>Bočnih stupaca nema; stupac je traka koju stranica ustupa, a stranice ovdje nema.</li>
-			<li>Na vrhu ekrana visi narančasta pločica <strong>Karte</strong>. Ona je jedini put natrag do dijaloga jer je gumb na stranici sakriven. Pločica se povlači lijevo-desno i razvlači za rubove, najviše do polovice širine ekrana. Blijeda je dok se ne treba — pune boje postaje pod mišem i dok je dijalog otvoren. Samo ovdje uz ime nosi i gumbe <code>[R]</code>, <code>[G]</code> i <code>[S]</code>.</li>
+			<li>Na vrhu ekrana visi narančasta pločica <strong>Karte</strong>. Ona je jedini put natrag do dijaloga jer je gumb na stranici sakriven. Pločica se povlači lijevo-desno i razvlači za rubove, najviše do polovice širine ekrana. Blijeda je dok se ne treba — pune boje postaje pod mišem i dok je dijalog otvoren. Samo ovdje uz ime nosi i gumbe <code>[R]</code>, <code>[A]</code>, <code>[G]</code> i <code>[S]</code>, a na lijevom kraju <code>[⌂]</code>, koji vodi na početnu stranicu (s <kbd>Ctrl</kbd> ili srednjim klikom u novoj kartici).</li>
 			</ul>
 			<p>Ploča se sprema kao i svaki drugi prikaz — u predložak ili u poveznicu za dijeljenje — pa se može imati više različitih ploča.</p>
 			<h3 id="mreža">Mreža</h3>
