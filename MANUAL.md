@@ -35,7 +35,7 @@ Slike zastare na stranici koja je dugo otvorena. U dijalogu *Karte* je red **Osv
 
 Osvježavaju se slike, nizovi slika, videa i jednostavne karte — sve ono što ima gumb `[R]`. Interaktivne karte (Windy, Blitzortung i slične) se preskaču: one same dohvaćaju najnovije podatke, a ponovno učitavanje bi im samo poništilo pomak i zumiranje.
 
-**Odbrojavanje.** Dok je osvježavanje uključeno, na vrhu ekrana visi pločica s vremenom do sljedećeg osvježavanja. Tu je i gumb `[R]` koji osvježava odmah. Vrijeme se vraća na puni razmak pri svakom osvježavanju — automatskom, ručnom (`[R]`, tipka <kbd>R</kbd> ili `[R]` na pojedinoj karti) i pri ponovnom otvaranju stranice.
+**Odbrojavanje.** Dok je osvježavanje uključeno, na vrhu ekrana visi pločica s vremenom do sljedećeg osvježavanja. Tu je i gumb `[R]` koji osvježava odmah. Vrijeme se vraća na puni razmak pri svakom osvježavanju svih karata — automatskom, ručnom (`[R]` na pločici ili tipka <kbd>R</kbd>) i pri ponovnom otvaranju stranice. `[R]` na pojedinoj karti osvježi samo nju i ne dira odbrojavanje, osim ako je to jedina karta koja se osvježava.
 
 Kao i prekidači mreže, ova postavka **ne putuje** u predlošku ni u poveznici — vrijedi samo u ovom pregledniku.
 

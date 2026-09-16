@@ -160,8 +160,13 @@ function removeDuplicate(block) {
 function buildReloadButton() {
 	const btn = el('a', { class: 'rl-btn', text: '[R]', title: 'Ponovno učitaj kartu' });
 	btn.addEventListener('click', () => {
-		reloadMap(btn.closest('.map-block'));
-		restartRefresh(); // a refresh by hand is still a refresh: the interval runs from it
+		const block = btn.closest('.map-block');
+		reloadMap(block);
+		// the interval runs from the last time the maps were new, and one map
+		// made new is all of them only when it is the only one the clock sweeps;
+		// among several, the rest are as stale as they were
+		const others = reloadableBlocks().filter(other => other !== block);
+		if (!others.length) restartRefresh();
 	});
 	return btn;
 }
