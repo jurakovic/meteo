@@ -130,20 +130,20 @@
 		overflow:hidden;touch-action:none;user-select:none}.ms-tab:hover{background-color:#ffa726}.ms-tab:hover,body.ms-open .ms-tab{opacity:1}
 		.ms-tab-name{flex:1 1 auto;min-width:0;overflow:hidden;text-overflow:ellipsis;text-align:center}.ms-tab:not(.ms-tab-sized) .ms-tab-name{
 		padding:0 24px}.ms-tab-home{flex:0 0 auto;display:none;gap:8px}body.dashboard .ms-tab-home{display:inline-flex}.ms-tab-home::after{content:
-		'|';opacity:.55}.ms-tab-home a{text-decoration:none;cursor:pointer}.ms-tab-cluster{flex:0 0 auto;display:none;gap:8px}
-		body.dashboard .ms-tab-cluster,body.refresh-on .ms-tab-cluster{display:inline-flex}.ms-tab-cluster .ms-tab-board{display:none}
-		body.dashboard .ms-tab-cluster .ms-tab-board{display:inline}.ms-tab-count{min-width:4ch;text-align:right;font-variant-numeric:tabular-nums}
-		body:not(.refresh-on) .ms-tab-count{display:none}.ms-tab-cluster::before{content:'|';opacity:.55}.ms-tab-cluster a{text-decoration:none;
-		cursor:pointer}.ms-tab-cluster a.ms-tab-off{opacity:.55}body.dashboard .ms-tab,body.refresh-on .ms-tab,body.snap-full .ms-tab{display:flex}
-		.map-settings .ms-presets{display:flex;flex-wrap:wrap;gap:6px;padding-bottom:8px;margin-bottom:8px;border-bottom:1px solid #485871}
-		.map-settings .ms-presets label{position:relative;flex:1 1 auto}.map-settings .ms-presets .ms-fill{flex:1000 1 0;height:0}
-		.map-settings .ms-presets input{position:absolute;margin:0;opacity:0}.map-settings .ms-chip{display:block;position:relative;text-align:
-		center;padding:3px 10px;background-color:#2b3a52;border:1px solid #485871;user-select:none}.map-settings .ms-chip.ms-user::after{content:'';
-		position:absolute;top:0;right:0;border-top:7px solid #93a4bd;border-left:7px solid transparent}.map-settings .ms-chip.ms-board,
-		.map-settings .ms-manage-name.ms-board{border-left:3px solid #4a8de6}.map-settings .ms-manage-name.ms-board{padding-left:6px}
-		.map-settings .ms-chip.ms-origin::before{content:'';position:absolute;left:4px;top:50%;width:4px;height:4px;margin-top:-2px;border-radius:
-		50%;background-color:#93a4bd}.map-settings .ms-presets label:hover .ms-chip{background-color:#3a4a66}
-		.map-settings .ms-presets input:checked+.ms-chip{color:#ff9800;background-color:#485871}
+		'|';opacity:.55}.ms-tab-home a{display:flex;text-decoration:none;cursor:pointer}.ms-tab-home img{display:block;width:15px;height:15px;
+		border-radius:50%}.ms-tab-cluster{flex:0 0 auto;display:none;gap:8px}body.dashboard .ms-tab-cluster,body.refresh-on .ms-tab-cluster{display:
+		inline-flex}.ms-tab-cluster .ms-tab-board{display:none}body.dashboard .ms-tab-cluster .ms-tab-board{display:inline}.ms-tab-count{min-width:
+		4ch;text-align:right;font-variant-numeric:tabular-nums}body:not(.refresh-on) .ms-tab-count{display:none}.ms-tab-cluster::before{content:'|';
+		opacity:.55}.ms-tab-cluster a{text-decoration:none;cursor:pointer}.ms-tab-cluster a.ms-tab-off{opacity:.55}body.dashboard .ms-tab,
+		body.refresh-on .ms-tab,body.snap-full .ms-tab{display:flex}.map-settings .ms-presets{display:flex;flex-wrap:wrap;gap:6px;padding-bottom:8px
+		;margin-bottom:8px;border-bottom:1px solid #485871}.map-settings .ms-presets label{position:relative;flex:1 1 auto}
+		.map-settings .ms-presets .ms-fill{flex:1000 1 0;height:0}.map-settings .ms-presets input{position:absolute;margin:0;opacity:0}
+		.map-settings .ms-chip{display:block;position:relative;text-align:center;padding:3px 10px;background-color:#2b3a52;border:1px solid #485871;
+		user-select:none}.map-settings .ms-chip.ms-user::after{content:'';position:absolute;top:0;right:0;border-top:7px solid #93a4bd;border-left:
+		7px solid transparent}.map-settings .ms-chip.ms-board,.map-settings .ms-manage-name.ms-board{border-left:3px solid #4a8de6}
+		.map-settings .ms-manage-name.ms-board{padding-left:6px}.map-settings .ms-chip.ms-origin::before{content:'';position:absolute;left:4px;top:
+		50%;width:4px;height:4px;margin-top:-2px;border-radius:50%;background-color:#93a4bd}.map-settings .ms-presets label:hover .ms-chip{
+		background-color:#3a4a66}.map-settings .ms-presets input:checked+.ms-chip{color:#ff9800;background-color:#485871}
 		.map-settings .ms-presets input:focus-visible+.ms-chip{outline:1px solid white;outline-offset:1px}.map-settings .ms-item{display:flex;
 		justify-content:space-between;align-items:center;padding:2px 0}.map-settings .ms-glyph{margin:0 6px 0 4px}
 		.map-settings .ms-list:empty::before{display:block;padding:2px 0;font-style:italic;opacity:.6}.map-settings .ms-selected:empty::before{
@@ -917,11 +917,12 @@
 		title:"Prikaži mrežu (G)"});r.addEventListener("click",()=>setGridPrefs(!isGridShown(),isGridSnapped()));const s=el("a",{
 		class:"ms-tab-btn ms-tab-board","data-grid":"snap",text:"[S]",title:"Poravnaj uz mrežu (S)"})
 		;s.addEventListener("click",()=>setGridPrefs(isGridShown(),!isGridSnapped()));const n=el("span",{class:"ms-tab-count",
-		title:"Do sljedećeg osvježavanja"});e.appendChild(el("span",{class:"ms-tab-cluster"},[t,a,r,s,n]));const i=el("a",{class:"ms-tab-btn",
-		text:"[⌂]",title:"Početna"}),o=()=>new URL("../",window.location.href).href;i.addEventListener("click",e=>{
-		e.ctrlKey||e.metaKey?window.open(o(),"_blank"):window.location.href=o()}),i.addEventListener("mousedown",e=>{
-		1===e.button&&e.preventDefault()}),i.addEventListener("auxclick",e=>{1===e.button&&window.open(o(),"_blank")}),e.prepend(el("span",{
-		class:"ms-tab-home"},[i])),syncMsTab()}function syncMsTab(){const e=document.querySelector(".ms-tab");if(!e)return
+		title:"Do sljedećeg osvježavanja"});e.appendChild(el("span",{class:"ms-tab-cluster"},[t,a,r,s,n]))
+		;const i=document.querySelector('link[rel="icon"][sizes="32x32"]'),o=el("a",{class:"ms-tab-btn",title:"Početna"},[el("img",{
+		src:i?i.href:void 0,alt:"Početna"})]),l=()=>new URL("../",window.location.href).href;o.addEventListener("click",e=>{
+		e.ctrlKey||e.metaKey?window.open(l(),"_blank"):window.location.href=l()}),o.addEventListener("mousedown",e=>{
+		1===e.button&&e.preventDefault()}),o.addEventListener("auxclick",e=>{1===e.button&&window.open(l(),"_blank")}),e.prepend(el("span",{
+		class:"ms-tab-home"},[o])),syncMsTab()}function syncMsTab(){const e=document.querySelector(".ms-tab");if(!e)return
 		;const t=e.querySelector('[data-grid="show"]'),a=e.querySelector('[data-grid="snap"]');t&&t.classList.toggle("ms-tab-off",!isGridShown()),
 		a&&a.classList.toggle("ms-tab-off",!isGridSnapped()),syncRefreshLabels()}function syncRefreshLabels(){
 		const e=isRefreshOn()?refreshLabel():"",t=document.querySelector(".ms-tab .ms-tab-count");t&&(t.textContent=e)
@@ -1652,7 +1653,7 @@
 			<li>dok su <a href="#bočni-stupci">bočni stupci</a> sakrili stranicu,</li>
 			<li>dok je uključeno <a href="#automatsko-osvježavanje">automatsko osvježavanje</a> — tada nosi odbrojavanje i <code>[R]</code>, koji odmah osvježava sve karte.</li>
 			</ul>
-			<p>Na ploči uvijek nosi <code>[R]</code>, uz njega i <code>[A]</code>, <code>[G]</code> i <code>[S]</code>, a na lijevom kraju <code>[⌂]</code>, koji vodi na početnu stranicu (s <kbd>Ctrl</kbd> ili srednjim klikom u novoj kartici).</p>
+			<p>Na ploči uvijek nosi <code>[R]</code>, uz njega i <code>[A]</code>, <code>[G]</code> i <code>[S]</code>, a na lijevom kraju ikonu stranice, koja vodi na početnu stranicu (s <kbd>Ctrl</kbd> ili srednjim klikom u novoj kartici).</p>
 			<p>Pločica je blijeda dok ne zatreba — pune boje postaje pod mišem i dok je dijalog otvoren. Povlači se lijevo-desno, a za rubove se razvlači, najviše do polovice širine ekrana.</p>
 			<h2 id="tipke-i-geste">Tipke i geste</h2>
 			<p>Tipke ne rade dok je kursor u polju za upis.</p>

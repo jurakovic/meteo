@@ -1238,8 +1238,17 @@ body.fs-lock {
 		}
 
 		.ms-tab-home a {
+			display: flex;
 			text-decoration: none;
 			cursor: pointer;
+		}
+
+		/* the site's favicon, round, at the height of the glyphs beside it */
+		.ms-tab-home img {
+			display: block;
+			width: 15px;
+			height: 15px;
+			border-radius: 50%;
 		}
 
 	/* the title bars' cluster, on the tab — and the board's alone. There the tab

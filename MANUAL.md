@@ -214,7 +214,7 @@ Kad gumb *Karte* na stranici nije dostupan, na vrhu ekrana visi narančasta plo�
 - dok su [bočni stupci](#bočni-stupci) sakrili stranicu,
 - dok je uključeno [automatsko osvježavanje](#automatsko-osvježavanje) — tada nosi odbrojavanje i `[R]`, koji odmah osvježava sve karte.
 
-Na ploči uvijek nosi `[R]`, uz njega i `[A]`, `[G]` i `[S]`, a na lijevom kraju `[⌂]`, koji vodi na početnu stranicu (s <kbd>Ctrl</kbd> ili srednjim klikom u novoj kartici).
+Na ploči uvijek nosi `[R]`, uz njega i `[A]`, `[G]` i `[S]`, a na lijevom kraju ikonu stranice, koja vodi na početnu stranicu (s <kbd>Ctrl</kbd> ili srednjim klikom u novoj kartici).
 
 Pločica je blijeda dok ne zatreba — pune boje postaje pod mišem i dok je dijalog otvoren. Povlači se lijevo-desno, a za rubove se razvlači, najviše do polovice širine ekrana.
 

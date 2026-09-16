@@ -1379,8 +1379,12 @@ function buildMsTabCluster(tab) {
 	// and on the far side the way home, which the board hides with the rest of
 	// the page. Resolved off this page's own address rather than written as /,
 	// since the built site lives under /meteo/; Ctrl or the middle button opens
-	// it beside the board, as a link would
-	const home = el('a', { class: 'ms-tab-btn', text: '[⌂]', title: 'Početna' });
+	// it beside the board, as a link would. It shows the site's favicon, taken
+	// off the page's own <link> so the address is whatever the build made it
+	const icon = document.querySelector('link[rel="icon"][sizes="32x32"]');
+	const home = el('a', { class: 'ms-tab-btn', title: 'Početna' }, [
+		el('img', { src: icon ? icon.href : undefined, alt: 'Početna' })
+	]);
 	const homeUrl = () => new URL('../', window.location.href).href;
 	home.addEventListener('click', (e) => {
 		if (e.ctrlKey || e.metaKey) window.open(homeUrl(), '_blank');
