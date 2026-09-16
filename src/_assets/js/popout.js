@@ -45,21 +45,22 @@ function setPopoutButton(btn, popped) {
 function togglePopout(block) {
 	if (!block) return;
 	if (!block.classList.contains('popout')) { if (POPOUT_MQ.matches) popoutMap(block); }
+	// only a map's last showing docks or leaves the board; any other goes alone
+	else if (otherShowings(block).length) removeShowing(block);
 	else if (dashboardMode) removeFromDashboard(block);
 	else dockMap(block);
 }
 
-// a widget's [R] fetches its map afresh — the page may have been open long
-// enough for new images to be out — without reloading the page. First in
-// the cluster, shown only on a popped-out widget (CSS). Not on an
-// interactive map, whose bar keeps its own [X]/[R] gate button
 // ---------- copies ----------
 
-// A map can be on screen more than once. [D] makes a copy of the widget, and a
-// copy is a widget and nothing else: the page keeps one row per map however
-// many float over it, so there is no question of where a copy sits in a list
-// it was never in, and [=] on one simply takes it away. The original is what
-// docks, once, whatever its copies were doing.
+// A map can be on screen more than once. [D] makes another showing of it, and
+// no showing is the original: each is a widget like the rest, and any of them
+// can be closed while the others stay. The page still keeps one row per map,
+// so there is no question of where a copy sits in a list it was never in, and
+// the row's one place to dock into belongs to whichever showing holds it — the
+// one not marked .duplicate. Closing that one hands the place to another
+// (removeShowing), so the page always keeps a way back for the map, and only
+// the map's last showing docks — or, on the board, takes the map off the list.
 //
 // A copy is built from the catalog rather than cloned from the DOM, so the
 // names its parts carry are its own (maps.js: instSuffix). Two renderings
@@ -73,17 +74,31 @@ function buildDuplicateButton() {
 }
 
 function isDuplicate(block) {
-	return !!block && block.dataset.inst !== block.dataset.mapId;
+	return !!block && block.classList.contains('duplicate');
+}
+
+function showingsOf(mapId) {
+	return [...document.querySelectorAll(`.map-block[data-map-id="${CSS.escape(mapId)}"]`)];
+}
+
+function otherShowings(block) {
+	return showingsOf(block.dataset.mapId).filter(b => b !== block);
+}
+
+// the showing that holds the map's place in the page
+function pageShowing(mapId) {
+	return showingsOf(mapId).find(b => !isDuplicate(b)) || null;
 }
 
 function blockByInst(inst) {
 	return document.querySelector(`.map-block[data-inst="${CSS.escape(inst)}"]`);
 }
 
-// the lowest free index for this map, so closing the middle copy of three and
-// making another gives back the name that was freed rather than climbing
+// the lowest free index for this map, so closing the middle showing of three
+// and making another gives back the name that was freed rather than climbing —
+// the first one's too, once the showing that bore it has been closed
 function freeInstance(mapId) {
-	for (let index = 2; ; index++) {
+	for (let index = 1; ; index++) {
 		const inst = instKey(mapId, index);
 		if (!blockByInst(inst)) return inst;
 	}
@@ -106,13 +121,13 @@ function wireDuplicate(block) {
 
 function makeDuplicate(mapId, inst) {
 	const map = MAP_CATALOG.find(m => m.id === mapId);
-	const origin = blockByInst(mapId);
+	const origin = pageShowing(mapId);
 	if (!map || !origin) return null;
 	const block = el('div', { class: 'map-block duplicate', 'data-map-id': mapId, 'data-inst': inst },
 		buildMapContent(map, inst));
 	// beside the map it copies, so the list's order still reads off the DOM
 	// (arrangeBoard) and a map dropped from the list takes its copies with it.
-	// It never docks, so it asks the page for no room
+	// It holds no place in the page, so it asks the page for no room
 	origin.after(block);
 	wireDuplicate(block);
 	return block;
@@ -126,9 +141,22 @@ function duplicateMap(block) {
 	const copy = makeDuplicate(mapId, inst);
 	if (!copy) return null;
 	popoutMap(copy);
+	const popped = block.classList.contains('popout');
+	// the size of the widget it came from: its width, and its height too where
+	// the height is its own (an interactive map, or a map freed of its aspect,
+	// which the copy is freed of as well), held to the widget limits like a
+	// stored one — a pane's width is its column's and may be wider. A map
+	// copied from the page starts at the size any widget starts at
+	if (popped) {
+		const size = block.getBoundingClientRect();
+		if (block.classList.contains('free') && !copy.classList.contains('free')) unlockAspect(copy);
+		copy.style.width = `${Math.round(clamp(size.width, POPOUT_MIN_WIDTH, popoutMaxWidth()))}px`;
+		if (copy.classList.contains('free'))
+			copy.style.height = `${Math.round(clamp(size.height, POPOUT_MIN_HEIGHT, viewportHeight()))}px`;
+	}
 	// a step off the widget it came from, the way a cascade steps, so it is
 	// plainly a second thing and not the first one having jumped
-	const from = block.classList.contains('popout') ? block.getBoundingClientRect() : copy.getBoundingClientRect();
+	const from = popped ? block.getBoundingClientRect() : copy.getBoundingClientRect();
 	placePopout(copy, from.left + CASCADE_STEP, from.top + CASCADE_STEP);
 	raisePopout(copy);
 	fitWidget(copy);
@@ -138,16 +166,41 @@ function duplicateMap(block) {
 	return copy;
 }
 
-// the block a stored entry names: the map's own rendering, or a copy, which
+// the block a stored entry names: the plain key is the showing holding the
+// page's place, whatever it is called by now (the breakpoint docks it, and it
+// may have inherited the place from a #2); any other key is a copy, which
 // exists only in the arrangement and so is made here as the arrangement is laid
-// out. A copy of a map the list no longer holds has nothing to be made from,
-// and sanitizeSnapLayout has already dropped it
+// out — under a free name, the stored one being a position in the layout and
+// not a name anything on screen still answers to. A copy of a map the list no
+// longer holds has nothing to be made from, and sanitizeSnapLayout has already
+// dropped it
 function instanceFor(inst) {
-	return blockByInst(inst) || (instIndex(inst) > 1 ? makeDuplicate(instMapId(inst), inst) : null);
+	const mapId = instMapId(inst);
+	if (instIndex(inst) === 1) return pageShowing(mapId);
+	const copy = blockByInst(inst);
+	return copy && isDuplicate(copy) ? copy : makeDuplicate(mapId, freeInstance(mapId));
 }
 
-function removeDuplicate(block) {
-	dlog(`removeDuplicate: ${block.dataset.inst}`);
+// a showing closed while others of its map stay out: it goes, and if it held
+// the page's place, the next showing takes the place over — the gap and its
+// way back with it. Nothing moves in the DOM for that (an iframe would reload):
+// every other showing is a widget, fixed, so the heir docks where the gap is
+// from wherever it sits in the row
+function removeShowing(block) {
+	dlog(`removeShowing: ${block.dataset.inst}`);
+	if (!isDuplicate(block)) {
+		const heir = otherShowings(block)[0];
+		if (heir) {
+			heir.classList.remove('duplicate');
+			if (block._gap) {
+				heir._gap = block._gap;
+				heir._gap._block = heir;
+				delete block._gap;
+			}
+		}
+	}
+	const fs = block.querySelector('.if1.fullscreen');
+	if (fs) exitFullscreen(fs);
 	if (block._group) leaveGroup(block);
 	unsnapPane(block);
 	if (block._shadow) block._shadow.remove();
@@ -157,6 +210,10 @@ function removeDuplicate(block) {
 	persistSnapLayout();
 }
 
+// a widget's [R] fetches its map afresh — the page may have been open long
+// enough for new images to be out — without reloading the page. First in
+// the cluster, shown only on a popped-out widget (CSS). Not on an
+// interactive map, whose bar keeps its own [X]/[R] gate button
 function buildReloadButton() {
 	const btn = el('a', { class: 'rl-btn', text: '[R]', title: 'Ponovno učitaj kartu' });
 	btn.addEventListener('click', () => {
@@ -194,14 +251,16 @@ function freshUrl(url) {
 function popoutMap(block) {
 	dlog(`popoutMap: ${block.dataset.mapId}`);
 	const rect = block.getBoundingClientRect();
-	// a copy was never in the page, so it leaves nothing behind in it
+	// a copy holds no place in the page, so it leaves nothing behind in it. The
+	// gap's way back docks whichever showing holds the place by then
 	if (!isDuplicate(block)) {
 		const back = el('a', { text: 'Vrati' });
-		back.addEventListener('click', () => dockMap(block));
 		const gap = el('div', { class: 'map-gap', style: `height: ${rect.height}px;` }, [
 			el('span', { text: 'Karta je izdvojena u prozor ·' }),
 			back
 		]);
+		back.addEventListener('click', () => dockMap(gap._block));
+		gap._block = block;
 		block._gap = gap;
 		block.after(gap);
 	}
@@ -360,8 +419,8 @@ function fitWidget(block) {
 
 function dockMap(block) {
 	dlog(`dockMap: ${block.dataset.mapId}`);
-	// a copy has no place in the page to go back to, so [=] takes it away
-	if (isDuplicate(block)) return removeDuplicate(block);
+	// a copy has no place in the page to go back to (Vrati sve, the breakpoint)
+	if (isDuplicate(block)) return removeShowing(block);
 	// a fullscreen iframe inside the widget is fixed on its own; take it down first
 	const fs = block.querySelector('.if1.fullscreen');
 	if (fs) exitFullscreen(fs);
@@ -449,13 +508,12 @@ function popoutRest() {
 	});
 }
 
-// [x] on the board: the map leaves the list it is shown from — the widget
-// goes, with its rows in the (hidden) table, and the list is stored without
-// it (maps.js), as the dialog would store it after the map was unticked
+// [x] on the board, on a map's last showing: the map leaves the list it is
+// shown from — the widget goes, with its rows in the (hidden) table, and the
+// list is stored without it (maps.js), as the dialog would store it after the
+// map was unticked
 function removeFromDashboard(block) {
 	dlog(`removeFromDashboard: ${block.dataset.mapId}`);
-	// the copy alone; the map stays on the list for the original to show
-	if (isDuplicate(block)) return removeDuplicate(block);
 	const id = block.dataset.mapId;
 	snapPersistPaused = true;
 	dockMap(block); // out of its column and group, a fullscreen taken down
@@ -2353,8 +2411,27 @@ document.addEventListener('dblclick', (e) => {
 // map list it sits beside, which is what sanitizeSnapLayout() holds it to on
 // the way back. A group is a number shared by its members' entries, counted
 // in order of appearance across the columns and the floating widgets
+// the key each showing is stored under. Which showing is which is only a
+// matter of the moment — any can be closed and another take the page's place —
+// so the keys are dealt afresh on every write: the page's own showing first,
+// under the plain map id, which is the block the render gives back on load, and
+// the rest #2, #3 on in the page's order. A layout thus never names a copy of a
+// map without the map itself, whichever of its showings were left
+function layoutKeys() {
+	const keys = new Map(), counts = new Map();
+	const blocks = [...document.querySelectorAll('.map-block')];
+	[...blocks.filter(b => !isDuplicate(b)), ...blocks.filter(isDuplicate)].forEach(block => {
+		const id = block.dataset.mapId;
+		const index = (counts.get(id) || 0) + 1;
+		counts.set(id, index);
+		keys.set(block, instKey(id, index));
+	});
+	return keys;
+}
+
 function snapLayout() {
 	const layout = {};
+	const keys = layoutKeys();
 	const groupNumbers = new Map();
 	const groupNumber = (block) => {
 		if (!block._group) return undefined;
@@ -2366,7 +2443,7 @@ function snapLayout() {
 		layout[col.side] = {
 			width: roundFraction(col.width),
 			panes: [...col.panes].sort((a, b) => a.top - b.top).map(p => {
-				const entry = { id: p.block.dataset.inst, top: roundFraction(p.top) };
+				const entry = { id: keys.get(p.block), top: roundFraction(p.top) };
 				if (p.height !== undefined) entry.height = roundFraction(p.height);
 				const group = groupNumber(p.block);
 				if (group) entry.group = group;
@@ -2382,7 +2459,7 @@ function snapLayout() {
 		.map(block => {
 			const rect = block.getBoundingClientRect();
 			const entry = {
-				id: block.dataset.inst,
+				id: keys.get(block),
 				left: roundFraction(rect.left / viewportWidth()),
 				top: roundFraction(rect.top / viewportHeight()),
 				width: roundFraction(rect.width / viewportWidth())

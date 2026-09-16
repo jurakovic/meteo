@@ -974,13 +974,13 @@ function clearSharedMapView() {
 
 // ---------- rendering ----------
 
-// A map can be on screen more than once: the widget's [D] makes a copy of it
-// (popout.js), and a copy is a widget and nothing else — the page keeps one row
-// per map however many copies float over it. So a block is named twice: by the
-// map it shows (`data-map-id`, which is the catalog's) and by which showing of
-// it this is (`data-inst`). The first copy of a map is the map itself, so its
-// instance key is the plain id and every layout written before copies existed
-// still reads; a further one carries `#2`, `#3`.
+// A map can be on screen more than once: the widget's [D] makes another showing
+// of it (popout.js), and a showing beyond the first is a widget and nothing
+// else — the page keeps one row per map however many float over it. So a block
+// is named twice: by the map it shows (`data-map-id`, which is the catalog's)
+// and by which showing of it this is (`data-inst`). The render's own block is
+// the first, so its instance key is the plain id and every layout written
+// before copies existed still reads; a further one carries `#2`, `#3`.
 //
 // The parts inside a block that carry a name of their own — a slideshow and
 // its indicators, a frame and the ids built off it — take a suffix from the

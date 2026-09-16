@@ -225,33 +225,41 @@
 		;return t.addEventListener("click",()=>togglePopout(t.closest(".map-block"))),setPopoutButton(t,!1),t}function setPopoutButton(t,e){
 		t.textContent=e?dashboardMode?"[x]":"[=]":"[^]",
 		t.title=e?dashboardMode?"Ukloni kartu s ploče":"Vrati kartu na stranicu":"Izdvoji kartu u pomični prozor"}function togglePopout(t){
-		t&&(t.classList.contains("popout")?dashboardMode?removeFromDashboard(t):dockMap(t):POPOUT_MQ.matches&&popoutMap(t))}
-		function buildDuplicateButton(){const t=el("a",{class:"dup-btn",text:"[D]",title:"Udvostruči kartu (D)"})
+		t&&(t.classList.contains("popout")?otherShowings(t).length?removeShowing(t):dashboardMode?removeFromDashboard(t):dockMap(t):POPOUT_MQ.matches&&popoutMap(t))
+		}function buildDuplicateButton(){const t=el("a",{class:"dup-btn",text:"[D]",title:"Udvostruči kartu (D)"})
 		;return t.addEventListener("click",()=>duplicateMap(t.closest(".map-block"))),t}function isDuplicate(t){
-		return!!t&&t.dataset.inst!==t.dataset.mapId}function blockByInst(t){
-		return document.querySelector(`.map-block[data-inst="${CSS.escape(t)}"]`)}function freeInstance(t){for(let e=2;;e++){const o=instKey(t,e)
-		;if(!blockByInst(o))return o}}function wireDuplicate(t){t.querySelectorAll("img.lazy").forEach(t=>{t.src=t.getAttribute("data-src"),
-		t.classList.remove("lazy")}),t.querySelectorAll("iframe[data-zoom-hr-desktop]").forEach(t=>setIframeSrc(t)),addSwipeEvents(),
-		hideOverlayOnDoubleTap(),updateHintText()}function makeDuplicate(t,e){const o=MAP_CATALOG.find(e=>e.id===t),n=blockByInst(t)
-		;if(!o||!n)return null;const s=el("div",{class:"map-block duplicate","data-map-id":t,"data-inst":e},buildMapContent(o,e));return n.after(s),
-		wireDuplicate(s),s}function duplicateMap(t){if(!t||!POPOUT_MQ.matches)return null;const e=t.dataset.mapId,o=freeInstance(e)
-		;dlog(`duplicateMap: ${e} -> ${o}`);const n=makeDuplicate(e,o);if(!n)return null;popoutMap(n)
-		;const s=t.classList.contains("popout")?t.getBoundingClientRect():n.getBoundingClientRect()
-		;return placePopout(n,s.left+CASCADE_STEP,s.top+CASCADE_STEP),raisePopout(n),fitWidget(n),updateGroups(),syncShadows(),persistSnapLayout(),n
-		}function instanceFor(t){return blockByInst(t)||(instIndex(t)>1?makeDuplicate(instMapId(t),t):null)}function removeDuplicate(t){
-		dlog(`removeDuplicate: ${t.dataset.inst}`),t._group&&leaveGroup(t),unsnapPane(t),t._shadow&&t._shadow.remove(),t.remove(),updateGroups(),
-		syncShadows(),persistSnapLayout()}function buildReloadButton(){const t=el("a",{class:"rl-btn",text:"[R]",title:"Ponovno učitaj kartu"})
+		return!!t&&t.classList.contains("duplicate")}function showingsOf(t){
+		return[...document.querySelectorAll(`.map-block[data-map-id="${CSS.escape(t)}"]`)]}function otherShowings(t){
+		return showingsOf(t.dataset.mapId).filter(e=>e!==t)}function pageShowing(t){return showingsOf(t).find(t=>!isDuplicate(t))||null}
+		function blockByInst(t){return document.querySelector(`.map-block[data-inst="${CSS.escape(t)}"]`)}function freeInstance(t){
+		for(let e=1;;e++){const o=instKey(t,e);if(!blockByInst(o))return o}}function wireDuplicate(t){t.querySelectorAll("img.lazy").forEach(t=>{
+		t.src=t.getAttribute("data-src"),t.classList.remove("lazy")
+		}),t.querySelectorAll("iframe[data-zoom-hr-desktop]").forEach(t=>setIframeSrc(t)),addSwipeEvents(),hideOverlayOnDoubleTap(),updateHintText()
+		}function makeDuplicate(t,e){const o=MAP_CATALOG.find(e=>e.id===t),n=pageShowing(t);if(!o||!n)return null;const s=el("div",{
+		class:"map-block duplicate","data-map-id":t,"data-inst":e},buildMapContent(o,e));return n.after(s),wireDuplicate(s),s}
+		function duplicateMap(t){if(!t||!POPOUT_MQ.matches)return null;const e=t.dataset.mapId,o=freeInstance(e);dlog(`duplicateMap: ${e} -> ${o}`)
+		;const n=makeDuplicate(e,o);if(!n)return null;popoutMap(n);const s=t.classList.contains("popout");if(s){const e=t.getBoundingClientRect()
+		;t.classList.contains("free")&&!n.classList.contains("free")&&unlockAspect(n),
+		n.style.width=`${Math.round(clamp(e.width,260,popoutMaxWidth()))}px`,
+		n.classList.contains("free")&&(n.style.height=`${Math.round(clamp(e.height,120,viewportHeight()))}px`)}
+		const i=s?t.getBoundingClientRect():n.getBoundingClientRect();return placePopout(n,i.left+CASCADE_STEP,i.top+CASCADE_STEP),raisePopout(n),
+		fitWidget(n),updateGroups(),syncShadows(),persistSnapLayout(),n}function instanceFor(t){const e=instMapId(t)
+		;if(1===instIndex(t))return pageShowing(e);const o=blockByInst(t);return o&&isDuplicate(o)?o:makeDuplicate(e,freeInstance(e))}
+		function removeShowing(t){if(dlog(`removeShowing: ${t.dataset.inst}`),!isDuplicate(t)){const e=otherShowings(t)[0]
+		;e&&(e.classList.remove("duplicate"),t._gap&&(e._gap=t._gap,e._gap._block=e,delete t._gap))}const e=t.querySelector(".if1.fullscreen")
+		;e&&exitFullscreen(e),t._group&&leaveGroup(t),unsnapPane(t),t._shadow&&t._shadow.remove(),t.remove(),updateGroups(),syncShadows(),
+		persistSnapLayout()}function buildReloadButton(){const t=el("a",{class:"rl-btn",text:"[R]",title:"Ponovno učitaj kartu"})
 		;return t.addEventListener("click",()=>{const e=t.closest(".map-block");reloadMap(e)
 		;reloadableBlocks().filter(t=>t!==e).length||restartRefresh()}),t}function reloadMap(t){t&&(dlog(`reloadMap: ${t.dataset.mapId}`),
 		t.querySelectorAll("img[src]").forEach(t=>{t.src=freshUrl(t.getAttribute("src"))}),t.querySelectorAll("video").forEach(t=>{
 		t.querySelectorAll("source[src]").forEach(t=>{t.src=freshUrl(t.getAttribute("src"))}),t.load()}),
 		t.querySelectorAll(".if2 iframe[src]").forEach(t=>{t.src=t.getAttribute("src")}))}function freshUrl(t){
 		const e=t.replace(/([?&])_r=\d+(&|$)/,(t,e,o)=>o?e:"");return`${e}${e.includes("?")?"&":"?"}_r=${Date.now()}`}function popoutMap(t){
-		dlog(`popoutMap: ${t.dataset.mapId}`);const e=t.getBoundingClientRect();if(!isDuplicate(t)){const o=el("a",{text:"Vrati"})
-		;o.addEventListener("click",()=>dockMap(t));const n=el("div",{class:"map-gap",style:`height: ${e.height}px;`},[el("span",{
-		text:"Karta je izdvojena u prozor ·"}),o]);t._gap=n,t.after(n)}t.classList.add("popout"),t.style.width=`${Math.min(420,e.width)}px`,
-		isFreePopout(t)&&(t.style.height=`${t.offsetHeight}px`,t.classList.add("free")),POPOUT_HANDLES.forEach(e=>t.appendChild(el("div",{
-		class:`po-h po-h-${e}`,"data-dir":e}))),placePopout(t,e.left,e.top),raisePopout(t),
+		dlog(`popoutMap: ${t.dataset.mapId}`);const e=t.getBoundingClientRect();if(!isDuplicate(t)){const o=el("a",{text:"Vrati"}),n=el("div",{
+		class:"map-gap",style:`height: ${e.height}px;`},[el("span",{text:"Karta je izdvojena u prozor ·"}),o])
+		;o.addEventListener("click",()=>dockMap(n._block)),n._block=t,t._gap=n,t.after(n)}t.classList.add("popout"),
+		t.style.width=`${Math.min(420,e.width)}px`,isFreePopout(t)&&(t.style.height=`${t.offsetHeight}px`,t.classList.add("free")),
+		POPOUT_HANDLES.forEach(e=>t.appendChild(el("div",{class:`po-h po-h-${e}`,"data-dir":e}))),placePopout(t,e.left,e.top),raisePopout(t),
 		t.querySelectorAll(".po-btn").forEach(t=>setPopoutButton(t,!0)),persistSnapLayout()}function isFreePopout(t){
 		return!!t.querySelector(".if1, .if2")}function unlockAspect(t){t.classList.contains("free")||(dlog(`unlockAspect: ${t.dataset.mapId}`),
 		t.style.height=`${t.offsetHeight}px`,t.classList.add("free","letterbox"),t.querySelector(".po-backdrop")||t.appendChild(el("div",{
@@ -274,9 +282,8 @@
 		;const s=n.getBoundingClientRect(),i=o.getBoundingClientRect(),r=n.naturalWidth/n.naturalHeight,a=Math.min(s.width,s.height*r),l=Math.min(s.height,s.width/r),c=s.left+(s.width-a)/2,p=s.top+(s.height-l)/2,u=t=>`${Math.round(Math.max(0,t))}px`
 		;t.style.setProperty("--lb-l",u(c-i.left)),t.style.setProperty("--lb-r",u(i.right-(c+a))),t.style.setProperty("--lb-t",u(p-i.top)),
 		t.style.setProperty("--lb-b",u(i.bottom-(p+l))),t.style.setProperty("--lb-w",u(a))}function fitWidget(t){fitTitles(t),fitLetterbox(t)}
-		function dockMap(t){if(dlog(`dockMap: ${t.dataset.mapId}`),isDuplicate(t))return removeDuplicate(t)
-		;const e=t.querySelector(".if1.fullscreen");e&&exitFullscreen(e),t._group&&leaveGroup(t),unsnapPane(t),
-		t.classList.remove("popout","free","grouped","letterbox","covered"),
+		function dockMap(t){if(dlog(`dockMap: ${t.dataset.mapId}`),isDuplicate(t))return removeShowing(t);const e=t.querySelector(".if1.fullscreen")
+		;e&&exitFullscreen(e),t._group&&leaveGroup(t),unsnapPane(t),t.classList.remove("popout","free","grouped","letterbox","covered"),
 		["left","top","width","height","z-index","--po-img","--lb-l","--lb-r","--lb-t","--lb-b","--lb-w"].forEach(e=>t.style.removeProperty(e)),
 		t.querySelectorAll(".po-h, .po-backdrop").forEach(t=>t.remove()),t._gap&&t._gap.remove(),delete t._gap,
 		t.querySelectorAll(".po-btn").forEach(t=>setPopoutButton(t,!1)),unfitTitles(t),persistSnapLayout()}function dockAllPopouts(){
@@ -287,8 +294,8 @@
 		renderGrid(),document.querySelectorAll(".map-block.popout .po-btn").forEach(t=>setPopoutButton(t,!0))}function popoutRest(){let t=16,e=0
 		;document.querySelectorAll(".map-block:not(.popout)").forEach(o=>{popoutMap(o),t>16&&t+o.offsetHeight>viewportHeight()&&(t=16,e++),
 		placePopout(o,snapColumnPx(snapColumns.left)+16+(t-16)+420*e/2,t),raisePopout(o),t+=CASCADE_STEP})}function removeFromDashboard(t){
-		if(dlog(`removeFromDashboard: ${t.dataset.mapId}`),isDuplicate(t))return removeDuplicate(t);const e=t.dataset.mapId;snapPersistPaused=!0,
-		dockMap(t),snapPersistPaused=!1;const o=t.closest("tr"),n=o.nextElementSibling,s=n&&n.querySelector(".links-bottom")?n:null,i=s||o
+		dlog(`removeFromDashboard: ${t.dataset.mapId}`);const e=t.dataset.mapId;snapPersistPaused=!0,dockMap(t),snapPersistPaused=!1
+		;const o=t.closest("tr"),n=o.nextElementSibling,s=n&&n.querySelector(".links-bottom")?n:null,i=s||o
 		;[s,o.previousElementSibling&&o.previousElementSibling.classList.contains("sp20")?o.previousElementSibling:i.nextElementSibling&&i.nextElementSibling.classList.contains("sp20")?i.nextElementSibling:null,o].forEach(t=>{
 		t&&t.remove()}),removeMapFromList(e)}const GRID_CELL=16,GRID_KEY="mapGrid";function loadGridPrefs(){try{
 		const t=JSON.parse(localStorage.getItem(GRID_KEY));if(t&&"object"==typeof t)return{show:!0===t.show,snap:!0===t.snap}}catch(t){}return{
@@ -564,16 +571,18 @@
 		;[snapColumns.left,snapColumns.right].forEach(e=>{e.panes.length&&(e.width*=1-t)}),snapPageWidths=null}else snapPageWidths={
 		left:snapColumnWidth(snapColumns.left),right:snapColumnWidth(snapColumns.right)},t.width=1-snapColumnWidth(e);layoutSnapColumns(),
 		persistSnapLayout()}function snapHandlePointerDown(t,e){
-		t.classList.contains("snap-seam")?resizeSnapSeam(e):resizeSnapColumn(snapColumns[t.dataset.side],e)}function snapLayout(){
-		const t={},e=new Map,o=t=>{if(t._group)return e.has(t._group)||e.set(t._group,e.size+1),e.get(t._group)}
-		;Object.values(snapColumns).forEach(e=>{e.panes.length&&(t[e.side]={width:roundFraction(e.width),
-		panes:[...e.panes].sort((t,e)=>t.top-e.top).map(t=>{const e={id:t.block.dataset.inst,top:roundFraction(t.top)}
-		;void 0!==t.height&&(e.height=roundFraction(t.height));const n=o(t.block);return n&&(e.group=n),
-		t.block.classList.contains("fs-host")&&(e.fullscreen=!0),e})})})
-		;const n=floatingBlocks().sort((t,e)=>(Number(t.style.zIndex)||0)-(Number(e.style.zIndex)||0)).map(t=>{const e=t.getBoundingClientRect(),n={
-		id:t.dataset.inst,left:roundFraction(e.left/viewportWidth()),top:roundFraction(e.top/viewportHeight()),
-		width:roundFraction(e.width/viewportWidth())};t.classList.contains("free")&&(n.height=roundFraction(e.height/viewportHeight()));const s=o(t)
-		;return s&&(n.group=s),t.classList.contains("fs-host")&&(n.fullscreen=!0),n});return n.length&&(t.floating=n),
+		t.classList.contains("snap-seam")?resizeSnapSeam(e):resizeSnapColumn(snapColumns[t.dataset.side],e)}function layoutKeys(){
+		const t=new Map,e=new Map,o=[...document.querySelectorAll(".map-block")]
+		;return[...o.filter(t=>!isDuplicate(t)),...o.filter(isDuplicate)].forEach(o=>{const n=o.dataset.mapId,s=(e.get(n)||0)+1;e.set(n,s),
+		t.set(o,instKey(n,s))}),t}function snapLayout(){const t={},e=layoutKeys(),o=new Map,n=t=>{
+		if(t._group)return o.has(t._group)||o.set(t._group,o.size+1),o.get(t._group)};Object.values(snapColumns).forEach(o=>{
+		o.panes.length&&(t[o.side]={width:roundFraction(o.width),panes:[...o.panes].sort((t,e)=>t.top-e.top).map(t=>{const o={id:e.get(t.block),
+		top:roundFraction(t.top)};void 0!==t.height&&(o.height=roundFraction(t.height));const s=n(t.block);return s&&(o.group=s),
+		t.block.classList.contains("fs-host")&&(o.fullscreen=!0),o})})})
+		;const s=floatingBlocks().sort((t,e)=>(Number(t.style.zIndex)||0)-(Number(e.style.zIndex)||0)).map(t=>{const o=t.getBoundingClientRect(),s={
+		id:e.get(t),left:roundFraction(o.left/viewportWidth()),top:roundFraction(o.top/viewportHeight()),
+		width:roundFraction(o.width/viewportWidth())};t.classList.contains("free")&&(s.height=roundFraction(o.height/viewportHeight()));const i=n(t)
+		;return i&&(s.group=i),t.classList.contains("fs-host")&&(s.fullscreen=!0),s});return s.length&&(t.floating=s),
 		dashboardMode&&(t.dashboard=!0),Object.keys(t).length?t:null}function hasFullscreen(t){const e=MAP_CATALOG.find(e=>e.id===instMapId(t))
 		;return!!e&&"iframe"===e.type}function restoreFullscreen(t){const e=t.querySelector(".fs-btn")
 		;e&&!t.querySelector(".if1.fullscreen")&&e.click()}function roundFraction(t){return Math.round(1e4*t)/1e4}function sanitizeSnapLayout(t,e){
@@ -1601,8 +1610,8 @@
 			<h3 id="grupe">Grupe</h3>
 			<p>Dva prozora koja se dodiruju mogu se spojiti u grupu gumbom <code>[+]</code>; samo dodirivanje nije dovoljno. Grupa se pomiče i mijenja veličinu kao cjelina, a članovi ostaju spojeni. Unutarnji rubovi grupe su šavovi, a vanjski rub mijenja veličinu cijele grupe. <code>[-]</code> vadi prozor iz grupe.</p>
 			<h3 id="kopije">Kopije</h3>
-			<p>Gumb <code>[D]</code> (ili tipka <kbd>D</kbd>, za prozor na vrhu) otvara još jedan prozor s istom kartom — npr. ista sinoptička karta u dvije veličine, ili isti niz slika zaustavljen na dvije različite slike. Svaka kopija ima svoje strelice i kvadratiće.</p>
-			<p>Kopija je samo prozor: u stranici i dalje postoji jedan red po karti. <code>[=]</code> (na ploči <code>[x]</code>) na kopiji samo nju makne. Kopije su dio razmještaja, pa se spremaju u predložak i putuju u poveznici. Karta maknuta s popisa odnese sa sobom i svoje kopije.</p>
+			<p>Gumb <code>[D]</code> (ili tipka <kbd>D</kbd>, za prozor na vrhu) otvara još jedan prozor s istom kartom — npr. ista sinoptička karta u dvije veličine, ili isti niz slika zaustavljen na dvije različite slike. Kopija se otvori malo pomaknuta i iste veličine kao prozor iz kojeg je nastala. Svaka kopija ima svoje strelice i kvadratiće.</p>
+			<p>Kopija je samo prozor: u stranici i dalje postoji jedan red po karti. Nijedan prozor nije „izvorni” — <code>[=]</code> (na ploči <code>[x]</code>) na bilo kojem prozoru dok ih ima još s istom kartom samo njega makne, a ostali ostaju gdje jesu. Tek zadnji vraća kartu u stranicu (na ploči je miče s popisa). Kopije su dio razmještaja, pa se spremaju u predložak i putuju u poveznici. Karta maknuta s popisa odnese sa sobom i svoje kopije.</p>
 			<h3 id="bočni-stupci">Bočni stupci</h3>
 			<p>Prozor povučen do lijevog ili desnog ruba ekrana uskoči u stupac uz taj rub. U stupcu karte stoje jedna ispod druge, a stranica se preslaže u preostalu širinu.</p>
 			<ul>
