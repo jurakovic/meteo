@@ -9,7 +9,7 @@ Stranica ima dva dijela:
 
 Sve osim poglavlja [Osnovno korištenje](#osnovno-korištenje) odnosi se na stranicu *Prilagodi*.
 
-Dio mogućnosti — izdvojeni prozori, bočni stupci, mreža i tipkovnički prečaci — radi samo na računalu, odnosno na ekranu širem od 800 px s mišem. Na dodirnim ekranima stranica je obična, okomita lista karata, a nadzorna ploča je tamo pojednostavljena. Vidi [Na mobitelu](#na-mobitelu).
+Dio mogućnosti — izdvojeni prozori, bočni stupci, nadzorna ploča, mreža i tipkovnički prečaci — radi samo na računalu, odnosno na ekranu širem od 800 px s mišem. Na dodirnim ekranima stranica ostaje obična, okomita lista karata. Vidi [Na mobitelu](#na-mobitelu).
 
 ## Osnovno korištenje
 
@@ -159,7 +159,7 @@ Prozor povučen do lijevog ili desnog ruba ekrana uskoči u stupac uz taj rub. S
 
 ## Nadzorna ploča
 
-*Na računalu; na mobitelu u pojednostavljenom obliku — vidi [Na mobitelu](#na-mobitelu).*
+*Samo na računalu.*
 
 Nadzorna ploča sakriva stranicu i svaku kartu s popisa pretvara u prozor. Ostaju samo karte na praznoj podlozi — prikaz za ekran koji stoji uključen i gleda se izdaleka.
 
@@ -244,9 +244,7 @@ Sve se sprema lokalno u pregledniku. Ništa se ne šalje nikamo i ništa ne prel
 
 ## Na mobitelu
 
-Na dodirnim ekranima stranica je obična okomita lista karata. Nema izdvojenih prozora, bočnih stupaca ni mreže — sve su to stvari za miša i široki ekran.
-
-**Nadzorna ploča** radi i na mobitelu, ali bez ručnog slaganja: kad je uključena (*Karte* → *Nadzorna ploča* → *Primijeni*), sve karte se same slože u mrežu preko cijelog ekrana i ponovno slože kad se mobitel okrene. Karte se ne pomiču ni ne razvlače; u traci je samo `[R]`. Karta preko cijelog zaslona zauzme cijeli ekran. Na malom ekranu ploča ima smisla s nekoliko karata — sa šesnaest je svaka velika tek nešto više od sličice, pa je zgodno za mobitel spremiti poseban predložak.
+Na dodirnim ekranima stranica je obična okomita lista karata. Nema izdvojenih prozora, bočnih stupaca, nadzorne ploče ni mreže — sve su to stvari za miša i široki ekran.
 
 Radi:
 
@@ -258,4 +256,4 @@ Radi:
 
 Dijalog *Karte* na mobitelu zauzima cijeli ekran i zatvara se natpisom *Zatvori* u zaglavlju.
 
-Ako ste na računalu složili razmještaj prozora, a stranicu otvorite na mobitelu, razmještaj se ne gubi — samo se ne prikazuje (a ploča se na mobitelu složi sama, bez da ga dira). Vratit će se kad stranicu otvorite na računalu.
+Ako ste na računalu složili razmještaj prozora, a stranicu otvorite na mobitelu, razmještaj se ne gubi — samo se ne prikazuje. Vratit će se kad stranicu otvorite na računalu.
