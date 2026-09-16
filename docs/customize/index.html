@@ -1175,7 +1175,7 @@
 		;o&&e.contains(o)&&(t.preventDefault(),scrollManualTo(e,decodeURIComponent(o.getAttribute("href").slice(1))))}),
 		document.addEventListener("dialog-toggled",t=>{t.detail.panel===e&&(syncManualHash(t.detail.visible),
 		t.detail.visible&&(e.querySelector(".ms-body").scrollTop=0))}),document.addEventListener("keydown",e=>{
-		"?"!==e.key||e.altKey||e.ctrlKey||e.metaKey||e.target.matches&&e.target.matches('input:not([type="radio"]):not([type="checkbox"]), textarea, [contenteditable]')||(e.preventDefault(),
+		"h"!==e.key&&"H"!==e.key||e.altKey||e.ctrlKey||e.metaKey||e.target.matches&&e.target.matches('input:not([type="radio"]):not([type="checkbox"]), textarea, [contenteditable]')||(e.preventDefault(),
 		toggleManual())});const o=()=>{const t="upute"===decodeURIComponent(window.location.hash.slice(1));t!==manualOpen()&&setDialogVisible(e,t)}
 		;window.addEventListener("hashchange",o),o()}function initDialogs(){dialogPanels().forEach(e=>{buildDialogHandles(e),initDialogWindow(e)}),
 		initDialogBackdrop(),initManual(),window.addEventListener("resize",()=>applyStoredDialog(openDialogPanel()))}function initDynamicContent(){
@@ -1215,7 +1215,7 @@
 								<button type="button" class="btn" onclick="scrollToElement('links')">Linkovi</button>
 								<input type="checkbox" class="links-toggle" onchange="toggleLinksBottom(this)" title="Prikaži linkove ispod karata" />
 							</div>
-							<button type="button" class="btn help-btn" onclick="toggleManual()" title="Upute (?)">?</button>
+							<button type="button" class="btn help-btn" onclick="toggleManual()" title="Upute (H)">?</button>
 						</div>
 					</td>
 				</tr>
@@ -1479,7 +1479,7 @@
 			</tbody>
 			</table>
 			<p><strong>Linkovi.</strong> Gumb <em>Linkovi</em> vodi na popis dodatnih izvora na dnu stranice. Kvadratić pokraj njega uključuje prikaz linkova ispod svake karte.</p>
-			<p><strong>Upute.</strong> Gumb <code>?</code> u redu gumba otvara ovaj tekst, kao i poveznica <em>Upute</em> u podnožju i tipka <kbd>?</kbd>. Otvara se u prozoru preko stranice, pa se upute čitaju uz karte, a ne umjesto njih; zatvara se natpisom <em>Zatvori</em> ili tipkom <kbd>Esc</kbd>. Poveznica koja završava s <code>#upute</code> otvara ih odmah pri otvaranju stranice.</p>
+			<p><strong>Upute.</strong> Gumb <code>?</code> u redu gumba otvara ovaj tekst, kao i poveznica <em>Upute</em> u podnožju i tipka <kbd>H</kbd>. Otvara se u prozoru preko stranice, pa se upute čitaju uz karte, a ne umjesto njih; zatvara se natpisom <em>Zatvori</em> ili tipkom <kbd>Esc</kbd>. Poveznica koja završava s <code>#upute</code> otvara ih odmah pri otvaranju stranice.</p>
 			<h2 id="automatsko-osvježavanje">Automatsko osvježavanje</h2>
 			<p>Slike zastare na stranici koja je dugo otvorena. U dijalogu <em>Karte</em> je red <strong>Osvježavaj svakih</strong> s kvadratićem i razmakom — 5, 10, 15, 30 ili 60 minuta. Isključeno je dok se ne uključi, a početni razmak je 5 minuta.</p>
 			<p>Osvježavaju se slike, nizovi slika, videa i jednostavne karte — sve ono što ima gumb <code>[R]</code>. Interaktivne karte (Windy, Blitzortung i slične) se preskaču: one same dohvaćaju najnovije podatke, a ponovno učitavanje bi im samo poništilo pomak i zumiranje.</p>
@@ -1614,7 +1614,7 @@
 			</thead>
 			<tbody>
 			<tr><td><kbd>K</kbd></td><td>otvara i zatvara dijalog <em>Karte</em></td></tr>
-			<tr><td><kbd>?</kbd></td><td>otvara i zatvara <em>Upute</em></td></tr>
+			<tr><td><kbd>H</kbd></td><td>otvara i zatvara <em>Upute</em></td></tr>
 			<tr><td><kbd>Esc</kbd></td><td>zatvara dijalog; ako je zatvoren, izlazi iz cijelog zaslona</td></tr>
 			<tr><td><kbd>R</kbd></td><td>ponovno učitava sve karte</td></tr>
 			<tr><td><kbd>A</kbd></td><td>slaže karte u mrežu (na ploči)</td></tr>

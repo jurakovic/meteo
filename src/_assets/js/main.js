@@ -962,9 +962,10 @@ function initManual() {
 		if (e.detail.visible) panel.querySelector('.ms-body').scrollTop = 0;
 	});
 
-	// ? names the button it sits on, as R, G and S name theirs
+	// H for help: the letters name the thing, as R, G and S do, and ? would
+	// need Shift on one layout and AltGr on the next
 	document.addEventListener('keydown', (e) => {
-		if (e.key !== '?' || e.altKey || e.ctrlKey || e.metaKey) return;
+		if ((e.key !== 'h' && e.key !== 'H') || e.altKey || e.ctrlKey || e.metaKey) return;
 		if (e.target.matches && e.target.matches('input:not([type="radio"]):not([type="checkbox"]), textarea, [contenteditable]')) return;
 		e.preventDefault();
 		toggleManual();
