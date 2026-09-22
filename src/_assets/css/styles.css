@@ -1198,7 +1198,8 @@ body.fs-lock {
 	}
 
 	.ms-tab:hover,
-	body.ms-open .ms-tab {
+	body.ms-open .ms-tab,
+	body.ms-add-open .ms-tab {
 		opacity: 1;
 	}
 
@@ -1308,6 +1309,74 @@ body.fs-lock {
 		/* a switch that is off is dimmed; [R] is an action and is always lit */
 		.ms-tab-cluster a.ms-tab-off {
 			opacity: 0.55;
+		}
+
+	/* the tab's [+]: a menu of the maps the board does not show, hung under the
+	   tab (maps.js: openMsAdd). The dialog's colours and its search box, since it
+	   is the dialog's Dostupne karte cut down to the one thing it is for */
+	.ms-add {
+		position: fixed;
+		z-index: 100001; /* over the tab's shadow */
+		display: flex;
+		flex-direction: column;
+		width: 300px;
+		max-width: calc(100vw - 16px);
+		box-sizing: border-box;
+		padding: 6px;
+		border: 1px solid #5F6F89;
+		box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6), 0 2px 8px rgba(0, 0, 0, 0.4);
+		background-color: #202c40;
+		text-align: left;
+		font-size: 13px;
+		color: white;
+	}
+
+		.ms-add-input {
+			flex: 0 0 auto;
+			margin-bottom: 6px;
+			padding: 4px 6px;
+			border: 1px solid #485871;
+			border-radius: 3px;
+			background-color: #1b2735;
+			color: inherit;
+			font-family: inherit;
+			font-size: inherit;
+		}
+
+		.ms-add-input:focus {
+			outline: none;
+			border-color: #ff9800;
+		}
+
+		.ms-add-list {
+			flex: 1 1 auto;
+			min-height: 0;
+			overflow-y: auto;
+		}
+
+		.ms-add-item {
+			padding: 3px 4px;
+			border-radius: 3px;
+			white-space: nowrap;
+			overflow: hidden;
+			text-overflow: ellipsis;
+			cursor: pointer;
+			user-select: none;
+		}
+
+		/* the one Enter would add: lit by the arrows and by the pointer alike */
+		.ms-add-item.active {
+			background-color: #3a4a66;
+		}
+
+		.ms-add-item .ms-glyph {
+			margin: 0 6px 0 0;
+		}
+
+		.ms-add-empty {
+			padding: 3px 4px;
+			font-style: italic;
+			opacity: 0.6;
 		}
 
 	/* not under a fullscreen map, though the page is just as far out of reach

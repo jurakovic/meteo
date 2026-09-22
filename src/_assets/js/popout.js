@@ -528,6 +528,36 @@ function removeFromDashboard(block) {
 	removeMapFromList(id);
 }
 
+// the tab's [+], the other way round: the map joins the end of the list, its
+// rows join the end of the (hidden) table the way the render would have laid
+// them, and it comes onto the board the way any map new to the list does, at
+// the cascade's first step (popoutRest — every other map is a widget already).
+// Nothing is rendered again, so nothing else on the board reloads
+function addToDashboard(mapId) {
+	const map = MAP_CATALOG.find(m => m.id === mapId);
+	const tbody = document.querySelector('tbody[data-maps]');
+	if (!map || !tbody || !isDashboard() || pageShowing(mapId)) return;
+	dlog(`addToDashboard: ${mapId}`);
+	addMapToList(mapId);
+	const empty = tbody.querySelector('.maps-empty');
+	if (empty) tbody.replaceChildren(); // the "nothing selected" row
+	if (tbody.children.length) tbody.appendChild(el('tr', { class: 'sp20' }));
+	const block = el('div', { class: 'map-block', 'data-map-id': map.id, 'data-inst': map.id }, buildMapContent(map));
+	tbody.appendChild(el('tr', {}, [el('td', { align: 'center' }, [block])]));
+	if (map.links && map.links.length) {
+		const links = buildLinksBottom(map);
+		tbody.appendChild(el('tr', {}, [el('td', { align: 'center' }, [links])]));
+		links.addEventListener('scroll', () => updateLinksScrollShadow(links), { passive: true });
+	}
+	wireDuplicate(block); // its own wiring and only its own, as a copy's
+	popoutRest();
+	fitWidget(block);
+	updateGroups();
+	syncShadows();
+	persistSnapLayout();
+	return block;
+}
+
 // ---------- the grid (desktop, on the board) ----------
 
 // Graph paper under the widgets, and the lines a widget settles onto when let
