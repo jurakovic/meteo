@@ -1387,7 +1387,7 @@ function applyStoredMsTab() {
 
 // On a board the tab is the only chrome there is, so it carries the same glyph
 // cluster a widget's title bar does, and for the same reason: the common moves
-// without opening the dialog, and on the board the way back to the landing page. [R] reloads every widget's map (popout.js), [G]
+// without opening the dialog. [R] reloads every widget's map (popout.js), [G]
 // and [S] are the board's two grid switches — the dialog's own, through
 // setGridPrefs, so the three places cannot disagree. Each glyph is the key that
 // does the same thing, and says so in its title, the way the tab itself does.
@@ -1408,23 +1408,6 @@ function buildMsTabCluster(tab) {
 	snap.addEventListener('click', () => setGridPrefs(isGridShown(), !isGridSnapped()));
 	const count = el('span', { class: 'ms-tab-count', title: 'Do sljedećeg osvježavanja' });
 	tab.appendChild(el('span', { class: 'ms-tab-cluster' }, [add, reload, arrange, grid, snap, count]));
-	// and on the far side the way home, which the board hides with the rest of
-	// the page. Resolved off this page's own address rather than written as /,
-	// since the built site lives under /meteo/; Ctrl or the middle button opens
-	// it beside the board, as a link would. It shows the site's favicon, taken
-	// off the page's own <link> so the address is whatever the build made it
-	const icon = document.querySelector('link[rel="icon"][sizes="32x32"]');
-	const home = el('a', { class: 'ms-tab-btn', title: 'Početna' }, [
-		el('img', { src: icon ? icon.href : undefined, alt: 'Početna' })
-	]);
-	const homeUrl = () => new URL('../', window.location.href).href;
-	home.addEventListener('click', (e) => {
-		if (e.ctrlKey || e.metaKey) window.open(homeUrl(), '_blank');
-		else window.location.href = homeUrl();
-	});
-	home.addEventListener('mousedown', (e) => { if (e.button === 1) e.preventDefault(); }); // no autoscroll
-	home.addEventListener('auxclick', (e) => { if (e.button === 1) window.open(homeUrl(), '_blank'); });
-	tab.prepend(el('span', { class: 'ms-tab-home' }, [home]));
 	syncMsTab();
 }
 
@@ -2012,11 +1995,13 @@ function buildMapSettings(panel) {
 		// nothing to hold back — tick the grid on, see it, shut the dialog
 		// arranging acts on the board that is up, not on the tick that may yet be
 		// applied: with the mode ticked but not yet applied there is no board to
-		// arrange, so it waits for Primijeni rather than doing nothing on a press
+		// arrange, so it waits for Primijeni rather than doing nothing on a press.
+		// And it needs the tick as well, standing down with the grid switches
+		// when the mode is unticked over a board that is still up
 		const tile = el('button', { type: 'button', class: 'btn ms-arrange', title: 'Posloži u mrežu (A)' }, [
 			document.createTextNode('Posloži')
 		]);
-		tile.disabled = !isDashboard();
+		tile.disabled = !dashboardChecked || !isDashboard();
 		tile.addEventListener('click', () => arrangeBoard());
 		modeDiv.append(btn,
 			buildGridToggle('Prikaži mrežu', gridChecked, (on) => { gridChecked = on; setGridPrefs(gridChecked, snapChecked); }),
@@ -2445,7 +2430,20 @@ function buildMapSettings(panel) {
 	// the header stays put and the body under it scrolls (CSS); in the body
 	// the actions sit right under the render order they act on, rather than
 	// at the far end of the picker and the preset management below it
-	panel.appendChild(el('div', { class: 'ms-head' }, [el('span', { class: 'ms-title', text: 'Karte' }), closeLink]));
+	// and before the title the way home, which the board and the hidden page
+	// take out of sight. Resolved off this page's own address rather than
+	// written as /, since the built site lives under /meteo/, and a real href,
+	// so Ctrl and the middle button open it beside the page as any link does.
+	// It shows the site's favicon, taken off the page's own <link> so the
+	// address is whatever the build made it
+	const icon = document.querySelector('link[rel="icon"][sizes="32x32"]');
+	const homeLink = el('a', { class: 'ms-home', href: new URL('../', window.location.href).href, title: 'Početna' }, [
+		el('img', { src: icon ? icon.href : undefined, alt: 'Početna' })
+	]);
+	panel.appendChild(el('div', { class: 'ms-head' }, [
+		el('span', { class: 'ms-head-left' }, [homeLink, el('span', { class: 'ms-title', text: 'Karte' })]),
+		closeLink
+	]));
 	panel.appendChild(el('div', { class: 'ms-body' }, [
 		presetsDiv,
 		modeDiv,

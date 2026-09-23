@@ -116,9 +116,12 @@
 		none}@media (max-width:800px){.map-settings{top:0;max-width:100%;height:auto;max-height:100vh;max-height:100dvh;border:none}}
 		@media (min-width:801px) and (hover:hover) and (pointer:fine){.map-settings .po-h{position:absolute;z-index:1}.map-settings .ms-head{cursor:
 		move}}body.ms-open{overflow:hidden}html.ms-gutter{scrollbar-gutter:stable}.map-settings .ms-head{display:flex;justify-content:space-between;
-		align-items:baseline;padding:7px 10px;background-color:#2c3b56;border-bottom:1px solid #3d4d6a}.map-settings .ms-head .ms-title{font-weight:
-		700}.map-settings .ms-head a{cursor:pointer;color:#8fb4ff}@media (max-width:800px){.map-settings .ms-head{padding:0}
-		.map-settings .ms-head .ms-title{padding:11px 10px}.map-settings .ms-head a{padding:11px 14px}}.map-settings .ms-body{min-height:0;
+		align-items:center;padding:7px 10px;background-color:#2c3b56;border-bottom:1px solid #3d4d6a}.map-settings .ms-head .ms-title{font-weight:
+		700}.map-settings .ms-head a{cursor:pointer;color:#8fb4ff}.map-settings .ms-head .ms-head-left{display:flex;align-items:center;gap:8px}
+		.map-settings .ms-head .ms-home{display:flex}.map-settings .ms-head .ms-home img{display:block;width:16px;height:16px;border-radius:50%}
+		@media (max-width:800px){.map-settings .ms-head{padding:0}.map-settings .ms-head .ms-title{padding:11px 10px}.map-settings .ms-head a{
+		padding:11px 14px}.map-settings .ms-head .ms-head-left{gap:0}.map-settings .ms-head .ms-home{padding:11px 4px 11px 10px}.map-settings
+		 .ms-head .ms-home+.ms-title{padding-left:4px}}.map-settings .ms-body{min-height:0;
 		overflow-y:auto;overscroll-behavior:contain;padding:10px}@media (min-width:801px) and (hover:hover) and (pointer:fine){
 		.map-settings .ms-body{scrollbar-gutter:stable}.map-settings .ms-body::-webkit-scrollbar{width:12px}
 		.map-settings .ms-body::-webkit-scrollbar-track{background-color:#1a2536}.map-settings .ms-body::-webkit-scrollbar-thumb{background-color:
@@ -129,9 +132,7 @@
 		rgba(0,0,0,.4);cursor:pointer;opacity:.55;transition:opacity .15s ease;box-sizing:border-box;align-items:center;gap:10px;white-space:nowrap;
 		overflow:hidden;touch-action:none;user-select:none}.ms-tab:hover{background-color:#ffa726}.ms-tab:hover,body.ms-add-open .ms-tab,
 		body.ms-open .ms-tab{opacity:1}.ms-tab-name{flex:1 1 auto;min-width:0;overflow:hidden;text-overflow:ellipsis;text-align:center}
-		.ms-tab:not(.ms-tab-sized) .ms-tab-name{padding:0 24px}.ms-tab-home{flex:0 0 auto;display:none;gap:8px}body.dashboard .ms-tab-home{display:
-		inline-flex}.ms-tab-home::after{content:'|';opacity:.55}.ms-tab-home a{display:flex;text-decoration:none;cursor:pointer}.ms-tab-home img{
-		display:block;width:15px;height:15px;border-radius:50%}.ms-tab-cluster{flex:0 0 auto;display:none;gap:8px}body.dashboard .ms-tab-cluster,
+		.ms-tab:not(.ms-tab-sized) .ms-tab-name{padding:0 24px}.ms-tab-cluster{flex:0 0 auto;display:none;gap:8px}body.dashboard .ms-tab-cluster,
 		body.refresh-on .ms-tab-cluster{display:inline-flex}.ms-tab-cluster .ms-tab-board{display:none}body.dashboard .ms-tab-cluster .ms-tab-board{
 		display:inline}.ms-tab-count{min-width:4ch;text-align:right;font-variant-numeric:tabular-nums}body:not(.refresh-on) .ms-tab-count{display:
 		none}.ms-tab-cluster::before{content:'|';opacity:.55}.ms-tab-cluster a{text-decoration:none;cursor:pointer}.ms-tab-cluster a.ms-tab-off{
@@ -935,21 +936,16 @@
 		title:"Prikaži mrežu (G)"});s.addEventListener("click",()=>setGridPrefs(!isGridShown(),isGridSnapped()));const n=el("a",{
 		class:"ms-tab-btn ms-tab-board","data-grid":"snap",text:"[S]",title:"Poravnaj uz mrežu (S)"})
 		;n.addEventListener("click",()=>setGridPrefs(isGridShown(),!isGridSnapped()));const i=el("span",{class:"ms-tab-count",
-		title:"Do sljedećeg osvježavanja"});e.appendChild(el("span",{class:"ms-tab-cluster"},[t,a,r,s,n,i]))
-		;const o=document.querySelector('link[rel="icon"][sizes="32x32"]'),l=el("a",{class:"ms-tab-btn",title:"Početna"},[el("img",{
-		src:o?o.href:void 0,alt:"Početna"})]),d=()=>new URL("../",window.location.href).href;l.addEventListener("click",e=>{
-		e.ctrlKey||e.metaKey?window.open(d(),"_blank"):window.location.href=d()}),l.addEventListener("mousedown",e=>{
-		1===e.button&&e.preventDefault()}),l.addEventListener("auxclick",e=>{1===e.button&&window.open(d(),"_blank")}),e.prepend(el("span",{
-		class:"ms-tab-home"},[l])),syncMsTab()}let msAdd=null;const MS_ADD_MAX_HEIGHT=420;function toggleMsAdd(e){msAdd?closeMsAdd():openMsAdd(e)}
-		function closeMsAdd(){msAdd&&(msAdd.menu.remove(),msAdd=null,document.body.classList.remove("ms-add-open"),
-		document.removeEventListener("pointerdown",msAddOutside,!0))}function msAddOutside(e){
-		!msAdd||msAdd.menu.contains(e.target)||msAdd.anchor.contains(e.target)||closeMsAdd()}function openMsAdd(e){if(!isDashboard())return
-		;closeMsAdd();const t=new Set(resolveMapIds()),a=MAP_CATALOG.filter(e=>!t.has(e.id)),r=el("input",{type:"text",class:"ms-add-input",
-		placeholder:"Traži kartu…",spellcheck:"false",autocomplete:"off"}),s=el("div",{class:"ms-add-list"}),n=el("div",{class:"ms-add-empty",
-		text:a.length?"Nema pogodaka":"Sve su karte na ploči"}),i=el("div",{class:"ms-add"},[r,s,n]);let o=[],l=-1;function d(e){
-		o[l]&&o[l].classList.remove("active"),l=e,o[l]&&(o[l].classList.add("active"),o[l].scrollIntoView({block:"nearest"}))}function c(e){
-		closeMsAdd(),addToDashboard(e)}function p(){const e=findTerms(r.value);o=a.filter(t=>matchesFind(t,e)).map(e=>{const t=el("div",{
-		class:"ms-add-item","data-map-id":e.id},[el("span",{class:"ms-glyph",text:CATEGORY_GLYPHS[e.category]||""
+		title:"Do sljedećeg osvježavanja"});e.appendChild(el("span",{class:"ms-tab-cluster"},[t,a,r,s,n,i])),syncMsTab()}let msAdd=null
+		;const MS_ADD_MAX_HEIGHT=420;function toggleMsAdd(e){msAdd?closeMsAdd():openMsAdd(e)}function closeMsAdd(){msAdd&&(msAdd.menu.remove(),
+		msAdd=null,document.body.classList.remove("ms-add-open"),document.removeEventListener("pointerdown",msAddOutside,!0))}
+		function msAddOutside(e){!msAdd||msAdd.menu.contains(e.target)||msAdd.anchor.contains(e.target)||closeMsAdd()}function openMsAdd(e){
+		if(!isDashboard())return;closeMsAdd();const t=new Set(resolveMapIds()),a=MAP_CATALOG.filter(e=>!t.has(e.id)),r=el("input",{type:"text",
+		class:"ms-add-input",placeholder:"Traži kartu…",spellcheck:"false",autocomplete:"off"}),s=el("div",{class:"ms-add-list"}),n=el("div",{
+		class:"ms-add-empty",text:a.length?"Nema pogodaka":"Sve su karte na ploči"}),i=el("div",{class:"ms-add"},[r,s,n]);let o=[],l=-1
+		;function d(e){o[l]&&o[l].classList.remove("active"),l=e,o[l]&&(o[l].classList.add("active"),o[l].scrollIntoView({block:"nearest"}))}
+		function c(e){closeMsAdd(),addToDashboard(e)}function p(){const e=findTerms(r.value);o=a.filter(t=>matchesFind(t,e)).map(e=>{
+		const t=el("div",{class:"ms-add-item","data-map-id":e.id},[el("span",{class:"ms-glyph",text:CATEGORY_GLYPHS[e.category]||""
 		}),document.createTextNode(e.name)]);return t.addEventListener("mousedown",e=>e.preventDefault()),t.addEventListener("mousemove",()=>{
 		o[l]!==t&&d(o.indexOf(t))}),t.addEventListener("click",()=>c(e.id)),t}),s.replaceChildren(...o),n.hidden=o.length>0,l=-1,d(o.length?0:-1)}
 		r.addEventListener("input",p),r.addEventListener("keydown",e=>{if("ArrowDown"===e.key||"ArrowUp"===e.key){if(e.preventDefault(),
@@ -1016,23 +1012,23 @@
 		;return"custom"===e?{preset:"custom",maps:P()}:{preset:e}}function x(e,t){if(!t)return e&&e.dashboard?null:e;const a=Object.assign({},e)
 		;return a.dashboard=!0,a}function z(e){const t="custom"===e.preset?currentSnapLayout():(userPresets.find(t=>t.id===e.preset)||{}).layout
 		;return sanitizeSnapLayout(x(t,b),prefsMapIds(e))}function L(){return sanitizeSnapLayout(x(currentSnapLayout(),b),P())}w(resolveMapIds()),
-		S(activePresetId());const _=el("div",{class:"ms-layout"});const R=el("div",{class:"ms-mode"});function T(e,t,a){const r=el("input",{
+		S(activePresetId());const R=el("div",{class:"ms-layout"});const _=el("div",{class:"ms-mode"});function T(e,t,a){const r=el("input",{
 		type:"checkbox"});return r.checked=t,r.disabled=!b,r.addEventListener("change",()=>a(r.checked)),el("label",{
-		class:"ms-grid"+(b?"":" ms-off")},[r,el("span",{text:e})])}function C(){R.replaceChildren(),R.hidden=!POPOUT_MQ.matches,
-		R.classList.toggle("ms-on",b);const e=el("button",{type:"button",class:"btn","aria-pressed":String(b)
+		class:"ms-grid"+(b?"":" ms-off")},[r,el("span",{text:e})])}function C(){_.replaceChildren(),_.hidden=!POPOUT_MQ.matches,
+		_.classList.toggle("ms-on",b);const e=el("button",{type:"button",class:"btn","aria-pressed":String(b)
 		},[document.createTextNode("Nadzorna ploča "),el("span",{class:"beta",text:"beta"})]);e.addEventListener("click",()=>H(!b))
 		;const t=el("button",{type:"button",class:"btn ms-arrange",title:"Posloži u mrežu (A)"},[document.createTextNode("Posloži")])
-		;t.disabled=!isDashboard(),t.addEventListener("click",()=>arrangeBoard()),R.append(e,T("Prikaži mrežu",y,e=>{y=e,setGridPrefs(y,k)
+		;t.disabled=!b||!isDashboard(),t.addEventListener("click",()=>arrangeBoard()),_.append(e,T("Prikaži mrežu",y,e=>{y=e,setGridPrefs(y,k)
 		}),T("Poravnaj uz mrežu",k,e=>{k=e,setGridPrefs(y,k)}),t)}C();const j=el("div",{class:"ms-refresh"});function I(){j.replaceChildren(),
 		j.classList.toggle("ms-on",isRefreshOn());const e=el("select",{class:"ms-refresh-every","aria-label":"Razmak osvježavanja"})
 		;REFRESH_CHOICES.forEach(t=>{const a=el("option",{value:String(t),text:`${t} min`});t===refreshEveryMinutes()&&(a.selected=!0),
 		e.appendChild(a)});const t=el("input",{type:"checkbox"});t.checked=isRefreshOn();const a=()=>setRefreshPrefs(t.checked,Number(e.value))
 		;t.addEventListener("change",a),e.addEventListener("change",a);const r=isRefreshOn()?refreshLabel():"";j.append(el("label",{},[t,el("span",{
 		text:"Osvježavaj svakih"})]),e,el("span",{class:"ms-refresh-left",text:r?`još ${r}`:""}))}function H(e){b=e,C(),D(),Q()}function D(){
-		_.replaceChildren();const e=function(){const e=currentSnapLayout()||{},t=[];return e.left&&t.push(`lijevo ${e.left.panes.length}`),
+		R.replaceChildren();const e=function(){const e=currentSnapLayout()||{},t=[];return e.left&&t.push(`lijevo ${e.left.panes.length}`),
 		e.right&&t.push(`desno ${e.right.panes.length}`),e.floating&&t.push(`u prozoru ${e.floating.length}`),t}()
-		;if(_.hidden=isDashboard()||!e.length,_.hidden)return;const t=el("a",{text:"Vrati sve"});t.addEventListener("click",dockAllPopouts),
-		_.append(el("span",{text:`Izdvojene karte: ${e.join(", ")}`}),t)}I(),e._onRefreshChange=I,e._onGridChange=()=>{y=isGridShown(),
+		;if(R.hidden=isDashboard()||!e.length,R.hidden)return;const t=el("a",{text:"Vrati sve"});t.addEventListener("click",dockAllPopouts),
+		R.append(el("span",{text:`Izdvojene karte: ${e.join(", ")}`}),t)}I(),e._onRefreshChange=I,e._onGridChange=()=>{y=isGridShown(),
 		k=isGridSnapped(),C()},D(),e._onLayoutChange=()=>{C(),D(),Q()};const O=el("div",{class:"ms-manage"});let N=!1;const V=el("input",{
 		type:"text",class:"ms-name",maxlength:String(40),placeholder:"Naziv predloška"}),B=el("button",{type:"button",class:"btn",text:"Spremi"})
 		;function F(e){const t=storeUserPreset(e,P(),L());V.value="",N=!1,v=t.id,S(t.id),Q()}B.addEventListener("click",()=>{
@@ -1072,10 +1068,11 @@
 		text:"Podijeli"});J.addEventListener("click",()=>{copyMapViewLink(function(){
 		const e=M(),t=z(e),a=userPresets.find(t=>t.id===e.preset),r=a?presetSharePrefs(a):e;return t?r.layout=t:delete r.layout,r
 		}(),()=>flashLabel(J,"Kopirano!","Podijeli"))});const $=el("a",{text:"Zatvori",title:"Zatvori (Esc)"})
-		;$.addEventListener("click",()=>setMapSettingsVisible(e,!1)),e.appendChild(el("div",{class:"ms-head"},[el("span",{class:"ms-title",
-		text:"Karte"}),$])),e.appendChild(el("div",{class:"ms-body"},[g,R,j,_,t,el("div",{class:"ms-actions"},[X,J]),l,m,a,O])),
-		buildDialogHandles(e)}document.addEventListener("dialog-toggled",e=>{e.detail.visible&&closeMsAdd()}),
-		window.addEventListener("resize",()=>closeMsAdd()),
+		;$.addEventListener("click",()=>setMapSettingsVisible(e,!1));const ee=document.querySelector('link[rel="icon"][sizes="32x32"]'),te=el("a",{
+		class:"ms-home",href:new URL("../",window.location.href).href,title:"Početna"},[el("img",{src:ee?ee.href:void 0,alt:"Početna"})])
+		;e.appendChild(el("div",{class:"ms-head"},[el("span",{class:"ms-head-left"},[te,el("span",{class:"ms-title",text:"Karte"})]),$])),
+		e.appendChild(el("div",{class:"ms-body"},[g,_,j,R,t,el("div",{class:"ms-actions"},[X,J]),l,m,a,O])),buildDialogHandles(e)}
+		document.addEventListener("dialog-toggled",e=>{e.detail.visible&&closeMsAdd()}),window.addEventListener("resize",()=>closeMsAdd()),
 		"loading"===document.readyState?document.addEventListener("DOMContentLoaded",initMsTab):initMsTab(),
 		"loading"===document.readyState?document.addEventListener("DOMContentLoaded",renderMaps):renderMaps(),
 		document.addEventListener("DOMContentLoaded",applyStoredSnapLayout),
@@ -1494,7 +1491,10 @@
 
 	<div class="map-settings manual-dialog" id="manualDialog" data-dialog-key="manualPanel" hidden>
 		<div class="ms-head">
-			<span class="ms-title">Upute</span>
+			<span class="ms-head-left">
+				<a class="ms-home" href="/meteo/" title="Početna"><img src="/meteo/img/favicon-32x32.png" alt="Početna"></a>
+				<span class="ms-title">Upute</span>
+			</span>
 			<a class="ms-close" title="Zatvori (Esc)">Zatvori</a>
 		</div>
 		<div class="ms-body">
@@ -1547,12 +1547,13 @@
 			</table>
 			<p><strong>Cijeli zaslon.</strong> Iz cijelog zaslona izlazi se gumbom <code>[-]</code> ili tipkom <kbd>Esc</kbd>. Za ponašanje u bočnom stupcu i na ploči vidi <a href="#bočni-stupci">Bočni stupci</a> i <a href="#nadzorna-ploča">Nadzorna ploča</a>.</p>
 			<p><strong>Linkovi.</strong> Gumb <em>Linkovi</em> vodi na popis dodatnih izvora na dnu stranice. Kvadratić pokraj njega uključuje prikaz linkova ispod svake karte.</p>
-			<p><strong>Upute.</strong> Ovaj tekst otvaraju gumb <code>?</code>, poveznica <em>Upute</em> u podnožju i tipka <kbd>H</kbd>. Otvara se u prozoru preko stranice, pa se upute mogu čitati uz karte. Zatvara se natpisom <em>Zatvori</em> ili tipkom <kbd>Esc</kbd>. Poveznica koja završava s <code>#upute</code> otvara upute odmah pri učitavanju stranice.</p>
+			<p><strong>Upute.</strong> Ovaj tekst otvaraju gumb <code>?</code>, poveznica <em>Upute</em> u podnožju i tipka <kbd>H</kbd>. Otvara se u prozoru preko stranice, pa se upute mogu čitati uz karte. Zatvara se natpisom <em>Zatvori</em> ili tipkom <kbd>Esc</kbd>. Ikona stranice lijevo od naslova vodi na početnu stranicu, kao i u dijalogu <em>Karte</em>. Poveznica koja završava s <code>#upute</code> otvara upute odmah pri učitavanju stranice.</p>
 			<h2 id="dijalog-karte">Dijalog Karte</h2>
 			<p>Gumb <strong>Karte</strong> (ili tipka <kbd>K</kbd>) otvara dijalog u kojem se bira što se prikazuje. Kad gumb na stranici nije dostupan, dijalog se otvara s <a href="#pločica-karte">pločice Karte</a> na vrhu ekrana.</p>
 			<p>Dok je dijalog otvoren, stranica iza njega je malo zatamnjena i ne reagira. Klik izvan dijaloga samo ga zatvara — taj klik ne ide dalje, pa neće usput otvoriti poveznicu ni pomaknuti prozor.</p>
 			<p><strong>Ništa se ne primjenjuje dok ne pritisnete Primijeni</strong> ili tipku <kbd>Enter</kbd>. Zatvaranje dijaloga bez toga — natpisom <em>Zatvori</em>, tipkom <kbd>Esc</kbd> ili klikom izvan njega — odbacuje sve promjene. Iznimka su prekidači mreže i automatsko osvježavanje, koji djeluju odmah.</p>
 			<p>Na računalu se dijalog pomiče povlačenjem zaglavlja, a veličina mu se mijenja povlačenjem rubova ili uglova. Dvoklik na zaglavlje vraća ga na početno mjesto i veličinu. Na mobitelu zauzima cijeli ekran.</p>
+			<p>Ikona stranice u zaglavlju, lijevo od naslova, vodi na početnu stranicu (s <kbd>Ctrl</kbd> ili srednjim klikom u novoj kartici) — i s <a href="#nadzorna-ploča">nadzorne ploče</a>, na kojoj stranice nema.</p>
 			<p>Dijalog je, odozgo prema dolje:</p>
 			<ul>
 			<li>red <strong>predložaka</strong>,</li>
@@ -1693,7 +1694,7 @@
 			<li>dok su <a href="#bočni-stupci">bočni stupci</a> sakrili stranicu,</li>
 			<li>dok je uključeno <a href="#automatsko-osvježavanje">automatsko osvježavanje</a> — tada nosi odbrojavanje i <code>[R]</code>, koji odmah osvježava sve karte.</li>
 			</ul>
-			<p>Na ploči uvijek nosi <code>[+]</code> (dodaje kartu na ploču) i <code>[R]</code>, uz njih i <code>[A]</code>, <code>[G]</code> i <code>[S]</code>, a na lijevom kraju ikonu stranice, koja vodi na početnu stranicu (s <kbd>Ctrl</kbd> ili srednjim klikom u novoj kartici).</p>
+			<p>Na ploči uvijek nosi <code>[+]</code> (dodaje kartu na ploču) i <code>[R]</code>, uz njih i <code>[A]</code>, <code>[G]</code> i <code>[S]</code>.</p>
 			<p>Pločica je blijeda dok ne zatreba — pune boje postaje pod mišem i dok je dijalog otvoren. Povlači se lijevo-desno, a za rubove se razvlači, najviše do polovice širine ekrana.</p>
 			<h2 id="tipke-i-geste">Tipke i geste</h2>
 			<p>Tipke ne rade dok je kursor u polju za upis.</p>

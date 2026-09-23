@@ -1072,7 +1072,7 @@ body.fs-lock {
 	.map-settings .ms-head {
 		display: flex;
 		justify-content: space-between;
-		align-items: baseline;
+		align-items: center; /* not baseline: the icon at the left end has none */
 		padding: 7px 10px;
 		background-color: #2c3b56;
 		border-bottom: 1px solid #3d4d6a;
@@ -1087,11 +1087,32 @@ body.fs-lock {
 			color: #8fb4ff;
 		}
 
+		/* the way home and the title, together at the left end */
+		.map-settings .ms-head .ms-head-left {
+			display: flex;
+			align-items: center;
+			gap: 8px;
+		}
+
+			.map-settings .ms-head .ms-home {
+				display: flex;
+			}
+
+			/* the site's favicon, round, at the height of the title beside it */
+			.map-settings .ms-head .ms-home img {
+				display: block;
+				width: 16px;
+				height: 16px;
+				border-radius: 50%;
+			}
+
 	/* a word is a target for a cursor, not for a finger: on touch the head
 	   gives its padding to its children instead, so Zatvori is tapped
 	   anywhere in the right end of the bar and the title anywhere in the
-	   left. Both keep the same top padding, so the baseline they are aligned
-	   on does not move and the bar reads as it did */
+	   left. Both keep the same top padding, so the line they are centred
+	   on does not move and the bar reads as it did. The way home takes the
+	   gap to the title into its own padding, split with the title, so the
+	   two ends of it touch and the icon is tapped anywhere up to the word */
 	@media (max-width: 800px) {
 		.map-settings .ms-head {
 			padding: 0;
@@ -1103,6 +1124,18 @@ body.fs-lock {
 
 			.map-settings .ms-head a {
 				padding: 11px 14px;
+			}
+
+			.map-settings .ms-head .ms-head-left {
+				gap: 0;
+			}
+
+			.map-settings .ms-head .ms-home {
+				padding: 11px 4px 11px 10px;
+			}
+
+			.map-settings .ms-head .ms-home + .ms-title {
+				padding-left: 4px;
 			}
 	}
 
@@ -1219,38 +1252,6 @@ body.fs-lock {
 	.ms-tab:not(.ms-tab-sized) .ms-tab-name {
 		padding: 0 24px;
 	}
-
-	/* the way home, at the far left and on the board alone: beside the columns
-	   the page is only hidden, a double-click on an edge away. Divided from the
-	   name as the cluster is, mirrored */
-	.ms-tab-home {
-		flex: 0 0 auto;
-		display: none;
-		gap: 8px;
-	}
-
-	body.dashboard .ms-tab-home {
-		display: inline-flex;
-	}
-
-		.ms-tab-home::after {
-			content: '|';
-			opacity: 0.55;
-		}
-
-		.ms-tab-home a {
-			display: flex;
-			text-decoration: none;
-			cursor: pointer;
-		}
-
-		/* the site's favicon, round, at the height of the glyphs beside it */
-		.ms-tab-home img {
-			display: block;
-			width: 15px;
-			height: 15px;
-			border-radius: 50%;
-		}
 
 	/* the title bars' cluster, on the tab — and the board's alone. There the tab
 	   is the only chrome there is, so it carries the moves a title bar would;

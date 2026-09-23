@@ -75,6 +75,7 @@ function ProcessHtml() {
 	$html = $html.Replace('<div class="ms-body" data-include-html="/_components/manual.c.html">', '<div class="ms-body">')
 	$html = $html.Replace('<!-- manual -->', $manual)
 	$html = $html.Replace('href="/_assets/img', 'href="/meteo/img')
+	$html = $html.Replace('src="/_assets/img', 'src="/meteo/img')
 	$html = $html.Replace('href="/customize/index.html', 'href="/meteo/customize/')
 	$html = $html.Replace('url=/customize/index.html', 'url=/meteo/customize/')
 	$html = $html.Replace('href="/"', 'href="/meteo/"')

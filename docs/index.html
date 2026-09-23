@@ -116,9 +116,12 @@
 		none}@media (max-width:800px){.map-settings{top:0;max-width:100%;height:auto;max-height:100vh;max-height:100dvh;border:none}}
 		@media (min-width:801px) and (hover:hover) and (pointer:fine){.map-settings .po-h{position:absolute;z-index:1}.map-settings .ms-head{cursor:
 		move}}body.ms-open{overflow:hidden}html.ms-gutter{scrollbar-gutter:stable}.map-settings .ms-head{display:flex;justify-content:space-between;
-		align-items:baseline;padding:7px 10px;background-color:#2c3b56;border-bottom:1px solid #3d4d6a}.map-settings .ms-head .ms-title{font-weight:
-		700}.map-settings .ms-head a{cursor:pointer;color:#8fb4ff}@media (max-width:800px){.map-settings .ms-head{padding:0}
-		.map-settings .ms-head .ms-title{padding:11px 10px}.map-settings .ms-head a{padding:11px 14px}}.map-settings .ms-body{min-height:0;
+		align-items:center;padding:7px 10px;background-color:#2c3b56;border-bottom:1px solid #3d4d6a}.map-settings .ms-head .ms-title{font-weight:
+		700}.map-settings .ms-head a{cursor:pointer;color:#8fb4ff}.map-settings .ms-head .ms-head-left{display:flex;align-items:center;gap:8px}
+		.map-settings .ms-head .ms-home{display:flex}.map-settings .ms-head .ms-home img{display:block;width:16px;height:16px;border-radius:50%}
+		@media (max-width:800px){.map-settings .ms-head{padding:0}.map-settings .ms-head .ms-title{padding:11px 10px}.map-settings .ms-head a{
+		padding:11px 14px}.map-settings .ms-head .ms-head-left{gap:0}.map-settings .ms-head .ms-home{padding:11px 4px 11px 10px}.map-settings
+		 .ms-head .ms-home+.ms-title{padding-left:4px}}.map-settings .ms-body{min-height:0;
 		overflow-y:auto;overscroll-behavior:contain;padding:10px}@media (min-width:801px) and (hover:hover) and (pointer:fine){
 		.map-settings .ms-body{scrollbar-gutter:stable}.map-settings .ms-body::-webkit-scrollbar{width:12px}
 		.map-settings .ms-body::-webkit-scrollbar-track{background-color:#1a2536}.map-settings .ms-body::-webkit-scrollbar-thumb{background-color:
@@ -129,9 +132,7 @@
 		rgba(0,0,0,.4);cursor:pointer;opacity:.55;transition:opacity .15s ease;box-sizing:border-box;align-items:center;gap:10px;white-space:nowrap;
 		overflow:hidden;touch-action:none;user-select:none}.ms-tab:hover{background-color:#ffa726}.ms-tab:hover,body.ms-add-open .ms-tab,
 		body.ms-open .ms-tab{opacity:1}.ms-tab-name{flex:1 1 auto;min-width:0;overflow:hidden;text-overflow:ellipsis;text-align:center}
-		.ms-tab:not(.ms-tab-sized) .ms-tab-name{padding:0 24px}.ms-tab-home{flex:0 0 auto;display:none;gap:8px}body.dashboard .ms-tab-home{display:
-		inline-flex}.ms-tab-home::after{content:'|';opacity:.55}.ms-tab-home a{display:flex;text-decoration:none;cursor:pointer}.ms-tab-home img{
-		display:block;width:15px;height:15px;border-radius:50%}.ms-tab-cluster{flex:0 0 auto;display:none;gap:8px}body.dashboard .ms-tab-cluster,
+		.ms-tab:not(.ms-tab-sized) .ms-tab-name{padding:0 24px}.ms-tab-cluster{flex:0 0 auto;display:none;gap:8px}body.dashboard .ms-tab-cluster,
 		body.refresh-on .ms-tab-cluster{display:inline-flex}.ms-tab-cluster .ms-tab-board{display:none}body.dashboard .ms-tab-cluster .ms-tab-board{
 		display:inline}.ms-tab-count{min-width:4ch;text-align:right;font-variant-numeric:tabular-nums}body:not(.refresh-on) .ms-tab-count{display:
 		none}.ms-tab-cluster::before{content:'|';opacity:.55}.ms-tab-cluster a{text-decoration:none;cursor:pointer}.ms-tab-cluster a.ms-tab-off{
@@ -1249,7 +1250,10 @@
 
 	<div class="map-settings manual-dialog" id="manualDialog" data-dialog-key="manualPanel" hidden>
 		<div class="ms-head">
-			<span class="ms-title">Upute</span>
+			<span class="ms-head-left">
+				<a class="ms-home" href="/meteo/" title="Početna"><img src="/meteo/img/favicon-32x32.png" alt="Početna"></a>
+				<span class="ms-title">Upute</span>
+			</span>
 			<a class="ms-close" title="Zatvori (Esc)">Zatvori</a>
 		</div>
 		<div class="ms-body">
@@ -1302,12 +1306,13 @@
 			</table>
 			<p><strong>Cijeli zaslon.</strong> Iz cijelog zaslona izlazi se gumbom <code>[-]</code> ili tipkom <kbd>Esc</kbd>. Za ponašanje u bočnom stupcu i na ploči vidi <a href="#bočni-stupci">Bočni stupci</a> i <a href="#nadzorna-ploča">Nadzorna ploča</a>.</p>
 			<p><strong>Linkovi.</strong> Gumb <em>Linkovi</em> vodi na popis dodatnih izvora na dnu stranice. Kvadratić pokraj njega uključuje prikaz linkova ispod svake karte.</p>
-			<p><strong>Upute.</strong> Ovaj tekst otvaraju gumb <code>?</code>, poveznica <em>Upute</em> u podnožju i tipka <kbd>H</kbd>. Otvara se u prozoru preko stranice, pa se upute mogu čitati uz karte. Zatvara se natpisom <em>Zatvori</em> ili tipkom <kbd>Esc</kbd>. Poveznica koja završava s <code>#upute</code> otvara upute odmah pri učitavanju stranice.</p>
+			<p><strong>Upute.</strong> Ovaj tekst otvaraju gumb <code>?</code>, poveznica <em>Upute</em> u podnožju i tipka <kbd>H</kbd>. Otvara se u prozoru preko stranice, pa se upute mogu čitati uz karte. Zatvara se natpisom <em>Zatvori</em> ili tipkom <kbd>Esc</kbd>. Ikona stranice lijevo od naslova vodi na početnu stranicu, kao i u dijalogu <em>Karte</em>. Poveznica koja završava s <code>#upute</code> otvara upute odmah pri učitavanju stranice.</p>
 			<h2 id="dijalog-karte">Dijalog Karte</h2>
 			<p>Gumb <strong>Karte</strong> (ili tipka <kbd>K</kbd>) otvara dijalog u kojem se bira što se prikazuje. Kad gumb na stranici nije dostupan, dijalog se otvara s <a href="#pločica-karte">pločice Karte</a> na vrhu ekrana.</p>
 			<p>Dok je dijalog otvoren, stranica iza njega je malo zatamnjena i ne reagira. Klik izvan dijaloga samo ga zatvara — taj klik ne ide dalje, pa neće usput otvoriti poveznicu ni pomaknuti prozor.</p>
 			<p><strong>Ništa se ne primjenjuje dok ne pritisnete Primijeni</strong> ili tipku <kbd>Enter</kbd>. Zatvaranje dijaloga bez toga — natpisom <em>Zatvori</em>, tipkom <kbd>Esc</kbd> ili klikom izvan njega — odbacuje sve promjene. Iznimka su prekidači mreže i automatsko osvježavanje, koji djeluju odmah.</p>
 			<p>Na računalu se dijalog pomiče povlačenjem zaglavlja, a veličina mu se mijenja povlačenjem rubova ili uglova. Dvoklik na zaglavlje vraća ga na početno mjesto i veličinu. Na mobitelu zauzima cijeli ekran.</p>
+			<p>Ikona stranice u zaglavlju, lijevo od naslova, vodi na početnu stranicu (s <kbd>Ctrl</kbd> ili srednjim klikom u novoj kartici) — i s <a href="#nadzorna-ploča">nadzorne ploče</a>, na kojoj stranice nema.</p>
 			<p>Dijalog je, odozgo prema dolje:</p>
 			<ul>
 			<li>red <strong>predložaka</strong>,</li>
@@ -1448,7 +1453,7 @@
 			<li>dok su <a href="#bočni-stupci">bočni stupci</a> sakrili stranicu,</li>
 			<li>dok je uključeno <a href="#automatsko-osvježavanje">automatsko osvježavanje</a> — tada nosi odbrojavanje i <code>[R]</code>, koji odmah osvježava sve karte.</li>
 			</ul>
-			<p>Na ploči uvijek nosi <code>[+]</code> (dodaje kartu na ploču) i <code>[R]</code>, uz njih i <code>[A]</code>, <code>[G]</code> i <code>[S]</code>, a na lijevom kraju ikonu stranice, koja vodi na početnu stranicu (s <kbd>Ctrl</kbd> ili srednjim klikom u novoj kartici).</p>
+			<p>Na ploči uvijek nosi <code>[+]</code> (dodaje kartu na ploču) i <code>[R]</code>, uz njih i <code>[A]</code>, <code>[G]</code> i <code>[S]</code>.</p>
 			<p>Pločica je blijeda dok ne zatreba — pune boje postaje pod mišem i dok je dijalog otvoren. Povlači se lijevo-desno, a za rubove se razvlači, najviše do polovice širine ekrana.</p>
 			<h2 id="tipke-i-geste">Tipke i geste</h2>
 			<p>Tipke ne rade dok je kursor u polju za upis.</p>

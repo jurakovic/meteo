@@ -32,7 +32,7 @@ Gumbi u traci interaktivne karte:
 
 **Linkovi.** Gumb *Linkovi* vodi na popis dodatnih izvora na dnu stranice. Kvadratić pokraj njega uključuje prikaz linkova ispod svake karte.
 
-**Upute.** Ovaj tekst otvaraju gumb `?`, poveznica *Upute* u podnožju i tipka <kbd>H</kbd>. Otvara se u prozoru preko stranice, pa se upute mogu čitati uz karte. Zatvara se natpisom *Zatvori* ili tipkom <kbd>Esc</kbd>. Poveznica koja završava s `#upute` otvara upute odmah pri učitavanju stranice.
+**Upute.** Ovaj tekst otvaraju gumb `?`, poveznica *Upute* u podnožju i tipka <kbd>H</kbd>. Otvara se u prozoru preko stranice, pa se upute mogu čitati uz karte. Zatvara se natpisom *Zatvori* ili tipkom <kbd>Esc</kbd>. Ikona stranice lijevo od naslova vodi na početnu stranicu, kao i u dijalogu *Karte*. Poveznica koja završava s `#upute` otvara upute odmah pri učitavanju stranice.
 
 ## Dijalog Karte
 
@@ -43,6 +43,8 @@ Dok je dijalog otvoren, stranica iza njega je malo zatamnjena i ne reagira. Klik
 **Ništa se ne primjenjuje dok ne pritisnete Primijeni** ili tipku <kbd>Enter</kbd>. Zatvaranje dijaloga bez toga — natpisom *Zatvori*, tipkom <kbd>Esc</kbd> ili klikom izvan njega — odbacuje sve promjene. Iznimka su prekidači mreže i automatsko osvježavanje, koji djeluju odmah.
 
 Na računalu se dijalog pomiče povlačenjem zaglavlja, a veličina mu se mijenja povlačenjem rubova ili uglova. Dvoklik na zaglavlje vraća ga na početno mjesto i veličinu. Na mobitelu zauzima cijeli ekran.
+
+Ikona stranice u zaglavlju, lijevo od naslova, vodi na početnu stranicu (s <kbd>Ctrl</kbd> ili srednjim klikom u novoj kartici) — i s [nadzorne ploče](#nadzorna-ploča), na kojoj stranice nema.
 
 Dijalog je, odozgo prema dolje:
 
@@ -215,7 +217,7 @@ Kad gumb *Karte* na stranici nije dostupan, na vrhu ekrana visi narančasta plo�
 - dok su [bočni stupci](#bočni-stupci) sakrili stranicu,
 - dok je uključeno [automatsko osvježavanje](#automatsko-osvježavanje) — tada nosi odbrojavanje i `[R]`, koji odmah osvježava sve karte.
 
-Na ploči uvijek nosi `[+]` (dodaje kartu na ploču) i `[R]`, uz njih i `[A]`, `[G]` i `[S]`, a na lijevom kraju ikonu stranice, koja vodi na početnu stranicu (s <kbd>Ctrl</kbd> ili srednjim klikom u novoj kartici).
+Na ploči uvijek nosi `[+]` (dodaje kartu na ploču) i `[R]`, uz njih i `[A]`, `[G]` i `[S]`.
 
 Pločica je blijeda dok ne zatreba — pune boje postaje pod mišem i dok je dijalog otvoren. Povlači se lijevo-desno, a za rubove se razvlači, najviše do polovice širine ekrana.
 
