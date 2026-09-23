@@ -1449,7 +1449,9 @@ function openMsAdd(anchor) {
 	if (!isDashboard()) return;
 	closeMsAdd();
 	const onBoard = new Set(resolveMapIds());
-	const maps = MAP_CATALOG.filter(map => !onBoard.has(map.id));
+	// by name, as the dialog's Naziv sorts: a menu is scanned for a name, not a kind
+	const maps = MAP_CATALOG.filter(map => !onBoard.has(map.id))
+		.sort((a, b) => a.name.localeCompare(b.name, 'hr'));
 
 	const input = el('input', { type: 'text', class: 'ms-add-input', placeholder: 'Traži kartu…', spellcheck: 'false', autocomplete: 'off' });
 	const list = el('div', { class: 'ms-add-list' });

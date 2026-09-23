@@ -1165,32 +1165,39 @@ body.fs-lock {
 		   overlay kind shows an empty track until hovered and lies over the row
 		   handles. A touch screen has no hover to miss and no handles to cover,
 		   and its overlay scrollbar is what everything else there looks like —
-		   so the native one is left alone below the breakpoint, gutter and all */
+		   so the native one is left alone below the breakpoint, gutter and all.
+		   The tab's [+] menu scrolls the same way */
 		@media (min-width: 801px) and (hover: hover) and (pointer: fine) {
-			.map-settings .ms-body {
+			.map-settings .ms-body,
+			.ms-add-list {
 				scrollbar-gutter: stable;
 			}
 
-			.map-settings .ms-body::-webkit-scrollbar {
+			.map-settings .ms-body::-webkit-scrollbar,
+			.ms-add-list::-webkit-scrollbar {
 				width: 12px;
 			}
 
-			.map-settings .ms-body::-webkit-scrollbar-track {
+			.map-settings .ms-body::-webkit-scrollbar-track,
+			.ms-add-list::-webkit-scrollbar-track {
 				background-color: #1a2536;
 			}
 
-			.map-settings .ms-body::-webkit-scrollbar-thumb {
+			.map-settings .ms-body::-webkit-scrollbar-thumb,
+			.ms-add-list::-webkit-scrollbar-thumb {
 				background-color: #485871;
 				border: 3px solid #1a2536;
 				border-radius: 6px;
 			}
 
-				.map-settings .ms-body::-webkit-scrollbar-thumb:hover {
+				.map-settings .ms-body::-webkit-scrollbar-thumb:hover,
+				.ms-add-list::-webkit-scrollbar-thumb:hover {
 					background-color: #5F6F89;
 				}
 
 			@supports not selector(::-webkit-scrollbar) {
-				.map-settings .ms-body {
+				.map-settings .ms-body,
+				.ms-add-list {
 					scrollbar-width: thin;
 					scrollbar-color: #485871 #1a2536;
 				}

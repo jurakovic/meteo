@@ -193,7 +193,7 @@ Na ploči:
 
 - **Posloži** (u dijalogu, `[A]` na pločici ili tipka <kbd>A</kbd>) razmjesti sve karte u pravilnu mrežu, jednakih veličina i bez razmaka. Broj stupaca i redova bira se tako da karte budu što veće, s obzirom na njihov oblik i oblik ekrana — četiri karte daju 2x2, šest 3x2, deset 4x3. Karte se pritom oslobode omjera; dvoklik na naslovnu traku vraća ga pojedinoj karti. Isto se dogodi i pri prvom ulasku na ploču.
 - `[x]` u traci prozora ili srednji klik na traku **miče kartu s popisa** — na ploči nema stranice u koju bi se vratila.
-- **Dodavanje karte** bez otvaranja dijaloga: `[+]` na [pločici Karte](#pločica-karte) otvara popis karata kojih još nema na ploči. Upisani pojam sužava popis kao u dijalogu, strelice biraju, a <kbd>Enter</kbd> ili klik dodaje kartu. <kbd>Esc</kbd> ili klik izvan popisa ga zatvara.
+- **Dodavanje karte** bez otvaranja dijaloga: `[+]` na [pločici Karte](#pločica-karte) otvara abecedni popis karata kojih još nema na ploči. Upisani pojam sužava popis kao u dijalogu, strelice biraju, a <kbd>Enter</kbd> ili klik dodaje kartu. <kbd>Esc</kbd> ili klik izvan popisa ga zatvara.
 - Karta dodana u popis pojavi se na ploči uz gornji lijevi kut, stepenasto ispod ostalih novih.
 - Bočnih stupaca nema; prozor doveden do ruba ekrana ostaje prozor.
 - **Cijeli zaslon** zauzme cijeli ekran, osim strane koju neki prozor zatvara cijelom visinom ili širinom. Prozor uz cijeli lijevi rub ostavi kartu na desnoj strani; prozor u kutu ne zatvara ništa, pa karta ide preko cijelog ekrana, a on ostaje iznad nje.
