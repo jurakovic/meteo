@@ -1,6 +1,7 @@
 // The settings dialog's two lists of maps: the selected ones, in the order the
 // page shows them (reordered by dragging), and the available ones below, a
 // finding surface sorted and filtered freely.
+
 import { el } from '../lib/dom.js';
 import { catalogMap, CATEGORY_GLYPHS, MAP_CATALOG } from '../maps/catalog.js';
 import { findTerms, matchesFind } from '../maps/find.js';

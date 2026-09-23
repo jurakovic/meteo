@@ -10,7 +10,7 @@ import { unsnapPane } from './columns.js';
 import { CASCADE_STEP, POPOUT_MIN_HEIGHT, POPOUT_MIN_WIDTH } from './constants.js';
 import { placePopout, popoutMaxWidth, raisePopout } from './core.js';
 import { leaveGroup, updateGroups } from './groups.js';
-import { persistSnapLayout } from './layout.js';
+import { arrangementChanged } from './layout.js';
 import { syncShadows } from './overlap.js';
 import { fitWidget, popoutMap, unlockAspect } from './popout.js';
 
@@ -123,7 +123,7 @@ export function duplicateMap(block) {
 	fitWidget(copy);
 	updateGroups();
 	syncShadows();
-	persistSnapLayout();
+	arrangementChanged();
 	return copy;
 }
 
@@ -168,5 +168,5 @@ export function removeShowing(block) {
 	block.remove();
 	updateGroups();
 	syncShadows();
-	persistSnapLayout();
+	arrangementChanged();
 }

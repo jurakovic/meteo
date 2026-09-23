@@ -10,6 +10,7 @@
 // change is announced as a dialog-toggled event.
 
 import { isTextField } from '../lib/dom.js';
+import { emit, EVENTS } from '../lib/events.js';
 import { clamp, roundFraction, setScrollbarGutter, viewportHeight, viewportWidth } from '../lib/geometry.js';
 import { DESKTOP_MQ } from '../lib/media.js';
 import { pulledSize, RESIZE_HANDLES, trackPointer } from '../lib/pointer.js';
@@ -192,7 +193,7 @@ function syncDialogChrome() {
 // off that — the Karte button's arrow, the manual's hash — has no other way of
 // hearing about it
 function notifyDialog(panel, visible) {
-	document.dispatchEvent(new CustomEvent('dialog-toggled', { detail: { panel, visible } }));
+	emit(EVENTS.dialogToggled, { panel, visible });
 }
 
 export function setDialogVisible(panel, visible) {

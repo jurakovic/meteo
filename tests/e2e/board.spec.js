@@ -101,6 +101,18 @@ test.describe('dashboard', () => {
 		await expect(page.locator('.po-grid')).toHaveCount(0);
 	});
 
+	test('G with the dialog open: its grid tick follows the key', async ({ page }) => {
+		await enterBoard(page, 'Sateliti');
+		await openDialog(page);
+		const tick = page.locator('#mapSettings .ms-grid', { hasText: 'Prikaži mrežu' }).locator('input');
+		await expect(tick).not.toBeChecked();
+		await page.keyboard.press('g');
+		await expect(tick).toBeChecked();
+		await expect(page.locator('.ms-tab [data-grid="show"]')).not.toHaveClass(/ms-tab-off/);
+		await tick.uncheck(); // and the other way: the tab follows the tick
+		await expect(page.locator('.ms-tab [data-grid="show"]')).toHaveClass(/ms-tab-off/);
+	});
+
 	test('A tiles the board again after a widget was moved', async ({ page }) => {
 		await enterBoard(page, 'Sateliti');
 		const tiled = await widgetBoxes(page);
@@ -173,6 +185,9 @@ test.describe('auto-refresh', () => {
 		await expect(page.locator('body')).toHaveClass(/refresh-on/);
 		expect(await storedJson(page, 'mapRefresh')).toEqual({ on: true, minutes: 5 });
 		await expect(page.locator('#mapSettings .ms-refresh-left')).toHaveText(/^još [45]:\d\d$/);
+		const before = await page.locator('#mapSettings .ms-refresh-left').textContent();
+		await page.clock.runFor(3000); // the dialog's own countdown moves with the clock
+		await expect(page.locator('#mapSettings .ms-refresh-left')).not.toHaveText(before);
 		await page.keyboard.press('Escape');
 		const img = page.locator('.map-block[data-inst="neverin-radar-hr"] .slide.active img');
 		await expect(img).not.toHaveAttribute('src', /_r=/);

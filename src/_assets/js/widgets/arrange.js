@@ -19,7 +19,7 @@ import { isSnapped } from './columns.js';
 import { ARRANGE_ASPECT, ARRANGE_HOLE, POPOUT_TITLE_HEIGHT } from './constants.js';
 import { placePopout } from './core.js';
 import { updateGroups } from './groups.js';
-import { persistSnapLayout } from './layout.js';
+import { arrangementChanged } from './layout.js';
 import { syncShadows } from './overlap.js';
 import { fitWidget, unlockAspect } from './popout.js';
 
@@ -110,5 +110,5 @@ export function arrangeBoard() {
 	});
 	updateGroups();
 	syncShadows();
-	persistSnapLayout();
+	arrangementChanged();
 }

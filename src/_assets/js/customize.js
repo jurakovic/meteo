@@ -5,6 +5,7 @@
 // the document is parsed (onReady), each step on its own.
 
 import { onReady } from './lib/dom.js';
+import { EVENTS, on } from './lib/events.js';
 import { cloakBoard, loadSharedMapView, uncloakBoard } from './maps/prefs.js';
 import { initRerender, renderMaps } from './maps/render.js';
 import { initActions, registerAction } from './page/actions.js';
@@ -46,7 +47,7 @@ initLayoutBreakpoint();
 initWidgetResponsiveness();
 initPageResize();
 // the columns and the widgets measure against a viewport a dialog's gutter changes
-document.addEventListener('dialog-toggled', () => layoutSnapColumns());
+on(EVENTS.dialogToggled, () => layoutSnapColumns());
 
 // once the document is parsed: the maps, then their arrangement, then the
 // wiring that has to see both

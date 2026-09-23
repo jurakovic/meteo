@@ -18,7 +18,7 @@ import { MAGNET, POPOUT_TITLE_HEIGHT, SNAP_ARM, SNAP_DETACH } from './constants.
 import { floatingBlocks } from './core.js';
 import { snapToGrid } from './grid.js';
 import { groupBox, groupMembers, groupStarts, moveGroup } from './groups.js';
-import { persistSnapLayout } from './layout.js';
+import { arrangementChanged } from './layout.js';
 import { trackWidgetPointer } from './overlap.js';
 
 export function dragPopout(block, e) {
@@ -58,7 +58,7 @@ export function dragPopout(block, e) {
 		showSnapPreview(null);
 		if (target) { snapPanes(byPlace(members), target.side, target.slot); return; }
 		snapToGrid(members); // on release, not during: the drag itself stays free
-		persistSnapLayout();
+		arrangementChanged();
 	});
 }
 

@@ -7,8 +7,8 @@ import { duplicateMap } from './copies.js';
 import { floatingBlocks, placePopout } from './core.js';
 import { toggleGridShown, toggleGridSnapped } from './grid.js';
 import { groupBox, groupMembers, groupStarts, moveGroup } from './groups.js';
-import { persistSnapLayout } from './layout.js';
-import { updateCovered } from './overlap.js';
+import { arrangementChanged } from './layout.js';
+import { refreshOverlap } from './overlap.js';
 import { reloadAllMaps } from './reload.js';
 
 // Keys for what the buttons cannot do in one gesture, and for backing out of
@@ -20,7 +20,7 @@ import { reloadAllMaps } from './reload.js';
 // [R] [G] [S], each titled with its key. None of this reaches the page while an
 // iframe holds the focus — a press inside a frame belongs to the frame's
 // document, and these maps are another origin — so a click on the page or on a
-// title bar comes first, as it does for the pointer (see updateCovered). The
+// title bar comes first, as it does for the pointer (see refreshOverlap). The
 // dialog's guard is repeated here: not from a text field, whose own Escape is a
 // way out of the field, and not under a modifier, which belongs to the browser
 const NUDGE_KEYS = { ArrowLeft: [-1, 0], ArrowRight: [1, 0], ArrowUp: [0, -1], ArrowDown: [0, 1] };
@@ -87,7 +87,7 @@ function nudgePopout(dx, dy) {
 		const rect = block.getBoundingClientRect();
 		placePopout(block, rect.left + dx, rect.top + dy);
 	}
-	updateCovered(); // the shadows and the order follow at once; the writing waits
+	refreshOverlap(); // the shadows and the order follow at once; the writing waits
 	nudgePersist();
 }
 
@@ -97,5 +97,5 @@ let nudgeTimer = 0;
 
 function nudgePersist() {
 	clearTimeout(nudgeTimer);
-	nudgeTimer = setTimeout(persistSnapLayout, 300);
+	nudgeTimer = setTimeout(arrangementChanged, 300);
 }

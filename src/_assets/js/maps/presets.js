@@ -70,7 +70,12 @@ function loadUserPresets() {
 }
 
 // read once: allPresets runs on every validation and panel build
-export let userPresets = loadUserPresets();
+let userPresets = loadUserPresets();
+
+// the saved presets, in the order they were made
+export function getUserPresets() {
+	return userPresets;
+}
 
 export function saveUserPresets() {
 	writeJson(STORAGE_KEYS.userPresets, userPresets);
@@ -161,7 +166,12 @@ function loadHiddenPresets() {
 	return Array.isArray(list) ? list.filter(id => isHideablePreset(id) && MAP_PRESETS.some(preset => preset.id === id)) : [];
 }
 
-export let hiddenPresets = loadHiddenPresets();
+let hiddenPresets = loadHiddenPresets();
+
+// the ids of the built-ins taken off the preset bar
+export function getHiddenPresets() {
+	return hiddenPresets;
+}
 
 function saveHiddenPresets() {
 	writeJson(STORAGE_KEYS.hiddenPresets, hiddenPresets);

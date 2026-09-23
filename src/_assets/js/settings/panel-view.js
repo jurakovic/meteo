@@ -1,8 +1,9 @@
 // What the settings dialog would apply or share, worked out from what it holds
 // — the preset or list picked, the board's tick — and the arrangement on
 // screen. No DOM here: the dialog's sections pass in what they show.
+
 import { prefsMapIds, sameMapIds } from '../maps/prefs.js';
-import { isUserPresetId, userPresets } from '../maps/presets.js';
+import { getUserPresets, isUserPresetId } from '../maps/presets.js';
 import { presetSharePrefs } from '../maps/share.js';
 import { currentSnapLayout, sameSnapLayout, sanitizeSnapLayout } from '../widgets/layout.js';
 
@@ -36,7 +37,7 @@ export function withDashboard(layout, on) {
 export function layoutForPrefs(prefs, dashboardChecked, current = currentSnapLayout()) {
 	const stored = prefs.preset === 'custom'
 		? current
-		: (userPresets.find(p => p.id === prefs.preset) || {}).layout; // a built-in has none
+		: (getUserPresets().find(p => p.id === prefs.preset) || {}).layout; // a built-in has none
 	return sanitizeSnapLayout(withDashboard(stored, dashboardChecked), prefsMapIds(prefs));
 }
 
@@ -52,7 +53,7 @@ export function selectedLayout(mapIds, dashboardChecked, current = currentSnapLa
 // on it either way, since the link carries the view Primijeni would build
 export function readSharePrefs(prefs, dashboardChecked, current = currentSnapLayout()) {
 	const layout = layoutForPrefs(prefs, dashboardChecked, current);
-	const preset = userPresets.find(p => p.id === prefs.preset);
+	const preset = getUserPresets().find(p => p.id === prefs.preset);
 	const shared = preset ? presetSharePrefs(preset) : prefs;
 	if (layout) shared.layout = layout; else delete shared.layout;
 	return shared;

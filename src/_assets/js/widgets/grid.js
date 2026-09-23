@@ -13,11 +13,11 @@
 // state while the board is off, when they do nothing
 
 import { dlog } from '../lib/debug.js';
+import { emit, EVENTS } from '../lib/events.js';
 import { viewportHeight, viewportWidth } from '../lib/geometry.js';
 import { DESKTOP_MQ } from '../lib/media.js';
 import { readJson, STORAGE_KEYS, writeJson } from '../lib/storage.js';
-import { syncMsTab } from '../settings/tab.js';
-import { dashboardMode, isDashboard } from './board.js';
+import { isDashboard } from './board.js';
 import { GRID_CELL, POPOUT_MIN_HEIGHT, POPOUT_MIN_WIDTH } from './constants.js';
 import { placePopout } from './core.js';
 import { fitWidget, syncBackdrop, unlockAspect } from './popout.js';
@@ -45,19 +45,15 @@ export function setGridPrefs(show, snap) {
 	writeJson(STORAGE_KEYS.grid, { show, snap });
 	renderGrid();
 	// the switches are in three places — the dialog's ticks, the tab's [G]/[S],
-	// and the keys — so the one that was not used is told. An open dialog holds
-	// its own copy of them and is re-read, or its next tick would write the
-	// stale one back and undo what the key or the glyph did
-	const panel = document.getElementById('mapSettings');
-	if (panel && !panel.hidden && panel._onGridChange) panel._onGridChange();
-	syncMsTab();
+	// and the keys — so the ones that were not used are told
+	emit(EVENTS.gridChanged);
 }
 
 // the paper itself: one fixed layer under the widgets and over the columns'
 // ground, drawn by the CSS from the cell. The page's own far edge is no
 // multiple of the cell and is not drawn — it is the edge of the screen
 export function renderGrid() {
-	const on = gridShow && dashboardMode && DESKTOP_MQ.matches;
+	const on = gridShow && isDashboard() && DESKTOP_MQ.matches;
 	let grid = document.querySelector('.po-grid');
 	if (!on) {
 		if (grid) grid.remove();
@@ -121,7 +117,7 @@ function snapBlockToGrid(block) {
 // on release only, never while the gesture runs: the widget follows the
 // pointer and settles onto the grid when it is let go
 export function snapToGrid(blocks) {
-	if (!gridSnap || !dashboardMode || !DESKTOP_MQ.matches) return;
+	if (!gridSnap || !isDashboard() || !DESKTOP_MQ.matches) return;
 	blocks.forEach(block => {
 		if (!block.classList.contains('fs-host')) snapBlockToGrid(block);
 	});

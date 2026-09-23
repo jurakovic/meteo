@@ -18,6 +18,7 @@
 // rectangle that is already the right half. It settles in a pass or two —
 // every pass only narrows — and stops when nothing moves.
 
+import { EVENTS, on } from '../lib/events.js';
 import { viewportHeight, viewportWidth } from '../lib/geometry.js';
 import { DESKTOP_MQ } from '../lib/media.js';
 import { catalogMap } from '../maps/catalog.js';
@@ -26,7 +27,7 @@ import { isDashboard } from './board.js';
 import { layoutSnapColumns } from './columns.js';
 import { POPOUT_FS_Z, POPOUT_MARGIN } from './constants.js';
 import { floatingBlocks, raisePopout } from './core.js';
-import { persistSnapLayout } from './layout.js';
+import { arrangementChanged } from './layout.js';
 
 export function freeRectAround(rect, blockers, bounds) {
 	// the spans, laid end to end, reach from one side of the rectangle to the
@@ -117,7 +118,7 @@ export function initWidgetFullscreen() {
 	// pane's side class); page/iframe.js says when one is toggled, so the column can
 	// hide its dividers under it — and, when the page's scroll lock takes the
 	// scrollbar, the viewport the columns are laid out in has changed width
-	document.addEventListener('map-fullscreen', () => {
+	on(EVENTS.mapFullscreen, () => {
 		// only the bar and the map move to the fullscreen place; the widget's box
 		// would stay behind, an empty frame over whatever it was floating on.
 		// The widgets floating over the page stay in view over the fullscreen map:
@@ -134,6 +135,6 @@ export function initWidgetFullscreen() {
 		layoutSnapColumns();
 		// a widget's fullscreen is part of the arrangement (the fullscreen flag on
 		// its entry); on a phone there is no arrangement on screen to write
-		if (DESKTOP_MQ.matches) persistSnapLayout();
+		if (DESKTOP_MQ.matches) arrangementChanged();
 	});
 }

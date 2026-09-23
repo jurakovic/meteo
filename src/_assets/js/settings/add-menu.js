@@ -1,4 +1,5 @@
 import { el } from '../lib/dom.js';
+import { EVENTS, on } from '../lib/events.js';
 import { clamp, viewportHeight, viewportWidth } from '../lib/geometry.js';
 import { CATEGORY_GLYPHS, MAP_CATALOG } from '../maps/catalog.js';
 import { findTerms, matchesFind } from '../maps/find.js';
@@ -126,7 +127,7 @@ function placeMsAdd() {
 
 // the menu shuts when a dialog opens and when the window is resized
 export function initAddMenu() {
-	document.addEventListener('dialog-toggled', (e) => { if (e.detail.visible) closeMsAdd(); });
+	on(EVENTS.dialogToggled, ({ visible }) => { if (visible) closeMsAdd(); });
 
 	window.addEventListener('resize', () => closeMsAdd());
 }

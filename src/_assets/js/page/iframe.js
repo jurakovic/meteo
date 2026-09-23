@@ -4,6 +4,7 @@
 // fullscreen. The page's own; a widget hosting one is widgets/fullscreen.js'.
 
 import { dlog } from '../lib/debug.js';
+import { emit, EVENTS } from '../lib/events.js';
 import { isNarrowViewport } from '../lib/media.js';
 
 // the width the frames' addresses were last set for: they depend on it only
@@ -59,7 +60,7 @@ export function toggleFullscreen(frameId, btn) {
 		// filling a snap column beside it (customize page), where the page
 		// stays in use
 		if (!if1.closest('.map-block.snapped')) document.body.classList.add('fs-lock');
-		document.dispatchEvent(new Event('map-fullscreen'));
+		emit(EVENTS.mapFullscreen);
 		btn.textContent = '[-]';
 		// unlock interactivity: drop the overlay gate
 		if (overlay) overlay.style.display = 'none';
@@ -77,7 +78,7 @@ export function exitFullscreen(if1) {
 	if (btn) btn.textContent = '[ ]';
 	if (![...document.querySelectorAll('.if1.fullscreen')].some(f => !f.closest('.map-block.snapped')))
 		document.body.classList.remove('fs-lock');
-	document.dispatchEvent(new Event('map-fullscreen'));
+	emit(EVENTS.mapFullscreen);
 	// restore the overlay gate to its pre-fullscreen lock state (tracked on enter)
 	const wasUnlocked = if1._fsOverlayVisible === false;
 	delete if1._fsOverlayVisible;

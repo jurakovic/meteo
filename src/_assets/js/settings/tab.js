@@ -9,6 +9,7 @@
 // move opens the dialog
 
 import { el } from '../lib/dom.js';
+import { EVENTS, on } from '../lib/events.js';
 import { clamp, roundFraction, viewportWidth } from '../lib/geometry.js';
 import { trackPointer } from '../lib/pointer.js';
 import { readJson, STORAGE_KEYS, writeJson } from '../lib/storage.js';
@@ -106,27 +107,24 @@ function buildMsTabCluster(tab) {
 }
 
 // the two switches say whether they are on by being lit or dimmed, as the
-// dialog's greys its own off the board. Called from setGridPrefs, wherever the
-// switch was flipped — the dialog, a key, or the glyph itself. [R] is an action
-// and has nothing to be on or off about
-export function syncMsTab() {
+// dialog's greys its own off the board. On grid-changed, wherever the switch
+// was flipped — the dialog, a key, or the glyph itself. [R] is an action and
+// has nothing to be on or off about
+function syncMsTab() {
 	const tab = document.querySelector('.ms-tab');
 	if (!tab) return;
 	const show = tab.querySelector('[data-grid="show"]');
 	const snap = tab.querySelector('[data-grid="snap"]');
 	if (show) show.classList.toggle('ms-tab-off', !isGridShown());
 	if (snap) snap.classList.toggle('ms-tab-off', !isGridSnapped());
-	syncRefreshLabels();
+	syncRefreshLabel();
 }
 
-// the countdown reads in two places — the tab, which shows for it wherever the
-// clock runs, and the dialog's own row — and the tick writes both
-export function syncRefreshLabels() {
-	const left = isRefreshOn() ? refreshLabel() : '';
+// the countdown, on every tick; the dialog's own row keeps its copy
+// (settings/panel-rows.js)
+function syncRefreshLabel() {
 	const count = document.querySelector('.ms-tab .ms-tab-count');
-	if (count) count.textContent = left;
-	const row = document.querySelector('.ms-refresh-left');
-	if (row) row.textContent = left ? `još ${left}` : '';
+	if (count) count.textContent = isRefreshOn() ? refreshLabel() : '';
 }
 
 export function initMsTab() {
@@ -164,4 +162,8 @@ export function initMsTab() {
 		}, () => { if (msTabMoved) saveMsTab(tab); });
 	});
 	window.addEventListener('resize', applyStoredMsTab); // held inside the viewport
+	on(EVENTS.gridChanged, syncMsTab);
+	on(EVENTS.refreshTick, syncRefreshLabel);
+	// the countdown coming or going changes how narrow the tab may be
+	on(EVENTS.refreshChanged, applyStoredMsTab);
 }

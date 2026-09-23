@@ -31,14 +31,24 @@ import { clamp, viewportHeight, viewportWidth } from '../lib/geometry.js';
 import { isDashboard, setDashboard } from './board.js';
 import { POPOUT_MAX_WIDTH, POPOUT_MIN_HEIGHT, POPOUT_TITLE_HEIGHT, SNAP_EDGE, SNAP_MIN_WIDTH, SNAP_SHUT } from './constants.js';
 import { magnetEdge } from './drag.js';
-import { persistSnapLayout } from './layout.js';
+import { arrangementChanged } from './layout.js';
 import { trackWidgetPointer } from './overlap.js';
 import { fitWidget } from './popout.js';
 
-export const snapColumns = {
+const snapColumns = {
 	left: { side: 'left', width: null, panes: [], node: null, ui: null },
 	right: { side: 'right', width: null, panes: [], node: null, ui: null }
 };
+
+// a column by its side, 'left' or 'right': { side, width, panes, … }
+export function snapColumn(side) {
+	return snapColumns[side];
+}
+
+// a column's width, as a fraction of the viewport, as the layout restores it
+export function setSnapColumnWidth(side, fraction) {
+	snapColumns[side].width = fraction;
+}
 
 let snapPreview = null;
 
@@ -149,7 +159,7 @@ export function snapPanes(blocks, side, slot) {
 		layoutSnapColumns();
 		y = block.getBoundingClientRect().bottom;
 	});
-	persistSnapLayout();
+	arrangementChanged();
 }
 
 // a popped-out block becomes a pane of the column with its top there (a free
@@ -325,7 +335,7 @@ function resizeSnapColumn(col, e) {
 		if (isSnapPageHidden() && !snapPageWidths && before.left + before.right < 0.999) snapPageWidths = before;
 		if (!isSnapPageHidden()) snapPageWidths = null;
 		layoutSnapColumns();
-	}, persistSnapLayout);
+	}, arrangementChanged);
 }
 
 // the seam between two columns that meet moves width from one to the other
@@ -337,7 +347,7 @@ function resizeSnapSeam(e) {
 		left.width = px / viewportWidth();
 		right.width = 1 - left.width;
 		layoutSnapColumns();
-	}, persistSnapLayout);
+	}, arrangementChanged);
 }
 
 // double-click on an edge: hide the page behind the columns — this column
@@ -357,7 +367,7 @@ export function toggleSnapPage(col) {
 		snapPageWidths = null;
 	}
 	layoutSnapColumns();
-	persistSnapLayout();
+	arrangementChanged();
 }
 
 export function snapHandlePointerDown(handle, e) {

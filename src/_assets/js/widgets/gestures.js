@@ -3,10 +3,10 @@
 // double and middle clicks; and a frame taking the focus raises its widget.
 
 import { DESKTOP_MQ } from '../lib/media.js';
-import { layoutSnapColumns, snapColumns, snapHandlePointerDown, snapPaneOf, toggleSnapPage } from './columns.js';
+import { layoutSnapColumns, snapColumn, snapHandlePointerDown, snapPaneOf, toggleSnapPage } from './columns.js';
 import { raisePopout } from './core.js';
 import { dragPopout } from './drag.js';
-import { persistSnapLayout } from './layout.js';
+import { arrangementChanged } from './layout.js';
 import { fitWidget, lockToImage, togglePopout } from './popout.js';
 import { resizePopout, resizeSeam, seamNeighbour } from './resize.js';
 
@@ -92,7 +92,7 @@ function onMiddleClick(e) {
 function onDoubleClick(e) {
 	if (!e.target.closest) return;
 	const edge = e.target.closest('.snap-edge');
-	if (edge) toggleSnapPage(snapColumns[edge.dataset.side]);
+	if (edge) toggleSnapPage(snapColumn(edge.dataset.side));
 	// a double-click on a widget's title bar puts its map in fullscreen and
 	// takes it out again (toggleBarFullscreen: an interactive map only, which
 	// is never the letterboxed widget below)
@@ -109,7 +109,7 @@ function onDoubleClick(e) {
 		if (pane) delete pane.height;
 		layoutSnapColumns();
 		fitWidget(block);
-		persistSnapLayout();
+		arrangementChanged();
 	}
 }
 
