@@ -1,5 +1,5 @@
 // The customize page's maps: the view it shows (maps/prefs.js) drawn into
-// <tbody data-maps>, every title bar with the widgets' buttons.
+// <div data-maps>, every title bar with the widgets' buttons.
 //
 // Which maps are off comes from remote-config.js (isMapEnabled). Off is hidden,
 // not removed: lists, presets and links keep the id, and the map is back in
@@ -30,16 +30,16 @@ export function initRerender() {
 }
 
 export function renderMaps() {
-	const tbody = document.querySelector('tbody[data-maps]');
-	if (!tbody) return;
-	// a fullscreen map goes with the tbody too, and would leave the page's
+	const list = document.querySelector('[data-maps]');
+	if (!list) return;
+	// a fullscreen map goes with the list too, and would leave the page's
 	// scroll locked behind it; taken down as the arrangement it is part of
 	// is (what comes back is applied after the render)
 	withPersistPaused(() => document.querySelectorAll('.if1.fullscreen').forEach(exitFullscreen));
-	resetSnapColumns(); // their panes go with the tbody
+	resetSnapColumns(); // their panes go with the list
 	mapsRendered = true;
 	const maps = resolveMapIds().map(catalogMap).filter(map => map && isMapEnabled(map.id));
-	renderMapRows(tbody, maps, WIDGET_RENDER);
+	renderMapRows(list, maps, WIDGET_RENDER);
 }
 
 // the remote config changed under maps already out: the view is drawn again the

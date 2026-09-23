@@ -19,47 +19,36 @@
 		<div class="progress-container">
 			<div class="progress-bar"></div>
 		</div>
-		<h2 align="center">Meteo radari <span class="beta">beta</span></h2>
+		<h2>Meteo radari <span class="beta">beta</span></h2>
 		<hr>
-		<table border="0" align="center" cellpadding="0" cellspacing="0">
-			<tbody>
-				<tr>
-					<td align="center">
-						<div class="buttons three with-help">
-							<a href="/" style="text-decoration: none"><div class="btn">Početna</div></a>
-							<button type="button" class="btn ms-toggle" data-action="map-settings">
-								<span>Karte</span>
-								<span class="arrow">▼</span>
-							</button>
-							<div class="links-btn">
-								<button type="button" class="btn" data-action="links">Linkovi</button>
-								<input type="checkbox" class="links-toggle" data-action="links-bottom" title="Prikaži linkove ispod karata" />
-							</div>
-							<button type="button" class="btn help-btn" data-action="manual" title="Upute (H)">?</button>
-						</div>
-					</td>
-				</tr>
-				<tr class="sp"></tr>
-			</tbody>
+		<main class="maps">
+			<div class="maps-head">
+				<div class="buttons three with-help">
+					<a href="/"><div class="btn">Početna</div></a>
+					<button type="button" class="btn ms-toggle" data-action="map-settings">
+						<span>Karte</span>
+						<span class="arrow">▼</span>
+					</button>
+					<div class="links-btn">
+						<button type="button" class="btn" data-action="links">Linkovi</button>
+						<input type="checkbox" class="links-toggle" data-action="links-bottom" title="Prikaži linkove ispod karata" />
+					</div>
+					<button type="button" class="btn help-btn" data-action="manual" title="Upute (H)">?</button>
+				</div>
+			</div>
 
-			<tbody data-maps></tbody>
+			<div class="maps-list" data-maps></div>
 
-			<tbody>
-				<tr>
-					<td align="center" id="links">
-						<button type="button" class="expandable">
-							<span>Linkovi</span>
-							<span class="arrow">▼</span>
-						</button>
-					</td>
-				</tr>
-				<tr>
-					<td align="left">
-						<div class="links" data-include-html="/_components/links.c.html"></div>
-					</td>
-				</tr>
-			</tbody>
-		</table>
+			<div class="maps-foot">
+				<div class="maps-links-head" id="links">
+					<button type="button" class="expandable">
+						<span>Linkovi</span>
+						<span class="arrow">▼</span>
+					</button>
+				</div>
+				<div class="links" data-include-html="/_components/links.c.html"></div>
+			</div>
+		</main>
 	</div>
 	<!-- the settings dialog, over everything; the tab opens it where the page's own button is out of reach.
 	     The backdrop under it takes the press that dismisses it, so that press reaches nothing else -->
@@ -81,9 +70,9 @@
 	</div>
 	<button type="button" class="ms-tab" title="Karte (K)"><span class="ms-tab-name">Karte</span></button>
 	<footer>
-		<a data-action="top" style="cursor: pointer">Povratak na vrh</a>
+		<a data-action="top">Povratak na vrh</a>
 		·
-		<span class="manual-link"><a data-action="manual" style="cursor: pointer">Upute</a> ·</span>
+		<span class="manual-link"><a data-action="manual">Upute</a> ·</span>
 		<a href="/">Početna</a>
 		|
 		<a href="https://jurakovic.github.io">Projekti</a>

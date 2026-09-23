@@ -199,7 +199,7 @@ function dropSnapColumn(col) {
 	col.panes = [];
 }
 
-// the panes are gone with the tbody they were part of, and the board with
+// the panes are gone with the list they were part of, and the board with
 // them (applySnapLayout sets it again from the layout)
 export function resetSnapColumns() {
 	Object.values(snapColumns).forEach(dropSnapColumn);
@@ -354,7 +354,7 @@ function resizeSnapSeam(e) {
 
 // double-click on an edge: hide the page behind the columns — this column
 // takes what the other leaves — or bring it back, to the widths from before
-// the page was hidden, else with a gap wide enough for the page's table
+// the page was hidden, else with a gap wide enough for the page's list
 export function toggleSnapPage(col) {
 	const other = otherSnapColumn(col);
 	if (!isSnapPageHidden()) {

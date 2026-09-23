@@ -231,7 +231,7 @@ export function applySnapLayout(layout) {
 	// the mode before anything is measured: the page's scrollbar goes with it
 	setDashboard(!!(layout && layout.dashboard && DESKTOP_MQ.matches));
 	// nothing to place, but the sweep still has to run: the widgets this replaces
-	// go with the tbody (renderMaps) rather than being docked, so their shadows
+	// go with the list (renderMaps) rather than being docked, so their shadows
 	// are left in the layer with no widget to own them, and the refreshOverlap
 	// that sweeps them is below this return
 	if (!layout || !DESKTOP_MQ.matches) {

@@ -70,38 +70,32 @@ export function popoutRest() {
 }
 
 // [x] on the board, on a map's last showing: the map leaves the list it is
-// shown from — the widget goes, with its rows in the (hidden) table, and the
+// shown from — the widget goes, with its entry in the (hidden) list, and the
 // list is stored without it (maps/prefs.js), as the dialog would store it after the
 // map was unticked
 export function removeFromDashboard(block) {
 	dlog(`removeFromDashboard: ${block.dataset.mapId}`);
 	const id = block.dataset.mapId;
 	withPersistPaused(() => dockMap(block)); // out of its column and group, a fullscreen taken down
-	const row = block.closest('tr');
-	const next = row.nextElementSibling;
-	const links = next && next.querySelector('.links-bottom') ? next : null;
-	const last = links || row;
-	const spacer = row.previousElementSibling && row.previousElementSibling.classList.contains('sp20') ? row.previousElementSibling
-		: last.nextElementSibling && last.nextElementSibling.classList.contains('sp20') ? last.nextElementSibling : null;
-	[links, spacer, row].forEach(node => { if (node) node.remove(); });
+	block.closest('.map-entry').remove(); // with the links under it
 	removeMapFromList(id);
 }
 
 // the tab's [+], the other way round: the map joins the end of the list, its
-// rows join the end of the (hidden) table the way the render would have laid
+// entry joins the end of the (hidden) list the way the render would have laid
 // them, and it comes onto the board the way any map new to the list does, at
 // the cascade's first step (popoutRest — every other map is a widget already).
 // Nothing is rendered again, so nothing else on the board reloads
 export function addToDashboard(mapId) {
 	const map = catalogMap(mapId);
-	const tbody = document.querySelector('tbody[data-maps]');
-	if (!map || !tbody || !isDashboard() || pageShowing(mapId)) return;
+	const list = document.querySelector('[data-maps]');
+	if (!map || !list || !isDashboard() || pageShowing(mapId)) return;
 	dlog(`addToDashboard: ${mapId}`);
 	addMapToList(mapId);
-	const empty = tbody.querySelector('.maps-empty');
-	if (empty) tbody.replaceChildren(); // the "nothing selected" row
-	const block = appendMapRows(tbody, map, WIDGET_RENDER);
-	const links = tbody.lastElementChild.querySelector('.links-bottom');
+	const empty = list.querySelector('.maps-empty');
+	if (empty) list.replaceChildren(); // the "nothing selected" line
+	const block = appendMapRows(list, map, WIDGET_RENDER);
+	const links = block.parentElement.querySelector('.links-bottom');
 	if (links) links.addEventListener('scroll', () => updateLinksScrollShadow(links), { passive: true });
 	wireDuplicate(block); // its own wiring and only its own, as a copy's
 	popoutRest();

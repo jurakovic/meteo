@@ -97,7 +97,7 @@ function fullscreenRect() {
 }
 
 // every widget's box placed on its rect, in the layer its standing asks for,
-// and any box left without a widget — one docked, or gone with the tbody —
+// and any box left without a widget — one docked, or gone with the list —
 // swept out of both
 // each widget's box in the shadow layer
 const shadowOf = new WeakMap();

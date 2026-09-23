@@ -6,7 +6,7 @@ import { addExpandableClickEventListener, addLinksScrollShadows, initLinksBottom
 import { showProgress } from './progress.js';
 import { addSwipeEvents } from './slideshow.js';
 
-// wiring for content inside the maps tbody; called on load and again after
+// wiring for content inside the maps list; called on load and again after
 // maps/render.js re-renders it, so it must only touch freshly created nodes
 export function initDynamicContent() {
 	document.querySelectorAll('img.lazy').forEach(img => {

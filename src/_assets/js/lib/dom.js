@@ -44,3 +44,12 @@ export function flashLabel(node, text, restore) {
 	node.textContent = text;
 	setTimeout(() => { node.textContent = restore; }, 1500);
 }
+
+// a number the stylesheet defines on :root (a z-index layer), fallback while
+// there is none to read (no stylesheet yet, a test without a DOM)
+export function cssNumber(name, fallback) {
+	const value = typeof getComputedStyle === 'function'
+		? Number(getComputedStyle(document.documentElement).getPropertyValue(name).trim())
+		: NaN;
+	return Number.isFinite(value) && value > 0 ? value : fallback;
+}

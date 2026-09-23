@@ -18,6 +18,7 @@
 // rectangle that is already the right half. It settles in a pass or two —
 // every pass only narrows — and stops when nothing moves.
 
+import { cssNumber } from '../lib/dom.js';
 import { EVENTS, on } from '../lib/events.js';
 import { viewportHeight, viewportWidth } from '../lib/geometry.js';
 import { DESKTOP_MQ } from '../lib/media.js';
@@ -25,7 +26,7 @@ import { instMapId } from '../maps/render.js';
 import { mapTypeOf } from '../maps/types.js';
 import { isDashboard } from './board.js';
 import { layoutSnapColumns } from './columns.js';
-import { POPOUT_FS_Z, POPOUT_MARGIN } from './constants.js';
+import { POPOUT_MARGIN } from './constants.js';
 import { floatingBlocks, raisePopout } from './core.js';
 import { arrangementChanged } from './layout.js';
 
@@ -128,7 +129,9 @@ export function initWidgetFullscreen() {
 			const hosting = !!block.querySelector('.if1.fullscreen');
 			const wasHosting = block.classList.contains('fs-host');
 			block.classList.toggle('fs-host', hosting);
-			if (hosting) block.style.zIndex = POPOUT_FS_Z;
+			// under every other widget, over the columns' ground (styles.css puts
+			// the page's fullscreen map in the same layer)
+			if (hosting) block.style.zIndex = cssNumber('--z-fullscreen-host', 4500);
 			else if (wasHosting) raisePopout(block);
 		});
 		fitBoardFullscreen(); // on the board there is no column to fit it, and no page either

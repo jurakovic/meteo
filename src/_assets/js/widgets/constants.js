@@ -4,11 +4,10 @@
 // ---- a widget
 export const POPOUT_WIDTH = 420; // the width a map pops out at
 export const POPOUT_MIN_WIDTH = 260;
-export const POPOUT_MAX_WIDTH = 875; // the table's max-width; the page's cap (the board has none)
+export const POPOUT_MAX_WIDTH = 875; // the maps list's max-width; the page's cap (the board has none)
 export const POPOUT_MIN_HEIGHT = 120; // free (iframe) widgets only; the others follow their aspect
 export const POPOUT_MARGIN = 16; // the gutter a widget is cascaded into, and the gap that still counts as none
 export const POPOUT_TITLE_HEIGHT = 23; // .radartitle height; keeps the drag handle reachable
-export const POPOUT_FS_Z = 4500; // a widget hosting a fullscreen map: under every other widget, over the columns' ground (CSS puts the page's fullscreen there too)
 export const TITLE_GAP = 6; // kept between a widget's title and a button cluster
 export const CASCADE_STEP = 32; // between widgets popped out one after another with no place of their own
 

@@ -2,7 +2,7 @@
 // draggable, resizable widget, so it stays visible while the rest of the page
 // scrolls. Nothing moves in the DOM (an iframe would reload): the block only
 // gets a class and inline left/top/width, the same trick as the iframe
-// fullscreen. A gap of the block's height keeps its place in the table and
+// fullscreen. A gap of the block's height keeps its place in the list and
 // offers a way back.
 
 import { buildReloadButton } from './reload.js';

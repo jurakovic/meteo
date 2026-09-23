@@ -1,6 +1,45 @@
+/* the site's colours and stacking layers, in one place: every colour used
+   more than once, and every layer a fixed element sits on. The layers the
+   widgets are placed in from script are read from here (widgets/core.js) */
+:root {
+	--c-page: #212f45; /* the page, and a widget under its map */
+	--c-surface: #202c40; /* a map's placeholder, the dialog, the menu, the gap left by a widget */
+	--c-surface-deep: #1a2536; /* the columns' ground, the dialog's rows, scroll tracks */
+	--c-field: #1b2735; /* text fields and lists */
+	--c-chip: #2b3a52; /* preset chips and name fields */
+	--c-control: #485871; /* buttons and the lines around controls */
+	--c-control-hover: #5f6f89; /* a control under the pointer; the dialog's edge */
+	--c-row-hover: #3a4a66; /* a chip or a menu row under the pointer */
+	--c-line: #3d4d6a; /* the dialog's rules */
+	--c-muted: #8a94a8; /* quiet text */
+	--c-mark: #93a4bd; /* marks on chips */
+	--c-title: #2b5797; /* title bars */
+	--c-links: #3a3f4a; /* the row of links under a map */
+	--c-accent: #ff9800; /* the site's orange: the tab, what is selected or wrong */
+	--c-board: #4a8de6; /* the board's blue: its rows, groups, the snap preview */
+	--c-board-deep: #22385c; /* a board row that is on */
+
+	--z-progress: 1000; /* the loading bar */
+	--z-column-ground: 3999; /* a snap column's ground, under its panes */
+	--z-grid: 4000; /* the board's graph paper */
+	--z-shadows-under: 4400; /* widgets' shadows beside a fullscreen map */
+	--z-fullscreen-host: 4500; /* a fullscreen map in a widget or a column, under the other widgets (widgets/fullscreen.js) */
+	--z-fullscreen-host-bar: 4501; /* its title bar */
+	--z-shadows: 4900; /* widgets' shadows */
+	--z-widgets: 5000; /* the widgets, raised one above another from here up (widgets/core.js) */
+	--z-widgets-top: 7999; /* the highest a widget goes before the order is packed down again */
+	--z-column-ui: 8000; /* a snap column's edge, over its panes */
+	--z-snap-preview: 8500; /* where a dragged widget would snap */
+	--z-fullscreen: 9999; /* a fullscreen map over the page */
+	--z-fullscreen-bar: 10000; /* its title bar */
+	--z-backdrop: 99999; /* the dialog's backdrop */
+	--z-dialog: 100000; /* a dialog, and the tab */
+	--z-menu: 100001; /* the tab's [+] menu, over the tab's shadow */
+}
+
 
 body {
-	background-color: #212f45;
+	background-color: var(--c-page);
 	font-family: monospace;
 	min-height: 100vh;
 	margin: 0px;
@@ -11,8 +50,12 @@ body {
 	margin: 8px;
 }
 
-h2, a, td {
+h2, a, td, .maps {
 	color: white;
+}
+
+h2 {
+	text-align: center;
 }
 
 a {
@@ -23,21 +66,55 @@ a {
 		text-decoration: underline;
 	}
 
-table {
+/* the page's column: the buttons, the maps and the links under them */
+.maps {
+	display: block;
 	width: 100%;
 	max-width: 875px;
-	height: auto;
-	table-layout: fixed;
+	margin: 0 auto;
+}
+
+.maps-head {
+	margin-bottom: 12px;
+}
+
+.maps-head,
+.maps-links-head,
+.map-entry {
+	text-align: center;
+}
+
+/* a map narrower than the column sits in its middle. Only in the page's
+   flow: a widget lays its block out as a flex column, where an auto margin
+   would shrink the bar to its text. :where keeps this at a class's weight,
+   so any rule below that places these blocks still wins */
+:where(.map-block:not(.popout)) :is(.radartitle, .slideshow, .placeholder, .indicators-container),
+:where(.map-entry) > .links-bottom {
+	margin-inline: auto;
+}
+
+.map-entry + .map-entry {
+	margin-top: 24px;
+}
+
+@media (max-width: 800px) {
+	.map-entry + .map-entry {
+		margin-top: 12px;
+	}
+}
+
+[data-action] {
+	cursor: pointer;
 }
 
 .placeholder {
-	background-color: #202c40;
+	background-color: var(--c-surface);
 }
 
 .radartitle {
 	position: relative;
 	max-width: 100%;
-	background-color: #2b5797;
+	background-color: var(--c-title);
 	box-sizing: border-box;
 	height: 23px;
 	padding: 4px 3px;
@@ -194,7 +271,7 @@ iframe, video {
 	top: 0;
 	left: var(--snap-l, 0px);
 	right: var(--snap-r, 0px);
-	z-index: 10000;
+	z-index: var(--z-fullscreen-bar);
 	display: flex;
 	align-items: center; /* vertically center the title items in a taller bar */
 	justify-content: center;
@@ -220,7 +297,7 @@ iframe, video {
 	width: auto; /* the .if1 width: 100% would win over right */
 	bottom: 0;
 	padding-top: 0;
-	z-index: 9999;
+	z-index: var(--z-fullscreen);
 }
 
 body.fs-lock {
@@ -266,8 +343,8 @@ body.fs-lock {
 	gap: 6px;
 	box-sizing: border-box;
 	padding: 8px;
-	background-color: #202c40;
-	color: #8a94a8;
+	background-color: var(--c-surface);
+	color: var(--c-muted);
 }
 
 	.map-gap a {
@@ -321,15 +398,15 @@ body.fs-lock {
 
 	/* a grouped widget's frame in the snap blue, so the group reads as one */
 	.map-block.popout.grouped::after {
-		border-color: #4a8de6;
+		border-color: var(--c-board);
 	}
 
 	/* no shadow of its own: it is cast for it in the layer below every widget
 	   (.po-shadows), so it never falls across the widget beside it */
 	.map-block.popout {
 		position: fixed;
-		z-index: 5000;
-		background-color: #212f45;
+		z-index: var(--z-widgets);
+		background-color: var(--c-page);
 	}
 
 		/* the frame, laid over the widget by a pseudo rather than drawn by a
@@ -363,7 +440,7 @@ body.fs-lock {
 			content: '';
 			position: absolute;
 			inset: 0;
-			border: 1px solid #2b5797;
+			border: 1px solid var(--c-title);
 			z-index: 2; /* over .po-h, which straddles these edges at 1 */
 			pointer-events: none; /* and must keep catching the drag */
 		}
@@ -583,8 +660,8 @@ body.fs-lock {
 		position: fixed;
 		top: 0;
 		bottom: 0;
-		z-index: 3999;
-		background-color: #1a2536;
+		z-index: var(--z-column-ground);
+		background-color: var(--c-surface-deep);
 		pointer-events: none;
 	}
 
@@ -593,7 +670,7 @@ body.fs-lock {
 		position: fixed;
 		top: 0;
 		bottom: 0;
-		z-index: 8000;
+		z-index: var(--z-column-ui);
 		pointer-events: none;
 	}
 
@@ -689,11 +766,11 @@ body.fs-lock {
 	}
 
 	.po-shadows {
-		z-index: 4900;
+		z-index: var(--z-shadows);
 	}
 
 	.po-shadows-under {
-		z-index: 4400;
+		z-index: var(--z-shadows-under);
 	}
 
 		.po-shadow {
@@ -708,7 +785,7 @@ body.fs-lock {
 	.po-grid {
 		position: fixed;
 		inset: 0;
-		z-index: 4000;
+		z-index: var(--z-grid);
 		pointer-events: none;
 		background-image:
 			repeating-linear-gradient(to right, rgba(255, 255, 255, 0.08) 0 1px, transparent 1px var(--grid-cell)),
@@ -770,11 +847,11 @@ body.fs-lock {
 	   the page's fullscreen goes under them (above the columns' ground), and
 	   a widget hosting one is lowered to the same place by popout.js */
 	.radartitle.fullscreen {
-		z-index: 4501;
+		z-index: var(--z-fullscreen-host-bar);
 	}
 
 	.if1.fullscreen {
-		z-index: 4500;
+		z-index: var(--z-fullscreen-host);
 	}
 
 	/* the columns cover the page: no scrollbar for it, and nothing to scroll to */
@@ -785,9 +862,9 @@ body.fs-lock {
 	/* the slot a dragged widget would take */
 	.snap-preview {
 		position: fixed;
-		z-index: 8500;
+		z-index: var(--z-snap-preview);
 		box-sizing: border-box;
-		border: 2px dashed #4a8de6;
+		border: 2px dashed var(--c-board);
 		background-color: rgba(43, 87, 151, 0.25);
 		pointer-events: none;
 	}
@@ -796,7 +873,7 @@ body.fs-lock {
 .links-bottom {
 	display: none;
 	text-align: left;
-	background-color: #3a3f4a;
+	background-color: var(--c-links);
 	box-sizing: border-box;
 	padding: 5px 4px;
 	white-space: nowrap;
@@ -828,13 +905,13 @@ body.fs-lock {
 	.links-bottom::before {
 		left: -4px;
 		margin-right: -24px;
-		background: linear-gradient(to left, transparent, #3a3f4a);
+		background: linear-gradient(to left, transparent, var(--c-links));
 	}
 
 	.links-bottom::after {
 		right: -4px;
 		margin-left: -24px;
-		background: linear-gradient(to right, transparent, #3a3f4a);
+		background: linear-gradient(to right, transparent, var(--c-links));
 	}
 
 	.links-bottom.can-scroll-left::before {
@@ -855,23 +932,9 @@ body.fs-lock {
 	}
 }
 
-.sp {
-	height: 12px;
-}
-
-.sp20 {
-	height: 24px;
-}
-
-@media (max-width: 800px) {
-	.sp20 {
-		height: 12px;
-	}
-}
-
 .beta {
 	font-size: 9px;
-	color: #ff9800;
+	color: var(--c-accent);
 	vertical-align: super;
 	text-transform: uppercase;
 	letter-spacing: 1px;
@@ -894,6 +957,12 @@ body.fs-lock {
 	gap: 1%;
 	font-size: 13px;
 }
+
+	/* a button that is a link: the button says it is one, not an underline */
+	.buttons a,
+	.buttons a:hover {
+		text-decoration: none;
+	}
 
 	.buttons.three {
 		grid-template-columns: repeat(3, 1fr);
@@ -947,7 +1016,7 @@ body.fs-lock {
 		font-size: 13px;
 		font-family: inherit;
 		color: white;
-		background-color: #485871;
+		background-color: var(--c-control);
 		align-content: center;
 		cursor: pointer;
 		width: 100%;
@@ -957,7 +1026,7 @@ body.fs-lock {
 	}
 
 		.buttons .btn:hover {
-			background-color: #5F6F89;
+			background-color: var(--c-control-hover);
 		}
 
 	.links-btn {
@@ -993,7 +1062,7 @@ body.fs-lock {
 .ms-backdrop {
 	position: fixed;
 	inset: 0;
-	z-index: 99999;
+	z-index: var(--z-backdrop);
 	background-color: rgba(10, 16, 28, 0.45);
 }
 
@@ -1008,7 +1077,7 @@ body.fs-lock {
    up; 750 by 750 to begin with, or what the viewport leaves */
 .map-settings {
 	position: fixed;
-	z-index: 100000;
+	z-index: var(--z-dialog);
 	top: 24px;
 	left: 0;
 	right: 0;
@@ -1020,9 +1089,9 @@ body.fs-lock {
 	display: flex; /* the header stays, the body below it scrolls */
 	flex-direction: column;
 	box-sizing: border-box;
-	border: 1px solid #5F6F89;
+	border: 1px solid var(--c-control-hover);
 	box-shadow: 0 16px 48px rgba(0, 0, 0, 0.75), 0 2px 8px rgba(0, 0, 0, 0.5);
-	background-color: #202c40;
+	background-color: var(--c-surface);
 	text-align: left;
 	font-size: 13px;
 	color: white;
@@ -1082,7 +1151,7 @@ body.fs-lock {
 		align-items: center; /* not baseline: the icon at the left end has none */
 		padding: 7px 10px;
 		background-color: #2c3b56;
-		border-bottom: 1px solid #3d4d6a;
+		border-bottom: 1px solid var(--c-line);
 	}
 
 		.map-settings .ms-head .ms-title {
@@ -1172,26 +1241,26 @@ body.fs-lock {
 
 			.map-settings .ms-body::-webkit-scrollbar-track,
 			.ms-add-list::-webkit-scrollbar-track {
-				background-color: #1a2536;
+				background-color: var(--c-surface-deep);
 			}
 
 			.map-settings .ms-body::-webkit-scrollbar-thumb,
 			.ms-add-list::-webkit-scrollbar-thumb {
-				background-color: #485871;
-				border: 3px solid #1a2536;
+				background-color: var(--c-control);
+				border: 3px solid var(--c-surface-deep);
 				border-radius: 6px;
 			}
 
 				.map-settings .ms-body::-webkit-scrollbar-thumb:hover,
 				.ms-add-list::-webkit-scrollbar-thumb:hover {
-					background-color: #5F6F89;
+					background-color: var(--c-control-hover);
 				}
 
 			@supports not selector(::-webkit-scrollbar) {
 				.map-settings .ms-body,
 				.ms-add-list {
 					scrollbar-width: thin;
-					scrollbar-color: #485871 #1a2536;
+					scrollbar-color: var(--c-control) var(--c-surface-deep);
 				}
 			}
 		}
@@ -1206,7 +1275,7 @@ body.fs-lock {
 .ms-tab {
 	display: none;
 	position: fixed;
-	z-index: 100000;
+	z-index: var(--z-dialog);
 	top: 0;
 	left: 50%;
 	transform: translateX(-50%);
@@ -1218,7 +1287,7 @@ body.fs-lock {
 	color: white;
 	/* the site's orange: the one way to the dialog from a board that has no
 	   page to carry the button, so it is the accent rather than the furniture */
-	background-color: #ff9800;
+	background-color: var(--c-accent);
 	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
 	cursor: pointer;
 	/* it hangs over the board the whole time it is shown, and the board is the
@@ -1331,16 +1400,16 @@ body.fs-lock {
 	   is the dialog's Dostupne karte cut down to the one thing it is for */
 	.ms-add {
 		position: fixed;
-		z-index: 100001; /* over the tab's shadow */
+		z-index: var(--z-menu); /* over the tab's shadow */
 		display: flex;
 		flex-direction: column;
 		width: 300px;
 		max-width: calc(100vw - 16px);
 		box-sizing: border-box;
 		padding: 6px;
-		border: 1px solid #5F6F89;
+		border: 1px solid var(--c-control-hover);
 		box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6), 0 2px 8px rgba(0, 0, 0, 0.4);
-		background-color: #202c40;
+		background-color: var(--c-surface);
 		text-align: left;
 		font-size: 13px;
 		color: white;
@@ -1350,9 +1419,9 @@ body.fs-lock {
 			flex: 0 0 auto;
 			margin-bottom: 6px;
 			padding: 4px 6px;
-			border: 1px solid #485871;
+			border: 1px solid var(--c-control);
 			border-radius: 3px;
-			background-color: #1b2735;
+			background-color: var(--c-field);
 			color: inherit;
 			font-family: inherit;
 			font-size: inherit;
@@ -1360,7 +1429,7 @@ body.fs-lock {
 
 		.ms-add-input:focus {
 			outline: none;
-			border-color: #ff9800;
+			border-color: var(--c-accent);
 		}
 
 		.ms-add-list {
@@ -1381,7 +1450,7 @@ body.fs-lock {
 
 		/* the one Enter would add: lit by the arrows and by the pointer alike */
 		.ms-add-item.active {
-			background-color: #3a4a66;
+			background-color: var(--c-row-hover);
 		}
 
 		.ms-add-item .ms-glyph {
@@ -1418,7 +1487,7 @@ body.fs-lock {
 		gap: 6px;
 		padding-bottom: 8px;
 		margin-bottom: 8px;
-		border-bottom: 1px solid #485871;
+		border-bottom: 1px solid var(--c-control);
 	}
 
 		/* the radio holds the state and takes the keyboard focus, the chip
@@ -1452,8 +1521,8 @@ body.fs-lock {
 			position: relative; /* for the saved-preset corner mark */
 			text-align: center; /* the chips are wider than their names once stretched */
 			padding: 3px 10px;
-			background-color: #2b3a52;
-			border: 1px solid #485871;
+			background-color: var(--c-chip);
+			border: 1px solid var(--c-control);
 			user-select: none;
 		}
 
@@ -1466,7 +1535,7 @@ body.fs-lock {
 				position: absolute;
 				top: 0;
 				right: 0;
-				border-top: 7px solid #93a4bd;
+				border-top: 7px solid var(--c-mark);
 				border-left: 7px solid transparent;
 			}
 
@@ -1480,7 +1549,7 @@ body.fs-lock {
 			   sits inside it, in the padding */
 			.map-settings .ms-chip.ms-board,
 			.map-settings .ms-manage-name.ms-board {
-				border-left: 3px solid #4a8de6;
+				border-left: 3px solid var(--c-board);
 			}
 
 			.map-settings .ms-manage-name.ms-board {
@@ -1496,19 +1565,19 @@ body.fs-lock {
 				height: 4px;
 				margin-top: -2px;
 				border-radius: 50%;
-				background-color: #93a4bd;
+				background-color: var(--c-mark);
 			}
 
 		.map-settings .ms-presets label:hover .ms-chip {
-			background-color: #3a4a66;
+			background-color: var(--c-row-hover);
 		}
 
 		/* the panel's button fill, with the accent on the name alone — the same
 		   way the active sort link is marked. The fill is restated to hold
 		   steady under :hover, which it ties with on specificity */
 		.map-settings .ms-presets input:checked + .ms-chip {
-			color: #ff9800;
-			background-color: #485871;
+			color: var(--c-accent);
+			background-color: var(--c-control);
 		}
 
 		/* white, not the accent: orange now means "selected", and a focus ring in
@@ -1562,7 +1631,7 @@ body.fs-lock {
 		/* no rule below: sorting only reaches the list underneath, so the row
 		   reads as its header rather than a band between the two lists */
 		margin: 6px 0 0;
-		border-top: 1px solid #485871;
+		border-top: 1px solid var(--c-control);
 	}
 
 		.map-settings .ms-sort a {
@@ -1572,7 +1641,7 @@ body.fs-lock {
 		}
 
 		.map-settings .ms-sort a.active {
-			color: #ff9800;
+			color: var(--c-accent);
 		}
 
 	/* the box sits on the list it narrows, under the sort row that heads the
@@ -1587,9 +1656,9 @@ body.fs-lock {
 			flex: 1;
 			min-width: 0;
 			padding: 4px 22px 4px 6px;
-			border: 1px solid #485871;
+			border: 1px solid var(--c-control);
 			border-radius: 3px;
-			background-color: #1b2735;
+			background-color: var(--c-field);
 			color: inherit;
 			font-family: inherit;
 			font-size: inherit;
@@ -1597,7 +1666,7 @@ body.fs-lock {
 
 		.map-settings .ms-find-input:focus {
 			outline: none;
-			border-color: #ff9800;
+			border-color: var(--c-accent);
 		}
 
 		/* only once there is something to clear; the room it takes is held by the
@@ -1672,14 +1741,14 @@ body.fs-lock {
 		gap: 14px;
 		margin: 10px 0 4px;
 		padding: 8px 10px;
-		background-color: #1a2536;
-		border: 1px solid #3d4d6a;
-		border-left: 4px solid #4a8de6;
+		background-color: var(--c-surface-deep);
+		border: 1px solid var(--c-line);
+		border-left: 4px solid var(--c-board);
 	}
 
 		.map-settings .ms-mode.ms-on {
-			background-color: #22385c;
-			border-color: #4a8de6;
+			background-color: var(--c-board-deep);
+			border-color: var(--c-board);
 		}
 		.map-settings .ms-mode .btn {
 			flex: none;
@@ -1701,7 +1770,7 @@ body.fs-lock {
 			display: flex;
 			align-items: center;
 			gap: 6px;
-			color: #8a94a8;
+			color: var(--c-muted);
 			cursor: pointer;
 			user-select: none;
 		}
@@ -1739,15 +1808,15 @@ body.fs-lock {
 		gap: 10px;
 		margin: 4px 0;
 		padding: 8px 10px;
-		background-color: #1a2536;
-		border: 1px solid #3d4d6a;
-		border-left: 4px solid #4a8de6;
-		color: #8a94a8;
+		background-color: var(--c-surface-deep);
+		border: 1px solid var(--c-line);
+		border-left: 4px solid var(--c-board);
+		color: var(--c-muted);
 	}
 
 		.map-settings .ms-refresh.ms-on {
-			background-color: #22385c;
-			border-color: #4a8de6;
+			background-color: var(--c-board-deep);
+			border-color: var(--c-board);
 			color: white;
 		}
 
@@ -1761,9 +1830,9 @@ body.fs-lock {
 
 		.map-settings .ms-refresh-every {
 			padding: 2px 4px;
-			border: 1px solid #485871;
+			border: 1px solid var(--c-control);
 			border-radius: 3px;
-			background-color: #1b2735;
+			background-color: var(--c-field);
 			color: inherit;
 			font-family: inherit;
 			font-size: inherit;
@@ -1780,7 +1849,7 @@ body.fs-lock {
 		display: flex;
 		gap: 14px;
 		padding: 6px 0;
-		color: #8a94a8;
+		color: var(--c-muted);
 	}
 
 	/* both rows are hidden by attribute (on a phone, or with nothing to say),
@@ -1807,7 +1876,7 @@ body.fs-lock {
 	}
 
 	.map-settings .ms-item.dragging {
-		background-color: #2b5797;
+		background-color: var(--c-title);
 	}
 
 		.map-settings .ms-item.dragging .ms-handle {
@@ -1817,7 +1886,7 @@ body.fs-lock {
 	.map-settings .ms-manage {
 		padding-top: 6px;
 		margin-top: 6px;
-		border-top: 1px solid #485871;
+		border-top: 1px solid var(--c-control);
 	}
 
 		/* the accent means "active" and dimming means "hidden", so weight is what
@@ -1848,7 +1917,7 @@ body.fs-lock {
 		.map-settings .ms-manage-empty + .ms-manage-title {
 			padding-top: 8px;
 			margin-top: 8px;
-			border-top: 1px solid #485871;
+			border-top: 1px solid var(--c-control);
 		}
 
 		.map-settings .ms-save {
@@ -1865,8 +1934,8 @@ body.fs-lock {
 			font-family: inherit;
 			font-size: 13px;
 			color: white;
-			background-color: #2b3a52;
-			border: 1px solid #485871;
+			background-color: var(--c-chip);
+			border: 1px solid var(--c-control);
 			outline: none;
 			height: 24px;
 			padding: 0 6px;
@@ -1874,7 +1943,7 @@ body.fs-lock {
 
 		/* a rejected rename (empty or already taken) keeps the editor open */
 		.map-settings .ms-name.invalid {
-			border-color: #ff9800;
+			border-color: var(--c-accent);
 		}
 
 		.map-settings .ms-save .btn {
@@ -1938,7 +2007,7 @@ body.fs-lock {
 
 			/* armed delete, same accent as the active sort link */
 			.map-settings .ms-manage-links a.active {
-				color: #ff9800;
+				color: var(--c-accent);
 			}
 
 		.map-settings .ms-manage-empty {
@@ -1952,7 +2021,7 @@ body.fs-lock {
 		font-size: 13px;
 		font-family: inherit;
 		color: white;
-		background-color: #485871;
+		background-color: var(--c-control);
 		cursor: pointer;
 		height: 24px;
 		padding: 0 24px;
@@ -1961,7 +2030,7 @@ body.fs-lock {
 	}
 
 		.map-settings .btn:hover {
-			background-color: #5F6F89;
+			background-color: var(--c-control-hover);
 		}
 
 	/* flex so the button and the link sit on a common middle rather than on a
@@ -1997,13 +2066,13 @@ body.fs-lock {
 	.manual-dialog .ms-body h3 {
 		margin: 22px 0 8px;
 		font-weight: normal;
-		color: #ff9800;
+		color: var(--c-accent);
 	}
 
 	.manual-dialog .ms-body h2 {
 		font-size: 16px;
 		padding-bottom: 4px;
-		border-bottom: 1px solid #485871;
+		border-bottom: 1px solid var(--c-control);
 	}
 
 	.manual-dialog .ms-body h3 {
@@ -2027,30 +2096,32 @@ body.fs-lock {
 	.manual-dialog .ms-body kbd {
 		padding: 0 4px;
 		border-radius: 3px;
-		background-color: #1b2735;
+		background-color: var(--c-field);
 		font-family: inherit;
 		white-space: nowrap;
 	}
 
 	.manual-dialog .ms-body kbd {
-		border: 1px solid #5F6F89;
+		border: 1px solid var(--c-control-hover);
 	}
 
 	.manual-dialog .ms-body a {
-		color: #ff9800;
+		color: var(--c-accent);
 	}
 
 	/* the aside the document sets off from the run of the text */
 	.manual-dialog .ms-body blockquote {
 		margin: 12px 0;
 		padding: 2px 12px;
-		border-left: 3px solid #485871;
+		border-left: 3px solid var(--c-control);
 	}
 
 	/* a table can be wider than the dialog once it is pulled narrow, and it is
 	   the table that scrolls then rather than the document under it */
 	.manual-dialog .ms-body table {
 		display: block;
+		width: 100%;
+		max-width: 875px;
 		overflow-x: auto;
 		margin: 10px 0;
 		border-collapse: collapse;
@@ -2059,7 +2130,7 @@ body.fs-lock {
 		.manual-dialog .ms-body th,
 		.manual-dialog .ms-body td {
 			padding: 4px 10px 4px 0;
-			border-bottom: 1px solid #2b3a52;
+			border-bottom: 1px solid var(--c-chip);
 			text-align: left;
 			vertical-align: top;
 		}
@@ -2074,8 +2145,8 @@ body.fs-lock {
 	.manual-dialog .manual-toc {
 		margin: 10px 0 18px;
 		padding: 8px 0;
-		border-top: 1px solid #485871;
-		border-bottom: 1px solid #485871;
+		border-top: 1px solid var(--c-control);
+		border-bottom: 1px solid var(--c-control);
 	}
 
 		.manual-dialog .manual-toc ul {
@@ -2235,7 +2306,7 @@ body.fs-lock {
 }
 
 	.indicator.active {
-		background-color: #ff9800;
+		background-color: var(--c-accent);
 	}
 
 @media (max-width: 800px) {
@@ -2251,7 +2322,7 @@ body.fs-lock {
 	margin-bottom: 4px;
 	font-family: inherit;
 	color: white;
-	background-color: #485871;
+	background-color: var(--c-control);
 	cursor: pointer;
 	width: 100%;
 	height: 24px;
@@ -2260,7 +2331,7 @@ body.fs-lock {
 }
 
 	.expandable:hover {
-		background-color: #5F6F89;
+		background-color: var(--c-control-hover);
 	}
 
 	.expandable .arrow {
@@ -2308,7 +2379,7 @@ body.fs-lock {
 footer {
 	position: sticky;
 	top: 100%;
-	background: #485871;
+	background: var(--c-control);
 	color: white;
 	text-align: center;
 	padding: 8px;
@@ -2321,13 +2392,13 @@ footer {
 	top: 0;
 	width: 100%;
 	height: 3px;
-	z-index: 1000;
+	z-index: var(--z-progress);
 	background-color: #5c5c5c80;
 }
 
 .progress-bar {
 	width: 0;
 	height: 100%;
-	background-color: #ff9800;
+	background-color: var(--c-accent);
 	transition: width 0.3s ease-in-out;
 }

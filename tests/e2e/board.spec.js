@@ -69,6 +69,9 @@ test.describe('dashboard', () => {
 		await expect(po).toHaveText('[x]');
 		await po.click();
 		await expect(block(page, 'meteociel-satelit')).toHaveCount(0);
+		// its entry goes whole, links and all, and leaves nothing behind
+		await expect(page.locator('[data-maps] > .map-entry')).toHaveCount(3);
+		await expect(page.locator('[data-maps] > :not(.map-entry)')).toHaveCount(0);
 		expect(await storedJson(page, 'mapPrefs')).toMatchObject({ preset: 'custom', maps: ['neverin-satelit-hr', 'neverin-satelit-eu', 'idokep-satelit-eu'] });
 
 		await page.locator('.ms-tab .ms-tab-add').click();
@@ -80,6 +83,9 @@ test.describe('dashboard', () => {
 		await menu.locator('input').press('Enter');
 		await expect(menu).toHaveCount(0);
 		await expect(block(page, 'ventusky')).toHaveClass(/popout/);
+		// an entry of its own at the end of the list, the way the render lays one
+		await expect(page.locator('[data-maps] > .map-entry')).toHaveCount(4);
+		await expect(page.locator('[data-maps] > .map-entry').last().locator('.map-block')).toHaveAttribute('data-map-id', 'ventusky');
 		expect((await storedJson(page, 'mapPrefs')).maps.at(-1)).toBe('ventusky');
 		expect((await storedJson(page, 'mapPrefs')).layout.floating.map(f => f.id)).toContain('ventusky');
 	});
