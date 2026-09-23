@@ -2,6 +2,7 @@
 // and the stacking order.
 
 import { subpixel, viewportHeight, viewportWidth } from '../lib/geometry.js';
+import { mapTypeOf } from '../maps/types.js';
 import { isDashboard } from './board.js';
 import { POPOUT_MARGIN, POPOUT_MAX_WIDTH, POPOUT_TITLE_HEIGHT } from './constants.js';
 import { groupMembers } from './groups.js';
@@ -12,7 +13,8 @@ let popoutZ = 5000; // bumped on every raise so the last touched widget is on to
 // iframes have no intrinsic aspect, so their widgets resize in both dimensions;
 // images, slideshows and videos keep the height their aspect ratio gives them
 export function isFreePopout(block) {
-	return !!block.querySelector('.if1, .if2');
+	const type = mapTypeOf(block.dataset.mapId);
+	return !!type && type.freeAspect;
 }
 
 // the widest a widget goes: the table's width over the page, which is where

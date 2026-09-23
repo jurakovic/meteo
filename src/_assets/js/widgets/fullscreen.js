@@ -21,8 +21,8 @@
 import { EVENTS, on } from '../lib/events.js';
 import { viewportHeight, viewportWidth } from '../lib/geometry.js';
 import { DESKTOP_MQ } from '../lib/media.js';
-import { catalogMap } from '../maps/catalog.js';
 import { instMapId } from '../maps/render.js';
+import { mapTypeOf } from '../maps/types.js';
 import { isDashboard } from './board.js';
 import { layoutSnapColumns } from './columns.js';
 import { POPOUT_FS_Z, POPOUT_MARGIN } from './constants.js';
@@ -102,8 +102,8 @@ export function fitBoardFullscreen() {
 
 // only an interactive map has a fullscreen to be stored
 export function hasFullscreen(inst) {
-	const map = catalogMap(instMapId(inst));
-	return !!map && map.type === 'iframe';
+	const type = mapTypeOf(instMapId(inst));
+	return !!type && type.fullscreen;
 }
 
 // a map put fullscreen as stored: through its own button, so page/iframe.js does

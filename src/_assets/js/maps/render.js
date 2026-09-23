@@ -12,6 +12,7 @@ import { buildPopoutButton } from '../widgets/popout.js';
 import { buildReloadButton } from '../widgets/reload.js';
 import { catalogMap } from './catalog.js';
 import { resolveMapIds } from './prefs.js';
+import { MAP_TYPES } from './types.js';
 
 // Drawing the customize page's maps into <tbody data-maps>: one block per map,
 // built from its catalog entry.
@@ -84,7 +85,7 @@ function buildMapTitleBar(map) {
 	return buildTitleBar({ text: map.name, href: map.titleHref }, map, true);
 }
 
-function buildSlideshow(map, inst) {
+export function buildSlideshow(map, inst) {
 	const slideshowId = map.id + instSuffix(inst);
 	const start = map.startSlide || 1;
 	const titled = map.slides.some(slide => slide.title);
@@ -137,7 +138,7 @@ function buildSlideshow(map, inst) {
 	return [map.titleHref ? buildMapTitleBar(map) : null, container, indicators];
 }
 
-function buildImage(map) {
+export function buildImage(map) {
 	return [
 		buildMapTitleBar(map),
 		el('div', { class: 'placeholder', style: `${maxWidthStyle(map)} aspect-ratio: ${map.aspect};`.trim() }, [
@@ -146,7 +147,7 @@ function buildImage(map) {
 	];
 }
 
-function buildVideo(map) {
+export function buildVideo(map) {
 	const video = el('video', { controls: '' }, [el('source', { type: 'video/mp4', src: map.src })]);
 	video.muted = true;
 	video.autoplay = true;
@@ -161,7 +162,7 @@ function buildVideo(map) {
 	];
 }
 
-function buildIframe(map, inst) {
+export function buildIframe(map, inst) {
 	const frameId = map.frameId + instSuffix(inst);
 	const pascal = frameId[0].toUpperCase() + frameId.slice(1);
 
@@ -201,7 +202,7 @@ function buildIframe(map, inst) {
 	return [title, body];
 }
 
-function buildBasicIframe(map) {
+export function buildBasicIframe(map) {
 	return [
 		buildMapTitleBar(map),
 		el('div', { class: 'if2 placeholder' }, [
@@ -219,15 +220,10 @@ function buildLinksBottom(map) {
 	return bar;
 }
 
+// a map's block contents, drawn the way its type draws it (maps/types.js)
 export function buildMapContent(map, inst = map.id) {
-	switch (map.type) {
-		case 'slideshow': return buildSlideshow(map, inst);
-		case 'image': return buildImage(map);
-		case 'video': return buildVideo(map);
-		case 'iframe': return buildIframe(map, inst);
-		case 'iframe-basic': return buildBasicIframe(map);
-	}
-	return [];
+	const type = MAP_TYPES[map.type];
+	return type ? type.build(map, inst) : [];
 }
 
 export function renderMaps() {

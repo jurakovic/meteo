@@ -143,6 +143,16 @@ test.describe('dashboard', () => {
 		await expect(img).toHaveAttribute('src', /[?&]_r=\d+$/);
 	});
 
+	test('R fetches each kind of map as its type says: frames and videos again, interactive maps not', async ({ page }) => {
+		await enterBoard(page, 'Radari');
+		const requested = [];
+		page.on('request', request => requested.push(request.url()));
+		await page.keyboard.press('r');
+		await expect.poll(() => requested.some(url => url.includes('cdn.fmi.fi'))).toBe(true); // eumetnet, a plain frame
+		await expect.poll(() => requested.some(url => url.includes('sat-eu.mp4') || url.includes('radar.gif'))).toBe(true);
+		expect(requested.some(url => url.includes('embed.windy.com'))).toBe(false); // live of its own accord
+	});
+
 	test('D copies the widget on top', async ({ page }) => {
 		await enterBoard(page, 'Sateliti');
 		// a press raises it; the bottom row, clear of the tab hanging over the top one
