@@ -5,6 +5,9 @@
 // fullscreen. A gap of the block's height keeps its place in the table and
 // offers a way back.
 
+import { buildReloadButton } from './reload.js';
+import { buildGroupButton } from './groups.js';
+import { buildDuplicateButton } from './copies.js';
 import { dlog } from '../lib/debug.js';
 import { el } from '../lib/dom.js';
 import { DESKTOP_MQ } from '../lib/media.js';
@@ -261,4 +264,15 @@ export function handGapTo(block, heir) {
 	if (!gap) return;
 	setGap(heir, gap);
 	gapOfBlock.delete(block);
+}
+
+// what the customize page draws its maps with (maps/render.js): every title
+// bar carries the widgets' buttons, shown on a desktop (CSS) — an interactive
+// map's without [R], its bar keeping its own gate button instead
+export const WIDGET_RENDER = { titleButtons: widgetTitleButtons };
+
+function widgetTitleButtons(interactive) {
+	return interactive
+		? [buildDuplicateButton(), buildGroupButton(), buildPopoutButton()]
+		: [buildDuplicateButton(), buildReloadButton(), buildGroupButton(), buildPopoutButton()];
 }

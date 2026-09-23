@@ -5,12 +5,9 @@
 // not name is on, and so is every map when there is no copy yet or the fetch
 // fails: a broken file hides nothing.
 //
-// Started first on both pages, since the render asks isMapEnabled(). Off is
-// hidden, not removed, on both:
-// - the landing page's maps are static rows carrying data-map-id, so a style
-//   rule takes a map's rows out, with the spacer after them
-// - the customize page leaves the map out of what it shows (maps/render.js)
-//   and draws the view again on a change, on the map-config-changed event
+// Started first on both pages, since the render asks isMapEnabled(): both
+// leave a map that is off out of what they draw, and draw again on a change
+// (map-config-changed)
 
 import { emit, EVENTS } from './lib/events.js';
 import { readJson, STORAGE_KEYS, writeJson } from './lib/storage.js';
@@ -38,23 +35,6 @@ function sameIdSet(a, b) {
 	return a.size === b.size && [...a].every(id => b.has(id));
 }
 
-// the landing page's rows. Set from <head> in the build, where this is inlined,
-// so a map already off is never painted. Only a tr carries the id on that page;
-// the customize page puts it on blocks and dialog rows, which this leaves alone.
-// The ids come from a remote file, hence the escape
-function styleDisabledMaps() {
-	let style = document.getElementById('mapConfigStyle');
-	if (!style) {
-		style = document.createElement('style');
-		style.id = 'mapConfigStyle';
-		document.head.appendChild(style);
-	}
-	const rows = [...disabledMaps].map(id => `tr[data-map-id="${CSS.escape(id)}"]`);
-	style.textContent = rows.length
-		? rows.map(row => `${row}, ${row} + tr.sp20`).join(',\n') + ' { display: none; }'
-		: '';
-}
-
 // no-cache revalidates rather than skips the cache: a switch flipped in the
 // file is seen on the next load, not whenever the browser's copy runs out
 function fetchMapConfig() {
@@ -65,16 +45,14 @@ function fetchMapConfig() {
 			const disabled = disabledMapIds(config);
 			if (sameIdSet(disabled, disabledMaps)) return;
 			disabledMaps = disabled;
-			styleDisabledMaps();
 			emit(EVENTS.mapConfigChanged);
 		})
 		.catch(() => { /* the copy in hand stands: the file out of reach is no reason to show less */ });
 }
 
-// the stored copy at once — from <head> in the build, so a map already off is
-// never painted — and the file fetched behind it
+// the stored copy at once, before the first render, so a map already off is
+// never drawn — and the file fetched behind it
 export function initRemoteConfig() {
 	disabledMaps = disabledMapIds(loadMapConfig());
-	styleDisabledMaps();
 	fetchMapConfig();
 }

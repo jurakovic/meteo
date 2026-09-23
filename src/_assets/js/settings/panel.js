@@ -6,7 +6,7 @@ import { el, flashLabel } from '../lib/dom.js';
 import { EVENTS, on } from '../lib/events.js';
 import { activePresetId, clearSharedMapView, resolveMapIds, saveMapPrefs } from '../maps/prefs.js';
 import { isBoardPreset } from '../maps/presets.js';
-import { renderMaps } from '../maps/render.js';
+import { renderMaps } from '../maps/view.js';
 import { copyMapViewLink } from '../maps/share.js';
 import { registerCommand, withKey } from '../page/commands.js';
 import { initDynamicContent } from '../page/content.js';

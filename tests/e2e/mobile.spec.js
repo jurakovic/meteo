@@ -22,7 +22,7 @@ async function swipe(locator, dx) {
 
 test('landing: a swipe changes the slide; a double tap opens the gate', async ({ page, paths }) => {
 	await page.goto(paths.landing);
-	const slideshow = page.locator('.slideshow[data-slideshow-id="1"]');
+	const slideshow = page.locator('.slideshow[data-slideshow-id="neverin-radar-hr"]');
 	await swipe(slideshow, -120);
 	await expect(slideshow).toHaveAttribute('data-current-slide', '3');
 	await swipe(slideshow, 120);

@@ -8,9 +8,12 @@ test.describe('landing page', () => {
 	});
 
 	test('shows the fixed list of maps', async ({ page }) => {
-		await expect(page.locator('tr[data-map-id="neverin-radar-hr"]').first()).toBeVisible();
+		await expect(page.locator('.map-block[data-map-id="neverin-radar-hr"]').first()).toBeVisible();
 		await expect(page.locator('.slideshow')).toHaveCount(12);
 		await expect(page.locator('iframe#windy')).toHaveAttribute('src', /embed\.windy\.com.*zoom=7/);
+		// the default view, drawn from the catalog, without the widgets
+		await expect(page.locator('.map-block')).toHaveCount(16);
+		await expect(page.locator('.po-btn, .dup-btn, .grp-btn, .rl-btn')).toHaveCount(0);
 	});
 
 	test('the manual is switched off: no ? button, and H does nothing', async ({ page }) => {
@@ -25,8 +28,8 @@ test.describe('landing page', () => {
 	});
 
 	test('slideshow arrows and indicators move together', async ({ page }) => {
-		const slideshow = page.locator('.slideshow[data-slideshow-id="1"]');
-		const indicators = page.locator('.indicators-container[data-slideshow-id="1"] .indicator');
+		const slideshow = page.locator('.slideshow[data-slideshow-id="neverin-radar-hr"]');
+		const indicators = page.locator('.indicators-container[data-slideshow-id="neverin-radar-hr"] .indicator');
 		await expect(slideshow).toHaveAttribute('data-current-slide', '2');
 		await slideshow.locator('.next').click();
 		await expect(slideshow).toHaveAttribute('data-current-slide', '3');
@@ -39,7 +42,7 @@ test.describe('landing page', () => {
 	});
 
 	test('a horizontal mouse drag changes the slide', async ({ page }) => {
-		const slideshow = page.locator('.slideshow[data-slideshow-id="1"]');
+		const slideshow = page.locator('.slideshow[data-slideshow-id="neverin-radar-hr"]');
 		await slideshow.scrollIntoViewIfNeeded();
 		const b = await slideshow.boundingBox();
 		await page.mouse.move(b.x + b.width / 2 + 100, b.y + b.height / 2);
@@ -104,7 +107,7 @@ test.describe('landing page', () => {
 	});
 
 	test('fullscreen opens over the page, drops the gate and restores it on exit', async ({ page }) => {
-		const fs = page.locator('tr[data-map-id="windy"] .fs-btn');
+		const fs = page.locator('.map-block[data-map-id="windy"] .fs-btn');
 		await fs.scrollIntoViewIfNeeded();
 		await fs.click();
 		await expect(fs).toHaveText('[-]');
@@ -121,7 +124,7 @@ test.describe('landing page', () => {
 	});
 
 	test('Escape leaves a fullscreen map (B4)', async ({ page }) => {
-		const fs = page.locator('tr[data-map-id="windy"] .fs-btn');
+		const fs = page.locator('.map-block[data-map-id="windy"] .fs-btn');
 		await fs.scrollIntoViewIfNeeded();
 		await fs.click();
 		await expect(page.locator('body')).toHaveClass(/fs-lock/);
@@ -136,10 +139,10 @@ test.describe('landing page with a map switched off remotely', () => {
 
 	test('the map is hidden once the config arrives, and at once on the next load', async ({ page, paths }) => {
 		await page.goto(paths.landing);
-		await expect(page.locator('tr[data-map-id="windy"]').first()).toBeHidden();
-		await expect(page.locator('tr[data-map-id="dhmz-radar"]').first()).toBeVisible();
+		await expect(page.locator('.map-block[data-map-id="windy"]')).toHaveCount(0); // left out, not just hidden
+		await expect(page.locator('.map-block[data-map-id="dhmz-radar"]').first()).toBeVisible();
 		expect(await page.evaluate(() => localStorage.getItem('mapConfig'))).toContain('windy');
 		await page.reload();
-		await expect(page.locator('tr[data-map-id="windy"]').first()).toBeHidden();
+		await expect(page.locator('.map-block[data-map-id="windy"]')).toHaveCount(0);
 	});
 });
