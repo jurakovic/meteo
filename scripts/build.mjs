@@ -1,5 +1,6 @@
 // Builds docs/ (the GitHub Pages site) from src/: every page with its CSS and
-// scripts minified and inlined, the shared fragments and the manual put in,
+// its script (the page's entry module, bundled) minified and inlined, the
+// shared fragments and the manual put in,
 // dev paths rewritten to the site's /meteo/ ones, comments stripped. Output is
 // CRLF, as the rest of the repository is.
 //
@@ -7,6 +8,7 @@
 import { cp, mkdir, readdir, readFile, rm, writeFile } from 'node:fs/promises';
 import { dirname, join, relative, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { build as esbuild } from 'esbuild';
 import { minify } from 'terser';
 import CleanCSS from 'clean-css';
 import { convertManual } from './manual.mjs';
@@ -34,9 +36,23 @@ function indent(text, num, skip = -1) {
 	}).join(CRLF);
 }
 
-async function minifyJs(name) {
-	const code = await readText(join(src, '_assets/js', `${name}.js`));
-	const result = await minify(code, { compress: true, mangle: true, format: { max_line_len: 140 } });
+// the pages' entry modules, each bundled with everything it imports into one
+// script: inlined into <head>, where it runs before the body exists (which
+// the entries are written for). esbuild bundles and terser minifies: esbuild's
+// own line limit breaks lines inside string literals, where the indentation
+// below would then land, and terser's does not
+const ENTRIES = ['landing', 'customize'];
+
+async function bundleJs(name) {
+	const bundled = await esbuild({
+		entryPoints: [join(src, '_assets/js', `${name}.js`)],
+		bundle: true,
+		format: 'iife',
+		charset: 'utf8',
+		target: 'es2020',
+		write: false
+	});
+	const result = await minify(bundled.outputFiles[0].text, { compress: true, mangle: true, format: { max_line_len: 140 } });
 	return toCrlf(result.code);
 }
 
@@ -71,8 +87,8 @@ function processHtml(html, parts) {
 		['url=/customize/index.html', 'url=/meteo/customize/'],
 		['href="/"', 'href="/meteo/"'],
 		['<link rel="stylesheet" href="/_assets/css/styles.css">', `<style>${CRLF}${parts.css}${CRLF}\t</style>`],
-		...['main', 'maps', 'popout', 'config'].map(name =>
-			[`<script src="/_assets/js/${name}.js" defer></script>`, `<script>${CRLF}${parts.js[name]}${CRLF}\t</script>`]),
+		...ENTRIES.map(name =>
+			[`<script type="module" src="/_assets/js/${name}.js"></script>`, `<script>${CRLF}${parts.js[name]}${CRLF}\t</script>`]),
 		['<script src="/_assets/js/include.js" defer></script>', ''],
 		['<!-- seo -->', parts.seo],
 		['<!-- gtag -->', parts.gtag],
@@ -96,8 +112,7 @@ async function build() {
 
 	const parts = {
 		css: indent(await minifyCss('styles'), 2),
-		js: Object.fromEntries(await Promise.all(['main', 'maps', 'popout', 'config']
-			.map(async name => [name, indent(await minifyJs(name), 2)]))),
+		js: Object.fromEntries(await Promise.all(ENTRIES.map(async name => [name, indent(await bundleJs(name), 2)]))),
 		seo: indent(await component('seo'), 1, 0),
 		gtag: indent(await component('gtag'), 1, 0),
 		links: indent(await component('links'), 6),

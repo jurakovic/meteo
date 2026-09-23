@@ -10,10 +10,7 @@
 	<title>Meteo radari</title>
 	<!-- seo -->
 	<link rel="stylesheet" href="/_assets/css/styles.css">
-	<script src="/_assets/js/config.js" defer></script>
-	<script src="/_assets/js/popout.js" defer></script>
-	<script src="/_assets/js/maps.js" defer></script>
-	<script src="/_assets/js/main.js" defer></script>
+	<script type="module" src="/_assets/js/customize.js"></script>
 	<script src="/_assets/js/include.js" defer></script>
 	<!-- gtag -->
 </head>
@@ -30,15 +27,15 @@
 					<td align="center">
 						<div class="buttons three with-help">
 							<a href="/" style="text-decoration: none"><div class="btn">Početna</div></a>
-							<button type="button" class="btn ms-toggle" onclick="toggleMapSettings()">
+							<button type="button" class="btn ms-toggle" data-action="map-settings">
 								<span>Karte</span>
 								<span class="arrow">▼</span>
 							</button>
 							<div class="links-btn">
-								<button type="button" class="btn" onclick="scrollToElement('links')">Linkovi</button>
-								<input type="checkbox" class="links-toggle" onchange="toggleLinksBottom(this)" title="Prikaži linkove ispod karata" />
+								<button type="button" class="btn" data-action="links">Linkovi</button>
+								<input type="checkbox" class="links-toggle" data-action="links-bottom" title="Prikaži linkove ispod karata" />
 							</div>
-							<button type="button" class="btn help-btn" onclick="toggleManual()" title="Upute (H)">?</button>
+							<button type="button" class="btn help-btn" data-action="manual" title="Upute (H)">?</button>
 						</div>
 					</td>
 				</tr>
@@ -84,9 +81,9 @@
 	</div>
 	<button type="button" class="ms-tab" title="Karte (K)"><span class="ms-tab-name">Karte</span></button>
 	<footer>
-		<a onclick="scrollToTop()" style="cursor: pointer">Povratak na vrh</a>
+		<a data-action="top" style="cursor: pointer">Povratak na vrh</a>
 		·
-		<span class="manual-link"><a onclick="toggleManual()" style="cursor: pointer">Upute</a> ·</span>
+		<span class="manual-link"><a data-action="manual" style="cursor: pointer">Upute</a> ·</span>
 		<a href="/">Početna</a>
 		|
 		<a href="https://jurakovic.github.io">Projekti</a>
