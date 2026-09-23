@@ -1,4 +1,5 @@
 import { el } from '../lib/dom.js';
+import { EVENTS, on } from '../lib/events.js';
 import { initDynamicContent } from '../page/content.js';
 import { exitFullscreen } from '../page/iframe.js';
 import { isMapEnabled } from '../remote-config.js';
@@ -25,7 +26,7 @@ import { resolveMapIds } from './prefs.js';
 let mapsRendered = false; // from the first render on, a change is applied in place
 
 export function initRerender() {
-	document.addEventListener('map-config-changed', () => {
+	on(EVENTS.mapConfigChanged, () => {
 		if (mapsRendered) rerenderMaps();
 	});
 }

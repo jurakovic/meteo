@@ -17,7 +17,7 @@ import { subpixel, viewportHeight, viewportWidth } from '../lib/geometry.js';
 import { snapColumnOf, snapPaneOf } from './columns.js';
 import { GROUP_TOUCH } from './constants.js';
 import { allPopouts, floatingBlocks } from './core.js';
-import { persistSnapLayout } from './layout.js';
+import { arrangementChanged } from './layout.js';
 import { fitWidget } from './popout.js';
 
 let groupSeq = 0;
@@ -47,7 +47,7 @@ function toggleGroup(block) {
 	if (!block || !block.classList.contains('popout')) return;
 	if (block._group) leaveGroup(block);
 	else joinGroup(block);
-	persistSnapLayout();
+	arrangementChanged();
 }
 
 export function rectsTouch(a, b) {

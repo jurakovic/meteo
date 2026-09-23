@@ -11,13 +11,13 @@ import { DESKTOP_MQ } from '../lib/media.js';
 import { RESIZE_HANDLES } from '../lib/pointer.js';
 import { catalogMap } from '../maps/catalog.js';
 import { exitFullscreen } from '../page/iframe.js';
-import { dashboardMode, removeFromDashboard, setDashboard } from './board.js';
+import { isDashboard, removeFromDashboard, setDashboard } from './board.js';
 import { isSnapped, layoutSnapColumns, unsnapPane } from './columns.js';
 import { POPOUT_WIDTH, TITLE_GAP } from './constants.js';
 import { isDuplicate, otherShowings, removeShowing } from './copies.js';
 import { isFreePopout, placePopout, popoutMaxWidth, raisePopout } from './core.js';
 import { leaveGroup } from './groups.js';
-import { persistSnapLayout, withPersistPaused } from './layout.js';
+import { arrangementChanged, withPersistPaused } from './layout.js';
 import { syncShadows } from './overlap.js';
 import { lockedHeightAt, lockedWidthFor } from './resize.js';
 
@@ -31,8 +31,8 @@ export function buildPopoutButton() {
 export function setPopoutButton(btn, popped) {
 	// ASCII only: an arrow glyph comes from a fallback font and sits off the baseline of [ ] and [X]
 	// on the board there is no page to go back to: the button takes the map off the board
-	btn.textContent = !popped ? '[^]' : dashboardMode ? '[x]' : '[=]';
-	btn.title = !popped ? 'Izdvoji kartu u pomični prozor' : dashboardMode ? 'Ukloni kartu s ploče' : 'Vrati kartu na stranicu';
+	btn.textContent = !popped ? '[^]' : isDashboard() ? '[x]' : '[=]';
+	btn.title = !popped ? 'Izdvoji kartu u pomični prozor' : isDashboard() ? 'Ukloni kartu s ploče' : 'Vrati kartu na stranicu';
 }
 
 export function togglePopout(block) {
@@ -40,7 +40,7 @@ export function togglePopout(block) {
 	if (!block.classList.contains('popout')) { if (DESKTOP_MQ.matches) popoutMap(block); }
 	// only a map's last showing docks or leaves the board; any other goes alone
 	else if (otherShowings(block).length) removeShowing(block);
-	else if (dashboardMode) removeFromDashboard(block);
+	else if (isDashboard()) removeFromDashboard(block);
 	else dockMap(block);
 }
 
@@ -74,7 +74,7 @@ export function popoutMap(block) {
 	placePopout(block, rect.left, rect.top);
 	raisePopout(block);
 	block.querySelectorAll('.po-btn').forEach(btn => setPopoutButton(btn, true));
-	persistSnapLayout();
+	arrangementChanged();
 }
 
 // a locked widget freed of its aspect: it becomes a free widget (an inline
@@ -224,7 +224,7 @@ export function dockMap(block) {
 	delete block._gap;
 	block.querySelectorAll('.po-btn').forEach(btn => setPopoutButton(btn, false));
 	unfitTitles(block);
-	persistSnapLayout();
+	arrangementChanged();
 }
 
 // everything back on the page — which is leaving the board, where every map
@@ -236,6 +236,6 @@ export function dockAllPopouts() {
 	// one write for the lot: every dockMap would otherwise store the arrangement
 	// on its way out, and the only one worth storing is the last
 	withPersistPaused(() => document.querySelectorAll('.map-block.popout').forEach(dockMap));
-	persistSnapLayout(); // also with nothing to dock: the mode may have changed
+	arrangementChanged(); // also with nothing to dock: the mode may have changed
 	syncShadows(); // the breakpoint docks with persistence paused, so the sweep is not reached through it
 }

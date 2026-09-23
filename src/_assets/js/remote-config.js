@@ -12,6 +12,7 @@
 // - the customize page leaves the map out of what it shows (maps/render.js)
 //   and draws the view again on a change, on the map-config-changed event
 
+import { emit, EVENTS } from './lib/events.js';
 import { readJson, STORAGE_KEYS, writeJson } from './lib/storage.js';
 
 const MAP_CONFIG_URL = 'https://meteo-data.jurakovic.workers.dev/config.json';
@@ -65,7 +66,7 @@ function fetchMapConfig() {
 			if (sameIdSet(disabled, disabledMaps)) return;
 			disabledMaps = disabled;
 			styleDisabledMaps();
-			document.dispatchEvent(new CustomEvent('map-config-changed'));
+			emit(EVENTS.mapConfigChanged);
 		})
 		.catch(() => { /* the copy in hand stands: the file out of reach is no reason to show less */ });
 }

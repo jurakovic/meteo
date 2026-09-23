@@ -4,7 +4,7 @@
 import { isSnapped, layoutSnapColumns } from './columns.js';
 import { floatingBlocks, placePopout } from './core.js';
 import { groupBox, groupMembers, groupStarts, moveGroup, updateGroups } from './groups.js';
-import { syncShadows, updateCovered } from './overlap.js';
+import { refreshOverlap, syncShadows } from './overlap.js';
 import { fitWidget, syncBackdrop } from './popout.js';
 
 export function initWidgetResponsiveness() {
@@ -28,7 +28,7 @@ export function initWidgetResponsiveness() {
 				}
 			});
 			updateGroups();
-			updateCovered(); // the clamp may have moved a widget onto or off another
+			refreshOverlap(); // the clamp may have moved a widget onto or off another
 		}, 200);
 	});
 

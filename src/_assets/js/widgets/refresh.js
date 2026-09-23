@@ -1,6 +1,6 @@
 import { dlog } from '../lib/debug.js';
+import { emit, EVENTS } from '../lib/events.js';
 import { readJson, STORAGE_KEYS, writeJson } from '../lib/storage.js';
-import { applyStoredMsTab, syncRefreshLabels } from '../settings/tab.js';
 import { reloadAllMaps } from './reload.js';
 
 // Images go stale on a page left open, and on a board left running for the
@@ -52,13 +52,13 @@ export function restartRefresh() {
 	refreshTicker = 0;
 	refreshDeadline = refreshOn ? Date.now() + refreshMinutes * 60000 : 0;
 	if (refreshOn) refreshTicker = setInterval(refreshTick, 1000);
-	syncRefreshLabels();
+	emit(EVENTS.refreshTick);
 }
 
 function refreshTick() {
 	if (!refreshOn) return;
 	if (Date.now() >= refreshDeadline) reloadAllMaps(); // which sets the clock going again
-	else syncRefreshLabels();
+	else emit(EVENTS.refreshTick);
 }
 
 export function setRefreshPrefs(on, minutes) {
@@ -69,9 +69,7 @@ export function setRefreshPrefs(on, minutes) {
 	// the countdown hangs off the body, since the tab shows for it off the board
 	document.body.classList.toggle('refresh-on', refreshOn);
 	restartRefresh();
-	const panel = document.getElementById('mapSettings');
-	if (panel && !panel.hidden && panel._onRefreshChange) panel._onRefreshChange();
-	applyStoredMsTab(); // the countdown coming or going changes how narrow the tab may be
+	emit(EVENTS.refreshChanged);
 }
 
 export function initRefresh() {

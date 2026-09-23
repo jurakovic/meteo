@@ -1,5 +1,6 @@
 // The settings dialog's rows above the list: the board's mode with its grid
 // switches, the auto-refresh clock, and the line naming what is popped out.
+
 import { el } from '../lib/dom.js';
 import { DESKTOP_MQ } from '../lib/media.js';
 import { arrangeBoard } from '../widgets/arrange.js';
@@ -95,6 +96,13 @@ export function createRefreshRow() {
 				el('label', {}, [box, el('span', { text: 'Osvježavaj svakih' })]),
 				every,
 				el('span', { class: 'ms-refresh-left', text: left ? `još ${left}` : '' }));
+		},
+
+		// a second gone by: the countdown, the rest of the row as it was
+		tick() {
+			const label = refreshDiv.querySelector('.ms-refresh-left');
+			const left = isRefreshOn() ? refreshLabel() : '';
+			if (label) label.textContent = left ? `još ${left}` : '';
 		}
 	};
 }

@@ -3,6 +3,7 @@
 // Nothing is applied until Primijeni, except the grid and refresh switches.
 
 import { el, flashLabel, isTextField } from '../lib/dom.js';
+import { EVENTS, on } from '../lib/events.js';
 import { activePresetId, clearSharedMapView, resolveMapIds, saveMapPrefs } from '../maps/prefs.js';
 import { isBoardPreset } from '../maps/presets.js';
 import { renderMaps } from '../maps/render.js';
@@ -29,7 +30,23 @@ export function toggleMapSettings() {
 	setDialogVisible(element, element.hidden);
 }
 
+// the hooks of the dialog built last; it is rebuilt on every open, so the
+// page's events are subscribed to once and handed to whichever is up
+let openPanel = null;
+
+function whileOpen(hook) {
+	return () => {
+		const element = document.getElementById('mapSettings');
+		if (openPanel && element && !element.hidden) openPanel[hook]();
+	};
+}
+
 export function initMapSettings() {
+	on(EVENTS.gridChanged, whileOpen('gridChanged'));
+	on(EVENTS.refreshChanged, whileOpen('refreshChanged'));
+	on(EVENTS.refreshTick, whileOpen('refreshTick'));
+	on(EVENTS.layoutChanged, whileOpen('layoutChanged'));
+
 	// the picker from the keyboard, for wherever the page's button is out of reach.
 	// Escape is the shared chrome's, since it shuts whichever dialog is up
 	document.addEventListener('keydown', (e) => {
@@ -58,10 +75,10 @@ export function initMapSettings() {
 	}, true);
 
 	// the page's Karte button wears the picker's state as an arrow
-	document.addEventListener('dialog-toggled', (e) => {
-		if (e.detail.panel.id !== 'mapSettings') return;
+	on(EVENTS.dialogToggled, ({ panel, visible }) => {
+		if (panel.id !== 'mapSettings') return;
 		const arrow = document.querySelector('.buttons button.btn .arrow');
-		if (arrow) arrow.textContent = e.detail.visible ? '▲' : '▼';
+		if (arrow) arrow.textContent = visible ? '▲' : '▼';
 	});
 }
 
@@ -160,27 +177,32 @@ function buildMapSettings(element) {
 	layoutLine.render();
 	manage.render();
 
-	// the clock is in two places, this row and the tab's countdown, so a change
-	// made at the other one is read back here rather than left standing
-	element._onRefreshChange = refresh.render;
+	// what the page announces while this dialog is the one open (see
+	// initMapSettings, which subscribes once for every dialog built)
+	openPanel = {
+		// the clock is in two places, the refresh row and the tab's countdown,
+		// so a change made at the other one is read back here rather than left
+		// standing
+		refreshChanged: () => refresh.render(),
+		refreshTick: () => refresh.tick(),
 
-	// G flips the grid from the keyboard (widgets/keyboard.js) through
-	// setGridPrefs, which calls this: the row is re-read from the prefs rather
-	// than left standing on the copy it took when it was built, which the next
-	// tick would write back
-	element._onGridChange = () => {
-		panel.gridChecked = isGridShown();
-		panel.snapChecked = isGridSnapped();
-		mode.render();
-	};
+		// G flips the grid from the keyboard (widgets/keyboard.js): the row is
+		// re-read from the prefs rather than left standing on the copy it took
+		// when it was built, which the next tick would write back
+		gridChanged() {
+			panel.gridChecked = isGridShown();
+			panel.snapChecked = isGridSnapped();
+			mode.render();
+		},
 
-	// the arrangement changes from inside the open panel — Vrati sve on the
-	// layout line — and the rows and Ažuriraj follow at once. A gesture on a
-	// widget cannot: it is a press outside, which the backdrop takes
-	element._onLayoutChange = () => {
-		mode.render();
-		layoutLine.render();
-		manage.render();
+		// the arrangement changes from inside the open panel — Vrati sve on the
+		// layout line — and the rows and Ažuriraj follow at once. A gesture on a
+		// widget cannot: it is a press outside, which the backdrop takes
+		layoutChanged() {
+			mode.render();
+			layoutLine.render();
+			manage.render();
+		}
 	};
 
 	const applyBtn = el('button', { type: 'button', class: 'btn ms-apply', text: 'Primijeni', title: 'Primijeni (Enter)' });

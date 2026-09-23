@@ -1,9 +1,10 @@
 // The settings dialog's preset management: the built-ins (hidden or shown) and
 // the saved presets (saved, updated, renamed, shared, deleted), with the row
 // for saving a preset that arrived in a shared link.
+
 import { el, flashLabel } from '../lib/dom.js';
-import { resolveMapIds, sameMapIds, sharedMapView } from '../maps/prefs.js';
-import { cleanPresetName, deleteUserPreset, findUserPresetByName, hiddenPresets, hideablePresets, hideAllPresets, isBoardPreset, isHideablePreset, isPresetHidden, MAP_PRESETS, PRESET_NAME_MAX, saveUserPresets, setPresetHidden, showAllPresets, storeUserPreset, uniquePresetName, userPresets } from '../maps/presets.js';
+import { getSharedMapView, resolveMapIds, sameMapIds } from '../maps/prefs.js';
+import { cleanPresetName, deleteUserPreset, findUserPresetByName, getHiddenPresets, getUserPresets, hideablePresets, hideAllPresets, isBoardPreset, isHideablePreset, isPresetHidden, MAP_PRESETS, PRESET_NAME_MAX, saveUserPresets, setPresetHidden, showAllPresets, storeUserPreset, uniquePresetName } from '../maps/presets.js';
 import { copyMapViewLink, presetSharePrefs } from '../maps/share.js';
 import { hasPendingEdits } from './panel-view.js';
 
@@ -70,7 +71,7 @@ export function createPresetManager(panel) {
 	}
 
 	function commitRename() {
-		const preset = userPresets.find(p => p.id === renamingId);
+		const preset = getUserPresets().find(p => p.id === renamingId);
 		if (!preset) return;
 		const name = cleanPresetName(renameInput.value);
 		const clash = findUserPresetByName(name);
@@ -224,17 +225,18 @@ export function createPresetManager(panel) {
 	// name. Recomputed per render: deleting that preset brings the row back.
 	function sharedAlreadySaved() {
 		const ids = resolveMapIds();
-		return userPresets.some(preset => sameMapIds(preset.maps, ids));
+		return getUserPresets().some(preset => sameMapIds(preset.maps, ids));
 	}
 
 	function buildSharedRow() {
 		const saveLink = el('a', { text: 'Spremi' });
+		const shared = getSharedMapView();
 		saveLink.addEventListener('click', () => {
 			// saves what is on screen, so any tweak the recipient made is kept
-			saveCurrentAs(uniquePresetName(sharedMapView.name));
+			saveCurrentAs(uniquePresetName(shared.name));
 		});
 		return el('div', { class: 'ms-shared' }, [
-			el('span', { text: `Podijeljen predložak "${sharedMapView.name}"` }),
+			el('span', { text: `Podijeljen predložak "${shared.name}"` }),
 			saveLink
 		]);
 	}
@@ -254,8 +256,8 @@ export function createPresetManager(panel) {
 
 		// each shown only while it would do something — "Sakrij sve" reaches
 		// every preset but the permanent one, so that is the count to stop at
-		if (hiddenPresets.length < hideablePresets().length) addLink('Sakrij sve', hideAllPresets);
-		if (hiddenPresets.length) addLink('Prikaži sve', showAllPresets);
+		if (getHiddenPresets().length < hideablePresets().length) addLink('Sakrij sve', hideAllPresets);
+		if (getHiddenPresets().length) addLink('Prikaži sve', showAllPresets);
 
 		heading.appendChild(links);
 		return heading;
@@ -288,9 +290,10 @@ export function createPresetManager(panel) {
 
 		manageDiv.appendChild(buildUserHeading());
 		if (addingPreset) manageDiv.appendChild(el('div', { class: 'ms-save' }, [nameInput, saveBtn]));
-		if (sharedMapView && sharedMapView.name && !sharedAlreadySaved()) manageDiv.appendChild(buildSharedRow());
-		if (userPresets.length) {
-			userPresets.forEach(preset => manageDiv.appendChild(buildManageRow(preset)));
+		const shared = getSharedMapView();
+		if (shared && shared.name && !sharedAlreadySaved()) manageDiv.appendChild(buildSharedRow());
+		if (getUserPresets().length) {
+			getUserPresets().forEach(preset => manageDiv.appendChild(buildManageRow(preset)));
 		} else {
 			manageDiv.appendChild(el('div', { class: 'ms-manage-empty', text: 'Nema spremljenih predložaka' }));
 		}

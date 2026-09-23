@@ -8,6 +8,7 @@
 
 import { FEATURES } from '../features.js';
 import { isTextField } from '../lib/dom.js';
+import { EVENTS, on } from '../lib/events.js';
 import { setDialogVisible, toggleDialog } from './dialog.js';
 
 const MANUAL_HASH = 'upute';
@@ -77,10 +78,10 @@ export function initManual() {
 		scrollManualTo(panel, hashText(link.getAttribute('href')));
 	});
 
-	document.addEventListener('dialog-toggled', (e) => {
-		if (e.detail.panel !== panel) return;
-		syncManualHash(e.detail.visible);
-		if (e.detail.visible) panel.querySelector('.ms-body').scrollTop = 0;
+	on(EVENTS.dialogToggled, ({ panel: toggled, visible }) => {
+		if (toggled !== panel) return;
+		syncManualHash(visible);
+		if (visible) panel.querySelector('.ms-body').scrollTop = 0;
 	});
 
 	// H for help: the letters name the thing, as R, G and S do, and ? would

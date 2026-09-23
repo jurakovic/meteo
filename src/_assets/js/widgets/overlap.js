@@ -21,7 +21,7 @@ import { isSnapped } from './columns.js';
 import { allPopouts } from './core.js';
 import { fitBoardFullscreen } from './fullscreen.js';
 
-export function updateCovered() {
+function markCovered() {
 	const boxes = allPopouts().map(block => ({
 		block,
 		rect: block.getBoundingClientRect(),
@@ -35,10 +35,15 @@ export function updateCovered() {
 		// map fills the column or the page and is the one thing meant to be used
 		a.block.classList.toggle('covered', under && !a.block.classList.contains('fs-host'));
 	});
-	// the same call sites, and the same reason: a widget moved or raised beside
-	// a fullscreen map on the board changes the rectangle that map is to fill
+}
+
+// what lies over what, worked out again wherever a widget's rect or its order
+// can have changed: the covered frames, the room a fullscreen map on the board
+// fills (a widget moved or raised beside it changes it), and the shadows
+export function refreshOverlap() {
+	markCovered();
 	fitBoardFullscreen();
-	syncShadows(); // the same call sites: wherever a widget's rect or its order can have changed
+	syncShadows();
 }
 
 // A widget's shadow belongs to what is behind the widgets, not to the widget
@@ -124,7 +129,7 @@ export function syncShadows() {
 }
 
 // a pointer gesture on a widget, a group, a pane or a column: the shadows
-// follow it live, since updateCovered — which syncs them otherwise — runs
+// follow it live, since refreshOverlap — which syncs them otherwise — runs
 // only once the gesture is over
 export function trackWidgetPointer(e, onMove, onEnd) {
 	trackPointer(e, onMove, onEnd, syncShadows);

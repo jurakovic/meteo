@@ -76,7 +76,8 @@ The scripts are ES modules under [`src/_assets/js`](./src/_assets/js). The dev p
 | Where | What |
 |---|---|
 | `landing.js`, `customize.js` | the two pages' entry points. Modules only declare; an entry wires them up, in order — what must be in place before the first paint at once (in the build the script runs in `<head>`), the rest once the document is parsed (`onReady`, each step on its own so one failing does not stop the others) |
-| `lib/` | helpers with no knowledge of maps: `dom` (`el`, `onReady`, `isTextField`), `geometry` (`clamp`, the viewport), `pointer` (a drag or resize gesture), `media` (the breakpoint), `debug` (`dlog`) |
+| `lib/` | helpers with no knowledge of maps: `dom` (`el`, `onReady`, `isTextField`), `geometry` (`clamp`, the viewport), `pointer` (a drag or resize gesture), `media` (the breakpoint), `storage` (every key the site stores; reads and writes that never throw), `events` (every event the page announces), `debug` (`dlog`) |
+| `features.js` | switches for parts built but not offered yet (the manual) |
 | `remote-config.js` | which maps the worker's `config.json` switches off |
 | `page/` | what both pages have: the slideshows, the interactive maps' gate and fullscreen (`iframe`), the links, the progress bar, the dialog chrome, the manual, and `actions` — the `data-action` controls in the markup, run by one click listener |
 | `maps/` | the customize page's data and view: the `catalog`, the `presets`, the stored or shared view (`prefs`), share links (`share`), `find`, and `render` |
@@ -84,6 +85,8 @@ The scripts are ES modules under [`src/_assets/js`](./src/_assets/js). The dev p
 | `widgets/` | the pop-out widgets (desktop): `constants`, `core`, `popout`, `copies`, `drag`, `resize` (and seams), `groups`, `overlap` (covered frames, shadows), `columns`, `fullscreen`, `board`, `grid`, `arrange`, `keyboard`, `gestures`, `reload`, `refresh`, `layout` (the arrangement as data: read, checked, applied, written), `responsive` |
 
 Modules import each other freely, cycles included: a cycle is harmless because no module runs anything when it is imported other than defining constants — every listener and every start-up step is a function an entry calls.
+
+Each piece of state belongs to one module and is read through its functions (`isDashboard()`, `getUserPresets()`, `snapColumn(side)`…), never through a variable another module exports. A change other parts show is announced on the event bus (`lib/events.js`: `dialog-toggled`, `map-config-changed`, `map-fullscreen`, `layout-changed`, `grid-changed`, `refresh-changed`, `refresh-tick`) rather than pushed into them: the grid does not know the tab or the dialog exist. The settings dialog is rebuilt on every open, so it subscribes once and hands each event to the one that is up. After every gesture, `arrangementChanged()` (widgets/layout.js) works out the groups and the overlap again, stores the arrangement with the view and announces it.
 
 ### Maps catalog
 

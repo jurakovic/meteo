@@ -3,20 +3,20 @@
 // checked on the way in from storage or a link, applied after a render, and
 // written back after every gesture.
 
+import { emit, EVENTS } from '../lib/events.js';
 import { clamp, roundFraction, viewportHeight, viewportWidth } from '../lib/geometry.js';
 import { DESKTOP_MQ } from '../lib/media.js';
-import { getActiveMapPrefs, getMapPrefs, resolveMapIds, saveMapPrefs, sharedMapView } from '../maps/prefs.js';
+import { getActiveMapPrefs, resolveMapIds, storeViewLayout } from '../maps/prefs.js';
 import { instKey, instMapId } from '../maps/render.js';
-import { encodeMapView } from '../maps/share.js';
 import { arrangeBoard } from './arrange.js';
-import { dashboardMode, isDashboard, popoutRest, setDashboard } from './board.js';
-import { attachSnapPane, layoutSnapColumns, resetSnapColumns, snapColumns } from './columns.js';
+import { isDashboard, popoutRest, setDashboard } from './board.js';
+import { attachSnapPane, layoutSnapColumns, resetSnapColumns, setSnapColumnWidth, snapColumn } from './columns.js';
 import { POPOUT_MIN_HEIGHT, POPOUT_MIN_WIDTH, SNAP_MIN_WIDTH } from './constants.js';
 import { instanceFor, isDuplicate } from './copies.js';
 import { floatingBlocks, placePopout, popoutMaxWidth, raisePopout } from './core.js';
 import { hasFullscreen, restoreFullscreen } from './fullscreen.js';
 import { newGroupId, updateGroups } from './groups.js';
-import { syncShadows, updateCovered } from './overlap.js';
+import { refreshOverlap, syncShadows } from './overlap.js';
 import { dockAllPopouts, popoutMap, unlockAspect } from './popout.js';
 
 export function initLayoutBreakpoint() {
@@ -70,7 +70,7 @@ function snapLayout() {
 		if (!groupNumbers.has(block._group)) groupNumbers.set(block._group, groupNumbers.size + 1);
 		return groupNumbers.get(block._group);
 	};
-	Object.values(snapColumns).forEach(col => {
+	['left', 'right'].map(snapColumn).forEach(col => {
 		if (!col.panes.length) return;
 		layout[col.side] = {
 			width: roundFraction(col.width),
@@ -103,7 +103,7 @@ function snapLayout() {
 			return entry;
 		});
 	if (floating.length) layout.floating = floating;
-	if (dashboardMode) layout.dashboard = true;
+	if (isDashboard()) layout.dashboard = true;
 	return Object.keys(layout).length ? layout : null;
 }
 
@@ -231,7 +231,7 @@ export function applySnapLayout(layout) {
 	setDashboard(!!(layout && layout.dashboard && DESKTOP_MQ.matches));
 	// nothing to place, but the sweep still has to run: the widgets this replaces
 	// go with the tbody (renderMaps) rather than being docked, so their shadows
-	// are left in the layer with no widget to own them, and the updateCovered
+	// are left in the layer with no widget to own them, and the refreshOverlap
 	// that sweeps them is below this return
 	if (!layout || !DESKTOP_MQ.matches) {
 		// a narrow window is not a change of mind: the arrangement it cannot
@@ -246,7 +246,7 @@ export function applySnapLayout(layout) {
 	const tiled = withPersistPaused(() => placeSnapLayout(layout));
 	// the tiling was decided here rather than read from the layout, so it is
 	// the one thing this function has to write back
-	if (tiled) persistSnapLayout();
+	if (tiled) arrangementChanged();
 }
 
 // the widgets and panes a layout names, put in place; true when the board had
@@ -262,7 +262,7 @@ function placeSnapLayout(layout) {
 	['left', 'right'].forEach(side => {
 		const stored = layout[side];
 		if (!stored) return;
-		const col = snapColumns[side];
+		const col = snapColumn(side);
 		stored.panes.forEach(({ id, top, height, group, fullscreen }) => {
 			const block = instanceFor(id);
 			if (!block || block.classList.contains('popout')) return;
@@ -273,10 +273,10 @@ function placeSnapLayout(layout) {
 			if (fullscreen) toFullscreen.push(block);
 		});
 		if (!col.panes.length) return;
-		col.width = clamp(stored.width * viewportWidth(), SNAP_MIN_WIDTH, viewportWidth()) / viewportWidth();
+		setSnapColumnWidth(side, clamp(stored.width * viewportWidth(), SNAP_MIN_WIDTH, viewportWidth()) / viewportWidth());
 	});
-	const { left, right } = snapColumns;
-	if (left.panes.length && right.panes.length && left.width + right.width > 1) right.width = 1 - left.width;
+	const left = snapColumn('left'), right = snapColumn('right');
+	if (left.panes.length && right.panes.length && left.width + right.width > 1) setSnapColumnWidth('right', 1 - left.width);
 	layoutSnapColumns();
 	(layout.floating || []).forEach(({ id, left, top, width, height, group, fullscreen }) => {
 		const block = instanceFor(id);
@@ -295,14 +295,14 @@ function placeSnapLayout(layout) {
 	// a board the layout places nothing on is a new one, and a new board is
 	// tiled rather than cascaded. Where it does place some, the rest cascade in
 	// beside them: an arrangement already made is not taken apart to make room
-	const tiled = dashboardMode && !(layout.floating || []).length;
-	if (dashboardMode) popoutRest(); // the maps of the list the layout does not place: onto the board
+	const tiled = isDashboard() && !(layout.floating || []).length;
+	if (isDashboard()) popoutRest(); // the maps of the list the layout does not place: onto the board
 	if (tiled) arrangeBoard();
 	// once everything stands where it belongs: a pane's fullscreen is placed
 	// by its column, and page/iframe.js reads off the pane whether to lock the page
 	toFullscreen.forEach(restoreFullscreen);
 	updateGroups();
-	updateCovered(); // persistence is paused, so this is not reached through it
+	refreshOverlap(); // persistence is paused, so this is not reached through it
 	return tiled;
 }
 
@@ -347,36 +347,17 @@ export function isDashboardView() {
 	return unappliedSnapLayout ? unappliedSnapLayout.dashboard === true : isDashboard();
 }
 
-// the arrangement is written as it changes — it is direct manipulation, not
-// a form with an apply button — next to the map list it belongs to: into the
-// preferences, or, while a shared view is on, into that view and back into
-// the address bar, so the link stays re-copyable with the arrangement as it
-// is now and a refresh keeps it (the recipient's storage is still never
-// written). Paused while the breakpoint docks everything: that is the window
+// the arrangement changed — a gesture ended, a widget came or went. Three
+// things follow, always together: what touches what (the group buttons) and
+// what lies over what (covered frames, the fullscreen's room, the shadows) are
+// worked out again, and the arrangement is stored with the view
+// (storeViewLayout) and announced (layout-changed) — unless held back
+// (withPersistPaused): the breakpoint docking everything is the window
 // changing, not the arrangement
-export function persistSnapLayout() {
-	// every gesture ends here: what touches what, and what lies over what, may
-	// both have changed
+export function arrangementChanged() {
 	updateGroups();
-	updateCovered();
+	refreshOverlap();
 	if (snapPersistPaused) return;
-	const layout = currentSnapLayout();
-	if (sharedMapView) {
-		if (layout) sharedMapView.layout = layout;
-		else delete sharedMapView.layout;
-		const url = new URL(window.location);
-		url.searchParams.set('v', encodeMapView(sharedMapView));
-		history.replaceState(null, '', url);
-	} else {
-		const prefs = getMapPrefs();
-		if (layout) prefs.layout = layout;
-		else delete prefs.layout;
-		saveMapPrefs(prefs);
-	}
-	// the settings panel, if open, names the arrangement and offers Ažuriraj off
-	// it. A press outside the dialog is taken by the backdrop and shuts it, so
-	// what reaches this with the panel still up is what the panel itself drives:
-	// Vrati sve on the layout line
-	const panel = document.getElementById('mapSettings');
-	if (panel && !panel.hidden && panel._onLayoutChange) panel._onLayoutChange();
+	storeViewLayout(currentSnapLayout());
+	emit(EVENTS.layoutChanged);
 }

@@ -26,7 +26,7 @@ import { floatingBlocks, placePopout, popoutMaxWidth } from './core.js';
 import { magnetEdge, magnetRects } from './drag.js';
 import { snapToGrid } from './grid.js';
 import { groupBox, groupMembers, groupRelations, groupStarts, updateGroups } from './groups.js';
-import { persistSnapLayout } from './layout.js';
+import { arrangementChanged } from './layout.js';
 import { trackWidgetPointer } from './overlap.js';
 import { fitWidget, lockAspect, unlockAspect } from './popout.js';
 
@@ -108,7 +108,7 @@ export function resizeSeam(block, other, dir, e) {
 		// for both, so the two land on the same line and stay a seam
 		snapToGrid([first, second]);
 		updateGroups();
-		persistSnapLayout();
+		arrangementChanged();
 	});
 }
 
@@ -158,7 +158,7 @@ function resizePane(block, dir, e, col, members) {
 		pane.top = (dir.includes('n') ? start.bottom - h : start.top) / viewportHeight();
 		if (dir.includes('n')) above.forEach(s => { snapPaneOf(s.block).top = (s.top - (h - start.height)) / viewportHeight(); });
 		layoutSnapColumns();
-	}, () => { snapToGrid([block]); persistSnapLayout(); });
+	}, () => { snapToGrid([block]); arrangementChanged(); });
 }
 
 // a widget over the page, from any side or corner
@@ -209,7 +209,7 @@ function resizeFloating(block, dir, e) {
 		h = block.getBoundingClientRect().height;
 		placePopout(block, dir.includes('w') ? start.right - w : start.left, dir.includes('n') ? start.bottom - h : start.top);
 		fitWidget(block);
-	}, () => { snapToGrid([block]); persistSnapLayout(); });
+	}, () => { snapToGrid([block]); arrangementChanged(); });
 }
 
 // the width a locked widget pulled to w by h takes: its height follows its
@@ -357,5 +357,5 @@ function resizeGroup(members, dir, e) {
 		// unmeasured through the gesture they keep the width the image had before
 		// it — the group shrinking under indicators that do not
 		members.forEach(fitWidget);
-	}, () => { snapToGrid(members); persistSnapLayout(); });
+	}, () => { snapToGrid(members); arrangementChanged(); });
 }

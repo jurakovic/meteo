@@ -18,17 +18,17 @@ import { catalogMap } from '../maps/catalog.js';
 import { addMapToList, removeMapFromList } from '../maps/prefs.js';
 import { appendMapRows } from '../maps/render.js';
 import { updateLinksScrollShadow } from '../page/links.js';
-import { snapColumnPx, snapColumns } from './columns.js';
+import { snapColumn, snapColumnPx } from './columns.js';
 import { CASCADE_STEP, POPOUT_MARGIN, POPOUT_WIDTH } from './constants.js';
 import { pageShowing, wireDuplicate } from './copies.js';
 import { placePopout, raisePopout } from './core.js';
 import { renderGrid } from './grid.js';
 import { updateGroups } from './groups.js';
-import { persistSnapLayout, withPersistPaused } from './layout.js';
+import { arrangementChanged, withPersistPaused } from './layout.js';
 import { syncShadows } from './overlap.js';
 import { dockMap, fitWidget, popoutMap, setPopoutButton } from './popout.js';
 
-export let dashboardMode = false;
+let dashboardMode = false;
 
 export function isDashboard() {
 	return dashboardMode;
@@ -62,7 +62,7 @@ export function popoutRest() {
 			round++;
 		}
 		placePopout(block,
-			snapColumnPx(snapColumns.left) + POPOUT_MARGIN + (top - POPOUT_MARGIN) + round * POPOUT_WIDTH / 2,
+			snapColumnPx(snapColumn('left')) + POPOUT_MARGIN + (top - POPOUT_MARGIN) + round * POPOUT_WIDTH / 2,
 			top);
 		raisePopout(block);
 		top += CASCADE_STEP;
@@ -108,6 +108,6 @@ export function addToDashboard(mapId) {
 	fitWidget(block);
 	updateGroups();
 	syncShadows();
-	persistSnapLayout();
+	arrangementChanged();
 	return block;
 }

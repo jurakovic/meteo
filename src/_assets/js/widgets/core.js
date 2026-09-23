@@ -2,10 +2,10 @@
 // and the stacking order.
 
 import { subpixel, viewportHeight, viewportWidth } from '../lib/geometry.js';
-import { dashboardMode } from './board.js';
+import { isDashboard } from './board.js';
 import { POPOUT_MARGIN, POPOUT_MAX_WIDTH, POPOUT_TITLE_HEIGHT } from './constants.js';
 import { groupMembers } from './groups.js';
-import { updateCovered } from './overlap.js';
+import { refreshOverlap } from './overlap.js';
 
 let popoutZ = 5000; // bumped on every raise so the last touched widget is on top
 
@@ -19,7 +19,7 @@ export function isFreePopout(block) {
 // that cap comes from, and the whole viewport on the board, which has no table
 // to relate to — a board of half-width tiles needs more than 875 of a wide screen
 export function popoutMaxWidth() {
-	return dashboardMode ? viewportWidth() : Math.min(POPOUT_MAX_WIDTH, viewportWidth() - POPOUT_MARGIN);
+	return isDashboard() ? viewportWidth() : Math.min(POPOUT_MAX_WIDTH, viewportWidth() - POPOUT_MARGIN);
 }
 
 // keep the whole widget inside the viewport when it fits, else at least its
@@ -36,7 +36,7 @@ export function raisePopout(block) {
 	groupMembers(block)
 		.sort((a, b) => (Number(a.style.zIndex) || 0) - (Number(b.style.zIndex) || 0))
 		.forEach(member => member.style.zIndex = ++popoutZ);
-	updateCovered();
+	refreshOverlap();
 }
 
 export function allPopouts() {

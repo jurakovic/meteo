@@ -2,12 +2,12 @@
 // pick), stored in this browser — or, while a shared link is open, the view
 // that link carries, which overrides the stored one for the session.
 
-import { readJson, STORAGE_KEYS, writeJson } from '../lib/storage.js';
 import { DESKTOP_MQ } from '../lib/media.js';
-import { persistSnapLayout } from '../widgets/layout.js';
+import { readJson, STORAGE_KEYS, writeJson } from '../lib/storage.js';
+import { arrangementChanged } from '../widgets/layout.js';
 import { CATALOG_BY_ID } from './catalog.js';
-import { allPresets, MAP_PRESETS, userPresets } from './presets.js';
-import { decodeMapView } from './share.js';
+import { allPresets, getUserPresets, MAP_PRESETS } from './presets.js';
+import { decodeMapView, encodeMapView } from './share.js';
 
 // guards both untrusted sources (localStorage, ?v=): 'custom' is a runtime-only
 // preset (not in MAP_PRESETS), everything else must name a real preset or it
@@ -51,7 +51,7 @@ function storeShownList(maps) {
 // a map taken off the board leaves the list it is shown from
 export function removeMapFromList(mapId) {
 	storeShownList(resolveMapIds().filter(id => id !== mapId));
-	persistSnapLayout();
+	arrangementChanged();
 }
 
 // the tab's [+]: the map goes on the end of the list. The arrangement is
@@ -84,11 +84,16 @@ export function sameMapIds(a, b) {
 // still the same view. Saved presets are searched before the built-ins, so a
 // saved copy of a built-in list selects the copy rather than the original.
 export function presetIdForMapIds(mapIds) {
-	const match = userPresets.concat(MAP_PRESETS).find(preset => sameMapIds(preset.maps, mapIds));
+	const match = getUserPresets().concat(MAP_PRESETS).find(preset => sameMapIds(preset.maps, mapIds));
 	return match ? match.id : null;
 }
 
-export let sharedMapView = null;
+let sharedMapView = null;
+
+// the view a shared link opened, null when there is none
+export function getSharedMapView() {
+	return sharedMapView;
+}
 
 // read once, as the page starts, from the address it was opened at
 export function loadSharedMapView() {
@@ -136,4 +141,25 @@ export function clearSharedMapView() {
 	const url = new URL(window.location);
 	url.searchParams.delete('v');
 	history.replaceState(null, '', url);
+}
+
+// the arrangement is written as it changes — it is direct manipulation, not
+// a form with an apply button — next to the map list it belongs to: into the
+// preferences, or, while a shared view is on, into that view and back into
+// the address bar, so the link stays re-copyable with the arrangement as it
+// is now and a refresh keeps it (the recipient's storage is still never
+// written)
+export function storeViewLayout(layout) {
+	if (sharedMapView) {
+		if (layout) sharedMapView.layout = layout;
+		else delete sharedMapView.layout;
+		const url = new URL(window.location);
+		url.searchParams.set('v', encodeMapView(sharedMapView));
+		history.replaceState(null, '', url);
+	} else {
+		const prefs = getMapPrefs();
+		if (layout) prefs.layout = layout;
+		else delete prefs.layout;
+		saveMapPrefs(prefs);
+	}
 }

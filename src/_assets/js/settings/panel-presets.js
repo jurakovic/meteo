@@ -1,5 +1,6 @@
 // The settings dialog's preset bar: a chip per preset on offer, built-in and
 // saved, and "Prilagođeno" for a list that is nobody's.
+
 import { el } from '../lib/dom.js';
 import { presetMapIds, sameMapIds } from '../maps/prefs.js';
 import { allPresets, isBoardPreset, isUserPresetId, visiblePresets } from '../maps/presets.js';
