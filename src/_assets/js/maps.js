@@ -622,62 +622,16 @@ const MAP_PRESETS = [
 ];
 
 // ---------- remote config ----------
-// Which maps are switched off, from a file beside the maps' own sources, so a
-// map whose source is down can be taken off the page without a build. It is
-// read from the last copy this browser saw, at once, and fetched again behind
-// that for the next load — or for this one, if it changed and the maps are
-// already out. A map the file does not name is on, and so is every map when
-// there is no copy yet or the fetch fails: a broken file hides nothing.
-//
+// Which maps are off comes from config.js (isMapEnabled), loaded before this.
 // Off is hidden, not removed: lists, presets and links keep the id, and the map
 // is back where it was once it is on again. Only what is shown leaves it out —
 // the render, the tab's [+] menu and the dialog's rows (hidden, not left out,
 // so a list saved from the dialog still holds it)
-const MAP_CONFIG_URL = 'https://meteo-data.jurakovic.workers.dev/config.json';
-const MAP_CONFIG_KEY = 'mapConfig';
-
-// { "maps": { "<id>": { "enabled": false } } } — anything else is ignored
-function disabledMapIds(config) {
-	const maps = config && config.maps && typeof config.maps === 'object' ? config.maps : {};
-	return new Set(Object.keys(maps).filter(id => maps[id] && maps[id].enabled === false));
-}
-
-function loadMapConfig() {
-	try {
-		return JSON.parse(localStorage.getItem(MAP_CONFIG_KEY));
-	} catch (e) {
-		return null; // corrupt storage: every map on until the fetch lands
-	}
-}
-
-let disabledMaps = disabledMapIds(loadMapConfig());
 let mapsRendered = false; // from the first render on, a change is applied in place
 
-function isMapEnabled(id) {
-	return !disabledMaps.has(id);
-}
-
-function sameIdSet(a, b) {
-	return a.size === b.size && [...a].every(id => b.has(id));
-}
-
-// no-cache revalidates rather than skips the cache: a switch flipped in the
-// file is seen on the next load, not whenever the browser's copy runs out
-function fetchMapConfig() {
-	fetch(MAP_CONFIG_URL, { cache: 'no-cache' })
-		.then(response => response.ok ? response.json() : Promise.reject(response.status))
-		.then(config => {
-			try {
-				localStorage.setItem(MAP_CONFIG_KEY, JSON.stringify(config));
-			} catch (e) { /* storage disabled or full — the copy is for the next load only */ }
-			const disabled = disabledMapIds(config);
-			if (sameIdSet(disabled, disabledMaps)) return;
-			disabledMaps = disabled;
-			if (mapsRendered) rerenderMaps();
-		})
-		.catch(() => { /* the copy in hand stands: the file out of reach is no reason to show less */ });
-}
-fetchMapConfig();
+document.addEventListener('map-config-changed', () => {
+	if (mapsRendered) rerenderMaps();
+});
 
 // ---------- user presets (localStorage) ----------
 // Saved views take the same { id, name, maps } shape as the built-ins, so the
