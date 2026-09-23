@@ -1,0 +1,12 @@
+{
+  "name": "meteo",
+  "private": true,
+  "description": "Meteo radari — build and test tooling",
+  "type": "module",
+  "scripts": {
+    "test:e2e": "playwright test"
+  },
+  "devDependencies": {
+    "@playwright/test": "1.56.1"
+  }
+}
