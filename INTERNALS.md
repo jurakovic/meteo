@@ -8,13 +8,30 @@ Two main folders:
 [`src`](./src)
 - contains source files for site build
 - no particular framework is used, only vanilla HTML, CSS, and JavaScript
-	- all build *magic* is done in [`build.sh`](./src/build.sh) and [`build.ps1`](./src/build.ps1) scripts
 
 [`docs`](./docs)
 - contains build output
 - source for GitHub Pages publish
 
+and the tooling around them: [`scripts/`](./scripts) (the build), [`tests/`](./tests) (the browser suite and unit tests) and [`package.json`](./package.json).
+
 ### Commands
+
+Node 22 or later. Once, after a clone: `npm install`.
+
+| Command | What it does |
+|---|---|
+| `npm run build` | builds `docs/` from `src/` (`src/build.sh` does the same) |
+| `npm run lint` | ESLint over the site's scripts, the build and the tests |
+| `npm test` | unit tests (`node --test`) |
+| `npm run test:e2e` | the browser suite (Playwright; `npx playwright install chromium` once) |
+| `npm run check` | all of the above, in that order |
+
+Without Node installed, the same runs in a container:
+
+```bash
+docker run -it --rm -v "$(pwd):/meteo" -w /meteo node:22 sh -c "npm install && npm run build"
+```
 
 #### Run from src
 
@@ -34,40 +51,23 @@ docker run -d -p 8081:80 --name meteo-docs -v "$(pwd)/docs:/usr/share/nginx/html
 
 Open <http://localhost:8081/meteo/>
 
-#### Minify JS and CSS
-
-> [`terser`](https://www.npmjs.com/package/terser), [`clean-css-cli`](https://www.npmjs.com/package/clean-css-cli)
-
-```bash
-docker run -it --rm --entrypoint sh -v "$(pwd):/meteo" node:22-alpine
-
-# inside container
-npm install terser -g
-npm install clean-css-cli -g
-cd meteo/src/_assets
-terser js/main.js --compress --mangle -o js/main.min.js --format max_line_len=140
-terser js/maps.js --compress --mangle -o js/maps.min.js --format max_line_len=140
-terser js/popout.js --compress --mangle -o js/popout.min.js --format max_line_len=140
-terser js/config.js --compress --mangle -o js/config.min.js --format max_line_len=140
-cleancss --format 'wrapAt:140' -o css/styles.min.css css/styles.css
-```
+`node tests/serve.mjs` serves both at once, `src/` at the root and `docs/` under `/meteo/` (port 8080, or `PORT`).
 
 #### Build
 
-```bash
-cd src
-./build.sh
-```
+[`scripts/build.mjs`](./scripts/build.mjs) produces `docs/` from `src/` by processing every `.html` file (except `_components/`):
 
-`build.sh` runs `unix2dos` over all five minified assets before calling `build.ps1`, and over the built `.html` afterwards. The first pass is not cosmetic: terser and clean-css write LF, and `Prepend-Tabs` splits on CRLF, so an asset left at LF is one single line to it and reaches `docs/` with only its first line indented. The list has to name every asset — `maps.min.js` and `popout.min.js` were once missing from it, which is why their inlined bodies used to sit unindented in the built page.
-
-`build.ps1` produces `docs/` from `src/` by processing every `.html` file (except `_components/`):
-
-1. injects the manual (`md.ps1`) at `<!-- manual -->` and drops the dialog body's dev-only include (the fragment is also written to `_components/manual.c.html` for the dev pages), above the rewrites below so a path it grows later is rewritten with every other
-2. inlines the minified assets (`styles.min.css`, `config.min.js`, `main.min.js`, `maps.min.js`, `popout.min.js`) in place of their `<link>`/`<script>` tags, each line indented by `Prepend-Tabs`
+1. injects the manual ([`scripts/manual.mjs`](./scripts/manual.mjs)) at `<!-- manual -->` and drops the dialog body's dev-only include (the fragment is also written to `_components/manual.c.html` for the dev pages), above the rewrites below so a path it grows later is rewritten with every other
+2. minifies the CSS (clean-css) and the scripts (terser) in memory and inlines them in place of their `<link>`/`<script>` tags, each line indented
 3. injects `_components/*.c.html` (seo, gtag, links) at their placeholders
 4. rewrites dev paths to GitHub Pages paths (`href="/customize/index.html` → `/meteo/customize/`, `href="/"` → `/meteo/"`, image paths, the extras stub's `url=`)
-5. strips HTML comments, trims trailing whitespace, collapses blank lines
+5. strips HTML comments, trims trailing whitespace, collapses blank lines, and writes CRLF
+
+The indentation splits on CRLF, as the PowerShell build it replaced did, so a fragment with LF endings (`links.c.html`) is one line to it — kept as it was, since the Node build was checked to produce the PowerShell build's `docs/` byte for byte.
+
+### Tests
+
+The browser suite ([`tests/e2e`](./tests/e2e)) drives both the dev tree and the built site. Every request that leaves the local server is answered by [`fixtures.js`](./tests/e2e/fixtures.js) — map images as an SVG of a map's size, frames as an empty page, the worker's `config.json` as a test chooses — so it runs offline and the same way every time, and a script error on a page fails the test. Chromium resolves `localhostmeteo` (the origin the worker allows) to the local server by a launch flag, no hosts entry needed.
 
 ### Maps catalog
 
@@ -256,13 +256,13 @@ Hard-won details worth keeping in mind when touching the drag/scroll code:
 
 ### The manual
 
-[`MANUAL.md`](./MANUAL.md) is the user-facing document: what the site does and how to work it, in Croatian, which is what the site speaks. It sits at the root beside `README.md` and this file, and is named to match them — *what it is*, *how to use it*, *how it works*. It deliberately cannot live in `docs/`, the conventional place for it, because `docs/` is the built site and `build.ps1` deletes it on every run. The file name stays English for the same reason the rest of the repo is, and to leave room for a `MANUAL.en.md` beside it.
+[`MANUAL.md`](./MANUAL.md) is the user-facing document: what the site does and how to work it, in Croatian, which is what the site speaks. It sits at the root beside `README.md` and this file, and is named to match them — *what it is*, *how to use it*, *how it works*. It deliberately cannot live in `docs/`, the conventional place for it, because `docs/` is the built site and the build deletes it on every run. The file name stays English for the same reason the rest of the repo is, and to leave room for a `MANUAL.en.md` beside it.
 
 It shares no prose with this file on purpose: this one explains mechanism to someone reading the code, that one answers *how do I keep two radars side by side while I scroll?* Every UI label it quotes is the label the code renders, so a label that changes is one grep from the line that quotes it.
 
 #### The manual on the site
 
-The Markdown stays the only source and the build makes HTML of it — [`src/md.ps1`](./src/md.ps1), dot-sourced by `build.ps1`, which reads `../MANUAL.md` and returns a fragment. The built pages get it inlined; the build also writes it to `src/_components/manual.c.html`, which the dev pages fetch through `include.js` (the `data-include-html` on the dialog's `.ms-body`, stripped from the built pages). That file is build output, so it is git-ignored, and a page served from `src/` shows the manual as of the last build — run the build again after editing `MANUAL.md`.
+The Markdown stays the only source and the build makes HTML of it — [`scripts/manual.mjs`](./scripts/manual.mjs), which the build hands `MANUAL.md` and which returns the fragment's lines. The built pages get it inlined; the build also writes it to `src/_components/manual.c.html`, which the dev pages fetch through `include.js` (the `data-include-html` on the dialog's `.ms-body`, stripped from the built pages). That file is build output, so it is git-ignored, and a page served from `src/` shows the manual as of the last build — run the build again after editing `MANUAL.md`.
 
 It is shown in a **dialog** rather than on a page of its own, so the manual can be read beside the maps it describes instead of in place of them. Both pages carry it (`#manualDialog`, the `<!-- manual -->` placeholder inside its `.ms-body`, and in its head the same `.ms-home` as the *Karte* dialog's, written into the markup as `href="/"` and the favicon's `src`, which the build rewrites to `/meteo/` like every other root path), reached by the `?` button in the button row, the *Upute* link in the footer, or the `H` key. A dialog has no address, which a page would have given for free, so `#upute` stands in: it opens the dialog on arrival, and the dialog writes it and takes it away again through `replaceState` — assigning to `location.hash` would stack a history entry per open, and Back would walk out through them one at a time.
 
@@ -276,11 +276,11 @@ A heading link inside the dialog is intercepted and scrolls `.ms-body` by the of
 
 Rendering it client-side from the raw `.md` was considered and rejected: it needs a Markdown library or a hand-rolled parser, against the no-dependency grain, and leaves the page empty without JS.
 
-Two things in `build.ps1` the step respects:
+Two things in the build the step respects:
 
 - **The injection happens above the path rewrites.** `href="/"` → `/meteo/"` and the rest run before the `<!-- seo -->` replacement, so a manual injected at the usual place would ship a `/customize/` link unrewritten and 404 under `/meteo/`. The document has no such link today; the order is what keeps one it grows later correct.
-- **The comment strip runs after injection** (`(?s)<!--.*?-->`), so the converter emits no comments.
+- **The comment strip runs after injection**, so the converter emits no comments.
 
-And one the converter respects: it joins its lines with CRLF, because `Prepend-Tabs` splits on it — joined with LF the whole document would be one line to it and reach the page with only its first line indented, the same trap the minified assets carry (see *Commands*).
+The build joins the fragment's lines with CRLF, which its indentation splits on (see *Build*).
 
 In dev the placeholder is left an HTML comment and the dialog's body is empty, exactly as `<!-- seo -->` and `<!-- gtag -->` are, so the manual's *content* is testable against the built `docs/` only. The chrome around it is the shared dialog machinery and works unbuilt.

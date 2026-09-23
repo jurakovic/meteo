@@ -4,9 +4,18 @@
   "description": "Meteo radari — build and test tooling",
   "type": "module",
   "scripts": {
-    "test:e2e": "playwright test"
+    "build": "node scripts/build.mjs",
+    "lint": "eslint .",
+    "test": "node --test \"tests/unit/**/*.test.mjs\"",
+    "test:e2e": "playwright test",
+    "check": "npm run lint && npm test && npm run build && npm run test:e2e"
   },
   "devDependencies": {
-    "@playwright/test": "1.56.1"
+    "@eslint/js": "^10.0.1",
+    "@playwright/test": "1.56.1",
+    "clean-css": "^5.3.3",
+    "eslint": "^10.11.0",
+    "globals": "^17.12.0",
+    "terser": "^5.51.2"
   }
 }
