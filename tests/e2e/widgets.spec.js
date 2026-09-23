@@ -183,6 +183,20 @@ test.describe('pop-out widgets', () => {
 		await expect(block(page, 'neverin-satelit-hr')).not.toHaveClass(/grouped/);
 	});
 
+	test('raising stays inside the widgets\' layer however often it happens (B5)', async ({ page }) => {
+		await popout(page, 'neverin-radar-hr');
+		await popout(page, 'neverin-satelit-hr');
+		const z = await page.evaluate(() => {
+			const [a, b] = ['neverin-radar-hr', 'neverin-satelit-hr'].map(id => document.querySelector(`.map-block[data-inst="${id}"]`));
+			// a right press raises without starting a drag
+			for (let i = 0; i < 3100; i++) (i % 2 ? a : b).dispatchEvent(new PointerEvent('pointerdown', { button: 2, bubbles: true }));
+			return [a, b].map(block => Number(block.style.zIndex));
+		});
+		expect(Math.max(...z)).toBeLessThan(8000); // under the columns' edges
+		expect(Math.min(...z)).toBeGreaterThanOrEqual(5000);
+		expect(z[0]).toBeGreaterThan(z[1]); // the last raised is on top
+	});
+
 	test('the arrows nudge the widget on top a grid cell, a pixel with Shift', async ({ page }) => {
 		await popout(page, 'neverin-radar-hr');
 		await moveWidget(page, 'neverin-radar-hr', 200, 100);
@@ -236,4 +250,20 @@ test.describe('pop-out widgets', () => {
 		await expect(block(page, 'neverin-radar-hr')).toHaveClass(/popout/);
 		expect(Math.abs((await box(block(page, 'neverin-radar-hr'))).x - placed.x)).toBeLessThan(1);
 	});
+});
+
+test('an empty list says so, centred in the column, and a list picked after it draws again', async ({ page, paths }) => {
+	await page.goto(paths.customize);
+	await page.keyboard.press('k');
+	await page.locator('#mapSettings .ms-chip', { hasText: /^Ništa$/ }).click();
+	await page.keyboard.press('Enter');
+	const empty = page.locator('[data-maps] > .map-entry > .maps-empty');
+	await expect(empty).toBeVisible();
+	await expect(page.locator('.map-block')).toHaveCount(0);
+	expect(await empty.evaluate(node => getComputedStyle(node).textAlign)).toBe('center');
+	await page.keyboard.press('k');
+	await page.locator('#mapSettings .ms-chip', { hasText: /^Sateliti$/ }).click();
+	await page.keyboard.press('Enter');
+	await expect(page.locator('[data-maps] > .map-entry')).toHaveCount(4);
+	await expect(empty).toHaveCount(0);
 });

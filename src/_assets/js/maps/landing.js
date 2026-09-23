@@ -9,9 +9,9 @@ import { catalogMap, DEFAULT_MAPS } from './catalog.js';
 import { renderMapRows } from './render.js';
 
 export function renderLanding() {
-	const tbody = document.querySelector('tbody[data-maps]');
-	if (!tbody) return;
-	renderMapRows(tbody, DEFAULT_MAPS.map(catalogMap).filter(map => map && isMapEnabled(map.id)));
+	const list = document.querySelector('[data-maps]');
+	if (!list) return;
+	renderMapRows(list, DEFAULT_MAPS.map(catalogMap).filter(map => map && isMapEnabled(map.id)));
 }
 
 export function initLandingRerender() {

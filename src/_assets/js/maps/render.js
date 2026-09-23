@@ -2,7 +2,7 @@ import { el } from '../lib/dom.js';
 import { MAP_TYPES } from './types.js';
 
 // Drawing maps from their catalog entries: a block's title bar, its map as
-// its type draws it, the links under it, and the rows a map takes in a table.
+// its type draws it, the links under it, and the entry a map takes in the list.
 // Both pages draw with this — the landing page as it is, the customize page
 // with the widgets' buttons in every title bar, which it passes in
 // (options.titleButtons) so that this knows nothing of widgets.
@@ -206,29 +206,25 @@ export function buildMapContent(map, inst = map.id, options = {}) {
 	return type ? type.build(map, inst, options) : [];
 }
 
-// the table's rows for a list of maps, or a line saying there are none
-export function renderMapRows(tbody, maps, options = {}) {
-	tbody.replaceChildren();
+// the list's entries for a list of maps, or a line saying there are none
+export function renderMapRows(list, maps, options = {}) {
+	list.replaceChildren();
 	if (!maps.length) {
-		tbody.appendChild(el('tr', {}, [
-			el('td', { align: 'center' }, [
-				el('div', { class: 'maps-empty', text: 'Nema odabranih karata. Odaberite ih pod "Karte".' })
-			])
+		list.appendChild(el('div', { class: 'map-entry' }, [
+			el('div', { class: 'maps-empty', text: 'Nema odabranih karata. Odaberite ih pod "Karte".' })
 		]));
 		return;
 	}
-	maps.forEach(map => appendMapRows(tbody, map, options));
+	maps.forEach(map => appendMapRows(list, map, options));
 }
 
-// the rows a map takes at the end of the table — a spacer after the one
-// before, its block, and the links under it — returning the block. One block
-// per map, so the pop-out can lift title, map and indicators together
-export function appendMapRows(tbody, map, options = {}) {
-	if (tbody.children.length) tbody.appendChild(el('tr', { class: 'sp20' }));
+// the entry a map takes at the end of the list — its block and the links
+// under it — returning the block. One block per map, so the pop-out can lift
+// title, map and indicators together
+export function appendMapRows(list, map, options = {}) {
 	const block = el('div', { class: 'map-block', 'data-map-id': map.id, 'data-inst': map.id }, buildMapContent(map, map.id, options));
-	tbody.appendChild(el('tr', {}, [el('td', { align: 'center' }, [block])]));
-	if (map.links && map.links.length) {
-		tbody.appendChild(el('tr', {}, [el('td', { align: 'center' }, [buildLinksBottom(map)])]));
-	}
+	const entry = el('div', { class: 'map-entry' }, [block]);
+	if (map.links && map.links.length) entry.appendChild(buildLinksBottom(map));
+	list.appendChild(entry);
 	return block;
 }
