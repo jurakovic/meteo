@@ -28,7 +28,7 @@ import { POPOUT_FS_Z, POPOUT_MARGIN } from './constants.js';
 import { floatingBlocks, raisePopout } from './core.js';
 import { persistSnapLayout } from './layout.js';
 
-function freeRectAround(rect, blockers, bounds) {
+export function freeRectAround(rect, blockers, bounds) {
 	// the spans, laid end to end, reach from one side of the rectangle to the
 	// other. A gap no wider than POPOUT_MARGIN is no gap: it is the grid's cell,
 	// so widgets stacked on the grid wall as the eye reads them, and it is the

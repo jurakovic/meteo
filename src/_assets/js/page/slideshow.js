@@ -45,108 +45,70 @@ function handleSwipe(slideshow, startX, endX) {
 // through here, and the sweep must pass over everything already bound rather
 // than hang a second set of handlers on it
 export function addSwipeEvents() {
-	const slideshows = document.querySelectorAll('.slideshow:not([data-swipe])');
-
-	slideshows.forEach(slideshow => {
+	document.querySelectorAll('.slideshow:not([data-swipe])').forEach(slideshow => {
 		slideshow.setAttribute('data-swipe', '');
-		let startX = 0;
-		let startY = 0;
-		let endX = 0;
-		let endY = 0;
-		let isDragging = false;
-
-		// Prevent default drag behavior on images
-		const images = slideshow.querySelectorAll('img');
-		images.forEach(img => {
+		// an image's own drag would take the gesture
+		slideshow.querySelectorAll('img').forEach(img => {
 			img.addEventListener('dragstart', (e) => e.preventDefault());
 		});
+		bindTouchSwipe(slideshow);
+		guardArrowsFromPinch(slideshow);
+		bindMouseSwipe(slideshow);
+	});
+}
 
-		// Touch events for mobile
-		slideshow.addEventListener('touchstart', (e) => {
-			// Ignore multi-touch (e.g. pinch-zoom); only single-finger swipes change slides
-			if (e.touches.length > 1) {
-				isDragging = false;
-				return;
-			}
-			startX = e.touches[0].clientX;
-			startY = e.touches[0].clientY;
-			isDragging = false;
+// a gesture from start to end changes the slide only when it went more across
+// than up or down — otherwise it was the page being scrolled
+function swipeIfHorizontal(slideshow, start, end) {
+	if (Math.abs(end.x - start.x) > Math.abs(end.y - start.y)) handleSwipe(slideshow, start.x, end.x);
+}
+
+// one finger only: a second (a pinch-zoom) calls the swipe off
+function bindTouchSwipe(slideshow) {
+	let start = null, end = null, swiping = false;
+	slideshow.addEventListener('touchstart', (e) => {
+		swiping = false;
+		if (e.touches.length > 1) return;
+		start = end = { x: e.touches[0].clientX, y: e.touches[0].clientY };
+	});
+	slideshow.addEventListener('touchmove', (e) => {
+		if (e.touches.length > 1 || !start) { swiping = false; return; }
+		end = { x: e.touches[0].clientX, y: e.touches[0].clientY };
+		if (Math.abs(end.x - start.x) > Math.abs(end.y - start.y)) swiping = true;
+	});
+	slideshow.addEventListener('touchend', () => {
+		if (swiping) swipeIfHorizontal(slideshow, start, end);
+	});
+}
+
+// A two-finger touch still synthesizes a click on an arrow under it, so the
+// click is cancelled whenever more than one finger was involved in the
+// gesture: a pinch-zoom must not change the slide
+function guardArrowsFromPinch(slideshow) {
+	slideshow.querySelectorAll('.prev, .next').forEach(btn => {
+		let multiTouch = false;
+		btn.addEventListener('touchstart', (e) => {
+			if (e.touches.length > 1) multiTouch = true;
 		});
-
-		slideshow.addEventListener('touchmove', (e) => {
-			if (e.touches.length > 1) {
-				isDragging = false;
-				return;
-			}
-			endX = e.touches[0].clientX;
-			endY = e.touches[0].clientY;
-
-			// If the finger moves horizontally, set isDragging to true
-			if (Math.abs(endX - startX) > Math.abs(endY - startY)) {
-				isDragging = true;
-			}
+		btn.addEventListener('touchend', (e) => {
+			if (multiTouch) e.preventDefault(); // cancel the click that would follow
+			if (e.touches.length === 0) multiTouch = false; // reset once all fingers lift
 		});
+	});
+}
 
-		slideshow.addEventListener('touchend', () => {
-			if (isDragging) {
-				const deltaX = endX - startX;
-				const deltaY = endY - startY;
-
-				// Only trigger swipe if horizontal movement is greater than vertical movement (prevent swipe on scroll up or down)
-				if (Math.abs(deltaX) > Math.abs(deltaY)) {
-					handleSwipe(slideshow, startX, endX);
-				}
-			}
-		});
-
-		// Prevent prev/next buttons from changing the slide during a pinch-zoom gesture.
-		// A two-finger touch still synthesizes a click on the button, so suppress that
-		// click whenever more than one finger was involved in the gesture.
-		slideshow.querySelectorAll('.prev, .next').forEach(btn => {
-			let multiTouch = false;
-			btn.addEventListener('touchstart', (e) => {
-				if (e.touches.length > 1) multiTouch = true;
-			});
-			btn.addEventListener('touchend', (e) => {
-				if (multiTouch) e.preventDefault(); // cancel the click that would follow
-				if (e.touches.length === 0) multiTouch = false; // reset once all fingers lift
-			});
-		});
-
-		// Mouse events for desktop
-		slideshow.addEventListener('mousedown', (e) => {
-			startX = e.clientX;
-			startY = e.clientY;
-			isDragging = true;
-		});
-
-		slideshow.addEventListener('mousemove', (e) => {
-			if (isDragging) {
-				endX = e.clientX;
-				endY = e.clientY;
-			}
-		});
-
-		slideshow.addEventListener('mouseup', (e) => {
-			if (isDragging) {
-				endX = e.clientX;
-				endY = e.clientY;
-				const deltaX = endX - startX;
-				const deltaY = endY - startY;
-
-				// Only trigger swipe if horizontal movement is greater than vertical movement (prevent swipe on scroll up or down)
-				if (Math.abs(deltaX) > Math.abs(deltaY)) {
-					handleSwipe(slideshow, startX, endX);
-				}
-				isDragging = false;
-			}
-		});
-
-		// Handle mouse leaving the slideshow area
-		slideshow.addEventListener('mouseleave', () => {
-			if (isDragging) {
-				isDragging = false;
-			}
-		});
+// the same gesture with the mouse, on a desktop; leaving the slideshow calls it off
+function bindMouseSwipe(slideshow) {
+	let start = null;
+	slideshow.addEventListener('mousedown', (e) => {
+		start = { x: e.clientX, y: e.clientY };
+	});
+	slideshow.addEventListener('mouseup', (e) => {
+		if (!start) return;
+		swipeIfHorizontal(slideshow, start, { x: e.clientX, y: e.clientY });
+		start = null;
+	});
+	slideshow.addEventListener('mouseleave', () => {
+		start = null;
 	});
 }

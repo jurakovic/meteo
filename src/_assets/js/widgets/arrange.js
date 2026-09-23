@@ -33,7 +33,7 @@ import { fitWidget, unlockAspect } from './popout.js';
 // out the same size. Falls out as 2x2 for four, 3x2 for six and 4x3 for
 // twelve, and on a wide screen puts two side by side rather than one above
 // the other
-function arrangeShape(n, width, height, aspect) {
+export function arrangeShape(n, width, height, aspect) {
 	let best = { cols: 1, rows: n, score: -Infinity };
 	for (let cols = 1; cols <= n; cols++) {
 		const rows = Math.ceil(n / cols);
@@ -72,13 +72,13 @@ function arrangeAspect(blocks) {
 // n whole numbers summing to total, the remainder over the first of them: a
 // fraction left on any cell would leave a hairline between two tiles, and a
 // hairline is the difference between an edge that is a seam and one that is not
-function shareOut(total, n) {
+export function shareOut(total, n) {
 	const base = Math.floor(total / n);
 	const extra = Math.round(total) - base * n;
 	return Array.from({ length: n }, (_, i) => base + (i < extra ? 1 : 0));
 }
 
-function runningTotal(sizes, upTo) {
+export function runningTotal(sizes, upTo) {
 	return sizes.slice(0, upTo).reduce((sum, size) => sum + size, 0);
 }
 

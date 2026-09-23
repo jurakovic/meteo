@@ -6,7 +6,7 @@
 // ("chmu" finds ČHMÚ). A stroke is not a combining mark and survives that —
 // đ is one code point of its own — so it is spelled out
 
-function foldText(text) {
+export function foldText(text) {
 	return text.toLowerCase().normalize('NFD').replace(/\p{Diacritic}/gu, '').replace(/đ/g, 'd');
 }
 

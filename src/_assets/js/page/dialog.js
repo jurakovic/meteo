@@ -12,7 +12,7 @@
 import { isTextField } from '../lib/dom.js';
 import { clamp, roundFraction, setScrollbarGutter, viewportHeight, viewportWidth } from '../lib/geometry.js';
 import { DESKTOP_MQ } from '../lib/media.js';
-import { RESIZE_HANDLES, trackPointer } from '../lib/pointer.js';
+import { pulledSize, RESIZE_HANDLES, trackPointer } from '../lib/pointer.js';
 
 const DIALOG_MIN_WIDTH = 360;
 
@@ -151,11 +151,7 @@ function initDialogWindow(panel) {
 				placeDialog(panel, start.left + dx, start.top + dy, start.width, kept);
 				return;
 			}
-			let width = start.width, height = start.height;
-			if (dir.includes('e')) width = start.width + dx;
-			if (dir.includes('w')) width = start.width - dx;
-			if (dir.includes('s')) height = start.height + dy;
-			if (dir.includes('n')) height = start.height - dy;
+			let { w: width, h: height } = pulledSize(dir, start, dx, dy);
 			// clamped here as well as in placeDialog, so the edge that stays put does
 			width = clamp(width, DIALOG_MIN_WIDTH, dialogMaxWidth());
 			height = clamp(height, DIALOG_MIN_HEIGHT, dialogMaxHeight());

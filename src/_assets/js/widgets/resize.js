@@ -19,6 +19,7 @@
 
 import { dlog } from '../lib/debug.js';
 import { clamp, viewportHeight, viewportWidth } from '../lib/geometry.js';
+import { pulledSize } from '../lib/pointer.js';
 import { isSnapped, layoutSnapColumns, paneMagnetEdges, snapColumnOf, snapPaneOf } from './columns.js';
 import { POPOUT_MIN_HEIGHT, POPOUT_MIN_WIDTH, SEAM_ALIGN } from './constants.js';
 import { floatingBlocks, placePopout, popoutMaxWidth } from './core.js';
@@ -111,29 +112,59 @@ export function resizeSeam(block, other, dir, e) {
 	});
 }
 
+// Shift holds the aspect and a plain pull is free of it, the way round an
+// image editor has it. The key is read through the gesture rather than at the
+// start of it: press or release it mid-pull and the rest of the pull answers,
+// the widget taking its aspect back or letting it go where it stands, so what
+// it is left as is what the key said when it was let go. The pointer need not
+// move for this — trackWidgetPointer repeats the last move on the key itself.
+// In a column the width is the column's, so the height is the only thing a
+// pull can change and letting the aspect go is the only way to change it: a
+// plain pull frees a locked pane, as it does over the page, and Shift holds
+// the aspect and with it the pane. The double-click on the title bar is the
+// way back to the aspect, there as anywhere.
 export function resizePopout(block, dir, e) {
 	const members = groupMembers(block);
 	const col = snapColumnOf(block);
-	if (members.length > 1 && !col) return resizeGroup(members, dir, e);
-	// Shift holds the aspect and a plain pull is free of it, the way round an
-	// image editor has it. The key is read through the gesture rather than at the
-	// start of it: press or release it mid-pull and the rest of the pull answers,
-	// the widget taking its aspect back or letting it go where it stands, so what
-	// it is left as is what the key said when it was let go. The pointer need not
-	// move for this — trackWidgetPointer repeats the last move on the key itself.
-	// In a column the width is the column's, so the height is the only thing a
-	// pull can change and letting the aspect go is the only way to change it: a
-	// plain pull frees a locked pane, as it does over the page, and Shift holds
-	// the aspect and with it the pane. The double-click on the title bar is the
-	// way back to the aspect, there as anywhere.
+	if (col) resizePane(block, dir, e, col, members);
+	else if (members.length > 1) resizeGroup(members, dir, e);
+	else resizeFloating(block, dir, e);
+}
+
+// a pane's top or bottom edge, up or down its column: drawn to the column's
+// ends and the other panes, the stack it belongs to moving along
+function resizePane(block, dir, e, col, members) {
+	const setMode = (shift) => {
+		if (shift || block.classList.contains('free')) return;
+		unlockAspect(block);
+		snapPaneOf(block).height = block.offsetHeight / viewportHeight(); // a free pane carries its own
+	};
+	setMode(e.shiftKey);
+	const start = block.getBoundingClientRect();
+	const mates = groupStarts(members.filter(m => m !== block));
+	const above = mates.filter(s => s.top < start.top), below = mates.filter(s => s.top > start.top);
+	const stackTop = Math.min(start.top, ...above.map(s => s.top));
+	const stackBottom = Math.max(start.bottom, ...below.map(s => s.bottom));
+	trackWidgetPointer(e, (dx, dy, ev) => {
+		setMode(ev.shiftKey); // the key as it is now, not as it was at the start
+		if (!block.classList.contains('free')) return; // Shift is holding the aspect, so the column gives the height
+		let { h } = pulledSize(dir, start, dx, dy);
+		const edges = paneMagnetEdges(col, members); // the stack moves along, so it is no magnet
+		if (dir.includes('s')) { const m = magnetEdge(start.top + h, edges); if (m !== null) h = m - start.top; }
+		if (dir.includes('n')) { const m = magnetEdge(start.bottom - h, edges); if (m !== null) h = start.bottom - m; }
+		h = clamp(h, POPOUT_MIN_HEIGHT, start.height + (dir.includes('n') ? stackTop : viewportHeight() - stackBottom));
+		const pane = snapPaneOf(block);
+		pane.height = h / viewportHeight();
+		pane.top = (dir.includes('n') ? start.bottom - h : start.top) / viewportHeight();
+		if (dir.includes('n')) above.forEach(s => { snapPaneOf(s.block).top = (s.top - (h - start.height)) / viewportHeight(); });
+		layoutSnapColumns();
+	}, () => { snapToGrid([block]); persistSnapLayout(); });
+}
+
+// a widget over the page, from any side or corner
+function resizeFloating(block, dir, e) {
 	let ratio;
 	const setMode = (shift) => {
-		if (col) {
-			if (shift || block.classList.contains('free')) return;
-			unlockAspect(block);
-			snapPaneOf(block).height = block.offsetHeight / viewportHeight(); // a free pane carries its own
-			return;
-		}
 		if (!shift && !block.classList.contains('free')) unlockAspect(block);
 		else if (shift && block.classList.contains('letterbox')) {
 			lockAspect(block);
@@ -155,66 +186,21 @@ export function resizePopout(block, dir, e) {
 	// to it; placePopout keeps its own clamp. A widget always starts inside the
 	// viewport (placePopout sees to it), so the room is never less than the side
 	// it is the room for, and no gesture is forced to shrink one
-	const ceiling = popoutMaxWidth();
-	const maxWidth = Math.min(ceiling, dir.includes('w') ? start.right : viewportWidth() - start.left);
-	const maxHeight = dir.includes('n') ? start.bottom : viewportHeight() - start.top;
-	const magnets = col ? [] : magnetRects(block);
-	const mates = col ? groupStarts(members.filter(m => m !== block)) : [];
-	const above = mates.filter(s => s.top < start.top), below = mates.filter(s => s.top > start.top);
-	const stackTop = Math.min(start.top, ...above.map(s => s.top));
-	const stackBottom = Math.max(start.bottom, ...below.map(s => s.bottom));
+	const room = {
+		width: Math.min(popoutMaxWidth(), dir.includes('w') ? start.right : viewportWidth() - start.left),
+		height: dir.includes('n') ? start.bottom : viewportHeight() - start.top
+	};
+	const magnets = magnetRects(block);
 	trackWidgetPointer(e, (dx, dy, ev) => {
 		setMode(ev.shiftKey); // the key as it is now, not as it was at the start
-		const free = block.classList.contains('free');
-		let w = start.width, h = start.height;
-		if (dir.includes('e')) w = start.width + dx;
-		if (dir.includes('w')) w = start.width - dx;
-		if (dir.includes('s')) h = start.height + dy;
-		if (dir.includes('n')) h = start.height - dy;
-		if (col) {
-			if (!free) return; // Shift is holding the aspect, so the column gives the height
-			const edges = paneMagnetEdges(col, members); // the stack moves along, so it is no magnet
-			if (dir.includes('s')) { const m = magnetEdge(start.top + h, edges); if (m !== null) h = m - start.top; }
-			if (dir.includes('n')) { const m = magnetEdge(start.bottom - h, edges); if (m !== null) h = start.bottom - m; }
-			h = clamp(h, POPOUT_MIN_HEIGHT, start.height + (dir.includes('n') ? stackTop : viewportHeight() - stackBottom));
-			const pane = snapPaneOf(block);
-			pane.height = h / viewportHeight();
-			pane.top = (dir.includes('n') ? start.bottom - h : start.top) / viewportHeight();
-			if (dir.includes('n')) above.forEach(s => { snapPaneOf(s.block).top = (s.top - (h - start.height)) / viewportHeight(); });
-			layoutSnapColumns();
-			return;
-		}
-		({ w, h } = pullResizeEdges(magnets, dir, start, w, h));
-		if (free) {
-			w = clamp(w, POPOUT_MIN_WIDTH, maxWidth);
-			h = clamp(h, POPOUT_MIN_HEIGHT, maxHeight);
+		const pulled = pulledSize(dir, start, dx, dy);
+		let { w, h } = pullResizeEdges(magnets, dir, start, pulled.w, pulled.h);
+		if (block.classList.contains('free')) {
+			w = clamp(w, POPOUT_MIN_WIDTH, room.width);
+			h = clamp(h, POPOUT_MIN_HEIGHT, room.height);
 			block.style.height = `${Math.round(h)}px`;
 		} else {
-			// the width the wanted height asks for, read off the widget rather
-			// than taken from the start ratio, so the pulled edge lands on its
-			// magnet and a plain drag follows the pointer (lockedWidthFor)
-			if (dir === 'n' || dir === 's') w = lockedWidthFor(block, h, h * ratio, ratio, maxWidth);
-			else if (dir.length === 2) w = Math.max(w, lockedWidthFor(block, h, h * ratio, ratio, maxWidth));
-			// the width the height asked for moves the right edge (the left, pulled from the west)
-			if (!(dir.includes('e') || dir.includes('w')) || dir.length === 2)
-				w = pullResizeEdges(magnets, dir.includes('w') ? 'w' : 'e', start, w, h).w;
-			w = clamp(w, POPOUT_MIN_WIDTH, maxWidth);
-			// and the same the other way about: a width pulled by a side handle
-			// carries the bottom edge down with it, since a locked height follows
-			// the width, so that edge is offered the same magnets and the width
-			// is taken back from the height that lands on one — which is how a
-			// widget widened beside a taller one stops level with its bottom
-			if (dir !== 'n' && dir !== 's') {
-				const vert = (dir.includes('n') ? 'n' : 's') + (dir.includes('w') ? 'w' : '');
-				const at = lockedHeightAt(block, w);
-				const want = pullResizeEdges(magnets, vert, start, w, at).h; // the height only; the width has had its pull
-				if (Math.abs(want - at) > 0.5) w = lockedWidthFor(block, want, w + (want - at) * ratio, ratio, maxWidth);
-			}
-			// and the room is a height, which locked is a width as well: the
-			// widest the widget stands inside it, so the aspect cannot carry the
-			// height off the bottom of the screen
-			if (lockedHeightAt(block, w) > maxHeight + 0.5)
-				w = lockedWidthFor(block, maxHeight, maxHeight * ratio, ratio, maxWidth);
+			w = lockedResizeWidth(block, dir, start, w, h, ratio, magnets, room);
 		}
 		block.style.width = `${Math.round(w)}px`;
 		// the laid-out height, exact for locked widgets where it follows the
@@ -224,6 +210,38 @@ export function resizePopout(block, dir, e) {
 		placePopout(block, dir.includes('w') ? start.right - w : start.left, dir.includes('n') ? start.bottom - h : start.top);
 		fitWidget(block);
 	}, () => { snapToGrid([block]); persistSnapLayout(); });
+}
+
+// the width a locked widget pulled to w by h takes: its height follows its
+// width, so a pull on the top or bottom is the width that gives that height,
+// and whichever edge moves is offered the magnets
+function lockedResizeWidth(block, dir, start, w, h, ratio, magnets, room) {
+	// the width the wanted height asks for, read off the widget rather
+	// than taken from the start ratio, so the pulled edge lands on its
+	// magnet and a plain drag follows the pointer (lockedWidthFor)
+	if (dir === 'n' || dir === 's') w = lockedWidthFor(block, h, h * ratio, ratio, room.width);
+	else if (dir.length === 2) w = Math.max(w, lockedWidthFor(block, h, h * ratio, ratio, room.width));
+	// the width the height asked for moves the right edge (the left, pulled from the west)
+	if (!(dir.includes('e') || dir.includes('w')) || dir.length === 2)
+		w = pullResizeEdges(magnets, dir.includes('w') ? 'w' : 'e', start, w, h).w;
+	w = clamp(w, POPOUT_MIN_WIDTH, room.width);
+	// and the same the other way about: a width pulled by a side handle
+	// carries the bottom edge down with it, since a locked height follows
+	// the width, so that edge is offered the same magnets and the width
+	// is taken back from the height that lands on one — which is how a
+	// widget widened beside a taller one stops level with its bottom
+	if (dir !== 'n' && dir !== 's') {
+		const vert = (dir.includes('n') ? 'n' : 's') + (dir.includes('w') ? 'w' : '');
+		const at = lockedHeightAt(block, w);
+		const want = pullResizeEdges(magnets, vert, start, w, at).h; // the height only; the width has had its pull
+		if (Math.abs(want - at) > 0.5) w = lockedWidthFor(block, want, w + (want - at) * ratio, ratio, room.width);
+	}
+	// and the room is a height, which locked is a width as well: the
+	// widest the widget stands inside it, so the aspect cannot carry the
+	// height off the bottom of the screen
+	if (lockedHeightAt(block, w) > room.height + 0.5)
+		w = lockedWidthFor(block, room.height, room.height * ratio, ratio, room.width);
+	return w;
 }
 
 // the pulled edges of something that started as start (left/top/right/
@@ -305,12 +323,8 @@ function resizeGroup(members, dir, e) {
 		(dir.includes('w') ? box.right : viewportWidth() - box.left) / box.width,
 		(dir.includes('n') ? box.bottom : viewportHeight() - box.top) / box.height);
 	trackWidgetPointer(e, (dx, dy) => {
-		let w = box.width, h = box.height;
-		if (dir.includes('e')) w = box.width + dx;
-		if (dir.includes('w')) w = box.width - dx;
-		if (dir.includes('s')) h = box.height + dy;
-		if (dir.includes('n')) h = box.height - dy;
-		({ w, h } = pullResizeEdges(magnets, dir, box, w, h));
+		const pulled = pulledSize(dir, box, dx, dy);
+		const { w, h } = pullResizeEdges(magnets, dir, box, pulled.w, pulled.h);
 		let scale = dir === 'n' || dir === 's' ? h / box.height
 			: dir.length === 2 ? Math.max(w / box.width, h / box.height)
 			: w / box.width;
