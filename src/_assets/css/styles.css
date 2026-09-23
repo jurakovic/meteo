@@ -922,6 +922,21 @@ body.fs-lock {
 			line-height: 1;
 		}
 
+	/* the manual switched off (MANUAL_ENABLED in main.js): its entries go, and
+	   the help button's column with them */
+	html.no-manual .help-btn,
+	html.no-manual .manual-link {
+		display: none;
+	}
+
+	html.no-manual .buttons.with-help {
+		grid-template-columns: 49.5% 49.5%;
+	}
+
+	html.no-manual .buttons.three.with-help {
+		grid-template-columns: repeat(3, 1fr);
+	}
+
 	/* same expand affordance as the .expandable "Linkovi" button */
 	.buttons button.btn {
 		position: relative;

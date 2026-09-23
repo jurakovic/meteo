@@ -909,6 +909,12 @@ document.addEventListener('keydown', (e) => {
 // anyone can send.
 const MANUAL_HASH = 'upute';
 
+// the manual is off for now: false hides the ? button and the footer's Upute
+// and leaves H and #upute alone; true brings it all back. The class goes on
+// before the first paint, as board-boot does, so nothing flashes up and away
+const MANUAL_ENABLED = false;
+if (!MANUAL_ENABLED) document.documentElement.classList.add('no-manual');
+
 function manualDialog() {
 	return document.getElementById('manualDialog');
 }
@@ -944,7 +950,7 @@ function scrollManualTo(panel, id) {
 
 function initManual() {
 	const panel = manualDialog();
-	if (!panel) return;
+	if (!panel || !MANUAL_ENABLED) return;
 
 	const close = panel.querySelector('.ms-close');
 	if (close) close.addEventListener('click', () => setDialogVisible(panel, false));
