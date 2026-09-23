@@ -213,10 +213,6 @@ test.describe('pop-out widgets', () => {
 	});
 
 	test('a narrow window docks everything and keeps the arrangement for a wide one', async ({ page }) => {
-		// B1 (REFACTORING.md): the arrangement kept for the wide window is read
-		// after the viewport has already narrowed, so the widget comes back
-		// displaced; fixed in S2
-		test.fail();
 		await popout(page, 'neverin-radar-hr');
 		await moveWidget(page, 'neverin-radar-hr', 200, 100);
 		const placed = await box(block(page, 'neverin-radar-hr'));
