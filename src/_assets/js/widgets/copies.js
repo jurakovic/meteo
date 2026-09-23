@@ -4,6 +4,7 @@ import { clamp, viewportHeight } from '../lib/geometry.js';
 import { DESKTOP_MQ } from '../lib/media.js';
 import { catalogMap } from '../maps/catalog.js';
 import { buildMapContent, instIndex, instKey, instMapId } from '../maps/render.js';
+import { withKey } from '../page/commands.js';
 import { exitFullscreen, hideOverlayOnDoubleTap, setIframeSrc, updateHintText } from '../page/iframe.js';
 import { addSwipeEvents } from '../page/slideshow.js';
 import { unsnapPane } from './columns.js';
@@ -29,7 +30,7 @@ import { fitWidget, popoutMap, unlockAspect } from './popout.js';
 // the arrows would drive whichever came first while both sets of indicators
 // lit up.
 export function buildDuplicateButton() {
-	const btn = el('a', { class: 'dup-btn', text: '[D]', title: 'Udvostruči kartu (D)' });
+	const btn = el('a', { class: 'dup-btn', text: '[D]', title: withKey('Udvostruči kartu', 'duplicate') });
 	btn.addEventListener('click', () => duplicateMap(btn.closest('.map-block')));
 	return btn;
 }

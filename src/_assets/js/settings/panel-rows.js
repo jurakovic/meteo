@@ -3,7 +3,7 @@
 
 import { el } from '../lib/dom.js';
 import { DESKTOP_MQ } from '../lib/media.js';
-import { arrangeBoard } from '../widgets/arrange.js';
+import { withKey } from '../page/commands.js';
 import { isDashboard } from '../widgets/board.js';
 import { setGridPrefs } from '../widgets/grid.js';
 import { currentSnapLayout } from '../widgets/layout.js';
@@ -51,11 +51,10 @@ export function createModeRow(panel) {
 			// arrange, so it waits for Primijeni rather than doing nothing on a press.
 			// And it needs the tick as well, standing down with the grid switches
 			// when the mode is unticked over a board that is still up
-			const tile = el('button', { type: 'button', class: 'btn ms-arrange', title: 'Posloži u mrežu (A)' }, [
+			const tile = el('button', { type: 'button', class: 'btn ms-arrange', 'data-action': 'arrange', title: withKey('Posloži u mrežu', 'arrange') }, [
 				document.createTextNode('Posloži')
 			]);
 			tile.disabled = !panel.dashboardChecked || !isDashboard();
-			tile.addEventListener('click', () => arrangeBoard());
 			modeDiv.append(btn,
 				buildGridToggle('Prikaži mrežu', panel.gridChecked, (on) => { panel.gridChecked = on; setGridPrefs(panel.gridChecked, panel.snapChecked); }),
 				buildGridToggle('Poravnaj uz mrežu', panel.snapChecked, (on) => { panel.snapChecked = on; setGridPrefs(panel.gridChecked, panel.snapChecked); }),

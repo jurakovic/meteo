@@ -257,3 +257,9 @@ function getResetButtonFromOverlayId(overlayId) {
 function getFrameIdFromResetButtonId(resetFrameId) {
 	return document.getElementById(resetFrameId).getAttribute('data-frame-id');
 }
+
+// whichever interactive map is in fullscreen, out of it (Escape)
+export function exitAnyFullscreen() {
+	const fs = document.querySelector('.if1.fullscreen');
+	if (fs) exitFullscreen(fs);
+}
