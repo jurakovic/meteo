@@ -80,3 +80,20 @@ test('instance keys: the plain id for the first showing, #n for copies', () => {
 	assert.equal(instSuffix('windy#2'), 'Copy2');
 	assert.equal(instSuffix('windy'), '');
 });
+
+test('every map in the catalog is of a registered type', async () => {
+	const { MAP_TYPES, mapTypeOf } = await import('../../src/_assets/js/maps/types.js');
+	for (const map of MAP_CATALOG) assert.ok(MAP_TYPES[map.type], `${map.id}: ${map.type}`);
+	assert.equal(mapTypeOf('windy').fullscreen, true);
+	assert.equal(mapTypeOf('windy').reload, null);
+	assert.equal(mapTypeOf('eumetnet').freeAspect, true);
+	assert.equal(mapTypeOf('nope'), null);
+});
+
+test('a fresh address replaces its own reload parameter and keeps the rest', async () => {
+	const { freshUrl } = await import('../../src/_assets/js/maps/types.js');
+	assert.match(freshUrl('https://x/a.png'), /^https:\/\/x\/a\.png\?_r=\d+$/);
+	assert.match(freshUrl('https://x/a.gif?nocache'), /^https:\/\/x\/a\.gif\?nocache&_r=\d+$/);
+	assert.match(freshUrl('https://x/a.gif?_r=1&k=2'), /^https:\/\/x\/a\.gif\?k=2&_r=\d+$/);
+	assert.match(freshUrl('https://x/a.gif?k=2&_r=1'), /^https:\/\/x\/a\.gif\?k=2&_r=\d+$/);
+});

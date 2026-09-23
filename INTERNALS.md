@@ -80,7 +80,7 @@ The scripts are ES modules under [`src/_assets/js`](./src/_assets/js). The dev p
 | `features.js` | switches for parts built but not offered yet (the manual) |
 | `remote-config.js` | which maps the worker's `config.json` switches off |
 | `page/` | what both pages have: the slideshows, the interactive maps' gate and fullscreen (`iframe`), the links, the progress bar, the dialog chrome, the manual, and `commands` — every action a control or a key can run, registered by id with its keys (`registerCommand`); the markup's `data-action` controls and the tab's glyphs run them through one click listener, the keys through one keydown listener, and a title names the bound key (`withKey`) |
-| `maps/` | the customize page's data and view: the `catalog`, the `presets`, the stored or shared view (`prefs`), share links (`share`), `find`, and `render` |
+| `maps/` | the customize page's data and view: the `catalog`, the map `types` (what each kind means: how it is drawn, sized, put fullscreen and reloaded), the `presets`, the stored or shared view (`prefs`), share links (`share`), `find`, and `render` |
 | `settings/` | the settings dialog (`panel`), the tab at the top edge (`tab`) and its `[+]` menu (`add-menu`) |
 | `widgets/` | the pop-out widgets (desktop): `constants`, `core`, `popout`, `copies`, `drag`, `resize` (and seams), `groups`, `overlap` (covered frames, shadows), `columns`, `fullscreen`, `board`, `grid`, `arrange`, `keyboard`, `gestures`, `reload`, `refresh`, `layout` (the arrangement as data: read, checked, applied, written), `responsive` |
 

@@ -7,6 +7,7 @@
 
 import { dlog } from '../lib/debug.js';
 import { el } from '../lib/dom.js';
+import { mapTypeOf } from '../maps/types.js';
 import { restartRefresh } from './refresh.js';
 
 export function buildReloadButton() {
@@ -23,35 +24,22 @@ export function buildReloadButton() {
 	return btn;
 }
 
+// a map fetched afresh the way its type is (maps/types.js)
 function reloadMap(block) {
-	if (!block) return;
+	const type = block && mapTypeOf(block.dataset.mapId);
+	if (!type || !type.reload) return;
 	dlog(`reloadMap: ${block.dataset.mapId}`);
-	// images and videos are re-fetched past the cache by a fresh query parameter
-	block.querySelectorAll('img[src]').forEach(img => { img.src = freshUrl(img.getAttribute('src')); });
-	block.querySelectorAll('video').forEach(video => {
-		video.querySelectorAll('source[src]').forEach(source => { source.src = freshUrl(source.getAttribute('src')); });
-		video.load();
-	});
-	// a plain iframe is navigated to its address again
-	block.querySelectorAll('.if2 iframe[src]').forEach(iframe => { iframe.src = iframe.getAttribute('src'); });
+	type.reload(block);
 }
 
-// the url with a reload parameter of its own set to now (replaced when there
-// is one already), so the browser fetches instead of serving its cache
-function freshUrl(url) {
-	const base = url.replace(/([?&])_r=\d+(&|$)/, (m, sep, next) => next ? sep : '');
-	return `${base}${base.includes('?') ? '&' : '?'}_r=${Date.now()}`;
-}
-
-// every map with something to re-fetch, popped out or still in the page: the
-// images, the slideshows, the videos and the basic frames. An interactive map
-// is left out — its feed is live of its own accord, and navigating its frame
-// again would cost it its pan and its zoom for nothing — which is the same
-// rule that decides whether a title bar gets an [R] at all, read off the
-// content here rather than off the button, since a docked map carries none
+// every map with something to re-fetch, popped out or still in the page — all
+// but the interactive maps, the same rule that decides whether a title bar
+// gets an [R] at all
 function reloadableBlocks() {
-	return [...document.querySelectorAll('.map-block')]
-		.filter(block => block.querySelector('img[src], video, .if2 iframe[src]'));
+	return [...document.querySelectorAll('.map-block')].filter(block => {
+		const type = mapTypeOf(block.dataset.mapId);
+		return !!type && !!type.reload;
+	});
 }
 
 export function reloadAllMaps() {
