@@ -10,10 +10,10 @@ import { addSwipeEvents } from '../page/slideshow.js';
 import { unsnapPane } from './columns.js';
 import { CASCADE_STEP, POPOUT_MIN_HEIGHT, POPOUT_MIN_WIDTH } from './constants.js';
 import { placePopout, popoutMaxWidth, raisePopout } from './core.js';
-import { leaveGroup, updateGroups } from './groups.js';
+import { groupOf, leaveGroup, updateGroups } from './groups.js';
 import { arrangementChanged } from './layout.js';
-import { syncShadows } from './overlap.js';
-import { fitWidget, popoutMap, unlockAspect } from './popout.js';
+import { dropShadow, syncShadows } from './overlap.js';
+import { fitWidget, handGapTo, popoutMap, unlockAspect } from './popout.js';
 
 // A map can be on screen more than once. [D] makes another showing of it, and
 // no showing is the original: each is a widget like the rest, and any of them
@@ -154,18 +154,14 @@ export function removeShowing(block) {
 		const heir = otherShowings(block)[0];
 		if (heir) {
 			heir.classList.remove('duplicate');
-			if (block._gap) {
-				heir._gap = block._gap;
-				heir._gap._block = heir;
-				delete block._gap;
-			}
+			handGapTo(block, heir);
 		}
 	}
 	const fs = block.querySelector('.if1.fullscreen');
 	if (fs) exitFullscreen(fs);
-	if (block._group) leaveGroup(block);
+	if (groupOf(block)) leaveGroup(block);
 	unsnapPane(block);
-	if (block._shadow) block._shadow.remove();
+	dropShadow(block);
 	block.remove();
 	updateGroups();
 	syncShadows();

@@ -31,6 +31,62 @@ export function setIframeSrc(iframe) {
 	iframe.src = url;
 }
 
+// The gate's button, beside the map's title, as a state (data-state):
+// - hidden: the gate is up over the map as it loaded; nothing to offer
+// - exit: [X], the gate let through — a press puts it back up
+// - reset: [R], the gate back up over a map that may have been moved — a
+//   press reloads the map as it started, and the button goes
+// - fullscreen: [R] in fullscreen, where a press reloads the map and the
+//   button stays, for repeated use
+const GATE_LABELS = { hidden: '[X]', exit: '[X]', reset: '[R]', fullscreen: '[R]' };
+
+function gateButton(frameId) {
+	return document.querySelector(`a[data-frame-id="${frameId}"]`);
+}
+
+function gateState(frameId) {
+	const btn = gateButton(frameId);
+	return btn ? btn.dataset.state || 'hidden' : null;
+}
+
+function setGateState(frameId, state) {
+	const btn = gateButton(frameId);
+	if (!btn) return;
+	dlog(`gate ${frameId}: ${state}`);
+	btn.dataset.state = state;
+	btn.textContent = GATE_LABELS[state];
+	if (state === 'hidden') btn.style.display = 'none';
+	else btn.style.removeProperty('display');
+}
+
+function overlayOf(frameId) {
+	return document.getElementById(frameId).parentElement.querySelector('.overlay');
+}
+
+// the gate let through: the map takes the pointer
+function openGate(frameId) {
+	overlayOf(frameId).style.display = 'none';
+	setGateState(frameId, 'exit');
+}
+
+// the gate's button pressed (the gate command, page/commands.js)
+export function pressGateButton(btn) {
+	const frameId = btn.dataset.frameId;
+	switch (btn.dataset.state) {
+		case 'exit':
+			overlayOf(frameId).removeAttribute('style');
+			setGateState(frameId, 'reset');
+			break;
+		case 'reset':
+			setIframeSrc(document.getElementById(frameId));
+			setGateState(frameId, 'hidden');
+			break;
+		case 'fullscreen':
+			setIframeSrc(document.getElementById(frameId));
+			break;
+	}
+}
+
 export function switchIframeZoom(frameId, btn) {
 	const newMode = btn.getAttribute('data-mode') === 'hr' ? 'eu' : 'hr';
 	const iframe = document.getElementById(frameId);
@@ -38,36 +94,35 @@ export function switchIframeZoom(frameId, btn) {
 	setIframeSrc(iframe);
 	btn.setAttribute('data-mode', newMode);
 	btn.textContent = newMode === 'hr' ? '[HR]' : '[EU]';
-	const resetBtn = getResetButtonFromFrameId(frameId);
-	// only the gated [R] hides on a zoom switch; the in-fullscreen [R] must stay
-	if (resetBtn.textContent === '[R]' && !iframe.parentElement.classList.contains('fullscreen'))
-		resetBtn.style.display = 'none';
+	// the map is at its start again, so [R] has nothing left to do; in
+	// fullscreen the button stays, as it always does there
+	if (gateState(frameId) === 'reset') setGateState(frameId, 'hidden');
 }
+
+// whether the gate was up as a map went into fullscreen, to put it back so
+const gateBeforeFullscreen = new WeakMap();
 
 export function toggleFullscreen(frameId, btn) {
 	dlog(`toggleFullscreen: ${frameId}`);
 	const if1 = document.getElementById(frameId).parentElement;
 	if (if1.classList.contains('fullscreen')) {
 		exitFullscreen(if1);
-	} else {
-		const overlay = if1.querySelector('.overlay');
-		const resetBtn = getResetButtonFromFrameId(frameId);
-		// snapshot whether the overlay gate was up, to restore it on exit
-		if1._fsOverlayVisible = !overlay || overlay.style.display !== 'none';
-		if1.classList.add('fullscreen');
-		if1.previousElementSibling.classList.add('fullscreen');
-		// the page scroll is locked under a map covering it — not under one
-		// filling a snap column beside it (customize page), where the page
-		// stays in use
-		if (!if1.closest('.map-block.snapped')) document.body.classList.add('fs-lock');
-		emit(EVENTS.mapFullscreen);
-		btn.textContent = '[-]';
-		// unlock interactivity: drop the overlay gate
-		if (overlay) overlay.style.display = 'none';
-		// show [R] in the top bar to reset the map to default without leaving
-		// fullscreen; it reloads and stays available for repeated use
-		if (resetBtn) setResetButtonToFullscreenReset(resetBtn);
+		return;
 	}
+	const overlay = if1.querySelector('.overlay');
+	gateBeforeFullscreen.set(if1, !overlay || overlay.style.display !== 'none');
+	if1.classList.add('fullscreen');
+	if1.previousElementSibling.classList.add('fullscreen');
+	// the page scroll is locked under a map covering it — not under one
+	// filling a snap column beside it (customize page), where the page
+	// stays in use
+	if (!if1.closest('.map-block.snapped')) document.body.classList.add('fs-lock');
+	emit(EVENTS.mapFullscreen);
+	btn.textContent = '[-]';
+	// the map is the thing in use now: the gate goes, and [R] puts the map
+	// back to its start without leaving fullscreen
+	if (overlay) overlay.style.display = 'none';
+	setGateState(frameId, 'fullscreen');
 }
 
 export function exitFullscreen(if1) {
@@ -79,40 +134,32 @@ export function exitFullscreen(if1) {
 	if (![...document.querySelectorAll('.if1.fullscreen')].some(f => !f.closest('.map-block.snapped')))
 		document.body.classList.remove('fs-lock');
 	emit(EVENTS.mapFullscreen);
-	// restore the overlay gate to its pre-fullscreen lock state (tracked on enter)
-	const wasUnlocked = if1._fsOverlayVisible === false;
-	delete if1._fsOverlayVisible;
+	// the gate as it was before; and the map was likely panned or zoomed in
+	// fullscreen, so the button is always offered: [X] if the gate was let
+	// through, [R] if it was up
+	const wasUnlocked = gateBeforeFullscreen.get(if1) === false;
+	gateBeforeFullscreen.delete(if1);
 	const overlay = if1.querySelector('.overlay');
 	if (overlay) {
 		if (wasUnlocked) overlay.style.display = 'none';
 		else overlay.removeAttribute('style');
 	}
-	// the map was likely panned/zoomed in fullscreen, so always show the reset
-	// button, matching the lock state: [X] (re-lock, then [R]) if it was
-	// unlocked, [R] (reset to default) if it was locked
-	const resetBtn = getResetButtonFromFrameId(if1.querySelector('iframe').id);
-	if (resetBtn) {
-		resetBtn.style.removeProperty('display');
-		if (wasUnlocked) setResetButtonToExit(resetBtn);
-		else setResetButtonToReset(resetBtn);
-	}
+	setGateState(if1.querySelector('iframe').id, wasUnlocked ? 'exit' : 'reset');
 }
 
-// bound once per overlay, for the reason above
-export function hideOverlayOnDoubleTap() {
-	const overlays = document.querySelectorAll('.if1 .overlay:not([data-tap])');
+// the hint's fade-out, per hint
+const hintTimers = new WeakMap();
 
-	overlays.forEach((overlay) => {
+// bound once per overlay: a double click, or a double tap, lets the map
+// through; a single tap shows the hint that says so
+export function hideOverlayOnDoubleTap() {
+	document.querySelectorAll('.if1 .overlay:not([data-tap])').forEach((overlay) => {
 		overlay.setAttribute('data-tap', '');
+		const frameId = overlay.dataset.frameId;
 		let lastTap = 0;
 		let multiTouch = false;
 
-		overlay.addEventListener('dblclick', () => {
-			overlay.style.display = 'none';
-			let resetFrame = getResetButtonFromOverlayId(overlay.id);
-			resetFrame.removeAttribute('style');
-			setResetButtonToExit(resetFrame);
-		});
+		overlay.addEventListener('dblclick', () => openGate(frameId));
 
 		overlay.addEventListener('touchstart', (e) => {
 			if (e.touches.length > 1) multiTouch = true;
@@ -128,24 +175,16 @@ export function hideOverlayOnDoubleTap() {
 				}
 				return;
 			}
-
 			const currentTime = new Date().getTime();
 			const tapLength = currentTime - lastTap;
-
 			if (tapLength > 0 && tapLength < 200) {
-				overlay.style.display = 'none';
-				let resetFrame = getResetButtonFromOverlayId(overlay.id);
-				resetFrame.removeAttribute('style');
-				setResetButtonToExit(resetFrame);
-
+				openGate(frameId);
 				e.preventDefault(); // prevent unintended behavior (e.g. zoom)
 			}
-
 			lastTap = currentTime;
 		});
 
 		const hint = overlay.querySelector('.hint');
-
 		let startY = 0;
 		let startX = 0;
 
@@ -158,20 +197,13 @@ export function hideOverlayOnDoubleTap() {
 
 		overlay.addEventListener('touchend', (e) => {
 			if (!hint) return;
-
-			const endX = e.changedTouches[0].clientX;
-			const endY = e.changedTouches[0].clientY;
-
-			const deltaX = Math.abs(endX - startX);
-			const deltaY = Math.abs(endY - startY);
-
-			// If finger moved more than 10px, treat it as a scroll
+			const deltaX = Math.abs(e.changedTouches[0].clientX - startX);
+			const deltaY = Math.abs(e.changedTouches[0].clientY - startY);
+			// a finger that moved more than 10px was scrolling
 			if (deltaX < 10 && deltaY < 10) {
 				hint.style.opacity = '0.6';
-				clearTimeout(hint._hideTimer);
-				hint._hideTimer = setTimeout(() => {
-					hint.style.removeProperty('opacity');
-				}, 2000);
+				clearTimeout(hintTimers.get(hint));
+				hintTimers.set(hint, setTimeout(() => hint.style.removeProperty('opacity'), 2000));
 			}
 		});
 	});
@@ -184,78 +216,6 @@ export function updateHintText() {
 			? "Dvostruki dodir za pristup interaktivnoj karti"
 			: "Dvostruki klik za pristup interaktivnoj karti";
 	});
-}
-
-function restoreOverlay(frameId) {
-	dlog(`restoreOverlay: ${frameId}`);
-	const frame = document.getElementById(frameId);
-	let parentElement = frame.parentElement;
-	let overlay = parentElement.querySelector('.overlay');
-	overlay.removeAttribute('style');
-
-	const resetFrame = getResetButtonFromFrameId(frameId);
-	setResetButtonToReset(resetFrame);
-}
-
-function setResetButtonToExit(resetFrame) {
-	dlog(`setResetButtonToExit: ${resetFrame.id}`);
-	const newResetFrame = resetFrame.cloneNode(true);
-	resetFrame.parentNode.replaceChild(newResetFrame, resetFrame);
-
-	newResetFrame.addEventListener('click', (e) => {
-		e.stopPropagation(); // Stop event bubbling
-		restoreOverlay(getFrameIdFromResetButtonId(newResetFrame.id));
-	});
-	newResetFrame.textContent = '[X]';
-}
-
-function setResetButtonToReset(resetFrame) {
-	dlog(`setResetButtonToReset: ${resetFrame.id}`);
-	const newResetFrame = resetFrame.cloneNode(true);
-	resetFrame.parentNode.replaceChild(newResetFrame, resetFrame);
-
-	newResetFrame.addEventListener('click', (e) => {
-		e.stopPropagation(); // Stop event bubbling
-		resetIframe(getFrameIdFromResetButtonId(newResetFrame.id));
-	});
-	newResetFrame.textContent = '[R]';
-}
-
-function resetIframe(frameId) {
-	dlog(`Resetting iframe: ${frameId}`);
-	setIframeSrc(document.getElementById(frameId));
-
-	const resetFrame = getResetButtonFromFrameId(frameId);
-	resetFrame.style.display = 'none';
-	setResetButtonToExit(resetFrame);
-}
-
-// in fullscreen [R] reloads the map to its default position and zoom and
-// stays, available for repeated use
-function setResetButtonToFullscreenReset(resetFrame) {
-	dlog(`setResetButtonToFullscreenReset: ${resetFrame.id}`);
-	const newResetFrame = resetFrame.cloneNode(true);
-	resetFrame.parentNode.replaceChild(newResetFrame, resetFrame);
-
-	newResetFrame.addEventListener('click', (e) => {
-		e.stopPropagation(); // Stop event bubbling
-		setIframeSrc(document.getElementById(getFrameIdFromResetButtonId(newResetFrame.id)));
-	});
-	newResetFrame.textContent = '[R]';
-	newResetFrame.style.removeProperty('display'); // ensure visible in fullscreen
-}
-
-function getResetButtonFromFrameId(frameId) {
-	return document.querySelector(`a[data-frame-id="${frameId}"]`);
-}
-
-function getResetButtonFromOverlayId(overlayId) {
-	const frameId = document.getElementById(overlayId).getAttribute('data-frame-id');
-	return getResetButtonFromFrameId(frameId);
-}
-
-function getFrameIdFromResetButtonId(resetFrameId) {
-	return document.getElementById(resetFrameId).getAttribute('data-frame-id');
 }
 
 // whichever interactive map is in fullscreen, out of it (Escape)

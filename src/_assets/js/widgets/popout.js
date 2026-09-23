@@ -16,7 +16,7 @@ import { isSnapped, layoutSnapColumns, unsnapPane } from './columns.js';
 import { POPOUT_WIDTH, TITLE_GAP } from './constants.js';
 import { isDuplicate, otherShowings, removeShowing } from './copies.js';
 import { isFreePopout, placePopout, popoutMaxWidth, raisePopout } from './core.js';
-import { leaveGroup } from './groups.js';
+import { groupOf, leaveGroup } from './groups.js';
 import { arrangementChanged, withPersistPaused } from './layout.js';
 import { syncShadows } from './overlap.js';
 import { lockedHeightAt, lockedWidthFor } from './resize.js';
@@ -55,9 +55,8 @@ export function popoutMap(block) {
 			el('span', { text: 'Karta je izdvojena u prozor ·' }),
 			back
 		]);
-		back.addEventListener('click', () => dockMap(gap._block));
-		gap._block = block;
-		block._gap = gap;
+		back.addEventListener('click', () => dockMap(blockOfGap.get(gap)));
+		setGap(block, gap);
 		block.after(gap);
 	}
 	block.classList.add('popout');
@@ -214,14 +213,13 @@ export function dockMap(block) {
 	// a fullscreen iframe inside the widget is fixed on its own; take it down first
 	const fs = block.querySelector('.if1.fullscreen');
 	if (fs) exitFullscreen(fs);
-	if (block._group) leaveGroup(block);
+	if (groupOf(block)) leaveGroup(block);
 	unsnapPane(block);
 	block.classList.remove('popout', 'free', 'grouped', 'letterbox', 'covered');
 	['left', 'top', 'width', 'height', 'z-index', '--po-img', '--lb-l', '--lb-r', '--lb-t', '--lb-b', '--lb-w']
 		.forEach(p => block.style.removeProperty(p));
 	block.querySelectorAll('.po-h, .po-backdrop').forEach(h => h.remove());
-	if (block._gap) block._gap.remove();
-	delete block._gap;
+	removeGap(block);
 	block.querySelectorAll('.po-btn').forEach(btn => setPopoutButton(btn, false));
 	unfitTitles(block);
 	arrangementChanged();
@@ -238,4 +236,29 @@ export function dockAllPopouts() {
 	withPersistPaused(() => document.querySelectorAll('.map-block.popout').forEach(dockMap));
 	arrangementChanged(); // also with nothing to dock: the mode may have changed
 	syncShadows(); // the breakpoint docks with persistence paused, so the sweep is not reached through it
+}
+
+// the gap a block popped out of the page leaves in it, and the block its way
+// back docks — which is whichever showing holds the map's place by then
+const gapOfBlock = new WeakMap();
+const blockOfGap = new WeakMap();
+
+function setGap(block, gap) {
+	gapOfBlock.set(block, gap);
+	blockOfGap.set(gap, block);
+}
+
+function removeGap(block) {
+	const gap = gapOfBlock.get(block);
+	if (gap) gap.remove();
+	gapOfBlock.delete(block);
+}
+
+// a showing closed while another of its map stays: the heir takes the gap
+// over, and with it the way back
+export function handGapTo(block, heir) {
+	const gap = gapOfBlock.get(block);
+	if (!gap) return;
+	setGap(heir, gap);
+	gapOfBlock.delete(block);
 }

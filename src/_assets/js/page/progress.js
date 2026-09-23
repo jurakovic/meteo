@@ -2,6 +2,11 @@
 
 import { dlog } from '../lib/debug.js';
 
+// the run in progress, so listeners left over from a superseded one stand
+// down, and the hide it scheduled
+let progressRun = 0;
+let progressHideTimer = 0;
+
 export function showProgress() {
 	// Get all images on the page
 	const images = document.querySelectorAll('img');
@@ -12,12 +17,11 @@ export function showProgress() {
 	// each invocation gets a token; listeners left over from a superseded run
 	// (e.g. Primijeni clicked while images are still loading) bail out so they
 	// can't move the shared bar or schedule a hide over the current run
-	const runId = (progressContainer._runId || 0) + 1;
-	progressContainer._runId = runId;
+	const runId = ++progressRun;
 
 	// re-runnable after a re-render: reset the bar, show the container and
 	// cancel a hide still pending from the previous run
-	clearTimeout(progressContainer._hideTimer);
+	clearTimeout(progressHideTimer);
 	progressBar.style.width = '0';
 	progressContainer.style.removeProperty('display');
 
@@ -29,13 +33,13 @@ export function showProgress() {
 
 	// Update progress bar
 	const updateProgress = () => {
-		if (progressContainer._runId !== runId) return; // superseded by a newer run
+		if (progressRun !== runId) return; // superseded by a newer run
 		const percent = (imagesLoaded / images.length) * 100;
 		progressBar.style.width = percent + '%';
 
 		// Hide the progress bar when all images are loaded
 		if (imagesLoaded === images.length) {
-			progressContainer._hideTimer = setTimeout(() => {
+			progressHideTimer = setTimeout(() => {
 				progressContainer.style.display = 'none';
 			}, 500); // Hide after a short delay
 		}

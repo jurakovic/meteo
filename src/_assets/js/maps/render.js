@@ -176,7 +176,7 @@ export function buildIframe(map, inst) {
 			buildDuplicateButton(),
 			buildGroupButton(),
 			buildPopoutButton(),
-			el('a', { id: `reset${pascal}Frame`, 'data-frame-id': frameId, style: 'display:none', text: '[X]' }),
+			el('a', { id: `reset${pascal}Frame`, 'data-frame-id': frameId, 'data-action': 'gate', style: 'display:none', text: '[X]' }),
 			fsBtn
 		])
 	]);

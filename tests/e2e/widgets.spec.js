@@ -146,6 +146,19 @@ test.describe('pop-out widgets', () => {
 		await expect(block(page, 'neverin-radar-hr')).toHaveClass(/popout/);
 	});
 
+	test('closing the original while its copy stays hands the copy the page\'s place', async ({ page }) => {
+		await popout(page, 'neverin-radar-hr');
+		await bar(page, 'neverin-radar-hr').locator('.dup-btn').click();
+		await expect(block(page, 'neverin-radar-hr#2')).toHaveClass(/popout/);
+		await bar(page, 'neverin-radar-hr').locator('.po-btn').click(); // the original goes
+		await expect(page.locator('.map-block[data-map-id="neverin-radar-hr"]')).toHaveCount(1);
+		const heir = page.locator('.map-block[data-map-id="neverin-radar-hr"]');
+		await expect(heir).not.toHaveClass(/duplicate/);
+		await page.locator('.map-gap a', { hasText: 'Vrati' }).click(); // the gap's way back docks the heir
+		await expect(heir).not.toHaveClass(/popout/);
+		await expect(page.locator('.map-gap')).toHaveCount(0);
+	});
+
 	test('widgets pulled edge to edge by the magnets can be grouped and move together', async ({ page }) => {
 		await popout(page, 'neverin-radar-hr');
 		await moveWidget(page, 'neverin-radar-hr', 150, 150);

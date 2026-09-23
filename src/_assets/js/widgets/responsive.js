@@ -7,11 +7,14 @@ import { groupBox, groupMembers, groupStarts, moveGroup, updateGroups } from './
 import { refreshOverlap, syncShadows } from './overlap.js';
 import { fitWidget, syncBackdrop } from './popout.js';
 
+// debounced: the window is resized a pixel at a time
+let resizeTimer = 0;
+
 export function initWidgetResponsiveness() {
 	// a smaller window must not strand a widget off-screen
 	window.addEventListener('resize', () => {
-		clearTimeout(window._popoutResizeTimeout);
-		window._popoutResizeTimeout = setTimeout(() => {
+		clearTimeout(resizeTimer);
+		resizeTimer = setTimeout(() => {
 			layoutSnapColumns();
 			// a group is kept whole: moved by its box, not member by member
 			const done = new Set();
