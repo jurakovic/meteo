@@ -1655,6 +1655,12 @@ body.fs-lock {
 		display: none;
 	}
 
+	/* a map switched off by the remote config (maps.js): hidden in both
+	   sections, but there, so the list read off the rows still holds it */
+	.map-settings .ms-item.ms-off {
+		display: none;
+	}
+
 	/* the list is not empty here — every row is filtered out of sight — so
 	   :empty cannot speak for it */
 	.map-settings .ms-available.ms-no-hits::after {

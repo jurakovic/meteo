@@ -621,6 +621,64 @@ const MAP_PRESETS = [
 	{ id: 'nista', name: 'Ništa', maps: [] }
 ];
 
+// ---------- remote config ----------
+// Which maps are switched off, from a file beside the maps' own sources, so a
+// map whose source is down can be taken off the page without a build. It is
+// read from the last copy this browser saw, at once, and fetched again behind
+// that for the next load — or for this one, if it changed and the maps are
+// already out. A map the file does not name is on, and so is every map when
+// there is no copy yet or the fetch fails: a broken file hides nothing.
+//
+// Off is hidden, not removed: lists, presets and links keep the id, and the map
+// is back where it was once it is on again. Only what is shown leaves it out —
+// the render, the tab's [+] menu and the dialog's rows (hidden, not left out,
+// so a list saved from the dialog still holds it)
+const MAP_CONFIG_URL = 'https://meteo-data.jurakovic.workers.dev/config.json';
+const MAP_CONFIG_KEY = 'mapConfig';
+
+// { "maps": { "<id>": { "enabled": false } } } — anything else is ignored
+function disabledMapIds(config) {
+	const maps = config && config.maps && typeof config.maps === 'object' ? config.maps : {};
+	return new Set(Object.keys(maps).filter(id => maps[id] && maps[id].enabled === false));
+}
+
+function loadMapConfig() {
+	try {
+		return JSON.parse(localStorage.getItem(MAP_CONFIG_KEY));
+	} catch (e) {
+		return null; // corrupt storage: every map on until the fetch lands
+	}
+}
+
+let disabledMaps = disabledMapIds(loadMapConfig());
+let mapsRendered = false; // from the first render on, a change is applied in place
+
+function isMapEnabled(id) {
+	return !disabledMaps.has(id);
+}
+
+function sameIdSet(a, b) {
+	return a.size === b.size && [...a].every(id => b.has(id));
+}
+
+// no-cache revalidates rather than skips the cache: a switch flipped in the
+// file is seen on the next load, not whenever the browser's copy runs out
+function fetchMapConfig() {
+	fetch(MAP_CONFIG_URL, { cache: 'no-cache' })
+		.then(response => response.ok ? response.json() : Promise.reject(response.status))
+		.then(config => {
+			try {
+				localStorage.setItem(MAP_CONFIG_KEY, JSON.stringify(config));
+			} catch (e) { /* storage disabled or full — the copy is for the next load only */ }
+			const disabled = disabledMapIds(config);
+			if (sameIdSet(disabled, disabledMaps)) return;
+			disabledMaps = disabled;
+			if (mapsRendered) rerenderMaps();
+		})
+		.catch(() => { /* the copy in hand stands: the file out of reach is no reason to show less */ });
+}
+fetchMapConfig();
+
 // ---------- user presets (localStorage) ----------
 // Saved views take the same { id, name, maps } shape as the built-ins, so the
 // preset bar, presetMapIds and the stored preferences treat both alike. Ids
@@ -1218,7 +1276,8 @@ function renderMaps() {
 	snapPersistPaused = false;
 	resetSnapColumns(); // their panes go with the tbody
 	tbody.replaceChildren();
-	const maps = resolveMapIds().map(id => MAP_CATALOG.find(m => m.id === id)).filter(Boolean);
+	mapsRendered = true;
+	const maps = resolveMapIds().map(id => MAP_CATALOG.find(m => m.id === id)).filter(map => map && isMapEnabled(map.id));
 	if (!maps.length) {
 		tbody.appendChild(el('tr', {}, [
 			el('td', { align: 'center' }, [
@@ -1236,6 +1295,19 @@ function renderMaps() {
 			tbody.appendChild(el('tr', {}, [el('td', { align: 'center' }, [buildLinksBottom(map)])]));
 		}
 	});
+}
+
+// the remote config changed under maps already out: the view is drawn again the
+// way Primijeni draws it, the arrangement carried over from the screen, so a map
+// switched off goes and one switched on comes back — docked on the page, down
+// the cascade on a board. Every frame reloads, which a config change is rare
+// enough to afford
+function rerenderMaps() {
+	const layout = sanitizeSnapLayout(currentSnapLayout(), resolveMapIds());
+	closeMsAdd();
+	renderMaps();
+	initDynamicContent();
+	applySnapLayout(layout);
 }
 
 // ---------- settings panel ----------
@@ -1450,7 +1522,7 @@ function openMsAdd(anchor) {
 	closeMsAdd();
 	const onBoard = new Set(resolveMapIds());
 	// by name, as the dialog's Naziv sorts: a menu is scanned for a name, not a kind
-	const maps = MAP_CATALOG.filter(map => !onBoard.has(map.id))
+	const maps = MAP_CATALOG.filter(map => isMapEnabled(map.id) && !onBoard.has(map.id))
 		.sort((a, b) => a.name.localeCompare(b.name, 'hr'));
 
 	const input = el('input', { type: 'text', class: 'ms-add-input', placeholder: 'Traži kartu…', spellcheck: 'false', autocomplete: 'off' });
@@ -1662,7 +1734,7 @@ function buildMapSettings(panel) {
 			const map = MAP_CATALOG.find(m => m.id === row.getAttribute('data-map-id'));
 			const hit = !map || matchesFind(map, terms);
 			row.classList.toggle('ms-filtered', !hit);
-			if (hit) hits++;
+			if (hit && !row.classList.contains('ms-off')) hits++;
 		});
 		findDiv.classList.toggle('ms-find-set', terms.length > 0);
 		availableDiv.classList.toggle('ms-no-hits', terms.length > 0 && hits === 0);
@@ -1765,7 +1837,9 @@ function buildMapSettings(panel) {
 		const checkbox = el('input', { type: 'checkbox' });
 		checkbox.checked = checked;
 		const handle = el('span', { class: 'ms-handle', text: '≡', title: 'Povuci za premještanje' });
-		const row = el('div', { class: 'ms-item', 'data-map-id': map.id }, [
+		// a map switched off keeps its row, hidden, so the list read back off the
+		// rows (selectedMapIds) still holds it where it was
+		const row = el('div', { class: isMapEnabled(map.id) ? 'ms-item' : 'ms-item ms-off', 'data-map-id': map.id }, [
 			el('label', {}, [
 				checkbox,
 				el('span', { class: 'ms-glyph', text: CATEGORY_GLYPHS[map.category] || '' }),
