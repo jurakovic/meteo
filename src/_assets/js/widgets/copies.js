@@ -13,7 +13,7 @@ import { placePopout, popoutMaxWidth, raisePopout } from './core.js';
 import { groupOf, leaveGroup, updateGroups } from './groups.js';
 import { arrangementChanged } from './layout.js';
 import { dropShadow, syncShadows } from './overlap.js';
-import { fitWidget, handGapTo, popoutMap, unlockAspect } from './popout.js';
+import { fitWidget, handGapTo, popoutMap, unlockAspect, WIDGET_RENDER } from './popout.js';
 
 // A map can be on screen more than once. [D] makes another showing of it, and
 // no showing is the original: each is a widget like the rest, and any of them
@@ -86,7 +86,7 @@ function makeDuplicate(mapId, inst) {
 	const origin = pageShowing(mapId);
 	if (!map || !origin) return null;
 	const block = el('div', { class: 'map-block duplicate', 'data-map-id': mapId, 'data-inst': inst },
-		buildMapContent(map, inst));
+		buildMapContent(map, inst, WIDGET_RENDER));
 	// beside the map it copies, so the list's order still reads off the DOM
 	// (arrangeBoard) and a map dropped from the list takes its copies with it.
 	// It holds no place in the page, so it asks the page for no room

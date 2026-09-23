@@ -7,7 +7,7 @@
 import { onReady } from './lib/dom.js';
 import { EVENTS, on } from './lib/events.js';
 import { cloakBoard, loadSharedMapView, uncloakBoard } from './maps/prefs.js';
-import { initRerender, renderMaps } from './maps/render.js';
+import { initRerender, renderMaps } from './maps/view.js';
 import { initCommands } from './page/commands.js';
 import { initPageContent, initPageResize } from './page/content.js';
 import { initDialogs } from './page/dialog.js';

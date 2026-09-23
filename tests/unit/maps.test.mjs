@@ -3,10 +3,10 @@
 import './setup.mjs';
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { catalogMap, MAP_CATALOG } from '../../src/_assets/js/maps/catalog.js';
+import { catalogMap, DEFAULT_MAPS, MAP_CATALOG } from '../../src/_assets/js/maps/catalog.js';
 import { findTerms, foldText, matchesFind } from '../../src/_assets/js/maps/find.js';
 import { isValidPrefs, prefsMapIds, presetIdForMapIds, sameMapIds } from '../../src/_assets/js/maps/prefs.js';
-import { cleanPresetName, DEFAULT_MAPS, MAP_PRESETS, uniquePresetName, storeUserPreset } from '../../src/_assets/js/maps/presets.js';
+import { cleanPresetName, MAP_PRESETS, uniquePresetName, storeUserPreset } from '../../src/_assets/js/maps/presets.js';
 import { instIndex, instKey, instMapId, instSuffix } from '../../src/_assets/js/maps/render.js';
 import { decodeMapView, encodeMapView } from '../../src/_assets/js/maps/share.js';
 

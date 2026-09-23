@@ -1,36 +1,15 @@
 import { el } from '../lib/dom.js';
-import { EVENTS, on } from '../lib/events.js';
-import { initDynamicContent } from '../page/content.js';
-import { exitFullscreen } from '../page/iframe.js';
-import { isMapEnabled } from '../remote-config.js';
-import { closeMsAdd } from '../settings/add-menu.js';
-import { resetSnapColumns } from '../widgets/columns.js';
-import { buildDuplicateButton } from '../widgets/copies.js';
-import { buildGroupButton } from '../widgets/groups.js';
-import { applySnapLayout, currentSnapLayout, sanitizeSnapLayout, withPersistPaused } from '../widgets/layout.js';
-import { buildPopoutButton } from '../widgets/popout.js';
-import { buildReloadButton } from '../widgets/reload.js';
-import { catalogMap } from './catalog.js';
-import { resolveMapIds } from './prefs.js';
 import { MAP_TYPES } from './types.js';
 
-// Drawing the customize page's maps into <tbody data-maps>: one block per map,
-// built from its catalog entry.
+// Drawing maps from their catalog entries: a block's title bar, its map as
+// its type draws it, the links under it, and the rows a map takes in a table.
+// Both pages draw with this — the landing page as it is, the customize page
+// with the widgets' buttons in every title bar, which it passes in
+// (options.titleButtons) so that this knows nothing of widgets.
 //
-// Which maps are off comes from remote-config.js (isMapEnabled). Off is hidden, not removed: lists, presets and links keep the id, and the map
-// is back in its place in the list once it is on again. Not on the screen,
-// though: the arrangement is written off what is up, so the next write drops a
-// map that is off, and on again it comes in where any map new to the view does
-// (docked, or down the cascade on a board). Only what is shown leaves it out —
-// the render, the tab's [+] menu and the dialog's rows (hidden, not left out,
-// so a list saved from the dialog still holds it)
-let mapsRendered = false; // from the first render on, a change is applied in place
-
-export function initRerender() {
-	on(EVENTS.mapConfigChanged, () => {
-		if (mapsRendered) rerenderMaps();
-	});
-}
+// options.titleButtons(interactive): the extra buttons of a title bar, or
+// nothing; interactive for an interactive map, whose bar has its own gate
+// button in place of a reload
 
 // A map can be on screen more than once: the widget's [D] makes another showing
 // of it (widgets/copies.js), and a showing beyond the first is a widget and nothing
@@ -70,22 +49,25 @@ function maxWidthStyle(map) {
 
 // map is optional and only supplies the width: slide title bars are
 // unconstrained, their max-width sits on the .placeholder wrapper below;
-// popout adds the pop-out button (desktop only, see the pop-out section)
-function buildTitleBar(title, map = {}, popout = false) {
+// buttons, when given, go in a cluster on the right
+function buildTitleBar(title, map = {}, buttons = null) {
 	return el('div', { class: 'radartitle', style: maxWidthStyle(map) || undefined }, [
 		el('a', { href: title.href, target: '_blank', rel: 'nofollow', text: title.text }),
-		popout ? el('span', { class: 'right right-cluster' },
-			[buildDuplicateButton(), buildReloadButton(), buildGroupButton(), buildPopoutButton()]) : null
+		buttons && buttons.length ? el('span', { class: 'right right-cluster' }, buttons) : null
 	]);
+}
+
+function titleButtons(options, interactive = false) {
+	return options.titleButtons ? options.titleButtons(interactive) : null;
 }
 
 // top-level title bars show the map's picker name; only slide titles
 // carry their own text (it differs per slide)
-function buildMapTitleBar(map) {
-	return buildTitleBar({ text: map.name, href: map.titleHref }, map, true);
+function buildMapTitleBar(map, options) {
+	return buildTitleBar({ text: map.title || map.name, href: map.titleHref }, map, titleButtons(options));
 }
 
-export function buildSlideshow(map, inst) {
+export function buildSlideshow(map, inst, options = {}) {
 	const slideshowId = map.id + instSuffix(inst);
 	const start = map.startSlide || 1;
 	const titled = map.slides.some(slide => slide.title);
@@ -110,7 +92,7 @@ export function buildSlideshow(map, inst) {
 			// a slide may omit its title text to inherit the map name (its href still differs per slide);
 			// without a map-level title bar the slide bars carry the pop-out button instead
 			const title = { text: slide.title.text || map.name, href: slide.title.href };
-			slideDiv.appendChild(buildTitleBar(title, {}, !map.titleHref));
+			slideDiv.appendChild(buildTitleBar(title, {}, map.titleHref ? null : titleButtons(options)));
 			slideDiv.appendChild(el('div', {
 				class: 'placeholder',
 				style: `${width ? `max-width: ${width}px; ` : ''}aspect-ratio: ${slide.aspect};`
@@ -135,19 +117,19 @@ export function buildSlideshow(map, inst) {
 		indicators.appendChild(el('span', { class: 'indicator' + (i === start - 1 ? ' active' : '') }));
 	});
 
-	return [map.titleHref ? buildMapTitleBar(map) : null, container, indicators];
+	return [map.titleHref ? buildMapTitleBar(map, options) : null, container, indicators];
 }
 
-export function buildImage(map) {
+export function buildImage(map, inst, options = {}) {
 	return [
-		buildMapTitleBar(map),
+		buildMapTitleBar(map, options),
 		el('div', { class: 'placeholder', style: `${maxWidthStyle(map)} aspect-ratio: ${map.aspect};`.trim() }, [
 			el('img', { src: map.img, alt: map.alt })
 		])
 	];
 }
 
-export function buildVideo(map) {
+export function buildVideo(map, inst, options = {}) {
 	const video = el('video', { controls: '' }, [el('source', { type: 'video/mp4', src: map.src })]);
 	video.muted = true;
 	video.autoplay = true;
@@ -155,14 +137,14 @@ export function buildVideo(map) {
 	// without an aspect the wrapper's padding-top (.vid1) sizes the box
 	const style = `${maxWidthStyle(map)}${map.aspect ? ` aspect-ratio: ${map.aspect};` : ''}`.trim();
 	return [
-		buildMapTitleBar(map),
+		buildMapTitleBar(map, options),
 		el('div', { class: 'placeholder', style: style || undefined }, [
 			el('div', { class: 'vid1' }, [video])
 		])
 	];
 }
 
-export function buildIframe(map, inst) {
+export function buildIframe(map, inst, options = {}) {
 	const frameId = map.frameId + instSuffix(inst);
 	const pascal = frameId[0].toUpperCase() + frameId.slice(1);
 
@@ -173,9 +155,7 @@ export function buildIframe(map, inst) {
 		zoomBtn,
 		el('a', { class: 'center', href: map.titleHref, target: '_blank', rel: 'nofollow', text: map.name }),
 		el('span', { class: 'right right-cluster' }, [
-			buildDuplicateButton(),
-			buildGroupButton(),
-			buildPopoutButton(),
+			...(titleButtons(options, true) || []),
 			el('a', { id: `reset${pascal}Frame`, 'data-frame-id': frameId, 'data-action': 'gate', style: 'display:none', text: '[X]' }),
 			fsBtn
 		])
@@ -202,16 +182,16 @@ export function buildIframe(map, inst) {
 	return [title, body];
 }
 
-export function buildBasicIframe(map) {
+export function buildBasicIframe(map, inst, options = {}) {
 	return [
-		buildMapTitleBar(map),
+		buildMapTitleBar(map, options),
 		el('div', { class: 'if2 placeholder' }, [
 			el('iframe', { loading: 'lazy', src: map.src, frameborder: '0', scrolling: 'no' })
 		])
 	];
 }
 
-function buildLinksBottom(map) {
+export function buildLinksBottom(map) {
 	const bar = el('div', { class: 'links-bottom', style: maxWidthStyle(map) || undefined });
 	map.links.forEach((link, i) => {
 		if (i > 0) bar.appendChild(document.createTextNode(' · '));
@@ -221,22 +201,14 @@ function buildLinksBottom(map) {
 }
 
 // a map's block contents, drawn the way its type draws it (maps/types.js)
-export function buildMapContent(map, inst = map.id) {
+export function buildMapContent(map, inst = map.id, options = {}) {
 	const type = MAP_TYPES[map.type];
-	return type ? type.build(map, inst) : [];
+	return type ? type.build(map, inst, options) : [];
 }
 
-export function renderMaps() {
-	const tbody = document.querySelector('tbody[data-maps]');
-	if (!tbody) return;
-	// a fullscreen map goes with the tbody too, and would leave the page's
-	// scroll locked behind it; taken down as the arrangement it is part of
-	// is (what comes back is applied after the render)
-	withPersistPaused(() => document.querySelectorAll('.if1.fullscreen').forEach(exitFullscreen));
-	resetSnapColumns(); // their panes go with the tbody
+// the table's rows for a list of maps, or a line saying there are none
+export function renderMapRows(tbody, maps, options = {}) {
 	tbody.replaceChildren();
-	mapsRendered = true;
-	const maps = resolveMapIds().map(catalogMap).filter(map => map && isMapEnabled(map.id));
 	if (!maps.length) {
 		tbody.appendChild(el('tr', {}, [
 			el('td', { align: 'center' }, [
@@ -245,31 +217,18 @@ export function renderMaps() {
 		]));
 		return;
 	}
-	maps.forEach(map => appendMapRows(tbody, map));
+	maps.forEach(map => appendMapRows(tbody, map, options));
 }
 
 // the rows a map takes at the end of the table — a spacer after the one
 // before, its block, and the links under it — returning the block. One block
 // per map, so the pop-out can lift title, map and indicators together
-export function appendMapRows(tbody, map) {
+export function appendMapRows(tbody, map, options = {}) {
 	if (tbody.children.length) tbody.appendChild(el('tr', { class: 'sp20' }));
-	const block = el('div', { class: 'map-block', 'data-map-id': map.id, 'data-inst': map.id }, buildMapContent(map));
+	const block = el('div', { class: 'map-block', 'data-map-id': map.id, 'data-inst': map.id }, buildMapContent(map, map.id, options));
 	tbody.appendChild(el('tr', {}, [el('td', { align: 'center' }, [block])]));
 	if (map.links && map.links.length) {
 		tbody.appendChild(el('tr', {}, [el('td', { align: 'center' }, [buildLinksBottom(map)])]));
 	}
 	return block;
-}
-
-// the remote config changed under maps already out: the view is drawn again the
-// way Primijeni draws it, the arrangement carried over from the screen, so a map
-// switched off goes and one switched on comes back — docked on the page, down
-// the cascade on a board. Every frame reloads, which a config change is rare
-// enough to afford
-function rerenderMaps() {
-	const layout = sanitizeSnapLayout(currentSnapLayout(), resolveMapIds());
-	closeMsAdd();
-	renderMaps();
-	initDynamicContent();
-	applySnapLayout(layout);
 }

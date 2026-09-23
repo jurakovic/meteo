@@ -26,7 +26,7 @@ import { renderGrid } from './grid.js';
 import { updateGroups } from './groups.js';
 import { arrangementChanged, withPersistPaused } from './layout.js';
 import { syncShadows } from './overlap.js';
-import { dockMap, fitWidget, popoutMap, setPopoutButton } from './popout.js';
+import { dockMap, fitWidget, popoutMap, setPopoutButton, WIDGET_RENDER } from './popout.js';
 
 let dashboardMode = false;
 
@@ -100,7 +100,7 @@ export function addToDashboard(mapId) {
 	addMapToList(mapId);
 	const empty = tbody.querySelector('.maps-empty');
 	if (empty) tbody.replaceChildren(); // the "nothing selected" row
-	const block = appendMapRows(tbody, map);
+	const block = appendMapRows(tbody, map, WIDGET_RENDER);
 	const links = tbody.lastElementChild.querySelector('.links-bottom');
 	if (links) links.addEventListener('scroll', () => updateLinksScrollShadow(links), { passive: true });
 	wireDuplicate(block); // its own wiring and only its own, as a copy's
