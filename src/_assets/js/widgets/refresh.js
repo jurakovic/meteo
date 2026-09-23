@@ -1,4 +1,5 @@
 import { dlog } from '../lib/debug.js';
+import { readJson, STORAGE_KEYS, writeJson } from '../lib/storage.js';
 import { applyStoredMsTab, syncRefreshLabels } from '../settings/tab.js';
 import { reloadAllMaps } from './reload.js';
 
@@ -7,21 +8,17 @@ import { reloadAllMaps } from './reload.js';
 // on an interval — off until it is asked for, and a way of working rather than
 // part of the view, so it travels in neither a preset nor a link and keeps the
 // same footing as the grid switches.
-const REFRESH_KEY = 'mapRefresh';
-
 export const REFRESH_CHOICES = [5, 10, 15, 30, 60];
 
 const REFRESH_DEFAULT = 5;
 
 function loadRefreshPrefs() {
-	try {
-		const stored = JSON.parse(localStorage.getItem(REFRESH_KEY));
-		if (stored && typeof stored === 'object') return {
-			on: stored.on === true,
-			minutes: REFRESH_CHOICES.includes(stored.minutes) ? stored.minutes : REFRESH_DEFAULT
-		};
-	} catch { /* unreadable is off */ }
-	return { on: false, minutes: REFRESH_DEFAULT };
+	const stored = readJson(STORAGE_KEYS.refresh);
+	if (!stored || typeof stored !== 'object') return { on: false, minutes: REFRESH_DEFAULT };
+	return {
+		on: stored.on === true,
+		minutes: REFRESH_CHOICES.includes(stored.minutes) ? stored.minutes : REFRESH_DEFAULT
+	};
 }
 
 let { on: refreshOn, minutes: refreshMinutes } = loadRefreshPrefs();
@@ -68,9 +65,7 @@ export function setRefreshPrefs(on, minutes) {
 	dlog(`setRefreshPrefs: on=${on} minutes=${minutes}`);
 	refreshOn = on === true;
 	refreshMinutes = REFRESH_CHOICES.includes(minutes) ? minutes : REFRESH_DEFAULT;
-	try {
-		localStorage.setItem(REFRESH_KEY, JSON.stringify({ on: refreshOn, minutes: refreshMinutes }));
-	} catch { /* storage disabled or full — the clock still runs this session */ }
+	writeJson(STORAGE_KEYS.refresh, { on: refreshOn, minutes: refreshMinutes });
 	// the countdown hangs off the body, since the tab shows for it off the board
 	document.body.classList.toggle('refresh-on', refreshOn);
 	restartRefresh();

@@ -1,6 +1,8 @@
 // The links: the list at the foot of the page (Linkovi), the row under each
 // map and its switch, and the scrolling to either.
 
+import { readJson, STORAGE_KEYS, writeJson } from '../lib/storage.js';
+
 export function scrollToTop() {
 	window.scrollTo({
 		top: 0,
@@ -49,14 +51,14 @@ export function addExpandableClickEventListener() {
 
 export function toggleLinksBottom(checkbox) {
 	document.body.classList.toggle('show-links-bottom', checkbox.checked);
-	localStorage.setItem('showLinksBottom', checkbox.checked ? '1' : '0');
+	writeJson(STORAGE_KEYS.linksBottom, checkbox.checked ? 1 : 0); // "1" or "0", as it always was
 	updateLinksScrollShadows();
 }
 
 export function initLinksBottom() {
 	const checkbox = document.querySelector('.links-toggle');
 	if (!checkbox) return;
-	checkbox.checked = localStorage.getItem('showLinksBottom') === '1';
+	checkbox.checked = readJson(STORAGE_KEYS.linksBottom) === 1;
 	document.body.classList.toggle('show-links-bottom', checkbox.checked);
 }
 

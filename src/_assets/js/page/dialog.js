@@ -13,6 +13,7 @@ import { isTextField } from '../lib/dom.js';
 import { clamp, roundFraction, setScrollbarGutter, viewportHeight, viewportWidth } from '../lib/geometry.js';
 import { DESKTOP_MQ } from '../lib/media.js';
 import { pulledSize, RESIZE_HANDLES, trackPointer } from '../lib/pointer.js';
+import { readJson, removeKey, writeJson } from '../lib/storage.js';
 
 const DIALOG_MIN_WIDTH = 360;
 
@@ -44,14 +45,10 @@ function dialogStorageKey(panel) {
 function loadDialogGeometry(panel) {
 	const key = dialogStorageKey(panel);
 	if (!key) return null;
-	try {
-		const stored = JSON.parse(localStorage.getItem(key));
-		if (!stored || typeof stored !== 'object') return null;
-		if (!Number.isFinite(stored.left) || !Number.isFinite(stored.top) || !(stored.width > 0)) return null;
-		return { left: stored.left, top: stored.top, width: stored.width, height: stored.height > 0 ? stored.height : null };
-	} catch {
-		return null;
-	}
+	const stored = readJson(key);
+	if (!stored || typeof stored !== 'object') return null;
+	if (!Number.isFinite(stored.left) || !Number.isFinite(stored.top) || !(stored.width > 0)) return null;
+	return { left: stored.left, top: stored.top, width: stored.width, height: stored.height > 0 ? stored.height : null };
 }
 
 function saveDialogGeometry(panel) {
@@ -64,17 +61,13 @@ function saveDialogGeometry(panel) {
 		width: Math.round(rect.width)
 	};
 	if (panel.style.height) stored.height = Math.round(rect.height); // only once resized; else the CSS's
-	try {
-		localStorage.setItem(key, JSON.stringify(stored));
-	} catch { /* storage disabled or full — the dialog still moves this session */ }
+	writeJson(key, stored);
 }
 
 function forgetDialogGeometry(panel) {
 	const key = dialogStorageKey(panel);
 	if (!key) return;
-	try {
-		localStorage.removeItem(key);
-	} catch { /* nothing stored is nothing to drop */ }
+	removeKey(key);
 }
 
 function dialogMaxWidth() {

@@ -11,6 +11,7 @@
 import { el } from '../lib/dom.js';
 import { clamp, roundFraction, viewportWidth } from '../lib/geometry.js';
 import { trackPointer } from '../lib/pointer.js';
+import { readJson, STORAGE_KEYS, writeJson } from '../lib/storage.js';
 import { arrangeBoard } from '../widgets/arrange.js';
 import { SNAP_ARM } from '../widgets/constants.js';
 import { isGridShown, isGridSnapped, setGridPrefs } from '../widgets/grid.js';
@@ -19,26 +20,18 @@ import { reloadAllMaps } from '../widgets/reload.js';
 import { toggleMsAdd } from './add-menu.js';
 import { toggleMapSettings } from './panel.js';
 
-const MS_TAB_KEY = 'msTab';
-
 const MS_TAB_EDGE = 8; // a press this close to a side resizes; elsewhere drags
 
 let msTabMoved = false; // the release of a drag is no click
 
 function loadMsTab() {
-	try {
-		const tab = JSON.parse(localStorage.getItem(MS_TAB_KEY));
-		return tab && typeof tab === 'object' && Number.isFinite(tab.left) && Number.isFinite(tab.width) ? tab : null;
-	} catch {
-		return null;
-	}
+	const tab = readJson(STORAGE_KEYS.tab);
+	return tab && typeof tab === 'object' && Number.isFinite(tab.left) && Number.isFinite(tab.width) ? tab : null;
 }
 
 function saveMsTab(tab) {
 	const rect = tab.getBoundingClientRect();
-	try {
-		localStorage.setItem(MS_TAB_KEY, JSON.stringify({ left: roundFraction(rect.left / viewportWidth()), width: Math.round(rect.width) }));
-	} catch { /* storage disabled or full — the tab still moves this session */ }
+	writeJson(STORAGE_KEYS.tab, { left: roundFraction(rect.left / viewportWidth()), width: Math.round(rect.width) });
 }
 
 // the width its name takes is the narrowest it goes: measured with the width

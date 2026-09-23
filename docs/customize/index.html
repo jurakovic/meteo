@@ -235,74 +235,77 @@
 		;"loading"===document.readyState?document.addEventListener("DOMContentLoaded",e):e()}function n(t){
 		return!!t&&"function"==typeof t.matches&&t.matches('input:not([type="radio"]):not([type="checkbox"]), textarea, [contenteditable]')}
 		function o(t,e,n){t.textContent=e,setTimeout(()=>{t.textContent=n},1500)}
-		var r=window.matchMedia("(min-width: 801px) and (hover: hover) and (pointer: fine)");function a(){return window.innerWidth<800}
-		function i(t,e,n){return Math.min(Math.max(t,e),Math.max(e,n))}function s(t){return Math.round(1e4*t)/1e4}function l(t){
-		return Math.round(1e3*t)/1e3}var c=0;function d(t){c=t}function u(){return document.documentElement.clientWidth-c}function h(){
-		return document.documentElement.clientHeight}var p="1"===new URLSearchParams(window.location.search).get("debug");function m(...t){
-		p&&console.log(...t)}var f=0;function g(t=!1){(t||window.innerWidth!==f)&&(f=window.innerWidth,
-		document.querySelectorAll("iframe[data-zoom-hr-desktop]").forEach(t=>w(t)))}function w(t){m(`Updating iframe src for ${t.id}`)
-		;const e=t.getAttribute("data-zoom-mode");let n="eu"===e?t.getAttribute("data-src-eu"):t.getAttribute("data-src-hr");if(a()){
+		var r="mapPrefs",a="mapUserPresets",i="mapHiddenPresets",s="mapConfig",l="mapGrid",c="mapRefresh",d="msTab",u="showLinksBottom",h=new Map
+		;function p(t){try{return JSON.parse(h.has(t)?h.get(t):localStorage.getItem(t))}catch{return null}}function m(t,e){const n=JSON.stringify(e)
+		;try{localStorage.setItem(t,n),h.delete(t)}catch{h.set(t,n)}}
+		var f=window.matchMedia("(min-width: 801px) and (hover: hover) and (pointer: fine)");function g(){return window.innerWidth<800}
+		function w(t,e,n){return Math.min(Math.max(t,e),Math.max(e,n))}function v(t){return Math.round(1e4*t)/1e4}function y(t){
+		return Math.round(1e3*t)/1e3}var b=0;function k(t){b=t}function E(){return document.documentElement.clientWidth-b}function x(){
+		return document.documentElement.clientHeight}var L="1"===new URLSearchParams(window.location.search).get("debug");function S(...t){
+		L&&console.log(...t)}var C=0;function z(t=!1){(t||window.innerWidth!==C)&&(C=window.innerWidth,
+		document.querySelectorAll("iframe[data-zoom-hr-desktop]").forEach(t=>M(t)))}function M(t){S(`Updating iframe src for ${t.id}`)
+		;const e=t.getAttribute("data-zoom-mode");let n="eu"===e?t.getAttribute("data-src-eu"):t.getAttribute("data-src-hr");if(g()){
 		const o="eu"===e?"data-zoom-eu-desktop":"data-zoom-hr-desktop",r="eu"===e?"data-zoom-eu-mobile":"data-zoom-hr-mobile"
-		;n=n.replace(t.getAttribute(o),t.getAttribute(r))}t.src=n}function v(t,e){m(`toggleFullscreen: ${t}`)
-		;const n=document.getElementById(t).parentElement;if(n.classList.contains("fullscreen"))y(n);else{const o=n.querySelector(".overlay"),r=S(t)
+		;n=n.replace(t.getAttribute(o),t.getAttribute(r))}t.src=n}function A(t,e){S(`toggleFullscreen: ${t}`)
+		;const n=document.getElementById(t).parentElement;if(n.classList.contains("fullscreen"))R(n);else{const o=n.querySelector(".overlay"),r=I(t)
 		;n._fsOverlayVisible=!o||"none"!==o.style.display,n.classList.add("fullscreen"),n.previousElementSibling.classList.add("fullscreen"),
 		n.closest(".map-block.snapped")||document.body.classList.add("fs-lock"),document.dispatchEvent(new Event("map-fullscreen")),
-		e.textContent="[-]",o&&(o.style.display="none"),r&&function(t){m(`setResetButtonToFullscreenReset: ${t.id}`);const e=t.cloneNode(!0)
-		;t.parentNode.replaceChild(e,t),e.addEventListener("click",t=>{t.stopPropagation(),w(document.getElementById(C(e.id)))}),
-		e.textContent="[R]",e.style.removeProperty("display")}(r)}}function y(t){t.classList.remove("fullscreen");const e=t.previousElementSibling
+		e.textContent="[-]",o&&(o.style.display="none"),r&&function(t){S(`setResetButtonToFullscreenReset: ${t.id}`);const e=t.cloneNode(!0)
+		;t.parentNode.replaceChild(e,t),e.addEventListener("click",t=>{t.stopPropagation(),M(document.getElementById(q(e.id)))}),
+		e.textContent="[R]",e.style.removeProperty("display")}(r)}}function R(t){t.classList.remove("fullscreen");const e=t.previousElementSibling
 		;e.classList.remove("fullscreen");const n=e.querySelector(".fs-btn");n&&(n.textContent="[ ]"),
 		[...document.querySelectorAll(".if1.fullscreen")].some(t=>!t.closest(".map-block.snapped"))||document.body.classList.remove("fs-lock"),
 		document.dispatchEvent(new Event("map-fullscreen"));const o=!1===t._fsOverlayVisible;delete t._fsOverlayVisible
-		;const r=t.querySelector(".overlay");r&&(o?r.style.display="none":r.removeAttribute("style"));const a=S(t.querySelector("iframe").id)
-		;a&&(a.style.removeProperty("display"),o?E(a):x(a))}function b(){document.querySelectorAll(".if1 .overlay:not([data-tap])").forEach(t=>{
-		t.setAttribute("data-tap","");let e=0,n=!1;t.addEventListener("dblclick",()=>{t.style.display="none";let e=L(t.id)
-		;e.removeAttribute("style"),E(e)}),t.addEventListener("touchstart",t=>{t.touches.length>1&&(n=!0)}),t.addEventListener("touchend",o=>{
-		if(n)return void(0===o.touches.length&&(n=!1,e=0));const r=(new Date).getTime(),a=r-e;if(a>0&&a<200){t.style.display="none";let e=L(t.id)
-		;e.removeAttribute("style"),E(e),o.preventDefault()}e=r});const o=t.querySelector(".hint");let r=0,a=0;t.addEventListener("touchstart",t=>{
+		;const r=t.querySelector(".overlay");r&&(o?r.style.display="none":r.removeAttribute("style"));const a=I(t.querySelector("iframe").id)
+		;a&&(a.style.removeProperty("display"),o?$(a):P(a))}function j(){document.querySelectorAll(".if1 .overlay:not([data-tap])").forEach(t=>{
+		t.setAttribute("data-tap","");let e=0,n=!1;t.addEventListener("dblclick",()=>{t.style.display="none";let e=B(t.id)
+		;e.removeAttribute("style"),$(e)}),t.addEventListener("touchstart",t=>{t.touches.length>1&&(n=!0)}),t.addEventListener("touchend",o=>{
+		if(n)return void(0===o.touches.length&&(n=!1,e=0));const r=(new Date).getTime(),a=r-e;if(a>0&&a<200){t.style.display="none";let e=B(t.id)
+		;e.removeAttribute("style"),$(e),o.preventDefault()}e=r});const o=t.querySelector(".hint");let r=0,a=0;t.addEventListener("touchstart",t=>{
 		1===t.touches.length&&(a=t.touches[0].clientX,r=t.touches[0].clientY)}),t.addEventListener("touchend",t=>{if(!o)return
 		;const e=t.changedTouches[0].clientX,n=t.changedTouches[0].clientY,i=Math.abs(e-a),s=Math.abs(n-r);i<10&&s<10&&(o.style.opacity="0.6",
-		clearTimeout(o._hideTimer),o._hideTimer=setTimeout(()=>{o.style.removeProperty("opacity")},2e3))})})}function k(){const t=a()
+		clearTimeout(o._hideTimer),o._hideTimer=setTimeout(()=>{o.style.removeProperty("opacity")},2e3))})})}function _(){const t=g()
 		;document.querySelectorAll(".hint").forEach(e=>{
-		e.textContent=t?"Dvostruki dodir za pristup interaktivnoj karti":"Dvostruki klik za pristup interaktivnoj karti"})}function E(t){
-		m(`setResetButtonToExit: ${t.id}`);const e=t.cloneNode(!0);t.parentNode.replaceChild(e,t),e.addEventListener("click",t=>{var n
+		e.textContent=t?"Dvostruki dodir za pristup interaktivnoj karti":"Dvostruki klik za pristup interaktivnoj karti"})}function $(t){
+		S(`setResetButtonToExit: ${t.id}`);const e=t.cloneNode(!0);t.parentNode.replaceChild(e,t),e.addEventListener("click",t=>{var n
 		;t.stopPropagation(),
-		m(`restoreOverlay: ${n=C(e.id)}`),document.getElementById(n).parentElement.querySelector(".overlay").removeAttribute("style"),x(S(n))}),
-		e.textContent="[X]"}function x(t){m(`setResetButtonToReset: ${t.id}`);const e=t.cloneNode(!0);t.parentNode.replaceChild(e,t),
-		e.addEventListener("click",t=>{t.stopPropagation(),function(t){m(`Resetting iframe: ${t}`),w(document.getElementById(t));const e=S(t)
-		;e.style.display="none",E(e)}(C(e.id))}),e.textContent="[R]"}function S(t){return document.querySelector(`a[data-frame-id="${t}"]`)}
-		function L(t){return S(document.getElementById(t).getAttribute("data-frame-id"))}function C(t){
-		return document.getElementById(t).getAttribute("data-frame-id")}function z(t){const e=document.getElementById(t);e&&e.scrollIntoView({
-		behavior:"smooth",block:"start"})}function M(t){const e=t.scrollWidth-t.clientWidth,n=t.scrollLeft
-		;t.classList.toggle("can-scroll-left",n>1),t.classList.toggle("can-scroll-right",e>1&&n<e-1)}function A(){
-		document.querySelectorAll(".links-bottom").forEach(M)}function R(t,e){
+		S(`restoreOverlay: ${n=q(e.id)}`),document.getElementById(n).parentElement.querySelector(".overlay").removeAttribute("style"),P(I(n))}),
+		e.textContent="[X]"}function P(t){S(`setResetButtonToReset: ${t.id}`);const e=t.cloneNode(!0);t.parentNode.replaceChild(e,t),
+		e.addEventListener("click",t=>{t.stopPropagation(),function(t){S(`Resetting iframe: ${t}`),M(document.getElementById(t));const e=I(t)
+		;e.style.display="none",$(e)}(q(e.id))}),e.textContent="[R]"}function I(t){return document.querySelector(`a[data-frame-id="${t}"]`)}
+		function B(t){return I(document.getElementById(t).getAttribute("data-frame-id"))}function q(t){
+		return document.getElementById(t).getAttribute("data-frame-id")}function H(t){const e=document.getElementById(t);e&&e.scrollIntoView({
+		behavior:"smooth",block:"start"})}function D(t){const e=t.scrollWidth-t.clientWidth,n=t.scrollLeft
+		;t.classList.toggle("can-scroll-left",n>1),t.classList.toggle("can-scroll-right",e>1&&n<e-1)}function T(){
+		document.querySelectorAll(".links-bottom").forEach(D)}function N(t,e){
 		const n=t.getAttribute("data-slideshow-id"),o=t.querySelectorAll(".slide"),r=document.querySelectorAll(`.indicators-container[data-slideshow-id="${n}"] .indicator`)
 		;let a=e;a>o.length&&(a=1),a<1&&(a=o.length),t.setAttribute("data-current-slide",a),o.forEach(t=>t.classList.remove("active")),
 		o[a-1].classList.add("active"),r.forEach(t=>t.classList.remove("active")),r[a-1].classList.add("active"),function(t){
 		if(!t.hasAttribute("data-dynamic-width"))return
 		;const e=t.getAttribute("data-slideshow-id"),n=document.querySelector(`.indicators-container[data-slideshow-id='${e}']`),o=t.querySelector(".slide.active .placeholder")
-		;if(!o)return;t.style.maxWidth=o.style.maxWidth,n.style.maxWidth=o.style.maxWidth}(t)}function j(){
+		;if(!o)return;t.style.maxWidth=o.style.maxWidth,n.style.maxWidth=o.style.maxWidth}(t)}function W(){
 		document.querySelectorAll(".slideshow:not([data-swipe])").forEach(t=>{t.setAttribute("data-swipe",""),t.querySelectorAll("img").forEach(t=>{
 		t.addEventListener("dragstart",t=>t.preventDefault())}),function(t){let e=null,n=null,o=!1;t.addEventListener("touchstart",t=>{o=!1,
 		t.touches.length>1||(e=n={x:t.touches[0].clientX,y:t.touches[0].clientY})}),t.addEventListener("touchmove",t=>{
 		t.touches.length>1||!e?o=!1:(n={x:t.touches[0].clientX,y:t.touches[0].clientY},Math.abs(n.x-e.x)>Math.abs(n.y-e.y)&&(o=!0))}),
-		t.addEventListener("touchend",()=>{o&&_(t,e,n)})}(t),function(t){t.querySelectorAll(".prev, .next").forEach(t=>{let e=!1
+		t.addEventListener("touchend",()=>{o&&O(t,e,n)})}(t),function(t){t.querySelectorAll(".prev, .next").forEach(t=>{let e=!1
 		;t.addEventListener("touchstart",t=>{t.touches.length>1&&(e=!0)}),t.addEventListener("touchend",t=>{e&&t.preventDefault(),
 		0===t.touches.length&&(e=!1)})})}(t),function(t){let e=null;t.addEventListener("mousedown",t=>{e={x:t.clientX,y:t.clientY}}),
-		t.addEventListener("mouseup",n=>{e&&(_(t,e,{x:n.clientX,y:n.clientY}),e=null)}),t.addEventListener("mouseleave",()=>{e=null})}(t)})}
-		function _(t,e,n){Math.abs(n.x-e.x)>Math.abs(n.y-e.y)&&function(t,e,n){const o=n-e;if(Math.abs(o)>50){
-		const e=parseInt(t.getAttribute("data-current-slide"));R(t,e+(o>0?-1:1))}}(t,e.x,n.x)}function I(){
-		document.querySelectorAll("img.lazy").forEach(t=>{t.src=t.getAttribute("data-src"),t.classList.remove("lazy")}),j(),g(!0),b(),k(),
-		document.querySelectorAll(".links-bottom").forEach(t=>{t.addEventListener("scroll",()=>M(t),{passive:!0})}),A(),function(){
+		t.addEventListener("mouseup",n=>{e&&(O(t,e,{x:n.clientX,y:n.clientY}),e=null)}),t.addEventListener("mouseleave",()=>{e=null})}(t)})}
+		function O(t,e,n){Math.abs(n.x-e.x)>Math.abs(n.y-e.y)&&function(t,e,n){const o=n-e;if(Math.abs(o)>50){
+		const e=parseInt(t.getAttribute("data-current-slide"));N(t,e+(o>0?-1:1))}}(t,e.x,n.x)}function V(){
+		document.querySelectorAll("img.lazy").forEach(t=>{t.src=t.getAttribute("data-src"),t.classList.remove("lazy")}),W(),z(!0),j(),_(),
+		document.querySelectorAll(".links-bottom").forEach(t=>{t.addEventListener("scroll",()=>D(t),{passive:!0})}),T(),function(){
 		const t=document.querySelectorAll("img"),e=document.querySelector(".progress-bar"),n=document.querySelector(".progress-container");let o=0
 		;const r=(n._runId||0)+1;if(n._runId=r,clearTimeout(n._hideTimer),e.style.width="0",n.style.removeProperty("display"),
 		0===t.length)return void(n.style.display="none");const a=()=>{if(n._runId!==r)return;const a=o/t.length*100;e.style.width=a+"%",
 		o===t.length&&(n._hideTimer=setTimeout(()=>{n.style.display="none"},500))};t.forEach(t=>{t.addEventListener("load",()=>{o++,a()}),
-		t.addEventListener("error",()=>{o++,m(`Error loading image: ${t.src}`),t.removeAttribute("src"),a()}),
-		t.complete&&t.dispatchEvent(new Event("load"))})}()}var $=0;var P="mapConfig";function B(t){
-		const e=t&&t.maps&&"object"==typeof t.maps?t.maps:{};return new Set(Object.keys(e).filter(t=>e[t]&&!1===e[t].enabled))}var q=new Set
-		;function H(t){return!q.has(t)}function D(){let t=document.getElementById("mapConfigStyle");t||(t=document.createElement("style"),
-		t.id="mapConfigStyle",document.head.appendChild(t));const e=[...q].map(t=>`tr[data-map-id="${CSS.escape(t)}"]`)
-		;t.textContent=e.length?e.map(t=>`${t}, ${t} + tr.sp20`).join(",\n")+" { display: none; }":""}var N=[{text:"Windy",
+		t.addEventListener("error",()=>{o++,S(`Error loading image: ${t.src}`),t.removeAttribute("src"),a()}),
+		t.complete&&t.dispatchEvent(new Event("load"))})}()}var F=0;function U(t){const e=t&&t.maps&&"object"==typeof t.maps?t.maps:{}
+		;return new Set(Object.keys(e).filter(t=>e[t]&&!1===e[t].enabled))}var Z=new Set;function K(t){return!Z.has(t)}function X(){
+		let t=document.getElementById("mapConfigStyle");t||(t=document.createElement("style"),t.id="mapConfigStyle",document.head.appendChild(t))
+		;const e=[...Z].map(t=>`tr[data-map-id="${CSS.escape(t)}"]`)
+		;t.textContent=e.length?e.map(t=>`${t}, ${t} + tr.sp20`).join(",\n")+" { display: none; }":""}var Y=[{text:"Windy",
 		href:"https://www.windy.com/-Weather-radar-radar?radar,44.5,16.5,7"},{text:"Zoom Earth",
 		href:"https://zoom.earth/maps/radar/#view=44.5,16.5,7z"},{text:"meteoblue",
 		href:"https://www.meteoblue.com/en/weather/maps/croatia_croatia_3202326#map=radar~radarMapEU~none~none~none&coords=6/44.5/16.5"},{
@@ -311,37 +314,37 @@
 		href:"https://www.vrijemeradar.hr/vremenski-radar/zagreb/18138691?center=44.5,16.5&zoom=7&layer=wr&tz=Europe%2FZagreb"},{text:"Sat24",
 		href:"https://www.sat24.com/en-gb/country/hr/hd#selectedLayer=euRadarSat"},{text:"I'm Weather",
 		href:"https://imweather.com/?model=nowcast&run=&member=&element=radsat&level=&lat=44.5000&lng=16.5000&z=6"},{text:"Időkép",
-		href:"https://www.idokep.eu/adria"}],O=[{text:"Windy",href:"https://www.windy.com/-Weather-radar-radar?radar,47.5,17.5,5"},{
+		href:"https://www.idokep.eu/adria"}],Q=[{text:"Windy",href:"https://www.windy.com/-Weather-radar-radar?radar,47.5,17.5,5"},{
 		text:"Zoom Earth",href:"https://zoom.earth/maps/radar/#view=47.5,17.5,5z"},{text:"meteoblue",
 		href:"https://www.meteoblue.com/en/weather/maps/croatia_croatia_3202326#map=radar~radarMapEU~none~none~none&coords=4/47.5/17.5"},{
 		text:"Rain Viewer",href:"https://www.rainviewer.com/map.html?loc=47.5,17.5,4&oCS=1&c=5&lm=1&layer=radar&sm=1&sn=2&ts=1"},{text:"Ventusky",
 		href:"https://www.ventusky.com/?p=47.5;17.5;4&l=radar&w=off"},{text:"Vrijeme&Radar",
 		href:"https://www.vrijemeradar.hr/vremenski-radar/zagreb/18138691?center=47.5,15.5&zoom=5&layer=wr&tz=Europe%2FZagreb"},{text:"Sat24",
 		href:"https://www.sat24.com/en-gb/continent/eu/hd#selectedLayer=euRadarSat"},{text:"I'm Weather",
-		href:"https://imweather.com/?model=nowcast&run=&member=&element=radsat&level=&lat=47.5000&lng=17.5000&z=4.2"}],T=[{text:"Windy",
+		href:"https://imweather.com/?model=nowcast&run=&member=&element=radsat&level=&lat=47.5000&lng=17.5000&z=4.2"}],G=[{text:"Windy",
 		href:"https://www.windy.com/-Satellite-satellite?satellite,47.5,17.5,5"},{text:"Zoom Earth",
 		href:"https://zoom.earth/maps/satellite/#view=47.5,17.5,5z"},{text:"meteoblue",
 		href:"https://www.meteoblue.com/en/weather/maps/croatia_croatia_3202326#map=satellite~radar~none~none~none&coords=4/47.5/17.5"},{
 		text:"Ventusky",href:"https://www.ventusky.com/?p=47.5;17.5;4&l=satellite&w=off"},{text:"Sat24",
 		href:"https://www.sat24.com/en-gb/continent/eu/hd"},{text:"I'm Weather",
 		href:"https://imweather.com/?model=nowcast&element=satellite&run=&member=&level=&lat=47.5000&lng=17.5000&z=4.2"},{text:"Wetterzentrale",
-		href:"https://www.wetterzentrale.de/en/reanalysis.php?map=1&model=sat&var=404&nmaps=32"}],W=[{text:"Windy",
+		href:"https://www.wetterzentrale.de/en/reanalysis.php?map=1&model=sat&var=404&nmaps=32"}],J=[{text:"Windy",
 		href:"https://www.windy.com/-Temperature-temp?temp,44.5,16.5,7"},{text:"Zoom Earth",
 		href:"https://zoom.earth/maps/temperature/#view=44.5,16.5,7z/model=icon"},{text:"meteoblue",
 		href:"https://www.meteoblue.com/en/weather/maps/croatia_croatia_3202326#map=temperature~daily-max~auto~2%20m%20above%20gnd~none&coords=6/44.5/16.5"
 		},{text:"Ventusky",href:"https://www.ventusky.com/?p=44.49;16.50;6&l=temperature-2m&w=off"},{text:"Vrijeme&Radar",
 		href:"https://www.vrijemeradar.hr/vremenski-radar/zagreb/18138691?center=44.5,16.5&zoom=7&layer=tr&tz=Europe%2FZagreb"},{text:"Meteoradar",
 		href:"https://www.meteoradar.co.uk/en-gb/country/hr/maps/temperature"},{text:"Meteociel",
-		href:"https://www.meteociel.fr/observations-meteo/temperatures.php?region=it"},{text:"Pljusak",href:"https://pljusak.com/karta.php"}],V=[{
+		href:"https://www.meteociel.fr/observations-meteo/temperatures.php?region=it"},{text:"Pljusak",href:"https://pljusak.com/karta.php"}],tt=[{
 		text:"ESSL",href:"https://weather.essl.org/storm/"},{text:"ASTORP",href:"https://rawinsonde.com/ASTORP/ESTOFEX.html"},{text:"ESTOFEX",
-		href:"https://www.estofex.org"},{text:"ESWD",href:"https://www.eswd.eu"}];function F(t,e){return t.filter(t=>t.text!==e)}var U={radar:"📡",
-		satelit:"🛰️",munje:"⚡",temperatura:"🌡️",nevrijeme:"⛈️",sinoptika:"🗺️",kamera:"📷",prognoza:"📈"};function Z(t,e){return{id:`dhmz-${t}`,
-		category:"radar",name:`DHMZ | MRC ${e}`,type:"slideshow",
+		href:"https://www.estofex.org"},{text:"ESWD",href:"https://www.eswd.eu"}];function et(t,e){return t.filter(t=>t.text!==e)}var nt={
+		radar:"📡",satelit:"🛰️",munje:"⚡",temperatura:"🌡️",nevrijeme:"⛈️",sinoptika:"🗺️",kamera:"📷",prognoza:"📈"};function ot(t,e){return{
+		id:`dhmz-${t}`,category:"radar",name:`DHMZ | MRC ${e}`,type:"slideshow",
 		titleHref:`https://meteo.hr/podaci.php?section=podaci_mjerenja&param=radari&el=${t}&acto=anim`,maxWidth:720,aspect:"720 / 751",
-		slides:[`https://vrijeme.hr/anim_${t}.gif`,`https://vrijeme.hr/${t}-stat.png`]}}var K=[{id:"neverin-radar-hr",category:"radar",
+		slides:[`https://vrijeme.hr/anim_${t}.gif`,`https://vrijeme.hr/${t}-stat.png`]}}var rt=[{id:"neverin-radar-hr",category:"radar",
 		name:"Neverin | Radar | Hrvatska",type:"slideshow",titleHref:"https://www.neverin.hr/radar/",aspect:"880 / 640",startSlide:2,
 		slides:["https://maps.neverin.hr/radar/latest/hr/latest.webp","https://maps.neverin.hr/radar/latest/hr/anim.webp","https://maps.neverin.hr/radar/latest/hr/anim_6h.webp"],
-		links:N},{id:"neverin-satelit-hr",category:"satelit",name:"Neverin | Satelit | Hrvatska",type:"slideshow",
+		links:Y},{id:"neverin-satelit-hr",category:"satelit",name:"Neverin | Satelit | Hrvatska",type:"slideshow",
 		titleHref:"https://www.neverin.hr/satelit/",aspect:"880 / 640",startSlide:2,
 		slides:["https://maps.neverin.hr/satellite/rgb_geocolour/latest/hr/latest.webp","https://maps.neverin.hr/satellite/rgb_geocolour/latest/hr/anim.webp","https://maps.neverin.hr/satellite/rgb_geocolour/latest/hr/anim_6h.webp"],
 		links:[{text:"Windy",href:"https://www.windy.com/-Satellite-satellite?satellite,44.5,16.5,7"},{text:"Zoom Earth",
@@ -352,21 +355,21 @@
 		href:"https://imweather.com/?model=nowcast&element=satellite&run=&member=&level=&lat=44.5000&lng=16.5000&z=6"}]},{id:"neverin-radar-eu",
 		category:"radar",name:"Neverin | Radar | Europa",type:"slideshow",titleHref:"https://www.neverin.hr/radar/",aspect:"880 / 640",startSlide:2,
 		slides:["https://maps.neverin.hr/radar/latest/eu2/latest.webp","https://maps.neverin.hr/radar/latest/eu2/anim.webp","https://maps.neverin.hr/radar/latest/eu2/anim_6h.webp"],
-		links:O},{id:"neverin-satelit-eu",category:"satelit",name:"Neverin | Satelit | Europa",type:"slideshow",
+		links:Q},{id:"neverin-satelit-eu",category:"satelit",name:"Neverin | Satelit | Europa",type:"slideshow",
 		titleHref:"https://www.neverin.hr/satelit/",aspect:"880 / 640",startSlide:2,
 		slides:["https://maps.neverin.hr/satellite/rgb_geocolour/latest/eu2/latest.webp","https://maps.neverin.hr/satellite/rgb_geocolour/latest/eu2/anim.webp","https://maps.neverin.hr/satellite/rgb_geocolour/latest/eu2/anim_6h.webp"],
-		links:T},{id:"windy",category:"radar",name:"Windy",type:"iframe",frameId:"windy",
+		links:G},{id:"windy",category:"radar",name:"Windy",type:"iframe",frameId:"windy",
 		titleHref:"https://www.windy.com/-Radar-lightning-radar?radar,44.5,16.5,7",
 		srcHr:"https://embed.windy.com/embed2.html?lat=44.5&lon=16.56&zoom=7&level=surface&overlay=radar&menu=&message=true&marker=&calendar=&pressure=&type=map&location=coordinates&detail=&detailLat=45.798&detailLon=15.936&metricWind=m%2Fs&metricTemp=%C2%B0C&radarRange=-1",
 		zoomHrDesktop:"&zoom=7",zoomHrMobile:"&zoom=6",
 		srcEu:"https://embed.windy.com/embed2.html?lat=48.0&lon=10.00&zoom=5&level=surface&overlay=radar&menu=&message=true&marker=&calendar=&pressure=&type=map&location=coordinates&detail=&detailLat=45.798&detailLon=15.936&metricWind=m%2Fs&metricTemp=%C2%B0C&radarRange=-1",
-		zoomEuDesktop:"&zoom=5",zoomEuMobile:"&zoom=3",links:F(N,"Windy")},{id:"dhmz-radar",category:"radar",name:"DHMZ | Radar | Hrvatska",
+		zoomEuDesktop:"&zoom=5",zoomEuMobile:"&zoom=3",links:et(Y,"Windy")},{id:"dhmz-radar",category:"radar",name:"DHMZ | Radar | Hrvatska",
 		type:"slideshow",titleHref:"https://meteo.hr/podaci.php?section=podaci_mjerenja&param=radari&el=kompozit&acto=anim",maxWidth:720,
-		aspect:"720 / 751",slides:["https://vrijeme.hr/anim_kompozit.gif","https://vrijeme.hr/kompozit-stat.png"],links:N},{id:"meteociel-temp",
+		aspect:"720 / 751",slides:["https://vrijeme.hr/anim_kompozit.gif","https://vrijeme.hr/kompozit-stat.png"],links:Y},{id:"meteociel-temp",
 		category:"temperatura",name:"Meteociel.fr | Temperatura",type:"slideshow",maxWidth:768,slides:[{title:{text:"Meteociel.fr | Temperatura",
 		href:"https://www.meteociel.fr/observations-meteo/temperatures.php?region=it"},img:"https://www.meteociel.fr/cartes_obs/temp_it.png",
 		aspect:"1"},{title:{text:"Meteociel.fr | Temperatura",href:"https://www.meteociel.fr/observations-meteo/temperatures.php?region=eur2"},
-		img:"https://www.meteociel.com/cartes_obs/temp_eur2.png",aspect:"1"}],links:F(W,"Meteociel")},{id:"blitzortung",category:"munje",
+		img:"https://www.meteociel.com/cartes_obs/temp_eur2.png",aspect:"1"}],links:et(J,"Meteociel")},{id:"blitzortung",category:"munje",
 		name:"Blitzortung.org | Munje",type:"iframe",frameId:"blitzortung",titleHref:"https://map.blitzortung.org/#6/44.5/16.5",
 		srcHr:"https://map.blitzortung.org/index.php?interactive=1&NavigationControl=1&FullScreenControl=0&Cookies=0&InfoDiv=0&MenuButtonDiv=0&ScaleControl=0&CirclesRangeValue=1&LinksCheckboxChecked=0&LinksRangeValue=0&MapStyle=1&MapStyleRangeValue=3&Advertisment=0#6/44.5/16.5",
 		zoomHrDesktop:"#6/",zoomHrMobile:"#5/",
@@ -376,20 +379,20 @@
 		text:"Neverin",href:"https://www.neverin.hr/munje/"}]},{id:"essl",category:"nevrijeme",name:"ESSL | Prognoza nevremena",type:"slideshow",
 		titleHref:"https://stormforecast.eu",maxWidth:900,aspect:"900 / 600",startSlide:2,
 		slides:["https://meteo-data.jurakovic.workers.dev/essl/img1.png","https://meteo-data.jurakovic.workers.dev/essl/img2.png","https://meteo-data.jurakovic.workers.dev/essl/img3.png"],
-		links:F(V,"ESSL")},{id:"astorp",category:"nevrijeme",name:"ASTORP | Prognoza nevremena",type:"slideshow",
+		links:et(tt,"ESSL")},{id:"astorp",category:"nevrijeme",name:"ASTORP | Prognoza nevremena",type:"slideshow",
 		titleHref:"https://rawinsonde.com/ASTORP/ESTOFEX.html",aspect:"1048 / 850",
 		slides:["https://rawinsonde.com/ASTORP/Results/ESTOFEX_DAY_1.jpg","https://rawinsonde.com/ASTORP/Results/ESTOFEX_DAY_2.jpg","https://rawinsonde.com/ASTORP/Results/ESTOFEX_DAY_3.jpg","https://rawinsonde.com/ASTORP/Results/ESTOFEX_DAY_4.jpg","https://rawinsonde.com/ASTORP/Results/ESTOFEX_DAY_5.jpg","https://rawinsonde.com/ASTORP/Results/ESTOFEX_DAY_6.jpg","https://rawinsonde.com/ASTORP/Results/ESTOFEX_DAY_7.jpg"],
-		links:F(V,"ASTORP")},{id:"estofex",category:"nevrijeme",name:"ESTOFEX | Prognoza nevremena",type:"slideshow",
+		links:et(tt,"ASTORP")},{id:"estofex",category:"nevrijeme",name:"ESTOFEX | Prognoza nevremena",type:"slideshow",
 		titleHref:"https://www.estofex.org",maxWidth:800,aspect:"1",
 		slides:["https://meteo-data.jurakovic.workers.dev/estofex/img1.png","https://meteo-data.jurakovic.workers.dev/estofex/img2.png"],
-		links:F(V,"ESTOFEX")},{id:"eumetnet",category:"radar",name:"EUMETNET",type:"iframe-basic",
+		links:et(tt,"ESTOFEX")},{id:"eumetnet",category:"radar",name:"EUMETNET",type:"iframe-basic",
 		titleHref:"https://www.eumetnet.eu/observations/opera-radar-animation/",src:"https://cdn.fmi.fi/demos/eumetnet-web-site-radar-animator/",
-		links:O},{id:"meteociel-satelit",category:"satelit",name:"Meteociel.fr | Satelit",type:"slideshow",maxWidth:768,slides:[{title:{
+		links:Q},{id:"meteociel-satelit",category:"satelit",name:"Meteociel.fr | Satelit",type:"slideshow",maxWidth:768,slides:[{title:{
 		text:"Meteociel.fr | Satelit",
 		href:"https://www.meteociel.fr/observations-meteo/satellite.php?mode=animation-infrarouge-noir-et-blanc-hd-mtg"},
 		img:"https://modeles20.meteociel.fr/satellite/animsatirmtgeu.gif",aspect:"1"},{title:{text:"Meteociel.fr | Satelit",
 		href:"https://www.meteociel.fr/observations-meteo/satellite.php?mode=infrarouge-noir-et-blanc-hd-mtg"},
-		img:"https://modeles20.meteociel.fr/satellite/latestsatirmtgeu.png",aspect:"1"}],links:T},{id:"chmi-sinopticka",category:"sinoptika",
+		img:"https://modeles20.meteociel.fr/satellite/latestsatirmtgeu.png",aspect:"1"}],links:G},{id:"chmi-sinopticka",category:"sinoptika",
 		name:"ČHMÚ | Sinoptička karta",type:"slideshow",maxWidth:760,dynamicWidth:!0,slides:[{title:{
 		href:"https://intranet.chmi.cz/aktualni-situace/aktualni-stav-pocasi/evropa/synopticka-situace"},
 		img:"https://intranet.chmi.cz/files/portal/docs/meteo/om/evropa/analyza.gif",aspect:"760 / 492"},{title:{
@@ -418,25 +421,25 @@
 		name:"Ventusky",type:"iframe",frameId:"ventusky",scaled:!0,loading:"eager",
 		titleHref:"https://www.ventusky.com/?p=44.5;16.5;6&l=radar&w=off",srcHr:"https://embed.ventusky.com/?p=44.5;16.5;6&l=radar&w=off",
 		zoomHrDesktop:";6&",zoomHrMobile:";6&",srcEu:"https://embed.ventusky.com/?p=48.0;10.0;4&l=radar&w=off",zoomEuDesktop:";4&",
-		zoomEuMobile:";3&",links:F(N,"Ventusky")},{id:"rainviewer",category:"radar",name:"Rain Viewer",type:"iframe",frameId:"rainViewer",scaled:!0,
-		titleHref:"https://www.rainviewer.com/map.html?loc=44.5,16.5,6&oCS=1&c=5&lm=1&layer=radar&sm=1&sn=2&ts=1",
+		zoomEuMobile:";3&",links:et(Y,"Ventusky")},{id:"rainviewer",category:"radar",name:"Rain Viewer",type:"iframe",frameId:"rainViewer",
+		scaled:!0,titleHref:"https://www.rainviewer.com/map.html?loc=44.5,16.5,6&oCS=1&c=5&lm=1&layer=radar&sm=1&sn=2&ts=1",
 		srcHr:"https://www.rainviewer.com/map.html?loc=44.8,16.5,6.3&oCS=1&c=5&lm=1&layer=radar&sm=1&sn=2&ts=1",zoomHrDesktop:",6.3&",
 		zoomHrMobile:",5.8&",srcEu:"https://www.rainviewer.com/map.html?loc=48.0,10.0,4.0&oCS=1&c=5&lm=1&layer=radar&sm=1&sn=2&ts=1",
-		zoomEuDesktop:",4.0&",zoomEuMobile:",3.2&",links:F(N,"Rain Viewer")},{id:"weatherandradar",category:"radar",name:"Vrijeme&Radar",
+		zoomEuDesktop:",4.0&",zoomEuMobile:",3.2&",links:et(Y,"Rain Viewer")},{id:"weatherandradar",category:"radar",name:"Vrijeme&Radar",
 		type:"iframe",frameId:"weatherAndRadar",scaled:!0,
 		titleHref:"https://www.vrijemeradar.hr/vremenski-radar/zagreb/18138691?center=44.5,16.5&zoom=7&layer=wr&tz=Europe%2FZagreb",
 		srcHr:"https://radar.wo-cloud.com/pwa/?center=44.5,16.5&zoom=7.2&tz=Europe/Zagreb&tf=HH:mm&tempunit=celsius&windunit=kph&showShareButton=false&lang=en-US&placemarkName=Zagreb&desktop=true&fadeTop=true",
 		zoomHrDesktop:"&zoom=7.2",zoomHrMobile:"&zoom=6.8",
 		srcEu:"https://radar.wo-cloud.com/pwa/?center=48.0,10.0&zoom=5.0&tz=Europe/Zagreb&tf=HH:mm&tempunit=celsius&windunit=kph&showShareButton=false&lang=en-US&placemarkName=Zagreb&desktop=true&fadeTop=true",
-		zoomEuDesktop:"&zoom=5.0",zoomEuMobile:"&zoom=4.0",links:F(N,"Vrijeme&Radar")},{id:"meteo-si",category:"radar",name:"meteo.si",
+		zoomEuDesktop:"&zoom=5.0",zoomEuMobile:"&zoom=4.0",links:et(Y,"Vrijeme&Radar")},{id:"meteo-si",category:"radar",name:"meteo.si",
 		type:"slideshow",titleHref:"https://meteo.arso.gov.si/met/sl/weather/observ/radar/",maxWidth:821,aspect:"821 / 660",
 		slides:["https://meteo.arso.gov.si/uploads/probase/www/observ/radar/si0-rm-anim.gif?nocache","https://meteo.arso.gov.si/uploads/probase/www/observ/radar/si0-rm.gif?nocache"],
-		links:N},{id:"idokep-radar-eu",category:"radar",name:"Időkép | Radar | Europa",type:"image",titleHref:"https://www.idokep.eu/ceu/radar",
-		maxWidth:840,aspect:"840 / 600",img:"https://www.idokep.eu/terkep/eu/radar.gif",links:O},{id:"idokep-satelit-eu",category:"satelit",
+		links:Y},{id:"idokep-radar-eu",category:"radar",name:"Időkép | Radar | Europa",type:"image",titleHref:"https://www.idokep.eu/ceu/radar",
+		maxWidth:840,aspect:"840 / 600",img:"https://www.idokep.eu/terkep/eu/radar.gif",links:Q},{id:"idokep-satelit-eu",category:"satelit",
 		name:"Időkép | Satelit | Europa",type:"video",titleHref:"https://www.idokep.hu/muhold",aspect:"1070 / 713",
 		src:"https://www.idokep.hu/radar/sat-eu.mp4",
 		backdrop:"data:image/jpeg;base64,/9j/4AAQSkZJRgABAQEAYABgAAD/2wBDAA0JCgsKCA0LCwsPDg0QFCEVFBISFCgdHhghMCoyMS8qLi00O0tANDhHOS0uQllCR05QVFVUMz9dY1xSYktTVFH/2wBDAQ4PDxQRFCcVFSdRNi42UVFRUVFRUVFRUVFRUVFRUVFRUVFRUVFRUVFRUVFRUVFRUVFRUVFRUVFRUVFRUVFRUVH/wAARCAArAEADASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9oADAMBAAIRAxEAPwBljPoksUEElnNNdFRuYRLgnufvdK1reHR5XKx20qjH3hEMfh81YmgR5hN2UB3MU4OSOK1rGdCGcrsEJHU85JNXzsjkibEIW0t1nk3FBjaAvzGp7u5huNPcSBDGM5IGQR7VkSXQkkhQuqgEuRuwcHnHuKgF5vJjlHlgJ/eyAST+uRUFjNbjhbSVSMboUP8ADjPI/n7e9YOl28+oRbLaGMeXkZZif0rbNkZ1MKTERFAH2nkMMFSD6g/yrQKC0sv3hKqgyzJwSPSjS2orFXTLF7ZZleMFnxuJIC4A6AVoLd2rMqNPGHz3HANZV1qiJuS3XCkgeY3zHp1rLjSaU7IkaRc8HZ+tZuaWhSRV0W6EeiSNISI97HjqRxwPrUltes7mWVwkbHJwOnpisC4l8pIrWNiNo+cH19DVmOOXcipISdu45rUR201zYGEec3y/dG3r0/Q1C1zYXLAxoc/x5XPGMAn1rmLaKdHk8wjBxgZ708aolm22OT94xIIAHyjuTn0qG3eyH0OzsonhgcRwMDuwD656tz29qpalLK141oD5keBuI4JA5wfSoLPWbSzELSSs8jJnezZVR6ZPrVa5v2/tQ3iL8zHofpUTmkkNK5v6Bp0ElqbmVY8lioHbGayNX1O5tr7bGvlhSOCOn+NWYdZj1CGC3s7SaKJZA87qQAvqc+9ZOqyreahIwY5VtrAnPAPGPanJ8sdCoW5veOKy4fIBJ6k1q6c4Vg0gPTj2rIikdhtLEgDIrd0hQ7fMM4Ga1ZmS3juUaKMOZDxkf41nrYXIlZhGgJQrhm4GeDXTQxo0XIzzViOCJraQlBkZqG3ayNVFPVmXpvhjV9T0hpo5VdWUKkbgLjBI4/AfrVe6uHs1jinLpPG4SdMcAAY9OM9fwre0+WWyvES3ldEjj+RdxIXLjOAa5Lxa7ya1PI7Es+/cc9cdKHFMjU1k1ZZLfyIJ08pRghDkE56mmzyzJE1xNOSsQycsTxXJaZzqNuhJ2tIoYZ6810Ws3Ev9nLFlSjNkgoDnr3xUOF3ZmkZaXP/Z",
-		links:T},{id:"istramet-munje",category:"munje",name:"Istramet | Munje",type:"image",titleHref:"https://www.istramet.hr/radari-munja/",
+		links:G},{id:"istramet-munje",category:"munje",name:"Istramet | Munje",type:"image",titleHref:"https://www.istramet.hr/radari-munja/",
 		maxWidth:804,aspect:"804 / 687",img:"https://www.istramet.hr/wp-content/themes/istramet/img/munje_hr.png",links:[{text:"Blitzortung.org",
 		href:"https://map.blitzortung.org/#6.5/44.5/16.5"},{text:"LightningMaps.org",
 		href:"https://www.lightningmaps.org/?lang=en#m=sen;t=3;s=200;o=0;b=0.00;ts=0;z=7;y=44.5;x=16.5;d=4;dl=6;dc=0;"},{text:"Neverin",
@@ -448,7 +451,7 @@
 		name:"Wetterzentrale | Temperatura",type:"image",
 		titleHref:"https://www.wetterzentrale.de/en/topkarten.php?map=17&model=ecm&var=5&run=6&time=0&lid=OP&h=1&mv=0&tr=1",aspect:"959 / 741",
 		img:"https://www.wetterzentrale.de/en/create_gif.php?model=ECM&member=OP&var=5&map=IT&run=06&speed=250&times=0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47",
-		alt:"Wetterzentrale Temperatura",links:W},{id:"dhmz-sinopticka",category:"sinoptika",name:"DHMZ | Sinoptička karta",type:"image",
+		alt:"Wetterzentrale Temperatura",links:J},{id:"dhmz-sinopticka",category:"sinoptika",name:"DHMZ | Sinoptička karta",type:"image",
 		titleHref:"https://meteo.hr/prognoze.php?section=prognoze_model&param=web_fronte_sutra12",maxWidth:720,aspect:"1",
 		img:"https://prognoza.hr/web_fronte_sutra12.jpg",links:[{text:"ČHMÚ",
 		href:"https://intranet.chmi.cz/aktualni-situace/aktualni-stav-pocasi/evropa/synopticka-situace"}]},{id:"dwd-sinopticka",
@@ -457,21 +460,22 @@
 		slides:["https://www.dwd.de/DWD/wetter/wv_spez/hobbymet/wetterkarten/ico_tkboden_na_v36.png","https://www.dwd.de/DWD/wetter/wv_spez/hobbymet/wetterkarten/ico_tkboden_na_036.png","https://www.dwd.de/DWD/wetter/wv_spez/hobbymet/wetterkarten/ico_tkboden_na_048.png","https://www.dwd.de/DWD/wetter/wv_spez/hobbymet/wetterkarten/ico_tkboden_na_060.png","https://www.dwd.de/DWD/wetter/wv_spez/hobbymet/wetterkarten/ico_tkboden_na_084.png","https://www.dwd.de/DWD/wetter/wv_spez/hobbymet/wetterkarten/ico_tkboden_na_108.png"],
 		links:[{text:"ČHMÚ",href:"https://intranet.chmi.cz/aktualni-situace/aktualni-stav-pocasi/evropa/synopticka-situace"},{text:"DHMZ",
 		href:"https://meteo.hr/prognoze.php?section=prognoze_model&param=web_fronte_sutra12"}]
-		},Z("puntijarka","Puntijarka"),Z("bilogora","Bilogora"),Z("gradiste","Gradište"),Z("goli","Goli"),Z("debeljak","Debeljak"),Z("uljenje","Uljenje")],X=new Map(K.map(t=>[t.id,t]))
-		;function J(t){return X.get(t)||null}function Y(t){return t.toLowerCase().normalize("NFD").replace(/\p{Diacritic}/gu,"").replace(/đ/g,"d")}
-		function Q(t){return Y(t).split(/\s+/).filter(Boolean)}function G(t,e){const n=Y(`${t.name} ${t.category}`);return e.every(t=>n.includes(t))
-		}var tt=260,et=120,nt=16,ot=23,rt=4/3,at=tt,it=["n","ne","e","se","s","sw","w","nw"];function st(t,e,n,o){let r=e.width,a=e.height
+		},ot("puntijarka","Puntijarka"),ot("bilogora","Bilogora"),ot("gradiste","Gradište"),ot("goli","Goli"),ot("debeljak","Debeljak"),ot("uljenje","Uljenje")],at=new Map(rt.map(t=>[t.id,t]))
+		;function it(t){return at.get(t)||null}function st(t){
+		return t.toLowerCase().normalize("NFD").replace(/\p{Diacritic}/gu,"").replace(/đ/g,"d")}function lt(t){
+		return st(t).split(/\s+/).filter(Boolean)}function ct(t,e){const n=st(`${t.name} ${t.category}`);return e.every(t=>n.includes(t))}
+		var dt=260,ut=120,ht=16,pt=23,mt=4/3,ft=dt,gt=["n","ne","e","se","s","sw","w","nw"];function wt(t,e,n,o){let r=e.width,a=e.height
 		;return t.includes("e")&&(r=e.width+n),t.includes("w")&&(r=e.width-n),t.includes("s")&&(a=e.height+o),t.includes("n")&&(a=e.height-o),{w:r,
-		h:a}}function lt(t,e,n,o){const r=t.clientX,a=t.clientY;let i=0,s=0,l=t;const c=t=>{l=t,i=t.clientX-r,s=t.clientY-a,e(i,s,t),o&&o()},d=t=>{
+		h:a}}function vt(t,e,n,o){const r=t.clientX,a=t.clientY;let i=0,s=0,l=t;const c=t=>{l=t,i=t.clientX-r,s=t.clientY-a,e(i,s,t),o&&o()},d=t=>{
 		"Shift"!==t.key||t.repeat||(e(i,s,{clientX:l.clientX,clientY:l.clientY,shiftKey:"keydown"===t.type}),o&&o())},u=()=>{
 		document.removeEventListener("pointermove",c),document.removeEventListener("pointerup",u),document.removeEventListener("pointercancel",u),
 		document.removeEventListener("keydown",d),document.removeEventListener("keyup",d),document.body.classList.remove("po-dragging"),n&&n()}
 		;document.body.classList.add("po-dragging"),document.addEventListener("pointermove",c),document.addEventListener("pointerup",u),
-		document.addEventListener("pointercancel",u),document.addEventListener("keydown",d),document.addEventListener("keyup",d)}function ct(){
-		const t=["--fs-left","--fs-right","--fs-top","--fs-bottom"],e=jn(),n=no();e.forEach(o=>{
+		document.addEventListener("pointercancel",u),document.addEventListener("keydown",d),document.addEventListener("keyup",d)}function yt(){
+		const t=["--fs-left","--fs-right","--fs-top","--fs-bottom"],e=qn(),n=lo();e.forEach(o=>{
 		if(!n||!o.classList.contains("fs-host"))return void t.forEach(t=>o.style.removeProperty(t))
-		;const r=u(),a=h(),i=o.getBoundingClientRect(),s=e.filter(t=>t!==o&&!t.classList.contains("fs-host")).map(t=>t.getBoundingClientRect()),l=function(t,e,n){
-		const o=(t,e,n)=>{let o=e;return t.sort((t,e)=>t[0]-e[0]).forEach(([t,e])=>{t<=o+nt&&(o=Math.max(o,e))}),o>=n-nt},r=(t,e,n,r,a)=>{
+		;const r=E(),a=x(),i=o.getBoundingClientRect(),s=e.filter(t=>t!==o&&!t.classList.contains("fs-host")).map(t=>t.getBoundingClientRect()),l=function(t,e,n){
+		const o=(t,e,n)=>{let o=e;return t.sort((t,e)=>t[0]-e[0]).forEach(([t,e])=>{t<=o+ht&&(o=Math.max(o,e))}),o>=n-ht},r=(t,e,n,r,a)=>{
 		const i=e.filter(e=>e.right<=t.left+1),s=[...new Set(i.map(t=>t.right))].sort((t,e)=>e-t);for(const t of s){
 		const e=i.filter(e=>e.left<t-.5&&e.right>=t-.5);if(o(e.map(t=>[t.top,t.bottom]),n,r))return t}return a},a=t=>({left:-t.right,right:-t.left,
 		top:t.top,bottom:t.bottom}),i=t=>({left:t.top,right:t.bottom,top:t.left,bottom:t.right}),s=t=>a(i(t)),l=e.map(a),c=e.map(i),d=e.map(s)
@@ -480,60 +484,59 @@
 		;if(o.left===u.left&&o.right===u.right&&o.top===u.top&&o.bottom===u.bottom)break;u=o}return u}({left:i.left,right:i.right,top:i.top,
 		bottom:i.bottom},s,{left:0,top:0,right:r,bottom:a});o.style.setProperty("--fs-left",`${Math.round(l.left)}px`),
 		o.style.setProperty("--fs-right",`${Math.round(r-l.right)}px`),o.style.setProperty("--fs-top",`${Math.round(l.top)}px`),
-		o.style.setProperty("--fs-bottom",`${Math.round(a-l.bottom)}px`)})}function dt(t){const e=t.querySelector(".fs-btn")
-		;e&&!t.querySelector(".if1.fullscreen")&&e.click()}function ut(){const t=Rn().map(t=>({block:t,rect:t.getBoundingClientRect(),
+		o.style.setProperty("--fs-bottom",`${Math.round(a-l.bottom)}px`)})}function bt(t){const e=t.querySelector(".fs-btn")
+		;e&&!t.querySelector(".if1.fullscreen")&&e.click()}function kt(){const t=Bn().map(t=>({block:t,rect:t.getBoundingClientRect(),
 		z:Number(t.style.zIndex)||0}));t.forEach(e=>{
 		const n=t.some(t=>t.block!==e.block&&t.z>e.z&&t.rect.left<e.rect.right&&t.rect.right>e.rect.left&&t.rect.top<e.rect.bottom&&t.rect.bottom>e.rect.top)
-		;e.block.classList.toggle("covered",n&&!e.block.classList.contains("fs-host"))}),ct(),ht()}function ht(){const e=new Set,n=function(){
+		;e.block.classList.toggle("covered",n&&!e.block.classList.contains("fs-host"))}),yt(),Et()}function Et(){const e=new Set,n=function(){
 		const t=document.querySelector(".if1.fullscreen");if(!t)return null
 		;const e=document.querySelector(".radartitle.fullscreen"),n=t.getBoundingClientRect();if(!e)return n;const o=e.getBoundingClientRect()
 		;return{left:Math.min(n.left,o.left),right:Math.max(n.right,o.right),top:Math.min(n.top,o.top),bottom:Math.max(n.bottom,o.bottom)}
 		}(),o=new Map,r=e=>o.get(e)||o.set(e,function(e){const n=e?"po-shadows":"po-shadows-under";let o=document.querySelector(`.${n}`)
-		;return o||document.body.appendChild(o=t("div",{class:n})),o}(e)).get(e);Rn().forEach(o=>{if(!function(t){
-		return!Hn(t)&&!t.classList.contains("fs-host")}(o))return
+		;return o||document.body.appendChild(o=t("div",{class:n})),o}(e)).get(e);Bn().forEach(o=>{if(!function(t){
+		return!Vn(t)&&!t.classList.contains("fs-host")}(o))return
 		;const a=o.getBoundingClientRect(),i=!n||a.left<n.right&&a.right>n.left&&a.top<n.bottom&&a.bottom>n.top,s=r(i)
 		;o._shadow&&o._shadow.parentElement===s||(o._shadow&&o._shadow.remove(),o._shadow=t("div",{class:"po-shadow"}),s.appendChild(o._shadow)),
 		o._shadow.style.cssText=`left: ${a.left}px; top: ${a.top}px; width: ${a.width}px; height: ${a.height}px;`,e.add(o._shadow)}),
 		document.querySelectorAll(".po-shadows, .po-shadows-under").forEach(t=>[...t.children].forEach(t=>{e.has(t)||t.remove()}))}
-		function pt(t,e,n){lt(t,e,n,ht)}function mt(){const e=t("a",{class:"dup-btn",text:"[D]",title:"Udvostruči kartu (D)"})
-		;return e.addEventListener("click",()=>xt(e.closest(".map-block"))),e}function ft(t){return!!t&&t.classList.contains("duplicate")}
-		function gt(t){return[...document.querySelectorAll(`.map-block[data-map-id="${CSS.escape(t)}"]`)]}function wt(t){
-		return gt(t.dataset.mapId).filter(e=>e!==t)}function vt(t){return gt(t).find(t=>!ft(t))||null}function yt(t){
-		return document.querySelector(`.map-block[data-inst="${CSS.escape(t)}"]`)}function bt(t){for(let e=1;;e++){const n=ho(t,e)
-		;if(!yt(n))return n}}function kt(t){t.querySelectorAll("img.lazy").forEach(t=>{t.src=t.getAttribute("data-src"),t.classList.remove("lazy")
-		}),t.querySelectorAll("iframe[data-zoom-hr-desktop]").forEach(t=>w(t)),j(),b(),k()}function Et(e,n){const o=J(e),r=vt(e)
-		;if(!o||!r)return null;const a=t("div",{class:"map-block duplicate","data-map-id":e,"data-inst":n},bo(o,n));return r.after(a),kt(a),a}
-		function xt(t){if(!t||!r.matches)return null;const e=t.dataset.mapId,n=bt(e);m(`duplicateMap: ${e} -> ${n}`);const o=Et(e,n)
-		;if(!o)return null;cn(o);const a=t.classList.contains("popout");if(a){const e=t.getBoundingClientRect()
-		;t.classList.contains("free")&&!o.classList.contains("free")&&dn(o),o.style.width=`${Math.round(i(e.width,tt,zn()))}px`,
-		o.classList.contains("free")&&(o.style.height=`${Math.round(i(e.height,et,h()))}px`)}
-		const s=a?t.getBoundingClientRect():o.getBoundingClientRect();return Mn(o,s.left+32,s.top+32),An(o),pn(o),En(),ht(),$o(),o}function St(t){
-		const e=po(t);if(1===mo(t))return vt(e);const n=yt(t);return n&&ft(n)?n:Et(e,bt(e))}function Lt(t){if(m(`removeShowing: ${t.dataset.inst}`),
-		!ft(t)){const e=wt(t)[0];e&&(e.classList.remove("duplicate"),t._gap&&(e._gap=t._gap,e._gap._block=e,delete t._gap))}
-		const e=t.querySelector(".if1.fullscreen");e&&y(e),t._group&&kn(t),Jn(t),t._shadow&&t._shadow.remove(),t.remove(),En(),ht(),$o()}
-		function Ct(t){const e=t.querySelector(".slide.active img")||t.querySelector(".placeholder img")
+		function xt(t,e,n){vt(t,e,n,Et)}function Lt(){const e=t("a",{class:"dup-btn",text:"[D]",title:"Udvostruči kartu (D)"})
+		;return e.addEventListener("click",()=>$t(e.closest(".map-block"))),e}function St(t){return!!t&&t.classList.contains("duplicate")}
+		function Ct(t){return[...document.querySelectorAll(`.map-block[data-map-id="${CSS.escape(t)}"]`)]}function zt(t){
+		return Ct(t.dataset.mapId).filter(e=>e!==t)}function Mt(t){return Ct(t).find(t=>!St(t))||null}function At(t){
+		return document.querySelector(`.map-block[data-inst="${CSS.escape(t)}"]`)}function Rt(t){for(let e=1;;e++){const n=vo(t,e)
+		;if(!At(n))return n}}function jt(t){t.querySelectorAll("img.lazy").forEach(t=>{t.src=t.getAttribute("data-src"),t.classList.remove("lazy")
+		}),t.querySelectorAll("iframe[data-zoom-hr-desktop]").forEach(t=>M(t)),W(),j(),_()}function _t(e,n){const o=it(e),r=Mt(e)
+		;if(!o||!r)return null;const a=t("div",{class:"map-block duplicate","data-map-id":e,"data-inst":n},Co(o,n));return r.after(a),jt(a),a}
+		function $t(t){if(!t||!f.matches)return null;const e=t.dataset.mapId,n=Rt(e);S(`duplicateMap: ${e} -> ${n}`);const o=_t(e,n)
+		;if(!o)return null;fn(o);const r=t.classList.contains("popout");if(r){const e=t.getBoundingClientRect()
+		;t.classList.contains("free")&&!o.classList.contains("free")&&gn(o),o.style.width=`${Math.round(w(e.width,dt,$n()))}px`,
+		o.classList.contains("free")&&(o.style.height=`${Math.round(w(e.height,ut,x()))}px`)}
+		const a=r?t.getBoundingClientRect():o.getBoundingClientRect();return Pn(o,a.left+32,a.top+32),In(o),yn(o),Mn(),Et(),To(),o}function Pt(t){
+		const e=yo(t);if(1===bo(t))return Mt(e);const n=At(t);return n&&St(n)?n:_t(e,Rt(e))}function It(t){if(S(`removeShowing: ${t.dataset.inst}`),
+		!St(t)){const e=zt(t)[0];e&&(e.classList.remove("duplicate"),t._gap&&(e._gap=t._gap,e._gap._block=e,delete t._gap))}
+		const e=t.querySelector(".if1.fullscreen");e&&R(e),t._group&&zn(t),no(t),t._shadow&&t._shadow.remove(),t.remove(),Mn(),Et(),To()}
+		function Bt(t){const e=t.querySelector(".slide.active img")||t.querySelector(".placeholder img")
 		;if(e&&e.naturalWidth&&e.naturalHeight)return e.naturalWidth/e.naturalHeight;const n=t.querySelector("video")
 		;if(n&&n.videoWidth&&n.videoHeight)return n.videoWidth/n.videoHeight;if(t.classList.contains("free"))return 0
-		;const o=t.getBoundingClientRect(),r=o.height-ot;return r>0?o.width/r:0}function zt(t,e){const n=Math.floor(t/e),o=Math.round(t)-n*e
-		;return Array.from({length:e},(t,e)=>n+(e<o?1:0))}function Mt(t,e){return t.slice(0,e).reduce((t,e)=>t+e,0)}function At(){
-		if(!no()||!r.matches)return;const t=[...document.querySelectorAll(".map-block.popout")].filter(t=>!Hn(t)&&!t.classList.contains("fs-host"))
-		;if(!t.length)return;m(`arrangeBoard: ${t.length} widgets`);const e=u(),n=h(),{cols:o,rows:a}=function(t,e,n,o){let r={cols:1,rows:t,
-		score:-1/0};for(let a=1;a<=t;a++){const i=Math.ceil(t/a),s=e/a,l=n/i-ot;if(l<=0)continue;const c=Math.min(s,l*o),d=c*(c/o)*(1-.01*(a*i-t))
-		;d>r.score&&(r={cols:a,rows:i,score:d})}return r}(t.length,e,n,function(t){const e=t.map(Ct).filter(t=>t>0)
-		;return e.length?e.reduce((t,e)=>t+e,0)/e.length:rt}(t)),i=zt(e,o),s=zt(n,a);t.forEach((t,e)=>{dn(t),t.style.width=`${i[e%o]}px`,
-		t.style.height=`${s[Math.floor(e/o)]}px`}),t.forEach((t,e)=>{Mn(t,Mt(i,e%o),Mt(s,Math.floor(e/o))),pn(t)}),En(),ht(),$o()}function Rt(){
+		;const o=t.getBoundingClientRect(),r=o.height-pt;return r>0?o.width/r:0}function qt(t,e){const n=Math.floor(t/e),o=Math.round(t)-n*e
+		;return Array.from({length:e},(t,e)=>n+(e<o?1:0))}function Ht(t,e){return t.slice(0,e).reduce((t,e)=>t+e,0)}function Dt(){
+		if(!lo()||!f.matches)return;const t=[...document.querySelectorAll(".map-block.popout")].filter(t=>!Vn(t)&&!t.classList.contains("fs-host"))
+		;if(!t.length)return;S(`arrangeBoard: ${t.length} widgets`);const e=E(),n=x(),{cols:o,rows:r}=function(t,e,n,o){let r={cols:1,rows:t,
+		score:-1/0};for(let a=1;a<=t;a++){const i=Math.ceil(t/a),s=e/a,l=n/i-pt;if(l<=0)continue;const c=Math.min(s,l*o),d=c*(c/o)*(1-.01*(a*i-t))
+		;d>r.score&&(r={cols:a,rows:i,score:d})}return r}(t.length,e,n,function(t){const e=t.map(Bt).filter(t=>t>0)
+		;return e.length?e.reduce((t,e)=>t+e,0)/e.length:mt}(t)),a=qt(e,o),i=qt(n,r);t.forEach((t,e)=>{gn(t),t.style.width=`${a[e%o]}px`,
+		t.style.height=`${i[Math.floor(e/o)]}px`}),t.forEach((t,e)=>{Pn(t,Ht(a,e%o),Ht(i,Math.floor(e/o))),yn(t)}),Mn(),Et(),To()}function Tt(){
 		const e=t("a",{class:"rl-btn",text:"[R]",title:"Ponovno učitaj kartu"});return e.addEventListener("click",()=>{
-		const t=e.closest(".map-block");jt(t);It().filter(e=>e!==t).length||Wt()}),e}function jt(t){t&&(m(`reloadMap: ${t.dataset.mapId}`),
-		t.querySelectorAll("img[src]").forEach(t=>{t.src=_t(t.getAttribute("src"))}),t.querySelectorAll("video").forEach(t=>{
-		t.querySelectorAll("source[src]").forEach(t=>{t.src=_t(t.getAttribute("src"))}),t.load()}),
-		t.querySelectorAll(".if2 iframe[src]").forEach(t=>{t.src=t.getAttribute("src")}))}function _t(t){
-		const e=t.replace(/([?&])_r=\d+(&|$)/,(t,e,n)=>n?e:"");return`${e}${e.includes("?")?"&":"?"}_r=${Date.now()}`}function It(){
-		return[...document.querySelectorAll(".map-block")].filter(t=>t.querySelector("img[src], video, .if2 iframe[src]"))}function $t(){
-		It().forEach(jt),Wt()}var Pt="mapRefresh",Bt=[5,10,15,30,60];var{on:qt,minutes:Ht}=function(){try{
-		const t=JSON.parse(localStorage.getItem(Pt));if(t&&"object"==typeof t)return{on:!0===t.on,minutes:Bt.includes(t.minutes)?t.minutes:5}
-		}catch{}return{on:!1,minutes:5}}(),Dt=0,Nt=0;function Ot(){return qt}function Tt(){if(!qt||!Dt)return""
-		;const t=Math.max(0,Math.ceil((Dt-Date.now())/1e3));return`${Math.floor(t/60)}:${String(t%60).padStart(2,"0")}`}function Wt(){
-		clearInterval(Nt),Nt=0,Dt=qt?Date.now()+6e4*Ht:0,qt&&(Nt=setInterval(Vt,1e3)),Ve()}function Vt(){qt&&(Date.now()>=Dt?$t():Ve())}var Ft=[{
+		const t=e.closest(".map-block");Nt(t);Ot().filter(e=>e!==t).length||Gt()}),e}function Nt(t){t&&(S(`reloadMap: ${t.dataset.mapId}`),
+		t.querySelectorAll("img[src]").forEach(t=>{t.src=Wt(t.getAttribute("src"))}),t.querySelectorAll("video").forEach(t=>{
+		t.querySelectorAll("source[src]").forEach(t=>{t.src=Wt(t.getAttribute("src"))}),t.load()}),
+		t.querySelectorAll(".if2 iframe[src]").forEach(t=>{t.src=t.getAttribute("src")}))}function Wt(t){
+		const e=t.replace(/([?&])_r=\d+(&|$)/,(t,e,n)=>n?e:"");return`${e}${e.includes("?")?"&":"?"}_r=${Date.now()}`}function Ot(){
+		return[...document.querySelectorAll(".map-block")].filter(t=>t.querySelector("img[src], video, .if2 iframe[src]"))}function Vt(){
+		Ot().forEach(Nt),Gt()}var Ft=[5,10,15,30,60];var{on:Ut,minutes:Zt}=function(){const t=p(c);return t&&"object"==typeof t?{on:!0===t.on,
+		minutes:Ft.includes(t.minutes)?t.minutes:5}:{on:!1,minutes:5}}(),Kt=0,Xt=0;function Yt(){return Ut}function Qt(){if(!Ut||!Kt)return""
+		;const t=Math.max(0,Math.ceil((Kt-Date.now())/1e3));return`${Math.floor(t/60)}:${String(t%60).padStart(2,"0")}`}function Gt(){
+		clearInterval(Xt),Xt=0,Kt=Ut?Date.now()+6e4*Zt:0,Ut&&(Xt=setInterval(Jt,1e3)),Qe()}function Jt(){Ut&&(Date.now()>=Kt?Vt():Qe())}var te=[{
 		id:"zadano",name:"Osnovno",
 		maps:["neverin-radar-hr","neverin-satelit-hr","neverin-radar-eu","neverin-satelit-eu","windy","dhmz-radar","meteociel-temp","blitzortung","essl","astorp","estofex","eumetnet","meteociel-satelit","dwd-sinopticka","neverin-kamera","meteoblue-prognoza"]
 		},{id:"vise",name:"Više",
@@ -542,61 +545,60 @@
 		maps:["neverin-radar-hr","neverin-radar-eu","windy","dhmz-radar","eumetnet","ventusky","rainviewer","weatherandradar","meteo-si","idokep-radar-eu"]
 		},{id:"sateliti",name:"Sateliti",maps:["neverin-satelit-hr","neverin-satelit-eu","meteociel-satelit","idokep-satelit-eu"]},{id:"nevrijeme",
 		name:"Nevrijeme",maps:["essl","astorp","estofex","blitzortung","istramet-munje","blitzortung-karta"]},{id:"sve",name:"Sve",
-		maps:K.map(t=>t.id)},{id:"nista",name:"Ništa",maps:[]}],Ut="mapUserPresets";function Zt(t){return"string"==typeof t&&t.startsWith("u:")}
-		function Kt(t){return!(!t||!t.layout||!0!==t.layout.dashboard)}function Xt(t){
-		return t&&Zt(t.id)&&"string"==typeof t.name&&Array.isArray(t.maps)}var Jt=function(){try{const t=JSON.parse(localStorage.getItem(Ut))
-		;if(Array.isArray(t))return t.filter(Xt)}catch{}return[]}();function Yt(){try{localStorage.setItem(Ut,JSON.stringify(Jt))}catch{}}
-		function Qt(){return Ft.concat(Jt)}function Gt(){let t;do{t="u:"+Date.now().toString(36)+Math.random().toString(36).slice(2,6)
-		}while(Jt.some(e=>e.id===t));return t}function te(t){return String(t).trim().replace(/\s+/g," ").slice(0,40)}function ee(t){
-		return Jt.find(e=>e.name.toLowerCase()===t.toLowerCase())}function ne(t,e,n=null){const o=ee(t);return o?(o.name=t,o.maps=e,
-		o.layout=n):Jt.push({id:Gt(),name:t,maps:e,layout:n}),Yt(),o||Jt[Jt.length-1]}var oe="mapHiddenPresets";function re(t){return"zadano"!==t}
-		var ae=function(){try{const t=JSON.parse(localStorage.getItem(oe));if(Array.isArray(t))return t.filter(t=>re(t)&&Ft.some(e=>e.id===t))
-		}catch{}return[]}();function ie(){try{localStorage.setItem(oe,JSON.stringify(ae))}catch{}}function se(t){return ae.includes(t)}
-		function le(){return Ft.filter(t=>re(t.id))}function ce(){ae=le().map(t=>t.id),ie()}function de(){ae=[],ie()}function ue(t){
-		const e=JSON.stringify(t).replace(/[\u0080-\uffff]/g,t=>"\\u"+t.charCodeAt(0).toString(16).padStart(4,"0"))
-		;return btoa(e).replace(/\+/g,"-").replace(/\//g,"_").replace(/=+$/,"")}function he(t){const e={preset:"custom",maps:t.maps.slice(),
-		name:t.name};return t.layout&&(e.layout=t.layout),e}function pe(t,e){const n=new URL(window.location.origin+window.location.pathname)
-		;n.searchParams.set("v",ue(t));const o=n.toString(),r=()=>window.prompt("Kopiraj poveznicu:",o)
-		;navigator.clipboard&&navigator.clipboard.writeText?navigator.clipboard.writeText(o).then(e).catch(r):r()}var me=120;function fe(){
-		return[...document.querySelectorAll(".map-settings")]}function ge(){return fe().find(t=>!t.hidden)||null}function we(){return!!ge()}
-		function ve(t){return t.getAttribute("data-dialog-key")}function ye(){return Math.max(360,u()-16)}function be(){return Math.max(me,h()-16)}
-		function ke(t,e,n,o,r){o=i(o,360,ye()),t.style.width=`${Math.round(o)}px`,t.style.maxWidth="none",t.style.right="auto",t.style.margin="0",
-		null===r?(t.style.height="",t.style.maxHeight=`${Math.round(Math.max(me,h()-Math.max(0,n)-8))}px`):(t.style.maxHeight="none",
-		t.style.height=`${Math.round(i(r,me,be()))}px`),t.style.left=`${Math.round(i(e,0,Math.max(0,u()-t.offsetWidth)))}px`,
-		t.style.top=`${Math.round(i(n,0,Math.max(0,h()-t.offsetHeight)))}px`}function Ee(t){
-		["left","top","width","height","maxWidth","maxHeight","right","margin"].forEach(e=>t.style[e]="")}function xe(t){if(!t||t.hidden)return
-		;const e=r.matches?function(t){const e=ve(t);if(!e)return null;try{const t=JSON.parse(localStorage.getItem(e))
-		;return t&&"object"==typeof t&&Number.isFinite(t.left)&&Number.isFinite(t.top)&&t.width>0?{left:t.left,top:t.top,width:t.width,
-		height:t.height>0?t.height:null}:null}catch{return null}}(t):null;e?ke(t,e.left*u(),e.top*h(),e.width,e.height):Ee(t)}function Se(t){
-		t.querySelectorAll(":scope > .po-h").forEach(t=>t.remove()),it.forEach(e=>{const n=document.createElement("div")
-		;n.className=`po-h po-h-${e}`,n.dataset.dir=e,t.appendChild(n)})}function Le(t){t.addEventListener("pointerdown",e=>{
-		if(0!==e.button||!r.matches)return
+		maps:rt.map(t=>t.id)},{id:"nista",name:"Ništa",maps:[]}];function ee(t){return"string"==typeof t&&t.startsWith("u:")}function ne(t){
+		return!(!t||!t.layout||!0!==t.layout.dashboard)}function oe(t){return t&&ee(t.id)&&"string"==typeof t.name&&Array.isArray(t.maps)}
+		var re=function(){const t=p(a);return Array.isArray(t)?t.filter(oe):[]}();function ae(){m(a,re)}function ie(){return te.concat(re)}
+		function se(){let t;do{t="u:"+Date.now().toString(36)+Math.random().toString(36).slice(2,6)}while(re.some(e=>e.id===t));return t}
+		function le(t){return String(t).trim().replace(/\s+/g," ").slice(0,40)}function ce(t){
+		return re.find(e=>e.name.toLowerCase()===t.toLowerCase())}function de(t,e,n=null){const o=ce(t);return o?(o.name=t,o.maps=e,
+		o.layout=n):re.push({id:se(),name:t,maps:e,layout:n}),ae(),o||re[re.length-1]}function ue(t){return"zadano"!==t}var he=function(){
+		const t=p(i);return Array.isArray(t)?t.filter(t=>ue(t)&&te.some(e=>e.id===t)):[]}();function pe(){m(i,he)}function me(t){
+		return he.includes(t)}function fe(){return te.filter(t=>ue(t.id))}function ge(){he=fe().map(t=>t.id),pe()}function we(){he=[],pe()}
+		function ve(t){const e=JSON.stringify(t).replace(/[\u0080-\uffff]/g,t=>"\\u"+t.charCodeAt(0).toString(16).padStart(4,"0"))
+		;return btoa(e).replace(/\+/g,"-").replace(/\//g,"_").replace(/=+$/,"")}function ye(t){const e={preset:"custom",maps:t.maps.slice(),
+		name:t.name};return t.layout&&(e.layout=t.layout),e}function be(t,e){const n=new URL(window.location.origin+window.location.pathname)
+		;n.searchParams.set("v",ve(t));const o=n.toString(),r=()=>window.prompt("Kopiraj poveznicu:",o)
+		;navigator.clipboard&&navigator.clipboard.writeText?navigator.clipboard.writeText(o).then(e).catch(r):r()}var ke=120;function Ee(){
+		return[...document.querySelectorAll(".map-settings")]}function xe(){return Ee().find(t=>!t.hidden)||null}function Le(){return!!xe()}
+		function Se(t){return t.getAttribute("data-dialog-key")}function Ce(t){const e=Se(t);e&&function(t){h.delete(t);try{
+		localStorage.removeItem(t)}catch{}}(e)}function ze(){return Math.max(360,E()-16)}function Me(){return Math.max(ke,x()-16)}
+		function Ae(t,e,n,o,r){o=w(o,360,ze()),t.style.width=`${Math.round(o)}px`,t.style.maxWidth="none",t.style.right="auto",t.style.margin="0",
+		null===r?(t.style.height="",t.style.maxHeight=`${Math.round(Math.max(ke,x()-Math.max(0,n)-8))}px`):(t.style.maxHeight="none",
+		t.style.height=`${Math.round(w(r,ke,Me()))}px`),t.style.left=`${Math.round(w(e,0,Math.max(0,E()-t.offsetWidth)))}px`,
+		t.style.top=`${Math.round(w(n,0,Math.max(0,x()-t.offsetHeight)))}px`}function Re(t){
+		["left","top","width","height","maxWidth","maxHeight","right","margin"].forEach(e=>t.style[e]="")}function je(t){if(!t||t.hidden)return
+		;const e=f.matches?function(t){const e=Se(t);if(!e)return null;const n=p(e)
+		;return n&&"object"==typeof n&&Number.isFinite(n.left)&&Number.isFinite(n.top)&&n.width>0?{left:n.left,top:n.top,width:n.width,
+		height:n.height>0?n.height:null}:null}(t):null;e?Ae(t,e.left*E(),e.top*x(),e.width,e.height):Re(t)}function _e(t){
+		t.querySelectorAll(":scope > .po-h").forEach(t=>t.remove()),gt.forEach(e=>{const n=document.createElement("div")
+		;n.className=`po-h po-h-${e}`,n.dataset.dir=e,t.appendChild(n)})}function $e(t){t.addEventListener("pointerdown",e=>{
+		if(0!==e.button||!f.matches)return
 		;const n=e.target.closest(".po-h"),o=!n&&e.target.closest(".ms-head")&&!e.target.closest("a, button, input");if(!n&&!o)return
-		;e.preventDefault();const a=t.getBoundingClientRect(),l=n?n.dataset.dir:null,c=t.style.height?a.height:null;let d=!1;lt(e,(e,n)=>{
-		if(!d&&!e&&!n)return;if(d=!0,!l)return void ke(t,a.left+e,a.top+n,a.width,c);let{w:o,h:r}=st(l,a,e,n);o=i(o,360,ye()),r=i(r,me,be()),
-		ke(t,l.includes("w")?a.right-o:a.left,l.includes("n")?a.bottom-r:a.top,o,r)},()=>{d&&function(t){const e=ve(t);if(!e)return
-		;const n=t.getBoundingClientRect(),o={left:s(n.left/u()),top:s(n.top/h()),width:Math.round(n.width)}
-		;t.style.height&&(o.height=Math.round(n.height));try{localStorage.setItem(e,JSON.stringify(o))}catch{}}(t)})}),
-		t.addEventListener("dblclick",e=>{r.matches&&e.target.closest(".ms-head")&&!e.target.closest("a, button, input")&&(Ee(t),function(t){
-		const e=ve(t);if(e)try{localStorage.removeItem(e)}catch{}}(t))})}function Ce(t,e){document.dispatchEvent(new CustomEvent("dialog-toggled",{
-		detail:{panel:t,visible:e}}))}function ze(t,e){e&&fe().forEach(e=>{e===t||e.hidden||(e.hidden=!0,Ce(e,!1))}),t.hidden=!e,function(){
-		const t=we();if(t&&!document.documentElement.classList.contains("ms-gutter")){const t=window.innerWidth-document.documentElement.clientWidth
-		;t>0&&(d(t),document.documentElement.classList.add("ms-gutter"))}else t||(d(0),document.documentElement.classList.remove("ms-gutter"))
+		;e.preventDefault();const r=t.getBoundingClientRect(),a=n?n.dataset.dir:null,i=t.style.height?r.height:null;let s=!1;vt(e,(e,n)=>{
+		if(!s&&!e&&!n)return;if(s=!0,!a)return void Ae(t,r.left+e,r.top+n,r.width,i);let{w:o,h:l}=wt(a,r,e,n);o=w(o,360,ze()),l=w(l,ke,Me()),
+		Ae(t,a.includes("w")?r.right-o:r.left,a.includes("n")?r.bottom-l:r.top,o,l)},()=>{s&&function(t){const e=Se(t);if(!e)return
+		;const n=t.getBoundingClientRect(),o={left:v(n.left/E()),top:v(n.top/x()),width:Math.round(n.width)}
+		;t.style.height&&(o.height=Math.round(n.height)),m(e,o)}(t)})}),t.addEventListener("dblclick",e=>{
+		f.matches&&e.target.closest(".ms-head")&&!e.target.closest("a, button, input")&&(Re(t),Ce(t))})}function Pe(t,e){
+		document.dispatchEvent(new CustomEvent("dialog-toggled",{detail:{panel:t,visible:e}}))}function Ie(t,e){e&&Ee().forEach(e=>{
+		e===t||e.hidden||(e.hidden=!0,Pe(e,!1))}),t.hidden=!e,function(){const t=Le()
+		;if(t&&!document.documentElement.classList.contains("ms-gutter")){const t=window.innerWidth-document.documentElement.clientWidth;t>0&&(k(t),
+		document.documentElement.classList.add("ms-gutter"))}else t||(k(0),document.documentElement.classList.remove("ms-gutter"))
 		;document.body.classList.toggle("ms-open",t);const e=document.querySelector(".ms-backdrop");e&&(e.hidden=!t,
-		t&&e.classList.remove("ms-spent"))}(),e&&xe(t),Ce(t,e)}function Me(){const t=ge();return t&&ze(t,!1),!!t}function Ae(e){const n=t("div",{
+		t&&e.classList.remove("ms-spent"))}(),e&&je(t),Pe(t,e)}function Be(){const t=xe();return t&&Ie(t,!1),!!t}function qe(e){const n=t("div",{
 		class:"ms-list ms-selected"}),o=t("div",{class:"ms-list ms-available"});let r="zadano",a=!0;function i(t,e){
-		const n=J(t.getAttribute("data-map-id")),o=J(e.getAttribute("data-map-id")),i=a?1:-1
-		;return"naziv"===r?n.name.localeCompare(o.name,"hr")*i:"vrsta"===r?(n.category.localeCompare(o.category,"hr")||n.name.localeCompare(o.name,"hr"))*i:(K.indexOf(n)-K.indexOf(o))*i
+		const n=it(t.getAttribute("data-map-id")),o=it(e.getAttribute("data-map-id")),i=a?1:-1
+		;return"naziv"===r?n.name.localeCompare(o.name,"hr")*i:"vrsta"===r?(n.category.localeCompare(o.category,"hr")||n.name.localeCompare(o.name,"hr"))*i:(rt.indexOf(n)-rt.indexOf(o))*i
 		}function s(){[...o.children].sort(i).forEach(t=>o.appendChild(t))}const l={},c=t("div",{class:"ms-sort"},[t("span",{text:"Poredaj:"})])
 		;function d(){for(const[t,{link:e,label:n}]of Object.entries(l)){const o=t===r;e.classList.toggle("active",o),
 		e.textContent=o?`${n} ${a?"▲":"▼"}`:n}}[["zadano","Zadano"],["naziv","Naziv"],["vrsta","Vrsta"]].forEach(([e,n])=>{const o=t("a",{text:n})
 		;o.addEventListener("click",()=>{r===e?a=!a:(r=e,a=!0),d(),s()}),l[e]={link:o,label:n},c.appendChild(o)}),d();const u=t("input",{
 		type:"text",class:"ms-find-input",placeholder:"Traži karte…","aria-label":"Traži karte"}),h=t("a",{class:"ms-find-clear",text:"×",
-		title:"Očisti (Esc)"}),p=t("div",{class:"ms-find"},[u,h]);function m(){const t=Q(u.value);let e=0;[...o.children].forEach(n=>{
-		const o=J(n.getAttribute("data-map-id")),r=!o||G(o,t);n.classList.toggle("ms-filtered",!r),r&&!n.classList.contains("ms-off")&&e++}),
+		title:"Očisti (Esc)"}),p=t("div",{class:"ms-find"},[u,h]);function m(){const t=lt(u.value);let e=0;[...o.children].forEach(n=>{
+		const o=it(n.getAttribute("data-map-id")),r=!o||ct(o,t);n.classList.toggle("ms-filtered",!r),r&&!n.classList.contains("ms-off")&&e++}),
 		p.classList.toggle("ms-find-set",t.length>0),o.classList.toggle("ms-no-hits",t.length>0&&0===e)}function f(r,a){const i=t("input",{
 		type:"checkbox"});i.checked=a;const l=t("span",{class:"ms-handle",text:"≡",title:"Povuci za premještanje"}),c=t("div",{
-		class:H(r.id)?"ms-item":"ms-item ms-off","data-map-id":r.id},[t("label",{},[i,t("span",{class:"ms-glyph",text:U[r.category]||""
+		class:K(r.id)?"ms-item":"ms-item ms-off","data-map-id":r.id},[t("label",{},[i,t("span",{class:"ms-glyph",text:nt[r.category]||""
 		}),document.createTextNode(r.name)]),l]);return i.addEventListener("change",()=>{i.checked?n.appendChild(c):(o.appendChild(c),s(),m()),
 		e.listEdited()}),function(t,o){t.addEventListener("pointerdown",r=>{r.preventDefault(),
 		t.hasPointerCapture(r.pointerId)&&t.releasePointerCapture(r.pointerId),o.classList.add("dragging");const a=o.nextElementSibling
@@ -609,196 +611,195 @@
 		document.addEventListener("pointerup",p),document.addEventListener("pointercancel",p),l=requestAnimationFrame(u)})}(l,c),c}
 		return u.addEventListener("input",m),u.addEventListener("keydown",t=>{"Escape"===t.key&&(t.preventDefault(),u.value?(u.value="",
 		m()):e.close())}),h.addEventListener("click",()=>{u.value="",m(),u.focus()}),{selected:n,available:o,sort:c,find:p,fill(t){
-		n.replaceChildren(),o.replaceChildren(),t.forEach(t=>{const e=J(t);e&&n.appendChild(f(e,!0))}),
-		K.filter(e=>!t.includes(e.id)).forEach(t=>o.appendChild(f(t,!1))),s(),m()},
-		selectedIds:()=>[...n.children].map(t=>t.getAttribute("data-map-id"))}}function Re(t,e){return"custom"===t?{preset:"custom",maps:e}:{
-		preset:t}}function je(t,e){if(!e)return t&&t.dashboard?null:t;const n=Object.assign({},t);return n.dashboard=!0,n}function _e(t,e,n=_o()){
-		return So(je("custom"===t.preset?n:(Jt.find(e=>e.id===t.preset)||{}).layout,e),To(t))}function Ie(t,e,n,o){
-		return Zt(t.id)&&t.id===e&&(!Wo(t.maps,n)||(r=t.layout,a=o,!(JSON.stringify(r||null)===JSON.stringify(a||null))));var r,a}function $e(e){
+		n.replaceChildren(),o.replaceChildren(),t.forEach(t=>{const e=it(t);e&&n.appendChild(f(e,!0))}),
+		rt.filter(e=>!t.includes(e.id)).forEach(t=>o.appendChild(f(t,!1))),s(),m()},
+		selectedIds:()=>[...n.children].map(t=>t.getAttribute("data-map-id"))}}function He(t,e){return"custom"===t?{preset:"custom",maps:e}:{
+		preset:t}}function De(t,e){if(!e)return t&&t.dashboard?null:t;const n=Object.assign({},t);return n.dashboard=!0,n}function Te(t,e,n=Ho()){
+		return Ro(De("custom"===t.preset?n:(re.find(e=>e.id===t.preset)||{}).layout,e),Zo(t))}function Ne(t,e,n,o){
+		return ee(t.id)&&t.id===e&&(!Ko(t.maps,n)||(r=t.layout,a=o,!(JSON.stringify(r||null)===JSON.stringify(a||null))));var r,a}function We(e){
 		const n=t("div",{class:"ms-manage"});let r=!1;const a=t("input",{type:"text",class:"ms-name",maxlength:String(40),
 		placeholder:"Naziv predloška"}),i=t("button",{type:"button",class:"btn",text:"Spremi"});function s(t){
-		const n=ne(t,e.selectedMapIds(),e.selectedLayout());a.value="",r=!1,e.editingPresetId=n.id,e.presetsChanged(n.id)}
-		i.addEventListener("click",()=>{const t=te(a.value);t?s(t):a.focus()}),a.addEventListener("keydown",t=>{"Enter"===t.key?(t.preventDefault(),
+		const n=de(t,e.selectedMapIds(),e.selectedLayout());a.value="",r=!1,e.editingPresetId=n.id,e.presetsChanged(n.id)}
+		i.addEventListener("click",()=>{const t=le(a.value);t?s(t):a.focus()}),a.addEventListener("keydown",t=>{"Enter"===t.key?(t.preventDefault(),
 		i.click()):"Escape"===t.key&&(r=!1,a.value="",w())});let l=null;const c=t("input",{type:"text",class:"ms-name ms-rename",
-		maxlength:String(40)});let d=!1;function u(){const t=Jt.find(t=>t.id===l);if(!t)return;const n=te(c.value),o=ee(n)
-		;if(!n||o&&o!==t)return c.classList.add("invalid"),void c.focus();t.name=n,Yt(),l=null,e.presetsChanged(e.checkedPresetId())}function h(){
-		l=null,w()}function p(e){return t("span",{class:"ms-manage-links"},e.map(e=>e||t("span")))}function m(n){const o=se(n.id);let r=null
-		;return re(n.id)&&(r=t("a",{text:o?"Prikaži":"Sakrij"}),r.addEventListener("click",()=>{!function(t,e){e&&!re(t)||(ae=ae.filter(e=>e!==t),
-		e&&ae.push(t),ie())}(n.id,!o),e.presetsChanged(e.checkedPresetId())})),t("div",{class:"ms-manage-item"+(o?" ms-hidden":"")},[t("span",{
+		maxlength:String(40)});let d=!1;function u(){const t=re.find(t=>t.id===l);if(!t)return;const n=le(c.value),o=ce(n)
+		;if(!n||o&&o!==t)return c.classList.add("invalid"),void c.focus();t.name=n,ae(),l=null,e.presetsChanged(e.checkedPresetId())}function h(){
+		l=null,w()}function p(e){return t("span",{class:"ms-manage-links"},e.map(e=>e||t("span")))}function m(n){const o=me(n.id);let r=null
+		;return ue(n.id)&&(r=t("a",{text:o?"Prikaži":"Sakrij"}),r.addEventListener("click",()=>{!function(t,e){e&&!ue(t)||(he=he.filter(e=>e!==t),
+		e&&he.push(t),pe())}(n.id,!o),e.presetsChanged(e.checkedPresetId())})),t("div",{class:"ms-manage-item"+(o?" ms-hidden":"")},[t("span",{
 		class:"ms-manage-name",text:n.name}),p([null,null,r])])}function f(n){if(n.id===l)return function(){const e=t("a",{text:"Potvrdi"
 		}),n=t("a",{text:"Odustani"});return e.addEventListener("click",u),n.addEventListener("click",h),t("div",{class:"ms-manage-item"
 		},[c,p([null,e,n])])}();const r=t("a",{text:"Preimenuj"}),a=t("a",{text:"Obriši"});let i
-		;Ie(n,e.editingPresetId,e.selectedMapIds(),e.selectedLayout())?(i=t("a",{text:"Ažuriraj"}),i.addEventListener("click",()=>{
-		ne(n.name,e.selectedMapIds(),e.selectedLayout()),e.presetsChanged(n.id)})):i=function(e){const n=t("a",{text:"Podijeli"})
-		;return n.addEventListener("click",()=>{pe(e(),()=>o(n,"Kopirano!","Podijeli"))}),n}(()=>he(n));const s=t("div",{class:"ms-manage-item"
-		},[t("span",{class:"ms-manage-name"+(Kt(n)?" ms-board":""),text:n.name,title:Kt(n)?"Nadzorna ploča":void 0}),p([i,r,a])])
+		;Ne(n,e.editingPresetId,e.selectedMapIds(),e.selectedLayout())?(i=t("a",{text:"Ažuriraj"}),i.addEventListener("click",()=>{
+		de(n.name,e.selectedMapIds(),e.selectedLayout()),e.presetsChanged(n.id)})):i=function(e){const n=t("a",{text:"Podijeli"})
+		;return n.addEventListener("click",()=>{be(e(),()=>o(n,"Kopirano!","Podijeli"))}),n}(()=>ye(n));const s=t("div",{class:"ms-manage-item"
+		},[t("span",{class:"ms-manage-name"+(ne(n)?" ms-board":""),text:n.name,title:ne(n)?"Nadzorna ploča":void 0}),p([i,r,a])])
 		;r.addEventListener("click",()=>function(t){l=t.id,c.value=t.name,c.classList.remove("invalid"),d=!0,w()}(n));let m=null;const f=()=>{
 		clearTimeout(m),m=null,a.textContent="Obriši",a.classList.remove("active")};return a.addEventListener("click",()=>{
 		if(!m)return a.textContent="Sigurno?",a.classList.add("active"),void(m=setTimeout(f,3e3));f();const t=e.checkedPresetId()===n.id
-		;e.editingPresetId===n.id&&(e.editingPresetId=null),function(t){const e=Jt.find(e=>e.id===t);e&&qo().preset===t&&Ho({preset:"custom",
-		maps:e.maps.slice(),layout:qo().layout}),Jt=Jt.filter(e=>e.id!==t),Yt()}(n.id),e.presetsChanged(t?"custom":e.checkedPresetId())}),s}
-		function g(){const e=t("a",{text:"Spremi"});return e.addEventListener("click",()=>{s(function(t){const e=te(t);let n=e
-		;for(let t=2;ee(n);t++){const o=` (${t})`;n=e.slice(0,40-o.length).trim()+o}return n}(Vo.name))}),t("div",{class:"ms-shared"},[t("span",{
-		text:`Podijeljen predložak "${Vo.name}"`}),e])}function w(){n.replaceChildren(),n.appendChild(function(){const n=t("div",{
+		;e.editingPresetId===n.id&&(e.editingPresetId=null),function(t){const e=re.find(e=>e.id===t);e&&Wo().preset===t&&Oo({preset:"custom",
+		maps:e.maps.slice(),layout:Wo().layout}),re=re.filter(e=>e.id!==t),ae()}(n.id),e.presetsChanged(t?"custom":e.checkedPresetId())}),s}
+		function g(){const e=t("a",{text:"Spremi"});return e.addEventListener("click",()=>{s(function(t){const e=le(t);let n=e
+		;for(let t=2;ce(n);t++){const o=` (${t})`;n=e.slice(0,40-o.length).trim()+o}return n}(Xo.name))}),t("div",{class:"ms-shared"},[t("span",{
+		text:`Podijeljen predložak "${Xo.name}"`}),e])}function w(){n.replaceChildren(),n.appendChild(function(){const n=t("div",{
 		class:"ms-manage-title",text:"Zadani predlošci"}),o=t("span",{class:"ms-manage-title-links"}),r=(n,r)=>{const a=t("a",{text:n})
 		;a.addEventListener("click",()=>{r(),e.presetsChanged(e.checkedPresetId())}),o.appendChild(a)}
-		;return ae.length<le().length&&r("Sakrij sve",ce),ae.length&&r("Prikaži sve",de),n.appendChild(o),n}()),Ft.forEach(t=>n.appendChild(m(t))),
+		;return he.length<fe().length&&r("Sakrij sve",ge),he.length&&r("Prikaži sve",we),n.appendChild(o),n}()),te.forEach(t=>n.appendChild(m(t))),
 		n.appendChild(function(){const e=t("div",{class:"ms-manage-title",text:"Moji predlošci"}),n=t("a",{text:r?"Odustani":"Dodaj"})
 		;return n.addEventListener("click",()=>{r=!r,r||(a.value=""),w(),r&&a.focus()}),e.appendChild(t("span",{class:"ms-manage-title-links"
-		},[n])),e}()),r&&n.appendChild(t("div",{class:"ms-save"},[a,i])),Vo&&Vo.name&&!function(){const t=No();return Jt.some(e=>Wo(e.maps,t))
-		}()&&n.appendChild(g()),Jt.length?Jt.forEach(t=>n.appendChild(f(t))):n.appendChild(t("div",{class:"ms-manage-empty",
+		},[n])),e}()),r&&n.appendChild(t("div",{class:"ms-save"},[a,i])),Xo&&Xo.name&&!function(){const t=Fo();return re.some(e=>Ko(e.maps,t))
+		}()&&n.appendChild(g()),re.length?re.forEach(t=>n.appendChild(f(t))):n.appendChild(t("div",{class:"ms-manage-empty",
 		text:"Nema spremljenih predložaka"})),d&&(d=!1,c.focus(),c.select())}return c.addEventListener("keydown",t=>{
 		"Enter"===t.key?(t.preventDefault(),u()):"Escape"===t.key&&h()}),c.addEventListener("input",()=>c.classList.remove("invalid")),{element:n,
-		render:w}}function Pe(){const e=t("div",{class:"ms-refresh"});return{element:e,render(){e.replaceChildren(),e.classList.toggle("ms-on",Ot())
-		;const n=t("select",{class:"ms-refresh-every","aria-label":"Razmak osvježavanja"});Bt.forEach(e=>{const o=t("option",{value:String(e),
-		text:`${e} min`});e===Ht&&(o.selected=!0),n.appendChild(o)});const o=t("input",{type:"checkbox"});o.checked=Ot();const r=()=>function(t,e){
-		m(`setRefreshPrefs: on=${t} minutes=${e}`),qt=!0===t,Ht=Bt.includes(e)?e:5;try{localStorage.setItem(Pt,JSON.stringify({on:qt,minutes:Ht}))
-		}catch{}document.body.classList.toggle("refresh-on",qt),Wt();const n=document.getElementById("mapSettings")
-		;n&&!n.hidden&&n._onRefreshChange&&n._onRefreshChange(),Oe()}(o.checked,Number(n.value));o.addEventListener("change",r),
-		n.addEventListener("change",r);const a=Ot()?Tt():"";e.append(t("label",{},[o,t("span",{text:"Osvježavaj svakih"})]),n,t("span",{
-		class:"ms-refresh-left",text:a?`još ${a}`:""}))}}}function Be(){const e=document.getElementById("mapSettings");e&&(e.hidden&&function(e){
-		e.replaceChildren();const n={element:e,editingPresetId:"custom"===Uo()?null:Uo(),dashboardChecked:Io(),gridChecked:Ke(),snapChecked:Xe(),
-		selectedMapIds:()=>a.selectedIds(),checkedPresetId:()=>i.checkedId(),selectedLayout:()=>function(t,e,n=_o()){return So(je(n,e),t)
-		}(a.selectedIds(),n.dashboardChecked),listEdited(){i.markCustom(),d.render()},presetChosen(t,e){"custom"!==t.id&&(a.fill(e),
-		n.setDashboardChecked(Kt(t))),n.editingPresetId="custom"===t.id?null:t.id,i.updateOriginMark(),d.render()},presetsChanged(t){i.render(t),
-		d.render()},setDashboardChecked(t){n.dashboardChecked=t,s.render(),c.render(),d.render()},close(){ze(e,!1)}},a=Ae(n),i=function(e){
+		render:w}}function Oe(){const e=t("div",{class:"ms-refresh"});return{element:e,render(){e.replaceChildren(),e.classList.toggle("ms-on",Yt())
+		;const n=t("select",{class:"ms-refresh-every","aria-label":"Razmak osvježavanja"});Ft.forEach(e=>{const o=t("option",{value:String(e),
+		text:`${e} min`});e===Zt&&(o.selected=!0),n.appendChild(o)});const o=t("input",{type:"checkbox"});o.checked=Yt();const r=()=>function(t,e){
+		S(`setRefreshPrefs: on=${t} minutes=${e}`),Ut=!0===t,Zt=Ft.includes(e)?e:5,m(c,{on:Ut,minutes:Zt}),
+		document.body.classList.toggle("refresh-on",Ut),Gt();const n=document.getElementById("mapSettings")
+		;n&&!n.hidden&&n._onRefreshChange&&n._onRefreshChange(),Ke()}(o.checked,Number(n.value));o.addEventListener("change",r),
+		n.addEventListener("change",r);const a=Yt()?Qt():"";e.append(t("label",{},[o,t("span",{text:"Osvježavaj svakih"})]),n,t("span",{
+		class:"ms-refresh-left",text:a?`još ${a}`:""}))}}}function Ve(){const e=document.getElementById("mapSettings");e&&(e.hidden&&function(e){
+		e.replaceChildren();const n={element:e,editingPresetId:"custom"===Qo()?null:Qo(),dashboardChecked:Do(),gridChecked:tn(),snapChecked:en(),
+		selectedMapIds:()=>r.selectedIds(),checkedPresetId:()=>a.checkedId(),selectedLayout:()=>function(t,e,n=Ho()){return Ro(De(n,e),t)
+		}(r.selectedIds(),n.dashboardChecked),listEdited(){a.markCustom(),c.render()},presetChosen(t,e){"custom"!==t.id&&(r.fill(e),
+		n.setDashboardChecked(ne(t))),n.editingPresetId="custom"===t.id?null:t.id,a.updateOriginMark(),c.render()},presetsChanged(t){a.render(t),
+		c.render()},setDashboardChecked(t){n.dashboardChecked=t,i.render(),l.render(),c.render()},close(){Ie(e,!1)}},r=qe(n),a=function(e){
 		const n=t("div",{class:"ms-presets"});function o(){n.querySelectorAll(".ms-origin").forEach(t=>t.classList.remove("ms-origin"))
-		;const t=Qt().find(t=>t.id===e.editingPresetId);if(!t||Wo(t.maps,e.selectedMapIds()))return
+		;const t=ie().find(t=>t.id===e.editingPresetId);if(!t||Ko(t.maps,e.selectedMapIds()))return
 		;const o=[...n.querySelectorAll("input")].find(t=>t.value===e.editingPresetId);o&&o.nextElementSibling.classList.add("ms-origin")}return{
-		element:n,render(r){n.replaceChildren();const a=[...Qt().filter(t=>!se(t.id)),{id:"custom",name:"Prilagođeno"}]
+		element:n,render(r){n.replaceChildren();const a=[...ie().filter(t=>!me(t.id)),{id:"custom",name:"Prilagođeno"}]
 		;a.some(t=>t.id===r)||(r="custom"),a.forEach(o=>{const a=t("input",{type:"radio",name:"msPreset",value:o.id});a.checked=o.id===r,
-		a.addEventListener("change",()=>e.presetChosen(o,Do(o.id)));const i="ms-chip"+(Zt(o.id)?" ms-user":"")+(Kt(o)?" ms-board":"")
-		;n.appendChild(t("label",{},[a,t("span",{class:i,text:o.name,title:Kt(o)?"Nadzorna ploča":void 0})]))}),n.appendChild(t("span",{
+		a.addEventListener("change",()=>e.presetChosen(o,Vo(o.id)));const i="ms-chip"+(ee(o.id)?" ms-user":"")+(ne(o)?" ms-board":"")
+		;n.appendChild(t("label",{},[a,t("span",{class:i,text:o.name,title:ne(o)?"Nadzorna ploča":void 0})]))}),n.appendChild(t("span",{
 		class:"ms-fill"})),o()},updateOriginMark:o,markCustom(){n.querySelector('input[name="msPreset"][value="custom"]').checked=!0,o()},
-		checkedId(){const t=n.querySelector('input[name="msPreset"]:checked');return t?t.value:"zadano"}}}(n),s=function(e){const n=t("div",{
+		checkedId(){const t=n.querySelector('input[name="msPreset"]:checked');return t?t.value:"zadano"}}}(n),i=function(e){const n=t("div",{
 		class:"ms-mode"});function o(n,o,r){const a=t("input",{type:"checkbox"});return a.checked=o,a.disabled=!e.dashboardChecked,
 		a.addEventListener("change",()=>r(a.checked)),t("label",{class:"ms-grid"+(e.dashboardChecked?"":" ms-off")},[a,t("span",{text:n})])}return{
-		element:n,render(){n.replaceChildren(),n.hidden=!r.matches,n.classList.toggle("ms-on",e.dashboardChecked);const a=t("button",{type:"button",
+		element:n,render(){n.replaceChildren(),n.hidden=!f.matches,n.classList.toggle("ms-on",e.dashboardChecked);const r=t("button",{type:"button",
 		class:"btn","aria-pressed":String(e.dashboardChecked)},[document.createTextNode("Nadzorna ploča "),t("span",{class:"beta",text:"beta"})])
-		;a.addEventListener("click",()=>e.setDashboardChecked(!e.dashboardChecked));const i=t("button",{type:"button",class:"btn ms-arrange",
-		title:"Posloži u mrežu (A)"},[document.createTextNode("Posloži")]);i.disabled=!e.dashboardChecked||!no(),
-		i.addEventListener("click",()=>At()),n.append(a,o("Prikaži mrežu",e.gridChecked,t=>{e.gridChecked=t,Je(e.gridChecked,e.snapChecked)
-		}),o("Poravnaj uz mrežu",e.snapChecked,t=>{e.snapChecked=t,Je(e.gridChecked,e.snapChecked)}),i)}}}(n),l=Pe(),c=function(){const e=t("div",{
+		;r.addEventListener("click",()=>e.setDashboardChecked(!e.dashboardChecked));const a=t("button",{type:"button",class:"btn ms-arrange",
+		title:"Posloži u mrežu (A)"},[document.createTextNode("Posloži")]);a.disabled=!e.dashboardChecked||!lo(),
+		a.addEventListener("click",()=>Dt()),n.append(r,o("Prikaži mrežu",e.gridChecked,t=>{e.gridChecked=t,nn(e.gridChecked,e.snapChecked)
+		}),o("Poravnaj uz mrežu",e.snapChecked,t=>{e.snapChecked=t,nn(e.gridChecked,e.snapChecked)}),a)}}}(n),s=Oe(),l=function(){const e=t("div",{
 		class:"ms-layout"});return{element:e,render(){e.replaceChildren();const n=function(t){const e=[]
 		;return t?(t.left&&e.push(`lijevo ${t.left.panes.length}`),t.right&&e.push(`desno ${t.right.panes.length}`),
-		t.floating&&e.push(`u prozoru ${t.floating.length}`),e):e}(_o());if(e.hidden=no()||!n.length,e.hidden)return;const o=t("a",{text:"Vrati sve"
-		});o.addEventListener("click",fn),e.append(t("span",{text:`Izdvojene karte: ${n.join(", ")}`}),o)}}}(),d=$e(n);a.fill(No()),i.render(Uo()),
-		s.render(),l.render(),c.render(),d.render(),e._onRefreshChange=l.render,e._onGridChange=()=>{n.gridChecked=Ke(),n.snapChecked=Xe(),
-		s.render()},e._onLayoutChange=()=>{s.render(),c.render(),d.render()};const u=t("button",{type:"button",class:"btn ms-apply",
-		text:"Primijeni",title:"Primijeni (Enter)"});u.addEventListener("click",()=>{
-		const t=Re(i.checkedId(),a.selectedIds()),e=_e(t,n.dashboardChecked);e&&(t.layout=e),Ho(t),function(){if(!Vo)return;Vo=null
-		;const t=new URL(window.location);t.searchParams.delete("v"),history.replaceState(null,"",t)}(),n.close(),ko(),I(),Mo(e)});const h=t("a",{
-		text:"Podijeli"});h.addEventListener("click",()=>{pe(function(t,e,n=_o()){const o=_e(t,e,n),r=Jt.find(e=>e.id===t.preset),a=r?he(r):t
-		;return o?a.layout=o:delete a.layout,a}(Re(i.checkedId(),a.selectedIds()),n.dashboardChecked),()=>o(h,"Kopirano!","Podijeli"))})
-		;const p=t("a",{text:"Zatvori",title:"Zatvori (Esc)"});p.addEventListener("click",()=>n.close())
-		;const m=document.querySelector('link[rel="icon"][sizes="32x32"]'),f=t("a",{class:"ms-home",href:new URL("../",window.location.href).href,
-		title:"Početna"},[t("img",{src:m?m.href:void 0,alt:"Početna"})]);e.appendChild(t("div",{class:"ms-head"},[t("span",{class:"ms-head-left"
-		},[f,t("span",{class:"ms-title",text:"Karte"})]),p])),e.appendChild(t("div",{class:"ms-body"
-		},[i.element,s.element,l.element,c.element,a.selected,t("div",{class:"ms-actions"},[u,h]),a.sort,a.find,a.available,d.element])),Se(e)}(e),
-		ze(e,e.hidden))}var qe="msTab",He=!1;function De(t,e){const n=function(t){const e=t.style.width,n=t.classList.contains("ms-tab-sized")
+		t.floating&&e.push(`u prozoru ${t.floating.length}`),e):e}(Ho());if(e.hidden=lo()||!n.length,e.hidden)return;const o=t("a",{text:"Vrati sve"
+		});o.addEventListener("click",kn),e.append(t("span",{text:`Izdvojene karte: ${n.join(", ")}`}),o)}}}(),c=We(n);r.fill(Fo()),a.render(Qo()),
+		i.render(),s.render(),l.render(),c.render(),e._onRefreshChange=s.render,e._onGridChange=()=>{n.gridChecked=tn(),n.snapChecked=en(),
+		i.render()},e._onLayoutChange=()=>{i.render(),l.render(),c.render()};const d=t("button",{type:"button",class:"btn ms-apply",
+		text:"Primijeni",title:"Primijeni (Enter)"});d.addEventListener("click",()=>{
+		const t=He(a.checkedId(),r.selectedIds()),e=Te(t,n.dashboardChecked);e&&(t.layout=e),Oo(t),function(){if(!Xo)return;Xo=null
+		;const t=new URL(window.location);t.searchParams.delete("v"),history.replaceState(null,"",t)}(),n.close(),zo(),V(),Po(e)});const u=t("a",{
+		text:"Podijeli"});u.addEventListener("click",()=>{be(function(t,e,n=Ho()){const o=Te(t,e,n),r=re.find(e=>e.id===t.preset),a=r?ye(r):t
+		;return o?a.layout=o:delete a.layout,a}(He(a.checkedId(),r.selectedIds()),n.dashboardChecked),()=>o(u,"Kopirano!","Podijeli"))})
+		;const h=t("a",{text:"Zatvori",title:"Zatvori (Esc)"});h.addEventListener("click",()=>n.close())
+		;const p=document.querySelector('link[rel="icon"][sizes="32x32"]'),m=t("a",{class:"ms-home",href:new URL("../",window.location.href).href,
+		title:"Početna"},[t("img",{src:p?p.href:void 0,alt:"Početna"})]);e.appendChild(t("div",{class:"ms-head"},[t("span",{class:"ms-head-left"
+		},[m,t("span",{class:"ms-title",text:"Karte"})]),h])),e.appendChild(t("div",{class:"ms-body"
+		},[a.element,i.element,s.element,l.element,r.selected,t("div",{class:"ms-actions"},[d,u]),r.sort,r.find,r.available,c.element])),_e(e)}(e),
+		Ie(e,e.hidden))}var Fe=!1;function Ue(t,e){const n=function(t){const e=t.style.width,n=t.classList.contains("ms-tab-sized")
 		;t.style.width="",t.classList.add("ms-tab-sized");const o=Math.ceil(t.getBoundingClientRect().width);return t.style.width=e,
-		t.classList.toggle("ms-tab-sized",n),o}(t);return i(e,n,Math.max(n,u()/2))}function Ne(t,e,n){n=De(t,n),e=i(e,0,Math.max(0,u()-n)),
-		t.style.width=`${Math.round(n)}px`,t.style.left=`${Math.round(e)}px`,t.style.transform="none",t.classList.add("ms-tab-sized")}function Oe(){
-		const t=document.querySelector(".ms-tab"),e=function(){try{const t=JSON.parse(localStorage.getItem(qe))
-		;return t&&"object"==typeof t&&Number.isFinite(t.left)&&Number.isFinite(t.width)?t:null}catch{return null}}();t&&e&&Ne(t,e.left*u(),e.width)
-		}function Te(e){const n=t("a",{class:"ms-tab-btn ms-tab-board ms-tab-add",text:"[+]",title:"Dodaj kartu na ploču"})
-		;n.addEventListener("click",()=>{return e=n,void(ao?so():function(e){if(!no())return;so()
-		;const n=new Set(No()),o=K.filter(t=>H(t.id)&&!n.has(t.id)).sort((t,e)=>t.name.localeCompare(e.name,"hr")),r=t("input",{type:"text",
-		class:"ms-add-input",placeholder:"Traži kartu…",spellcheck:"false",autocomplete:"off"}),a=t("div",{class:"ms-add-list"}),s=t("div",{
-		class:"ms-add-empty",text:o.length?"Nema pogodaka":"Sve su karte na ploči"}),l=t("div",{class:"ms-add"},[r,a,s]);let c=[],d=-1
-		;function p(t){c[d]&&c[d].classList.remove("active"),d=t,c[d]&&(c[d].classList.add("active"),c[d].scrollIntoView({block:"nearest"}))}
-		function f(t){so(),function(t){const e=J(t),n=document.querySelector("tbody[data-maps]");if(!e||!n||!no()||vt(t))return
-		;m(`addToDashboard: ${t}`),function(t){Oo(No().filter(e=>e!==t).concat(t))}(t);const o=n.querySelector(".maps-empty");o&&n.replaceChildren()
-		;const r=Eo(n,e),a=n.lastElementChild.querySelector(".links-bottom");a&&a.addEventListener("scroll",()=>M(a),{passive:!0}),kt(r),ro(),pn(r),
-		En(),ht(),$o()}(t)}function g(){const e=Q(r.value);c=o.filter(t=>G(t,e)).map(e=>{const n=t("div",{class:"ms-add-item","data-map-id":e.id
-		},[t("span",{class:"ms-glyph",text:U[e.category]||""}),document.createTextNode(e.name)])
-		;return n.addEventListener("mousedown",t=>t.preventDefault()),n.addEventListener("mousemove",()=>{c[d]!==n&&p(c.indexOf(n))}),
-		n.addEventListener("click",()=>f(e.id)),n}),a.replaceChildren(...c),s.hidden=c.length>0,d=-1,p(c.length?0:-1)}r.addEventListener("input",g),
-		r.addEventListener("keydown",t=>{if("ArrowDown"===t.key||"ArrowUp"===t.key){if(t.preventDefault(),!c.length)return
-		;const e="ArrowDown"===t.key?1:-1;p((d+e+c.length)%c.length)}else"Enter"===t.key?(t.preventDefault(),
-		c[d]&&f(c[d].getAttribute("data-map-id"))):"Escape"===t.key&&(t.preventDefault(),r.value?(r.value="",g()):so())}),g(),
-		document.body.appendChild(l),ao={menu:l,anchor:e},document.body.classList.add("ms-add-open"),function(){if(!ao)return
-		;const{menu:t,anchor:e}=ao,n=e.closest(".ms-tab"),o=(n||e).getBoundingClientRect().bottom+4,r=t.offsetWidth,a=i(e.getBoundingClientRect().left-8,8,Math.max(8,u()-r-8))
-		;t.style.left=`${Math.round(a)}px`,t.style.top=`${Math.round(o)}px`,t.style.maxHeight=`${Math.max(120,Math.min(io,Math.round(h()-o-16)))}px`
-		}(),document.addEventListener("pointerdown",lo,!0),r.focus()}(e));var e});const o=t("a",{class:"ms-tab-btn",text:"[R]",
-		title:"Osvježi sve karte (R)"});o.addEventListener("click",()=>$t());const r=t("a",{class:"ms-tab-btn ms-tab-board",text:"[A]",
-		title:"Posloži u mrežu (A)"});r.addEventListener("click",()=>At());const a=t("a",{class:"ms-tab-btn ms-tab-board","data-grid":"show",
-		text:"[G]",title:"Prikaži mrežu (G)"});a.addEventListener("click",()=>Je(!Ke(),Xe()));const s=t("a",{class:"ms-tab-btn ms-tab-board",
-		"data-grid":"snap",text:"[S]",title:"Poravnaj uz mrežu (S)"});s.addEventListener("click",()=>Je(Ke(),!Xe()));const l=t("span",{
-		class:"ms-tab-count",title:"Do sljedećeg osvježavanja"});e.appendChild(t("span",{class:"ms-tab-cluster"},[n,o,r,a,s,l])),We()}function We(){
+		t.classList.toggle("ms-tab-sized",n),o}(t);return w(e,n,Math.max(n,E()/2))}function Ze(t,e,n){n=Ue(t,n),e=w(e,0,Math.max(0,E()-n)),
+		t.style.width=`${Math.round(n)}px`,t.style.left=`${Math.round(e)}px`,t.style.transform="none",t.classList.add("ms-tab-sized")}function Ke(){
+		const t=document.querySelector(".ms-tab"),e=function(){const t=p(d)
+		;return t&&"object"==typeof t&&Number.isFinite(t.left)&&Number.isFinite(t.width)?t:null}();t&&e&&Ze(t,e.left*E(),e.width)}function Xe(e){
+		const n=t("a",{class:"ms-tab-btn ms-tab-board ms-tab-add",text:"[+]",title:"Dodaj kartu na ploču"});n.addEventListener("click",()=>{
+		return e=n,void(ho?mo():function(e){if(!lo())return;mo()
+		;const n=new Set(Fo()),o=rt.filter(t=>K(t.id)&&!n.has(t.id)).sort((t,e)=>t.name.localeCompare(e.name,"hr")),r=t("input",{type:"text",
+		class:"ms-add-input",placeholder:"Traži kartu…",spellcheck:"false",autocomplete:"off"}),a=t("div",{class:"ms-add-list"}),i=t("div",{
+		class:"ms-add-empty",text:o.length?"Nema pogodaka":"Sve su karte na ploči"}),s=t("div",{class:"ms-add"},[r,a,i]);let l=[],c=-1
+		;function d(t){l[c]&&l[c].classList.remove("active"),c=t,l[c]&&(l[c].classList.add("active"),l[c].scrollIntoView({block:"nearest"}))}
+		function u(t){mo(),function(t){const e=it(t),n=document.querySelector("tbody[data-maps]");if(!e||!n||!lo()||Mt(t))return
+		;S(`addToDashboard: ${t}`),function(t){Uo(Fo().filter(e=>e!==t).concat(t))}(t);const o=n.querySelector(".maps-empty");o&&n.replaceChildren()
+		;const r=Mo(n,e),a=n.lastElementChild.querySelector(".links-bottom");a&&a.addEventListener("scroll",()=>D(a),{passive:!0}),jt(r),uo(),yn(r),
+		Mn(),Et(),To()}(t)}function h(){const e=lt(r.value);l=o.filter(t=>ct(t,e)).map(e=>{const n=t("div",{class:"ms-add-item","data-map-id":e.id
+		},[t("span",{class:"ms-glyph",text:nt[e.category]||""}),document.createTextNode(e.name)])
+		;return n.addEventListener("mousedown",t=>t.preventDefault()),n.addEventListener("mousemove",()=>{l[c]!==n&&d(l.indexOf(n))}),
+		n.addEventListener("click",()=>u(e.id)),n}),a.replaceChildren(...l),i.hidden=l.length>0,c=-1,d(l.length?0:-1)}r.addEventListener("input",h),
+		r.addEventListener("keydown",t=>{if("ArrowDown"===t.key||"ArrowUp"===t.key){if(t.preventDefault(),!l.length)return
+		;const e="ArrowDown"===t.key?1:-1;d((c+e+l.length)%l.length)}else"Enter"===t.key?(t.preventDefault(),
+		l[c]&&u(l[c].getAttribute("data-map-id"))):"Escape"===t.key&&(t.preventDefault(),r.value?(r.value="",h()):mo())}),h(),
+		document.body.appendChild(s),ho={menu:s,anchor:e},document.body.classList.add("ms-add-open"),function(){if(!ho)return
+		;const{menu:t,anchor:e}=ho,n=e.closest(".ms-tab"),o=(n||e).getBoundingClientRect().bottom+4,r=t.offsetWidth,a=w(e.getBoundingClientRect().left-8,8,Math.max(8,E()-r-8))
+		;t.style.left=`${Math.round(a)}px`,t.style.top=`${Math.round(o)}px`,t.style.maxHeight=`${Math.max(120,Math.min(po,Math.round(x()-o-16)))}px`
+		}(),document.addEventListener("pointerdown",fo,!0),r.focus()}(e));var e});const o=t("a",{class:"ms-tab-btn",text:"[R]",
+		title:"Osvježi sve karte (R)"});o.addEventListener("click",()=>Vt());const r=t("a",{class:"ms-tab-btn ms-tab-board",text:"[A]",
+		title:"Posloži u mrežu (A)"});r.addEventListener("click",()=>Dt());const a=t("a",{class:"ms-tab-btn ms-tab-board","data-grid":"show",
+		text:"[G]",title:"Prikaži mrežu (G)"});a.addEventListener("click",()=>nn(!tn(),en()));const i=t("a",{class:"ms-tab-btn ms-tab-board",
+		"data-grid":"snap",text:"[S]",title:"Poravnaj uz mrežu (S)"});i.addEventListener("click",()=>nn(tn(),!en()));const s=t("span",{
+		class:"ms-tab-count",title:"Do sljedećeg osvježavanja"});e.appendChild(t("span",{class:"ms-tab-cluster"},[n,o,r,a,i,s])),Ye()}function Ye(){
 		const t=document.querySelector(".ms-tab");if(!t)return;const e=t.querySelector('[data-grid="show"]'),n=t.querySelector('[data-grid="snap"]')
-		;e&&e.classList.toggle("ms-tab-off",!Ke()),n&&n.classList.toggle("ms-tab-off",!Xe()),Ve()}function Ve(){
-		const t=Ot()?Tt():"",e=document.querySelector(".ms-tab .ms-tab-count");e&&(e.textContent=t)
-		;const n=document.querySelector(".ms-refresh-left");n&&(n.textContent=t?`još ${t}`:"")}var Fe="mapGrid";var{show:Ue,snap:Ze}=function(){try{
-		const t=JSON.parse(localStorage.getItem(Fe));if(t&&"object"==typeof t)return{show:!0===t.show,snap:!0===t.snap}}catch{}return{show:!1,
-		snap:!1}}();function Ke(){return Ue}function Xe(){return Ze}function Je(t,e){m(`setGridPrefs: show=${t} snap=${e}`),Ue=t,Ze=e;try{
-		localStorage.setItem(Fe,JSON.stringify({show:t,snap:e}))}catch{}Ye();const n=document.getElementById("mapSettings")
-		;n&&!n.hidden&&n._onGridChange&&n._onGridChange(),We()}function Ye(){const t=Ue&&eo&&r.matches;let e=document.querySelector(".po-grid")
+		;e&&e.classList.toggle("ms-tab-off",!tn()),n&&n.classList.toggle("ms-tab-off",!en()),Qe()}function Qe(){
+		const t=Yt()?Qt():"",e=document.querySelector(".ms-tab .ms-tab-count");e&&(e.textContent=t)
+		;const n=document.querySelector(".ms-refresh-left");n&&(n.textContent=t?`još ${t}`:"")}var{show:Ge,snap:Je}=function(){const t=p(l)
+		;return t&&"object"==typeof t?{show:!0===t.show,snap:!0===t.snap}:{show:!1,snap:!1}}();function tn(){return Ge}function en(){return Je}
+		function nn(t,e){S(`setGridPrefs: show=${t} snap=${e}`),Ge=t,Je=e,m(l,{show:t,snap:e}),on();const n=document.getElementById("mapSettings")
+		;n&&!n.hidden&&n._onGridChange&&n._onGridChange(),Ye()}function on(){const t=Ge&&so&&f.matches;let e=document.querySelector(".po-grid")
 		;t?(e||(e=document.createElement("div"),e.className="po-grid",document.body.appendChild(e)),
-		e.style.setProperty("--grid-cell","16px")):e&&e.remove()}function Qe(t){const e=[];for(let n=0;n<t;n+=16)e.push(n)
-		;return e[e.length-1]!==t&&e.push(t),e}function Ge(t,e){let n=0;for(let o=1;o<t.length;o++)Math.abs(t[o]-e)<Math.abs(t[n]-e)&&(n=o);return n
-		}function tn(t){Ze&&eo&&r.matches&&t.forEach(t=>{t.classList.contains("fs-host")||function(t){
-		const e=Qe(u()),n=Qe(h()),o=t.getBoundingClientRect();let r=Ge(e,o.left),a=Ge(e,o.right),i=Ge(n,o.top),s=Ge(n,o.bottom)
-		;for(a<=r&&(a=Math.min(r+1,e.length-1)),s<=i&&(s=Math.min(i+1,n.length-1));e[a]-e[r]<tt&&(a<e.length-1||r>0);)a<e.length-1?a++:r--
-		;for(;n[s]-n[i]<et&&(s<n.length-1||i>0);)s<n.length-1?s++:i--;t.classList.contains("free")||dn(t),t.style.width=e[a]-e[r]+"px",
-		t.style.height=n[s]-n[i]+"px",Mn(t,e[r],n[i]),hn(t),pn(t)}(t)})}function en(t,e,n){const o=vn(t),r=Dn(t);r?function(t,e,n,o,r){const a=e=>{
-		e||t.classList.contains("free")||(dn(t),Nn(t).height=t.offsetHeight/h())};a(n.shiftKey)
-		;const s=t.getBoundingClientRect(),l=xn(r.filter(e=>e!==t)),c=l.filter(t=>t.top<s.top),d=l.filter(t=>t.top>s.top),u=Math.min(s.top,...c.map(t=>t.top)),p=Math.max(s.bottom,...d.map(t=>t.bottom))
-		;pt(n,(n,l,d)=>{if(a(d.shiftKey),!t.classList.contains("free"))return;let{h:m}=st(e,s,n,l);const f=Fn(o,r);if(e.includes("s")){
-		const t=$n(s.top+m,f);null!==t&&(m=t-s.top)}if(e.includes("n")){const t=$n(s.bottom-m,f);null!==t&&(m=s.bottom-t)}
-		m=i(m,et,s.height+(e.includes("n")?u:h()-p));const g=Nn(t);g.height=m/h(),g.top=(e.includes("n")?s.bottom-m:s.top)/h(),
-		e.includes("n")&&c.forEach(t=>{Nn(t.block).top=(t.top-(m-s.height))/h()}),Gn()},()=>{tn([t]),$o()})}(t,e,n,r,o):o.length>1?function(t,e,n){
-		const o=xn(t);o.forEach(t=>{t.width=t.right-t.left,t.height=t.bottom-t.top,t.free=t.block.classList.contains("free")});const r=Sn(o)
+		e.style.setProperty("--grid-cell","16px")):e&&e.remove()}function rn(t){const e=[];for(let n=0;n<t;n+=16)e.push(n)
+		;return e[e.length-1]!==t&&e.push(t),e}function an(t,e){let n=0;for(let o=1;o<t.length;o++)Math.abs(t[o]-e)<Math.abs(t[n]-e)&&(n=o);return n
+		}function sn(t){Je&&so&&f.matches&&t.forEach(t=>{t.classList.contains("fs-host")||function(t){
+		const e=rn(E()),n=rn(x()),o=t.getBoundingClientRect();let r=an(e,o.left),a=an(e,o.right),i=an(n,o.top),s=an(n,o.bottom)
+		;for(a<=r&&(a=Math.min(r+1,e.length-1)),s<=i&&(s=Math.min(i+1,n.length-1));e[a]-e[r]<dt&&(a<e.length-1||r>0);)a<e.length-1?a++:r--
+		;for(;n[s]-n[i]<ut&&(s<n.length-1||i>0);)s<n.length-1?s++:i--;t.classList.contains("free")||gn(t),t.style.width=e[a]-e[r]+"px",
+		t.style.height=n[s]-n[i]+"px",Pn(t,e[r],n[i]),vn(t),yn(t)}(t)})}function ln(t,e,n){const o=Ln(t),r=Fn(t);r?function(t,e,n,o,r){const a=e=>{
+		e||t.classList.contains("free")||(gn(t),Un(t).height=t.offsetHeight/x())};a(n.shiftKey)
+		;const i=t.getBoundingClientRect(),s=An(r.filter(e=>e!==t)),l=s.filter(t=>t.top<i.top),c=s.filter(t=>t.top>i.top),d=Math.min(i.top,...l.map(t=>t.top)),u=Math.max(i.bottom,...c.map(t=>t.bottom))
+		;xt(n,(n,s,c)=>{if(a(c.shiftKey),!t.classList.contains("free"))return;let{h:h}=wt(e,i,n,s);const p=Qn(o,r);if(e.includes("s")){
+		const t=Tn(i.top+h,p);null!==t&&(h=t-i.top)}if(e.includes("n")){const t=Tn(i.bottom-h,p);null!==t&&(h=i.bottom-t)}
+		h=w(h,ut,i.height+(e.includes("n")?d:x()-u));const m=Un(t);m.height=h/x(),m.top=(e.includes("n")?i.bottom-h:i.top)/x(),
+		e.includes("n")&&l.forEach(t=>{Un(t.block).top=(t.top-(h-i.height))/x()}),ao()},()=>{sn([t]),To()})}(t,e,n,r,o):o.length>1?function(t,e,n){
+		const o=An(t);o.forEach(t=>{t.width=t.right-t.left,t.height=t.bottom-t.top,t.free=t.block.classList.contains("free")});const r=Rn(o)
 		;r.right=r.left+r.width,r.bottom=r.top+r.height;const a=function(t){const e=(t,e)=>Math.abs(t-e)<=1,n=[];return t.forEach(o=>t.forEach(t=>{
 		if(o===t)return
 		;const r=Math.min(o.right,t.right)-Math.max(o.left,t.left)>0,a=Math.min(o.bottom,t.bottom)-Math.max(o.top,t.top)>0,i=r&&(e(t.top,o.bottom)||e(t.bottom,o.top)),s=a&&(e(t.left,o.right)||e(t.right,o.left))
 		;i&&(e(t.left,o.left)&&n.push({from:o,to:t,kind:"alignLeft"}),e(t.right,o.right)&&n.push({from:o,to:t,kind:"alignRight"}),n.push({from:o,
 		to:t,kind:e(t.top,o.bottom)?"below":"above"})),s&&(e(t.top,o.top)&&n.push({from:o,to:t,kind:"alignTop"}),e(t.bottom,o.bottom)&&n.push({
 		from:o,to:t,kind:"alignBottom"}),n.push({from:o,to:t,kind:e(t.left,o.right)?"right":"left"}))})),n
-		}(o),s=[...o].sort((t,e)=>t.top-e.top||t.left-e.left),l=In(t[0],t),c=e.includes("w")?r.right:r.left,d=e.includes("n")?r.bottom:r.top,p=Math.max(tt/Math.min(...o.map(t=>t.width)),...o.filter(t=>t.free).map(t=>et/t.height)),m=Math.min(zn()/Math.max(...o.map(t=>t.width)),(e.includes("w")?r.right:u()-r.left)/r.width,(e.includes("n")?r.bottom:h()-r.top)/r.height)
-		;pt(n,(n,u)=>{const h=st(e,r,n,u),{w:f,h:g}=nn(l,e,r,h.w,h.h)
-		;let w="n"===e||"s"===e?g/r.height:2===e.length?Math.max(f/r.width,g/r.height):f/r.width;w=i(w,p,Math.max(p,m)),o.forEach(t=>{
-		t.block.style.width=`${Math.round(t.width*w)}px`,t.free&&(t.block.style.height=`${Math.round(t.height*w)}px`)});const v=[];s.forEach(t=>{
-		let e=c+(t.left-c)*w,n=d+(t.top-d)*w;const o=t.block.offsetWidth,r=t.block.offsetHeight
+		}(o),i=[...o].sort((t,e)=>t.top-e.top||t.left-e.left),s=Dn(t[0],t),l=e.includes("w")?r.right:r.left,c=e.includes("n")?r.bottom:r.top,d=Math.max(dt/Math.min(...o.map(t=>t.width)),...o.filter(t=>t.free).map(t=>ut/t.height)),u=Math.min($n()/Math.max(...o.map(t=>t.width)),(e.includes("w")?r.right:E()-r.left)/r.width,(e.includes("n")?r.bottom:x()-r.top)/r.height)
+		;xt(n,(n,h)=>{const p=wt(e,r,n,h),{w:m,h:f}=cn(s,e,r,p.w,p.h)
+		;let g="n"===e||"s"===e?f/r.height:2===e.length?Math.max(m/r.width,f/r.height):m/r.width;g=w(g,d,Math.max(d,u)),o.forEach(t=>{
+		t.block.style.width=`${Math.round(t.width*g)}px`,t.free&&(t.block.style.height=`${Math.round(t.height*g)}px`)});const v=[];i.forEach(t=>{
+		let e=l+(t.left-l)*g,n=c+(t.top-c)*g;const o=t.block.offsetWidth,r=t.block.offsetHeight
 		;a.filter(e=>e.to===t&&v.includes(e.from)).forEach(t=>{const a=t.from.block.getBoundingClientRect()
 		;"below"===t.kind?n=a.bottom:"above"===t.kind?n=a.top-r:"right"===t.kind?e=a.right:"left"===t.kind?e=a.left-o:"alignLeft"===t.kind?e=a.left:"alignRight"===t.kind?e=a.right-o:"alignTop"===t.kind?n=a.top:"alignBottom"===t.kind&&(n=a.bottom-r)
-		}),t.block.style.left=`${Math.round(e)}px`,t.block.style.top=`${Math.round(n)}px`,v.push(t)}),t.forEach(pn)},()=>{tn(t),$o()})
-		}(o,e,n):function(t,e,n){let o;const r=e=>{if(e||t.classList.contains("free")){if(e&&t.classList.contains("letterbox")){un(t)
-		;const e=t.getBoundingClientRect();o=e.width/e.height}}else dn(t)};r(n.shiftKey);const a=t.getBoundingClientRect();o=a.width/a.height
-		;const s={width:Math.min(zn(),e.includes("w")?a.right:u()-a.left),height:e.includes("n")?a.bottom:h()-a.top},l=In(t);pt(n,(n,c,d)=>{
-		r(d.shiftKey);const u=st(e,a,n,c);let{w:h,h:p}=nn(l,e,a,u.w,u.h);t.classList.contains("free")?(h=i(h,tt,s.width),p=i(p,et,s.height),
-		t.style.height=`${Math.round(p)}px`):h=function(t,e,n,o,r,a,s,l){
-		"n"===e||"s"===e?o=on(t,r,r*a,a,l.width):2===e.length&&(o=Math.max(o,on(t,r,r*a,a,l.width)))
-		;(e.includes("e")||e.includes("w"))&&2!==e.length||(o=nn(s,e.includes("w")?"w":"e",n,o,r).w);if(o=i(o,tt,l.width),"n"!==e&&"s"!==e){
-		const r=(e.includes("n")?"n":"s")+(e.includes("w")?"w":""),i=rn(t,o),c=nn(s,r,n,o,i).h;Math.abs(c-i)>.5&&(o=on(t,c,o+(c-i)*a,a,l.width))}
-		rn(t,o)>l.height+.5&&(o=on(t,l.height,l.height*a,a,l.width));return o}(t,e,a,h,p,o,l,s),t.style.width=`${Math.round(h)}px`,
-		p=t.getBoundingClientRect().height,Mn(t,e.includes("w")?a.right-h:a.left,e.includes("n")?a.bottom-p:a.top),pn(t)},()=>{tn([t]),$o()})
-		}(t,e,n)}function nn(t,e,n,o,r){
+		}),t.block.style.left=`${Math.round(e)}px`,t.block.style.top=`${Math.round(n)}px`,v.push(t)}),t.forEach(yn)},()=>{sn(t),To()})
+		}(o,e,n):function(t,e,n){let o;const r=e=>{if(e||t.classList.contains("free")){if(e&&t.classList.contains("letterbox")){wn(t)
+		;const e=t.getBoundingClientRect();o=e.width/e.height}}else gn(t)};r(n.shiftKey);const a=t.getBoundingClientRect();o=a.width/a.height
+		;const i={width:Math.min($n(),e.includes("w")?a.right:E()-a.left),height:e.includes("n")?a.bottom:x()-a.top},s=Dn(t);xt(n,(n,l,c)=>{
+		r(c.shiftKey);const d=wt(e,a,n,l);let{w:u,h:h}=cn(s,e,a,d.w,d.h);t.classList.contains("free")?(u=w(u,dt,i.width),h=w(h,ut,i.height),
+		t.style.height=`${Math.round(h)}px`):u=function(t,e,n,o,r,a,i,s){
+		"n"===e||"s"===e?o=dn(t,r,r*a,a,s.width):2===e.length&&(o=Math.max(o,dn(t,r,r*a,a,s.width)))
+		;(e.includes("e")||e.includes("w"))&&2!==e.length||(o=cn(i,e.includes("w")?"w":"e",n,o,r).w);if(o=w(o,dt,s.width),"n"!==e&&"s"!==e){
+		const r=(e.includes("n")?"n":"s")+(e.includes("w")?"w":""),l=un(t,o),c=cn(i,r,n,o,l).h;Math.abs(c-l)>.5&&(o=dn(t,c,o+(c-l)*a,a,s.width))}
+		un(t,o)>s.height+.5&&(o=dn(t,s.height,s.height*a,a,s.width));return o}(t,e,a,u,h,o,s,i),t.style.width=`${Math.round(u)}px`,
+		h=t.getBoundingClientRect().height,Pn(t,e.includes("w")?a.right-u:a.left,e.includes("n")?a.bottom-h:a.top),yn(t)},()=>{sn([t]),To()})
+		}(t,e,n)}function cn(t,e,n,o,r){
 		const a=e.includes("w")?n.right-o:n.left,i=e.includes("n")?n.bottom-r:n.top,s=t.filter(t=>i<t.bottom&&i+r>t.top),l=t.filter(t=>a<t.right&&a+o>t.left),c=(t,e,n)=>{
-		const o=$n(t,e.concat(n));return null===o?t:o};return e.includes("e")&&(o=c(n.left+o,s.map(t=>t.left),l.map(t=>t.right))-n.left),
+		const o=Tn(t,e.concat(n));return null===o?t:o};return e.includes("e")&&(o=c(n.left+o,s.map(t=>t.left),l.map(t=>t.right))-n.left),
 		e.includes("w")&&(o=n.right-c(n.right-o,s.map(t=>t.right),l.map(t=>t.left))),
 		e.includes("s")&&(r=c(n.top+r,l.map(t=>t.top),s.map(t=>t.bottom))-n.top),
-		e.includes("n")&&(r=n.bottom-c(n.bottom-r,l.map(t=>t.bottom),s.map(t=>t.top))),{w:o,h:r}}function on(t,e,n,o,r){for(let a=0;a<3;a++){
-		const a=rn(t,n=i(n,tt,r));if(Math.abs(a-e)<.5)break;n+=(e-a)*o}return i(n,tt,r)}function rn(t,e){return t.style.width=`${Math.round(e)}px`,
-		t.getBoundingClientRect().height}function an(){const e=t("a",{class:"po-btn"})
-		;return e.addEventListener("click",()=>ln(e.closest(".map-block"))),sn(e,!1),e}function sn(t,e){t.textContent=e?eo?"[x]":"[=]":"[^]",
-		t.title=e?eo?"Ukloni kartu s ploče":"Vrati kartu na stranicu":"Izdvoji kartu u pomični prozor"}function ln(t){
-		t&&(t.classList.contains("popout")?wt(t).length?Lt(t):eo?function(t){m(`removeFromDashboard: ${t.dataset.mapId}`);const e=t.dataset.mapId
-		;Ro(()=>mn(t))
+		e.includes("n")&&(r=n.bottom-c(n.bottom-r,l.map(t=>t.bottom),s.map(t=>t.top))),{w:o,h:r}}function dn(t,e,n,o,r){for(let a=0;a<3;a++){
+		const a=un(t,n=w(n,dt,r));if(Math.abs(a-e)<.5)break;n+=(e-a)*o}return w(n,dt,r)}function un(t,e){return t.style.width=`${Math.round(e)}px`,
+		t.getBoundingClientRect().height}function hn(){const e=t("a",{class:"po-btn"})
+		;return e.addEventListener("click",()=>mn(e.closest(".map-block"))),pn(e,!1),e}function pn(t,e){t.textContent=e?so?"[x]":"[=]":"[^]",
+		t.title=e?so?"Ukloni kartu s ploče":"Vrati kartu na stranicu":"Izdvoji kartu u pomični prozor"}function mn(t){
+		t&&(t.classList.contains("popout")?zt(t).length?It(t):so?function(t){S(`removeFromDashboard: ${t.dataset.mapId}`);const e=t.dataset.mapId
+		;Bo(()=>bn(t))
 		;const n=t.closest("tr"),o=n.nextElementSibling,r=o&&o.querySelector(".links-bottom")?o:null,a=r||n,i=n.previousElementSibling&&n.previousElementSibling.classList.contains("sp20")?n.previousElementSibling:a.nextElementSibling&&a.nextElementSibling.classList.contains("sp20")?a.nextElementSibling:null
-		;[r,i,n].forEach(t=>{t&&t.remove()}),s=e,Oo(No().filter(t=>t!==s)),$o();var s}(t):mn(t):r.matches&&cn(t))}function cn(e){
-		m(`popoutMap: ${e.dataset.mapId}`);const n=e.getBoundingClientRect();if(!ft(e)){const o=t("a",{text:"Vrati"}),r=t("div",{class:"map-gap",
-		style:`height: ${n.height}px;`},[t("span",{text:"Karta je izdvojena u prozor ·"}),o]);o.addEventListener("click",()=>mn(r._block)),
+		;[r,i,n].forEach(t=>{t&&t.remove()}),s=e,Uo(Fo().filter(t=>t!==s)),To();var s}(t):bn(t):f.matches&&fn(t))}function fn(e){
+		S(`popoutMap: ${e.dataset.mapId}`);const n=e.getBoundingClientRect();if(!St(e)){const o=t("a",{text:"Vrati"}),r=t("div",{class:"map-gap",
+		style:`height: ${n.height}px;`},[t("span",{text:"Karta je izdvojena u prozor ·"}),o]);o.addEventListener("click",()=>bn(r._block)),
 		r._block=e,e._gap=r,e.after(r)}e.classList.add("popout"),e.style.width=`${Math.min(420,n.width)}px`,function(t){
 		return!!t.querySelector(".if1, .if2")}(e)&&(e.style.height=`${e.offsetHeight}px`,e.classList.add("free")),
-		it.forEach(n=>e.appendChild(t("div",{class:`po-h po-h-${n}`,"data-dir":n}))),Mn(e,n.left,n.top),An(e),
-		e.querySelectorAll(".po-btn").forEach(t=>sn(t,!0)),$o()}function dn(e){e.classList.contains("free")||(m(`unlockAspect: ${e.dataset.mapId}`),
+		gt.forEach(n=>e.appendChild(t("div",{class:`po-h po-h-${n}`,"data-dir":n}))),Pn(e,n.left,n.top),In(e),
+		e.querySelectorAll(".po-btn").forEach(t=>pn(t,!0)),To()}function gn(e){e.classList.contains("free")||(S(`unlockAspect: ${e.dataset.mapId}`),
 		e.style.height=`${e.offsetHeight}px`,e.classList.add("free","letterbox"),e.querySelector(".po-backdrop")||e.appendChild(t("div",{
-		class:"po-backdrop"})),hn(e))}function un(t){t.classList.contains("letterbox")&&(m(`lockAspect: ${t.dataset.mapId}`),
-		t.classList.remove("free","letterbox"),t.style.removeProperty("height"),t.style.removeProperty("--po-img"))}function hn(t){
+		class:"po-backdrop"})),vn(e))}function wn(t){t.classList.contains("letterbox")&&(S(`lockAspect: ${t.dataset.mapId}`),
+		t.classList.remove("free","letterbox"),t.style.removeProperty("height"),t.style.removeProperty("--po-img"))}function vn(t){
 		if(!t.classList.contains("letterbox"))return
-		;const e=t.querySelector(".slide.active img")||t.querySelector("img"),n=J(t.dataset.mapId),o=e&&(e.currentSrc||e.src)||n&&n.backdrop
-		;o&&t.style.setProperty("--po-img",`url("${o}")`)}function pn(t){!function(t){
+		;const e=t.querySelector(".slide.active img")||t.querySelector("img"),n=it(t.dataset.mapId),o=e&&(e.currentSrc||e.src)||n&&n.backdrop
+		;o&&t.style.setProperty("--po-img",`url("${o}")`)}function yn(t){!function(t){
 		t.querySelectorAll(".radartitle:not(.fullscreen)").forEach(t=>{if(!t.clientWidth)return
 		;const e=[...t.children].find(t=>"A"===t.tagName&&!t.classList.contains("left")&&!t.classList.contains("right"));if(!e)return;const n=e=>{
 		const n=t.querySelector(`:scope > ${e}`);return n?n.offsetWidth+3:0},o=n(".left"),r=n(".right"),a=t.clientWidth-6
@@ -807,275 +808,282 @@
 		;if(!(t.classList.contains("letterbox")&&n&&o&&o.naturalWidth&&o.clientWidth))return void e.forEach(e=>t.style.removeProperty(e))
 		;const r=o.getBoundingClientRect(),a=n.getBoundingClientRect(),i=o.naturalWidth/o.naturalHeight,s=Math.min(r.width,r.height*i),l=Math.min(r.height,r.width/i),c=r.left+(r.width-s)/2,d=r.top+(r.height-l)/2,u=t=>`${Math.round(Math.max(0,t))}px`
 		;t.style.setProperty("--lb-l",u(c-a.left)),t.style.setProperty("--lb-r",u(a.right-(c+s))),t.style.setProperty("--lb-t",u(d-a.top)),
-		t.style.setProperty("--lb-b",u(a.bottom-(d+l))),t.style.setProperty("--lb-w",u(s))}(t)}function mn(t){if(m(`dockMap: ${t.dataset.mapId}`),
-		ft(t))return Lt(t);const e=t.querySelector(".if1.fullscreen");e&&y(e),t._group&&kn(t),Jn(t),
+		t.style.setProperty("--lb-b",u(a.bottom-(d+l))),t.style.setProperty("--lb-w",u(s))}(t)}function bn(t){if(S(`dockMap: ${t.dataset.mapId}`),
+		St(t))return It(t);const e=t.querySelector(".if1.fullscreen");e&&R(e),t._group&&zn(t),no(t),
 		t.classList.remove("popout","free","grouped","letterbox","covered"),
 		["left","top","width","height","z-index","--po-img","--lb-l","--lb-r","--lb-t","--lb-b","--lb-w"].forEach(e=>t.style.removeProperty(e)),
 		t.querySelectorAll(".po-h, .po-backdrop").forEach(t=>t.remove()),t._gap&&t._gap.remove(),delete t._gap,
-		t.querySelectorAll(".po-btn").forEach(t=>sn(t,!1)),function(t){t.querySelectorAll(".radartitle a").forEach(t=>{
-		t.style.removeProperty("max-width"),t.style.removeProperty("--title-shift")})}(t),$o()}function fn(){oo(!1),Gn(),
-		Ro(()=>document.querySelectorAll(".map-block.popout").forEach(mn)),$o(),ht()}var gn=0;function wn(){return"g"+ ++gn}function vn(t){
-		return t._group?Rn().filter(e=>e._group===t._group):[t]}function yn(){const e=t("a",{class:"grp-btn",hidden:""})
-		;return e.addEventListener("click",()=>function(t){if(!t||!t.classList.contains("popout"))return;t._group?kn(t):function(t){
-		m(`joinGroup: ${t.dataset.mapId}`);const e=bn(t);if(!e.length)return
-		;const n=new Set(e.map(t=>t._group).filter(Boolean)),o=n.values().next().value||wn();Rn().forEach(t=>{
-		t._group&&n.has(t._group)&&(t._group=o)}),e.forEach(t=>t._group=o),t._group=o,En()}(t);$o()}(e.closest(".map-block"))),e}function bn(t){
-		const e=t.getBoundingClientRect();return function(t){const e=Dn(t);return(e?e.panes.map(t=>t.block):jn()).filter(e=>e!==t)
+		t.querySelectorAll(".po-btn").forEach(t=>pn(t,!1)),function(t){t.querySelectorAll(".radartitle a").forEach(t=>{
+		t.style.removeProperty("max-width"),t.style.removeProperty("--title-shift")})}(t),To()}function kn(){co(!1),ao(),
+		Bo(()=>document.querySelectorAll(".map-block.popout").forEach(bn)),To(),Et()}var En=0;function xn(){return"g"+ ++En}function Ln(t){
+		return t._group?Bn().filter(e=>e._group===t._group):[t]}function Sn(){const e=t("a",{class:"grp-btn",hidden:""})
+		;return e.addEventListener("click",()=>function(t){if(!t||!t.classList.contains("popout"))return;t._group?zn(t):function(t){
+		S(`joinGroup: ${t.dataset.mapId}`);const e=Cn(t);if(!e.length)return
+		;const n=new Set(e.map(t=>t._group).filter(Boolean)),o=n.values().next().value||xn();Bn().forEach(t=>{
+		t._group&&n.has(t._group)&&(t._group=o)}),e.forEach(t=>t._group=o),t._group=o,Mn()}(t);To()}(e.closest(".map-block"))),e}function Cn(t){
+		const e=t.getBoundingClientRect();return function(t){const e=Fn(t);return(e?e.panes.map(t=>t.block):qn()).filter(e=>e!==t)
 		}(t).filter(t=>!t.classList.contains("fs-host")&&function(t,e){
 		const n=Math.min(t.bottom,e.bottom)-Math.max(t.top,e.top)>0,o=Math.min(t.right,e.right)-Math.max(t.left,e.left)>0,r=(t,e)=>Math.abs(t-e)<=1
-		;return n&&(r(t.right,e.left)||r(t.left,e.right))||o&&(r(t.bottom,e.top)||r(t.top,e.bottom))}(e,t.getBoundingClientRect()))}function kn(t){
-		m(`leaveGroup: ${t.dataset.mapId}`);const e=t._group;delete t._group
-		;const n=Rn().filter(t=>t._group===e),o=Dn(t)?n.filter(e=>Nn(e).top>Nn(t).top):[];if(o.length&&o.length<n.length){const t=wn()
-		;o.forEach(e=>e._group=t)}[n.filter(t=>!o.includes(t)),o].forEach(t=>{t.length<2&&t.forEach(t=>delete t._group)}),En()}function En(){
-		Rn().forEach(t=>{const e=!!t._group;t.classList.toggle("grouped",e);const n=e||bn(t).length>0;t.querySelectorAll(".grp-btn").forEach(t=>{
-		t.hidden=!n,t.textContent=e?"[-]":"[+]",t.title=e?"Odvoji prozor od skupine":"Spoji prozor s prozorima koje dodiruje"}),pn(t)})}
-		function xn(t){return t.map(t=>{const e=t.getBoundingClientRect();return{block:t,left:e.left,top:e.top,right:e.right,bottom:e.bottom}})}
-		function Sn(t){const e=Math.min(...t.map(t=>t.left)),n=Math.min(...t.map(t=>t.top));return{left:e,top:n,
-		width:Math.max(...t.map(t=>t.right))-e,height:Math.max(...t.map(t=>t.bottom))-n}}function Ln(t,e,n,o){
-		const r=Math.min(Math.max(0,e.left+n),Math.max(0,u()-e.width)),a=Math.min(Math.max(0,e.top+o),Math.max(0,h()-e.height));n=r-e.left,
-		o=a-e.top,t.forEach(t=>{t.block.style.left=`${l(t.left+n)}px`,t.block.style.top=`${l(t.top+o)}px`})}var Cn=5e3;function zn(){
-		return eo?u():Math.min(875,u()-nt)}function Mn(t,e,n){const o=Math.max(0,u()-t.offsetWidth),r=Math.max(0,h()-Math.max(t.offsetHeight,ot))
-		;t.style.left=`${l(Math.min(Math.max(0,e),o))}px`,t.style.top=`${l(Math.min(Math.max(0,n),r))}px`}function An(t){
-		vn(t).sort((t,e)=>(Number(t.style.zIndex)||0)-(Number(e.style.zIndex)||0)).forEach(t=>t.style.zIndex=++Cn),ut()}function Rn(){
-		return[...document.querySelectorAll(".map-block.popout")]}function jn(){
-		return[...document.querySelectorAll(".map-block.popout:not(.snapped)")]}function _n(t,e){let n=t.getBoundingClientRect();const o={
-		x:e.clientX-n.left,y:e.clientY-n.top},r=vn(t);let a=xn(r),s=Sn(a),l=Dn(t);const c=In(t,r);let d=null;pt(e,(e,p,m)=>{
-		const f=Math.hypot(e,p)>=4;if(l){if(Math.abs(e)<40)return void(f&&function(t,e,n,o){const r=Un(t,n.top+o,n.height,e.map(t=>t.block))
-		;o=r-n.top,e.forEach(t=>{Nn(t.block).top=(t.top+o)/h()}),Gn()}(l,a,s,p));r.forEach(Jn),l=null,n=t.getBoundingClientRect(),
-		o.x=Math.min(o.x,t.offsetWidth-ot),o.y=i(m.clientY-n.top,0,ot),a=xn(r),s=Sn(a)}let g=s.left+m.clientX-o.x-n.left,w=s.top+m.clientY-o.y-n.top
-		;const v=f?(y=g,b=g+s.width,no()?null:y<=5?"left":b>=u()-5?"right":null):null;var y,b;d=v?{side:v,slot:Zn(r,v,w)}:null,
-		f&&!d&&({left:g,top:w}=function(t,e,n,o,r){const a=e+o,i=n+r,s=(t,e)=>{const n=$n(t,e.map(t=>t[0]));return null===n?null:e.find(t=>t[0]===n)
+		;return n&&(r(t.right,e.left)||r(t.left,e.right))||o&&(r(t.bottom,e.top)||r(t.top,e.bottom))}(e,t.getBoundingClientRect()))}function zn(t){
+		S(`leaveGroup: ${t.dataset.mapId}`);const e=t._group;delete t._group
+		;const n=Bn().filter(t=>t._group===e),o=Fn(t)?n.filter(e=>Un(e).top>Un(t).top):[];if(o.length&&o.length<n.length){const t=xn()
+		;o.forEach(e=>e._group=t)}[n.filter(t=>!o.includes(t)),o].forEach(t=>{t.length<2&&t.forEach(t=>delete t._group)}),Mn()}function Mn(){
+		Bn().forEach(t=>{const e=!!t._group;t.classList.toggle("grouped",e);const n=e||Cn(t).length>0;t.querySelectorAll(".grp-btn").forEach(t=>{
+		t.hidden=!n,t.textContent=e?"[-]":"[+]",t.title=e?"Odvoji prozor od skupine":"Spoji prozor s prozorima koje dodiruje"}),yn(t)})}
+		function An(t){return t.map(t=>{const e=t.getBoundingClientRect();return{block:t,left:e.left,top:e.top,right:e.right,bottom:e.bottom}})}
+		function Rn(t){const e=Math.min(...t.map(t=>t.left)),n=Math.min(...t.map(t=>t.top));return{left:e,top:n,
+		width:Math.max(...t.map(t=>t.right))-e,height:Math.max(...t.map(t=>t.bottom))-n}}function jn(t,e,n,o){
+		const r=Math.min(Math.max(0,e.left+n),Math.max(0,E()-e.width)),a=Math.min(Math.max(0,e.top+o),Math.max(0,x()-e.height));n=r-e.left,
+		o=a-e.top,t.forEach(t=>{t.block.style.left=`${y(t.left+n)}px`,t.block.style.top=`${y(t.top+o)}px`})}var _n=5e3;function $n(){
+		return so?E():Math.min(875,E()-ht)}function Pn(t,e,n){const o=Math.max(0,E()-t.offsetWidth),r=Math.max(0,x()-Math.max(t.offsetHeight,pt))
+		;t.style.left=`${y(Math.min(Math.max(0,e),o))}px`,t.style.top=`${y(Math.min(Math.max(0,n),r))}px`}function In(t){
+		Ln(t).sort((t,e)=>(Number(t.style.zIndex)||0)-(Number(e.style.zIndex)||0)).forEach(t=>t.style.zIndex=++_n),kt()}function Bn(){
+		return[...document.querySelectorAll(".map-block.popout")]}function qn(){
+		return[...document.querySelectorAll(".map-block.popout:not(.snapped)")]}function Hn(t,e){let n=t.getBoundingClientRect();const o={
+		x:e.clientX-n.left,y:e.clientY-n.top},r=Ln(t);let a=An(r),i=Rn(a),s=Fn(t);const l=Dn(t,r);let c=null;xt(e,(e,d,u)=>{
+		const h=Math.hypot(e,d)>=4;if(s){if(Math.abs(e)<40)return void(h&&function(t,e,n,o){const r=Gn(t,n.top+o,n.height,e.map(t=>t.block))
+		;o=r-n.top,e.forEach(t=>{Un(t.block).top=(t.top+o)/x()}),ao()}(s,a,i,d));r.forEach(no),s=null,n=t.getBoundingClientRect(),
+		o.x=Math.min(o.x,t.offsetWidth-pt),o.y=w(u.clientY-n.top,0,pt),a=An(r),i=Rn(a)}let p=i.left+u.clientX-o.x-n.left,m=i.top+u.clientY-o.y-n.top
+		;const f=h?(g=p,v=p+i.width,lo()?null:g<=5?"left":v>=E()-5?"right":null):null;var g,v;c=f?{side:f,slot:Jn(r,f,m)}:null,
+		h&&!c&&({left:p,top:m}=function(t,e,n,o,r){const a=e+o,i=n+r,s=(t,e)=>{const n=Tn(t,e.map(t=>t[0]));return null===n?null:e.find(t=>t[0]===n)
 		},l=t.filter(t=>n<t.bottom&&i>t.top),c=t.filter(t=>e<t.right&&a>t.left)
 		;let d=s(e,l.flatMap(t=>[[t.right,t],[t.left-o,t]])),u=s(n,c.flatMap(t=>[[t.bottom,t],[t.top-r,t]]))
 		;d&&!u&&(u=s(n,[[d[1].top,d[1]],[d[1].bottom-r,d[1]]]));u&&!d&&(d=s(e,[[u[1].left,u[1]],[u[1].right-o,u[1]]]));return{left:d?d[0]:e,
-		top:u?u[0]:n}}(c,g,w,s.width,s.height)),Ln(a,s,g-s.left,w-s.top),Kn(d?d.slot:null)},()=>{var t;(Kn(null),d)?function(t,e,n){const o=Pn[e]
-		;o.panes.length||(o.width=n.width/u());let r=n.top;t.forEach(t=>{m(`snapPane: ${t.dataset.mapId} → ${e}`),Jn(t),Xn(o,t,r/h()),Gn(),
-		r=t.getBoundingClientRect().bottom}),$o()}((t=r,[...t].sort((t,e)=>{const n=t.getBoundingClientRect(),o=e.getBoundingClientRect()
-		;return n.top-o.top||n.left-o.left})),d.side,d.slot):(tn(r),$o())})}function In(t,e=[]){
-		return jn().filter(n=>n!==t&&!e.includes(n)&&!n.classList.contains("fs-host")).map(t=>t.getBoundingClientRect())}function $n(t,e){let n=null
-		;return e.forEach(e=>{Math.abs(e-t)<=12&&(null===n||Math.abs(e-t)<Math.abs(n-t))&&(n=e)}),n}var Pn={left:{side:"left",width:null,panes:[],
-		node:null,ui:null},right:{side:"right",width:null,panes:[],node:null,ui:null}},Bn=null,qn=null;function Hn(t){
-		return t.classList.contains("snapped")}function Dn(t){return Object.values(Pn).find(e=>e.panes.some(e=>e.block===t))||null}function Nn(t){
-		const e=Dn(t);return e?e.panes.find(e=>e.block===t):null}function On(t){return"left"===t.side?Pn.right:Pn.left}function Tn(t){
-		return t.panes.length?t.width:0}function Wn(t){return Math.round(Tn(t)*u())}function Vn(){return Tn(Pn.left)+Tn(Pn.right)>=.999}
-		function Fn(t,e=[]){const n=[0,h()];return t.panes.forEach(t=>{if(e.includes(t.block)||t.block.classList.contains("fs-host"))return
-		;const o=t.block.getBoundingClientRect();n.push(o.top,o.bottom)}),n}function Un(t,e,n,o=[]){const r=Fn(t,o),a=$n(e,r.concat(r.map(t=>t-n)))
-		;return i(null===a?e:a,0,Math.max(0,h()-n))}function Zn(t,e,n){
-		const o=Pn[e],r=Math.max(...t.map(t=>t.offsetWidth)),a=o.panes.length?Wn(o):i(r,at,u()-Wn(On(o))),s=t.reduce((t,e)=>t+(e.classList.contains("free")?e.offsetHeight:Math.round(e.offsetHeight*a/e.offsetWidth)),0)
-		;return{left:"left"===e?0:u()-a,top:Math.round(Un(o,n,s,t)),width:a,height:s}}function Kn(e){Bn||(Bn=t("div",{class:"snap-preview",hidden:!0
-		}),document.body.appendChild(Bn)),Bn.hidden=!e,e&&Object.assign(Bn.style,{left:`${e.left}px`,top:`${e.top}px`,width:`${e.width}px`,
-		height:`${e.height}px`})}function Xn(e,n,o,r){e.node||(e.node=t("div",{class:`snap-col snap-${e.side}`}),e.ui=t("div",{
+		top:u?u[0]:n}}(l,p,m,i.width,i.height)),jn(a,i,p-i.left,m-i.top),to(c?c.slot:null)},()=>{var t;(to(null),c)?function(t,e,n){const o=Nn[e]
+		;o.panes.length||(o.width=n.width/E());let r=n.top;t.forEach(t=>{S(`snapPane: ${t.dataset.mapId} → ${e}`),no(t),eo(o,t,r/x()),ao(),
+		r=t.getBoundingClientRect().bottom}),To()}((t=r,[...t].sort((t,e)=>{const n=t.getBoundingClientRect(),o=e.getBoundingClientRect()
+		;return n.top-o.top||n.left-o.left})),c.side,c.slot):(sn(r),To())})}function Dn(t,e=[]){
+		return qn().filter(n=>n!==t&&!e.includes(n)&&!n.classList.contains("fs-host")).map(t=>t.getBoundingClientRect())}function Tn(t,e){let n=null
+		;return e.forEach(e=>{Math.abs(e-t)<=12&&(null===n||Math.abs(e-t)<Math.abs(n-t))&&(n=e)}),n}var Nn={left:{side:"left",width:null,panes:[],
+		node:null,ui:null},right:{side:"right",width:null,panes:[],node:null,ui:null}},Wn=null,On=null;function Vn(t){
+		return t.classList.contains("snapped")}function Fn(t){return Object.values(Nn).find(e=>e.panes.some(e=>e.block===t))||null}function Un(t){
+		const e=Fn(t);return e?e.panes.find(e=>e.block===t):null}function Zn(t){return"left"===t.side?Nn.right:Nn.left}function Kn(t){
+		return t.panes.length?t.width:0}function Xn(t){return Math.round(Kn(t)*E())}function Yn(){return Kn(Nn.left)+Kn(Nn.right)>=.999}
+		function Qn(t,e=[]){const n=[0,x()];return t.panes.forEach(t=>{if(e.includes(t.block)||t.block.classList.contains("fs-host"))return
+		;const o=t.block.getBoundingClientRect();n.push(o.top,o.bottom)}),n}function Gn(t,e,n,o=[]){const r=Qn(t,o),a=Tn(e,r.concat(r.map(t=>t-n)))
+		;return w(null===a?e:a,0,Math.max(0,x()-n))}function Jn(t,e,n){
+		const o=Nn[e],r=Math.max(...t.map(t=>t.offsetWidth)),a=o.panes.length?Xn(o):w(r,ft,E()-Xn(Zn(o))),i=t.reduce((t,e)=>t+(e.classList.contains("free")?e.offsetHeight:Math.round(e.offsetHeight*a/e.offsetWidth)),0)
+		;return{left:"left"===e?0:E()-a,top:Math.round(Gn(o,n,i,t)),width:a,height:i}}function to(e){Wn||(Wn=t("div",{class:"snap-preview",hidden:!0
+		}),document.body.appendChild(Wn)),Wn.hidden=!e,e&&Object.assign(Wn.style,{left:`${e.left}px`,top:`${e.top}px`,width:`${e.width}px`,
+		height:`${e.height}px`})}function eo(e,n,o,r){e.node||(e.node=t("div",{class:`snap-col snap-${e.side}`}),e.ui=t("div",{
 		class:`snap-ui snap-${e.side}`},[t("div",{class:"snap-edge","data-side":e.side})]),document.body.append(e.node,e.ui));const a={block:n,top:o
-		};n.classList.contains("free")&&(a.height=r||n.offsetHeight/h()),e.panes.push(a),n.classList.add("snapped",`snapped-${e.side}`)}
-		function Jn(t){const e=Dn(t);e&&(m(`unsnapPane: ${t.dataset.mapId}`),e.panes=e.panes.filter(e=>e.block!==t),
-		t.classList.remove("snapped",`snapped-${e.side}`),e.panes.length||Yn(e),Gn())}function Yn(t){t.node&&t.node.remove(),t.ui&&t.ui.remove(),
-		t.node=t.ui=t.width=null,t.panes=[]}function Qn(){Object.values(Pn).forEach(Yn),qn=null,oo(!1),Gn()}function Gn(){
-		document.body.classList.toggle("snap-full",Vn());const t=document.documentElement.style;t.setProperty("--snap-l",`${Wn(Pn.left)}px`),
-		t.setProperty("--snap-r",`${Wn(Pn.right)}px`);const e=Vn()&&Pn.left.panes.length&&Pn.right.panes.length;Object.values(Pn).forEach(t=>{
-		!function(t,e){const n=Wn(t);if(!n)return;const o="left"===t.side?0:u()-n;[t.node,t.ui].forEach(t=>{t.style.left=`${o}px`,
+		};n.classList.contains("free")&&(a.height=r||n.offsetHeight/x()),e.panes.push(a),n.classList.add("snapped",`snapped-${e.side}`)}
+		function no(t){const e=Fn(t);e&&(S(`unsnapPane: ${t.dataset.mapId}`),e.panes=e.panes.filter(e=>e.block!==t),
+		t.classList.remove("snapped",`snapped-${e.side}`),e.panes.length||oo(e),ao())}function oo(t){t.node&&t.node.remove(),t.ui&&t.ui.remove(),
+		t.node=t.ui=t.width=null,t.panes=[]}function ro(){Object.values(Nn).forEach(oo),On=null,co(!1),ao()}function ao(){
+		document.body.classList.toggle("snap-full",Yn());const t=document.documentElement.style;t.setProperty("--snap-l",`${Xn(Nn.left)}px`),
+		t.setProperty("--snap-r",`${Xn(Nn.right)}px`);const e=Yn()&&Nn.left.panes.length&&Nn.right.panes.length;Object.values(Nn).forEach(t=>{
+		!function(t,e){const n=Xn(t);if(!n)return;const o="left"===t.side?0:E()-n;[t.node,t.ui].forEach(t=>{t.style.left=`${o}px`,
 		t.style.width=`${n}px`});const r=t.ui.querySelector(".snap-edge");r.hidden=e&&"right"===t.side,
 		r.classList.toggle("snap-seam",e&&"left"===t.side),
-		r.title=e?"Širina stupaca · dvoklik vraća stranicu":Vn()?"Širina stupca · dvoklik vraća stranicu":"Širina stupca · dvoklik sakriva stranicu",
+		r.title=e?"Širina stupaca · dvoklik vraća stranicu":Yn()?"Širina stupca · dvoklik vraća stranicu":"Širina stupca · dvoklik sakriva stranicu",
 		t.panes.forEach(t=>function(t,e,n){const o=t.block
-		;o.style.width=`${n}px`,void 0!==t.height&&(o.style.height=`${Math.round(i(t.height*h(),et,h()))}px`)
-		;o.style.left=`${Math.round(e+(n-o.offsetWidth)/2)}px`,o.style.top=`${Math.round(i(t.top*h(),0,Math.max(0,h()-o.offsetHeight)))}px`
+		;o.style.width=`${n}px`,void 0!==t.height&&(o.style.height=`${Math.round(w(t.height*x(),ut,x()))}px`)
+		;o.style.left=`${Math.round(e+(n-o.offsetWidth)/2)}px`,o.style.top=`${Math.round(w(t.top*x(),0,Math.max(0,x()-o.offsetHeight)))}px`
 		}(t,o,n)),function(t){const e=new Map;t.panes.forEach(t=>{t.block._group&&(e.has(t.block._group)||e.set(t.block._group,[]),
 		e.get(t.block._group).push(t))}),e.forEach(t=>{t.sort((t,e)=>t.top-e.top);const e=t.reduce((t,e)=>t+e.block.offsetHeight,0)
-		;let n=i(t[0].block.getBoundingClientRect().top,0,Math.max(0,h()-e));t.forEach(t=>{t.block.style.top=`${Math.round(n)}px`,t.top=n/h(),
+		;let n=w(t[0].block.getBoundingClientRect().top,0,Math.max(0,x()-e));t.forEach(t=>{t.block.style.top=`${Math.round(n)}px`,t.top=n/x(),
 		n+=t.block.offsetHeight})})}(t),function(t){t.panes.forEach(e=>{const n=e.block
 		;if(!n.classList.contains("fs-host"))return n.style.removeProperty("--fs-top"),void n.style.removeProperty("--fs-bottom")
-		;const o=n.getBoundingClientRect();let r=0,a=h();t.panes.forEach(t=>{if(t===e||t.block.classList.contains("fs-host"))return
-		;const n=t.block.getBoundingClientRect();n.top<o.top?r=Math.max(r,n.bottom):a=Math.min(a,n.top)});const s=143;r=i(r,0,h()-s),
-		a=Math.max(a,r+s),n.style.setProperty("--fs-top",`${Math.round(r)}px`),n.style.setProperty("--fs-bottom",`${Math.round(h()-a)}px`)})}(t)
-		}(t,e),t.panes.forEach(t=>pn(t.block))})}function to(t,e){t.classList.contains("snap-seam")?function(t){const{left:e,right:n}=Pn,o=Wn(e)
-		;pt(t,t=>{const r=i(o+t,at,u()-at);e.width=r/u(),n.width=1-e.width,Gn()},$o)}(e):function(t,e){const n=Wn(t),o=u()-Wn(On(t)),r={
-		left:Tn(Pn.left),right:Tn(Pn.right)};pt(e,e=>{let a=i("left"===t.side?n+e:n-e,at,o);a>=o-24&&(a=o);const s=a/u()
-		;t.width=a===o?1-Tn(On(t)):s,Vn()&&!qn&&r.left+r.right<.999&&(qn=r),Vn()||(qn=null),Gn()},$o)}(Pn[t.dataset.side],e)}var eo=!1
-		;function no(){return eo}function oo(t){eo=t,document.body.classList.toggle("dashboard",t),Ye(),
-		document.querySelectorAll(".map-block.popout .po-btn").forEach(t=>sn(t,!0))}function ro(){let t=nt,e=0
-		;document.querySelectorAll(".map-block:not(.popout)").forEach(n=>{cn(n),t>nt&&t+n.offsetHeight>h()&&(t=nt,e++),
-		Mn(n,Wn(Pn.left)+nt+(t-nt)+420*e/2,t),An(n),t+=32})}var ao=null,io=420;function so(){ao&&(ao.menu.remove(),ao=null,
-		document.body.classList.remove("ms-add-open"),document.removeEventListener("pointerdown",lo,!0))}function lo(t){
-		!ao||ao.menu.contains(t.target)||ao.anchor.contains(t.target)||so()}var co=!1;var uo="#";function ho(t,e){return e>1?`${t}${uo}${e}`:t}
-		function po(t){return String(t).split(uo)[0]}function mo(t){const e=Number(String(t).split(uo)[1]);return e>1?e:1}function fo(t){
-		const e=mo(t);return e>1?`Copy${e}`:""}function go(t){return t.maxWidth?`max-width: ${t.maxWidth}px;`:""}function wo(e,n={},o=!1){
-		return t("div",{class:"radartitle",style:go(n)||void 0},[t("a",{href:e.href,target:"_blank",rel:"nofollow",text:e.text}),o?t("span",{
-		class:"right right-cluster"},[mt(),Rt(),yn(),an()]):null])}function vo(t){return wo({text:t.name,href:t.titleHref},t,!0)}function yo(e){
-		const n=t("div",{class:"links-bottom",style:go(e)||void 0});return e.links.forEach((e,o)=>{
+		;const o=n.getBoundingClientRect();let r=0,a=x();t.panes.forEach(t=>{if(t===e||t.block.classList.contains("fs-host"))return
+		;const n=t.block.getBoundingClientRect();n.top<o.top?r=Math.max(r,n.bottom):a=Math.min(a,n.top)});const i=143;r=w(r,0,x()-i),
+		a=Math.max(a,r+i),n.style.setProperty("--fs-top",`${Math.round(r)}px`),n.style.setProperty("--fs-bottom",`${Math.round(x()-a)}px`)})}(t)
+		}(t,e),t.panes.forEach(t=>yn(t.block))})}function io(t,e){t.classList.contains("snap-seam")?function(t){const{left:e,right:n}=Nn,o=Xn(e)
+		;xt(t,t=>{const r=w(o+t,ft,E()-ft);e.width=r/E(),n.width=1-e.width,ao()},To)}(e):function(t,e){const n=Xn(t),o=E()-Xn(Zn(t)),r={
+		left:Kn(Nn.left),right:Kn(Nn.right)};xt(e,e=>{let a=w("left"===t.side?n+e:n-e,ft,o);a>=o-24&&(a=o);const i=a/E()
+		;t.width=a===o?1-Kn(Zn(t)):i,Yn()&&!On&&r.left+r.right<.999&&(On=r),Yn()||(On=null),ao()},To)}(Nn[t.dataset.side],e)}var so=!1
+		;function lo(){return so}function co(t){so=t,document.body.classList.toggle("dashboard",t),on(),
+		document.querySelectorAll(".map-block.popout .po-btn").forEach(t=>pn(t,!0))}function uo(){let t=ht,e=0
+		;document.querySelectorAll(".map-block:not(.popout)").forEach(n=>{fn(n),t>ht&&t+n.offsetHeight>x()&&(t=ht,e++),
+		Pn(n,Xn(Nn.left)+ht+(t-ht)+420*e/2,t),In(n),t+=32})}var ho=null,po=420;function mo(){ho&&(ho.menu.remove(),ho=null,
+		document.body.classList.remove("ms-add-open"),document.removeEventListener("pointerdown",fo,!0))}function fo(t){
+		!ho||ho.menu.contains(t.target)||ho.anchor.contains(t.target)||mo()}var go=!1;var wo="#";function vo(t,e){return e>1?`${t}${wo}${e}`:t}
+		function yo(t){return String(t).split(wo)[0]}function bo(t){const e=Number(String(t).split(wo)[1]);return e>1?e:1}function ko(t){
+		const e=bo(t);return e>1?`Copy${e}`:""}function Eo(t){return t.maxWidth?`max-width: ${t.maxWidth}px;`:""}function xo(e,n={},o=!1){
+		return t("div",{class:"radartitle",style:Eo(n)||void 0},[t("a",{href:e.href,target:"_blank",rel:"nofollow",text:e.text}),o?t("span",{
+		class:"right right-cluster"},[Lt(),Tt(),Sn(),hn()]):null])}function Lo(t){return xo({text:t.name,href:t.titleHref},t,!0)}function So(e){
+		const n=t("div",{class:"links-bottom",style:Eo(e)||void 0});return e.links.forEach((e,o)=>{
 		o>0&&n.appendChild(document.createTextNode(" · ")),n.appendChild(t("a",{href:e.href,target:"_blank",rel:"nofollow",text:e.text}))}),n}
-		function bo(e,n=e.id){switch(e.type){case"slideshow":return function(e,n){
-		const o=e.id+fo(n),r=e.startSlide||1,a=e.slides.some(t=>t.title),i=t("div",{class:a?"slideshow":"slideshow placeholder",
+		function Co(e,n=e.id){switch(e.type){case"slideshow":return function(e,n){
+		const o=e.id+ko(n),r=e.startSlide||1,a=e.slides.some(t=>t.title),i=t("div",{class:a?"slideshow":"slideshow placeholder",
 		"data-slideshow-id":o,"data-current-slide":r,"data-dynamic-width":e.dynamicWidth?"":void 0,
-		style:(go(e)+(a?"":` aspect-ratio: ${e.aspect};`)).trim()||void 0});e.slides.forEach((n,o)=>{
+		style:(Eo(e)+(a?"":` aspect-ratio: ${e.aspect};`)).trim()||void 0});e.slides.forEach((n,o)=>{
 		const s=o===r-1,l=a?n.img:n,c=s||e.eagerSlides?t("img",{src:l}):t("img",{"data-src":l,class:"lazy"}),d=t("div",{
 		class:"slide fade"+(s?" active":"")});if(a){const o=n.maxWidth||e.maxWidth,r={text:n.title.text||e.name,href:n.title.href}
-		;d.appendChild(wo(r,{},!e.titleHref)),d.appendChild(t("div",{class:"placeholder",
+		;d.appendChild(xo(r,{},!e.titleHref)),d.appendChild(t("div",{class:"placeholder",
 		style:`${o?`max-width: ${o}px; `:""}aspect-ratio: ${n.aspect};`},[c]))}else d.appendChild(c);i.appendChild(d)});const s=t("a",{
 		class:"prev"+(a?" shorter":""),"data-action":"slide","data-step":"-1",html:"&#10094;"}),l=t("a",{class:"next"+(a?" shorter":""),
 		"data-action":"slide","data-step":"1",html:"&#10095;"});i.appendChild(s),i.appendChild(l);const c=t("div",{class:"indicators-container",
-		"data-slideshow-id":o,style:`${go(e)} grid-template-columns: repeat(${e.slides.length}, 1fr);`.trim()});return e.slides.forEach((e,n)=>{
-		c.appendChild(t("span",{class:"indicator"+(n===r-1?" active":"")}))}),[e.titleHref?vo(e):null,i,c]}(e,n);case"image":return function(e){
-		return[vo(e),t("div",{class:"placeholder",style:`${go(e)} aspect-ratio: ${e.aspect};`.trim()},[t("img",{src:e.img,alt:e.alt})])]}(e)
+		"data-slideshow-id":o,style:`${Eo(e)} grid-template-columns: repeat(${e.slides.length}, 1fr);`.trim()});return e.slides.forEach((e,n)=>{
+		c.appendChild(t("span",{class:"indicator"+(n===r-1?" active":"")}))}),[e.titleHref?Lo(e):null,i,c]}(e,n);case"image":return function(e){
+		return[Lo(e),t("div",{class:"placeholder",style:`${Eo(e)} aspect-ratio: ${e.aspect};`.trim()},[t("img",{src:e.img,alt:e.alt})])]}(e)
 		;case"video":return function(e){const n=t("video",{controls:""},[t("source",{type:"video/mp4",src:e.src})]);n.muted=!0,n.autoplay=!0,
-		n.loop=!0;const o=`${go(e)}${e.aspect?` aspect-ratio: ${e.aspect};`:""}`.trim();return[vo(e),t("div",{class:"placeholder",style:o||void 0
-		},[t("div",{class:"vid1"},[n])])]}(e);case"iframe":return function(e,n){const o=e.frameId+fo(n),r=o[0].toUpperCase()+o.slice(1),a=t("a",{
+		n.loop=!0;const o=`${Eo(e)}${e.aspect?` aspect-ratio: ${e.aspect};`:""}`.trim();return[Lo(e),t("div",{class:"placeholder",style:o||void 0
+		},[t("div",{class:"vid1"},[n])])]}(e);case"iframe":return function(e,n){const o=e.frameId+ko(n),r=o[0].toUpperCase()+o.slice(1),a=t("a",{
 		class:"left zoom-btn","data-mode":"hr","data-action":"zoom","data-frame":o,text:"[HR]"}),i=t("a",{class:"fs-btn","data-action":"fullscreen",
 		"data-frame":o,text:"[ ]"});return[t("div",{class:"radartitle"},[a,t("a",{class:"center",href:e.titleHref,target:"_blank",rel:"nofollow",
-		text:e.name}),t("span",{class:"right right-cluster"},[mt(),yn(),an(),t("a",{id:`reset${r}Frame`,"data-frame-id":o,style:"display:none",
+		text:e.name}),t("span",{class:"right right-cluster"},[Lt(),Sn(),hn(),t("a",{id:`reset${r}Frame`,"data-frame-id":o,style:"display:none",
 		text:"[X]"}),i])]),t("div",{class:"if1 placeholder"},[t("iframe",{id:o,class:e.scaled?"scaled-iframe":void 0,loading:e.loading||"lazy",
 		frameborder:"0","data-src-hr":e.srcHr,"data-zoom-hr-desktop":e.zoomHrDesktop,"data-zoom-hr-mobile":e.zoomHrMobile,"data-src-eu":e.srcEu,
 		"data-zoom-eu-desktop":e.zoomEuDesktop,"data-zoom-eu-mobile":e.zoomEuMobile}),t("div",{class:"overlay",id:`overlay${r}Frame`,
 		"data-frame-id":o},[t("span",{class:"hint",text:"Dvostruki klik za pristup interaktivnoj karti"})])])]}(e,n);case"iframe-basic":
-		return function(e){return[vo(e),t("div",{class:"if2 placeholder"},[t("iframe",{loading:"lazy",src:e.src,frameborder:"0",scrolling:"no"})])]
-		}(e)}return[]}function ko(){const e=document.querySelector("tbody[data-maps]");if(!e)return
-		;Ro(()=>document.querySelectorAll(".if1.fullscreen").forEach(y)),Qn(),e.replaceChildren(),co=!0;const n=No().map(J).filter(t=>t&&H(t.id))
-		;n.length?n.forEach(t=>Eo(e,t)):e.appendChild(t("tr",{},[t("td",{align:"center"},[t("div",{class:"maps-empty",
-		text:'Nema odabranih karata. Odaberite ih pod "Karte".'})])]))}function Eo(e,n){e.children.length&&e.appendChild(t("tr",{class:"sp20"}))
-		;const o=t("div",{class:"map-block","data-map-id":n.id,"data-inst":n.id},bo(n));return e.appendChild(t("tr",{},[t("td",{align:"center"
-		},[o])])),n.links&&n.links.length&&e.appendChild(t("tr",{},[t("td",{align:"center"},[yo(n)])])),o}function xo(){const t={},e=function(){
-		const t=new Map,e=new Map,n=[...document.querySelectorAll(".map-block")];return[...n.filter(t=>!ft(t)),...n.filter(ft)].forEach(n=>{
-		const o=n.dataset.mapId,r=(e.get(o)||0)+1;e.set(o,r),t.set(n,ho(o,r))}),t}(),n=new Map,o=t=>{
-		if(t._group)return n.has(t._group)||n.set(t._group,n.size+1),n.get(t._group)};Object.values(Pn).forEach(n=>{n.panes.length&&(t[n.side]={
-		width:s(n.width),panes:[...n.panes].sort((t,e)=>t.top-e.top).map(t=>{const n={id:e.get(t.block),top:s(t.top)}
-		;void 0!==t.height&&(n.height=s(t.height));const r=o(t.block);return r&&(n.group=r),
+		return function(e){return[Lo(e),t("div",{class:"if2 placeholder"},[t("iframe",{loading:"lazy",src:e.src,frameborder:"0",scrolling:"no"})])]
+		}(e)}return[]}function zo(){const e=document.querySelector("tbody[data-maps]");if(!e)return
+		;Bo(()=>document.querySelectorAll(".if1.fullscreen").forEach(R)),ro(),e.replaceChildren(),go=!0;const n=Fo().map(it).filter(t=>t&&K(t.id))
+		;n.length?n.forEach(t=>Mo(e,t)):e.appendChild(t("tr",{},[t("td",{align:"center"},[t("div",{class:"maps-empty",
+		text:'Nema odabranih karata. Odaberite ih pod "Karte".'})])]))}function Mo(e,n){e.children.length&&e.appendChild(t("tr",{class:"sp20"}))
+		;const o=t("div",{class:"map-block","data-map-id":n.id,"data-inst":n.id},Co(n));return e.appendChild(t("tr",{},[t("td",{align:"center"
+		},[o])])),n.links&&n.links.length&&e.appendChild(t("tr",{},[t("td",{align:"center"},[So(n)])])),o}function Ao(){const t={},e=function(){
+		const t=new Map,e=new Map,n=[...document.querySelectorAll(".map-block")];return[...n.filter(t=>!St(t)),...n.filter(St)].forEach(n=>{
+		const o=n.dataset.mapId,r=(e.get(o)||0)+1;e.set(o,r),t.set(n,vo(o,r))}),t}(),n=new Map,o=t=>{
+		if(t._group)return n.has(t._group)||n.set(t._group,n.size+1),n.get(t._group)};Object.values(Nn).forEach(n=>{n.panes.length&&(t[n.side]={
+		width:v(n.width),panes:[...n.panes].sort((t,e)=>t.top-e.top).map(t=>{const n={id:e.get(t.block),top:v(t.top)}
+		;void 0!==t.height&&(n.height=v(t.height));const r=o(t.block);return r&&(n.group=r),
 		t.block.classList.contains("fs-host")&&(n.fullscreen=!0),n})})})
-		;const r=jn().sort((t,e)=>(Number(t.style.zIndex)||0)-(Number(e.style.zIndex)||0)).map(t=>{const n=t.getBoundingClientRect(),r={id:e.get(t),
-		left:s(n.left/u()),top:s(n.top/h()),width:s(n.width/u())};t.classList.contains("free")&&(r.height=s(n.height/h()));const a=o(t)
-		;return a&&(r.group=a),t.classList.contains("fs-host")&&(r.fullscreen=!0),r});return r.length&&(t.floating=r),eo&&(t.dashboard=!0),
-		Object.keys(t).length?t:null}function So(t,e){if(!t||"object"!=typeof t)return null;const n={},o=new Set,r=!0===t.dashboard
+		;const r=qn().sort((t,e)=>(Number(t.style.zIndex)||0)-(Number(e.style.zIndex)||0)).map(t=>{const n=t.getBoundingClientRect(),r={id:e.get(t),
+		left:v(n.left/E()),top:v(n.top/x()),width:v(n.width/E())};t.classList.contains("free")&&(r.height=v(n.height/x()));const a=o(t)
+		;return a&&(r.group=a),t.classList.contains("fs-host")&&(r.fullscreen=!0),r});return r.length&&(t.floating=r),so&&(t.dashboard=!0),
+		Object.keys(t).length?t:null}function Ro(t,e){if(!t||"object"!=typeof t)return null;const n={},o=new Set,r=!0===t.dashboard
 		;r||["left","right"].forEach(r=>{const a=function(t,e,n){if(!t||"object"!=typeof t||!Array.isArray(t.panes))return null
-		;const o=Number(t.width);if(!(o>0&&o<=1))return null;const r=[];let a=0;return t.panes.forEach(t=>{if(!Co(t,e,n))return;const o={id:t.id
-		},i=Number(t.top),l=Number(t.share);if(Lo(i))o.top=s(i);else{if(!(l>0&&l<=1))return;o.top=s(a),o.height=s(l),a+=l}n.add(t.id),
-		r.push(zo(t,o))}),r.length?{width:s(o),panes:r}:null}(t[r],e,o);a&&(n[r]=a)
-		}),n.left&&n.right&&n.left.width+n.right.width>1&&(n.right.width=s(1-n.left.width),n.right.width<=0&&delete n.right)
+		;const o=Number(t.width);if(!(o>0&&o<=1))return null;const r=[];let a=0;return t.panes.forEach(t=>{if(!_o(t,e,n))return;const o={id:t.id
+		},i=Number(t.top),s=Number(t.share);if(jo(i))o.top=v(i);else{if(!(s>0&&s<=1))return;o.top=v(a),o.height=v(s),a+=s}n.add(t.id),
+		r.push($o(t,o))}),r.length?{width:v(o),panes:r}:null}(t[r],e,o);a&&(n[r]=a)
+		}),n.left&&n.right&&n.left.width+n.right.width>1&&(n.right.width=v(1-n.left.width),n.right.width<=0&&delete n.right)
 		;const a=function(t,e,n){
-		return Array.isArray(t)?t.filter(t=>Co(t,e,n)&&Lo(Number(t.left))&&Lo(Number(t.top))&&Lo(Number(t.width))&&Number(t.width)>0).map(t=>{
-		n.add(t.id);return zo(t,{id:t.id,left:s(Number(t.left)),top:s(Number(t.top)),width:s(Number(t.width))})}):[]}(t.floating,e,o)
+		return Array.isArray(t)?t.filter(t=>_o(t,e,n)&&jo(Number(t.left))&&jo(Number(t.top))&&jo(Number(t.width))&&Number(t.width)>0).map(t=>{
+		n.add(t.id);return $o(t,{id:t.id,left:v(Number(t.left)),top:v(Number(t.top)),width:v(Number(t.width))})}):[]}(t.floating,e,o)
 		;return a.length&&(n.floating=a),function(t){const e=new Map;t.forEach(t=>t.forEach(n=>{n.group&&(e.has(n.group)||e.set(n.group,{count:0,
 		places:new Set}),e.get(n.group).count++,e.get(n.group).places.add(t))})),t.forEach(t=>t.forEach(t=>{const n=e.get(t.group)
 		;n&&(n.count<2||n.places.size>1)&&delete t.group}))}([n.left&&n.left.panes,n.right&&n.right.panes,n.floating].filter(Boolean)),
-		r&&(n.dashboard=!0),Object.keys(n).length?n:null}function Lo(t){return Number.isFinite(t)&&t>=0&&t<=1}function Co(t,e,n){
-		return!!t&&"string"==typeof t.id&&e.includes(po(t.id))&&!n.has(t.id)}function zo(t,e){const n=Number(t.height)
-		;return Lo(n)&&n>0&&(e.height=s(n)),Number.isInteger(t.group)&&t.group>0&&(e.group=t.group),!0===t.fullscreen&&function(t){const e=J(po(t))
-		;return!!e&&"iframe"===e.type}(t.id)&&(e.fullscreen=!0),e}function Mo(t){if(Qn(),oo(!!(t&&t.dashboard&&r.matches)),
-		!t||!r.matches)return jo=r.matches?null:t,void ht();jo=null;const e=Ro(()=>function(t){const e=[],n=new Map,o=(t,e)=>{
-		e&&(n.has(e)||n.set(e,wn()),t._group=n.get(e))};["left","right"].forEach(n=>{const r=t[n];if(!r)return;const a=Pn[n]
-		;r.panes.forEach(({id:t,top:n,height:r,group:i,fullscreen:s})=>{const l=St(t);l&&!l.classList.contains("popout")&&(cn(l),
-		r&&!l.classList.contains("free")&&dn(l),Xn(a,l,n,r),o(l,i),s&&e.push(l))}),a.panes.length&&(a.width=i(r.width*u(),at,u())/u())})
-		;const{left:r,right:a}=Pn;r.panes.length&&a.panes.length&&r.width+a.width>1&&(a.width=1-r.width);Gn(),
-		(t.floating||[]).forEach(({id:t,left:n,top:r,width:a,height:s,group:l,fullscreen:c})=>{const d=St(t)
-		;d&&!d.classList.contains("popout")&&(cn(d),s&&!d.classList.contains("free")&&dn(d),d.style.width=`${Math.round(i(a*u(),tt,zn()))}px`,
-		d.classList.contains("free")&&s&&(d.style.height=`${Math.round(i(s*h(),et,h()))}px`),Mn(d,n*u(),r*h()),An(d),o(d,l),c&&e.push(d))})
-		;const s=eo&&!(t.floating||[]).length;eo&&ro();s&&At();return e.forEach(dt),En(),ut(),s}(t));e&&$o()}var Ao=!1;function Ro(t){const e=Ao
-		;Ao=!0;try{return t()}finally{Ao=e}}var jo=null;function _o(){return jo||xo()}function Io(){return jo?!0===jo.dashboard:no()}function $o(){
-		if(En(),ut(),Ao)return;const t=_o();if(Vo){t?Vo.layout=t:delete Vo.layout;const e=new URL(window.location);e.searchParams.set("v",ue(Vo)),
-		history.replaceState(null,"",e)}else{const e=qo();t?e.layout=t:delete e.layout,Ho(e)}const e=document.getElementById("mapSettings")
-		;e&&!e.hidden&&e._onLayoutChange&&e._onLayoutChange()}var Po="mapPrefs";function Bo(t){
-		return t&&"string"==typeof t.preset&&("custom"===t.preset||Qt().some(e=>e.id===t.preset))}function qo(){try{
-		const t=JSON.parse(localStorage.getItem(Po));if(Bo(t))return t}catch{}return{preset:"zadano"}}function Ho(t){try{
-		localStorage.setItem(Po,JSON.stringify(t))}catch{}}function Do(t){const e=Qt().find(e=>e.id===t);return e?e.maps:null}function No(){
-		return To(Fo())}function Oo(t){const e=Vo||qo();e.preset="custom",e.maps=t,Vo||Ho(e)}function To(t){
-		return"custom"===t.preset&&Array.isArray(t.maps)?[...new Set(t.maps)].filter(t=>X.has(t)):Do(t.preset)||Do("zadano")}function Wo(t,e){
-		return t.length===e.length&&t.every((t,n)=>t===e[n])}var Vo=null;function Fo(){return Vo||qo()}function Uo(){const t=Fo()
-		;return Vo&&"custom"===t.preset?function(t){const e=Jt.concat(Ft).find(e=>Wo(e.maps,t));return e?e.id:null}(No())||"custom":t.preset}
-		function Zo(){return document.getElementById("manualDialog")}function Ko(){var t;(t=Zo())&&ze(t,t.hidden)}var Xo=new Map;function Jo(t,e){
-		Xo.set(t,e)}function Yo(t){const e=t.target.closest(".snap-edge");if(e){if(0!==t.button)return;return t.preventDefault(),void to(e,t)}
-		const n=t.target.closest(".map-block.popout");if(!n)return;if(n.classList.contains("fs-host")||An(n),0!==t.button)return
+		r&&(n.dashboard=!0),Object.keys(n).length?n:null}function jo(t){return Number.isFinite(t)&&t>=0&&t<=1}function _o(t,e,n){
+		return!!t&&"string"==typeof t.id&&e.includes(yo(t.id))&&!n.has(t.id)}function $o(t,e){const n=Number(t.height)
+		;return jo(n)&&n>0&&(e.height=v(n)),Number.isInteger(t.group)&&t.group>0&&(e.group=t.group),!0===t.fullscreen&&function(t){const e=it(yo(t))
+		;return!!e&&"iframe"===e.type}(t.id)&&(e.fullscreen=!0),e}function Po(t){if(ro(),co(!!(t&&t.dashboard&&f.matches)),
+		!t||!f.matches)return qo=f.matches?null:t,void Et();qo=null;const e=Bo(()=>function(t){const e=[],n=new Map,o=(t,e)=>{
+		e&&(n.has(e)||n.set(e,xn()),t._group=n.get(e))};["left","right"].forEach(n=>{const r=t[n];if(!r)return;const a=Nn[n]
+		;r.panes.forEach(({id:t,top:n,height:r,group:i,fullscreen:s})=>{const l=Pt(t);l&&!l.classList.contains("popout")&&(fn(l),
+		r&&!l.classList.contains("free")&&gn(l),eo(a,l,n,r),o(l,i),s&&e.push(l))}),a.panes.length&&(a.width=w(r.width*E(),ft,E())/E())})
+		;const{left:r,right:a}=Nn;r.panes.length&&a.panes.length&&r.width+a.width>1&&(a.width=1-r.width);ao(),
+		(t.floating||[]).forEach(({id:t,left:n,top:r,width:a,height:i,group:s,fullscreen:l})=>{const c=Pt(t)
+		;c&&!c.classList.contains("popout")&&(fn(c),i&&!c.classList.contains("free")&&gn(c),c.style.width=`${Math.round(w(a*E(),dt,$n()))}px`,
+		c.classList.contains("free")&&i&&(c.style.height=`${Math.round(w(i*x(),ut,x()))}px`),Pn(c,n*E(),r*x()),In(c),o(c,s),l&&e.push(c))})
+		;const i=so&&!(t.floating||[]).length;so&&uo();i&&Dt();return e.forEach(bt),Mn(),kt(),i}(t));e&&To()}var Io=!1;function Bo(t){const e=Io
+		;Io=!0;try{return t()}finally{Io=e}}var qo=null;function Ho(){return qo||Ao()}function Do(){return qo?!0===qo.dashboard:lo()}function To(){
+		if(Mn(),kt(),Io)return;const t=Ho();if(Xo){t?Xo.layout=t:delete Xo.layout;const e=new URL(window.location);e.searchParams.set("v",ve(Xo)),
+		history.replaceState(null,"",e)}else{const e=Wo();t?e.layout=t:delete e.layout,Oo(e)}const e=document.getElementById("mapSettings")
+		;e&&!e.hidden&&e._onLayoutChange&&e._onLayoutChange()}function No(t){
+		return t&&"string"==typeof t.preset&&("custom"===t.preset||ie().some(e=>e.id===t.preset))}function Wo(){const t=p(r);return No(t)?t:{
+		preset:"zadano"}}function Oo(t){m(r,t)}function Vo(t){const e=ie().find(e=>e.id===t);return e?e.maps:null}function Fo(){return Zo(Yo())}
+		function Uo(t){const e=Xo||Wo();e.preset="custom",e.maps=t,Xo||Oo(e)}function Zo(t){
+		return"custom"===t.preset&&Array.isArray(t.maps)?[...new Set(t.maps)].filter(t=>at.has(t)):Vo(t.preset)||Vo("zadano")}function Ko(t,e){
+		return t.length===e.length&&t.every((t,n)=>t===e[n])}var Xo=null;function Yo(){return Xo||Wo()}function Qo(){const t=Yo()
+		;return Xo&&"custom"===t.preset?function(t){const e=re.concat(te).find(e=>Ko(e.maps,t));return e?e.id:null}(Fo())||"custom":t.preset}
+		var Go=!1,Jo="upute";function tr(){return document.getElementById("manualDialog")}function er(){var t;(t=tr())&&Ie(t,t.hidden)}
+		function nr(t){try{return decodeURIComponent(t.slice(1))}catch{return t.slice(1)}}var or=new Map;function rr(t,e){or.set(t,e)}
+		function ar(t){const e=t.target.closest(".snap-edge");if(e){if(0!==t.button)return;return t.preventDefault(),void io(e,t)}
+		const n=t.target.closest(".map-block.popout");if(!n)return;if(n.classList.contains("fs-host")||In(n),0!==t.button)return
 		;const o=t.target.closest(".po-h"),r=t.target.closest(".radartitle")
 		;(o||r&&!t.target.closest("a")&&!r.classList.contains("fullscreen"))&&(t.preventDefault(),o?function(t,e,n){const o=function(t,e){
-		if(1!==e.length||Hn(t)||t.classList.contains("fs-host"))return null
-		;const n=t.getBoundingClientRect(),o=(t,e)=>Math.abs(t-e)<=1,r=jn().filter(r=>{if(r===t||r.classList.contains("fs-host"))return!1
+		if(1!==e.length||Vn(t)||t.classList.contains("fs-host"))return null
+		;const n=t.getBoundingClientRect(),o=(t,e)=>Math.abs(t-e)<=1,r=qn().filter(r=>{if(r===t||r.classList.contains("fs-host"))return!1
 		;const a=r.getBoundingClientRect()
 		;return"e"===e||"w"===e?("e"===e?o(a.left,n.right):o(a.right,n.left))&&o(a.top,n.top)&&o(a.bottom,n.bottom):("s"===e?o(a.top,n.bottom):o(a.bottom,n.top))&&o(a.left,n.left)&&o(a.right,n.right)
 		});return 1===r.length?r[0]:null}(t,e);if(o)if(n.ctrlKey||n.metaKey){const r=t.getBoundingClientRect(),a={e:"w",w:"e",n:"s",s:"n"}
-		;("e"===e?n.clientX<r.right:"w"===e?n.clientX>=r.left:"s"===e?n.clientY<r.bottom:n.clientY>=r.top)?en(t,e,n):(An(o),en(o,a[e],n))
-		}else!function(t,e,n,o){m(`resizeSeam: ${t.dataset.mapId} | ${e.dataset.mapId} (${n})`);const r="e"===n||"w"===n;dn(t),dn(e)
-		;const a=t.getBoundingClientRect(),s=e.getBoundingClientRect(),[l,c]=r?a.left<=s.left?[t,e]:[e,t]:a.top<=s.top?[t,e]:[e,t],d=l.getBoundingClientRect(),u=c.getBoundingClientRect(),h=r?d.width:d.height,p=r?u.width:u.height,f=r?u.left:u.top,g=r?tt:et,w=In(l,[c]).flatMap(t=>r?[t.left,t.right]:[t.top,t.bottom])
-		;pt(o,(t,e)=>{let n=r?t:e;const o=$n(f+n,w);null!==o&&(n=o-f),n=i(n,g-h,p-g),r?(l.style.width=`${Math.round(h+n)}px`,
-		c.style.width=`${Math.round(p-n)}px`,c.style.left=`${Math.round(f+n)}px`):(l.style.height=`${Math.round(h+n)}px`,
-		c.style.height=`${Math.round(p-n)}px`,c.style.top=`${Math.round(f+n)}px`),pn(l),pn(c)},()=>{tn([l,c]),En(),$o()})}(t,o,e,n);else en(t,e,n)
-		}(n,o.dataset.dir,t):_n(n,t))}function Qo(t){1===t.button&&r.matches&&nr(t)&&t.preventDefault()}function Go(t){
-		if(1!==t.button||!r.matches)return;const e=nr(t);e&&(t.preventDefault(),ln(e.closest(".map-block")))}function tr(t){
-		if(!t.target.closest)return;const e=t.target.closest(".snap-edge");e&&function(t){const e=On(t)
-		;if(Vn())if(qn&&qn.left+qn.right<.999)[Pn.left,Pn.right].forEach(t=>{t.panes.length&&qn[t.side]&&(t.width=qn[t.side])}),qn=null;else{
-		const t=Math.min(.5,875/u());[Pn.left,Pn.right].forEach(e=>{e.panes.length&&(e.width*=1-t)}),qn=null}else qn={left:Tn(Pn.left),
-		right:Tn(Pn.right)},t.width=1-Tn(e);Gn(),$o()}(Pn[e.dataset.side]);const n=nr(t);n&&function(t){
+		;("e"===e?n.clientX<r.right:"w"===e?n.clientX>=r.left:"s"===e?n.clientY<r.bottom:n.clientY>=r.top)?ln(t,e,n):(In(o),ln(o,a[e],n))
+		}else!function(t,e,n,o){S(`resizeSeam: ${t.dataset.mapId} | ${e.dataset.mapId} (${n})`);const r="e"===n||"w"===n;gn(t),gn(e)
+		;const a=t.getBoundingClientRect(),i=e.getBoundingClientRect(),[s,l]=r?a.left<=i.left?[t,e]:[e,t]:a.top<=i.top?[t,e]:[e,t],c=s.getBoundingClientRect(),d=l.getBoundingClientRect(),u=r?c.width:c.height,h=r?d.width:d.height,p=r?d.left:d.top,m=r?dt:ut,f=Dn(s,[l]).flatMap(t=>r?[t.left,t.right]:[t.top,t.bottom])
+		;xt(o,(t,e)=>{let n=r?t:e;const o=Tn(p+n,f);null!==o&&(n=o-p),n=w(n,m-u,h-m),r?(s.style.width=`${Math.round(u+n)}px`,
+		l.style.width=`${Math.round(h-n)}px`,l.style.left=`${Math.round(p+n)}px`):(s.style.height=`${Math.round(u+n)}px`,
+		l.style.height=`${Math.round(h-n)}px`,l.style.top=`${Math.round(p+n)}px`),yn(s),yn(l)},()=>{sn([s,l]),Mn(),To()})}(t,o,e,n);else ln(t,e,n)
+		}(n,o.dataset.dir,t):Hn(n,t))}function ir(t){1===t.button&&f.matches&&dr(t)&&t.preventDefault()}function sr(t){
+		if(1!==t.button||!f.matches)return;const e=dr(t);e&&(t.preventDefault(),mn(e.closest(".map-block")))}function lr(t){
+		if(!t.target.closest)return;const e=t.target.closest(".snap-edge");e&&function(t){const e=Zn(t)
+		;if(Yn())if(On&&On.left+On.right<.999)[Nn.left,Nn.right].forEach(t=>{t.panes.length&&On[t.side]&&(t.width=On[t.side])}),On=null;else{
+		const t=Math.min(.5,875/E());[Nn.left,Nn.right].forEach(e=>{e.panes.length&&(e.width*=1-t)}),On=null}else On={left:Kn(Nn.left),
+		right:Kn(Nn.right)},t.width=1-Kn(e);ao(),To()}(Nn[e.dataset.side]);const n=dr(t);n&&function(t){
 		const e=t.closest(".map-block").querySelector(".fs-btn");e&&e.click()}(n)
 		;const o=t.target.closest(".map-block.popout.letterbox .radartitle:not(.fullscreen)");if(o&&!t.target.closest("a")){
-		const t=o.closest(".map-block");!function(t){const e=t.getBoundingClientRect();if(un(t),Hn(t))return
+		const t=o.closest(".map-block");!function(t){const e=t.getBoundingClientRect();if(wn(t),Vn(t))return
 		;const n=t.querySelector(".slide.active img")||t.querySelector(".placeholder img");if(n&&(!n.complete||!n.naturalWidth))return
-		;const o=zn(),r=rn(t,Math.min(e.width,o));if(r>e.height+.5){const n=e.width/r,a=on(t,e.height,e.height*n,n,o)
-		;t.style.width=`${Math.round(a)}px`}Mn(t,e.left,e.top)}(t);const e=Nn(t);e&&delete e.height,Gn(),pn(t),$o()}}function er(){
+		;const o=$n(),r=un(t,Math.min(e.width,o));if(r>e.height+.5){const n=e.width/r,a=dn(t,e.height,e.height*n,n,o)
+		;t.style.width=`${Math.round(a)}px`}Pn(t,e.left,e.top)}(t);const e=Un(t);e&&delete e.height,ao(),yn(t),To()}}function cr(){
 		const t=document.activeElement;if(!t||"IFRAME"!==t.tagName)return;const e=t.closest(".map-block.popout")
-		;e&&!e.classList.contains("fs-host")&&An(e)}function nr(t){
-		return!t.target.closest||t.target.closest("a, button, input")?null:t.target.closest(".map-block.popout .radartitle")}var or={
-		ArrowLeft:[-1,0],ArrowRight:[1,0],ArrowUp:[0,-1],ArrowDown:[0,1]};function rr(){
-		return jn().filter(t=>!t.classList.contains("fs-host")).reduce((t,e)=>!t||(Number(e.style.zIndex)||0)>=(Number(t.style.zIndex)||0)?e:t,null)
-		}var ar=0;q=B(function(){try{return JSON.parse(localStorage.getItem(P))}catch{return null}}()),D(),
-		fetch("https://meteo-data.jurakovic.workers.dev/config.json",{cache:"no-cache"}).then(t=>t.ok?t.json():Promise.reject(t.status)).then(t=>{
-		try{localStorage.setItem(P,JSON.stringify(t))}catch{}const e=B(t);var n,o;o=q,(n=e).size===o.size&&[...n].every(t=>o.has(t))||(q=e,D(),
-		document.dispatchEvent(new CustomEvent("map-config-changed")))}).catch(()=>{}),document.documentElement.classList.add("no-manual"),
-		function(){const t=new URLSearchParams(window.location.search).get("v");Vo=t?function(t){try{
-		const e=JSON.parse(atob(t.replace(/-/g,"+").replace(/_/g,"/")));if(Bo(e))return e.name&&(e.name=te(e.name)),e}catch{}return null}(t):null
-		}(),function(){const t=Fo().layout;t&&t.dashboard&&r.matches&&document.documentElement.classList.add("board-boot")}(),Jo("top",()=>{
-		window.scrollTo({top:0,behavior:"smooth"})}),Jo("links",()=>z("links")),Jo("links-bottom",t=>function(t){
-		document.body.classList.toggle("show-links-bottom",t.checked),localStorage.setItem("showLinksBottom",t.checked?"1":"0"),A()}(t)),
-		Jo("manual",()=>Ko()),Jo("slide",t=>{return e=t.closest(".slideshow"),n=Number(t.dataset.step),
-		void R(e,parseInt(e.getAttribute("data-current-slide"))+n);var e,n}),Jo("zoom",t=>function(t,e){
-		const n="hr"===e.getAttribute("data-mode")?"eu":"hr",o=document.getElementById(t);o.setAttribute("data-zoom-mode",n),w(o),
-		e.setAttribute("data-mode",n),e.textContent="hr"===n?"[HR]":"[EU]";const r=S(t)
+		;e&&!e.classList.contains("fs-host")&&In(e)}function dr(t){
+		return!t.target.closest||t.target.closest("a, button, input")?null:t.target.closest(".map-block.popout .radartitle")}var ur={
+		ArrowLeft:[-1,0],ArrowRight:[1,0],ArrowUp:[0,-1],ArrowDown:[0,1]};function hr(){
+		return qn().filter(t=>!t.classList.contains("fs-host")).reduce((t,e)=>!t||(Number(e.style.zIndex)||0)>=(Number(t.style.zIndex)||0)?e:t,null)
+		}var pr=0;Z=U(p(s)),X(),fetch("https://meteo-data.jurakovic.workers.dev/config.json",{cache:"no-cache"
+		}).then(t=>t.ok?t.json():Promise.reject(t.status)).then(t=>{m(s,t);const e=U(t);var n,o;o=Z,
+		(n=e).size===o.size&&[...n].every(t=>o.has(t))||(Z=e,X(),document.dispatchEvent(new CustomEvent("map-config-changed")))}).catch(()=>{}),
+		Go||document.documentElement.classList.add("no-manual"),function(){const t=new URLSearchParams(window.location.search).get("v")
+		;Xo=t?function(t){try{const e=JSON.parse(atob(t.replace(/-/g,"+").replace(/_/g,"/")));if(No(e))return e.name&&(e.name=le(e.name)),e}catch{}
+		return null}(t):null}(),function(){const t=Yo().layout;t&&t.dashboard&&f.matches&&document.documentElement.classList.add("board-boot")}(),
+		rr("top",()=>{window.scrollTo({top:0,behavior:"smooth"})}),rr("links",()=>H("links")),rr("links-bottom",t=>function(t){
+		document.body.classList.toggle("show-links-bottom",t.checked),m(u,t.checked?1:0),T()}(t)),rr("manual",()=>er()),rr("slide",t=>{
+		return e=t.closest(".slideshow"),n=Number(t.dataset.step),void N(e,parseInt(e.getAttribute("data-current-slide"))+n);var e,n}),
+		rr("zoom",t=>function(t,e){const n="hr"===e.getAttribute("data-mode")?"eu":"hr",o=document.getElementById(t)
+		;o.setAttribute("data-zoom-mode",n),M(o),e.setAttribute("data-mode",n),e.textContent="hr"===n?"[HR]":"[EU]";const r=I(t)
 		;"[R]"!==r.textContent||o.parentElement.classList.contains("fullscreen")||(r.style.display="none")}(t.dataset.frame,t)),
-		Jo("fullscreen",t=>v(t.dataset.frame,t)),document.addEventListener("click",t=>{
-		const e=t.target.closest&&t.target.closest("[data-action]"),n=e&&Xo.get(e.dataset.action);n&&n(e,t)}),Jo("map-settings",()=>Be()),
+		rr("fullscreen",t=>A(t.dataset.frame,t)),document.addEventListener("click",t=>{
+		const e=t.target.closest&&t.target.closest("[data-action]"),n=e&&or.get(e.dataset.action);n&&n(e,t)}),rr("map-settings",()=>Ve()),
 		document.addEventListener("keydown",t=>{if(t.altKey||t.ctrlKey||t.metaKey)return
 		;if(t.target.matches&&t.target.matches('input:not([type="radio"]):not([type="checkbox"]), textarea, [contenteditable]'))return
-		;if("Escape"===t.key)return void function(){if(we())return;const t=document.querySelector(".if1.fullscreen");t&&y(t)}();if(!r.matches)return
-		;if("r"===t.key||"R"===t.key)return t.preventDefault(),void $t();if("g"===t.key||"G"===t.key)return t.preventDefault(),
-		void(no()&&Je(!Ke(),Xe()));if("s"===t.key||"S"===t.key)return t.preventDefault(),void(no()&&Je(Ke(),!Xe()))
-		;if("a"===t.key||"A"===t.key)return t.preventDefault(),void(we()||At());if("d"===t.key||"D"===t.key)return t.preventDefault(),
-		void(we()||xt(rr()));const e=or[t.key];if(!e||we())return;t.preventDefault();const n=t.shiftKey?1:16;!function(t,e){const n=rr()
-		;if(!n)return;const o=vn(n);if(o.length>1){const n=xn(o);Ln(n,Sn(n),t,e)}else{const o=n.getBoundingClientRect();Mn(n,o.left+t,o.top+e)}ut(),
-		clearTimeout(ar),ar=setTimeout($o,300)}(e[0]*n,e[1]*n)}),document.addEventListener("keydown",t=>{
-		"Escape"!==t.key||t.altKey||t.ctrlKey||t.metaKey||n(t.target)||Me()}),document.addEventListener("keydown",t=>{
-		t.altKey||t.ctrlKey||t.metaKey||n(t.target)||"k"!==t.key&&"K"!==t.key||(t.preventDefault(),Be())}),document.addEventListener("keydown",t=>{
+		;if("Escape"===t.key)return void function(){if(Le())return;const t=document.querySelector(".if1.fullscreen");t&&R(t)}();if(!f.matches)return
+		;if("r"===t.key||"R"===t.key)return t.preventDefault(),void Vt();if("g"===t.key||"G"===t.key)return t.preventDefault(),
+		void(lo()&&nn(!tn(),en()));if("s"===t.key||"S"===t.key)return t.preventDefault(),void(lo()&&nn(tn(),!en()))
+		;if("a"===t.key||"A"===t.key)return t.preventDefault(),void(Le()||Dt());if("d"===t.key||"D"===t.key)return t.preventDefault(),
+		void(Le()||$t(hr()));const e=ur[t.key];if(!e||Le())return;t.preventDefault();const n=t.shiftKey?1:16;!function(t,e){const n=hr()
+		;if(!n)return;const o=Ln(n);if(o.length>1){const n=An(o);jn(n,Rn(n),t,e)}else{const o=n.getBoundingClientRect();Pn(n,o.left+t,o.top+e)}kt(),
+		clearTimeout(pr),pr=setTimeout(To,300)}(e[0]*n,e[1]*n)}),document.addEventListener("keydown",t=>{
+		"Escape"!==t.key||t.altKey||t.ctrlKey||t.metaKey||n(t.target)||Be()}),document.addEventListener("keydown",t=>{
+		t.altKey||t.ctrlKey||t.metaKey||n(t.target)||"k"!==t.key&&"K"!==t.key||(t.preventDefault(),Ve())}),document.addEventListener("keydown",t=>{
 		if("Enter"!==t.key||t.altKey||t.ctrlKey||t.metaKey||t.shiftKey||t.isComposing)return;const e=document.getElementById("mapSettings")
 		;if(!e||e.hidden)return;if(n(t.target)||t.target.matches&&t.target.matches("select"))return;const o=e.querySelector(".ms-apply")
 		;o&&(t.preventDefault(),t.stopPropagation(),o.click())},!0),document.addEventListener("dialog-toggled",t=>{
 		if("mapSettings"!==t.detail.panel.id)return;const e=document.querySelector(".buttons button.btn .arrow")
-		;e&&(e.textContent=t.detail.visible?"▲":"▼")}),document.addEventListener("dialog-toggled",t=>{t.detail.visible&&so()}),
-		window.addEventListener("resize",()=>so()),document.addEventListener("map-config-changed",()=>{co&&function(){const t=So(_o(),No());so(),
-		ko(),I(),Mo(t)}()}),document.addEventListener("pointerdown",Yo),window.addEventListener("blur",()=>setTimeout(er)),
-		document.addEventListener("mousedown",Qo),document.addEventListener("auxclick",Go),document.addEventListener("dblclick",tr),
+		;e&&(e.textContent=t.detail.visible?"▲":"▼")}),document.addEventListener("dialog-toggled",t=>{t.detail.visible&&mo()}),
+		window.addEventListener("resize",()=>mo()),document.addEventListener("map-config-changed",()=>{go&&function(){const t=Ro(Ho(),Fo());mo(),
+		zo(),V(),Po(t)}()}),document.addEventListener("pointerdown",ar),window.addEventListener("blur",()=>setTimeout(cr)),
+		document.addEventListener("mousedown",ir),document.addEventListener("auxclick",sr),document.addEventListener("dblclick",lr),
 		document.addEventListener("map-fullscreen",()=>{document.querySelectorAll(".map-block.popout").forEach(t=>{
 		const e=!!t.querySelector(".if1.fullscreen"),n=t.classList.contains("fs-host");t.classList.toggle("fs-host",e),
-		e?t.style.zIndex=4500:n&&An(t)}),ct(),Gn(),r.matches&&$o()}),r.addEventListener("change",t=>{t.matches?Mo(jo):(jo=So(Fo().layout,No()),
-		Ro(fn))}),window.addEventListener("resize",()=>{clearTimeout(window._popoutResizeTimeout),window._popoutResizeTimeout=setTimeout(()=>{Gn()
-		;const t=new Set;jn().forEach(e=>{if(t.has(e))return;const n=vn(e);if(n.forEach(e=>t.add(e)),1===n.length){const t=e.getBoundingClientRect()
-		;Mn(e,t.left,t.top)}else{const t=xn(n);Ln(t,Sn(t),0,0)}}),En(),ut()},200)}),["load","click","pointerup"].forEach(t=>{
+		e?t.style.zIndex=4500:n&&In(t)}),yt(),ao(),f.matches&&To()}),f.addEventListener("change",t=>{t.matches?Po(qo):(qo=Ro(Yo().layout,Fo()),
+		Bo(kn))}),window.addEventListener("resize",()=>{clearTimeout(window._popoutResizeTimeout),window._popoutResizeTimeout=setTimeout(()=>{ao()
+		;const t=new Set;qn().forEach(e=>{if(t.has(e))return;const n=Ln(e);if(n.forEach(e=>t.add(e)),1===n.length){const t=e.getBoundingClientRect()
+		;Pn(e,t.left,t.top)}else{const t=An(n);jn(t,Rn(t),0,0)}}),Mn(),kt()},200)}),["load","click","pointerup"].forEach(t=>{
 		document.addEventListener(t,t=>{const e=t.target.closest&&t.target.closest(".map-block.popout");e&&setTimeout(()=>{
-		Hn(e)&&!e.classList.contains("free")&&Gn(),pn(e),hn(e),ht()},0)},!0)}),window.addEventListener("resize",()=>{clearTimeout($),
-		$=setTimeout(()=>{g(),k(),A()},200)}),document.addEventListener("dialog-toggled",()=>Gn()),e(function(){
-		document.body.classList.toggle("refresh-on",qt),Wt()}),e(function(){const t=document.querySelector(".ms-tab");t&&(Te(t),Oe(),
-		t.addEventListener("click",t=>{t.target.closest(".ms-tab-btn")||(He?He=!1:Be())}),t.addEventListener("pointermove",e=>{
+		Vn(e)&&!e.classList.contains("free")&&ao(),yn(e),vn(e),Et()},0)},!0)}),window.addEventListener("resize",()=>{clearTimeout(F),
+		F=setTimeout(()=>{z(),_(),T()},200)}),document.addEventListener("dialog-toggled",()=>ao()),e(function(){
+		document.body.classList.toggle("refresh-on",Ut),Gt()}),e(function(){const t=document.querySelector(".ms-tab");t&&(Xe(t),Ke(),
+		t.addEventListener("click",t=>{t.target.closest(".ms-tab-btn")||(Fe?Fe=!1:Ve())}),t.addEventListener("pointermove",e=>{
 		if(e.target.closest(".ms-tab-btn"))return void(t.style.cursor="")
 		;const n=t.getBoundingClientRect(),o=e.clientX-n.left<=8||n.right-e.clientX<=8;t.style.cursor=o?"ew-resize":""}),
 		t.addEventListener("pointerdown",e=>{if(0!==e.button||e.target.closest(".ms-tab-btn"))return;e.preventDefault()
-		;const n=t.getBoundingClientRect(),o=e.clientX-n.left<=8?"w":n.right-e.clientX<=8?"e":"move";He=!1,lt(e,e=>{
-		if(He||!(Math.abs(e)<4))if(He=!0,"move"===o)Ne(t,n.left+e,n.width);else if("e"===o)Ne(t,n.left,n.width+e);else{const o=De(t,n.width-e)
-		;Ne(t,n.right-o,o)}},()=>{He&&function(t){const e=t.getBoundingClientRect();try{localStorage.setItem(qe,JSON.stringify({left:s(e.left/u()),
-		width:Math.round(e.width)}))}catch{}}(t)})}),window.addEventListener("resize",Oe))}),e(ko),e(function(){Mo(So(Fo().layout,No()))}),
-		e(function(){document.documentElement.classList.remove("board-boot")}),e(function(){fe().forEach(t=>{Se(t),Le(t)}),function(){
-		const t=document.querySelector(".ms-backdrop");t&&t.addEventListener("pointerdown",e=>{if(!we())return;e.preventDefault(),Me(),t.hidden=!1,
-		t.classList.add("ms-spent");let n=0;const o=()=>{clearTimeout(n),t.classList.remove("ms-spent"),t.hidden=!we(),
+		;const n=t.getBoundingClientRect(),o=e.clientX-n.left<=8?"w":n.right-e.clientX<=8?"e":"move";Fe=!1,vt(e,e=>{
+		if(Fe||!(Math.abs(e)<4))if(Fe=!0,"move"===o)Ze(t,n.left+e,n.width);else if("e"===o)Ze(t,n.left,n.width+e);else{const o=Ue(t,n.width-e)
+		;Ze(t,n.right-o,o)}},()=>{Fe&&function(t){const e=t.getBoundingClientRect();m(d,{left:v(e.left/E()),width:Math.round(e.width)})}(t)})}),
+		window.addEventListener("resize",Ke))}),e(zo),e(function(){Po(Ro(Yo().layout,Fo()))}),e(function(){
+		document.documentElement.classList.remove("board-boot")}),e(function(){Ee().forEach(t=>{_e(t),$e(t)}),function(){
+		const t=document.querySelector(".ms-backdrop");t&&t.addEventListener("pointerdown",e=>{if(!Le())return;e.preventDefault(),Be(),t.hidden=!1,
+		t.classList.add("ms-spent");let n=0;const o=()=>{clearTimeout(n),t.classList.remove("ms-spent"),t.hidden=!Le(),
 		document.removeEventListener("click",r,!0),document.removeEventListener("pointerup",a),document.removeEventListener("pointercancel",o)
 		},r=t=>{t.stopPropagation(),t.preventDefault(),o()},a=()=>{n=setTimeout(o,400)};document.addEventListener("click",r,!0),
-		document.addEventListener("pointerup",a),document.addEventListener("pointercancel",o)})}(),window.addEventListener("resize",()=>xe(ge()))}),
-		e(function(){Zo()}),e(function(){!function(){const t=document.querySelector(".links-toggle")
-		;t&&(t.checked="1"===localStorage.getItem("showLinksBottom"),document.body.classList.toggle("show-links-bottom",t.checked))}(),I(),
-		document.querySelector(".expandable").addEventListener("click",function(){let t=this.querySelector(".arrow")
+		document.addEventListener("pointerup",a),document.addEventListener("pointercancel",o)})}(),window.addEventListener("resize",()=>je(xe()))}),
+		e(function(){const t=tr();if(!t||!Go)return;const e=t.querySelector(".ms-close");e&&e.addEventListener("click",()=>Ie(t,!1)),
+		t.addEventListener("click",e=>{const n=e.target.closest('a[href^="#"]');n&&t.contains(n)&&(e.preventDefault(),function(t,e){
+		const n=t.querySelector(".ms-body"),o=t.querySelector(`[id="${CSS.escape(e)}"]`)
+		;n&&o&&(n.scrollTop+=o.getBoundingClientRect().top-n.getBoundingClientRect().top)}(t,nr(n.getAttribute("href"))))}),
+		document.addEventListener("dialog-toggled",e=>{e.detail.panel===t&&(!function(t){const e=new URL(window.location.href)
+		;t!==(nr(e.hash)===Jo)&&(e.hash=t?Jo:"",history.replaceState(null,"",t?e.href:e.href.replace(/#$/,"")))}(e.detail.visible),
+		e.detail.visible&&(t.querySelector(".ms-body").scrollTop=0))}),document.addEventListener("keydown",t=>{
+		"h"!==t.key&&"H"!==t.key||t.altKey||t.ctrlKey||t.metaKey||n(t.target)||(t.preventDefault(),er())});const o=()=>{
+		const e=nr(window.location.hash)===Jo;e!==function(){const t=tr();return!!t&&!t.hidden}()&&Ie(t,e)};window.addEventListener("hashchange",o),
+		o()}),e(function(){!function(){const t=document.querySelector(".links-toggle");t&&(t.checked=1===p(u),
+		document.body.classList.toggle("show-links-bottom",t.checked))
+		}(),V(),document.querySelector(".expandable").addEventListener("click",function(){let t=this.querySelector(".arrow")
 		;const e=document.querySelector(".links");e.style.maxHeight?(e.style.maxHeight=null,
 		t.textContent="▼"):(e.style.maxHeight=e.scrollHeight+"px",t.textContent="▲",setTimeout(()=>{
-		document.documentElement.style.scrollBehavior="auto",document.body.style.scrollBehavior="auto",z("links"),setTimeout(()=>{
+		document.documentElement.style.scrollBehavior="auto",document.body.style.scrollBehavior="auto",H("links"),setTimeout(()=>{
 		document.documentElement.style.scrollBehavior="smooth",document.body.style.scrollBehavior="smooth"},50)},310))})})})();
 	</script>
 	<script async src="https://www.googletagmanager.com/gtag/js?id=G-233EMZJM16"></script>
