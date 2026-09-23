@@ -47,11 +47,11 @@ function Main {
 	$manual = Prepend-Tabs -str $manual -num 3
 
 	# Find all .html files excluding those in _components directories
-	$files = Get-ChildItem -Path $directory -Recurse -Filter *.html | Where-Object { $_.FullName -notmatch "\\_components\\" }
+	$files = Get-ChildItem -Path $directory -Recurse -Filter *.html | Where-Object { $_.FullName -notmatch "[\\/]_components[\\/]" }
 
 	# Print each file path
 	foreach ($file in $files) {
-		$relativePath = $file.FullName.Substring($srcDir.Length).TrimStart('\')
+		$relativePath = $file.FullName.Substring($srcDir.Length).TrimStart('\', '/')
 		ProcessHtml $buildDir $relativePath $css $mainjs $mapsjs $popoutjs $configjs $seo $gtag $links $manual
 	}
 }
@@ -72,7 +72,7 @@ function ProcessHtml() {
 		[string]$manual
 	)
 
-	$publishFile = "$buildDir\$file"
+	$publishFile = Join-Path $buildDir $file
 
 	$html = Get-Content "$file" -Raw -Encoding "utf8"
 	# above the rewrites below, so a path the manual grows later is rewritten too
@@ -106,7 +106,7 @@ function ProcessHtml() {
 	$html = [regex]::Replace($html, "(`r`n){3,}", "`r`n`r`n")
 	$html = [regex]::Replace($html, "</script>`r`n`r`n", "</script>`r`n") # after minified main.js
 
-	mkdir -Force "$(Split-Path -Path $publishFile)" | Out-Null
+	New-Item -ItemType Directory -Force -Path (Split-Path -Path $publishFile) | Out-Null
 	Write-Output $html | Set-Content -NoNewline -Path "$publishFile" -Encoding "utf8"
 }
 
