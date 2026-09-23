@@ -86,6 +86,10 @@ test.describe('landing page', () => {
 		await expect(reset).toBeHidden();
 		await overlay.dblclick();
 		await expect(reset).toHaveText('[X]');
+		await reset.click();
+		await expect(reset).toHaveText('[R]');
+		await page.locator('.zoom-btn').first().click(); // the map is at its start again: [R] goes
+		await expect(reset).toBeHidden();
 	});
 
 	test('the zoom button switches between Croatia and Europe', async ({ page }) => {
@@ -107,6 +111,8 @@ test.describe('landing page', () => {
 		await expect(page.locator('body')).toHaveClass(/fs-lock/);
 		await expect(page.locator('#overlayWindyFrame')).toBeHidden();
 		await expect(page.locator('#resetWindyFrame')).toHaveText('[R]');
+		await page.locator('#resetWindyFrame').click(); // reloads the map and stays, in fullscreen
+		await expect(page.locator('#resetWindyFrame')).toBeVisible();
 		await fs.click();
 		await expect(fs).toHaveText('[ ]');
 		await expect(page.locator('body')).not.toHaveClass(/fs-lock/);

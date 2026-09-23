@@ -8,7 +8,7 @@
 // Explicit only: touching alone groups nothing. Widgets touch in one place —
 // floating over the page, or panes of the same column — so a group is always
 // in one place, and goes into or out of a column as one. A group lives in
-// block._group (an id shared by its members) and rides in the stored layout
+// groupOf(block) (an id shared by its members) and rides in the stored layout
 // as a group number on each member's entry. Docking a member takes it out.
 
 import { dlog } from '../lib/debug.js';
@@ -22,13 +22,27 @@ import { fitWidget } from './popout.js';
 
 let groupSeq = 0;
 
+// the group each grouped widget is in, by id
+const groupOfBlock = new WeakMap();
+
+export function groupOf(block) {
+	return groupOfBlock.get(block) || null;
+}
+
+// null takes the widget out of its group
+export function setGroupOf(block, id) {
+	if (id) groupOfBlock.set(block, id);
+	else groupOfBlock.delete(block);
+}
+
 // a group's id, fresh for every group made
 export function newGroupId() {
 	return `g${++groupSeq}`;
 }
 
 export function groupMembers(block) {
-	return block._group ? allPopouts().filter(b => b._group === block._group) : [block];
+	const group = groupOf(block);
+	return group ? allPopouts().filter(b => groupOf(b) === group) : [block];
 }
 
 // the widgets a block can touch: the others in its place
@@ -45,7 +59,7 @@ export function buildGroupButton() {
 
 function toggleGroup(block) {
 	if (!block || !block.classList.contains('popout')) return;
-	if (block._group) leaveGroup(block);
+	if (groupOf(block)) leaveGroup(block);
 	else joinGroup(block);
 	arrangementChanged();
 }
@@ -69,11 +83,11 @@ function joinGroup(block) {
 	const touched = touchingBlocks(block);
 	if (!touched.length) return;
 	// one group out of the widget, what it touches and the groups those are in
-	const ids = new Set(touched.map(b => b._group).filter(Boolean));
+	const ids = new Set(touched.map(b => groupOf(b)).filter(Boolean));
 	const id = ids.values().next().value || newGroupId();
-	allPopouts().forEach(b => { if (b._group && ids.has(b._group)) b._group = id; });
-	touched.forEach(b => b._group = id);
-	block._group = id;
+	allPopouts().forEach(b => { if (ids.has(groupOf(b))) setGroupOf(b, id); });
+	touched.forEach(b => setGroupOf(b, id));
+	setGroupOf(block, id);
 	updateGroups();
 }
 
@@ -82,17 +96,17 @@ function joinGroup(block) {
 // above it and the ones below, each a group of its own if two or more
 export function leaveGroup(block) {
 	dlog(`leaveGroup: ${block.dataset.mapId}`);
-	const id = block._group;
-	delete block._group;
-	const rest = allPopouts().filter(b => b._group === id);
+	const id = groupOf(block);
+	setGroupOf(block, null);
+	const rest = allPopouts().filter(b => groupOf(b) === id);
 	const col = snapColumnOf(block);
 	const below = col ? rest.filter(b => snapPaneOf(b).top > snapPaneOf(block).top) : [];
 	if (below.length && below.length < rest.length) {
 		const split = newGroupId();
-		below.forEach(b => b._group = split);
+		below.forEach(b => setGroupOf(b, split));
 	}
 	[rest.filter(b => !below.includes(b)), below].forEach(part => {
-		if (part.length < 2) part.forEach(b => delete b._group);
+		if (part.length < 2) part.forEach(b => setGroupOf(b, null));
 	});
 	updateGroups();
 }
@@ -101,7 +115,7 @@ export function leaveGroup(block) {
 // widget touching another, nothing where there is nothing to do
 export function updateGroups() {
 	allPopouts().forEach(block => {
-		const grouped = !!block._group;
+		const grouped = !!groupOf(block);
 		block.classList.toggle('grouped', grouped);
 		const can = grouped || touchingBlocks(block).length > 0;
 		block.querySelectorAll('.grp-btn').forEach(btn => {

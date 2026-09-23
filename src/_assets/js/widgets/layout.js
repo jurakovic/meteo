@@ -15,7 +15,7 @@ import { POPOUT_MIN_HEIGHT, POPOUT_MIN_WIDTH, SNAP_MIN_WIDTH } from './constants
 import { instanceFor, isDuplicate } from './copies.js';
 import { floatingBlocks, placePopout, popoutMaxWidth, raisePopout } from './core.js';
 import { hasFullscreen, restoreFullscreen } from './fullscreen.js';
-import { newGroupId, updateGroups } from './groups.js';
+import { groupOf, newGroupId, setGroupOf, updateGroups } from './groups.js';
 import { refreshOverlap, syncShadows } from './overlap.js';
 import { dockAllPopouts, popoutMap, unlockAspect } from './popout.js';
 
@@ -66,9 +66,10 @@ function snapLayout() {
 	const keys = layoutKeys();
 	const groupNumbers = new Map();
 	const groupNumber = (block) => {
-		if (!block._group) return undefined;
-		if (!groupNumbers.has(block._group)) groupNumbers.set(block._group, groupNumbers.size + 1);
-		return groupNumbers.get(block._group);
+		const group = groupOf(block);
+		if (!group) return undefined;
+		if (!groupNumbers.has(group)) groupNumbers.set(group, groupNumbers.size + 1);
+		return groupNumbers.get(group);
 	};
 	['left', 'right'].map(snapColumn).forEach(col => {
 		if (!col.panes.length) return;
@@ -257,7 +258,7 @@ function placeSnapLayout(layout) {
 	const setGroup = (block, group) => {
 		if (!group) return;
 		if (!groupIds.has(group)) groupIds.set(group, newGroupId());
-		block._group = groupIds.get(group);
+		setGroupOf(block, groupIds.get(group));
 	};
 	['left', 'right'].forEach(side => {
 		const stored = layout[side];

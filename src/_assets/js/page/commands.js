@@ -14,7 +14,7 @@
 
 import { isTextField } from '../lib/dom.js';
 import { anyDialogOpen, closeOpenDialog } from './dialog.js';
-import { exitAnyFullscreen, switchIframeZoom, toggleFullscreen } from './iframe.js';
+import { exitAnyFullscreen, pressGateButton, switchIframeZoom, toggleFullscreen } from './iframe.js';
 import { scrollToElement, scrollToTop, toggleLinksBottom } from './links.js';
 import { plusSlides } from './slideshow.js';
 
@@ -53,6 +53,7 @@ export function initCommands() {
 	registerCommand('slide', { run: (arrow) => plusSlides(arrow.closest('.slideshow'), Number(arrow.dataset.step)) });
 	registerCommand('zoom', { run: (btn) => switchIframeZoom(btn.dataset.frame, btn) });
 	registerCommand('fullscreen', { run: (btn) => toggleFullscreen(btn.dataset.frame, btn) });
+	registerCommand('gate', { run: (btn) => pressGateButton(btn) });
 	// Escape: the dialog owns it while one is open; under it Escape ends a
 	// fullscreen map — a class, not the browser's own fullscreen, so nothing
 	// else takes Escape off it — and under that it does nothing: backing out

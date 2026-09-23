@@ -25,6 +25,7 @@
 // opens it back to the widths from before. Two columns that meet share one seam
 // handle that moves width between them.
 
+import { groupOf } from './groups.js';
 import { dlog } from '../lib/debug.js';
 import { el } from '../lib/dom.js';
 import { clamp, viewportHeight, viewportWidth } from '../lib/geometry.js';
@@ -249,9 +250,10 @@ function layoutSnapColumn(col, seam) {
 function settleSnapStacks(col) {
 	const stacks = new Map();
 	col.panes.forEach(p => {
-		if (!p.block._group) return;
-		if (!stacks.has(p.block._group)) stacks.set(p.block._group, []);
-		stacks.get(p.block._group).push(p);
+		const group = groupOf(p.block);
+		if (!group) return;
+		if (!stacks.has(group)) stacks.set(group, []);
+		stacks.get(group).push(p);
 	});
 	stacks.forEach(panes => {
 		panes.sort((a, b) => a.top - b.top);

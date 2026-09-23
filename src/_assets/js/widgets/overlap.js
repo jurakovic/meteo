@@ -99,6 +99,16 @@ function fullscreenRect() {
 // every widget's box placed on its rect, in the layer its standing asks for,
 // and any box left without a widget — one docked, or gone with the tbody —
 // swept out of both
+// each widget's box in the shadow layer
+const shadowOf = new WeakMap();
+
+// a widget going away takes its shadow with it
+export function dropShadow(block) {
+	const shadow = shadowOf.get(block);
+	if (shadow) shadow.remove();
+	shadowOf.delete(block);
+}
+
 export function syncShadows() {
 	const live = new Set();
 	const fs = fullscreenRect();
@@ -115,14 +125,16 @@ export function syncShadows() {
 		const over = !fs || (rect.left < fs.right && rect.right > fs.left
 			&& rect.top < fs.bottom && rect.bottom > fs.top);
 		const layer = layerFor(over);
-		if (!block._shadow || block._shadow.parentElement !== layer) {
-			if (block._shadow) block._shadow.remove();
-			block._shadow = el('div', { class: 'po-shadow' });
-			layer.appendChild(block._shadow);
+		let shadow = shadowOf.get(block);
+		if (!shadow || shadow.parentElement !== layer) {
+			if (shadow) shadow.remove();
+			shadow = el('div', { class: 'po-shadow' });
+			shadowOf.set(block, shadow);
+			layer.appendChild(shadow);
 		}
-		block._shadow.style.cssText =
+		shadow.style.cssText =
 			`left: ${rect.left}px; top: ${rect.top}px; width: ${rect.width}px; height: ${rect.height}px;`;
-		live.add(block._shadow);
+		live.add(shadow);
 	});
 	document.querySelectorAll('.po-shadows, .po-shadows-under').forEach(layer =>
 		[...layer.children].forEach(box => { if (!live.has(box)) box.remove(); }));
