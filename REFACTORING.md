@@ -21,13 +21,20 @@ Status: ⬜ todo · 🔄 in progress · ✅ done
 | F11 | **No tooling.** No `package.json`, linter, tests or type checking; minified files made by hand in Docker; the build needs Windows PowerShell and `unix2dos` | build | S0, S1, S3 |
 | F12 | **HTML/CSS.** Table layout with deprecated attributes, inline handlers and styles; no CSS custom properties (`#485871` ×20, `#ff9800` ×12); z-index values spread across CSS (1…100001) and JS (5000, 4500) | HTML, CSS | S12 |
 
+## Bugs found on the way
+
+| # | Bug | Found by | Fixed in |
+|---|---|---|---|
+| B1 | Narrowing the window below the breakpoint reads the arrangement kept for the wide window *after* the viewport has narrowed, so fractions are taken against the narrow width and widgets come back displaced when the window widens again (the stored preferences are right; only the same session is off) | `widgets.spec.js`, "a narrow window…" | S2 |
+| B2 | The find box's comment says "cesk" finds ČHMÚ; it does not (the name folds to "chmu") — a stale comment | `dialog.spec.js` | S2 |
+
 ## Steps
 
 | Step | What | Findings | Status |
 |---|---|---|---|
 | S0 | This plan; the build runs on Linux as well as Windows and reproduces the committed `docs/` byte for byte | F11 | ✅ |
-| S1 | Browser test suite (Playwright) over the current behaviour, with the external images and the worker served locally so it runs offline | F11 | ⬜ |
-| S2 | Quick wins: dead code out, `withPersistPaused` (try/finally), duplicated helpers merged, one breakpoint constant in JS | F3, F5, F9 | ⬜ |
+| S1 | Browser test suite (Playwright) over the current behaviour, with the external images and the worker served locally so it runs offline | F11 | ✅ |
+| S2 | Quick wins: dead code out, `withPersistPaused` (try/finally), duplicated helpers merged, one breakpoint constant in JS; bugs B1–B2 | F3, F5, F9 | ⬜ |
 | S3 | `package.json`, ESLint, unit test runner; the build ported to Node (minify + assemble + manual), producing the same `docs/` | F11 | ⬜ |
 | S4 | ES modules, bundled per page with esbuild; no globals, no load-order guards, no inline `onclick` | F1 | ⬜ |
 | S5 | `maps.js` and `popout.js` split by responsibility; `buildMapSettings` split into parts | F2 | ⬜ |
@@ -44,3 +51,4 @@ Status: ⬜ todo · 🔄 in progress · ✅ done
 ## Log
 
 - **S0** — `build.ps1` made path-agnostic (component filter, relative path, output path, `New-Item` instead of `mkdir -Force`). On Linux with PowerShell 7 the build of the unchanged source reproduces the committed `docs/` and minified files exactly.
+- **S1** — `npm run test:e2e`: 58 Playwright tests (×2: the dev tree and the built site) over the landing page, the settings dialog, pop-out widgets, the dashboard, auto-refresh and a phone. `tests/serve.mjs` serves `src/` and `docs/` (under `/meteo/`), and `tests/e2e/fixtures.js` answers every outside request (images, frames, the worker's `config.json`), so the suite runs offline and fails on any script error. B1 is marked as an expected failure until it is fixed. Stable over three repeats.
