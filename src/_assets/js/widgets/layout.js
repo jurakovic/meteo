@@ -114,65 +114,96 @@ function snapLayout() {
 // two widths are held to the viewport. A map dropped from the list leaves
 // the layout, and an emptied column with it. A group is its members' place
 // as much as their number: fewer than two, or spread over two places, is no
-// group
+// group.
+//
+// The keys go in the order they always have: layouts are compared as JSON
+// (sameSnapLayout), and one saved by an earlier version must still compare
+// equal to itself read back
 export function sanitizeSnapLayout(layout, mapIds) {
 	if (!layout || typeof layout !== 'object') return null;
 	const clean = {};
-	const seen = new Set();
-	const fraction = (n, max = 1) => Number.isFinite(n) && n >= 0 && n <= max;
-	const groupOf = (entry) => Number.isInteger(entry.group) && entry.group > 0 ? entry.group : undefined;
+	const seen = new Set(); // every showing once, across the columns and the floating widgets
 	const board = layout.dashboard === true;
-	['left', 'right'].forEach(side => {
-		if (board) return; // a board has no columns: its panes are dropped here and come back as widgets, through popoutRest
-		const col = layout[side];
-		if (!col || typeof col !== 'object' || !Array.isArray(col.panes)) return;
-		const width = Number(col.width);
-		if (!(width > 0 && width <= 1)) return;
-		const panes = [];
-		let stacked = 0;
-		col.panes.forEach(p => {
-			if (!(p && typeof p.id === 'string' && mapIds.includes(instMapId(p.id)) && !seen.has(p.id))) return;
-			const entry = { id: p.id };
-			const top = Number(p.top), height = Number(p.height), share = Number(p.share);
-			if (fraction(top)) {
-				entry.top = roundFraction(top);
-			} else if (share > 0 && share <= 1) {
-				entry.top = roundFraction(stacked);
-				entry.height = roundFraction(share);
-				stacked += share;
-			} else {
-				return;
-			}
-			if (fraction(height) && height > 0) entry.height = roundFraction(height);
-			const group = groupOf(p);
-			if (group) entry.group = group;
-			if (p.fullscreen === true && hasFullscreen(p.id)) entry.fullscreen = true;
-			seen.add(p.id);
-			panes.push(entry);
+	// a board has no columns: its panes are dropped here and come back as
+	// widgets, through popoutRest
+	if (!board) {
+		['left', 'right'].forEach(side => {
+			const col = sanitizeColumn(layout[side], mapIds, seen);
+			if (col) clean[side] = col;
 		});
-		if (!panes.length) return;
-		clean[side] = { width: roundFraction(width), panes };
-	});
+	}
 	if (clean.left && clean.right && clean.left.width + clean.right.width > 1) {
 		clean.right.width = roundFraction(1 - clean.left.width);
 		if (clean.right.width <= 0) delete clean.right;
 	}
-	if (Array.isArray(layout.floating)) {
-		const floating = layout.floating
-			.filter(f => f && typeof f.id === 'string' && mapIds.includes(instMapId(f.id)) && !seen.has(f.id)
-				&& fraction(Number(f.left)) && fraction(Number(f.top)) && fraction(Number(f.width)) && Number(f.width) > 0)
-			.map(f => {
-				seen.add(f.id);
-				const entry = { id: f.id, left: roundFraction(Number(f.left)), top: roundFraction(Number(f.top)), width: roundFraction(Number(f.width)) };
-				if (fraction(Number(f.height)) && Number(f.height) > 0) entry.height = roundFraction(Number(f.height));
-				const group = groupOf(f);
-				if (group) entry.group = group;
-				if (f.fullscreen === true && hasFullscreen(f.id)) entry.fullscreen = true;
-				return entry;
-			});
-		if (floating.length) clean.floating = floating;
-	}
-	const lists = [clean.left && clean.left.panes, clean.right && clean.right.panes, clean.floating].filter(Boolean);
+	const floating = sanitizeFloating(layout.floating, mapIds, seen);
+	if (floating.length) clean.floating = floating;
+	dropLoneGroups([clean.left && clean.left.panes, clean.right && clean.right.panes, clean.floating].filter(Boolean));
+	if (board) clean.dashboard = true; // a board with nothing placed yet is still a board
+	return Object.keys(clean).length ? clean : null;
+}
+
+function isFraction(n) {
+	return Number.isFinite(n) && n >= 0 && n <= 1;
+}
+
+// whether a stored entry names a showing of a map in the list, not yet placed
+function isListedShowing(entry, mapIds, seen) {
+	return !!entry && typeof entry.id === 'string' && mapIds.includes(instMapId(entry.id)) && !seen.has(entry.id);
+}
+
+// what a pane and a floating widget carry alike, after their place: a height
+// of their own, a group number, and a fullscreen (an interactive map's only)
+function sanitizeEntryTail(stored, entry) {
+	const height = Number(stored.height);
+	if (isFraction(height) && height > 0) entry.height = roundFraction(height);
+	if (Number.isInteger(stored.group) && stored.group > 0) entry.group = stored.group;
+	if (stored.fullscreen === true && hasFullscreen(stored.id)) entry.fullscreen = true;
+	return entry;
+}
+
+// a column: its width within the viewport, and the panes naming listed maps;
+// null for a column with none
+function sanitizeColumn(col, mapIds, seen) {
+	if (!col || typeof col !== 'object' || !Array.isArray(col.panes)) return null;
+	const width = Number(col.width);
+	if (!(width > 0 && width <= 1)) return null;
+	const panes = [];
+	let stacked = 0;
+	col.panes.forEach(p => {
+		if (!isListedShowing(p, mapIds, seen)) return;
+		const entry = { id: p.id };
+		const top = Number(p.top), share = Number(p.share);
+		if (isFraction(top)) {
+			entry.top = roundFraction(top);
+		} else if (share > 0 && share <= 1) {
+			entry.top = roundFraction(stacked);
+			entry.height = roundFraction(share);
+			stacked += share;
+		} else {
+			return;
+		}
+		seen.add(p.id);
+		panes.push(sanitizeEntryTail(p, entry));
+	});
+	return panes.length ? { width: roundFraction(width), panes } : null;
+}
+
+// the floating widgets naming listed maps, each with a place and a width
+function sanitizeFloating(list, mapIds, seen) {
+	if (!Array.isArray(list)) return [];
+	return list
+		.filter(f => isListedShowing(f, mapIds, seen)
+			&& isFraction(Number(f.left)) && isFraction(Number(f.top)) && isFraction(Number(f.width)) && Number(f.width) > 0)
+		.map(f => {
+			seen.add(f.id);
+			const entry = { id: f.id, left: roundFraction(Number(f.left)), top: roundFraction(Number(f.top)), width: roundFraction(Number(f.width)) };
+			return sanitizeEntryTail(f, entry);
+		});
+}
+
+// a group of fewer than two, or spread over two places, is no group
+function dropLoneGroups(lists) {
 	const groups = new Map(); // group number → how many members, over how many places
 	lists.forEach(list => list.forEach(entry => {
 		if (!entry.group) return;
@@ -184,8 +215,6 @@ export function sanitizeSnapLayout(layout, mapIds) {
 		const group = groups.get(entry.group);
 		if (group && (group.count < 2 || group.places.size > 1)) delete entry.group;
 	}));
-	if (board) clean.dashboard = true; // a board with nothing placed yet is still a board
-	return Object.keys(clean).length ? clean : null;
 }
 
 export function sameSnapLayout(a, b) {

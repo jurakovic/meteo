@@ -88,7 +88,7 @@ export function sameMapIds(a, b) {
 // recipient may already have used for something else, and a renamed preset is
 // still the same view. Saved presets are searched before the built-ins, so a
 // saved copy of a built-in list selects the copy rather than the original.
-function presetIdForMapIds(mapIds) {
+export function presetIdForMapIds(mapIds) {
 	const match = userPresets.concat(MAP_PRESETS).find(preset => sameMapIds(preset.maps, mapIds));
 	return match ? match.id : null;
 }

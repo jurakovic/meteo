@@ -5,7 +5,7 @@ import { MAP_CATALOG } from './catalog.js';
 import { getMapPrefs, saveMapPrefs } from './prefs.js';
 
 // default view of the customize page (mirrors the static landing page)
-const DEFAULT_MAPS = [
+export const DEFAULT_MAPS = [
 	'neverin-radar-hr', 'neverin-satelit-hr', 'neverin-radar-eu', 'neverin-satelit-eu',
 	'windy', 'dhmz-radar', 'meteociel-temp', 'blitzortung', 'essl', 'astorp', 'estofex',
 	'eumetnet', 'meteociel-satelit', 'dwd-sinopticka', 'neverin-kamera', 'meteoblue-prognoza'

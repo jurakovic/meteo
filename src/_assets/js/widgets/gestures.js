@@ -11,98 +11,106 @@ import { fitWidget, lockToImage, togglePopout } from './popout.js';
 import { resizePopout, resizeSeam, seamNeighbour } from './resize.js';
 
 export function initWidgetGestures() {
-	document.addEventListener('pointerdown', (e) => {
-		const snapHandle = e.target.closest('.snap-edge');
-		if (snapHandle) {
-			if (e.button !== 0) return;
-			e.preventDefault();
-			snapHandlePointerDown(snapHandle, e);
-			return;
-		}
-		const block = e.target.closest('.map-block.popout');
-		if (!block) return;
-		// a widget hosting a fullscreen map stays under the others (see map-fullscreen)
-		if (!block.classList.contains('fs-host')) raisePopout(block);
-		if (e.button !== 0) return;
-		const handle = e.target.closest('.po-h');
-		const title = e.target.closest('.radartitle');
-		// links and buttons keep working; a fullscreen bar is pinned, not a handle
-		if (!handle && (!title || e.target.closest('a') || title.classList.contains('fullscreen'))) return;
-		// also suppresses the compatibility mousedown, so a slide title bar drag
-		// cannot register as a swipe on the slideshow around it
-		e.preventDefault();
-		if (handle) {
-			// a shared whole edge is a seam and moves as one, which is ahead of both
-			// the single widget's pull and the group's scale: it is an inside edge,
-			// and those two are what an outside edge means
-			const dir = handle.dataset.dir;
-			const mate = seamNeighbour(block, dir);
-			if (!mate) resizePopout(block, dir, e);
-			else if (!(e.ctrlKey || e.metaKey)) resizeSeam(block, mate, dir, e);
-			else {
-				// Ctrl pulls one side of the seam alone: the widget the press is
-				// on the side of. The handles straddle the edge, so a press just
-				// inside a widget is a press on its edge, whichever handle took it
-				const r = block.getBoundingClientRect();
-				const inside = dir === 'e' ? e.clientX < r.right
-					: dir === 'w' ? e.clientX >= r.left
-					: dir === 's' ? e.clientY < r.bottom
-					: e.clientY >= r.top;
-				const opposite = { e: 'w', w: 'e', n: 's', s: 'n' };
-				if (inside) resizePopout(block, dir, e);
-				else {
-					raisePopout(mate); // the one that moves is the one in front
-					resizePopout(mate, opposite[dir], e);
-				}
-			}
-		} else dragPopout(block, e);
-	});
-
+	document.addEventListener('pointerdown', onPointerDown);
 	// on a tick, the frame holding the focus only after the event. A blur that
 	// went anywhere else — another tab, another window — leaves activeElement
 	// something other than a frame, and raises nothing
 	window.addEventListener('blur', () => setTimeout(raiseFocusedFrame));
-
-	// the middle button raises the autoscroll cursor on press: the press is taken
-	// here and the action left to auxclick, which is the click the middle button
-	// makes
-	document.addEventListener('mousedown', (e) => {
-		if (e.button === 1 && DESKTOP_MQ.matches && titleBarOf(e)) e.preventDefault();
-	});
-
-	document.addEventListener('auxclick', (e) => {
-		if (e.button !== 1 || !DESKTOP_MQ.matches) return;
-		const bar = titleBarOf(e);
-		if (!bar) return;
-		e.preventDefault();
-		togglePopout(bar.closest('.map-block')); // docks on the page, takes the map off the board
-	});
-
+	document.addEventListener('mousedown', onMiddleDown);
+	document.addEventListener('auxclick', onMiddleClick);
 	// the drag's preventDefault on pointerdown leaves click and dblclick alone,
 	// and the browser already tells a double-click from two drags apart
-	document.addEventListener('dblclick', (e) => {
-		if (!e.target.closest) return;
-		const edge = e.target.closest('.snap-edge');
-		if (edge) toggleSnapPage(snapColumns[edge.dataset.side]);
-		// a double-click on a widget's title bar puts its map in fullscreen and
-		// takes it out again (toggleBarFullscreen: an interactive map only, which
-		// is never the letterboxed widget below)
-		const bar = titleBarOf(e);
-		if (bar) toggleBarFullscreen(bar);
-		// a double-click on a freed widget's title bar (a link or button aside)
-		// locks it again, coming in to the image where it stands (lockToImage) —
-		// a pane's height goes with it
-		const title = e.target.closest('.map-block.popout.letterbox .radartitle:not(.fullscreen)');
-		if (title && !e.target.closest('a')) {
-			const block = title.closest('.map-block');
-			lockToImage(block);
-			const pane = snapPaneOf(block);
-			if (pane) delete pane.height;
-			layoutSnapColumns();
-			fitWidget(block);
-			persistSnapLayout();
+	document.addEventListener('dblclick', onDoubleClick);
+}
+
+// a press on a column's edge resizes the column; on a widget it raises it, and
+// on its handle resizes it, on its title bar drags it
+function onPointerDown(e) {
+	const snapHandle = e.target.closest('.snap-edge');
+	if (snapHandle) {
+		if (e.button !== 0) return;
+		e.preventDefault();
+		snapHandlePointerDown(snapHandle, e);
+		return;
+	}
+	const block = e.target.closest('.map-block.popout');
+	if (!block) return;
+	// a widget hosting a fullscreen map stays under the others (see map-fullscreen)
+	if (!block.classList.contains('fs-host')) raisePopout(block);
+	if (e.button !== 0) return;
+	const handle = e.target.closest('.po-h');
+	const title = e.target.closest('.radartitle');
+	// links and buttons keep working; a fullscreen bar is pinned, not a handle
+	if (!handle && (!title || e.target.closest('a') || title.classList.contains('fullscreen'))) return;
+	// also suppresses the compatibility mousedown, so a slide title bar drag
+	// cannot register as a swipe on the slideshow around it
+	e.preventDefault();
+	if (handle) resizeFromHandle(block, handle.dataset.dir, e);
+	else dragPopout(block, e);
+}
+
+// a shared whole edge is a seam and moves as one, which is ahead of both the
+// single widget's pull and the group's scale: it is an inside edge, and those
+// two are what an outside edge means
+function resizeFromHandle(block, dir, e) {
+	const mate = seamNeighbour(block, dir);
+	if (!mate) resizePopout(block, dir, e);
+	else if (!(e.ctrlKey || e.metaKey)) resizeSeam(block, mate, dir, e);
+	else {
+		// Ctrl pulls one side of the seam alone: the widget the press is
+		// on the side of. The handles straddle the edge, so a press just
+		// inside a widget is a press on its edge, whichever handle took it
+		const r = block.getBoundingClientRect();
+		const inside = dir === 'e' ? e.clientX < r.right
+			: dir === 'w' ? e.clientX >= r.left
+			: dir === 's' ? e.clientY < r.bottom
+			: e.clientY >= r.top;
+		const opposite = { e: 'w', w: 'e', n: 's', s: 'n' };
+		if (inside) resizePopout(block, dir, e);
+		else {
+			raisePopout(mate); // the one that moves is the one in front
+			resizePopout(mate, opposite[dir], e);
 		}
-	});
+	}
+}
+
+// the middle button raises the autoscroll cursor on press: the press is taken
+// here and the action left to auxclick, which is the click the middle button
+// makes
+function onMiddleDown(e) {
+	if (e.button === 1 && DESKTOP_MQ.matches && titleBarOf(e)) e.preventDefault();
+}
+
+function onMiddleClick(e) {
+	if (e.button !== 1 || !DESKTOP_MQ.matches) return;
+	const bar = titleBarOf(e);
+	if (!bar) return;
+	e.preventDefault();
+	togglePopout(bar.closest('.map-block')); // docks on the page, takes the map off the board
+}
+
+function onDoubleClick(e) {
+	if (!e.target.closest) return;
+	const edge = e.target.closest('.snap-edge');
+	if (edge) toggleSnapPage(snapColumns[edge.dataset.side]);
+	// a double-click on a widget's title bar puts its map in fullscreen and
+	// takes it out again (toggleBarFullscreen: an interactive map only, which
+	// is never the letterboxed widget below)
+	const bar = titleBarOf(e);
+	if (bar) toggleBarFullscreen(bar);
+	// a double-click on a freed widget's title bar (a link or button aside)
+	// locks it again, coming in to the image where it stands (lockToImage) —
+	// a pane's height goes with it
+	const title = e.target.closest('.map-block.popout.letterbox .radartitle:not(.fullscreen)');
+	if (title && !e.target.closest('a')) {
+		const block = title.closest('.map-block');
+		lockToImage(block);
+		const pane = snapPaneOf(block);
+		if (pane) delete pane.height;
+		layoutSnapColumns();
+		fitWidget(block);
+		persistSnapLayout();
+	}
 }
 
 // The covering widget's frame is dealt with by `covered` above, which is the

@@ -4,6 +4,18 @@
 // the sides and corners a window is resized from
 export const RESIZE_HANDLES = ['n', 'ne', 'e', 'se', 's', 'sw', 'w', 'nw'];
 
+// the size a box that started as start (width/height) is pulled to by the
+// handle dir moved dx, dy: an east edge adds to the width, a west one takes
+// away, and so on; a corner both
+export function pulledSize(dir, start, dx, dy) {
+	let w = start.width, h = start.height;
+	if (dir.includes('e')) w = start.width + dx;
+	if (dir.includes('w')) w = start.width - dx;
+	if (dir.includes('s')) h = start.height + dy;
+	if (dir.includes('n')) h = start.height - dy;
+	return { w, h };
+}
+
 // move and up listeners on document (nothing moves in the DOM), and
 // .po-dragging turns iframe pointer events off so the pointer is not
 // swallowed when it crosses one mid-gesture. onMove gets the offset from the

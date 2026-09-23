@@ -86,7 +86,7 @@ export function magnetRects(block, along = []) {
 // so a widget dropped below another sits flush with its left or right side.
 // The closest edge wins on each axis; nothing within reach leaves the widget
 // where it was asked
-function magnetPosition(rects, left, top, width, height) {
+export function magnetPosition(rects, left, top, width, height) {
 	const right = left + width, bottom = top + height;
 	// the candidate carrying the closest edge within reach, with its widget
 	const pull = (value, candidates) => {

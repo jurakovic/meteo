@@ -50,7 +50,7 @@ function toggleGroup(block) {
 	persistSnapLayout();
 }
 
-function rectsTouch(a, b) {
+export function rectsTouch(a, b) {
 	const alongY = Math.min(a.bottom, b.bottom) - Math.max(a.top, b.top) > 0;
 	const alongX = Math.min(a.right, b.right) - Math.max(a.left, b.left) > 0;
 	const near = (p, q) => Math.abs(p - q) <= GROUP_TOUCH;

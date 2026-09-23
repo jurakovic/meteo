@@ -57,7 +57,7 @@ export function instIndex(inst) {
 	return index > 1 ? index : 1;
 }
 
-function instSuffix(inst) {
+export function instSuffix(inst) {
 	const index = instIndex(inst);
 	return index > 1 ? `Copy${index}` : '';
 }
