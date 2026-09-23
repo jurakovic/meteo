@@ -507,13 +507,8 @@ function resetIframe(frameId) {
 	setResetButtonToExit(resetFrame);
 }
 
-// reload the map to its default position/zoom without changing the button —
-// used while in fullscreen, where reset must stay available for repeated use
-function resetIframePosition(frameId) {
-	dlog(`resetIframePosition: ${frameId}`);
-	setIframeSrc(document.getElementById(frameId));
-}
-
+// in fullscreen [R] reloads the map to its default position and zoom and
+// stays, available for repeated use
 function setResetButtonToFullscreenReset(resetFrame) {
 	dlog(`setResetButtonToFullscreenReset: ${resetFrame.id}`);
 	const newResetFrame = resetFrame.cloneNode(true);
@@ -521,7 +516,7 @@ function setResetButtonToFullscreenReset(resetFrame) {
 
 	newResetFrame.addEventListener('click', (e) => {
 		e.stopPropagation(); // Stop event bubbling
-		resetIframePosition(getFrameIdFromResetButtonId(newResetFrame.id));
+		setIframeSrc(document.getElementById(getFrameIdFromResetButtonId(newResetFrame.id)));
 	});
 	newResetFrame.textContent = '[R]';
 	newResetFrame.style.removeProperty('display'); // ensure visible in fullscreen
@@ -539,27 +534,6 @@ function getResetButtonFromOverlayId(overlayId) {
 function getFrameIdFromResetButtonId(resetFrameId) {
 	return document.getElementById(resetFrameId).getAttribute('data-frame-id');
 }
-
-function GetLastInit() {
-	let dt = new Date();
-	// normalize date to last 12h or 00h
-	dt = new Date(Date.UTC(dt.getUTCFullYear(), dt.getUTCMonth(), dt.getUTCDate(), (dt.getUTCHours() >= 12 ? 12 : 0), 0, 0, 0));
-	return dt;
-};
-
-function DTGFromDateInHours(mydate) {
-	const result = mydate.getUTCFullYear().toString() + pad(mydate.getUTCMonth() + 1, 2) + pad(mydate.getUTCDate(), 2) + pad(mydate.getUTCHours(), 2);
-	return result;
-};
-
-function EndValue(mydate) {
-	const result = mydate.getUTCFullYear().toString() + pad(mydate.getUTCMonth() + 1, 2) + pad(mydate.getUTCDate(), 2) + "06";
-	return result;
-};
-
-function pad(n, width, z) {
-	return String(n).padStart(width, z || '0');
-};
 
 const isDebugEnabled = new URLSearchParams(window.location.search).get('debug') === '1';
 

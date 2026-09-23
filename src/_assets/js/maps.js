@@ -301,19 +301,7 @@ const MAP_CATALOG = [
 				title: { text: 'Meteociel.fr | Satelit', href: 'https://www.meteociel.fr/observations-meteo/satellite.php?mode=infrarouge-noir-et-blanc-hd-mtg' },
 				img: 'https://modeles20.meteociel.fr/satellite/latestsatirmtgeu.png',
 				aspect: '1'
-			},
-			/*
-			{
-				title: { text: 'Meteociel.fr | Satelit', href: 'https://www.meteociel.fr/observations-meteo/satellite.php?mode=animation-sandwich-visible-infrarouge-mtg' },
-				img: 'https://modeles20.meteociel.fr/satellite/animsatsandvisirmtgeu.gif',
-				aspect: '1'
-			},
-			{
-				title: { text: 'Meteociel.fr | Satelit', href: 'https://www.meteociel.fr/observations-meteo/satellite.php?mode=sandwich-visible-infrarouge-mtg' },
-				img: 'https://modeles20.meteociel.fr/satellite/latestsatsandvisirmtgeu.png',
-				aspect: '1'
 			}
-			*/
 		],
 		links: SAT_EU_LINKS
 	},
@@ -490,17 +478,6 @@ const MAP_CATALOG = [
 		backdrop: 'data:image/jpeg;base64,/9j/4AAQSkZJRgABAQEAYABgAAD/2wBDAA0JCgsKCA0LCwsPDg0QFCEVFBISFCgdHhghMCoyMS8qLi00O0tANDhHOS0uQllCR05QVFVUMz9dY1xSYktTVFH/2wBDAQ4PDxQRFCcVFSdRNi42UVFRUVFRUVFRUVFRUVFRUVFRUVFRUVFRUVFRUVFRUVFRUVFRUVFRUVFRUVFRUVFRUVH/wAARCAArAEADASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9oADAMBAAIRAxEAPwBljPoksUEElnNNdFRuYRLgnufvdK1reHR5XKx20qjH3hEMfh81YmgR5hN2UB3MU4OSOK1rGdCGcrsEJHU85JNXzsjkibEIW0t1nk3FBjaAvzGp7u5huNPcSBDGM5IGQR7VkSXQkkhQuqgEuRuwcHnHuKgF5vJjlHlgJ/eyAST+uRUFjNbjhbSVSMboUP8ADjPI/n7e9YOl28+oRbLaGMeXkZZif0rbNkZ1MKTERFAH2nkMMFSD6g/yrQKC0sv3hKqgyzJwSPSjS2orFXTLF7ZZleMFnxuJIC4A6AVoLd2rMqNPGHz3HANZV1qiJuS3XCkgeY3zHp1rLjSaU7IkaRc8HZ+tZuaWhSRV0W6EeiSNISI97HjqRxwPrUltes7mWVwkbHJwOnpisC4l8pIrWNiNo+cH19DVmOOXcipISdu45rUR201zYGEec3y/dG3r0/Q1C1zYXLAxoc/x5XPGMAn1rmLaKdHk8wjBxgZ708aolm22OT94xIIAHyjuTn0qG3eyH0OzsonhgcRwMDuwD656tz29qpalLK141oD5keBuI4JA5wfSoLPWbSzELSSs8jJnezZVR6ZPrVa5v2/tQ3iL8zHofpUTmkkNK5v6Bp0ElqbmVY8lioHbGayNX1O5tr7bGvlhSOCOn+NWYdZj1CGC3s7SaKJZA87qQAvqc+9ZOqyreahIwY5VtrAnPAPGPanJ8sdCoW5veOKy4fIBJ6k1q6c4Vg0gPTj2rIikdhtLEgDIrd0hQ7fMM4Ga1ZmS3juUaKMOZDxkf41nrYXIlZhGgJQrhm4GeDXTQxo0XIzzViOCJraQlBkZqG3ayNVFPVmXpvhjV9T0hpo5VdWUKkbgLjBI4/AfrVe6uHs1jinLpPG4SdMcAAY9OM9fwre0+WWyvES3ldEjj+RdxIXLjOAa5Lxa7ya1PI7Es+/cc9cdKHFMjU1k1ZZLfyIJ08pRghDkE56mmzyzJE1xNOSsQycsTxXJaZzqNuhJ2tIoYZ6810Ws3Ev9nLFlSjNkgoDnr3xUOF3ZmkZaXP/Z',
 		links: SAT_EU_LINKS
 	},
-	/*
-	{
-		id: 'idokep-radar-adria',
-		category: 'radar',
-		name: 'Időkép | Radar | Hrvatska',
-		type: 'video',
-		titleHref: 'https://www.idokep.eu/adria',
-		videoClass: 'vid2',
-		src: 'https://www.idokep.hu/idokepradar/public_radar_adria.mp4'
-	},
-	*/
 	{
 		id: 'istramet-munje',
 		category: 'munje',
@@ -583,6 +560,13 @@ const MAP_CATALOG = [
 	dhmzMrcRadar('uljenje', 'Uljenje')
 ];
 
+const CATALOG_BY_ID = new Map(MAP_CATALOG.map(map => [map.id, map]));
+
+// the catalog entry of a map id, null for an id it does not know
+function catalogMap(id) {
+	return CATALOG_BY_ID.get(id) || null;
+}
+
 // ---------- presets ----------
 
 // default view of the customize page (mirrors the static landing page)
@@ -600,7 +584,7 @@ const MAP_PRESETS = [
 		id: 'vise', name: 'Više',
 		maps: [
 			'ventusky', 'rainviewer', 'weatherandradar', 'meteo-si', 'idokep-radar-eu',
-			'idokep-satelit-eu', /* 'idokep-radar-adria', */ 'istramet-munje', 'blitzortung-karta', 'wetterzentrale-temp',
+			'idokep-satelit-eu', 'istramet-munje', 'blitzortung-karta', 'wetterzentrale-temp',
 			'dhmz-sinopticka', 'chmi-sinopticka', 'dhmz-puntijarka', 'dhmz-bilogora', 'dhmz-gradiste', 'dhmz-goli',
 			'dhmz-debeljak', 'dhmz-uljenje'
 		]
@@ -842,38 +826,27 @@ function resolveMapIds() {
 	return prefsMapIds(getActiveMapPrefs());
 }
 
-// a map taken off the board (popout.js) leaves the list it is shown from:
-// the custom list without it, into the preferences — or into the shared
-// view, which stays a shared view, the arrangement written after it into
-// the address bar as always
+// the list the page shows, edited on the board (popout.js) rather than in the
+// dialog, stored as a custom list: into the preferences — or into the shared
+// view, which stays a shared view, the arrangement written after it into the
+// address bar as always
+function storeShownList(maps) {
+	const prefs = sharedMapView || getMapPrefs();
+	prefs.preset = 'custom';
+	prefs.maps = maps;
+	if (!sharedMapView) saveMapPrefs(prefs);
+}
+
+// a map taken off the board leaves the list it is shown from
 function removeMapFromList(mapId) {
-	const maps = resolveMapIds().filter(id => id !== mapId);
-	if (sharedMapView) {
-		sharedMapView.preset = 'custom';
-		sharedMapView.maps = maps;
-	} else {
-		const prefs = getMapPrefs();
-		prefs.preset = 'custom';
-		prefs.maps = maps;
-		saveMapPrefs(prefs);
-	}
+	storeShownList(resolveMapIds().filter(id => id !== mapId));
 	persistSnapLayout();
 }
 
-// its counterpart, the tab's [+] (popout.js): the map goes on the end of the
-// list, stored the same way. The arrangement is written by the caller, once
-// the widget stands on the board
+// the tab's [+]: the map goes on the end of the list. The arrangement is
+// written by the caller, once the widget stands on the board
 function addMapToList(mapId) {
-	const maps = resolveMapIds().filter(id => id !== mapId).concat(mapId);
-	if (sharedMapView) {
-		sharedMapView.preset = 'custom';
-		sharedMapView.maps = maps;
-	} else {
-		const prefs = getMapPrefs();
-		prefs.preset = 'custom';
-		prefs.maps = maps;
-		saveMapPrefs(prefs);
-	}
+	storeShownList(resolveMapIds().filter(id => id !== mapId).concat(mapId));
 }
 
 // the list a preferences object names — deduped as well as filtered: a
@@ -882,7 +855,7 @@ function addMapToList(mapId) {
 // both sets of indicators light up)
 function prefsMapIds(prefs) {
 	if (prefs.preset === 'custom' && Array.isArray(prefs.maps))
-		return [...new Set(prefs.maps)].filter(id => MAP_CATALOG.some(map => map.id === id));
+		return [...new Set(prefs.maps)].filter(id => CATALOG_BY_ID.has(id));
 	return presetMapIds(prefs.preset) || presetMapIds('zadano');
 }
 
@@ -1141,12 +1114,12 @@ function buildVideo(map) {
 	video.muted = true;
 	video.autoplay = true;
 	video.loop = true;
-	// without an aspect the wrapper class (.vid1/.vid2 padding-top) sizes the box
+	// without an aspect the wrapper's padding-top (.vid1) sizes the box
 	const style = `${maxWidthStyle(map)}${map.aspect ? ` aspect-ratio: ${map.aspect};` : ''}`.trim();
 	return [
 		buildMapTitleBar(map),
 		el('div', { class: 'placeholder', style: style || undefined }, [
-			el('div', { class: map.videoClass || 'vid1' }, [video])
+			el('div', { class: 'vid1' }, [video])
 		])
 	];
 }
@@ -1228,13 +1201,11 @@ function renderMaps() {
 	// a fullscreen map goes with the tbody too, and would leave the page's
 	// scroll locked behind it; taken down as the arrangement it is part of
 	// is (what comes back is applied after the render)
-	snapPersistPaused = true;
-	document.querySelectorAll('.if1.fullscreen').forEach(if1 => exitFullscreen(if1));
-	snapPersistPaused = false;
+	withPersistPaused(() => document.querySelectorAll('.if1.fullscreen').forEach(if1 => exitFullscreen(if1))); // main.js is not loaded yet at the first render in dev
 	resetSnapColumns(); // their panes go with the tbody
 	tbody.replaceChildren();
 	mapsRendered = true;
-	const maps = resolveMapIds().map(id => MAP_CATALOG.find(m => m.id === id)).filter(map => map && isMapEnabled(map.id));
+	const maps = resolveMapIds().map(catalogMap).filter(map => map && isMapEnabled(map.id));
 	if (!maps.length) {
 		tbody.appendChild(el('tr', {}, [
 			el('td', { align: 'center' }, [
@@ -1243,15 +1214,20 @@ function renderMaps() {
 		]));
 		return;
 	}
-	maps.forEach((map, i) => {
-		if (i > 0) tbody.appendChild(el('tr', { class: 'sp20' }));
-		// one block per map so the pop-out can lift title, map and indicators together
-		const block = el('div', { class: 'map-block', 'data-map-id': map.id, 'data-inst': map.id }, buildMapContent(map));
-		tbody.appendChild(el('tr', {}, [el('td', { align: 'center' }, [block])]));
-		if (map.links && map.links.length) {
-			tbody.appendChild(el('tr', {}, [el('td', { align: 'center' }, [buildLinksBottom(map)])]));
-		}
-	});
+	maps.forEach(map => appendMapRows(tbody, map));
+}
+
+// the rows a map takes at the end of the table — a spacer after the one
+// before, its block, and the links under it — returning the block. One block
+// per map, so the pop-out can lift title, map and indicators together
+function appendMapRows(tbody, map) {
+	if (tbody.children.length) tbody.appendChild(el('tr', { class: 'sp20' }));
+	const block = el('div', { class: 'map-block', 'data-map-id': map.id, 'data-inst': map.id }, buildMapContent(map));
+	tbody.appendChild(el('tr', {}, [el('td', { align: 'center' }, [block])]));
+	if (map.links && map.links.length) {
+		tbody.appendChild(el('tr', {}, [el('td', { align: 'center' }, [buildLinksBottom(map)])]));
+	}
+	return block;
 }
 
 // the remote config changed under maps already out: the view is drawn again the
@@ -1272,7 +1248,7 @@ function rerenderMaps() {
 // what a typed term and a map's text are both put through before they are
 // compared, so the box answers to a keyboard without the letters: NFD splits
 // a diacritic off the letter it sits on and the combining mark is dropped
-// ("cesk" finds ČHMÚ). A stroke is not a combining mark and survives that —
+// ("chmu" finds ČHMÚ). A stroke is not a combining mark and survives that —
 // đ is one code point of its own — so it is spelled out
 function foldText(text) {
 	return text.toLowerCase().normalize('NFD').replace(/\p{Diacritic}/gu, '').replace(/đ/g, 'd');
@@ -1638,8 +1614,8 @@ function buildMapSettings(panel) {
 	let sortAsc = true;
 
 	function compareRows(a, b) {
-		const ma = MAP_CATALOG.find(m => m.id === a.getAttribute('data-map-id'));
-		const mb = MAP_CATALOG.find(m => m.id === b.getAttribute('data-map-id'));
+		const ma = catalogMap(a.getAttribute('data-map-id'));
+		const mb = catalogMap(b.getAttribute('data-map-id'));
 		const dir = sortAsc ? 1 : -1;
 		if (sortKey === 'naziv') return ma.name.localeCompare(mb.name, 'hr') * dir;
 		if (sortKey === 'vrsta') return (ma.category.localeCompare(mb.category, 'hr') || ma.name.localeCompare(mb.name, 'hr')) * dir;
@@ -1688,7 +1664,7 @@ function buildMapSettings(panel) {
 		const terms = findTerms(findInput.value);
 		let hits = 0;
 		[...availableDiv.children].forEach(row => {
-			const map = MAP_CATALOG.find(m => m.id === row.getAttribute('data-map-id'));
+			const map = catalogMap(row.getAttribute('data-map-id'));
 			const hit = !map || matchesFind(map, terms);
 			row.classList.toggle('ms-filtered', !hit);
 			if (hit && !row.classList.contains('ms-off')) hits++;
@@ -1823,7 +1799,7 @@ function buildMapSettings(panel) {
 		selectedDiv.replaceChildren();
 		availableDiv.replaceChildren();
 		selectedIds.forEach(id => {
-			const map = MAP_CATALOG.find(m => m.id === id);
+			const map = catalogMap(id);
 			if (map) selectedDiv.appendChild(buildRow(map, true));
 		});
 		MAP_CATALOG.filter(map => !selectedIds.includes(map.id))

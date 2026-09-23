@@ -159,13 +159,6 @@ img {
 	padding-top: 67%;
 }
 
-.vid2 {
-	position: relative;
-	width: 100%;
-	overflow: hidden;
-	padding-top: 87%;
-}
-
 iframe, video {
 	position: absolute;
 	top: 0;
@@ -466,8 +459,7 @@ body.fs-lock {
 					object-fit: contain;
 				}
 
-		.map-block.popout.letterbox .vid1,
-		.map-block.popout.letterbox .vid2 {
+		.map-block.popout.letterbox .vid1 {
 			flex: 1;
 			min-height: 0;
 			padding-top: 0;

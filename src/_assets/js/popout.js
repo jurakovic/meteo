@@ -120,7 +120,7 @@ function wireDuplicate(block) {
 }
 
 function makeDuplicate(mapId, inst) {
-	const map = MAP_CATALOG.find(m => m.id === mapId);
+	const map = catalogMap(mapId);
 	const origin = pageShowing(mapId);
 	if (!map || !origin) return null;
 	const block = el('div', { class: 'map-block duplicate', 'data-map-id': mapId, 'data-inst': inst },
@@ -346,7 +346,7 @@ function lockAspect(block) {
 function syncBackdrop(block) {
 	if (!block.classList.contains('letterbox')) return;
 	const img = block.querySelector('.slide.active img') || block.querySelector('img');
-	const map = MAP_CATALOG.find(m => m.id === block.dataset.mapId);
+	const map = catalogMap(block.dataset.mapId);
 	const src = (img && (img.currentSrc || img.src)) || (map && map.backdrop);
 	if (src) block.style.setProperty('--po-img', `url("${src}")`);
 }
@@ -445,10 +445,7 @@ function dockAllPopouts() {
 	layoutSnapColumns();
 	// one write for the lot: every dockMap would otherwise store the arrangement
 	// on its way out, and the only one worth storing is the last
-	const paused = snapPersistPaused;
-	snapPersistPaused = true;
-	document.querySelectorAll('.map-block.popout').forEach(dockMap);
-	snapPersistPaused = paused;
+	withPersistPaused(() => document.querySelectorAll('.map-block.popout').forEach(dockMap));
 	persistSnapLayout(); // also with nothing to dock: the mode may have changed
 	syncShadows(); // the breakpoint docks with persistence paused, so the sweep is not reached through it
 }
@@ -515,9 +512,7 @@ function popoutRest() {
 function removeFromDashboard(block) {
 	dlog(`removeFromDashboard: ${block.dataset.mapId}`);
 	const id = block.dataset.mapId;
-	snapPersistPaused = true;
-	dockMap(block); // out of its column and group, a fullscreen taken down
-	snapPersistPaused = false;
+	withPersistPaused(() => dockMap(block)); // out of its column and group, a fullscreen taken down
 	const row = block.closest('tr');
 	const next = row.nextElementSibling;
 	const links = next && next.querySelector('.links-bottom') ? next : null;
@@ -534,21 +529,16 @@ function removeFromDashboard(block) {
 // the cascade's first step (popoutRest — every other map is a widget already).
 // Nothing is rendered again, so nothing else on the board reloads
 function addToDashboard(mapId) {
-	const map = MAP_CATALOG.find(m => m.id === mapId);
+	const map = catalogMap(mapId);
 	const tbody = document.querySelector('tbody[data-maps]');
 	if (!map || !tbody || !isDashboard() || pageShowing(mapId)) return;
 	dlog(`addToDashboard: ${mapId}`);
 	addMapToList(mapId);
 	const empty = tbody.querySelector('.maps-empty');
 	if (empty) tbody.replaceChildren(); // the "nothing selected" row
-	if (tbody.children.length) tbody.appendChild(el('tr', { class: 'sp20' }));
-	const block = el('div', { class: 'map-block', 'data-map-id': map.id, 'data-inst': map.id }, buildMapContent(map));
-	tbody.appendChild(el('tr', {}, [el('td', { align: 'center' }, [block])]));
-	if (map.links && map.links.length) {
-		const links = buildLinksBottom(map);
-		tbody.appendChild(el('tr', {}, [el('td', { align: 'center' }, [links])]));
-		links.addEventListener('scroll', () => updateLinksScrollShadow(links), { passive: true });
-	}
+	const block = appendMapRows(tbody, map);
+	const links = tbody.lastElementChild.querySelector('.links-bottom');
+	if (links) links.addEventListener('scroll', () => updateLinksScrollShadow(links), { passive: true });
 	wireDuplicate(block); // its own wiring and only its own, as a copy's
 	popoutRest();
 	fitWidget(block);
@@ -1931,10 +1921,12 @@ document.addEventListener('auxclick', (e) => {
 // unmade by it
 POPOUT_MQ.addEventListener('change', (e) => {
 	if (e.matches) { applySnapLayout(unappliedSnapLayout); return; }
-	unappliedSnapLayout = snapLayout(); // read before the dock empties the board
-	snapPersistPaused = true; // the stored arrangement is kept for a desktop window
-	dockAllPopouts();
-	snapPersistPaused = false;
+	// what the view stores rather than what is on screen: the viewport has
+	// narrowed already, and the fractions read off the screen now would be of
+	// the narrow width (B1). Every gesture writes the arrangement as it ends,
+	// so the stored one is the one on screen
+	unappliedSnapLayout = sanitizeSnapLayout(getActiveMapPrefs().layout, resolveMapIds());
+	withPersistPaused(dockAllPopouts); // the stored arrangement is kept for a desktop window
 });
 
 // a smaller window must not strand a widget off-screen
@@ -2509,7 +2501,7 @@ function snapLayout() {
 
 // only an interactive map has a fullscreen to be stored
 function hasFullscreen(inst) {
-	const map = MAP_CATALOG.find(m => m.id === instMapId(inst));
+	const map = catalogMap(instMapId(inst));
 	return !!map && map.type === 'iframe';
 }
 
@@ -2630,7 +2622,16 @@ function applySnapLayout(layout) {
 		return;
 	}
 	unappliedSnapLayout = null;
-	snapPersistPaused = true; // what is being applied is already what is stored
+	// what is being applied is already what is stored
+	const tiled = withPersistPaused(() => placeSnapLayout(layout));
+	// the tiling was decided here rather than read from the layout, so it is
+	// the one thing this function has to write back
+	if (tiled) persistSnapLayout();
+}
+
+// the widgets and panes a layout names, put in place; true when the board had
+// nothing placed and was tiled instead
+function placeSnapLayout(layout) {
 	const toFullscreen = [];
 	const groupIds = new Map(); // stored group number → a fresh id
 	const setGroup = (block, group) => {
@@ -2682,10 +2683,7 @@ function applySnapLayout(layout) {
 	toFullscreen.forEach(restoreFullscreen);
 	updateGroups();
 	updateCovered(); // persistence is paused, so this is not reached through it
-	snapPersistPaused = false;
-	// the tiling was decided here rather than read from the layout, so it is
-	// the one thing this function has to write back
-	if (tiled) persistSnapLayout();
+	return tiled;
 }
 
 function applyStoredSnapLayout() {
@@ -2693,6 +2691,19 @@ function applyStoredSnapLayout() {
 }
 
 let snapPersistPaused = false;
+
+// fn with the arrangement's writes held back, and whatever was in force
+// before put back afterwards — also when fn throws, which would otherwise
+// leave every later gesture unsaved for the rest of the session
+function withPersistPaused(fn) {
+	const paused = snapPersistPaused;
+	snapPersistPaused = true;
+	try {
+		return fn();
+	} finally {
+		snapPersistPaused = paused;
+	}
+}
 
 // the arrangement the view holds but the window is too narrow to show. Below
 // the breakpoint applySnapLayout() places nothing, so the board stands empty
