@@ -2,12 +2,13 @@
 // board's mode and grid, auto-refresh, saved presets and share links.
 // Nothing is applied until Primijeni, except the grid and refresh switches.
 
-import { el, flashLabel, isTextField } from '../lib/dom.js';
+import { el, flashLabel } from '../lib/dom.js';
 import { EVENTS, on } from '../lib/events.js';
 import { activePresetId, clearSharedMapView, resolveMapIds, saveMapPrefs } from '../maps/prefs.js';
 import { isBoardPreset } from '../maps/presets.js';
 import { renderMaps } from '../maps/render.js';
 import { copyMapViewLink } from '../maps/share.js';
+import { registerCommand, withKey } from '../page/commands.js';
 import { initDynamicContent } from '../page/content.js';
 import { buildDialogHandles, setDialogVisible } from '../page/dialog.js';
 import { isGridShown, isGridSnapped } from '../widgets/grid.js';
@@ -47,32 +48,27 @@ export function initMapSettings() {
 	on(EVENTS.refreshTick, whileOpen('refreshTick'));
 	on(EVENTS.layoutChanged, whileOpen('layoutChanged'));
 
-	// the picker from the keyboard, for wherever the page's button is out of reach.
-	// Escape is the shared chrome's, since it shuts whichever dialog is up
-	document.addEventListener('keydown', (e) => {
-		if (e.altKey || e.ctrlKey || e.metaKey || isTextField(e.target)) return;
-		if (e.key !== 'k' && e.key !== 'K') return;
-		e.preventDefault();
-		toggleMapSettings();
-	});
+	// the picker from the keyboard, for wherever the page's button is out of
+	// reach; the button and the tab run the same command. Escape is the shared
+	// chrome's, since it shuts whichever dialog is up
+	registerCommand('map-settings', { keys: ['k', 'K'], run: () => toggleMapSettings() });
 
 	// Enter is Primijeni while the picker is up, wherever the focus is in it — a
-	// chip, a checkbox, a button just pressed. Captured and kept from the focused
-	// button, which would otherwise take it as its own click: a press on Nadzorna
-	// ploča followed by Enter would tick the mode back off instead of applying it
-	// (Space still presses a button). A text field keeps its own Enter (the preset
-	// name editors), and so does the interval list
-	document.addEventListener('keydown', (e) => {
-		if (e.key !== 'Enter' || e.altKey || e.ctrlKey || e.metaKey || e.shiftKey || e.isComposing) return;
-		const panel = document.getElementById('mapSettings');
-		if (!panel || panel.hidden) return;
-		if (isTextField(e.target) || (e.target.matches && e.target.matches('select'))) return;
-		const apply = panel.querySelector('.ms-apply');
-		if (!apply) return;
-		e.preventDefault();
-		e.stopPropagation();
-		apply.click();
-	}, true);
+	// chip, a checkbox, a button just pressed. Kept from the focused button,
+	// which would otherwise take it as its own click: a press on Nadzorna ploča
+	// followed by Enter would tick the mode back off instead of applying it
+	// (Space still presses a button). A text field keeps its own Enter (the
+	// preset name editors), and so does the interval list
+	registerCommand('settings-apply', {
+		keys: ['Enter'],
+		capture: true,
+		keyWhen: (e) => {
+			const element = document.getElementById('mapSettings');
+			return !e.shiftKey && !e.isComposing && !!element && !element.hidden
+				&& !(e.target.matches && e.target.matches('select')) && !!element.querySelector('.ms-apply');
+		},
+		run: () => document.querySelector('#mapSettings .ms-apply').click()
+	});
 
 	// the page's Karte button wears the picker's state as an arrow
 	on(EVENTS.dialogToggled, ({ panel, visible }) => {
@@ -205,7 +201,7 @@ function buildMapSettings(element) {
 		}
 	};
 
-	const applyBtn = el('button', { type: 'button', class: 'btn ms-apply', text: 'Primijeni', title: 'Primijeni (Enter)' });
+	const applyBtn = el('button', { type: 'button', class: 'btn ms-apply', text: 'Primijeni', title: withKey('Primijeni', 'settings-apply') });
 	applyBtn.addEventListener('click', () => {
 		const prefs = readPanelPrefs(presets.checkedId(), list.selectedIds());
 		const layout = layoutForPrefs(prefs, panel.dashboardChecked);
@@ -226,7 +222,7 @@ function buildMapSettings(element) {
 		copyMapViewLink(prefs, () => flashLabel(shareLink, 'Kopirano!', 'Podijeli'));
 	});
 
-	const closeLink = el('a', { text: 'Zatvori', title: 'Zatvori (Esc)' });
+	const closeLink = el('a', { text: 'Zatvori', title: withKey('Zatvori', 'dialog-close') });
 	closeLink.addEventListener('click', () => panel.close());
 
 	// the header stays put and the body under it scrolls (CSS); in the body

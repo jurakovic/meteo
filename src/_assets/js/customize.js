@@ -8,13 +8,13 @@ import { onReady } from './lib/dom.js';
 import { EVENTS, on } from './lib/events.js';
 import { cloakBoard, loadSharedMapView, uncloakBoard } from './maps/prefs.js';
 import { initRerender, renderMaps } from './maps/render.js';
-import { initActions, registerAction } from './page/actions.js';
+import { initCommands } from './page/commands.js';
 import { initPageContent, initPageResize } from './page/content.js';
-import { initDialogKeys, initDialogs } from './page/dialog.js';
+import { initDialogs } from './page/dialog.js';
 import { applyManualSwitch, initManual } from './page/manual.js';
 import { initRemoteConfig } from './remote-config.js';
 import { initAddMenu } from './settings/add-menu.js';
-import { initMapSettings, toggleMapSettings } from './settings/panel.js';
+import { initMapSettings } from './settings/panel.js';
 import { initMsTab } from './settings/tab.js';
 import { layoutSnapColumns } from './widgets/columns.js';
 import { initWidgetFullscreen } from './widgets/fullscreen.js';
@@ -31,13 +31,9 @@ applyManualSwitch();
 loadSharedMapView();
 cloakBoard();
 
-// the listeners. The widgets' keys come before the dialogs': Escape ends a
-// fullscreen map only while no dialog is up, so it must be heard before a
-// dialog is shut by it
-initActions();
-registerAction('map-settings', () => toggleMapSettings());
+// the commands (controls and keys, page/commands.js) and the listeners
+initCommands();
 initWidgetKeys();
-initDialogKeys();
 initMapSettings();
 initAddMenu();
 initRerender();

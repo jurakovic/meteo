@@ -1,6 +1,6 @@
 import { DESKTOP_MQ } from '../lib/media.js';
+import { registerCommand } from '../page/commands.js';
 import { anyDialogOpen } from '../page/dialog.js';
-import { exitFullscreen } from '../page/iframe.js';
 import { arrangeBoard } from './arrange.js';
 import { GRID_CELL } from './constants.js';
 import { duplicateMap } from './copies.js';
@@ -11,55 +11,43 @@ import { arrangementChanged } from './layout.js';
 import { refreshOverlap } from './overlap.js';
 import { reloadAllMaps } from './reload.js';
 
-// Keys for what the buttons cannot do in one gesture, and for backing out of
-// what covers the screen. The letters name the thing and not the word for it,
-// so they stand whatever language the page comes to speak: R is the [R] the bar
-// already carries, G the grid and S its snap. (K, which opens the dialog and is
-// the Croatian Karte, lives in settings/panel.js; Escape for the dialogs in
-// page/dialog.js.) The three are also the tab's glyph cluster, which is where they can be read off:
-// [R] [G] [S], each titled with its key. None of this reaches the page while an
-// iframe holds the focus — a press inside a frame belongs to the frame's
-// document, and these maps are another origin — so a click on the page or on a
-// title bar comes first, as it does for the pointer (see refreshOverlap). The
-// dialog's guard is repeated here: not from a text field, whose own Escape is a
-// way out of the field, and not under a modifier, which belongs to the browser
+// The widgets' commands: keys for what the buttons cannot do in one gesture,
+// and the tab's glyphs. The letters name the thing and not the word for it,
+// so they stand whatever language the page comes to speak: R is the [R] the
+// bar already carries, G the grid and S its snap, A arranges and D duplicates.
+// (K, which opens the dialog and is the Croatian Karte, is the dialog's;
+// Escape is the page's, page/commands.js.) R, G and S are also the tab's glyph
+// cluster, which is where they can be read off. A press inside a frame never
+// reaches the page, so a click on the page or on a title bar comes first, as
+// it does for the pointer (see refreshOverlap). The rest act on widgets, which
+// are a desktop thing
 const NUDGE_KEYS = { ArrowLeft: [-1, 0], ArrowRight: [1, 0], ArrowUp: [0, -1], ArrowDown: [0, 1] };
 
 export function initWidgetKeys() {
-	document.addEventListener('keydown', (e) => {
-		if (e.altKey || e.ctrlKey || e.metaKey) return;
-		if (e.target.matches && e.target.matches('input:not([type="radio"]):not([type="checkbox"]), textarea, [contenteditable]')) return;
-		// a fullscreen map is a class and not the browser's own fullscreen, so
-		// nothing takes Escape off it; wherever there is a keyboard, this does
-		if (e.key === 'Escape') { escapeFullscreen(); return; }
-		if (!DESKTOP_MQ.matches) return; // the rest act on widgets, which are a desktop thing
-		if (e.key === 'r' || e.key === 'R') { e.preventDefault(); reloadAllMaps(); return; }
-		if (e.key === 'g' || e.key === 'G') { e.preventDefault(); toggleGridShown(); return; }
-		if (e.key === 's' || e.key === 'S') { e.preventDefault(); toggleGridSnapped(); return; }
-		// these two stand down under a dialog, as the arrows do below: a board
-		// rearranged or a copy made there would be done out of sight
-		if (e.key === 'a' || e.key === 'A') { e.preventDefault(); if (!anyDialogOpen()) arrangeBoard(); return; }
-		if (e.key === 'd' || e.key === 'D') { e.preventDefault(); if (!anyDialogOpen()) duplicateMap(topPopout()); return; }
-		// the arrows belong to whatever is on top. While the dialog is open that is
-		// the dialog: its body is the only thing that scrolls there, and a widget
-		// behind it is not what an arrow pressed on the map list is aimed at. The
-		// grid keys above are another matter — those two switches are the dialog's
-		// own as well, and it is re-read when they change (setGridPrefs)
-		const nudge = NUDGE_KEYS[e.key];
-		if (!nudge || anyDialogOpen()) return;
-		e.preventDefault(); // the page would scroll under it
-		const step = e.shiftKey ? 1 : GRID_CELL;
-		nudgePopout(nudge[0] * step, nudge[1] * step);
+	const desktop = () => DESKTOP_MQ.matches;
+	// these stand down under a dialog, as the arrows do below: a board
+	// rearranged or a copy made there would be done out of sight
+	const inSight = () => DESKTOP_MQ.matches && !anyDialogOpen();
+	registerCommand('reload', { keys: ['r', 'R'], keyWhen: desktop, run: () => reloadAllMaps() });
+	registerCommand('grid-show', { keys: ['g', 'G'], keyWhen: desktop, run: () => toggleGridShown() });
+	registerCommand('grid-snap', { keys: ['s', 'S'], keyWhen: desktop, run: () => toggleGridSnapped() });
+	registerCommand('arrange', { keys: ['a', 'A'], keyWhen: inSight, run: () => arrangeBoard() });
+	registerCommand('duplicate', { keys: ['d', 'D'], keyWhen: inSight, run: () => duplicateMap(topPopout()) });
+	// the arrows belong to whatever is on top. While the dialog is open that is
+	// the dialog: its body is the only thing that scrolls there, and a widget
+	// behind it is not what an arrow pressed on the map list is aimed at. The
+	// grid keys above are another matter — those two switches are the dialog's
+	// own as well, and it follows them (grid-changed). One grid cell a press,
+	// one pixel with Shift
+	registerCommand('nudge', {
+		keys: Object.keys(NUDGE_KEYS),
+		keyWhen: inSight,
+		run: (control, e) => {
+			const [x, y] = NUDGE_KEYS[e.key];
+			const step = e.shiftKey ? 1 : GRID_CELL;
+			nudgePopout(x * step, y * step);
+		}
 	});
-}
-
-// the dialog owns Escape while it is open; under it Escape ends a fullscreen
-// map, and under that it does nothing — backing out is not a reason to take
-// an arrangement apart
-function escapeFullscreen() {
-	if (anyDialogOpen()) return;
-	const fs = document.querySelector('.if1.fullscreen');
-	if (fs) exitFullscreen(fs);
 }
 
 // the widget the keys move is the one on top. popoutZ already names it and the

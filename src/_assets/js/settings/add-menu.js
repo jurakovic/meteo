@@ -4,6 +4,7 @@ import { clamp, viewportHeight, viewportWidth } from '../lib/geometry.js';
 import { CATEGORY_GLYPHS, MAP_CATALOG } from '../maps/catalog.js';
 import { findTerms, matchesFind } from '../maps/find.js';
 import { resolveMapIds } from '../maps/prefs.js';
+import { registerCommand } from '../page/commands.js';
 import { isMapEnabled } from '../remote-config.js';
 import { addToDashboard, isDashboard } from '../widgets/board.js';
 
@@ -127,6 +128,8 @@ function placeMsAdd() {
 
 // the menu shuts when a dialog opens and when the window is resized
 export function initAddMenu() {
+	// the tab's [+], on the board
+	registerCommand('add-map', { run: (glyph) => toggleMsAdd(glyph) });
 	on(EVENTS.dialogToggled, ({ visible }) => { if (visible) closeMsAdd(); });
 
 	window.addEventListener('resize', () => closeMsAdd());

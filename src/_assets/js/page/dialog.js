@@ -9,7 +9,6 @@
 // backdrop, a single scroll lock and a single Escape to reason about. Every
 // change is announced as a dialog-toggled event.
 
-import { isTextField } from '../lib/dom.js';
 import { emit, EVENTS } from '../lib/events.js';
 import { clamp, roundFraction, setScrollbarGutter, viewportHeight, viewportWidth } from '../lib/geometry.js';
 import { DESKTOP_MQ } from '../lib/media.js';
@@ -215,7 +214,7 @@ export function toggleDialog(panel) {
 	setDialogVisible(panel, panel.hidden);
 }
 
-function closeOpenDialog() {
+export function closeOpenDialog() {
 	const panel = openDialogPanel();
 	if (panel) setDialogVisible(panel, false);
 	return !!panel;
@@ -261,16 +260,6 @@ function initDialogBackdrop() {
 		document.addEventListener('click', swallow, true);
 		document.addEventListener('pointerup', release);
 		document.addEventListener('pointercancel', done);
-	});
-}
-
-// Escape shuts whichever dialog is up, wherever the keyboard is — not from a
-// text field, whose own Escape (the find box, the preset name editors) is a way
-// out of the field first
-export function initDialogKeys() {
-	document.addEventListener('keydown', (e) => {
-		if (e.key !== 'Escape' || e.altKey || e.ctrlKey || e.metaKey || isTextField(e.target)) return;
-		closeOpenDialog();
 	});
 }
 

@@ -113,6 +113,16 @@ test.describe('landing page', () => {
 		await expect(page.locator('#overlayWindyFrame')).toBeVisible();
 		await expect(page.locator('#resetWindyFrame')).toHaveText('[R]');
 	});
+
+	test('Escape leaves a fullscreen map (B4)', async ({ page }) => {
+		const fs = page.locator('tr[data-map-id="windy"] .fs-btn');
+		await fs.scrollIntoViewIfNeeded();
+		await fs.click();
+		await expect(page.locator('body')).toHaveClass(/fs-lock/);
+		await page.keyboard.press('Escape');
+		await expect(fs).toHaveText('[ ]');
+		await expect(page.locator('body')).not.toHaveClass(/fs-lock/);
+	});
 });
 
 test.describe('landing page with a map switched off remotely', () => {

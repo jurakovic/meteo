@@ -7,8 +7,8 @@
 // anyone can send.
 
 import { FEATURES } from '../features.js';
-import { isTextField } from '../lib/dom.js';
 import { EVENTS, on } from '../lib/events.js';
+import { registerCommand } from './commands.js';
 import { setDialogVisible, toggleDialog } from './dialog.js';
 
 const MANUAL_HASH = 'upute';
@@ -86,11 +86,7 @@ export function initManual() {
 
 	// H for help: the letters name the thing, as R, G and S do, and ? would
 	// need Shift on one layout and AltGr on the next
-	document.addEventListener('keydown', (e) => {
-		if ((e.key !== 'h' && e.key !== 'H') || e.altKey || e.ctrlKey || e.metaKey || isTextField(e.target)) return;
-		e.preventDefault();
-		toggleManual();
-	});
+	registerCommand('manual', { keys: ['h', 'H'], run: () => toggleManual() });
 
 	// the address, on arrival and whenever it is edited afterwards
 	const fromHash = () => {

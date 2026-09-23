@@ -13,12 +13,10 @@ import { EVENTS, on } from '../lib/events.js';
 import { clamp, roundFraction, viewportWidth } from '../lib/geometry.js';
 import { trackPointer } from '../lib/pointer.js';
 import { readJson, STORAGE_KEYS, writeJson } from '../lib/storage.js';
-import { arrangeBoard } from '../widgets/arrange.js';
+import { withKey } from '../page/commands.js';
 import { SNAP_ARM } from '../widgets/constants.js';
-import { isGridShown, isGridSnapped, setGridPrefs } from '../widgets/grid.js';
+import { isGridShown, isGridSnapped } from '../widgets/grid.js';
 import { isRefreshOn, refreshLabel } from '../widgets/refresh.js';
-import { reloadAllMaps } from '../widgets/reload.js';
-import { toggleMsAdd } from './add-menu.js';
 import { toggleMapSettings } from './panel.js';
 
 const MS_TAB_EDGE = 8; // a press this close to a side resizes; elsewhere drags
@@ -90,17 +88,14 @@ export function applyStoredMsTab() {
 // interactive content inside the button; their click is kept off the tab's own
 function buildMsTabCluster(tab) {
 	// the board's own way to add a map, without the dialog (see openMsAdd)
-	const add = el('a', { class: 'ms-tab-btn ms-tab-board ms-tab-add', text: '[+]', title: 'Dodaj kartu na ploču' });
-	add.addEventListener('click', () => toggleMsAdd(add));
-	const reload = el('a', { class: 'ms-tab-btn', text: '[R]', title: 'Osvježi sve karte (R)' });
-	reload.addEventListener('click', () => reloadAllMaps());
+	const glyph = (text, command, title, extra = {}) =>
+		el('a', { class: 'ms-tab-btn', ...extra, 'data-action': command, text, title: withKey(title, command) });
+	const add = glyph('[+]', 'add-map', 'Dodaj kartu na ploču', { class: 'ms-tab-btn ms-tab-board ms-tab-add' });
+	const reload = glyph('[R]', 'reload', 'Osvježi sve karte');
 	// the board's three, which do nothing off it and are not offered there
-	const arrange = el('a', { class: 'ms-tab-btn ms-tab-board', text: '[A]', title: 'Posloži u mrežu (A)' });
-	arrange.addEventListener('click', () => arrangeBoard());
-	const grid = el('a', { class: 'ms-tab-btn ms-tab-board', 'data-grid': 'show', text: '[G]', title: 'Prikaži mrežu (G)' });
-	grid.addEventListener('click', () => setGridPrefs(!isGridShown(), isGridSnapped()));
-	const snap = el('a', { class: 'ms-tab-btn ms-tab-board', 'data-grid': 'snap', text: '[S]', title: 'Poravnaj uz mrežu (S)' });
-	snap.addEventListener('click', () => setGridPrefs(isGridShown(), !isGridSnapped()));
+	const arrange = glyph('[A]', 'arrange', 'Posloži u mrežu', { class: 'ms-tab-btn ms-tab-board' });
+	const grid = glyph('[G]', 'grid-show', 'Prikaži mrežu', { class: 'ms-tab-btn ms-tab-board', 'data-grid': 'show' });
+	const snap = glyph('[S]', 'grid-snap', 'Poravnaj uz mrežu', { class: 'ms-tab-btn ms-tab-board', 'data-grid': 'snap' });
 	const count = el('span', { class: 'ms-tab-count', title: 'Do sljedećeg osvježavanja' });
 	tab.appendChild(el('span', { class: 'ms-tab-cluster' }, [add, reload, arrange, grid, snap, count]));
 	syncMsTab();
@@ -130,6 +125,7 @@ function syncRefreshLabel() {
 export function initMsTab() {
 	const tab = document.querySelector('.ms-tab');
 	if (!tab) return;
+	tab.title = withKey('Karte', 'map-settings');
 	buildMsTabCluster(tab); // before the first measure: the glyphs are part of the width its name gives it
 	applyStoredMsTab();
 	tab.addEventListener('click', (e) => {

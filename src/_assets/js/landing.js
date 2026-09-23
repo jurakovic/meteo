@@ -4,17 +4,16 @@
 // the document is parsed (onReady).
 
 import { onReady } from './lib/dom.js';
-import { initActions } from './page/actions.js';
+import { initCommands } from './page/commands.js';
 import { initPageContent, initPageResize } from './page/content.js';
-import { initDialogKeys, initDialogs } from './page/dialog.js';
+import { initDialogs } from './page/dialog.js';
 import { applyManualSwitch, initManual } from './page/manual.js';
 import { initRemoteConfig } from './remote-config.js';
 
 initRemoteConfig();
 applyManualSwitch();
 
-initActions();
-initDialogKeys();
+initCommands();
 initPageResize();
 
 onReady(initDialogs);
