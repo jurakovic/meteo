@@ -170,6 +170,12 @@ function Convert-Manual {
 			[void]$para.Add($lines[$i].Trim())
 			$i++
 		}
+		# a line that opens like a block (-, #, >) but is none of the ones above,
+		# such as -5 or #upute: the paragraph will not take it either, and with
+		# nothing taken the loop would stand on this line for ever
+		if ($para.Count -eq 0) {
+			throw "md.ps1: line opens like a block but is none (line $($i + 1)): $line"
+		}
 		[void]$body.Add("<p>$(ConvertTo-MdInline ($para -join ' '))</p>")
 	}
 

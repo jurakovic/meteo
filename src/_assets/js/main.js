@@ -928,11 +928,22 @@ function toggleManual() {
 	toggleDialog(manualDialog());
 }
 
+// a hash as text, without its #. A malformed escape (#%E0) is read as it
+// stands rather than thrown on: it is not the manual, and a throw here would
+// take the rest of initDialogs down with it
+function hashText(hash) {
+	try {
+		return decodeURIComponent(hash.slice(1));
+	} catch (e) {
+		return hash.slice(1);
+	}
+}
+
 // replaceState rather than the hash itself: assigning to location.hash stacks
 // an entry for every open, so Back would walk out through them one at a time
 function syncManualHash(open) {
 	const url = new URL(window.location.href);
-	const already = decodeURIComponent(url.hash.slice(1)) === MANUAL_HASH;
+	const already = hashText(url.hash) === MANUAL_HASH;
 	if (open === already) return;
 	url.hash = open ? MANUAL_HASH : '';
 	history.replaceState(null, '', open ? url.href : url.href.replace(/#$/, ''));
@@ -959,7 +970,7 @@ function initManual() {
 		const link = e.target.closest('a[href^="#"]');
 		if (!link || !panel.contains(link)) return;
 		e.preventDefault();
-		scrollManualTo(panel, decodeURIComponent(link.getAttribute('href').slice(1)));
+		scrollManualTo(panel, hashText(link.getAttribute('href')));
 	});
 
 	document.addEventListener('dialog-toggled', (e) => {
@@ -979,7 +990,7 @@ function initManual() {
 
 	// the address, on arrival and whenever it is edited afterwards
 	const fromHash = () => {
-		const wanted = decodeURIComponent(window.location.hash.slice(1)) === MANUAL_HASH;
+		const wanted = hashText(window.location.hash) === MANUAL_HASH;
 		if (wanted !== manualOpen()) setDialogVisible(panel, wanted);
 	};
 	window.addEventListener('hashchange', fromHash);

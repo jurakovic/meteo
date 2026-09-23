@@ -495,8 +495,9 @@
 		;if("Escape"===t.key)return void escapeFullscreen();if(!POPOUT_MQ.matches)return;if("r"===t.key||"R"===t.key)return t.preventDefault(),
 		void reloadAllMaps();if("g"===t.key||"G"===t.key)return t.preventDefault(),void toggleGridShown()
 		;if("s"===t.key||"S"===t.key)return t.preventDefault(),void toggleGridSnapped();if("a"===t.key||"A"===t.key)return t.preventDefault(),
-		void arrangeBoard();if("d"===t.key||"D"===t.key)return t.preventDefault(),void duplicateMap(topPopout());const e=NUDGE_KEYS[t.key]
-		;if(!e||mapSettingsOpen())return;t.preventDefault();const o=t.shiftKey?1:GRID_CELL;nudgePopout(e[0]*o,e[1]*o)})
+		void(mapSettingsOpen()||arrangeBoard());if("d"===t.key||"D"===t.key)return t.preventDefault(),
+		void(mapSettingsOpen()||duplicateMap(topPopout()));const e=NUDGE_KEYS[t.key];if(!e||mapSettingsOpen())return;t.preventDefault()
+		;const o=t.shiftKey?1:GRID_CELL;nudgePopout(e[0]*o,e[1]*o)})
 		;const REFRESH_KEY="mapRefresh",REFRESH_CHOICES=[5,10,15,30,60],REFRESH_DEFAULT=5;function loadRefreshPrefs(){try{
 		const t=JSON.parse(localStorage.getItem(REFRESH_KEY));if(t&&"object"==typeof t)return{on:!0===t.on,
 		minutes:REFRESH_CHOICES.includes(t.minutes)?t.minutes:5}}catch(t){}return{on:!1,minutes:5}}
@@ -1245,10 +1246,10 @@
 		document.addEventListener("pointerup",a),document.addEventListener("pointercancel",n)})}document.addEventListener("keydown",e=>{
 		"Escape"!==e.key||e.altKey||e.ctrlKey||e.metaKey||e.target.matches&&e.target.matches('input:not([type="radio"]):not([type="checkbox"]), textarea, [contenteditable]')||closeOpenDialog()
 		});const MANUAL_HASH="upute",MANUAL_ENABLED=!1;function manualDialog(){return document.getElementById("manualDialog")}function manualOpen(){
-		const e=manualDialog();return!!e&&!e.hidden}function toggleManual(){toggleDialog(manualDialog())}function syncManualHash(e){
-		const t=new URL(window.location.href);e!==("upute"===decodeURIComponent(t.hash.slice(1)))&&(t.hash=e?"upute":"",
-		history.replaceState(null,"",e?t.href:t.href.replace(/#$/,"")))}function scrollManualTo(e,t){
-		const o=e.querySelector(".ms-body"),n=e.querySelector(`[id="${CSS.escape(t)}"]`)
+		const e=manualDialog();return!!e&&!e.hidden}function toggleManual(){toggleDialog(manualDialog())}function hashText(e){try{
+		return decodeURIComponent(e.slice(1))}catch(t){return e.slice(1)}}function syncManualHash(e){const t=new URL(window.location.href)
+		;e!==("upute"===hashText(t.hash))&&(t.hash=e?"upute":"",history.replaceState(null,"",e?t.href:t.href.replace(/#$/,"")))}
+		function scrollManualTo(e,t){const o=e.querySelector(".ms-body"),n=e.querySelector(`[id="${CSS.escape(t)}"]`)
 		;o&&n&&(o.scrollTop+=n.getBoundingClientRect().top-o.getBoundingClientRect().top)}function initManual(){manualDialog()}
 		function initDialogs(){dialogPanels().forEach(e=>{buildDialogHandles(e),initDialogWindow(e)}),initDialogBackdrop(),initManual(),
 		window.addEventListener("resize",()=>applyStoredDialog(openDialogPanel()))}function initDynamicContent(){

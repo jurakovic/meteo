@@ -1695,8 +1695,10 @@ document.addEventListener('keydown', (e) => {
 	if (e.key === 'r' || e.key === 'R') { e.preventDefault(); reloadAllMaps(); return; }
 	if (e.key === 'g' || e.key === 'G') { e.preventDefault(); toggleGridShown(); return; }
 	if (e.key === 's' || e.key === 'S') { e.preventDefault(); toggleGridSnapped(); return; }
-	if (e.key === 'a' || e.key === 'A') { e.preventDefault(); arrangeBoard(); return; }
-	if (e.key === 'd' || e.key === 'D') { e.preventDefault(); duplicateMap(topPopout()); return; }
+	// these two stand down under a dialog, as the arrows do below: a board
+	// rearranged or a copy made there would be done out of sight
+	if (e.key === 'a' || e.key === 'A') { e.preventDefault(); if (!mapSettingsOpen()) arrangeBoard(); return; }
+	if (e.key === 'd' || e.key === 'D') { e.preventDefault(); if (!mapSettingsOpen()) duplicateMap(topPopout()); return; }
 	// the arrows belong to whatever is on top. While the dialog is open that is
 	// the dialog: its body is the only thing that scrolls there, and a widget
 	// behind it is not what an arrow pressed on the map list is aimed at. The

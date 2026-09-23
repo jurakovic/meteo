@@ -624,7 +624,10 @@ const MAP_PRESETS = [
 // ---------- remote config ----------
 // Which maps are off comes from config.js (isMapEnabled), loaded before this.
 // Off is hidden, not removed: lists, presets and links keep the id, and the map
-// is back where it was once it is on again. Only what is shown leaves it out —
+// is back in its place in the list once it is on again. Not on the screen,
+// though: the arrangement is written off what is up, so the next write drops a
+// map that is off, and on again it comes in where any map new to the view does
+// (docked, or down the cascade on a board). Only what is shown leaves it out —
 // the render, the tab's [+] menu and the dialog's rows (hidden, not left out,
 // so a list saved from the dialog still holds it)
 let mapsRendered = false; // from the first render on, a change is applied in place
