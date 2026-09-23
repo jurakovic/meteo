@@ -621,6 +621,21 @@ const MAP_PRESETS = [
 	{ id: 'nista', name: 'Ništa', maps: [] }
 ];
 
+// ---------- remote config ----------
+// Which maps are off comes from config.js (isMapEnabled), loaded before this.
+// Off is hidden, not removed: lists, presets and links keep the id, and the map
+// is back in its place in the list once it is on again. Not on the screen,
+// though: the arrangement is written off what is up, so the next write drops a
+// map that is off, and on again it comes in where any map new to the view does
+// (docked, or down the cascade on a board). Only what is shown leaves it out —
+// the render, the tab's [+] menu and the dialog's rows (hidden, not left out,
+// so a list saved from the dialog still holds it)
+let mapsRendered = false; // from the first render on, a change is applied in place
+
+document.addEventListener('map-config-changed', () => {
+	if (mapsRendered) rerenderMaps();
+});
+
 // ---------- user presets (localStorage) ----------
 // Saved views take the same { id, name, maps } shape as the built-ins, so the
 // preset bar, presetMapIds and the stored preferences treat both alike. Ids
@@ -845,6 +860,22 @@ function removeMapFromList(mapId) {
 	persistSnapLayout();
 }
 
+// its counterpart, the tab's [+] (popout.js): the map goes on the end of the
+// list, stored the same way. The arrangement is written by the caller, once
+// the widget stands on the board
+function addMapToList(mapId) {
+	const maps = resolveMapIds().filter(id => id !== mapId).concat(mapId);
+	if (sharedMapView) {
+		sharedMapView.preset = 'custom';
+		sharedMapView.maps = maps;
+	} else {
+		const prefs = getMapPrefs();
+		prefs.preset = 'custom';
+		prefs.maps = maps;
+		saveMapPrefs(prefs);
+	}
+}
+
 // the list a preferences object names — deduped as well as filtered: a
 // hand-crafted ?v= can name the same map twice, and two rendered copies would
 // share one data-slideshow-id (the arrows drive whichever comes first while
@@ -974,6 +1005,38 @@ function clearSharedMapView() {
 
 // ---------- rendering ----------
 
+// A map can be on screen more than once: the widget's [D] makes another showing
+// of it (popout.js), and a showing beyond the first is a widget and nothing
+// else — the page keeps one row per map however many float over it. So a block
+// is named twice: by the map it shows (`data-map-id`, which is the catalog's)
+// and by which showing of it this is (`data-inst`). The render's own block is
+// the first, so its instance key is the plain id and every layout written
+// before copies existed still reads; a further one carries `#2`, `#3`.
+//
+// The parts inside a block that carry a name of their own — a slideshow and
+// its indicators, a frame and the ids built off it — take a suffix from the
+// index instead of the key, since a frame's id is also pasted into other ids
+// and read back with getElementById, where a `#` has no business being.
+const INST_SEP = '#';
+
+function instKey(mapId, index) {
+	return index > 1 ? `${mapId}${INST_SEP}${index}` : mapId;
+}
+
+function instMapId(inst) {
+	return String(inst).split(INST_SEP)[0];
+}
+
+function instIndex(inst) {
+	const index = Number(String(inst).split(INST_SEP)[1]);
+	return index > 1 ? index : 1;
+}
+
+function instSuffix(inst) {
+	const index = instIndex(inst);
+	return index > 1 ? `Copy${index}` : '';
+}
+
 function el(tag, attrs = {}, children = []) {
 	const node = document.createElement(tag);
 	for (const [key, value] of Object.entries(attrs)) {
@@ -998,7 +1061,8 @@ function maxWidthStyle(map) {
 function buildTitleBar(title, map = {}, popout = false) {
 	return el('div', { class: 'radartitle', style: maxWidthStyle(map) || undefined }, [
 		el('a', { href: title.href, target: '_blank', rel: 'nofollow', text: title.text }),
-		popout ? el('span', { class: 'right right-cluster' }, [buildReloadButton(), buildGroupButton(), buildPopoutButton()]) : null
+		popout ? el('span', { class: 'right right-cluster' },
+			[buildDuplicateButton(), buildReloadButton(), buildGroupButton(), buildPopoutButton()]) : null
 	]);
 }
 
@@ -1008,13 +1072,14 @@ function buildMapTitleBar(map) {
 	return buildTitleBar({ text: map.name, href: map.titleHref }, map, true);
 }
 
-function buildSlideshow(map) {
+function buildSlideshow(map, inst) {
+	const slideshowId = map.id + instSuffix(inst);
 	const start = map.startSlide || 1;
 	const titled = map.slides.some(slide => slide.title);
 
 	const container = el('div', {
 		class: titled ? 'slideshow' : 'slideshow placeholder',
-		'data-slideshow-id': map.id,
+		'data-slideshow-id': slideshowId,
 		'data-current-slide': start,
 		'data-dynamic-width': map.dynamicWidth ? '' : undefined,
 		style: (maxWidthStyle(map) + (titled ? '' : ` aspect-ratio: ${map.aspect};`)).trim() || undefined
@@ -1044,15 +1109,15 @@ function buildSlideshow(map) {
 	});
 
 	const prev = el('a', { class: 'prev' + (titled ? ' shorter' : ''), html: '&#10094;' });
-	prev.addEventListener('click', () => plusSlides(map.id, -1));
+	prev.addEventListener('click', () => plusSlides(slideshowId, -1));
 	const next = el('a', { class: 'next' + (titled ? ' shorter' : ''), html: '&#10095;' });
-	next.addEventListener('click', () => plusSlides(map.id, 1));
+	next.addEventListener('click', () => plusSlides(slideshowId, 1));
 	container.appendChild(prev);
 	container.appendChild(next);
 
 	const indicators = el('div', {
 		class: 'indicators-container',
-		'data-slideshow-id': map.id,
+		'data-slideshow-id': slideshowId,
 		style: `${maxWidthStyle(map)} grid-template-columns: repeat(${map.slides.length}, 1fr);`.trim()
 	});
 	map.slides.forEach((slide, i) => {
@@ -1086,8 +1151,8 @@ function buildVideo(map) {
 	];
 }
 
-function buildIframe(map) {
-	const frameId = map.frameId;
+function buildIframe(map, inst) {
+	const frameId = map.frameId + instSuffix(inst);
 	const pascal = frameId[0].toUpperCase() + frameId.slice(1);
 
 	const zoomBtn = el('a', { class: 'left zoom-btn', 'data-mode': 'hr', text: '[HR]' });
@@ -1099,6 +1164,7 @@ function buildIframe(map) {
 		zoomBtn,
 		el('a', { class: 'center', href: map.titleHref, target: '_blank', rel: 'nofollow', text: map.name }),
 		el('span', { class: 'right right-cluster' }, [
+			buildDuplicateButton(),
 			buildGroupButton(),
 			buildPopoutButton(),
 			el('a', { id: `reset${pascal}Frame`, 'data-frame-id': frameId, style: 'display:none', text: '[X]' }),
@@ -1145,12 +1211,12 @@ function buildLinksBottom(map) {
 	return bar;
 }
 
-function buildMapContent(map) {
+function buildMapContent(map, inst = map.id) {
 	switch (map.type) {
-		case 'slideshow': return buildSlideshow(map);
+		case 'slideshow': return buildSlideshow(map, inst);
 		case 'image': return buildImage(map);
 		case 'video': return buildVideo(map);
-		case 'iframe': return buildIframe(map);
+		case 'iframe': return buildIframe(map, inst);
 		case 'iframe-basic': return buildBasicIframe(map);
 	}
 	return [];
@@ -1167,7 +1233,8 @@ function renderMaps() {
 	snapPersistPaused = false;
 	resetSnapColumns(); // their panes go with the tbody
 	tbody.replaceChildren();
-	const maps = resolveMapIds().map(id => MAP_CATALOG.find(m => m.id === id)).filter(Boolean);
+	mapsRendered = true;
+	const maps = resolveMapIds().map(id => MAP_CATALOG.find(m => m.id === id)).filter(map => map && isMapEnabled(map.id));
 	if (!maps.length) {
 		tbody.appendChild(el('tr', {}, [
 			el('td', { align: 'center' }, [
@@ -1179,7 +1246,7 @@ function renderMaps() {
 	maps.forEach((map, i) => {
 		if (i > 0) tbody.appendChild(el('tr', { class: 'sp20' }));
 		// one block per map so the pop-out can lift title, map and indicators together
-		const block = el('div', { class: 'map-block', 'data-map-id': map.id }, buildMapContent(map));
+		const block = el('div', { class: 'map-block', 'data-map-id': map.id, 'data-inst': map.id }, buildMapContent(map));
 		tbody.appendChild(el('tr', {}, [el('td', { align: 'center' }, [block])]));
 		if (map.links && map.links.length) {
 			tbody.appendChild(el('tr', {}, [el('td', { align: 'center' }, [buildLinksBottom(map)])]));
@@ -1187,51 +1254,91 @@ function renderMaps() {
 	});
 }
 
+// the remote config changed under maps already out: the view is drawn again the
+// way Primijeni draws it, the arrangement carried over from the screen, so a map
+// switched off goes and one switched on comes back — docked on the page, down
+// the cascade on a board. Every frame reloads, which a config change is rare
+// enough to afford
+function rerenderMaps() {
+	const layout = sanitizeSnapLayout(currentSnapLayout(), resolveMapIds());
+	closeMsAdd();
+	renderMaps();
+	initDynamicContent();
+	applySnapLayout(layout);
+}
+
 // ---------- settings panel ----------
 
+// what a typed term and a map's text are both put through before they are
+// compared, so the box answers to a keyboard without the letters: NFD splits
+// a diacritic off the letter it sits on and the combining mark is dropped
+// ("cesk" finds ČHMÚ). A stroke is not a combining mark and survives that —
+// đ is one code point of its own — so it is spelled out
+function foldText(text) {
+	return text.toLowerCase().normalize('NFD').replace(/\p{Diacritic}/gu, '').replace(/đ/g, 'd');
+}
+
+function findTerms(text) {
+	return foldText(text).split(/\s+/).filter(Boolean);
+}
+
+// the category as well as the name, so a kind of map ("satelit", "munje")
+// narrows the list the way a source does; every term has to hit somewhere,
+// which is what lets two words ("neverin radar") come down to one map. Shared
+// by the dialog's box and the tab's [+]
+function matchesFind(map, terms) {
+	const haystack = foldText(`${map.name} ${map.category}`);
+	return terms.every(term => haystack.includes(term));
+}
+
+// opening and shutting — the lock, the gutter, the backdrop, the stored
+// geometry — is the chrome both dialogs share (main.js). The arrow is not set
+// here but off the event below, so a shut this function never made (the
+// backdrop, Escape, the manual opening over it) moves it just the same
 function setMapSettingsVisible(panel, visible) {
-	panel.hidden = !visible;
-	const arrow = document.querySelector('.buttons button.btn .arrow');
-	if (arrow) arrow.textContent = visible ? '▲' : '▼';
-	// the page holds still under the dialog (CSS), with the gutter of the
-	// scrollbar it had kept, so nothing centred in it shifts; where it had
-	// none (hidden behind the columns, under a fullscreen, or short) the
-	// viewport is left as it is
-	const scrollbar = window.innerWidth - document.documentElement.clientWidth;
-	const keepGutter = visible && scrollbar > 0;
-	document.documentElement.classList.toggle('ms-gutter', keepGutter);
-	document.body.classList.toggle('ms-open', visible);
-	const backdrop = document.querySelector('.ms-backdrop');
-	if (backdrop) {
-		backdrop.hidden = !visible;
-		if (visible) backdrop.classList.remove('ms-spent'); // it paints again for a dialog that is back
-	}
-	viewportGutter = keepGutter ? scrollbar : 0; // clientWidth counts the kept gutter; the columns must not
-	layoutSnapColumns(); // in case the viewport did change
-	if (visible) applyStoredMsPanel(panel); // where the user put it, measurable only now it is shown
+	setDialogVisible(panel, visible);
 }
 
 function toggleMapSettings() {
 	const panel = document.getElementById('mapSettings');
 	if (!panel) return;
-	if (panel.hidden) {
-		buildMapSettings(panel);
-		setMapSettingsVisible(panel, true);
-	} else {
-		setMapSettingsVisible(panel, false);
-	}
+	if (panel.hidden) buildMapSettings(panel); // rebuilt from what is stored, so a dismissal drops the edits
+	setMapSettingsVisible(panel, panel.hidden);
 }
 
-// the dialog from the keyboard, for wherever the page's button is out of
-// reach: K opens or shuts it, Escape shuts it — not from a text field, whose
-// own Escape (the name and rename editors) is a way out of the field only
+// the picker from the keyboard, for wherever the page's button is out of reach.
+// Escape is the shared chrome's, since it shuts whichever dialog is up
 document.addEventListener('keydown', (e) => {
+	if (e.altKey || e.ctrlKey || e.metaKey) return;
+	if (e.key !== 'k' && e.key !== 'K') return;
+	if (e.target.matches && e.target.matches('input:not([type="radio"]):not([type="checkbox"]), textarea, [contenteditable]')) return;
+	e.preventDefault();
+	toggleMapSettings();
+});
+
+// Enter is Primijeni while the picker is up, wherever the focus is in it — a
+// chip, a checkbox, a button just pressed. Captured and kept from the focused
+// button, which would otherwise take it as its own click: a press on Nadzorna
+// ploča followed by Enter would tick the mode back off instead of applying it
+// (Space still presses a button). A text field keeps its own Enter (the preset
+// name editors), and so does the interval list
+document.addEventListener('keydown', (e) => {
+	if (e.key !== 'Enter' || e.altKey || e.ctrlKey || e.metaKey || e.shiftKey || e.isComposing) return;
 	const panel = document.getElementById('mapSettings');
-	if (!panel || e.altKey || e.ctrlKey || e.metaKey) return;
-	const typing = e.target.matches && e.target.matches('input:not([type="radio"]):not([type="checkbox"]), textarea, [contenteditable]');
-	if (typing) return;
-	if (e.key === 'Escape' && !panel.hidden) setMapSettingsVisible(panel, false);
-	else if (e.key === 'k' || e.key === 'K') { e.preventDefault(); toggleMapSettings(); }
+	if (!panel || panel.hidden) return;
+	if (e.target.matches && e.target.matches('input:not([type="radio"]):not([type="checkbox"]), textarea, select, [contenteditable]')) return;
+	const apply = panel.querySelector('.ms-apply');
+	if (!apply) return;
+	e.preventDefault();
+	e.stopPropagation();
+	apply.click();
+}, true);
+
+// the page's Karte button wears the picker's state as an arrow
+document.addEventListener('dialog-toggled', (e) => {
+	if (e.detail.panel.id !== 'mapSettings') return;
+	const arrow = document.querySelector('.buttons button.btn .arrow');
+	if (arrow) arrow.textContent = e.detail.visible ? '▲' : '▼';
 });
 
 // ---------- the tab: where and how wide the user put it ----------
@@ -1262,12 +1369,17 @@ function saveMsTab(tab) {
 	} catch (e) { /* storage disabled or full — the tab still moves this session */ }
 }
 
-// the width its name takes is the narrowest it goes: measured with the width unset (0 while it is not shown)
+// the width its name takes is the narrowest it goes: measured with the width
+// unset (0 while it is not shown), and as a sized tab, without the room the
+// name is given while nobody has sized it
 function msTabMinWidth(tab) {
 	const width = tab.style.width;
+	const sized = tab.classList.contains('ms-tab-sized');
 	tab.style.width = '';
-	const min = tab.offsetWidth;
+	tab.classList.add('ms-tab-sized');
+	const min = Math.ceil(tab.getBoundingClientRect().width); // up: offsetWidth rounds, and a fraction short ellipsises the name
 	tab.style.width = width;
+	tab.classList.toggle('ms-tab-sized', sized);
 	return min;
 }
 
@@ -1293,6 +1405,7 @@ function placeMsTab(tab, left, width) {
 	tab.style.width = `${Math.round(width)}px`;
 	tab.style.left = `${Math.round(left)}px`;
 	tab.style.transform = 'none'; // off the centring
+	tab.classList.add('ms-tab-sized'); // the width is this one now, not the name's plus its room
 }
 
 function applyStoredMsTab() {
@@ -1310,15 +1423,144 @@ function applyStoredMsTab() {
 // They are <a> without href, as the title bars' glyphs are, so they are no
 // interactive content inside the button; their click is kept off the tab's own
 function buildMsTabCluster(tab) {
+	// the board's own way to add a map, without the dialog (see openMsAdd)
+	const add = el('a', { class: 'ms-tab-btn ms-tab-board ms-tab-add', text: '[+]', title: 'Dodaj kartu na ploču' });
+	add.addEventListener('click', () => toggleMsAdd(add));
 	const reload = el('a', { class: 'ms-tab-btn', text: '[R]', title: 'Osvježi sve karte (R)' });
 	reload.addEventListener('click', () => reloadAllMaps());
-	const grid = el('a', { class: 'ms-tab-btn', 'data-grid': 'show', text: '[G]', title: 'Prikaži mrežu (G)' });
+	// the board's three, which do nothing off it and are not offered there
+	const arrange = el('a', { class: 'ms-tab-btn ms-tab-board', text: '[A]', title: 'Posloži u mrežu (A)' });
+	arrange.addEventListener('click', () => arrangeBoard());
+	const grid = el('a', { class: 'ms-tab-btn ms-tab-board', 'data-grid': 'show', text: '[G]', title: 'Prikaži mrežu (G)' });
 	grid.addEventListener('click', () => setGridPrefs(!isGridShown(), isGridSnapped()));
-	const snap = el('a', { class: 'ms-tab-btn', 'data-grid': 'snap', text: '[S]', title: 'Poravnaj uz mrežu (S)' });
+	const snap = el('a', { class: 'ms-tab-btn ms-tab-board', 'data-grid': 'snap', text: '[S]', title: 'Poravnaj uz mrežu (S)' });
 	snap.addEventListener('click', () => setGridPrefs(isGridShown(), !isGridSnapped()));
-	tab.appendChild(el('span', { class: 'ms-tab-cluster' }, [reload, grid, snap]));
+	const count = el('span', { class: 'ms-tab-count', title: 'Do sljedećeg osvježavanja' });
+	tab.appendChild(el('span', { class: 'ms-tab-cluster' }, [add, reload, arrange, grid, snap, count]));
 	syncMsTab();
 }
+
+// ---------- the tab's [+]: one map onto the board ----------
+
+// A small menu hung under the tab rather than a dialog: a box to type in and
+// the maps the board does not show yet, in the catalog's order, each with its
+// kind's glyph. Typing narrows the list as the dialog's box does; the arrows
+// walk it, Enter or a click puts the lit one on the board (addToDashboard,
+// popout.js) and shuts the menu. Escape, a press anywhere outside, the dialog
+// opening and the window resizing shut it too. It is built afresh on every
+// open, so it lists what the board holds by then. Outside the tab, which is a
+// <button> and so no place for a text box, and the focus stays in the box,
+// so the page's keys (K, R, A, D, the arrows on a widget) keep off it
+let msAdd = null; // { menu, anchor } while open
+const MS_ADD_MAX_HEIGHT = 420; // a menu, not a second dialog: the list scrolls past this
+
+function toggleMsAdd(anchor) {
+	if (msAdd) closeMsAdd();
+	else openMsAdd(anchor);
+}
+
+function closeMsAdd() {
+	if (!msAdd) return;
+	msAdd.menu.remove();
+	msAdd = null;
+	document.body.classList.remove('ms-add-open');
+	document.removeEventListener('pointerdown', msAddOutside, true);
+}
+
+// captured, so a press that lands on a widget still shuts the menu first; the
+// [+] itself is left to its own click, which toggles
+function msAddOutside(e) {
+	if (!msAdd || msAdd.menu.contains(e.target) || msAdd.anchor.contains(e.target)) return;
+	closeMsAdd();
+}
+
+function openMsAdd(anchor) {
+	if (!isDashboard()) return;
+	closeMsAdd();
+	const onBoard = new Set(resolveMapIds());
+	// by name, as the dialog's Naziv sorts: a menu is scanned for a name, not a kind
+	const maps = MAP_CATALOG.filter(map => isMapEnabled(map.id) && !onBoard.has(map.id))
+		.sort((a, b) => a.name.localeCompare(b.name, 'hr'));
+
+	const input = el('input', { type: 'text', class: 'ms-add-input', placeholder: 'Traži kartu…', spellcheck: 'false', autocomplete: 'off' });
+	const list = el('div', { class: 'ms-add-list' });
+	const empty = el('div', { class: 'ms-add-empty', text: maps.length ? 'Nema pogodaka' : 'Sve su karte na ploči' });
+	const menu = el('div', { class: 'ms-add' }, [input, list, empty]);
+	let items = [];
+	let active = -1;
+
+	function setActive(index) {
+		if (items[active]) items[active].classList.remove('active');
+		active = index;
+		if (!items[active]) return;
+		items[active].classList.add('active');
+		items[active].scrollIntoView({ block: 'nearest' });
+	}
+
+	function pick(mapId) {
+		closeMsAdd();
+		addToDashboard(mapId);
+	}
+
+	function fill() {
+		const terms = findTerms(input.value);
+		items = maps.filter(map => matchesFind(map, terms)).map(map => {
+			const item = el('div', { class: 'ms-add-item', 'data-map-id': map.id }, [
+				el('span', { class: 'ms-glyph', text: CATEGORY_GLYPHS[map.category] || '' }),
+				document.createTextNode(map.name)
+			]);
+			item.addEventListener('mousedown', (e) => e.preventDefault()); // the focus stays in the box
+			item.addEventListener('mousemove', () => { if (items[active] !== item) setActive(items.indexOf(item)); });
+			item.addEventListener('click', () => pick(map.id));
+			return item;
+		});
+		list.replaceChildren(...items);
+		empty.hidden = items.length > 0;
+		active = -1;
+		setActive(items.length ? 0 : -1);
+	}
+
+	input.addEventListener('input', fill);
+	input.addEventListener('keydown', (e) => {
+		if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
+			e.preventDefault();
+			if (!items.length) return;
+			const step = e.key === 'ArrowDown' ? 1 : -1;
+			setActive((active + step + items.length) % items.length);
+		} else if (e.key === 'Enter') {
+			e.preventDefault();
+			if (items[active]) pick(items[active].getAttribute('data-map-id'));
+		} else if (e.key === 'Escape') {
+			e.preventDefault();
+			// a term is cleared first, as in the dialog's box; an empty box shuts
+			if (input.value) { input.value = ''; fill(); } else closeMsAdd();
+		}
+	});
+
+	fill();
+	document.body.appendChild(menu);
+	msAdd = { menu, anchor };
+	document.body.classList.add('ms-add-open');
+	placeMsAdd();
+	document.addEventListener('pointerdown', msAddOutside, true);
+	input.focus();
+}
+
+// under the tab, its left edge under the [+], held inside the viewport
+function placeMsAdd() {
+	if (!msAdd) return;
+	const { menu, anchor } = msAdd;
+	const tab = anchor.closest('.ms-tab');
+	const top = (tab || anchor).getBoundingClientRect().bottom + 4;
+	const width = menu.offsetWidth;
+	const left = clamp(anchor.getBoundingClientRect().left - 8, 8, Math.max(8, viewportWidth() - width - 8));
+	menu.style.left = `${Math.round(left)}px`;
+	menu.style.top = `${Math.round(top)}px`;
+	menu.style.maxHeight = `${Math.max(120, Math.min(MS_ADD_MAX_HEIGHT, Math.round(viewportHeight() - top - 16)))}px`;
+}
+
+document.addEventListener('dialog-toggled', (e) => { if (e.detail.visible) closeMsAdd(); });
+window.addEventListener('resize', () => closeMsAdd());
 
 // the two switches say whether they are on by being lit or dimmed, as the
 // dialog's greys its own off the board. Called from setGridPrefs, wherever the
@@ -1331,6 +1573,17 @@ function syncMsTab() {
 	const snap = tab.querySelector('[data-grid="snap"]');
 	if (show) show.classList.toggle('ms-tab-off', !isGridShown());
 	if (snap) snap.classList.toggle('ms-tab-off', !isGridSnapped());
+	syncRefreshLabels();
+}
+
+// the countdown reads in two places — the tab, which shows for it wherever the
+// clock runs, and the dialog's own row — and the tick writes both
+function syncRefreshLabels() {
+	const left = isRefreshOn() ? refreshLabel() : '';
+	const count = document.querySelector('.ms-tab .ms-tab-count');
+	if (count) count.textContent = left;
+	const row = document.querySelector('.ms-refresh-left');
+	if (row) row.textContent = left ? `još ${left}` : '';
 }
 
 function initMsTab() {
@@ -1372,185 +1625,6 @@ function initMsTab() {
 
 if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', initMsTab);
 else initMsTab();
-
-// ---------- the dialog: where and how big the user put it ----------
-
-// On desktop the dialog is a window: dragged by its head and resized from any
-// side or corner through the widgets' own handles. It is rebuilt on every open,
-// and replaceChildren leaves the panel's own inline styles, so where it was put
-// outlives the rebuild.
-// Where and how big is remembered in this browser only (msPanel: the left and
-// top as fractions of the viewport, the width in px, and the height in px
-// once it has been resized), not in the arrangement, since it is about this
-// screen and not the view — the same footing as the tab above. Until it is
-// resized the height stays the content's, capped to what is left below wherever
-// the top now is; a double-click on the head drops the
-// lot and gives the CSS its dialog back
-const MS_PANEL_KEY = 'msPanel';
-const MS_PANEL_MIN_WIDTH = 360;
-const MS_PANEL_MIN_HEIGHT = 120;
-const MS_PANEL_MARGIN = 8; // kept free of the viewport edge when sizing
-
-function loadMsPanel() {
-	try {
-		const stored = JSON.parse(localStorage.getItem(MS_PANEL_KEY));
-		if (!stored || typeof stored !== 'object') return null;
-		if (!Number.isFinite(stored.left) || !Number.isFinite(stored.top) || !(stored.width > 0)) return null;
-		return { left: stored.left, top: stored.top, width: stored.width, height: stored.height > 0 ? stored.height : null };
-	} catch (e) {
-		return null;
-	}
-}
-
-function saveMsPanel(panel) {
-	const rect = panel.getBoundingClientRect();
-	const stored = {
-		left: roundFraction(rect.left / viewportWidth()),
-		top: roundFraction(rect.top / viewportHeight()),
-		width: Math.round(rect.width)
-	};
-	if (panel.style.height) stored.height = Math.round(rect.height); // only once it has been resized; else the content's
-	try {
-		localStorage.setItem(MS_PANEL_KEY, JSON.stringify(stored));
-	} catch (e) { /* storage disabled or full — the dialog still moves this session */ }
-}
-
-function msPanelMaxWidth() {
-	return Math.max(MS_PANEL_MIN_WIDTH, viewportWidth() - MS_PANEL_MARGIN * 2);
-}
-
-function msPanelMaxHeight() {
-	return Math.max(MS_PANEL_MIN_HEIGHT, viewportHeight() - MS_PANEL_MARGIN * 2);
-}
-
-// height null leaves it the content's. The CSS's max-height assumes the top
-// the CSS set, and the dialog may be anywhere now, so it is recomputed from
-// where the top is asked to be; the top is then held to the height that gave
-function placeMsPanel(panel, left, top, width, height) {
-	width = clamp(width, MS_PANEL_MIN_WIDTH, msPanelMaxWidth());
-	panel.style.width = `${Math.round(width)}px`;
-	panel.style.maxWidth = 'none';
-	panel.style.right = 'auto'; // off the centring
-	panel.style.margin = '0';
-	if (height === null) {
-		panel.style.height = '';
-		panel.style.maxHeight = `${Math.round(Math.max(MS_PANEL_MIN_HEIGHT, viewportHeight() - Math.max(0, top) - MS_PANEL_MARGIN))}px`;
-	} else {
-		panel.style.maxHeight = 'none';
-		panel.style.height = `${Math.round(clamp(height, MS_PANEL_MIN_HEIGHT, msPanelMaxHeight()))}px`;
-	}
-	panel.style.left = `${Math.round(clamp(left, 0, Math.max(0, viewportWidth() - panel.offsetWidth)))}px`;
-	panel.style.top = `${Math.round(clamp(top, 0, Math.max(0, viewportHeight() - panel.offsetHeight)))}px`;
-}
-
-function clearMsPanel(panel) {
-	['left', 'top', 'width', 'height', 'maxWidth', 'maxHeight', 'right', 'margin'].forEach(prop => panel.style[prop] = '');
-}
-
-// on open, and on a window resize, so it cannot be stranded off screen. A
-// phone gets the CSS's dialog, like it gets no widgets
-function applyStoredMsPanel(panel) {
-	panel = panel || document.getElementById('mapSettings');
-	if (!panel || panel.hidden) return;
-	const stored = POPOUT_MQ.matches ? loadMsPanel() : null;
-	if (!stored) { clearMsPanel(panel); return; }
-	placeMsPanel(panel, stored.left * viewportWidth(), stored.top * viewportHeight(), stored.width, stored.height);
-}
-
-// one listener on the panel, which outlives the rebuild its children do not
-function initMsPanel() {
-	const panel = document.getElementById('mapSettings');
-	if (!panel) return;
-	panel.addEventListener('pointerdown', (e) => {
-		if (e.button !== 0 || !POPOUT_MQ.matches) return;
-		const handle = e.target.closest('.po-h');
-		// the head is the grip, but a link or a button on it is itself
-		const head = !handle && e.target.closest('.ms-head') && !e.target.closest('a, button, input');
-		if (!handle && !head) return;
-		e.preventDefault();
-		const start = panel.getBoundingClientRect();
-		const dir = handle ? handle.dataset.dir : null;
-		const kept = panel.style.height ? start.height : null; // a drag leaves the height as it was found
-		let moved = false;
-		trackPopoutPointer(e, (dx, dy) => {
-			if (!moved && !dx && !dy) return; // a press that never moved stores nothing
-			moved = true;
-			if (!dir) {
-				placeMsPanel(panel, start.left + dx, start.top + dy, start.width, kept);
-				return;
-			}
-			let width = start.width, height = start.height;
-			if (dir.includes('e')) width = start.width + dx;
-			if (dir.includes('w')) width = start.width - dx;
-			if (dir.includes('s')) height = start.height + dy;
-			if (dir.includes('n')) height = start.height - dy;
-			// clamped here as well as in placeMsPanel, so the edge that stays put does
-			width = clamp(width, MS_PANEL_MIN_WIDTH, msPanelMaxWidth());
-			height = clamp(height, MS_PANEL_MIN_HEIGHT, msPanelMaxHeight());
-			placeMsPanel(panel, dir.includes('w') ? start.right - width : start.left,
-				dir.includes('n') ? start.bottom - height : start.top, width, height);
-		}, () => { if (moved) saveMsPanel(panel); });
-	});
-	// the way back to the dialog the CSS draws, the head's spare gesture
-	panel.addEventListener('dblclick', (e) => {
-		if (!POPOUT_MQ.matches || !e.target.closest('.ms-head') || e.target.closest('a, button, input')) return;
-		clearMsPanel(panel);
-		try {
-			localStorage.removeItem(MS_PANEL_KEY);
-		} catch (e2) { /* nothing stored is nothing to drop */ }
-	});
-	window.addEventListener('resize', () => applyStoredMsPanel(panel));
-}
-
-if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', initMsPanel);
-else initMsPanel();
-
-// A press anywhere outside the dialog shuts it, dropping what was edited in it
-// (it is rebuilt from what is stored on the next open). The press lands on the
-// backdrop, which is over everything the dialog is over, so it shuts the dialog
-// and does nothing else: it follows no link, presses no button, takes no widget.
-// The tab stands above the backdrop and keeps its own click, which shuts the
-// dialog the same way.
-//
-// A press is a pointerdown, a release and a click, and all three belong to the
-// dismissal: the backdrop stands until the click has been taken, so none of them
-// can be completed on what the dialog was covering. It stops painting the moment
-// it is pressed, the dialog it dimmed for being on its way out, and the click is
-// swallowed in the capture phase, which is ahead of every listener on the page
-// whatever order they were bound in. The release arms a short fallback for the
-// gestures no click follows — a pointer let go outside the window, a drag
-function initMsBackdrop() {
-	const backdrop = document.querySelector('.ms-backdrop');
-	if (!backdrop) return;
-	backdrop.addEventListener('pointerdown', (e) => {
-		const panel = document.getElementById('mapSettings');
-		if (!panel || panel.hidden) return;
-		e.preventDefault();
-		setMapSettingsVisible(panel, false);
-		backdrop.hidden = false;
-		backdrop.classList.add('ms-spent');
-		let timer = 0;
-		const done = () => {
-			clearTimeout(timer);
-			backdrop.classList.remove('ms-spent');
-			// the dialog may have been opened again meanwhile (K, the tab), and
-			// then the ground it stands on is not this gesture's to take away
-			const open = document.getElementById('mapSettings');
-			backdrop.hidden = !open || open.hidden;
-			document.removeEventListener('click', swallow, true);
-			document.removeEventListener('pointerup', release);
-			document.removeEventListener('pointercancel', done);
-		};
-		const swallow = (ev) => { ev.stopPropagation(); ev.preventDefault(); done(); };
-		const release = () => { timer = setTimeout(done, 400); };
-		document.addEventListener('click', swallow, true);
-		document.addEventListener('pointerup', release);
-		document.addEventListener('pointercancel', done);
-	});
-}
-
-if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', initMsBackdrop);
-else initMsBackdrop();
 
 function buildMapSettings(panel) {
 	panel.replaceChildren();
@@ -1598,6 +1672,51 @@ function buildMapSettings(panel) {
 		}
 	}
 	updateSortLinks();
+
+	// the box narrows the available list alone. The order above it is the page's
+	// own and is reordered by dragging, which a list with rows missing out of it
+	// could not be: a row dropped between two neighbours would land somewhere
+	// else entirely once the term was cleared
+	const findInput = el('input', { type: 'text', class: 'ms-find-input', placeholder: 'Traži karte…', 'aria-label': 'Traži karte' });
+	const findClear = el('a', { class: 'ms-find-clear', text: '×', title: 'Očisti (Esc)' });
+	const findDiv = el('div', { class: 'ms-find' }, [findInput, findClear]);
+
+	// hidden by a class rather than taken out of the list: a row carries its
+	// checkbox and its drag handler, and the term is cleared far more often
+	// than the catalog changes
+	function applyFind() {
+		const terms = findTerms(findInput.value);
+		let hits = 0;
+		[...availableDiv.children].forEach(row => {
+			const map = MAP_CATALOG.find(m => m.id === row.getAttribute('data-map-id'));
+			const hit = !map || matchesFind(map, terms);
+			row.classList.toggle('ms-filtered', !hit);
+			if (hit && !row.classList.contains('ms-off')) hits++;
+		});
+		findDiv.classList.toggle('ms-find-set', terms.length > 0);
+		availableDiv.classList.toggle('ms-no-hits', terms.length > 0 && hits === 0);
+	}
+
+	findInput.addEventListener('input', applyFind);
+
+	findInput.addEventListener('keydown', (e) => {
+		if (e.key !== 'Escape') return;
+		// the dialog's own Escape stands down inside a text field, so both ways
+		// out are this handler's: the term first, the dialog once there is none
+		e.preventDefault();
+		if (findInput.value) {
+			findInput.value = '';
+			applyFind();
+		} else {
+			setMapSettingsVisible(panel, false);
+		}
+	});
+
+	findClear.addEventListener('click', () => {
+		findInput.value = '';
+		applyFind();
+		findInput.focus();
+	});
 
 	function markCustom() {
 		panel.querySelector('input[name="msPreset"][value="custom"]').checked = true;
@@ -1675,7 +1794,9 @@ function buildMapSettings(panel) {
 		const checkbox = el('input', { type: 'checkbox' });
 		checkbox.checked = checked;
 		const handle = el('span', { class: 'ms-handle', text: '≡', title: 'Povuci za premještanje' });
-		const row = el('div', { class: 'ms-item', 'data-map-id': map.id }, [
+		// a map switched off keeps its row, hidden, so the list read back off the
+		// rows (selectedMapIds) still holds it where it was
+		const row = el('div', { class: isMapEnabled(map.id) ? 'ms-item' : 'ms-item ms-off', 'data-map-id': map.id }, [
 			el('label', {}, [
 				checkbox,
 				el('span', { class: 'ms-glyph', text: CATEGORY_GLYPHS[map.category] || '' }),
@@ -1690,6 +1811,7 @@ function buildMapSettings(panel) {
 			} else {
 				availableDiv.appendChild(row);
 				sortAvailable();
+				applyFind(); // the row arrives unjudged, and a term may be standing
 			}
 			markCustom();
 		});
@@ -1707,6 +1829,9 @@ function buildMapSettings(panel) {
 		MAP_CATALOG.filter(map => !selectedIds.includes(map.id))
 			.forEach(map => availableDiv.appendChild(buildRow(map, false)));
 		sortAvailable();
+		// the term outlives the list it was typed over: picking a preset is not
+		// the end of looking for something, and the rows are built anew here
+		applyFind();
 	}
 
 	const presetsDiv = el('div', { class: 'ms-presets' });
@@ -1901,11 +2026,57 @@ function buildMapSettings(panel) {
 		// these take effect on the tick, not on Primijeni: they are a way of
 		// working on the board rather than part of the view it shows, so there is
 		// nothing to hold back — tick the grid on, see it, shut the dialog
+		// arranging acts on the board that is up, not on the tick that may yet be
+		// applied: with the mode ticked but not yet applied there is no board to
+		// arrange, so it waits for Primijeni rather than doing nothing on a press.
+		// And it needs the tick as well, standing down with the grid switches
+		// when the mode is unticked over a board that is still up
+		const tile = el('button', { type: 'button', class: 'btn ms-arrange', title: 'Posloži u mrežu (A)' }, [
+			document.createTextNode('Posloži')
+		]);
+		tile.disabled = !dashboardChecked || !isDashboard();
+		tile.addEventListener('click', () => arrangeBoard());
 		modeDiv.append(btn,
 			buildGridToggle('Prikaži mrežu', gridChecked, (on) => { gridChecked = on; setGridPrefs(gridChecked, snapChecked); }),
-			buildGridToggle('Poravnaj uz mrežu', snapChecked, (on) => { snapChecked = on; setGridPrefs(gridChecked, snapChecked); }));
+			buildGridToggle('Poravnaj uz mrežu', snapChecked, (on) => { snapChecked = on; setGridPrefs(gridChecked, snapChecked); }),
+			tile);
 	}
 	renderModeRow();
+
+	// the clock. Its own row and not the mode row above: that one is the board's
+	// and stands down on a phone, where a page left open goes just as stale
+	const refreshDiv = el('div', { class: 'ms-refresh' });
+
+	function renderRefreshRow() {
+		refreshDiv.replaceChildren();
+		refreshDiv.classList.toggle('ms-on', isRefreshOn());
+		const every = el('select', { class: 'ms-refresh-every', 'aria-label': 'Razmak osvježavanja' });
+		REFRESH_CHOICES.forEach(minutes => {
+			const option = el('option', { value: String(minutes), text: `${minutes} min` });
+			if (minutes === refreshEveryMinutes()) option.selected = true;
+			every.appendChild(option);
+		});
+		const box = el('input', { type: 'checkbox' });
+		box.checked = isRefreshOn();
+		// as with the grid, this takes effect on the tick and not on Primijeni:
+		// it is a way of working, so there is nothing to hold back
+		const apply = () => setRefreshPrefs(box.checked, Number(every.value));
+		box.addEventListener('change', apply);
+		every.addEventListener('change', apply);
+		// the time is written here rather than left to the next tick: the row is
+		// not in the document yet, so the sweep that writes both labels cannot
+		// find it, and it would read empty for the first second it is on screen
+		const left = isRefreshOn() ? refreshLabel() : '';
+		refreshDiv.append(
+			el('label', {}, [box, el('span', { text: 'Osvježavaj svakih' })]),
+			every,
+			el('span', { class: 'ms-refresh-left', text: left ? `još ${left}` : '' }));
+	}
+	renderRefreshRow();
+
+	// the clock is in two places, this row and the tab's countdown, so a change
+	// made at the other one is read back here rather than left standing
+	panel._onRefreshChange = renderRefreshRow;
 
 	// G flips the grid from the keyboard (popout.js) through setGridPrefs, which
 	// calls this: the row is re-read from the prefs rather than left standing on
@@ -2266,7 +2437,7 @@ function buildMapSettings(panel) {
 
 	renderManage();
 
-	const applyBtn = el('button', { type: 'button', class: 'btn', text: 'Primijeni' });
+	const applyBtn = el('button', { type: 'button', class: 'btn ms-apply', text: 'Primijeni', title: 'Primijeni (Enter)' });
 	applyBtn.addEventListener('click', () => {
 		const prefs = readPanelPrefs();
 		const layout = layoutForPrefs(prefs);
@@ -2292,22 +2463,35 @@ function buildMapSettings(panel) {
 	// the header stays put and the body under it scrolls (CSS); in the body
 	// the actions sit right under the render order they act on, rather than
 	// at the far end of the picker and the preset management below it
-	panel.appendChild(el('div', { class: 'ms-head' }, [el('span', { class: 'ms-title', text: 'Karte' }), closeLink]));
+	// and before the title the way home, which the board and the hidden page
+	// take out of sight. Resolved off this page's own address rather than
+	// written as /, since the built site lives under /meteo/, and a real href,
+	// so Ctrl and the middle button open it beside the page as any link does.
+	// It shows the site's favicon, taken off the page's own <link> so the
+	// address is whatever the build made it
+	const icon = document.querySelector('link[rel="icon"][sizes="32x32"]');
+	const homeLink = el('a', { class: 'ms-home', href: new URL('../', window.location.href).href, title: 'Početna' }, [
+		el('img', { src: icon ? icon.href : undefined, alt: 'Početna' })
+	]);
+	panel.appendChild(el('div', { class: 'ms-head' }, [
+		el('span', { class: 'ms-head-left' }, [homeLink, el('span', { class: 'ms-title', text: 'Karte' })]),
+		closeLink
+	]));
 	panel.appendChild(el('div', { class: 'ms-body' }, [
 		presetsDiv,
 		modeDiv,
+		refreshDiv,
 		layoutDiv,
 		selectedDiv,
 		el('div', { class: 'ms-actions' }, [applyBtn, shareLink]),
 		sortDiv,
+		findDiv,
 		availableDiv,
 		manageDiv
 	]));
 
-	// the window handles, the widgets' own (CSS gates them to desktop). They go
-	// in the panel rather than beside it so the press that grabs one is a press
-	// inside the dialog, which is what keeps it from shutting itself
-	POPOUT_HANDLES.forEach(dir => panel.appendChild(el('div', { class: `po-h po-h-${dir}`, 'data-dir': dir })));
+	// the window handles again: replaceChildren above took the last set with it
+	buildDialogHandles(panel);
 }
 
 // in dev this is a deferred external script, so the DOM is already parsed and

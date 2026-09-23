@@ -44,44 +44,45 @@
 		justify-content:center}.radartitle.fullscreen .center{transform:none;left:auto}.radartitle.fullscreen .left,.radartitle.fullscreen .right{
 		top:50%;transform:translateY(-50%)}.if1.fullscreen{position:fixed;top:23px;left:var(--snap-l,0);right:var(--snap-r,0);width:auto;bottom:0;
 		padding-top:0;z-index:9999}body.fs-lock{overflow:hidden}@media (max-width:800px){.radartitle.fullscreen{height:32px}.if1.fullscreen{top:32px
-		}.radartitle .right-cluster{gap:14px}.radartitle.fullscreen .left{margin-left:10px}.radartitle.fullscreen .right{margin-right:10px}}.grp-btn
-		,.po-btn,.rl-btn{display:none}.map-gap{display:flex;align-items:center;justify-content:center;gap:6px;box-sizing:border-box;padding:8px;
-		background-color:#202c40;color:#8a94a8}.map-gap a{cursor:pointer}@media (min-width:801px) and (hover:hover) and (pointer:fine){.po-btn{
-		display:inline}.radartitle.fullscreen .po-btn{display:none}.map-block.popout .radartitle:not(.fullscreen)>a:not(.left):not(.right){display:
-		inline-block;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;vertical-align:top;transform:
-		translateX(var(--title-shift,0))}.map-block.popout .radartitle:not(.fullscreen)>a.center{transform:
-		translateX(calc(-50% + var(--title-shift,0)))}.map-block.popout .radartitle:not(.fullscreen) .rl-btn{display:inline}
-		.map-block.popout .radartitle:not(.fullscreen) .grp-btn:not([hidden]){display:inline}.map-block.popout.grouped::after{border-color:#4a8de6}
-		.map-block.popout{position:fixed;z-index:5000;background-color:#212f45}.map-block.popout::after{content:'';position:absolute;inset:0;border:
-		1px solid #2b5797;z-index:2;pointer-events:none}.map-block.popout .radartitle:not(.fullscreen){cursor:move}
-		.map-block.popout .indicators-container,.map-block.popout .placeholder,.map-block.popout .slideshow,.map-block.popout>.radartitle{max-width:
-		none!important}.map-block.popout .placeholder img{width:100%}.map-block.popout.free{display:flex;flex-direction:column}
-		.map-block.popout.free>.radartitle{flex:none}.map-block.popout.free .if1,.map-block.popout.free .if2{flex:1;min-height:0;padding-top:0}
-		.map-block.popout.letterbox .placeholder{flex:1;min-height:0;display:flex;flex-direction:column;aspect-ratio:auto!important;background-color
-		:transparent}.map-block.popout.letterbox .placeholder img{width:100%;height:100%;object-fit:contain}.map-block.popout.letterbox .slideshow{
-		flex:1;min-height:0}.map-block.popout.letterbox .slide.active{display:flex;flex-direction:column;flex:1;width:100%;min-height:0}
-		.map-block.popout.letterbox .slide>img{flex:1;min-height:0;width:100%;object-fit:contain}.map-block.popout.letterbox .vid1,
-		.map-block.popout.letterbox .vid2{flex:1;min-height:0;padding-top:0}.map-block.popout.letterbox .indicators-container{width:var(--lb-w,100%)
-		;margin-left:auto;margin-right:auto;transform:translateY(calc(-1 * var(--lb-b,0)))}.map-block.popout.letterbox .next,
-		.map-block.popout.letterbox .prev{top:var(--lb-t,0);bottom:var(--lb-b,0);width:calc(.15 * var(--lb-w,100%))}
-		.map-block.popout.letterbox .prev{left:var(--lb-l,0)}.map-block.popout.letterbox .next{right:var(--lb-r,0)}.map-block.popout .po-backdrop{
-		display:none}.map-block.popout.letterbox .po-backdrop{display:block;position:absolute;inset:0;overflow:hidden;z-index:-1}
-		.map-block.popout.letterbox .po-backdrop::before{content:'';position:absolute;inset:-24px;background:var(--po-img) center/cover no-repeat;
-		filter:blur(14px) brightness(.45)}.map-block.popout .po-h{position:absolute;z-index:1}.map-block.popout.covered iframe{pointer-events:none}
-		.po-h-n,.po-h-s{left:6px;right:6px;height:8px;cursor:ns-resize}.po-h-e,.po-h-w{top:6px;bottom:6px;width:8px;cursor:ew-resize}.po-h-ne,
-		.po-h-nw,.po-h-se,.po-h-sw{width:10px;height:10px}.po-h-n,.po-h-ne,.po-h-nw{top:-4px}.po-h-s,.po-h-se,.po-h-sw{bottom:-4px}.po-h-e,.po-h-ne,
-		.po-h-se{right:-4px}.po-h-nw,.po-h-sw,.po-h-w{left:-4px}.po-h-ne,.po-h-sw{cursor:nesw-resize}.po-h-nw,.po-h-se{cursor:nwse-resize}
-		body.po-dragging{user-select:none}body.po-dragging iframe{pointer-events:none}body{padding-left:var(--snap-l,0);padding-right:
-		var(--snap-r,0)}.snap-col{position:fixed;top:0;bottom:0;z-index:3999;background-color:#1a2536;pointer-events:none}.snap-ui{position:fixed;
-		top:0;bottom:0;z-index:8000;pointer-events:none}.snap-edge{position:absolute;pointer-events:auto;top:0;bottom:0;width:8px;cursor:ew-resize}
-		.snap-edge:hover,body.po-dragging .snap-edge{background-color:rgba(43,87,151,.6)}.snap-left .snap-edge{right:-4px}.snap-right .snap-edge{
-		left:-4px}.map-block.popout.snapped .po-h-e,.map-block.popout.snapped .po-h-ne,.map-block.popout.snapped .po-h-nw,
-		.map-block.popout.snapped .po-h-se,.map-block.popout.snapped .po-h-sw,.map-block.popout.snapped .po-h-w{display:none}
-		body.dashboard .if1.fullscreen,body.dashboard .radartitle.fullscreen,body.snap-full .if1.fullscreen,body.snap-full .radartitle.fullscreen{
-		left:0;right:0}html.board-boot{overflow:hidden}html.board-boot .container,html.board-boot footer{visibility:hidden}body.dashboard{overflow:
-		hidden}body.dashboard .container,body.dashboard footer{visibility:hidden}body.dashboard .map-block.popout:not(.fs-host){visibility:visible}
-		.po-shadows,.po-shadows-under{position:fixed;inset:0;pointer-events:none}.po-shadows{z-index:4900}.po-shadows-under{z-index:4400}.po-shadow{
-		position:absolute;box-shadow:0 6px 24px rgba(0,0,0,.6)}.po-grid{position:fixed;inset:0;z-index:4000;pointer-events:none;background-image:
+		}.radartitle .right-cluster{gap:14px}.radartitle.fullscreen .left{margin-left:10px}.radartitle.fullscreen .right{margin-right:10px}}.dup-btn
+		,.grp-btn,.po-btn,.rl-btn{display:none}.map-gap{display:flex;align-items:center;justify-content:center;gap:6px;box-sizing:border-box;padding
+		:8px;background-color:#202c40;color:#8a94a8}.map-gap a{cursor:pointer}@media (min-width:801px) and (hover:hover) and (pointer:fine){.po-btn{
+		display:inline}.dup-btn{display:inline}.radartitle.fullscreen .dup-btn,.radartitle.fullscreen .po-btn{display:none}
+		.map-block.popout .radartitle:not(.fullscreen)>a:not(.left):not(.right){display:inline-block;max-width:100%;overflow:hidden;text-overflow:
+		ellipsis;white-space:nowrap;vertical-align:top;transform:translateX(var(--title-shift,0))}
+		.map-block.popout .radartitle:not(.fullscreen)>a.center{transform:translateX(calc(-50% + var(--title-shift,0)))}
+		.map-block.popout .radartitle:not(.fullscreen) .rl-btn{display:inline}.map-block.popout .radartitle:not(.fullscreen) .grp-btn:not([hidden]){
+		display:inline}.map-block.popout.grouped::after{border-color:#4a8de6}.map-block.popout{position:fixed;z-index:5000;background-color:#212f45}
+		.map-block.popout::after{content:'';position:absolute;inset:0;border:1px solid #2b5797;z-index:2;pointer-events:none}
+		.map-block.popout .radartitle:not(.fullscreen){cursor:move}.map-block.popout .indicators-container,.map-block.popout .placeholder,
+		.map-block.popout .slideshow,.map-block.popout>.radartitle{max-width:none!important}.map-block.popout .placeholder img{width:100%}
+		.map-block.popout.free{display:flex;flex-direction:column}.map-block.popout.free>.radartitle{flex:none}.map-block.popout.free .if1,
+		.map-block.popout.free .if2{flex:1;min-height:0;padding-top:0}.map-block.popout.letterbox .placeholder{flex:1;min-height:0;display:flex;
+		flex-direction:column;aspect-ratio:auto!important;background-color:transparent}.map-block.popout.letterbox .placeholder img{width:100%;
+		height:100%;object-fit:contain}.map-block.popout.letterbox .slideshow{flex:1;min-height:0}.map-block.popout.letterbox .slide.active{display:
+		flex;flex-direction:column;flex:1;width:100%;min-height:0}.map-block.popout.letterbox .slide>img{flex:1;min-height:0;width:100%;object-fit:
+		contain}.map-block.popout.letterbox .vid1,.map-block.popout.letterbox .vid2{flex:1;min-height:0;padding-top:0}
+		.map-block.popout.letterbox .indicators-container{width:var(--lb-w,100%);margin-left:auto;margin-right:auto;transform:
+		translateY(calc(-1 * var(--lb-b,0)))}.map-block.popout.letterbox .next,.map-block.popout.letterbox .prev{top:var(--lb-t,0);bottom:
+		var(--lb-b,0);width:calc(.15 * var(--lb-w,100%))}.map-block.popout.letterbox .prev{left:var(--lb-l,0)}.map-block.popout.letterbox .next{
+		right:var(--lb-r,0)}.map-block.popout .po-backdrop{display:none}.map-block.popout.letterbox .po-backdrop{display:block;position:absolute;
+		inset:0;overflow:hidden;z-index:-1}.map-block.popout.letterbox .po-backdrop::before{content:'';position:absolute;inset:-24px;background:
+		var(--po-img) center/cover no-repeat;filter:blur(14px) brightness(.45)}.map-block.popout .po-h{position:absolute;z-index:1}
+		.map-block.popout.covered iframe{pointer-events:none}.po-h-n,.po-h-s{left:6px;right:6px;height:8px;cursor:ns-resize}.po-h-e,.po-h-w{top:6px;
+		bottom:6px;width:8px;cursor:ew-resize}.po-h-ne,.po-h-nw,.po-h-se,.po-h-sw{width:10px;height:10px}.po-h-n,.po-h-ne,.po-h-nw{top:-4px}.po-h-s,
+		.po-h-se,.po-h-sw{bottom:-4px}.po-h-e,.po-h-ne,.po-h-se{right:-4px}.po-h-nw,.po-h-sw,.po-h-w{left:-4px}.po-h-ne,.po-h-sw{cursor:nesw-resize}
+		.po-h-nw,.po-h-se{cursor:nwse-resize}body.po-dragging{user-select:none}body.po-dragging iframe{pointer-events:none}body{padding-left:
+		var(--snap-l,0);padding-right:var(--snap-r,0)}.snap-col{position:fixed;top:0;bottom:0;z-index:3999;background-color:#1a2536;pointer-events:
+		none}.snap-ui{position:fixed;top:0;bottom:0;z-index:8000;pointer-events:none}.snap-edge{position:absolute;pointer-events:auto;top:0;bottom:0
+		;width:8px;cursor:ew-resize}.snap-edge:hover,body.po-dragging .snap-edge{background-color:rgba(43,87,151,.6)}.snap-left .snap-edge{right:
+		-4px}.snap-right .snap-edge{left:-4px}.map-block.popout.snapped .po-h-e,.map-block.popout.snapped .po-h-ne,
+		.map-block.popout.snapped .po-h-nw,.map-block.popout.snapped .po-h-se,.map-block.popout.snapped .po-h-sw,.map-block.popout.snapped .po-h-w{
+		display:none}body.dashboard .if1.fullscreen,body.dashboard .radartitle.fullscreen,body.snap-full .if1.fullscreen,
+		body.snap-full .radartitle.fullscreen{left:0;right:0}html.board-boot{overflow:hidden}html.board-boot .container,html.board-boot footer{
+		visibility:hidden}body.dashboard{overflow:hidden}body.dashboard .container,body.dashboard footer{visibility:hidden}
+		body.dashboard .map-block.popout:not(.fs-host){visibility:visible}.po-shadows,.po-shadows-under{position:fixed;inset:0;pointer-events:none}
+		.po-shadows{z-index:4900}.po-shadows-under{z-index:4400}.po-shadow{position:absolute;box-shadow:0 6px 24px rgba(0,0,0,.6)}.po-grid{position:
+		fixed;inset:0;z-index:4000;pointer-events:none;background-image:
 		repeating-linear-gradient(to right,rgba(255,255,255,.08) 0 1px,transparent 1px var(--grid-cell)),
 		repeating-linear-gradient(to bottom,rgba(255,255,255,.08) 0 1px,transparent 1px var(--grid-cell))}.map-block.snapped-left .if1.fullscreen,
 		.map-block.snapped-left .radartitle.fullscreen{left:0;right:calc(100% - var(--snap-l))}.map-block.snapped-right .if1.fullscreen,
@@ -102,35 +103,51 @@
 		font-size:12px}}.sp{height:12px}.sp20{height:24px}@media (max-width:800px){.sp20{height:12px}}.beta{font-size:9px;color:#ff9800;
 		vertical-align:super;text-transform:uppercase;letter-spacing:1px}.btn .beta,h2 .beta{position:absolute;transform:translateY(-40%);
 		margin-left:1px}.buttons{display:grid;grid-template-columns:49.5% 49.5%;gap:1%;font-size:13px}.buttons.three{grid-template-columns:
+		repeat(3,1fr)}.buttons.with-help{grid-template-columns:1fr 1fr 32px}.buttons.three.with-help{grid-template-columns:repeat(3,1fr) 32px}
+		.buttons .help-btn{font-size:15px;line-height:1}html.no-manual .help-btn,html.no-manual .manual-link{display:none}
+		html.no-manual .buttons.with-help{grid-template-columns:49.5% 49.5%}html.no-manual .buttons.three.with-help{grid-template-columns:
 		repeat(3,1fr)}.buttons button.btn{position:relative}.buttons button.btn .arrow{position:absolute;right:10px;top:2px;font-size:14px}
 		.buttons .btn{margin-top:10px;margin-bottom:5px;font-size:13px;font-family:inherit;color:#fff;background-color:#485871;align-content:center;
 		cursor:pointer;width:100%;height:24px;border:none;outline:0}.buttons .btn:hover{background-color:#5f6f89}.links-btn{position:relative}
 		.links-btn .links-toggle{position:absolute;right:8px;top:22px;transform:translateY(-50%);margin:0;cursor:pointer}
 		.links-btn .links-toggle::before{content:'';position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:28px;height:28px}
 		.ms-backdrop{position:fixed;inset:0;z-index:99999;background-color:rgba(10,16,28,.45)}.ms-backdrop.ms-spent{background-color:transparent}
-		.map-settings{position:fixed;z-index:100000;top:24px;left:0;right:0;margin:0 auto;width:875px;max-width:calc(100% - 32px);max-height:
-		calc(100vh - 48px);display:flex;flex-direction:column;box-sizing:border-box;border:1px solid #5f6f89;box-shadow:0 16px 48px rgba(0,0,0,.75),
-		0 2px 8px rgba(0,0,0,.5);background-color:#202c40;text-align:left;font-size:13px;color:#fff}.map-settings[hidden]{display:none}
-		@media (max-width:800px){.map-settings{top:0;max-width:100%;max-height:100vh;max-height:100dvh;border:none}}
+		.map-settings{position:fixed;z-index:100000;top:24px;left:0;right:0;margin:0 auto;width:750px;height:750px;max-width:calc(100% - 32px);
+		max-height:calc(100vh - 48px);display:flex;flex-direction:column;box-sizing:border-box;border:1px solid #5f6f89;box-shadow:0 16px 48px
+		rgba(0,0,0,.75),0 2px 8px rgba(0,0,0,.5);background-color:#202c40;text-align:left;font-size:13px;color:#fff}.map-settings[hidden]{display:
+		none}@media (max-width:800px){.map-settings{top:0;max-width:100%;height:auto;max-height:100vh;max-height:100dvh;border:none}}
 		@media (min-width:801px) and (hover:hover) and (pointer:fine){.map-settings .po-h{position:absolute;z-index:1}.map-settings .ms-head{cursor:
 		move}}body.ms-open{overflow:hidden}html.ms-gutter{scrollbar-gutter:stable}.map-settings .ms-head{display:flex;justify-content:space-between;
-		align-items:baseline;padding:7px 10px;background-color:#2c3b56;border-bottom:1px solid #3d4d6a}.map-settings .ms-head .ms-title{font-weight:
-		700}.map-settings .ms-head a{cursor:pointer;color:#8fb4ff}@media (max-width:800px){.map-settings .ms-head{padding:0}
-		.map-settings .ms-head .ms-title{padding:11px 10px}.map-settings .ms-head a{padding:11px 14px}}.map-settings .ms-body{min-height:0;
-		overflow-y:auto;overscroll-behavior:contain;padding:10px}@media (min-width:801px) and (hover:hover) and (pointer:fine){
-		.map-settings .ms-body{scrollbar-gutter:stable}.map-settings .ms-body::-webkit-scrollbar{width:12px}
-		.map-settings .ms-body::-webkit-scrollbar-track{background-color:#1a2536}.map-settings .ms-body::-webkit-scrollbar-thumb{background-color:
-		#485871;border:3px solid #1a2536;border-radius:6px}.map-settings .ms-body::-webkit-scrollbar-thumb:hover{background-color:#5f6f89}
-		@supports not selector(::-webkit-scrollbar){.map-settings .ms-body{scrollbar-width:thin;scrollbar-color:#485871 #1a2536}}}
+		align-items:center;padding:7px 10px;background-color:#2c3b56;border-bottom:1px solid #3d4d6a}.map-settings .ms-head .ms-title{font-weight:
+		700}.map-settings .ms-head a{cursor:pointer;color:#8fb4ff}.map-settings .ms-head .ms-head-left{display:flex;align-items:center;gap:8px}
+		.map-settings .ms-head .ms-home{display:flex}.map-settings .ms-head .ms-home img{display:block;width:16px;height:16px;border-radius:50%}
+		@media (max-width:800px){.map-settings .ms-head{padding:0}.map-settings .ms-head .ms-title{padding:11px 10px}.map-settings .ms-head a{
+		padding:11px 14px}.map-settings .ms-head .ms-head-left{gap:0}.map-settings .ms-head .ms-home{padding:11px 4px 11px 10px}
+		.map-settings .ms-head .ms-home+.ms-title{padding-left:4px}}.map-settings .ms-body{min-height:0;overflow-y:auto;overscroll-behavior:contain;
+		padding:10px}@media (min-width:801px) and (hover:hover) and (pointer:fine){.map-settings .ms-body,.ms-add-list{scrollbar-gutter:stable}
+		.map-settings .ms-body::-webkit-scrollbar,.ms-add-list::-webkit-scrollbar{width:12px}.map-settings .ms-body::-webkit-scrollbar-track,
+		.ms-add-list::-webkit-scrollbar-track{background-color:#1a2536}.map-settings .ms-body::-webkit-scrollbar-thumb,
+		.ms-add-list::-webkit-scrollbar-thumb{background-color:#485871;border:3px solid #1a2536;border-radius:6px}
+		.map-settings .ms-body::-webkit-scrollbar-thumb:hover,.ms-add-list::-webkit-scrollbar-thumb:hover{background-color:#5f6f89}
+		@supports not selector(::-webkit-scrollbar){.map-settings .ms-body,.ms-add-list{scrollbar-width:thin;scrollbar-color:#485871 #1a2536}}}
 		.map-settings label{cursor:pointer}.ms-tab{display:none;position:fixed;z-index:100000;top:0;left:50%;transform:translateX(-50%);padding:3px
 		12px;border:none;border-radius:0 0 6px 6px;font-family:inherit;font-size:13px;color:#fff;background-color:#ff9800;box-shadow:0 2px 8px
 		rgba(0,0,0,.4);cursor:pointer;opacity:.55;transition:opacity .15s ease;box-sizing:border-box;align-items:center;gap:10px;white-space:nowrap;
-		overflow:hidden;touch-action:none;user-select:none}.ms-tab:hover{background-color:#ffa726}.ms-tab:hover,body.ms-open .ms-tab{opacity:1}
-		.ms-tab-name{flex:1 1 auto;min-width:0;overflow:hidden;text-overflow:ellipsis;text-align:center}.ms-tab-cluster{flex:0 0 auto;display:none;
-		gap:8px}body.dashboard .ms-tab-cluster{display:inline-flex}.ms-tab-cluster::before{content:'|';opacity:.55}.ms-tab-cluster a{text-decoration
-		:none;cursor:pointer}.ms-tab-cluster a.ms-tab-off{opacity:.55}body.dashboard .ms-tab,body.snap-full .ms-tab{display:flex}
-		.map-settings .ms-presets{display:flex;flex-wrap:wrap;gap:6px;padding-bottom:8px;margin-bottom:8px;border-bottom:1px solid #485871}
-		.map-settings .ms-presets label{position:relative;flex:1 1 auto}.map-settings .ms-presets .ms-fill{flex:1000 1 0;height:0}
+		overflow:hidden;touch-action:none;user-select:none}.ms-tab:hover{background-color:#ffa726}.ms-tab:hover,body.ms-add-open .ms-tab,
+		body.ms-open .ms-tab{opacity:1}.ms-tab-name{flex:1 1 auto;min-width:0;overflow:hidden;text-overflow:ellipsis;text-align:center}
+		.ms-tab:not(.ms-tab-sized) .ms-tab-name{padding:0 24px}.ms-tab-cluster{flex:0 0 auto;display:none;gap:8px}body.dashboard .ms-tab-cluster,
+		body.refresh-on .ms-tab-cluster{display:inline-flex}.ms-tab-cluster .ms-tab-board{display:none}body.dashboard .ms-tab-cluster .ms-tab-board{
+		display:inline}.ms-tab-count{min-width:4ch;text-align:right;font-variant-numeric:tabular-nums}body:not(.refresh-on) .ms-tab-count{display:
+		none}.ms-tab-cluster::before{content:'|';opacity:.55}.ms-tab-cluster a{text-decoration:none;cursor:pointer}.ms-tab-cluster a.ms-tab-off{
+		opacity:.55}.ms-add{position:fixed;z-index:100001;display:flex;flex-direction:column;width:300px;max-width:calc(100vw - 16px);box-sizing:
+		border-box;padding:6px;border:1px solid #5f6f89;box-shadow:0 8px 24px rgba(0,0,0,.6),0 2px 8px rgba(0,0,0,.4);background-color:#202c40;
+		text-align:left;font-size:13px;color:#fff}.ms-add-input{flex:0 0 auto;margin-bottom:6px;padding:4px 6px;border:1px solid #485871;
+		border-radius:3px;background-color:#1b2735;color:inherit;font-family:inherit;font-size:inherit}.ms-add-input:focus{outline:0;border-color:
+		#ff9800}.ms-add-list{flex:1 1 auto;min-height:0;overflow-y:auto}.ms-add-item{padding:3px 4px;border-radius:3px;white-space:nowrap;overflow:
+		hidden;text-overflow:ellipsis;cursor:pointer;user-select:none}.ms-add-item.active{background-color:#3a4a66}.ms-add-item .ms-glyph{margin:0
+		6px 0 0}.ms-add-empty{padding:3px 4px;font-style:italic;opacity:.6}body.dashboard .ms-tab,body.refresh-on .ms-tab,body.snap-full .ms-tab{
+		display:flex}.map-settings .ms-presets{display:flex;flex-wrap:wrap;gap:6px;padding-bottom:8px;margin-bottom:8px;border-bottom:1px solid
+		#485871}.map-settings .ms-presets label{position:relative;flex:1 1 auto}.map-settings .ms-presets .ms-fill{flex:1000 1 0;height:0}
 		.map-settings .ms-presets input{position:absolute;margin:0;opacity:0}.map-settings .ms-chip{display:block;position:relative;text-align:
 		center;padding:3px 10px;background-color:#2b3a52;border:1px solid #485871;user-select:none}.map-settings .ms-chip.ms-user::after{content:'';
 		position:absolute;top:0;right:0;border-top:7px solid #93a4bd;border-left:7px solid transparent}.map-settings .ms-chip.ms-board,
@@ -144,37 +161,63 @@
 		content:"Nema odabranih karata"}.map-settings .ms-available:empty::before{content:"Sve su karte odabrane"}
 		.map-settings .ms-available .ms-handle{display:none}.map-settings .ms-sort{display:flex;align-items:baseline;gap:14px;padding:6px 0;margin:
 		6px 0 0;border-top:1px solid #485871}.map-settings .ms-sort a{cursor:pointer;user-select:none;text-decoration:none}
-		.map-settings .ms-sort a.active{color:#ff9800}.map-settings .ms-mode{display:flex;align-items:center;gap:14px;margin:10px 0 4px;padding:8px
-		10px;background-color:#1a2536;border:1px solid #3d4d6a;border-left:4px solid #4a8de6}.map-settings .ms-mode.ms-on{background-color:#22385c;
-		border-color:#4a8de6}.map-settings .ms-mode .btn{flex:none;padding:0 14px}.map-settings .ms-mode .btn .beta{position:static;transform:none}
-		.map-settings .ms-grid{display:flex;align-items:center;gap:6px;color:#8a94a8;cursor:pointer;user-select:none}
-		.map-settings .ms-mode.ms-on .ms-grid{color:#fff}.map-settings .ms-grid.ms-off{opacity:.45;cursor:default}.map-settings .ms-layout{display:
-		flex;gap:14px;padding:6px 0;color:#8a94a8}.map-settings .ms-layout[hidden],.map-settings .ms-mode[hidden]{display:none}
-		.map-settings .ms-layout a{cursor:pointer;user-select:none;text-decoration:none}.map-settings .ms-handle{display:inline-block;cursor:grab;
-		touch-action:none;padding:2px 8px;user-select:none}.map-settings .ms-item.dragging{background-color:#2b5797}
-		.map-settings .ms-item.dragging .ms-handle{cursor:grabbing}.map-settings .ms-manage{padding-top:6px;margin-top:6px;border-top:1px solid
-		#485871}.map-settings .ms-manage-title{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px;font-weight:700}
-		.map-settings .ms-manage-title a{cursor:pointer;user-select:none;text-decoration:none}.map-settings .ms-manage-title-links{display:flex;gap:
-		12px;font-weight:400}.map-settings .ms-manage-empty+.ms-manage-title,.map-settings .ms-manage-item+.ms-manage-title{padding-top:8px;
-		margin-top:8px;border-top:1px solid #485871}.map-settings .ms-save{display:flex;gap:8px;margin-bottom:6px}.map-settings .ms-name{flex:1;
-		min-width:0;font-family:inherit;font-size:13px;color:#fff;background-color:#2b3a52;border:1px solid #485871;outline:0;height:24px;padding:0
-		6px}.map-settings .ms-name.invalid{border-color:#ff9800}.map-settings .ms-save .btn{flex:none;padding:0 14px}.map-settings .ms-manage-item,
-		.map-settings .ms-shared{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:8px;padding:2px 0}
-		.map-settings .ms-manage-name{flex:1;min-width:6em;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-		.map-settings .ms-manage-item.ms-hidden{opacity:.55}.map-settings .ms-manage-item.ms-hidden:focus-within,
-		.map-settings .ms-manage-item.ms-hidden:hover{opacity:1}.map-settings .ms-manage-links{flex:none;display:grid;grid-template-columns:9ch 9ch
-		8ch;gap:10px;white-space:nowrap}.map-settings .ms-manage-links a,.map-settings .ms-shared a{cursor:pointer;user-select:none;text-decoration:
-		none}.map-settings .ms-manage-links a.active{color:#ff9800}.map-settings .ms-manage-empty{padding:2px 0;font-style:italic;opacity:.6}
-		.map-settings .btn{font-size:13px;font-family:inherit;color:#fff;background-color:#485871;cursor:pointer;height:24px;padding:0 24px;border:
-		none;outline:0}.map-settings .btn:hover{background-color:#5f6f89}.map-settings .ms-actions{display:flex;align-items:center;gap:16px;padding:
-		10px 0 8px}.map-settings .ms-actions a{cursor:pointer;user-select:none;text-decoration:none}.map-settings .ms-actions+.ms-sort{margin-top:0}
-		.maps-empty{padding:20px 0;font-size:13px;font-style:italic;opacity:.6}.slideshow{position:relative;display:flex;justify-content:center}
-		.slide{display:none}.slide.active{display:block;width:100%}.slide>.placeholder{width:100%}.slide>.placeholder>img{margin-inline:auto}.next,
-		.prev{cursor:pointer;position:absolute;align-content:center;top:0;bottom:0;width:15%;padding:16px;color:transparent;opacity:.7;font-weight:
-		700;font-size:36px;transition:color .6s ease,background-image .6s ease;user-select:none}.prev{left:0;text-align:left}.prev:hover{
-		background-image:linear-gradient(to left,transparent,rgba(0,0,0,.6));color:#fff;text-decoration:none}.prev.shorter{top:23px}.next{right:0;
-		text-align:right}.next:hover{background-image:linear-gradient(to right,transparent,rgba(0,0,0,.6));color:#fff;text-decoration:none}
-		.next.shorter{top:23px}.fade{animation-name:fade;animation-duration:1s}@keyframes fade{from{opacity:.6}to{opacity:1}}
+		.map-settings .ms-sort a.active{color:#ff9800}.map-settings .ms-find{position:relative;display:flex;margin-bottom:6px}
+		.map-settings .ms-find-input{flex:1;min-width:0;padding:4px 22px 4px 6px;border:1px solid #485871;border-radius:3px;background-color:#1b2735
+		;color:inherit;font-family:inherit;font-size:inherit}.map-settings .ms-find-input:focus{outline:0;border-color:#ff9800}
+		.map-settings .ms-find-clear{position:absolute;top:50%;right:6px;transform:translateY(-50%);display:none;width:8px;height:8px;cursor:pointer
+		;user-select:none;font-size:0;opacity:.7}.map-settings .ms-find-clear::after,.map-settings .ms-find-clear::before{content:'';position:
+		absolute;top:3.25px;left:-1px;width:10px;height:1.5px;background-color:currentColor;transform:rotate(45deg)}
+		.map-settings .ms-find-clear::after{transform:rotate(-45deg)}.map-settings .ms-find.ms-find-set .ms-find-clear{display:block}
+		.map-settings .ms-find-clear:hover{opacity:1}.map-settings .ms-available .ms-item.ms-filtered{display:none}.map-settings .ms-item.ms-off{
+		display:none}.map-settings .ms-available.ms-no-hits::after{content:"Nema karte za taj pojam";display:block;padding:2px 0;font-style:italic;
+		opacity:.6}.map-settings .ms-mode{display:flex;align-items:center;gap:14px;margin:10px 0 4px;padding:8px 10px;background-color:#1a2536;
+		border:1px solid #3d4d6a;border-left:4px solid #4a8de6}.map-settings .ms-mode.ms-on{background-color:#22385c;border-color:#4a8de6}
+		.map-settings .ms-mode .btn{flex:none;padding:0 14px}.map-settings .ms-mode .btn .beta{position:static;transform:none}.map-settings .ms-grid
+		{display:flex;align-items:center;gap:6px;color:#8a94a8;cursor:pointer;user-select:none}.map-settings .ms-mode.ms-on .ms-grid{color:#fff}
+		.map-settings .ms-grid.ms-off{opacity:.45;cursor:default}.map-settings .ms-mode .ms-arrange{flex:none;margin-left:auto;padding:0 14px}
+		.map-settings .ms-mode .ms-arrange:disabled{opacity:.45;cursor:default}.map-settings .ms-refresh{display:flex;align-items:center;gap:10px;
+		margin:4px 0;padding:8px 10px;background-color:#1a2536;border:1px solid #3d4d6a;border-left:4px solid #4a8de6;color:#8a94a8}
+		.map-settings .ms-refresh.ms-on{background-color:#22385c;border-color:#4a8de6;color:#fff}.map-settings .ms-refresh label{display:flex;
+		align-items:center;gap:6px;cursor:pointer;user-select:none}.map-settings .ms-refresh-every{padding:2px 4px;border:1px solid #485871;
+		border-radius:3px;background-color:#1b2735;color:inherit;font-family:inherit;font-size:inherit}.map-settings .ms-refresh-left{margin-left:
+		auto;font-variant-numeric:tabular-nums}.map-settings .ms-layout{display:flex;gap:14px;padding:6px 0;color:#8a94a8}
+		.map-settings .ms-layout[hidden],.map-settings .ms-mode[hidden]{display:none}.map-settings .ms-layout a{cursor:pointer;user-select:none;
+		text-decoration:none}.map-settings .ms-handle{display:inline-block;cursor:grab;touch-action:none;padding:2px 8px;user-select:none}
+		.map-settings .ms-item.dragging{background-color:#2b5797}.map-settings .ms-item.dragging .ms-handle{cursor:grabbing}.map-settings .ms-manage
+		{padding-top:6px;margin-top:6px;border-top:1px solid #485871}.map-settings .ms-manage-title{display:flex;justify-content:space-between;
+		align-items:baseline;margin-bottom:6px;font-weight:700}.map-settings .ms-manage-title a{cursor:pointer;user-select:none;text-decoration:none
+		}.map-settings .ms-manage-title-links{display:flex;gap:12px;font-weight:400}.map-settings .ms-manage-empty+.ms-manage-title,
+		.map-settings .ms-manage-item+.ms-manage-title{padding-top:8px;margin-top:8px;border-top:1px solid #485871}.map-settings .ms-save{display:
+		flex;gap:8px;margin-bottom:6px}.map-settings .ms-name{flex:1;min-width:0;font-family:inherit;font-size:13px;color:#fff;background-color:
+		#2b3a52;border:1px solid #485871;outline:0;height:24px;padding:0 6px}.map-settings .ms-name.invalid{border-color:#ff9800}
+		.map-settings .ms-save .btn{flex:none;padding:0 14px}.map-settings .ms-manage-item,.map-settings .ms-shared{display:flex;flex-wrap:wrap;
+		justify-content:space-between;align-items:center;gap:8px;padding:2px 0}.map-settings .ms-manage-name{flex:1;min-width:6em;overflow:hidden;
+		text-overflow:ellipsis;white-space:nowrap}.map-settings .ms-manage-item.ms-hidden{opacity:.55}
+		.map-settings .ms-manage-item.ms-hidden:focus-within,.map-settings .ms-manage-item.ms-hidden:hover{opacity:1}.map-settings .ms-manage-links{
+		flex:none;display:grid;grid-template-columns:9ch 9ch 8ch;gap:10px;white-space:nowrap}.map-settings .ms-manage-links a,
+		.map-settings .ms-shared a{cursor:pointer;user-select:none;text-decoration:none}.map-settings .ms-manage-links a.active{color:#ff9800}
+		.map-settings .ms-manage-empty{padding:2px 0;font-style:italic;opacity:.6}.map-settings .btn{font-size:13px;font-family:inherit;color:#fff;
+		background-color:#485871;cursor:pointer;height:24px;padding:0 24px;border:none;outline:0}.map-settings .btn:hover{background-color:#5f6f89}
+		.map-settings .ms-actions{display:flex;align-items:center;gap:16px;padding:10px 0 8px}.map-settings .ms-actions a{cursor:pointer;user-select
+		:none;text-decoration:none}.map-settings .ms-actions+.ms-sort{margin-top:0}.manual-dialog .ms-body{padding:4px 14px 16px;line-height:1.5}
+		.manual-dialog .ms-body h2,.manual-dialog .ms-body h3{margin:22px 0 8px;font-weight:400;color:#ff9800}.manual-dialog .ms-body h2{font-size:
+		16px;padding-bottom:4px;border-bottom:1px solid #485871}.manual-dialog .ms-body h3{font-size:14px}.manual-dialog .ms-body p,
+		.manual-dialog .ms-body ul{margin:8px 0}.manual-dialog .ms-body ul{padding-left:20px}.manual-dialog .ms-body li{margin:3px 0}
+		.manual-dialog .ms-body code,.manual-dialog .ms-body kbd{padding:0 4px;border-radius:3px;background-color:#1b2735;font-family:inherit;
+		white-space:nowrap}.manual-dialog .ms-body kbd{border:1px solid #5f6f89}.manual-dialog .ms-body a{color:#ff9800}
+		.manual-dialog .ms-body blockquote{margin:12px 0;padding:2px 12px;border-left:3px solid #485871}.manual-dialog .ms-body table{display:block;
+		overflow-x:auto;margin:10px 0;border-collapse:collapse}.manual-dialog .ms-body td,.manual-dialog .ms-body th{padding:4px 10px 4px 0;
+		border-bottom:1px solid #2b3a52;text-align:left;vertical-align:top}.manual-dialog .ms-body th{font-weight:400;opacity:.7}
+		.manual-dialog .manual-toc{margin:10px 0 18px;padding:8px 0;border-top:1px solid #485871;border-bottom:1px solid #485871}
+		.manual-dialog .manual-toc ul{margin:0;padding:0;list-style:none}.manual-dialog .manual-toc li{margin:2px 0}
+		.manual-dialog .manual-toc .toc-3{padding-left:16px}.manual-dialog .manual-toc a{text-decoration:none}.manual-dialog .manual-toc a:hover{
+		text-decoration:underline}.maps-empty{padding:20px 0;font-size:13px;font-style:italic;opacity:.6}.slideshow{position:relative;display:flex;
+		justify-content:center}.slide{display:none}.slide.active{display:block;width:100%}.slide>.placeholder{width:100%}.slide>.placeholder>img{
+		margin-inline:auto}.next,.prev{cursor:pointer;position:absolute;align-content:center;top:0;bottom:0;width:15%;padding:16px;color:transparent
+		;opacity:.7;font-weight:700;font-size:36px;transition:color .6s ease,background-image .6s ease;user-select:none}.prev{left:0;text-align:left
+		}.prev:hover{background-image:linear-gradient(to left,transparent,rgba(0,0,0,.6));color:#fff;text-decoration:none}.prev.shorter{top:23px}
+		.next{right:0;text-align:right}.next:hover{background-image:linear-gradient(to right,transparent,rgba(0,0,0,.6));color:#fff;text-decoration:
+		none}.next.shorter{top:23px}.fade{animation-name:fade;animation-duration:1s}@keyframes fade{from{opacity:.6}to{opacity:1}}
 		@media (max-width:800px){.next,.prev{padding:12px;font-size:20px}.next.shorter,.prev.shorter{top:23px}}.indicators-container{display:grid;
 		grid-template-columns:repeat(3,1fr);gap:4px;width:100%}.indicator{height:3px;background-color:#4e5264;transition:background-color .3s}
 		.indicator.active{background-color:#ff9800}@media (max-width:800px){.indicator{height:2px}}.expandable{position:relative;justify-content:
@@ -187,6 +230,19 @@
 		height:3px;z-index:1000;background-color:#5c5c5c80}.progress-bar{width:0;height:100%;background-color:#ff9800;transition:width .3s
 		ease-in-out}
 	</style>
+	<script>
+		const MAP_CONFIG_URL="https://meteo-data.jurakovic.workers.dev/config.json",MAP_CONFIG_KEY="mapConfig";function disabledMapIds(e){
+		const t=e&&e.maps&&"object"==typeof e.maps?e.maps:{};return new Set(Object.keys(t).filter(e=>t[e]&&!1===t[e].enabled))}
+		function loadMapConfig(){try{return JSON.parse(localStorage.getItem("mapConfig"))}catch(e){return null}}
+		let disabledMaps=disabledMapIds(loadMapConfig());function isMapEnabled(e){return!disabledMaps.has(e)}function sameIdSet(e,t){
+		return e.size===t.size&&[...e].every(e=>t.has(e))}function styleDisabledMaps(){let e=document.getElementById("mapConfigStyle")
+		;e||(e=document.createElement("style"),e.id="mapConfigStyle",document.head.appendChild(e))
+		;const t=[...disabledMaps].map(e=>`tr[data-map-id="${CSS.escape(e)}"]`)
+		;e.textContent=t.length?t.map(e=>`${e}, ${e} + tr.sp20`).join(",\n")+" { display: none; }":""}function fetchMapConfig(){
+		fetch(MAP_CONFIG_URL,{cache:"no-cache"}).then(e=>e.ok?e.json():Promise.reject(e.status)).then(e=>{try{
+		localStorage.setItem("mapConfig",JSON.stringify(e))}catch(e){}const t=disabledMapIds(e);sameIdSet(t,disabledMaps)||(disabledMaps=t,
+		styleDisabledMaps(),document.dispatchEvent(new CustomEvent("map-config-changed")))}).catch(()=>{})}styleDisabledMaps(),fetchMapConfig();
+	</script>
 	<script>
 		function scrollToTop(){window.scrollTo({top:0,behavior:"smooth"})}function scrollToElement(e){const t=document.getElementById(e)
 		;t&&t.scrollIntoView({behavior:"smooth",block:"start"})}function addExpandableClickEventListener(){
@@ -201,29 +257,30 @@
 		document.body.classList.toggle("show-links-bottom",e.checked))}function plusSlides(e,t){
 		const o=document.querySelector(`.slideshow[data-slideshow-id="${e}"]`);showSlides(o,parseInt(o.getAttribute("data-current-slide"))+t)}
 		function showSlides(e,t){
-		const o=e.getAttribute("data-slideshow-id"),n=e.querySelectorAll(".slide"),s=document.querySelectorAll(`.indicators-container[data-slideshow-id="${o}"] .indicator`)
-		;let r=t;r>n.length&&(r=1),r<1&&(r=n.length),e.setAttribute("data-current-slide",r),n.forEach(e=>e.classList.remove("active")),
-		n[r-1].classList.add("active"),s.forEach(e=>e.classList.remove("active")),s[r-1].classList.add("active"),updateSlideshowWidth(e)}
+		const o=e.getAttribute("data-slideshow-id"),n=e.querySelectorAll(".slide"),i=document.querySelectorAll(`.indicators-container[data-slideshow-id="${o}"] .indicator`)
+		;let a=t;a>n.length&&(a=1),a<1&&(a=n.length),e.setAttribute("data-current-slide",a),n.forEach(e=>e.classList.remove("active")),
+		n[a-1].classList.add("active"),i.forEach(e=>e.classList.remove("active")),i[a-1].classList.add("active"),updateSlideshowWidth(e)}
 		function updateSlideshowWidth(e){if(!e.hasAttribute("data-dynamic-width"))return
 		;const t=e.getAttribute("data-slideshow-id"),o=document.querySelector(`.indicators-container[data-slideshow-id='${t}']`),n=e.querySelector(".slide.active .placeholder")
 		;n&&(e.style.maxWidth=n.style.maxWidth,o.style.maxWidth=n.style.maxWidth)}function showProgress(){
 		const e=document.querySelectorAll("img"),t=document.querySelector(".progress-bar"),o=document.querySelector(".progress-container");let n=0
-		;const s=(o._runId||0)+1;if(o._runId=s,clearTimeout(o._hideTimer),t.style.width="0",o.style.removeProperty("display"),
-		0===e.length)return void(o.style.display="none");const r=()=>{if(o._runId!==s)return;const r=n/e.length*100;t.style.width=r+"%",
-		n===e.length&&(o._hideTimer=setTimeout(()=>{o.style.display="none"},500))};e.forEach(e=>{e.addEventListener("load",()=>{n++,r()}),
-		e.addEventListener("error",()=>{n++,dlog(`Error loading image: ${e.src}`),e.removeAttribute("src"),r()}),
+		;const i=(o._runId||0)+1;if(o._runId=i,clearTimeout(o._hideTimer),t.style.width="0",o.style.removeProperty("display"),
+		0===e.length)return void(o.style.display="none");const a=()=>{if(o._runId!==i)return;const a=n/e.length*100;t.style.width=a+"%",
+		n===e.length&&(o._hideTimer=setTimeout(()=>{o.style.display="none"},500))};e.forEach(e=>{e.addEventListener("load",()=>{n++,a()}),
+		e.addEventListener("error",()=>{n++,dlog(`Error loading image: ${e.src}`),e.removeAttribute("src"),a()}),
 		e.complete&&e.dispatchEvent(new Event("load"))})}function handleSwipe(e,t,o){const n=o-t;if(Math.abs(n)>50){
 		const t=parseInt(e.getAttribute("data-current-slide"));showSlides(e,t+(n>0?-1:1))}}function addSwipeEvents(){
-		document.querySelectorAll(".slideshow").forEach(e=>{let t=0,o=0,n=0,s=0,r=!1;e.querySelectorAll("img").forEach(e=>{
-		e.addEventListener("dragstart",e=>e.preventDefault())}),e.addEventListener("touchstart",e=>{e.touches.length>1||(t=e.touches[0].clientX,
-		o=e.touches[0].clientY),r=!1}),e.addEventListener("touchmove",e=>{e.touches.length>1?r=!1:(n=e.touches[0].clientX,s=e.touches[0].clientY,
-		Math.abs(n-t)>Math.abs(s-o)&&(r=!0))}),e.addEventListener("touchend",()=>{if(r){const r=n-t,i=s-o
-		;Math.abs(r)>Math.abs(i)&&handleSwipe(e,t,n)}}),e.querySelectorAll(".prev, .next").forEach(e=>{let t=!1;e.addEventListener("touchstart",e=>{
-		e.touches.length>1&&(t=!0)}),e.addEventListener("touchend",e=>{t&&e.preventDefault(),0===e.touches.length&&(t=!1)})}),
-		e.addEventListener("mousedown",e=>{t=e.clientX,o=e.clientY,r=!0}),e.addEventListener("mousemove",e=>{r&&(n=e.clientX,s=e.clientY)}),
-		e.addEventListener("mouseup",i=>{if(r){n=i.clientX,s=i.clientY;const l=n-t,a=s-o;Math.abs(l)>Math.abs(a)&&handleSwipe(e,t,n),r=!1}}),
-		e.addEventListener("mouseleave",()=>{r&&(r=!1)})})}function updateLinksScrollShadow(e){const t=e.scrollWidth-e.clientWidth,o=e.scrollLeft
-		;e.classList.toggle("can-scroll-left",o>1),e.classList.toggle("can-scroll-right",t>1&&o<t-1)}function updateLinksScrollShadows(){
+		document.querySelectorAll(".slideshow:not([data-swipe])").forEach(e=>{e.setAttribute("data-swipe","");let t=0,o=0,n=0,i=0,a=!1
+		;e.querySelectorAll("img").forEach(e=>{e.addEventListener("dragstart",e=>e.preventDefault())}),e.addEventListener("touchstart",e=>{
+		e.touches.length>1||(t=e.touches[0].clientX,o=e.touches[0].clientY),a=!1}),e.addEventListener("touchmove",e=>{
+		e.touches.length>1?a=!1:(n=e.touches[0].clientX,i=e.touches[0].clientY,Math.abs(n-t)>Math.abs(i-o)&&(a=!0))}),
+		e.addEventListener("touchend",()=>{if(a){const a=n-t,l=i-o;Math.abs(a)>Math.abs(l)&&handleSwipe(e,t,n)}}),
+		e.querySelectorAll(".prev, .next").forEach(e=>{let t=!1;e.addEventListener("touchstart",e=>{e.touches.length>1&&(t=!0)}),
+		e.addEventListener("touchend",e=>{t&&e.preventDefault(),0===e.touches.length&&(t=!1)})}),e.addEventListener("mousedown",e=>{t=e.clientX,
+		o=e.clientY,a=!0}),e.addEventListener("mousemove",e=>{a&&(n=e.clientX,i=e.clientY)}),e.addEventListener("mouseup",l=>{if(a){n=l.clientX,
+		i=l.clientY;const r=n-t,s=i-o;Math.abs(r)>Math.abs(s)&&handleSwipe(e,t,n),a=!1}}),e.addEventListener("mouseleave",()=>{a&&(a=!1)})})}
+		function updateLinksScrollShadow(e){const t=e.scrollWidth-e.clientWidth,o=e.scrollLeft;e.classList.toggle("can-scroll-left",o>1),
+		e.classList.toggle("can-scroll-right",t>1&&o<t-1)}function updateLinksScrollShadows(){
 		document.querySelectorAll(".links-bottom").forEach(updateLinksScrollShadow)}function addLinksScrollShadows(){
 		document.querySelectorAll(".links-bottom").forEach(e=>{e.addEventListener("scroll",()=>updateLinksScrollShadow(e),{passive:!0})}),
 		updateLinksScrollShadows()}let previousWidth=0;function updateIframeSrc(){
@@ -231,31 +288,31 @@
 		document.querySelectorAll("iframe[data-zoom-hr-desktop]").forEach(e=>setIframeSrc(e)))}function setIframeSrc(e){
 		dlog(`Updating iframe src for ${e.id}`);const t=e.getAttribute("data-zoom-mode")
 		;let o="eu"===t?e.getAttribute("data-src-eu"):e.getAttribute("data-src-hr");if(window.innerWidth<800){
-		const n="eu"===t?"data-zoom-eu-desktop":"data-zoom-hr-desktop",s="eu"===t?"data-zoom-eu-mobile":"data-zoom-hr-mobile"
-		;o=o.replace(e.getAttribute(n),e.getAttribute(s))}e.src=o}function switchIframeZoom(e,t){
+		const n="eu"===t?"data-zoom-eu-desktop":"data-zoom-hr-desktop",i="eu"===t?"data-zoom-eu-mobile":"data-zoom-hr-mobile"
+		;o=o.replace(e.getAttribute(n),e.getAttribute(i))}e.src=o}function switchIframeZoom(e,t){
 		const o="hr"===t.getAttribute("data-mode")?"eu":"hr",n=document.getElementById(e);n.setAttribute("data-zoom-mode",o),setIframeSrc(n),
-		t.setAttribute("data-mode",o),t.textContent="hr"===o?"[HR]":"[EU]";const s=getResetButtonFromFrameId(e)
-		;"[R]"!==s.textContent||n.parentElement.classList.contains("fullscreen")||(s.style.display="none")}function toggleFullscreen(e,t){
+		t.setAttribute("data-mode",o),t.textContent="hr"===o?"[HR]":"[EU]";const i=getResetButtonFromFrameId(e)
+		;"[R]"!==i.textContent||n.parentElement.classList.contains("fullscreen")||(i.style.display="none")}function toggleFullscreen(e,t){
 		dlog(`toggleFullscreen: ${e}`);const o=document.getElementById(e).parentElement
-		;if(o.classList.contains("fullscreen"))exitFullscreen(o);else{const n=o.querySelector(".overlay"),s=getResetButtonFromFrameId(e)
+		;if(o.classList.contains("fullscreen"))exitFullscreen(o);else{const n=o.querySelector(".overlay"),i=getResetButtonFromFrameId(e)
 		;o._fsOverlayVisible=!n||"none"!==n.style.display,o.classList.add("fullscreen"),o.previousElementSibling.classList.add("fullscreen"),
 		o.closest(".map-block.snapped")||document.body.classList.add("fs-lock"),document.dispatchEvent(new Event("map-fullscreen")),
-		t.textContent="[-]",n&&(n.style.display="none"),s&&setResetButtonToFullscreenReset(s)}}function exitFullscreen(e){
+		t.textContent="[-]",n&&(n.style.display="none"),i&&setResetButtonToFullscreenReset(i)}}function exitFullscreen(e){
 		e.classList.remove("fullscreen");const t=e.previousElementSibling;t.classList.remove("fullscreen");const o=t.querySelector(".fs-btn")
 		;o&&(o.textContent="[ ]"),
 		[...document.querySelectorAll(".if1.fullscreen")].some(e=>!e.closest(".map-block.snapped"))||document.body.classList.remove("fs-lock"),
 		document.dispatchEvent(new Event("map-fullscreen"));const n=!1===e._fsOverlayVisible;delete e._fsOverlayVisible
-		;const s=e.querySelector(".overlay");s&&(n?s.style.display="none":s.removeAttribute("style"))
-		;const r=getResetButtonFromFrameId(e.querySelector("iframe").id);r&&(r.style.removeProperty("display"),
-		n?setResetButtonToExit(r):setResetButtonToReset(r))}function hideOverlayOnDoubleTap(){
-		document.querySelectorAll(".if1 .overlay").forEach(e=>{let t=0,o=!1;e.addEventListener("dblclick",()=>{e.style.display="none"
-		;let t=getResetButtonFromOverlayId(e.id);t.removeAttribute("style"),setResetButtonToExit(t)}),e.addEventListener("touchstart",e=>{
-		e.touches.length>1&&(o=!0)}),e.addEventListener("touchend",n=>{if(o)return void(0===n.touches.length&&(o=!1,t=0))
-		;const s=(new Date).getTime(),r=s-t;if(r>0&&r<200){e.style.display="none";let t=getResetButtonFromOverlayId(e.id)
-		;t.removeAttribute("style"),setResetButtonToExit(t),n.preventDefault()}t=s});const n=e.querySelector(".hint");let s=0,r=0
-		;e.addEventListener("touchstart",e=>{1===e.touches.length&&(r=e.touches[0].clientX,s=e.touches[0].clientY)}),
-		e.addEventListener("touchend",e=>{if(!n)return
-		;const t=e.changedTouches[0].clientX,o=e.changedTouches[0].clientY,i=Math.abs(t-r),l=Math.abs(o-s);i<10&&l<10&&(n.style.opacity="0.6",
+		;const i=e.querySelector(".overlay");i&&(n?i.style.display="none":i.removeAttribute("style"))
+		;const a=getResetButtonFromFrameId(e.querySelector("iframe").id);a&&(a.style.removeProperty("display"),
+		n?setResetButtonToExit(a):setResetButtonToReset(a))}function hideOverlayOnDoubleTap(){
+		document.querySelectorAll(".if1 .overlay:not([data-tap])").forEach(e=>{e.setAttribute("data-tap","");let t=0,o=!1
+		;e.addEventListener("dblclick",()=>{e.style.display="none";let t=getResetButtonFromOverlayId(e.id);t.removeAttribute("style"),
+		setResetButtonToExit(t)}),e.addEventListener("touchstart",e=>{e.touches.length>1&&(o=!0)}),e.addEventListener("touchend",n=>{
+		if(o)return void(0===n.touches.length&&(o=!1,t=0));const i=(new Date).getTime(),a=i-t;if(a>0&&a<200){e.style.display="none"
+		;let t=getResetButtonFromOverlayId(e.id);t.removeAttribute("style"),setResetButtonToExit(t),n.preventDefault()}t=i})
+		;const n=e.querySelector(".hint");let i=0,a=0;e.addEventListener("touchstart",e=>{1===e.touches.length&&(a=e.touches[0].clientX,
+		i=e.touches[0].clientY)}),e.addEventListener("touchend",e=>{if(!n)return
+		;const t=e.changedTouches[0].clientX,o=e.changedTouches[0].clientY,l=Math.abs(t-a),r=Math.abs(o-i);l<10&&r<10&&(n.style.opacity="0.6",
 		clearTimeout(n._hideTimer),n._hideTimer=setTimeout(()=>{n.style.removeProperty("opacity")},2e3))})})}function updateHintText(){
 		const e=window.innerWidth<800;document.querySelectorAll(".hint").forEach(t=>{
 		t.textContent=e?"Dvostruki dodir za pristup interaktivnoj karti":"Dvostruki klik za pristup interaktivnoj karti"})}
@@ -278,11 +335,74 @@
 		function DTGFromDateInHours(e){return e.getUTCFullYear().toString()+pad(e.getUTCMonth()+1,2)+pad(e.getUTCDate(),2)+pad(e.getUTCHours(),2)}
 		function EndValue(e){return e.getUTCFullYear().toString()+pad(e.getUTCMonth()+1,2)+pad(e.getUTCDate(),2)+"06"}function pad(e,t,o){
 		return String(e).padStart(t,o||"0")}const isDebugEnabled="1"===new URLSearchParams(window.location.search).get("debug");function dlog(...e){
-		isDebugEnabled&&console.log(...e)}function initDynamicContent(){document.querySelectorAll("img.lazy").forEach(e=>{
-		e.src=e.getAttribute("data-src"),e.classList.remove("lazy")}),addSwipeEvents(),previousWidth=0,updateIframeSrc(),hideOverlayOnDoubleTap(),
-		updateHintText(),addLinksScrollShadows(),showProgress()}document.addEventListener("DOMContentLoaded",()=>{initLinksBottom(),
-		initDynamicContent(),addExpandableClickEventListener()}),window.addEventListener("resize",()=>{clearTimeout(window._resizeTimeout),
-		window._resizeTimeout=setTimeout(()=>{updateIframeSrc(),updateHintText(),updateLinksScrollShadows()},200)});
+		isDebugEnabled&&console.log(...e)}
+		const DIALOG_MQ=window.matchMedia("(min-width: 801px) and (hover: hover) and (pointer: fine)"),DIALOG_MIN_WIDTH=360,DIALOG_MIN_HEIGHT=120,DIALOG_MARGIN=8,DIALOG_HANDLES=["n","ne","e","se","s","sw","w","nw"]
+		;let dialogGutter=0;function dialogGutterPx(){return dialogGutter}function dialogViewportWidth(){
+		return document.documentElement.clientWidth-dialogGutter}function dialogViewportHeight(){return document.documentElement.clientHeight}
+		function dialogClamp(e,t,o){return Math.min(Math.max(e,t),Math.max(t,o))}function dialogFraction(e){return Math.round(1e4*e)/1e4}
+		function dialogPanels(){return[...document.querySelectorAll(".map-settings")]}function openDialogPanel(){
+		return dialogPanels().find(e=>!e.hidden)||null}function anyDialogOpen(){return!!openDialogPanel()}function dialogStorageKey(e){
+		return e.getAttribute("data-dialog-key")}function loadDialogGeometry(e){const t=dialogStorageKey(e);if(!t)return null;try{
+		const e=JSON.parse(localStorage.getItem(t));return e&&"object"==typeof e&&(Number.isFinite(e.left)&&Number.isFinite(e.top)&&e.width>0)?{
+		left:e.left,top:e.top,width:e.width,height:e.height>0?e.height:null}:null}catch(e){return null}}function saveDialogGeometry(e){
+		const t=dialogStorageKey(e);if(!t)return;const o=e.getBoundingClientRect(),n={left:dialogFraction(o.left/dialogViewportWidth()),
+		top:dialogFraction(o.top/dialogViewportHeight()),width:Math.round(o.width)};e.style.height&&(n.height=Math.round(o.height));try{
+		localStorage.setItem(t,JSON.stringify(n))}catch(e){}}function forgetDialogGeometry(e){const t=dialogStorageKey(e);if(t)try{
+		localStorage.removeItem(t)}catch(e){}}function dialogMaxWidth(){return Math.max(360,dialogViewportWidth()-16)}function dialogMaxHeight(){
+		return Math.max(120,dialogViewportHeight()-16)}function placeDialog(e,t,o,n,i){n=dialogClamp(n,360,dialogMaxWidth()),
+		e.style.width=`${Math.round(n)}px`,e.style.maxWidth="none",e.style.right="auto",e.style.margin="0",null===i?(e.style.height="",
+		e.style.maxHeight=`${Math.round(Math.max(120,dialogViewportHeight()-Math.max(0,o)-8))}px`):(e.style.maxHeight="none",
+		e.style.height=`${Math.round(dialogClamp(i,120,dialogMaxHeight()))}px`),
+		e.style.left=`${Math.round(dialogClamp(t,0,Math.max(0,dialogViewportWidth()-e.offsetWidth)))}px`,
+		e.style.top=`${Math.round(dialogClamp(o,0,Math.max(0,dialogViewportHeight()-e.offsetHeight)))}px`}function clearDialog(e){
+		["left","top","width","height","maxWidth","maxHeight","right","margin"].forEach(t=>e.style[t]="")}function applyStoredDialog(e){
+		if(!e||e.hidden)return;const t=DIALOG_MQ.matches?loadDialogGeometry(e):null
+		;t?placeDialog(e,t.left*dialogViewportWidth(),t.top*dialogViewportHeight(),t.width,t.height):clearDialog(e)}
+		function trackDialogPointer(e,t,o){const n=e.clientX,i=e.clientY,a=e=>t(e.clientX-n,e.clientY-i,e),l=()=>{
+		document.removeEventListener("pointermove",a),document.removeEventListener("pointerup",l),document.removeEventListener("pointercancel",l),
+		document.body.classList.remove("po-dragging"),o&&o()};document.body.classList.add("po-dragging"),document.addEventListener("pointermove",a),
+		document.addEventListener("pointerup",l),document.addEventListener("pointercancel",l)}function buildDialogHandles(e){
+		e.querySelectorAll(":scope > .po-h").forEach(e=>e.remove()),DIALOG_HANDLES.forEach(t=>{const o=document.createElement("div")
+		;o.className=`po-h po-h-${t}`,o.dataset.dir=t,e.appendChild(o)})}function initDialogWindow(e){e.addEventListener("pointerdown",t=>{
+		if(0!==t.button||!DIALOG_MQ.matches)return
+		;const o=t.target.closest(".po-h"),n=!o&&t.target.closest(".ms-head")&&!t.target.closest("a, button, input");if(!o&&!n)return
+		;t.preventDefault();const i=e.getBoundingClientRect(),a=o?o.dataset.dir:null,l=e.style.height?i.height:null;let r=!1
+		;trackDialogPointer(t,(t,o)=>{if(!r&&!t&&!o)return;if(r=!0,!a)return void placeDialog(e,i.left+t,i.top+o,i.width,l);let n=i.width,s=i.height
+		;a.includes("e")&&(n=i.width+t),a.includes("w")&&(n=i.width-t),a.includes("s")&&(s=i.height+o),a.includes("n")&&(s=i.height-o),
+		n=dialogClamp(n,360,dialogMaxWidth()),
+		s=dialogClamp(s,120,dialogMaxHeight()),placeDialog(e,a.includes("w")?i.right-n:i.left,a.includes("n")?i.bottom-s:i.top,n,s)},()=>{
+		r&&saveDialogGeometry(e)})}),e.addEventListener("dblclick",t=>{
+		DIALOG_MQ.matches&&t.target.closest(".ms-head")&&!t.target.closest("a, button, input")&&(clearDialog(e),forgetDialogGeometry(e))})}
+		function syncDialogChrome(){const e=anyDialogOpen();if(e&&!document.documentElement.classList.contains("ms-gutter")){
+		const e=window.innerWidth-document.documentElement.clientWidth;e>0&&(dialogGutter=e,document.documentElement.classList.add("ms-gutter"))
+		}else e||(dialogGutter=0,document.documentElement.classList.remove("ms-gutter"));document.body.classList.toggle("ms-open",e)
+		;const t=document.querySelector(".ms-backdrop");t&&(t.hidden=!e,e&&t.classList.remove("ms-spent")),
+		"function"==typeof layoutSnapColumns&&layoutSnapColumns()}function notifyDialog(e,t){
+		document.dispatchEvent(new CustomEvent("dialog-toggled",{detail:{panel:e,visible:t}}))}function setDialogVisible(e,t){
+		t&&dialogPanels().forEach(t=>{t===e||t.hidden||(t.hidden=!0,notifyDialog(t,!1))}),e.hidden=!t,syncDialogChrome(),t&&applyStoredDialog(e),
+		notifyDialog(e,t)}function toggleDialog(e){e&&setDialogVisible(e,e.hidden)}function closeOpenDialog(){const e=openDialogPanel()
+		;return e&&setDialogVisible(e,!1),!!e}function initDialogBackdrop(){const e=document.querySelector(".ms-backdrop")
+		;e&&e.addEventListener("pointerdown",t=>{if(!anyDialogOpen())return;t.preventDefault(),closeOpenDialog(),e.hidden=!1,
+		e.classList.add("ms-spent");let o=0;const n=()=>{clearTimeout(o),e.classList.remove("ms-spent"),e.hidden=!anyDialogOpen(),
+		document.removeEventListener("click",i,!0),document.removeEventListener("pointerup",a),document.removeEventListener("pointercancel",n)
+		},i=e=>{e.stopPropagation(),e.preventDefault(),n()},a=()=>{o=setTimeout(n,400)};document.addEventListener("click",i,!0),
+		document.addEventListener("pointerup",a),document.addEventListener("pointercancel",n)})}document.addEventListener("keydown",e=>{
+		"Escape"!==e.key||e.altKey||e.ctrlKey||e.metaKey||e.target.matches&&e.target.matches('input:not([type="radio"]):not([type="checkbox"]), textarea, [contenteditable]')||closeOpenDialog()
+		});const MANUAL_HASH="upute",MANUAL_ENABLED=!1;function manualDialog(){return document.getElementById("manualDialog")}function manualOpen(){
+		const e=manualDialog();return!!e&&!e.hidden}function toggleManual(){toggleDialog(manualDialog())}function hashText(e){try{
+		return decodeURIComponent(e.slice(1))}catch(t){return e.slice(1)}}function syncManualHash(e){const t=new URL(window.location.href)
+		;e!==("upute"===hashText(t.hash))&&(t.hash=e?"upute":"",history.replaceState(null,"",e?t.href:t.href.replace(/#$/,"")))}
+		function scrollManualTo(e,t){const o=e.querySelector(".ms-body"),n=e.querySelector(`[id="${CSS.escape(t)}"]`)
+		;o&&n&&(o.scrollTop+=n.getBoundingClientRect().top-o.getBoundingClientRect().top)}function initManual(){manualDialog()}
+		function initDialogs(){dialogPanels().forEach(e=>{buildDialogHandles(e),initDialogWindow(e)}),initDialogBackdrop(),initManual(),
+		window.addEventListener("resize",()=>applyStoredDialog(openDialogPanel()))}function initDynamicContent(){
+		document.querySelectorAll("img.lazy").forEach(e=>{e.src=e.getAttribute("data-src"),e.classList.remove("lazy")}),addSwipeEvents(),
+		previousWidth=0,updateIframeSrc(),hideOverlayOnDoubleTap(),updateHintText(),addLinksScrollShadows(),showProgress()}
+		document.documentElement.classList.add("no-manual"),
+		"loading"===document.readyState?document.addEventListener("DOMContentLoaded",initDialogs):initDialogs(),
+		document.addEventListener("DOMContentLoaded",()=>{initLinksBottom(),initDynamicContent(),addExpandableClickEventListener()}),
+		window.addEventListener("resize",()=>{clearTimeout(window._resizeTimeout),window._resizeTimeout=setTimeout(()=>{updateIframeSrc(),
+		updateHintText(),updateLinksScrollShadows()},200)});
 	</script>
 	<script async src="https://www.googletagmanager.com/gtag/js?id=G-233EMZJM16"></script>
 	<script>
@@ -302,18 +422,19 @@
 		<table border="0" align="center" cellpadding="0" cellspacing="0">
 			<tr>
 				<td align="center">
-					<div class="buttons">
+					<div class="buttons with-help">
 						<a href="/meteo/customize/" style="text-decoration: none"><div class="btn">Prilagodi <span class="beta">beta</span></div></a>
 						<div class="links-btn">
 							<button type="button" class="btn" onclick="scrollToElement('links')">Linkovi</button>
 							<input type="checkbox" class="links-toggle" onchange="toggleLinksBottom(this)" title="Prikaži linkove ispod karata" />
 						</div>
+						<button type="button" class="btn help-btn" onclick="toggleManual()" title="Upute (H)">?</button>
 					</div>
 				</td>
 			</tr>
 			<tr class="sp"></tr>
 
-			<tr>
+			<tr data-map-id="neverin-radar-hr">
 				<td align="center">
 					<div class="radartitle">
 						<a href="https://www.neverin.hr/radar/" target="_blank" rel="nofollow">Neverin | Radar | Hrvatska</a>
@@ -338,7 +459,7 @@
 					</div>
 				</td>
 			</tr>
-			<tr>
+			<tr data-map-id="neverin-radar-hr">
 				<td align="center">
 					<div class="links-bottom">
 						<a href="https://www.windy.com/-Weather-radar-radar?radar,44.5,16.5,7" target="_blank" rel="nofollow">Windy</a>
@@ -355,7 +476,7 @@
 			</tr>
 			<tr class="sp20"></tr>
 
-			<tr>
+			<tr data-map-id="neverin-satelit-hr">
 				<td align="center">
 					<div class="radartitle">
 						<a href="https://www.neverin.hr/satelit/" target="_blank" rel="nofollow">Neverin | Satelit | Hrvatska</a>
@@ -380,7 +501,7 @@
 					</div>
 				</td>
 			</tr>
-			<tr>
+			<tr data-map-id="neverin-satelit-hr">
 				<td align="center">
 					<div class="links-bottom">
 						<a href="https://www.windy.com/-Satellite-satellite?satellite,44.5,16.5,7" target="_blank" rel="nofollow">Windy</a>
@@ -394,7 +515,7 @@
 			</tr>
 			<tr class="sp20"></tr>
 
-			<tr>
+			<tr data-map-id="neverin-radar-eu">
 				<td align="center">
 					<div class="radartitle">
 						<a href="https://www.neverin.hr/radar/" target="_blank" rel="nofollow">Neverin | Radar | Europa</a>
@@ -419,7 +540,7 @@
 					</div>
 				</td>
 			</tr>
-			<tr>
+			<tr data-map-id="neverin-radar-eu">
 				<td align="center">
 					<div class="links-bottom">
 						<a href="https://www.windy.com/-Weather-radar-radar?radar,47.5,17.5,5" target="_blank" rel="nofollow">Windy</a>
@@ -435,7 +556,7 @@
 			</tr>
 			<tr class="sp20"></tr>
 
-			<tr>
+			<tr data-map-id="neverin-satelit-eu">
 				<td align="center">
 					<div class="radartitle">
 						<a href="https://www.neverin.hr/satelit/" target="_blank" rel="nofollow">Neverin | Satelit | Europa</a>
@@ -460,7 +581,7 @@
 					</div>
 				</td>
 			</tr>
-			<tr>
+			<tr data-map-id="neverin-satelit-eu">
 				<td align="center">
 					<div class="links-bottom">
 						<a href="https://www.windy.com/-Satellite-satellite?satellite,47.5,17.5,5" target="_blank" rel="nofollow">Windy</a>
@@ -475,7 +596,7 @@
 			</tr>
 			<tr class="sp20"></tr>
 
-			<tr>
+			<tr data-map-id="windy">
 				<td align="center">
 					<div class="radartitle">
 						<a class="left zoom-btn" data-mode="hr" onclick="switchIframeZoom('windy', this)">[HR]</a>
@@ -496,7 +617,7 @@
 					</div>
 				</td>
 			</tr>
-			<tr>
+			<tr data-map-id="windy">
 				<td align="center">
 					<div class="links-bottom">
 						<a href="https://zoom.earth/maps/radar/#view=44.5,16.5,7z" target="_blank" rel="nofollow">Zoom Earth</a>
@@ -512,7 +633,7 @@
 			</tr>
 			<tr class="sp20"></tr>
 
-			<tr>
+			<tr data-map-id="dhmz-radar">
 				<td align="center">
 					<div class="radartitle" style="max-width: 720px;">
 						<a href="https://meteo.hr/podaci.php?section=podaci_mjerenja&param=radari&el=kompozit&acto=anim" target="_blank" rel="nofollow">DHMZ | Radar | Hrvatska</a>
@@ -533,7 +654,7 @@
 					</div>
 				</td>
 			</tr>
-			<tr>
+			<tr data-map-id="dhmz-radar">
 				<td align="center">
 					<div class="links-bottom" style="max-width: 720px">
 						<a href="https://www.windy.com/-Weather-radar-radar?radar,44.5,16.5,7" target="_blank" rel="nofollow">Windy</a>
@@ -550,7 +671,7 @@
 			</tr>
 			<tr class="sp20"></tr>
 
-			<tr>
+			<tr data-map-id="meteociel-temp">
 				<td align="center">
 					<div class="slideshow" data-slideshow-id="15" data-current-slide="1" style="max-width: 768px;">
 						<div class="slide fade active">
@@ -578,7 +699,7 @@
 					</div>
 				</td>
 			</tr>
-			<tr>
+			<tr data-map-id="meteociel-temp">
 				<td align="center">
 					<div class="links-bottom" style="max-width: 768px">
 						<a href="https://www.windy.com/-Temperature-temp?temp,44.5,16.5,7" target="_blank" rel="nofollow">Windy</a>
@@ -593,7 +714,7 @@
 			</tr>
 			<tr class="sp20"></tr>
 
-			<tr>
+			<tr data-map-id="blitzortung">
 				<td align="center">
 					<div class="radartitle">
 						<a class="left zoom-btn" data-mode="hr" onclick="switchIframeZoom('blitzortung', this)">[HR]</a>
@@ -614,7 +735,7 @@
 					</div>
 				</td>
 			</tr>
-			<tr>
+			<tr data-map-id="blitzortung">
 				<td align="center">
 					<div class="links-bottom">
 						<a href="https://www.blitzortung.org/en/historical_maps.php?map=10" target="_blank" rel="nofollow">Blitzortung.org</a>
@@ -625,7 +746,7 @@
 			</tr>
 			<tr class="sp20"></tr>
 
-			<tr>
+			<tr data-map-id="essl">
 				<td align="center">
 					<div class="radartitle" style="max-width: 900px;">
 						<a href="https://stormforecast.eu" target="_blank" rel="nofollow">ESSL | Prognoza nevremena</a>
@@ -650,7 +771,7 @@
 					</div>
 				</td>
 			</tr>
-			<tr>
+			<tr data-map-id="essl">
 				<td align="center">
 					<div class="links-bottom" style="max-width: 900px">
 						<a href="https://rawinsonde.com/ASTORP/ESTOFEX.html" target="_blank" rel="nofollow">ASTORP</a>
@@ -661,7 +782,7 @@
 			</tr>
 			<tr class="sp20"></tr>
 
-			<tr>
+			<tr data-map-id="astorp">
 				<td align="center">
 					<div class="radartitle">
 						<a href="https://rawinsonde.com/ASTORP/ESTOFEX.html" target="_blank" rel="nofollow">ASTORP | Prognoza nevremena</a>
@@ -702,7 +823,7 @@
 					</div>
 				</td>
 			</tr>
-			<tr>
+			<tr data-map-id="astorp">
 				<td align="center">
 					<div class="links-bottom">
 						<a href="https://weather.essl.org/storm/" target="_blank" rel="nofollow">ESSL</a>
@@ -713,7 +834,7 @@
 			</tr>
 			<tr class="sp20"></tr>
 
-			<tr>
+			<tr data-map-id="estofex">
 				<td align="center">
 					<div class="radartitle" style="max-width: 800px;">
 						<a href="https://www.estofex.org" target="_blank" rel="nofollow">ESTOFEX | Prognoza nevremena</a>
@@ -734,7 +855,7 @@
 					</div>
 				</td>
 			</tr>
-			<tr>
+			<tr data-map-id="estofex">
 				<td align="center">
 					<div class="links-bottom" style="max-width: 800px">
 						<a href="https://weather.essl.org/storm/" target="_blank" rel="nofollow">ESSL</a>
@@ -745,7 +866,7 @@
 			</tr>
 			<tr class="sp20"></tr>
 
-			<tr>
+			<tr data-map-id="eumetnet">
 				<td align="center">
 					<div class="radartitle">
 						<a href="https://www.eumetnet.eu/observations/opera-radar-animation/" target="_blank" rel="nofollow">EUMETNET</a>
@@ -755,7 +876,7 @@
 					</div>
 				</td>
 			</tr>
-			<tr>
+			<tr data-map-id="eumetnet">
 				<td align="center">
 					<div class="links-bottom">
 						<a href="https://www.windy.com/-Weather-radar-radar?radar,47.5,17.5,5" target="_blank" rel="nofollow">Windy</a>
@@ -771,7 +892,7 @@
 			</tr>
 			<tr class="sp20"></tr>
 
-			<tr>
+			<tr data-map-id="meteociel-satelit">
 				<td align="center">
 					<div class="slideshow" data-slideshow-id="5" data-current-slide="1" style="max-width: 768px;">
 						<div class="slide fade active">
@@ -801,7 +922,7 @@
 					</div>
 				</td>
 			</tr>
-			<tr>
+			<tr data-map-id="meteociel-satelit">
 				<td align="center">
 					<div class="links-bottom" style="max-width: 768px">
 						<a href="https://www.windy.com/-Satellite-satellite?satellite,47.5,17.5,5" target="_blank" rel="nofollow">Windy</a>
@@ -816,7 +937,7 @@
 			</tr>
 			<tr class="sp20"></tr>
 
-			<tr>
+			<tr data-map-id="dwd-sinopticka">
 				<td align="center">
 					<div class="radartitle" style="max-width: 800px;">
 						<a href="https://www.dwd.de/EN/ourservices/hobbymet_wcharts_europe/hobbyeuropecharts.html" target="_blank" rel="nofollow">DWD | Sinoptička karta</a>
@@ -853,7 +974,7 @@
 					</div>
 				</td>
 			</tr>
-			<tr>
+			<tr data-map-id="dwd-sinopticka">
 				<td align="center">
 					<div class="links-bottom" style="max-width: 800px">
 						<a href="https://intranet.chmi.cz/aktualni-situace/aktualni-stav-pocasi/evropa/synopticka-situace" target="_blank" rel="nofollow">ČHMÚ</a>
@@ -863,7 +984,7 @@
 			</tr>
 			<tr class="sp20"></tr>
 
-			<tr>
+			<tr data-map-id="neverin-kamera">
 				<td align="center">
 					<div class="radartitle">
 						<a href="https://www.neverin.hr/kamere/" target="_blank" rel="nofollow">Neverin | Kamera | Zagreb-Remetinečki rotor</a>
@@ -875,7 +996,7 @@
 			</tr>
 			<tr class="sp20"></tr>
 
-			<tr>
+			<tr data-map-id="meteoblue-prognoza">
 				<td align="center">
 					<div class="slideshow" data-slideshow-id="14" data-current-slide="1">
 						<div class="slide fade active">
@@ -921,7 +1042,7 @@
 					</div>
 				</td>
 			</tr>
-			<tr>
+			<tr data-map-id="meteoblue-prognoza">
 				<td align="center">
 					<div class="links-bottom">
 						<a href="https://meteo.hr" target="_blank" rel="nofollow">DHMZ</a>
@@ -1135,9 +1256,285 @@
 		</table>
 		<img src="https://bit.ly/radari-counter" style="width:1px;height:1px;float:right" />
 	</div>
+	<div class="ms-backdrop" hidden></div>
+
+	<div class="map-settings manual-dialog" id="manualDialog" data-dialog-key="manualPanel" hidden>
+		<div class="ms-head">
+			<span class="ms-head-left">
+				<a class="ms-home" href="/meteo/" title="Početna"><img src="/meteo/img/favicon-32x32.png" alt="Početna"></a>
+				<span class="ms-title">Upute</span>
+			</span>
+			<a class="ms-close" title="Zatvori (Esc)">Zatvori</a>
+		</div>
+		<div class="ms-body">
+						<nav class="manual-toc">
+			<ul>
+			<li class="toc-2"><a href="#karte-na-stranici">Karte na stranici</a></li>
+			<li class="toc-2"><a href="#dijalog-karte">Dijalog Karte</a></li>
+			<li class="toc-3"><a href="#odabir-karata">Odabir karata</a></li>
+			<li class="toc-3"><a href="#predlošci">Predlošci</a></li>
+			<li class="toc-3"><a href="#moji-predlošci">Moji predlošci</a></li>
+			<li class="toc-3"><a href="#dijeljenje">Dijeljenje</a></li>
+			<li class="toc-3"><a href="#automatsko-osvježavanje">Automatsko osvježavanje</a></li>
+			<li class="toc-2"><a href="#prozori">Prozori</a></li>
+			<li class="toc-3"><a href="#pomicanje-i-veličina">Pomicanje i veličina</a></li>
+			<li class="toc-3"><a href="#šavovi">Šavovi</a></li>
+			<li class="toc-3"><a href="#grupe">Grupe</a></li>
+			<li class="toc-3"><a href="#kopije">Kopije</a></li>
+			<li class="toc-3"><a href="#bočni-stupci">Bočni stupci</a></li>
+			<li class="toc-2"><a href="#nadzorna-ploča">Nadzorna ploča</a></li>
+			<li class="toc-3"><a href="#mreža">Mreža</a></li>
+			<li class="toc-2"><a href="#pločica-karte">Pločica Karte</a></li>
+			<li class="toc-2"><a href="#tipke-i-geste">Tipke i geste</a></li>
+			<li class="toc-2"><a href="#što-se-pamti">Što se pamti</a></li>
+			<li class="toc-2"><a href="#na-mobitelu">Na mobitelu</a></li>
+			</ul>
+			</nav>
+			<p><strong>Meteo radari</strong> na jednom mjestu prikazuje radarske i satelitske karte, munje, prognoze nevremena i sinoptičke karte iz više izvora, bez otvaranja desetak stranica.</p>
+			<p>Stranica ima dva dijela:</p>
+			<ul>
+			<li><strong>Početna</strong> — stalan popis karata. Ništa se ne podešava, uvijek je isto i odmah se otvori.</li>
+			<li><strong>Prilagodi</strong> — isti prikaz, ali sami birate koje se karte vide i kojim redoslijedom, a na računalu i kako su razmještene po ekranu. Do nje se dolazi gumbom <em>Prilagodi</em> na početnoj stranici.</li>
+			</ul>
+			<p>Poglavlje <a href="#karte-na-stranici">Karte na stranici</a> vrijedi za oba dijela, a sve ostalo samo za <em>Prilagodi</em>.</p>
+			<p>Izdvojeni prozori, bočni stupci i nadzorna ploča rade samo na računalu, odnosno na ekranu širem od 800 px s mišem. Na dodirnim ekranima stranica ostaje obična, okomita lista karata — vidi <a href="#na-mobitelu">Na mobitelu</a>.</p>
+			<h2 id="karte-na-stranici">Karte na stranici</h2>
+			<p>Svaka karta ima naslovnu traku s imenom izvora. Ime je ujedno i poveznica na izvornu stranicu.</p>
+			<p><strong>Karte s više slika</strong> (npr. <em>Neverin | Radar | Hrvatska</em>) imaju strelice <code>❮</code> i <code>❯</code> na rubovima i niz kvadratića ispod slike koji pokazuje na kojoj ste slici. Na dodirnom ekranu slike se mijenjaju i prelaskom prsta.</p>
+			<p><strong>Interaktivne karte</strong> (Windy, Blitzortung, meteoblue i slične) u početku ne primaju miš — preko njih stoji prozirni sloj s natpisom <em>Dvostruki klik za pristup interaktivnoj karti</em>. Bez njega bi se karta pomicala dok se stranica lista. Dvostrukim klikom sloj nestaje i kartom se dalje radi normalno.</p>
+			<p>Gumbi u traci interaktivne karte:</p>
+			<table>
+			<thead>
+			<tr><th>Gumb</th><th>Značenje</th></tr>
+			</thead>
+			<tbody>
+			<tr><td><code>[HR]</code> / <code>[EU]</code></td><td>prebacuje između prikaza Hrvatske i Europe</td></tr>
+			<tr><td><code>[X]</code></td><td>pojavi se kad se sloj ukloni; vraća sloj, a zatim postaje <code>[R]</code></td></tr>
+			<tr><td><code>[R]</code></td><td>vraća kartu na početni položaj i zumiranje</td></tr>
+			<tr><td><code>[ ]</code></td><td>otvara kartu preko cijelog zaslona; tada postaje <code>[-]</code>, koji je zatvara</td></tr>
+			</tbody>
+			</table>
+			<p><strong>Cijeli zaslon.</strong> Iz cijelog zaslona izlazi se gumbom <code>[-]</code> ili tipkom <kbd>Esc</kbd>. Za ponašanje u bočnom stupcu i na ploči vidi <a href="#bočni-stupci">Bočni stupci</a> i <a href="#nadzorna-ploča">Nadzorna ploča</a>.</p>
+			<p><strong>Linkovi.</strong> Gumb <em>Linkovi</em> vodi na popis dodatnih izvora na dnu stranice. Kvadratić pokraj njega uključuje prikaz linkova ispod svake karte.</p>
+			<p><strong>Upute.</strong> Ovaj tekst otvaraju gumb <code>?</code>, poveznica <em>Upute</em> u podnožju i tipka <kbd>H</kbd>. Otvara se u prozoru preko stranice, pa se upute mogu čitati uz karte. Zatvara se natpisom <em>Zatvori</em> ili tipkom <kbd>Esc</kbd>. Ikona stranice lijevo od naslova vodi na početnu stranicu, kao i u dijalogu <em>Karte</em>. Poveznica koja završava s <code>#upute</code> otvara upute odmah pri učitavanju stranice.</p>
+			<h2 id="dijalog-karte">Dijalog Karte</h2>
+			<p>Gumb <strong>Karte</strong> (ili tipka <kbd>K</kbd>) otvara dijalog u kojem se bira što se prikazuje. Kad gumb na stranici nije dostupan, dijalog se otvara s <a href="#pločica-karte">pločice Karte</a> na vrhu ekrana.</p>
+			<p>Dok je dijalog otvoren, stranica iza njega je malo zatamnjena i ne reagira. Klik izvan dijaloga samo ga zatvara — taj klik ne ide dalje, pa neće usput otvoriti poveznicu ni pomaknuti prozor.</p>
+			<p><strong>Ništa se ne primjenjuje dok ne pritisnete Primijeni</strong> ili tipku <kbd>Enter</kbd>. Zatvaranje dijaloga bez toga — natpisom <em>Zatvori</em>, tipkom <kbd>Esc</kbd> ili klikom izvan njega — odbacuje sve promjene. Iznimka su prekidači mreže i automatsko osvježavanje, koji djeluju odmah.</p>
+			<p>Na računalu se dijalog pomiče povlačenjem zaglavlja, a veličina mu se mijenja povlačenjem rubova ili uglova. Dvoklik na zaglavlje vraća ga na početno mjesto i veličinu. Na mobitelu zauzima cijeli ekran.</p>
+			<p>Ikona stranice u zaglavlju, lijevo od naslova, vodi na početnu stranicu (s <kbd>Ctrl</kbd> ili srednjim klikom u novoj kartici) — i s <a href="#nadzorna-ploča">nadzorne ploče</a>, na kojoj stranice nema.</p>
+			<p>Dijalog je, odozgo prema dolje:</p>
+			<ul>
+			<li>red <strong>predložaka</strong>,</li>
+			<li>red <strong>Nadzorna ploča</strong> s prekidačima mreže i gumbom <em>Posloži</em> (samo na računalu),</li>
+			<li>red <strong>Osvježavaj svakih</strong>,</li>
+			<li>redak <strong>Izdvojene karte</strong> s poveznicom <em>Vrati sve</em> — samo kad je neka karta izdvojena u prozor,</li>
+			<li><strong>odabrane karte</strong>, a ispod njih <em>Primijeni</em> i <em>Podijeli</em>,</li>
+			<li><strong>sve dostupne karte</strong>, s poretkom i okvirom za traženje,</li>
+			<li><strong>Zadani predlošci</strong> i <strong>Moji predlošci</strong>.</li>
+			</ul>
+			<h3 id="odabir-karata">Odabir karata</h3>
+			<p>Dijalog ima dva popisa:</p>
+			<ul>
+			<li><strong>Odabrane karte</strong> su redoslijed prikaza. Karte se premještaju povlačenjem za znak <code>≡</code>.</li>
+			<li><strong>Dostupne karte</strong> su sve ostale. Kvadratić pokraj karte dodaje je na kraj odabranih.</li>
+			</ul>
+			<p>Ispred svakog imena stoji znak vrste karte: 📡 radar, 🛰️ satelit, ⚡ munje, 🌡️ temperatura, ⛈️ nevrijeme, 🗺️ sinoptika, 📷 kamera, 📈 prognoza.</p>
+			<p>Dostupne karte mogu se poredati po <em>Zadano</em>, <em>Naziv</em> ili <em>Vrsta</em>; ponovni klik na isti poredak okreće smjer. To služi samo za traženje i ne mijenja redoslijed prikaza.</p>
+			<p><strong>Traženje.</strong> Upisani pojam traži se i u imenu i u vrsti karte, pa <em>munje</em> izdvoji sve munje, a <em>neverin</em> sve karte tog izvora. Svaka dodatna riječ sužava popis — <em>neverin radar</em> nađe oba Neverinova radara, <em>neverin radar hrvatska</em> samo jedan. Kvačice nisu potrebne: <em>chmu</em> nalazi <em>ČHMÚ</em>, <em>sinopticka</em> nalazi <em>Sinoptička</em>.</p>
+			<p>Traženje filtrira samo dostupne karte; odabrane ostaju cijele, jer se po njima povlači. Pojam ostaje upisan i nakon odabira karte ili predloška. Briše se znakom <code>×</code> ili tipkom <kbd>Esc</kbd>; <kbd>Esc</kbd> u praznom okviru zatvara dijalog.</p>
+			<blockquote><p>Ako na stranici piše <em>Nema odabranih karata</em>, popis je prazan — otvorite <em>Karte</em> i odaberite barem jednu.</p></blockquote>
+			<h3 id="predlošci">Predlošci</h3>
+			<p>Na vrhu dijaloga je red predložaka:</p>
+			<table>
+			<thead>
+			<tr><th>Predložak</th><th>Sadržaj</th></tr>
+			</thead>
+			<tbody>
+			<tr><td><em>Osnovno</em></td><td>zadani skup, isti kao na početnoj stranici</td></tr>
+			<tr><td><em>Više</em></td><td>dodatne karte kojih nema u osnovnom skupu</td></tr>
+			<tr><td><em>Radari</em></td><td>samo radari</td></tr>
+			<tr><td><em>Sateliti</em></td><td>samo sateliti</td></tr>
+			<tr><td><em>Nevrijeme</em></td><td>prognoze nevremena i munje</td></tr>
+			<tr><td><em>Sve</em></td><td>sve karte</td></tr>
+			<tr><td><em>Ništa</em></td><td>prazan popis, za slaganje od nule</td></tr>
+			</tbody>
+			</table>
+			<p>Iza njih slijede vaši spremljeni predlošci, a na kraju <strong>Prilagođeno</strong>.</p>
+			<p>Klik na predložak učita njegov popis. Čim se popis promijeni — dodana karta, drugi redoslijed — odabir skoči na <em>Prilagođeno</em>, a predložak iz kojeg je popis potekao dobije točkicu. Klik na njega vraća njegov popis i odbacuje izmjene.</p>
+			<p>Skok na <em>Prilagođeno</em> ujedno upozorava da izmijenjeni popis više nije taj predložak: poveznica za dijeljenje tada nosi popis karata, a ne ime predloška.</p>
+			<p>Predložak označen plavim rubom spremljen je kao <a href="#nadzorna-ploča">nadzorna ploča</a>.</p>
+			<h3 id="moji-predlošci">Moji predlošci</h3>
+			<p>Na dnu dijaloga, pod <strong>Moji predlošci</strong>:</p>
+			<ul>
+			<li><strong>Dodaj</strong> otvara polje za ime; <strong>Spremi</strong> (ili <kbd>Enter</kbd>) sprema trenutni popis pod tim imenom, a na računalu i razmještaj prozora.</li>
+			<li><strong>Ažuriraj</strong> se pojavi uz predložak iz kojeg je popis potekao čim ga izmijenite, i prepisuje ga trenutnim stanjem.</li>
+			<li><strong>Preimenuj</strong> mijenja ime, a <strong>Obriši</strong> briše predložak. Karte na ekranu pritom ostaju kakve jesu.</li>
+			<li><strong>Podijeli</strong> kopira poveznicu na taj predložak.</li>
+			</ul>
+			<p>Pod <strong>Zadani predlošci</strong> gotovi predlošci mogu se sakriti iz reda na vrhu (<em>Sakrij</em>, <em>Sakrij sve</em>) i vratiti (<em>Prikaži</em>, <em>Prikaži sve</em>). <em>Osnovno</em> se ne može sakriti.</p>
+			<h3 id="dijeljenje">Dijeljenje</h3>
+			<p><strong>Podijeli</strong> kopira poveznicu u međuspremnik, a natpis nakratko postane <em>Kopirano!</em>. Poveznica nosi cijeli prikaz — popis karata, redoslijed i razmještaj — pa tko je otvori vidi isto što i vi.</p>
+			<p>Gumb <em>Podijeli</em> ispod odabranih karata dijeli ono što je trenutno u dijalogu, a poveznica u redu spremljenog predloška dijeli taj predložak. Kad netko otvori poveznicu vlastitog predloška, dijalog mu nudi da ga spremi pod istim imenom.</p>
+			<p>Otvorena poveznica ne dira spremljene postavke onoga tko ju je otvorio sve dok ne pritisne <em>Primijeni</em>.</p>
+			<h3 id="automatsko-osvježavanje">Automatsko osvježavanje</h3>
+			<p>Slike zastare na stranici koja je dugo otvorena. Red <strong>Osvježavaj svakih</strong> ima kvadratić i razmak od 5, 10, 15, 30 ili 60 minuta. Isključeno je dok se ne uključi, a početni razmak je 5 minuta. Djeluje odmah, bez <em>Primijeni</em>.</p>
+			<p>Osvježavaju se slike, nizovi slika, videa i jednostavne karte. Interaktivne karte se preskaču: one same dohvaćaju najnovije podatke, a ponovno učitavanje samo bi im poništilo pomak i zumiranje.</p>
+			<p>Vrijeme do sljedećeg osvježavanja piše u tom redu i na <a href="#pločica-karte">pločici Karte</a>. Odbrojavanje kreće ispočetka pri svakom osvježavanju svih karata — automatskom, ručnom (<code>[R]</code> na pločici ili tipka <kbd>R</kbd>) i pri ponovnom učitavanju stranice. <code>[R]</code> na pojedinoj karti osvježi samo nju i ne dira odbrojavanje, osim ako je to jedina karta koja se osvježava.</p>
+			<h2 id="prozori">Prozori</h2>
+			<p><em>Samo na računalu.</em></p>
+			<p>Svaka naslovna traka ima gumb <code>[^]</code> koji kartu izdvaja iz stranice u prozor koji pluta iznad nje. Prozor ostaje na mjestu dok se stranica lista, pa se nekoliko karata može gledati istovremeno. Na mjestu karte u stranici ostaje traka <em>Karta je izdvojena u prozor</em> s poveznicom <strong>Vrati</strong>. Sve prozore odjednom vraća <em>Vrati sve</em> u dijalogu.</p>
+			<p>Gumbi u traci prozora:</p>
+			<table>
+			<thead>
+			<tr><th>Gumb</th><th>Značenje</th></tr>
+			</thead>
+			<tbody>
+			<tr><td><code>[D]</code></td><td>otvara kopiju karte u novom prozoru (ima ga i karta u stranici)</td></tr>
+			<tr><td><code>[R]</code></td><td>ponovno učitava kartu (interaktivne karte ga nemaju)</td></tr>
+			<tr><td><code>[+]</code> / <code>[-]</code></td><td>spaja prozor sa susjednim u grupu, odnosno vadi ga iz nje</td></tr>
+			<tr><td><code>[=]</code></td><td>vraća kartu u stranicu; na ploči je <code>[x]</code> i miče kartu s popisa</td></tr>
+			</tbody>
+			</table>
+			<h3 id="pomicanje-i-veličina">Pomicanje i veličina</h3>
+			<ul>
+			<li><strong>Pomicanje</strong> — povlačenjem naslovne trake ili strelicama (vidi <a href="#tipke-i-geste">Tipke i geste</a>).</li>
+			<li><strong>Veličina</strong> — povlačenjem bilo kojeg ruba ili ugla.</li>
+			<li><strong>Klik na prozor</strong> podiže ga iznad ostalih. Ako je interaktivna karta djelomično prekrivena drugim prozorom, prvi klik je podiže, a tek sljedeći ide karti.</li>
+			</ul>
+			<p>Prozori se međusobno privlače: rub koji se približi rubu drugog prozora sam sjedne na njega, pa se prozori lako slažu jedan uz drugi.</p>
+			<p><strong>Omjer.</strong> Prozor sa slikom ili videom u početku drži omjer karte — kad mu se mijenja širina, visina je prati. Čim se rub povuče, prozor se oslobodi omjera: širina i visina idu svaka za svojim, a karta se uklopi unutar okvira, s neoštrom kopijom slike kao podlogom.</p>
+			<ul>
+			<li>Držite li <kbd>Shift</kbd> dok povlačite rub, prozor zadržava omjer. Vrijedi i usred povlačenja — što je tipka u trenutku puštanja, to prozor ostaje.</li>
+			<li><strong>Dvoklik na naslovnu traku</strong> vraća omjer tako da se prozor stisne oko karte kakva jest: praznina sa strane ili odozgo nestane, a karta ostane iste veličine i na istom mjestu.</li>
+			</ul>
+			<p>Karta uvećana preko svoje izvorne veličine postaje mekša, kao i svaka uvećana slika.</p>
+			<h3 id="šavovi">Šavovi</h3>
+			<p>Kad dva prozora stoje jedan uz drugi i dodiruju se cijelom dužinom ruba — jednako visoki jedan pored drugog, ili jednako široki jedan ispod drugog — taj zajednički rub je <strong>šav</strong>. Povlačenjem šava mijenjaju se oba prozora: koliko jedan dobije, toliko drugi ustupi, a ostatak razmještaja se ne miče. Svejedno je za koji se od dva prozora rub uhvati.</p>
+			<ul>
+			<li>Šav se, kao i obični rub, privlači rubovima ostalih prozora, a uz uključeno <em>Poravnaj uz mrežu</em> sjedne na mrežu kad se pusti.</li>
+			<li>Držite li <kbd>Ctrl</kbd> dok hvatate šav, pomiče se rub samo jednog prozora — onoga s čije je strane šava pokazivač.</li>
+			<li>Šav postoji samo na stranicama, ne u uglovima. Rub koji dva prozora dijele samo djelomično nije šav i mijenja samo svoj prozor.</li>
+			<li>Oba prozora se pritom oslobode omjera, jer se inače šav ne bi mogao pomicati.</li>
+			</ul>
+			<h3 id="grupe">Grupe</h3>
+			<p>Dva prozora koja se dodiruju mogu se spojiti u grupu gumbom <code>[+]</code>; samo dodirivanje nije dovoljno. Grupa se pomiče i mijenja veličinu kao cjelina, a članovi ostaju spojeni. Unutarnji rubovi grupe su šavovi, a vanjski rub mijenja veličinu cijele grupe. <code>[-]</code> vadi prozor iz grupe.</p>
+			<h3 id="kopije">Kopije</h3>
+			<p>Gumb <code>[D]</code> (ili tipka <kbd>D</kbd>, za prozor na vrhu) otvara još jedan prozor s istom kartom — npr. ista sinoptička karta u dvije veličine, ili isti niz slika zaustavljen na dvije različite slike. Kopija se otvori malo pomaknuta i iste veličine kao prozor iz kojeg je nastala. Svaka kopija ima svoje strelice i kvadratiće.</p>
+			<p>Kopija je samo prozor: u stranici i dalje postoji jedan red po karti. Nijedan prozor nije „izvorni” — <code>[=]</code> (na ploči <code>[x]</code>) na bilo kojem prozoru dok ih ima još s istom kartom samo njega makne, a ostali ostaju gdje jesu. Tek zadnji vraća kartu u stranicu (na ploči je miče s popisa). Kopije su dio razmještaja, pa se spremaju u predložak i putuju u poveznici. Karta maknuta s popisa odnese sa sobom i svoje kopije.</p>
+			<h3 id="bočni-stupci">Bočni stupci</h3>
+			<p>Prozor povučen do lijevog ili desnog ruba ekrana uskoči u stupac uz taj rub. U stupcu karte stoje jedna ispod druge, a stranica se preslaže u preostalu širinu.</p>
+			<ul>
+			<li><strong>Širina stupca</strong> mijenja se povlačenjem njegovog unutarnjeg ruba. Kad se dva stupca dodiruju, zajednički rub premješta širinu s jednog na drugi.</li>
+			<li><strong>Visina karte</strong> mijenja se povlačenjem njenog gornjeg ili donjeg ruba. Širinu daje stupac, pa se karta pritom oslobodi omjera; s <kbd>Shift</kbd> zadržava omjer, a dvoklik na naslovnu traku ga vraća.</li>
+			<li><strong>Karta izlazi iz stupca</strong> povlačenjem naslovne trake u stranu.</li>
+			<li><strong>Dvoklik na rub stupca</strong> sakriva stranicu, pa stupci preuzmu cijelu širinu. Ponovni dvoklik vraća prijašnje širine. Dok je stranica sakrivena, dijalog se otvara s <a href="#pločica-karte">pločice Karte</a>.</li>
+			<li><strong>Cijeli zaslon</strong> u stupcu popuni samo taj stupac, pa stranica pokraj njega ostaje u upotrebi.</li>
+			</ul>
+			<h2 id="nadzorna-ploča">Nadzorna ploča</h2>
+			<p><em>Samo na računalu.</em></p>
+			<p>Nadzorna ploča sakriva stranicu i svaku kartu s popisa pretvara u prozor. Ostaju samo karte na tamnoj podlozi — prikaz za ekran koji je stalno uključen i gleda se izdaleka.</p>
+			<p>Uključuje se gumbom <strong>Nadzorna ploča</strong> u dijalogu i primjenjuje, zajedno s popisom, pritiskom na <em>Primijeni</em>. Isključuje se na isti način. Predložak spremljen dok je ploča uključena otvara se kao ploča, pa se može imati više različitih ploča.</p>
+			<p>Na ploči:</p>
+			<ul>
+			<li><strong>Posloži</strong> (u dijalogu, <code>[A]</code> na pločici ili tipka <kbd>A</kbd>) razmjesti sve karte u pravilnu mrežu, jednakih veličina i bez razmaka. Broj stupaca i redova bira se tako da karte budu što veće, s obzirom na njihov oblik i oblik ekrana — četiri karte daju 2x2, šest 3x2, deset 4x3. Karte se pritom oslobode omjera; dvoklik na naslovnu traku vraća ga pojedinoj karti. Isto se dogodi i pri prvom ulasku na ploču.</li>
+			<li><code>[x]</code> u traci prozora ili srednji klik na traku <strong>miče kartu s popisa</strong> — na ploči nema stranice u koju bi se vratila.</li>
+			<li><strong>Dodavanje karte</strong> bez otvaranja dijaloga: <code>[+]</code> na <a href="#pločica-karte">pločici Karte</a> otvara abecedni popis karata kojih još nema na ploči. Upisani pojam sužava popis kao u dijalogu, strelice biraju, a <kbd>Enter</kbd> ili klik dodaje kartu. <kbd>Esc</kbd> ili klik izvan popisa ga zatvara.</li>
+			<li>Karta dodana u popis pojavi se na ploči uz gornji lijevi kut, stepenasto ispod ostalih novih.</li>
+			<li>Bočnih stupaca nema; prozor doveden do ruba ekrana ostaje prozor.</li>
+			<li><strong>Cijeli zaslon</strong> zauzme cijeli ekran, osim strane koju neki prozor zatvara cijelom visinom ili širinom. Prozor uz cijeli lijevi rub ostavi kartu na desnoj strani; prozor u kutu ne zatvara ništa, pa karta ide preko cijelog ekrana, a on ostaje iznad nje.</li>
+			</ul>
+			<h3 id="mreža">Mreža</h3>
+			<p>Na ploči se karte mogu slagati po mreži od kvadratića. Dva prekidača, u dijalogu i na pločici, djeluju odmah, bez <em>Primijeni</em>:</p>
+			<table>
+			<thead>
+			<tr><th>Prekidač</th><th>Pločica</th><th>Tipka</th><th>Značenje</th></tr>
+			</thead>
+			<tbody>
+			<tr><td><em>Prikaži mrežu</em></td><td><code>[G]</code></td><td><kbd>G</kbd></td><td>crta mrežu po podlozi</td></tr>
+			<tr><td><em>Poravnaj uz mrežu</em></td><td><code>[S]</code></td><td><kbd>S</kbd></td><td>prozor pušten iz ruke sjeda na mrežu</td></tr>
+			</tbody>
+			</table>
+			<p>Poravnavanje djeluje tek kad se prozor pusti, pa je povlačenje slobodno. Svaki rub ide na svoju najbližu crtu, pa se prozor po potrebi malo razvuče ili stisne. Strelice pomiču prozor za točno jedan kvadratić, pa poravnani prozor ostaje poravnan.</p>
+			<h2 id="pločica-karte">Pločica Karte</h2>
+			<p>Kad gumb <em>Karte</em> na stranici nije dostupan, na vrhu ekrana visi narančasta pločica <strong>Karte</strong>; klik na nju otvara dijalog. Pojavljuje se:</p>
+			<ul>
+			<li>na <a href="#nadzorna-ploča">nadzornoj ploči</a>,</li>
+			<li>dok su <a href="#bočni-stupci">bočni stupci</a> sakrili stranicu,</li>
+			<li>dok je uključeno <a href="#automatsko-osvježavanje">automatsko osvježavanje</a> — tada nosi odbrojavanje i <code>[R]</code>, koji odmah osvježava sve karte.</li>
+			</ul>
+			<p>Na ploči uvijek nosi <code>[+]</code> (dodaje kartu na ploču) i <code>[R]</code>, uz njih i <code>[A]</code>, <code>[G]</code> i <code>[S]</code>.</p>
+			<p>Pločica je blijeda dok ne zatreba — pune boje postaje pod mišem i dok je dijalog otvoren. Povlači se lijevo-desno, a za rubove se razvlači, najviše do polovice širine ekrana.</p>
+			<h2 id="tipke-i-geste">Tipke i geste</h2>
+			<p>Tipke ne rade dok je kursor u polju za upis.</p>
+			<table>
+			<thead>
+			<tr><th>Tipka</th><th>Radnja</th></tr>
+			</thead>
+			<tbody>
+			<tr><td><kbd>K</kbd></td><td>otvara i zatvara dijalog <em>Karte</em></td></tr>
+			<tr><td><kbd>Enter</kbd></td><td>u dijalogu <em>Karte</em>: primjenjuje promjene</td></tr>
+			<tr><td><kbd>H</kbd></td><td>otvara i zatvara <em>Upute</em></td></tr>
+			<tr><td><kbd>Esc</kbd></td><td>zatvara dijalog; ako nijedan nije otvoren, izlazi iz cijelog zaslona</td></tr>
+			<tr><td><kbd>R</kbd></td><td>ponovno učitava sve karte</td></tr>
+			<tr><td><kbd>D</kbd></td><td>kopira prozor na vrhu</td></tr>
+			<tr><td><kbd>A</kbd></td><td>na ploči: slaže karte u mrežu</td></tr>
+			<tr><td><kbd>G</kbd></td><td>na ploči: prikazuje ili skriva mrežu</td></tr>
+			<tr><td><kbd>S</kbd></td><td>na ploči: uključuje ili isključuje poravnavanje uz mrežu</td></tr>
+			<tr><td>strelice</td><td>pomiču prozor na vrhu za jedan kvadratić mreže</td></tr>
+			<tr><td><kbd>Shift</kbd> + strelice</td><td>isto, za jedan piksel</td></tr>
+			</tbody>
+			</table>
+			<p>Tipke <kbd>R</kbd>, <kbd>D</kbd>, <kbd>A</kbd>, <kbd>G</kbd>, <kbd>S</kbd> i strelice rade samo na računalu. Strelice pomiču prozor koji je posljednji podignut; ako se pomaknuo krivi, kliknite na onaj koji želite i ponovite. Dok je dijalog otvoren, strelice listaju dijalog i ne pomiču prozore.</p>
+			<blockquote><p><strong>Tipke ne rade dok je fokus u interaktivnoj karti.</strong> Kad kliknete u Windy ili Blitzortung, tipke prima ta karta, a ne stranica. Kliknite na naslovnu traku ili bilo gdje po stranici i tipke ponovno rade.</p></blockquote>
+			<p>Mišem, na naslovnoj traci prozora:</p>
+			<table>
+			<thead>
+			<tr><th>Gesta</th><th>Radnja</th></tr>
+			</thead>
+			<tbody>
+			<tr><td>povlačenje</td><td>pomiče prozor</td></tr>
+			<tr><td>dvoklik</td><td>interaktivna karta: cijeli zaslon; slika: vraća omjer</td></tr>
+			<tr><td>srednji klik</td><td>vraća kartu u stranicu; na ploči je miče s popisa</td></tr>
+			</tbody>
+			</table>
+			<p>Mišem, na rubovima:</p>
+			<table>
+			<thead>
+			<tr><th>Gesta</th><th>Radnja</th></tr>
+			</thead>
+			<tbody>
+			<tr><td>povlačenje ruba ili ugla</td><td>mijenja veličinu prozora</td></tr>
+			<tr><td><kbd>Shift</kbd> + povlačenje</td><td>isto, uz zadržan omjer</td></tr>
+			<tr><td>povlačenje šava</td><td>pomiče zajednički rub dvaju prozora</td></tr>
+			<tr><td><kbd>Ctrl</kbd> + povlačenje šava</td><td>pomiče rub samo jednog prozora</td></tr>
+			<tr><td>dvoklik na rub stupca</td><td>sakriva ili vraća stranicu</td></tr>
+			</tbody>
+			</table>
+			<h2 id="što-se-pamti">Što se pamti</h2>
+			<p>Sve se sprema samo u ovom pregledniku. Ništa se ne šalje nikamo i ništa ne prelazi na drugi uređaj, osim poveznicom koju sami podijelite. Brisanjem podataka preglednika briše se i ovo.</p>
+			<p><strong>Prikaz</strong> — popis karata, redoslijed, razmještaj prozora i nadzorna ploča. Sprema se pritiskom na <em>Primijeni</em> i vraća pri sljedećem otvaranju stranice. Samo prikaz ide u predložak i u poveznicu za dijeljenje. Razmještaj se mijenja i sprema i bez <em>Primijeni</em>, čim pomaknete prozor.</p>
+			<p><strong>Postavke preglednika</strong> — položaj i veličina dijaloga i uputa, položaj i širina pločice, prekidači mreže i automatsko osvježavanje. One se tiču ovog ekrana, a ne prikaza, pa ne putuju ni u predlošku ni u poveznici.</p>
+			<p><strong>Podijeljena poveznica</strong> — nosi prikaz u adresi. Dok je otvorena, prikazuje se ono što ona nosi, a vaše spremljene postavke ostaju netaknute dok ne pritisnete <em>Primijeni</em>.</p>
+			<h2 id="na-mobitelu">Na mobitelu</h2>
+			<p>Na dodirnim ekranima stranica je obična okomita lista karata. Nema izdvojenih prozora, bočnih stupaca ni nadzorne ploče.</p>
+			<p>Radi:</p>
+			<ul>
+			<li>odabir karata i redoslijed prikaza,</li>
+			<li>predlošci, spremanje i dijeljenje,</li>
+			<li>automatsko osvježavanje,</li>
+			<li>listanje karata s više slika prelaskom prsta,</li>
+			<li>dvostruki dodir za pristup interaktivnoj karti,</li>
+			<li>cijeli zaslon.</li>
+			</ul>
+			<p>Dijalog <em>Karte</em> na mobitelu zauzima cijeli ekran i zatvara se natpisom <em>Zatvori</em> u zaglavlju.</p>
+			<p>Razmještaj prozora složen na računalu ne gubi se kad stranicu otvorite na mobitelu — samo se ne prikazuje, a vraća se čim je ponovno otvorite na računalu.</p>
+		</div>
+	</div>
 	<footer>
 		<a onclick="scrollToTop()" style="cursor: pointer">Povratak na vrh</a>
 		·
+		<span class="manual-link"><a onclick="toggleManual()" style="cursor: pointer">Upute</a> ·</span>
 		<a href="/meteo/customize/">Prilagodi <span class="beta">beta</span></a>
 		|
 		<a href="https://jurakovic.github.io">Projekti</a>

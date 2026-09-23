@@ -45,8 +45,169 @@ function setPopoutButton(btn, popped) {
 function togglePopout(block) {
 	if (!block) return;
 	if (!block.classList.contains('popout')) { if (POPOUT_MQ.matches) popoutMap(block); }
+	// only a map's last showing docks or leaves the board; any other goes alone
+	else if (otherShowings(block).length) removeShowing(block);
 	else if (dashboardMode) removeFromDashboard(block);
 	else dockMap(block);
+}
+
+// ---------- copies ----------
+
+// A map can be on screen more than once. [D] makes another showing of it, and
+// no showing is the original: each is a widget like the rest, and any of them
+// can be closed while the others stay. The page still keeps one row per map,
+// so there is no question of where a copy sits in a list it was never in, and
+// the row's one place to dock into belongs to whichever showing holds it — the
+// one not marked .duplicate. Closing that one hands the place to another
+// (removeShowing), so the page always keeps a way back for the map, and only
+// the map's last showing docks — or, on the board, takes the map off the list.
+//
+// A copy is built from the catalog rather than cloned from the DOM, so the
+// names its parts carry are its own (maps.js: instSuffix). Two renderings
+// sharing one slideshow id is the very thing prefsMapIds() dedupes to avoid —
+// the arrows would drive whichever came first while both sets of indicators
+// lit up.
+function buildDuplicateButton() {
+	const btn = el('a', { class: 'dup-btn', text: '[D]', title: 'Udvostruči kartu (D)' });
+	btn.addEventListener('click', () => duplicateMap(btn.closest('.map-block')));
+	return btn;
+}
+
+function isDuplicate(block) {
+	return !!block && block.classList.contains('duplicate');
+}
+
+function showingsOf(mapId) {
+	return [...document.querySelectorAll(`.map-block[data-map-id="${CSS.escape(mapId)}"]`)];
+}
+
+function otherShowings(block) {
+	return showingsOf(block.dataset.mapId).filter(b => b !== block);
+}
+
+// the showing that holds the map's place in the page
+function pageShowing(mapId) {
+	return showingsOf(mapId).find(b => !isDuplicate(b)) || null;
+}
+
+function blockByInst(inst) {
+	return document.querySelector(`.map-block[data-inst="${CSS.escape(inst)}"]`);
+}
+
+// the lowest free index for this map, so closing the middle showing of three
+// and making another gives back the name that was freed rather than climbing —
+// the first one's too, once the showing that bore it has been closed
+function freeInstance(mapId) {
+	for (let index = 1; ; index++) {
+		const inst = instKey(mapId, index);
+		if (!blockByInst(inst)) return inst;
+	}
+}
+
+// the copy's own wiring and only its own. initDynamicContent() sweeps the page,
+// and setting an iframe's src again reloads every interactive map already on
+// screen, costing each of them its pan and its zoom; the two sweeps below are
+// safe because they bind once per node and skip what is bound (main.js)
+function wireDuplicate(block) {
+	block.querySelectorAll('img.lazy').forEach(img => {
+		img.src = img.getAttribute('data-src');
+		img.classList.remove('lazy');
+	});
+	block.querySelectorAll('iframe[data-zoom-hr-desktop]').forEach(iframe => setIframeSrc(iframe));
+	addSwipeEvents();
+	hideOverlayOnDoubleTap();
+	updateHintText();
+}
+
+function makeDuplicate(mapId, inst) {
+	const map = MAP_CATALOG.find(m => m.id === mapId);
+	const origin = pageShowing(mapId);
+	if (!map || !origin) return null;
+	const block = el('div', { class: 'map-block duplicate', 'data-map-id': mapId, 'data-inst': inst },
+		buildMapContent(map, inst));
+	// beside the map it copies, so the list's order still reads off the DOM
+	// (arrangeBoard) and a map dropped from the list takes its copies with it.
+	// It holds no place in the page, so it asks the page for no room
+	origin.after(block);
+	wireDuplicate(block);
+	return block;
+}
+
+function duplicateMap(block) {
+	if (!block || !POPOUT_MQ.matches) return null;
+	const mapId = block.dataset.mapId;
+	const inst = freeInstance(mapId);
+	dlog(`duplicateMap: ${mapId} -> ${inst}`);
+	const copy = makeDuplicate(mapId, inst);
+	if (!copy) return null;
+	popoutMap(copy);
+	const popped = block.classList.contains('popout');
+	// the size of the widget it came from: its width, and its height too where
+	// the height is its own (an interactive map, or a map freed of its aspect,
+	// which the copy is freed of as well), held to the widget limits like a
+	// stored one — a pane's width is its column's and may be wider. A map
+	// copied from the page starts at the size any widget starts at
+	if (popped) {
+		const size = block.getBoundingClientRect();
+		if (block.classList.contains('free') && !copy.classList.contains('free')) unlockAspect(copy);
+		copy.style.width = `${Math.round(clamp(size.width, POPOUT_MIN_WIDTH, popoutMaxWidth()))}px`;
+		if (copy.classList.contains('free'))
+			copy.style.height = `${Math.round(clamp(size.height, POPOUT_MIN_HEIGHT, viewportHeight()))}px`;
+	}
+	// a step off the widget it came from, the way a cascade steps, so it is
+	// plainly a second thing and not the first one having jumped
+	const from = popped ? block.getBoundingClientRect() : copy.getBoundingClientRect();
+	placePopout(copy, from.left + CASCADE_STEP, from.top + CASCADE_STEP);
+	raisePopout(copy);
+	fitWidget(copy);
+	updateGroups();
+	syncShadows();
+	persistSnapLayout();
+	return copy;
+}
+
+// the block a stored entry names: the plain key is the showing holding the
+// page's place, whatever it is called by now (the breakpoint docks it, and it
+// may have inherited the place from a #2); any other key is a copy, which
+// exists only in the arrangement and so is made here as the arrangement is laid
+// out — under a free name, the stored one being a position in the layout and
+// not a name anything on screen still answers to. A copy of a map the list no
+// longer holds has nothing to be made from, and sanitizeSnapLayout has already
+// dropped it
+function instanceFor(inst) {
+	const mapId = instMapId(inst);
+	if (instIndex(inst) === 1) return pageShowing(mapId);
+	const copy = blockByInst(inst);
+	return copy && isDuplicate(copy) ? copy : makeDuplicate(mapId, freeInstance(mapId));
+}
+
+// a showing closed while others of its map stay out: it goes, and if it held
+// the page's place, the next showing takes the place over — the gap and its
+// way back with it. Nothing moves in the DOM for that (an iframe would reload):
+// every other showing is a widget, fixed, so the heir docks where the gap is
+// from wherever it sits in the row
+function removeShowing(block) {
+	dlog(`removeShowing: ${block.dataset.inst}`);
+	if (!isDuplicate(block)) {
+		const heir = otherShowings(block)[0];
+		if (heir) {
+			heir.classList.remove('duplicate');
+			if (block._gap) {
+				heir._gap = block._gap;
+				heir._gap._block = heir;
+				delete block._gap;
+			}
+		}
+	}
+	const fs = block.querySelector('.if1.fullscreen');
+	if (fs) exitFullscreen(fs);
+	if (block._group) leaveGroup(block);
+	unsnapPane(block);
+	if (block._shadow) block._shadow.remove();
+	block.remove();
+	updateGroups();
+	syncShadows();
+	persistSnapLayout();
 }
 
 // a widget's [R] fetches its map afresh — the page may have been open long
@@ -55,7 +216,15 @@ function togglePopout(block) {
 // interactive map, whose bar keeps its own [X]/[R] gate button
 function buildReloadButton() {
 	const btn = el('a', { class: 'rl-btn', text: '[R]', title: 'Ponovno učitaj kartu' });
-	btn.addEventListener('click', () => reloadMap(btn.closest('.map-block')));
+	btn.addEventListener('click', () => {
+		const block = btn.closest('.map-block');
+		reloadMap(block);
+		// the interval runs from the last time the maps were new, and one map
+		// made new is all of them only when it is the only one the clock sweeps;
+		// among several, the rest are as stale as they were
+		const others = reloadableBlocks().filter(other => other !== block);
+		if (!others.length) restartRefresh();
+	});
 	return btn;
 }
 
@@ -82,14 +251,19 @@ function freshUrl(url) {
 function popoutMap(block) {
 	dlog(`popoutMap: ${block.dataset.mapId}`);
 	const rect = block.getBoundingClientRect();
-	const back = el('a', { text: 'Vrati' });
-	back.addEventListener('click', () => dockMap(block));
-	const gap = el('div', { class: 'map-gap', style: `height: ${rect.height}px;` }, [
-		el('span', { text: 'Karta je izdvojena u prozor ·' }),
-		back
-	]);
-	block._gap = gap;
-	block.after(gap);
+	// a copy holds no place in the page, so it leaves nothing behind in it. The
+	// gap's way back docks whichever showing holds the place by then
+	if (!isDuplicate(block)) {
+		const back = el('a', { text: 'Vrati' });
+		const gap = el('div', { class: 'map-gap', style: `height: ${rect.height}px;` }, [
+			el('span', { text: 'Karta je izdvojena u prozor ·' }),
+			back
+		]);
+		back.addEventListener('click', () => dockMap(gap._block));
+		gap._block = block;
+		block._gap = gap;
+		block.after(gap);
+	}
 	block.classList.add('popout');
 	block.style.width = `${Math.min(POPOUT_WIDTH, rect.width)}px`;
 	// an interactive map is sized freely in both dimensions: it starts at the
@@ -245,6 +419,8 @@ function fitWidget(block) {
 
 function dockMap(block) {
 	dlog(`dockMap: ${block.dataset.mapId}`);
+	// a copy has no place in the page to go back to (Vrati sve, the breakpoint)
+	if (isDuplicate(block)) return removeShowing(block);
 	// a fullscreen iframe inside the widget is fixed on its own; take it down first
 	const fs = block.querySelector('.if1.fullscreen');
 	if (fs) exitFullscreen(fs);
@@ -332,9 +508,10 @@ function popoutRest() {
 	});
 }
 
-// [x] on the board: the map leaves the list it is shown from — the widget
-// goes, with its rows in the (hidden) table, and the list is stored without
-// it (maps.js), as the dialog would store it after the map was unticked
+// [x] on the board, on a map's last showing: the map leaves the list it is
+// shown from — the widget goes, with its rows in the (hidden) table, and the
+// list is stored without it (maps.js), as the dialog would store it after the
+// map was unticked
 function removeFromDashboard(block) {
 	dlog(`removeFromDashboard: ${block.dataset.mapId}`);
 	const id = block.dataset.mapId;
@@ -349,6 +526,36 @@ function removeFromDashboard(block) {
 		: last.nextElementSibling && last.nextElementSibling.classList.contains('sp20') ? last.nextElementSibling : null;
 	[links, spacer, row].forEach(node => { if (node) node.remove(); });
 	removeMapFromList(id);
+}
+
+// the tab's [+], the other way round: the map joins the end of the list, its
+// rows join the end of the (hidden) table the way the render would have laid
+// them, and it comes onto the board the way any map new to the list does, at
+// the cascade's first step (popoutRest — every other map is a widget already).
+// Nothing is rendered again, so nothing else on the board reloads
+function addToDashboard(mapId) {
+	const map = MAP_CATALOG.find(m => m.id === mapId);
+	const tbody = document.querySelector('tbody[data-maps]');
+	if (!map || !tbody || !isDashboard() || pageShowing(mapId)) return;
+	dlog(`addToDashboard: ${mapId}`);
+	addMapToList(mapId);
+	const empty = tbody.querySelector('.maps-empty');
+	if (empty) tbody.replaceChildren(); // the "nothing selected" row
+	if (tbody.children.length) tbody.appendChild(el('tr', { class: 'sp20' }));
+	const block = el('div', { class: 'map-block', 'data-map-id': map.id, 'data-inst': map.id }, buildMapContent(map));
+	tbody.appendChild(el('tr', {}, [el('td', { align: 'center' }, [block])]));
+	if (map.links && map.links.length) {
+		const links = buildLinksBottom(map);
+		tbody.appendChild(el('tr', {}, [el('td', { align: 'center' }, [links])]));
+		links.addEventListener('scroll', () => updateLinksScrollShadow(links), { passive: true });
+	}
+	wireDuplicate(block); // its own wiring and only its own, as a copy's
+	popoutRest();
+	fitWidget(block);
+	updateGroups();
+	syncShadows();
+	persistSnapLayout();
+	return block;
 }
 
 // ---------- the grid (desktop, on the board) ----------
@@ -474,6 +681,111 @@ function snapToGrid(blocks) {
 	blocks.forEach(block => {
 		if (!block.classList.contains('fs-host')) snapBlockToGrid(block);
 	});
+}
+
+// ---------- arranging the board ----------
+
+// Every widget the same size, tiled edge to edge over the whole board. It is
+// what a board left running for the room to glance at wants — none of the
+// screen spent on gaps, and nothing to line up by hand — and it is what makes
+// the seams useful: tiled with no gap, every inside edge is one.
+//
+// The widgets are freed on the way. "The same size" and "the shape its image
+// has" cannot both hold: given one width, locked widgets come out at as many
+// heights as there are maps and no row would line up. A freed widget
+// letterboxes its map over a blurred copy of it, and the double-click on the
+// bar is the way back to its own shape, one map at a time.
+const ARRANGE_ASPECT = 4 / 3; // a map's shape, near enough, when there are none to measure
+const ARRANGE_HOLE = 0.01; // the share of a map's size an empty cell costs: a tie-breaker, no more
+
+// how many columns n widgets go in: the shape that shows each map biggest. A
+// map is contained in what its cell leaves under the title bar, so its size is
+// the cell's area only when the cell has the map's shape, and too wide or too
+// tall a cell is spent on ground. That is what the eye asks of a board — ten
+// maps go 4x3 with two holes rather than 2x5 in strips too thin to read, or
+// 5x2 when the maps are square enough to be bigger that way. An empty cell
+// costs a hair, so a tidy 3x3 is not passed over for a 4x3 whose maps come
+// out the same size. Falls out as 2x2 for four, 3x2 for six and 4x3 for
+// twelve, and on a wide screen puts two side by side rather than one above
+// the other
+function arrangeShape(n, width, height, aspect) {
+	let best = { cols: 1, rows: n, score: -Infinity };
+	for (let cols = 1; cols <= n; cols++) {
+		const rows = Math.ceil(n / cols);
+		const w = width / cols, h = height / rows - POPOUT_TITLE_HEIGHT;
+		if (h <= 0) continue;
+		const mapWidth = Math.min(w, h * aspect);
+		const score = mapWidth * (mapWidth / aspect) * (1 - (cols * rows - n) * ARRANGE_HOLE);
+		if (score > best.score) best = { cols, rows, score };
+	}
+	return best;
+}
+
+// the shape of what a widget shows: the image's or the video's own, or, for a
+// locked widget of anything else, what its map takes of it under the bar. A
+// freed widget's rect is not measured — it is the cell a previous arrangement
+// cut, and reading it back would hand the next one the same shape whatever the
+// maps are. A freed frame has no shape of its own and fills any cell, so it
+// has no say
+function mapAspect(block) {
+	const img = block.querySelector('.slide.active img') || block.querySelector('.placeholder img');
+	if (img && img.naturalWidth && img.naturalHeight) return img.naturalWidth / img.naturalHeight;
+	const video = block.querySelector('video');
+	if (video && video.videoWidth && video.videoHeight) return video.videoWidth / video.videoHeight;
+	if (block.classList.contains('free')) return 0;
+	const r = block.getBoundingClientRect();
+	const h = r.height - POPOUT_TITLE_HEIGHT;
+	return h > 0 ? r.width / h : 0;
+}
+
+// the maps' shape, averaged, so the cells are cut to fit what goes in them
+function arrangeAspect(blocks) {
+	const ratios = blocks.map(mapAspect).filter(ratio => ratio > 0);
+	return ratios.length ? ratios.reduce((sum, ratio) => sum + ratio, 0) / ratios.length : ARRANGE_ASPECT;
+}
+
+// n whole numbers summing to total, the remainder over the first of them: a
+// fraction left on any cell would leave a hairline between two tiles, and a
+// hairline is the difference between an edge that is a seam and one that is not
+function shareOut(total, n) {
+	const base = Math.floor(total / n);
+	const extra = Math.round(total) - base * n;
+	return Array.from({ length: n }, (_, i) => base + (i < extra ? 1 : 0));
+}
+
+function runningTotal(sizes, upTo) {
+	return sizes.slice(0, upTo).reduce((sum, size) => sum + size, 0);
+}
+
+// left to right and top to bottom in the order of the list, so the board reads
+// the way the picker does. The last row carries the remainder and is not
+// stretched to fill it: a wider tile there would be the one thing on the board
+// unlike the others
+function arrangeBoard() {
+	if (!isDashboard() || !POPOUT_MQ.matches) return;
+	// in the list's order, which is the DOM's; on a board every map is a widget
+	const blocks = [...document.querySelectorAll('.map-block.popout')]
+		.filter(block => !isSnapped(block) && !block.classList.contains('fs-host'));
+	if (!blocks.length) return;
+	dlog(`arrangeBoard: ${blocks.length} widgets`);
+	const width = viewportWidth(), height = viewportHeight();
+	const { cols, rows } = arrangeShape(blocks.length, width, height, arrangeAspect(blocks));
+	const widths = shareOut(width, cols);
+	const heights = shareOut(height, rows);
+	blocks.forEach((block, i) => {
+		unlockAspect(block);
+		block.style.width = `${widths[i % cols]}px`;
+		block.style.height = `${heights[Math.floor(i / cols)]}px`;
+	});
+	// placed after every size is set, so the reads below are one layout and not
+	// one per widget, and each tile is placed against sizes that are already final
+	blocks.forEach((block, i) => {
+		placePopout(block, runningTotal(widths, i % cols), runningTotal(heights, Math.floor(i / cols)));
+		fitWidget(block);
+	});
+	updateGroups();
+	syncShadows();
+	persistSnapLayout();
 }
 
 // the widest a widget goes: the table's width over the page, which is where
@@ -623,11 +935,13 @@ function clamp(value, min, max) {
 
 // the layout viewport: innerWidth counts the vertical scrollbar, under which
 // a widget's right edge (and a right column) would then land — and so does
-// clientWidth while the settings dialog keeps the scrollbar's gutter in its
-// place (maps.js sets viewportGutter to its width for as long as it does)
-let viewportGutter = 0;
+// clientWidth while a dialog keeps the scrollbar's gutter in its place. The
+// gutter is the dialog chrome's (main.js) and is asked for rather than read:
+// this file runs before that one, and a call made in between gets the 0 that
+// is true of a page with no dialog up
 function viewportWidth() {
-	return document.documentElement.clientWidth - viewportGutter;
+	return document.documentElement.clientWidth
+		- (typeof dialogGutterPx === 'function' ? dialogGutterPx() : 0);
 }
 
 function viewportHeight() {
@@ -939,6 +1253,92 @@ function subpixel(v) {
 // together — the members above it move up with its top edge, the ones below down
 // with its bottom edge (the settle in layoutSnapColumn), and the stack's ends
 // stop at the column's
+// ---------- seams ----------
+
+// Two widgets edge to edge with the shared edge running the whole of both
+// sides: then it is a seam, and dragging it moves it — one side giving what
+// the other takes, the pair keeping the room it had and everything around them
+// left where it stands. It is what a tiled board is for, and it settles a press
+// that was always ambiguous: the two widgets' handles lie on top of each other
+// along that edge, so which of them was grabbed came down to which was raised
+// last. Either one now means the same thing.
+//
+// A side handle only, never a corner: a corner belongs to two edges at once and
+// to however many widgets meet there. And whole edges only — a seam between
+// sides of unequal length cannot move without tearing one of them off the
+// neighbours it meets further along.
+const SEAM_ALIGN = GROUP_TOUCH;
+
+function seamNeighbour(block, dir) {
+	if (dir.length !== 1 || isSnapped(block) || block.classList.contains('fs-host')) return null;
+	const a = block.getBoundingClientRect();
+	const near = (p, q) => Math.abs(p - q) <= SEAM_ALIGN;
+	const found = floatingBlocks().filter(other => {
+		if (other === block || other.classList.contains('fs-host')) return false;
+		const b = other.getBoundingClientRect();
+		if (dir === 'e' || dir === 'w') {
+			const meets = dir === 'e' ? near(b.left, a.right) : near(b.right, a.left);
+			return meets && near(b.top, a.top) && near(b.bottom, a.bottom);
+		}
+		const meets = dir === 's' ? near(b.top, a.bottom) : near(b.bottom, a.top);
+		return meets && near(b.left, a.left) && near(b.right, a.right);
+	});
+	// two of them is no seam: the edge would be one widget's on one side and
+	// two widgets' on the other, and there would be no saying which to move
+	return found.length === 1 ? found[0] : null;
+}
+
+function resizeSeam(block, other, dir, e) {
+	dlog(`resizeSeam: ${block.dataset.mapId} | ${other.dataset.mapId} (${dir})`);
+	const sideways = dir === 'e' || dir === 'w';
+	// the two sizes have to move on their own here, and a locked widget's height
+	// follows its width — the seam would come apart under the gesture that moves it
+	unlockAspect(block);
+	unlockAspect(other);
+	const ra = block.getBoundingClientRect(), rb = other.getBoundingClientRect();
+	// named by where they lie and not by which was grabbed, so the arithmetic
+	// below is the same whichever of the two handles the press landed on
+	const [first, second] = sideways
+		? (ra.left <= rb.left ? [block, other] : [other, block])
+		: (ra.top <= rb.top ? [block, other] : [other, block]);
+	const rf = first.getBoundingClientRect(), rs = second.getBoundingClientRect();
+	const firstSize = sideways ? rf.width : rf.height;
+	const secondSize = sideways ? rs.width : rs.height;
+	const secondAt = sideways ? rs.left : rs.top;
+	const min = sideways ? POPOUT_MIN_WIDTH : POPOUT_MIN_HEIGHT;
+	// the seam is pulled onto the like edges of the rest of the board, as a
+	// single edge is: a seam lined up with the one in the row above is most of
+	// what a tiled board asks of it
+	const edges = magnetRects(first, [second]).flatMap(r => sideways ? [r.left, r.right] : [r.top, r.bottom]);
+	trackPopoutPointer(e, (dx, dy) => {
+		let move = sideways ? dx : dy;
+		const pulled = magnetEdge(secondAt + move, edges);
+		if (pulled !== null) move = pulled - secondAt;
+		// held so neither side goes under its minimum, which is what keeps the
+		// seam inside the pair rather than pushing it out the far end
+		move = clamp(move, min - firstSize, secondSize - min);
+		if (sideways) {
+			first.style.width = `${Math.round(firstSize + move)}px`;
+			second.style.width = `${Math.round(secondSize - move)}px`;
+			second.style.left = `${Math.round(secondAt + move)}px`;
+		} else {
+			first.style.height = `${Math.round(firstSize + move)}px`;
+			second.style.height = `${Math.round(secondSize - move)}px`;
+			second.style.top = `${Math.round(secondAt + move)}px`;
+		}
+		// both, and fitWidget rather than fitTitles: a letterboxed widget holds
+		// its arrows and indicators to the image's rect, which has just moved
+		fitWidget(first);
+		fitWidget(second);
+	}, () => {
+		// each edge to its nearest line, and the shared one is the same value
+		// for both, so the two land on the same line and stay a seam
+		snapToGrid([first, second]);
+		updateGroups();
+		persistSnapLayout();
+	});
+}
+
 function resizePopout(block, dir, e) {
 	const members = groupMembers(block);
 	const col = snapColumnOf(block);
@@ -1221,8 +1621,31 @@ document.addEventListener('pointerdown', (e) => {
 	// also suppresses the compatibility mousedown, so a slide title bar drag
 	// cannot register as a swipe on the slideshow around it
 	e.preventDefault();
-	if (handle) resizePopout(block, handle.dataset.dir, e);
-	else dragPopout(block, e);
+	if (handle) {
+		// a shared whole edge is a seam and moves as one, which is ahead of both
+		// the single widget's pull and the group's scale: it is an inside edge,
+		// and those two are what an outside edge means
+		const dir = handle.dataset.dir;
+		const mate = seamNeighbour(block, dir);
+		if (!mate) resizePopout(block, dir, e);
+		else if (!(e.ctrlKey || e.metaKey)) resizeSeam(block, mate, dir, e);
+		else {
+			// Ctrl pulls one side of the seam alone: the widget the press is
+			// on the side of. The handles straddle the edge, so a press just
+			// inside a widget is a press on its edge, whichever handle took it
+			const r = block.getBoundingClientRect();
+			const inside = dir === 'e' ? e.clientX < r.right
+				: dir === 'w' ? e.clientX >= r.left
+				: dir === 's' ? e.clientY < r.bottom
+				: e.clientY >= r.top;
+			const opposite = { e: 'w', w: 'e', n: 's', s: 'n' };
+			if (inside) resizePopout(block, dir, e);
+			else {
+				raisePopout(mate); // the one that moves is the one in front
+				resizePopout(mate, opposite[dir], e);
+			}
+		}
+	} else dragPopout(block, e);
 });
 
 // The covering widget's frame is dealt with by `covered` above, which is the
@@ -1272,6 +1695,10 @@ document.addEventListener('keydown', (e) => {
 	if (e.key === 'r' || e.key === 'R') { e.preventDefault(); reloadAllMaps(); return; }
 	if (e.key === 'g' || e.key === 'G') { e.preventDefault(); toggleGridShown(); return; }
 	if (e.key === 's' || e.key === 'S') { e.preventDefault(); toggleGridSnapped(); return; }
+	// these two stand down under a dialog, as the arrows do below: a board
+	// rearranged or a copy made there would be done out of sight
+	if (e.key === 'a' || e.key === 'A') { e.preventDefault(); if (!mapSettingsOpen()) arrangeBoard(); return; }
+	if (e.key === 'd' || e.key === 'D') { e.preventDefault(); if (!mapSettingsOpen()) duplicateMap(topPopout()); return; }
 	// the arrows belong to whatever is on top. While the dialog is open that is
 	// the dialog: its body is the only thing that scrolls there, and a widget
 	// behind it is not what an arrow pressed on the map list is aimed at. The
@@ -1284,11 +1711,11 @@ document.addEventListener('keydown', (e) => {
 	nudgePopout(nudge[0] * step, nudge[1] * step);
 });
 
-// the dialog is over everything, so the keys it owns are its own while it is
-// there — Escape, and the arrows its body scrolls by
+// a dialog is over everything, so the keys it owns are its own while it is
+// there — Escape, and the arrows its body scrolls by. Either of them counts:
+// the manual covers the widgets as the picker does
 function mapSettingsOpen() {
-	const panel = document.getElementById('mapSettings');
-	return !!panel && !panel.hidden;
+	return [...document.querySelectorAll('.map-settings')].some(panel => !panel.hidden);
 }
 
 // the dialog owns Escape while it is open; under it Escape ends a fullscreen
@@ -1300,15 +1727,110 @@ function escapeFullscreen() {
 	if (fs) exitFullscreen(fs);
 }
 
-// every widget whose bar offers [R], once each — a titled slideshow carries
-// one on every slide. An interactive map carries none at all, and reloadMap()
-// reaches only a basic iframe (.if2) besides: its feed is live of its own
-// accord, and navigating its frame again would cost it its pan and its zoom
-// for nothing. So this is the images, the slideshows, the videos and the
-// basic frames, which is what has to be fetched to be new
-function reloadAllMaps() {
-	allPopouts().filter(block => block.querySelector('.rl-btn')).forEach(reloadMap);
+// every map with something to re-fetch, popped out or still in the page: the
+// images, the slideshows, the videos and the basic frames. An interactive map
+// is left out — its feed is live of its own accord, and navigating its frame
+// again would cost it its pan and its zoom for nothing — which is the same
+// rule that decides whether a title bar gets an [R] at all, read off the
+// content here rather than off the button, since a docked map carries none
+function reloadableBlocks() {
+	return [...document.querySelectorAll('.map-block')]
+		.filter(block => block.querySelector('img[src], video, .if2 iframe[src]'));
 }
+
+function reloadAllMaps() {
+	reloadableBlocks().forEach(reloadMap);
+	restartRefresh(); // the interval runs from the last time the maps were actually new
+}
+
+// ---------- auto-refresh (this browser's) ----------
+
+// Images go stale on a page left open, and on a board left running for the
+// room to glance at they are the whole point. This re-fetches what [R] does,
+// on an interval — off until it is asked for, and a way of working rather than
+// part of the view, so it travels in neither a preset nor a link and keeps the
+// same footing as the grid switches.
+const REFRESH_KEY = 'mapRefresh';
+const REFRESH_CHOICES = [5, 10, 15, 30, 60];
+const REFRESH_DEFAULT = 5;
+
+function loadRefreshPrefs() {
+	try {
+		const stored = JSON.parse(localStorage.getItem(REFRESH_KEY));
+		if (stored && typeof stored === 'object') return {
+			on: stored.on === true,
+			minutes: REFRESH_CHOICES.includes(stored.minutes) ? stored.minutes : REFRESH_DEFAULT
+		};
+	} catch (e) { /* unreadable is off */ }
+	return { on: false, minutes: REFRESH_DEFAULT };
+}
+
+let { on: refreshOn, minutes: refreshMinutes } = loadRefreshPrefs();
+let refreshDeadline = 0;
+let refreshTicker = 0;
+
+function isRefreshOn() {
+	return refreshOn;
+}
+
+function refreshEveryMinutes() {
+	return refreshMinutes;
+}
+
+// m:ss of what is left, which is what both labels read
+function refreshLabel() {
+	if (!refreshOn || !refreshDeadline) return '';
+	const left = Math.max(0, Math.ceil((refreshDeadline - Date.now()) / 1000));
+	return `${Math.floor(left / 60)}:${String(left % 60).padStart(2, '0')}`;
+}
+
+// counted off a deadline rather than by stepping a number down: a background
+// tab throttles its timers to about one a minute, and a counter stepped down
+// would lose exactly the time the page spent unattended — which is the page
+// this is for. The clock starts over here, so every way of refreshing by hand
+// (the key, the tab's [R], a widget's own) puts the interval back to full
+function restartRefresh() {
+	clearInterval(refreshTicker);
+	refreshTicker = 0;
+	refreshDeadline = refreshOn ? Date.now() + refreshMinutes * 60000 : 0;
+	if (refreshOn) refreshTicker = setInterval(refreshTick, 1000);
+	syncRefreshLabels();
+}
+
+function refreshTick() {
+	if (!refreshOn) return;
+	if (Date.now() >= refreshDeadline) reloadAllMaps(); // which sets the clock going again
+	else syncRefreshLabels();
+}
+
+function setRefreshPrefs(on, minutes) {
+	dlog(`setRefreshPrefs: on=${on} minutes=${minutes}`);
+	refreshOn = on === true;
+	refreshMinutes = REFRESH_CHOICES.includes(minutes) ? minutes : REFRESH_DEFAULT;
+	try {
+		localStorage.setItem(REFRESH_KEY, JSON.stringify({ on: refreshOn, minutes: refreshMinutes }));
+	} catch (e) { /* storage disabled or full — the clock still runs this session */ }
+	// the countdown hangs off the body, since the tab shows for it off the board
+	document.body.classList.toggle('refresh-on', refreshOn);
+	restartRefresh();
+	const panel = document.getElementById('mapSettings');
+	if (panel && !panel.hidden && panel._onRefreshChange) panel._onRefreshChange();
+	applyStoredMsTab(); // the countdown coming or going changes how narrow the tab may be
+}
+
+function initRefresh() {
+	document.body.classList.toggle('refresh-on', refreshOn);
+	restartRefresh();
+}
+
+// on DOMContentLoaded in both cases, unlike the inits elsewhere that run at
+// once when the DOM is already parsed: this one reaches into maps.js for the
+// labels and into this file's own later declarations, and in dev — where the
+// scripts are deferred rather than inlined, so the DOM is ready as this file
+// is read — running it here would be ahead of both, and the throw would take
+// the rest of this file down with it
+if (document.readyState === 'complete') initRefresh();
+else document.addEventListener('DOMContentLoaded', initRefresh);
 
 // the grid is the board's: off it the dialog's own switches are greyed and
 // unclickable, the tab's are not shown at all, and the keys are as quiet — a
@@ -1921,8 +2443,27 @@ document.addEventListener('dblclick', (e) => {
 // map list it sits beside, which is what sanitizeSnapLayout() holds it to on
 // the way back. A group is a number shared by its members' entries, counted
 // in order of appearance across the columns and the floating widgets
+// the key each showing is stored under. Which showing is which is only a
+// matter of the moment — any can be closed and another take the page's place —
+// so the keys are dealt afresh on every write: the page's own showing first,
+// under the plain map id, which is the block the render gives back on load, and
+// the rest #2, #3 on in the page's order. A layout thus never names a copy of a
+// map without the map itself, whichever of its showings were left
+function layoutKeys() {
+	const keys = new Map(), counts = new Map();
+	const blocks = [...document.querySelectorAll('.map-block')];
+	[...blocks.filter(b => !isDuplicate(b)), ...blocks.filter(isDuplicate)].forEach(block => {
+		const id = block.dataset.mapId;
+		const index = (counts.get(id) || 0) + 1;
+		counts.set(id, index);
+		keys.set(block, instKey(id, index));
+	});
+	return keys;
+}
+
 function snapLayout() {
 	const layout = {};
+	const keys = layoutKeys();
 	const groupNumbers = new Map();
 	const groupNumber = (block) => {
 		if (!block._group) return undefined;
@@ -1934,7 +2475,7 @@ function snapLayout() {
 		layout[col.side] = {
 			width: roundFraction(col.width),
 			panes: [...col.panes].sort((a, b) => a.top - b.top).map(p => {
-				const entry = { id: p.block.dataset.mapId, top: roundFraction(p.top) };
+				const entry = { id: keys.get(p.block), top: roundFraction(p.top) };
 				if (p.height !== undefined) entry.height = roundFraction(p.height);
 				const group = groupNumber(p.block);
 				if (group) entry.group = group;
@@ -1950,7 +2491,7 @@ function snapLayout() {
 		.map(block => {
 			const rect = block.getBoundingClientRect();
 			const entry = {
-				id: block.dataset.mapId,
+				id: keys.get(block),
 				left: roundFraction(rect.left / viewportWidth()),
 				top: roundFraction(rect.top / viewportHeight()),
 				width: roundFraction(rect.width / viewportWidth())
@@ -1967,8 +2508,8 @@ function snapLayout() {
 }
 
 // only an interactive map has a fullscreen to be stored
-function hasFullscreen(mapId) {
-	const map = MAP_CATALOG.find(m => m.id === mapId);
+function hasFullscreen(inst) {
+	const map = MAP_CATALOG.find(m => m.id === instMapId(inst));
 	return !!map && map.type === 'iframe';
 }
 
@@ -2007,7 +2548,7 @@ function sanitizeSnapLayout(layout, mapIds) {
 		const panes = [];
 		let stacked = 0;
 		col.panes.forEach(p => {
-			if (!(p && typeof p.id === 'string' && mapIds.includes(p.id) && !seen.has(p.id))) return;
+			if (!(p && typeof p.id === 'string' && mapIds.includes(instMapId(p.id)) && !seen.has(p.id))) return;
 			const entry = { id: p.id };
 			const top = Number(p.top), height = Number(p.height), share = Number(p.share);
 			if (fraction(top)) {
@@ -2035,7 +2576,7 @@ function sanitizeSnapLayout(layout, mapIds) {
 	}
 	if (Array.isArray(layout.floating)) {
 		const floating = layout.floating
-			.filter(f => f && typeof f.id === 'string' && mapIds.includes(f.id) && !seen.has(f.id)
+			.filter(f => f && typeof f.id === 'string' && mapIds.includes(instMapId(f.id)) && !seen.has(f.id)
 				&& fraction(Number(f.left)) && fraction(Number(f.top)) && fraction(Number(f.width)) && Number(f.width) > 0)
 			.map(f => {
 				seen.add(f.id);
@@ -2102,7 +2643,7 @@ function applySnapLayout(layout) {
 		if (!stored) return;
 		const col = snapColumns[side];
 		stored.panes.forEach(({ id, top, height, group, fullscreen }) => {
-			const block = document.querySelector(`.map-block[data-map-id="${CSS.escape(id)}"]`);
+			const block = instanceFor(id);
 			if (!block || block.classList.contains('popout')) return;
 			popoutMap(block);
 			if (height && !block.classList.contains('free')) unlockAspect(block); // a locked map stored with a height was freed
@@ -2117,7 +2658,7 @@ function applySnapLayout(layout) {
 	if (left.panes.length && right.panes.length && left.width + right.width > 1) right.width = 1 - left.width;
 	layoutSnapColumns();
 	(layout.floating || []).forEach(({ id, left, top, width, height, group, fullscreen }) => {
-		const block = document.querySelector(`.map-block[data-map-id="${CSS.escape(id)}"]`);
+		const block = instanceFor(id);
 		if (!block || block.classList.contains('popout')) return;
 		popoutMap(block);
 		if (height && !block.classList.contains('free')) unlockAspect(block);
@@ -2130,13 +2671,21 @@ function applySnapLayout(layout) {
 		setGroup(block, group);
 		if (fullscreen) toFullscreen.push(block);
 	});
+	// a board the layout places nothing on is a new one, and a new board is
+	// tiled rather than cascaded. Where it does place some, the rest cascade in
+	// beside them: an arrangement already made is not taken apart to make room
+	const tiled = dashboardMode && !(layout.floating || []).length;
 	if (dashboardMode) popoutRest(); // the maps of the list the layout does not place: onto the board
+	if (tiled) arrangeBoard();
 	// once everything stands where it belongs: a pane's fullscreen is placed
 	// by its column, and main.js reads off the pane whether to lock the page
 	toFullscreen.forEach(restoreFullscreen);
 	updateGroups();
 	updateCovered(); // persistence is paused, so this is not reached through it
 	snapPersistPaused = false;
+	// the tiling was decided here rather than read from the layout, so it is
+	// the one thing this function has to write back
+	if (tiled) persistSnapLayout();
 }
 
 function applyStoredSnapLayout() {

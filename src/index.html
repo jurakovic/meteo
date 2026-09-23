@@ -10,6 +10,7 @@
 	<title>Meteo radari</title>
 	<!-- seo -->
 	<link rel="stylesheet" href="/_assets/css/styles.css">
+	<script src="/_assets/js/config.js" defer></script>
 	<script src="/_assets/js/main.js" defer></script>
 	<script src="/_assets/js/include.js" defer></script>
 	<!-- gtag -->
@@ -24,18 +25,19 @@
 		<table border="0" align="center" cellpadding="0" cellspacing="0">
 			<tr>
 				<td align="center">
-					<div class="buttons">
+					<div class="buttons with-help">
 						<a href="/customize/index.html" style="text-decoration: none"><div class="btn">Prilagodi <span class="beta">beta</span></div></a>
 						<div class="links-btn">
 							<button type="button" class="btn" onclick="scrollToElement('links')">Linkovi</button>
 							<input type="checkbox" class="links-toggle" onchange="toggleLinksBottom(this)" title="Prikaži linkove ispod karata" />
 						</div>
+						<button type="button" class="btn help-btn" onclick="toggleManual()" title="Upute (H)">?</button>
 					</div>
 				</td>
 			</tr>
 			<tr class="sp"></tr>
 
-			<tr>
+			<tr data-map-id="neverin-radar-hr">
 				<td align="center">
 					<div class="radartitle">
 						<a href="https://www.neverin.hr/radar/" target="_blank" rel="nofollow">Neverin | Radar | Hrvatska</a>
@@ -60,7 +62,7 @@
 					</div>
 				</td>
 			</tr>
-			<tr>
+			<tr data-map-id="neverin-radar-hr">
 				<td align="center">
 					<div class="links-bottom">
 						<a href="https://www.windy.com/-Weather-radar-radar?radar,44.5,16.5,7" target="_blank" rel="nofollow">Windy</a>
@@ -77,7 +79,7 @@
 			</tr>
 			<tr class="sp20"></tr>
 
-			<tr>
+			<tr data-map-id="neverin-satelit-hr">
 				<td align="center">
 					<div class="radartitle">
 						<a href="https://www.neverin.hr/satelit/" target="_blank" rel="nofollow">Neverin | Satelit | Hrvatska</a>
@@ -102,7 +104,7 @@
 					</div>
 				</td>
 			</tr>
-			<tr>
+			<tr data-map-id="neverin-satelit-hr">
 				<td align="center">
 					<div class="links-bottom">
 						<a href="https://www.windy.com/-Satellite-satellite?satellite,44.5,16.5,7" target="_blank" rel="nofollow">Windy</a>
@@ -116,7 +118,7 @@
 			</tr>
 			<tr class="sp20"></tr>
 
-			<tr>
+			<tr data-map-id="neverin-radar-eu">
 				<td align="center">
 					<div class="radartitle">
 						<a href="https://www.neverin.hr/radar/" target="_blank" rel="nofollow">Neverin | Radar | Europa</a>
@@ -141,7 +143,7 @@
 					</div>
 				</td>
 			</tr>
-			<tr>
+			<tr data-map-id="neverin-radar-eu">
 				<td align="center">
 					<div class="links-bottom">
 						<a href="https://www.windy.com/-Weather-radar-radar?radar,47.5,17.5,5" target="_blank" rel="nofollow">Windy</a>
@@ -157,7 +159,7 @@
 			</tr>
 			<tr class="sp20"></tr>
 
-			<tr>
+			<tr data-map-id="neverin-satelit-eu">
 				<td align="center">
 					<div class="radartitle">
 						<a href="https://www.neverin.hr/satelit/" target="_blank" rel="nofollow">Neverin | Satelit | Europa</a>
@@ -182,7 +184,7 @@
 					</div>
 				</td>
 			</tr>
-			<tr>
+			<tr data-map-id="neverin-satelit-eu">
 				<td align="center">
 					<div class="links-bottom">
 						<a href="https://www.windy.com/-Satellite-satellite?satellite,47.5,17.5,5" target="_blank" rel="nofollow">Windy</a>
@@ -197,7 +199,7 @@
 			</tr>
 			<tr class="sp20"></tr>
 
-			<tr>
+			<tr data-map-id="windy">
 				<td align="center">
 					<div class="radartitle">
 						<a class="left zoom-btn" data-mode="hr" onclick="switchIframeZoom('windy', this)">[HR]</a>
@@ -218,7 +220,7 @@
 					</div>
 				</td>
 			</tr>
-			<tr>
+			<tr data-map-id="windy">
 				<td align="center">
 					<div class="links-bottom">
 						<a href="https://zoom.earth/maps/radar/#view=44.5,16.5,7z" target="_blank" rel="nofollow">Zoom Earth</a>
@@ -234,7 +236,7 @@
 			</tr>
 			<tr class="sp20"></tr>
 
-			<tr>
+			<tr data-map-id="dhmz-radar">
 				<td align="center">
 					<div class="radartitle" style="max-width: 720px;">
 						<a href="https://meteo.hr/podaci.php?section=podaci_mjerenja&param=radari&el=kompozit&acto=anim" target="_blank" rel="nofollow">DHMZ | Radar | Hrvatska</a>
@@ -255,7 +257,7 @@
 					</div>
 				</td>
 			</tr>
-			<tr>
+			<tr data-map-id="dhmz-radar">
 				<td align="center">
 					<div class="links-bottom" style="max-width: 720px">
 						<a href="https://www.windy.com/-Weather-radar-radar?radar,44.5,16.5,7" target="_blank" rel="nofollow">Windy</a>
@@ -272,7 +274,7 @@
 			</tr>
 			<tr class="sp20"></tr>
 
-			<tr>
+			<tr data-map-id="meteociel-temp">
 				<td align="center">
 					<div class="slideshow" data-slideshow-id="15" data-current-slide="1" style="max-width: 768px;">
 						<div class="slide fade active">
@@ -300,7 +302,7 @@
 					</div>
 				</td>
 			</tr>
-			<tr>
+			<tr data-map-id="meteociel-temp">
 				<td align="center">
 					<div class="links-bottom" style="max-width: 768px">
 						<a href="https://www.windy.com/-Temperature-temp?temp,44.5,16.5,7" target="_blank" rel="nofollow">Windy</a>
@@ -315,7 +317,7 @@
 			</tr>
 			<tr class="sp20"></tr>
 
-			<tr>
+			<tr data-map-id="blitzortung">
 				<td align="center">
 					<div class="radartitle">
 						<a class="left zoom-btn" data-mode="hr" onclick="switchIframeZoom('blitzortung', this)">[HR]</a>
@@ -336,7 +338,7 @@
 					</div>
 				</td>
 			</tr>
-			<tr>
+			<tr data-map-id="blitzortung">
 				<td align="center">
 					<div class="links-bottom">
 						<a href="https://www.blitzortung.org/en/historical_maps.php?map=10" target="_blank" rel="nofollow">Blitzortung.org</a>
@@ -347,7 +349,7 @@
 			</tr>
 			<tr class="sp20"></tr>
 
-			<tr>
+			<tr data-map-id="essl">
 				<td align="center">
 					<div class="radartitle" style="max-width: 900px;">
 						<a href="https://stormforecast.eu" target="_blank" rel="nofollow">ESSL | Prognoza nevremena</a>
@@ -372,7 +374,7 @@
 					</div>
 				</td>
 			</tr>
-			<tr>
+			<tr data-map-id="essl">
 				<td align="center">
 					<div class="links-bottom" style="max-width: 900px">
 						<a href="https://rawinsonde.com/ASTORP/ESTOFEX.html" target="_blank" rel="nofollow">ASTORP</a>
@@ -383,7 +385,7 @@
 			</tr>
 			<tr class="sp20"></tr>
 
-			<tr>
+			<tr data-map-id="astorp">
 				<td align="center">
 					<div class="radartitle">
 						<a href="https://rawinsonde.com/ASTORP/ESTOFEX.html" target="_blank" rel="nofollow">ASTORP | Prognoza nevremena</a>
@@ -424,7 +426,7 @@
 					</div>
 				</td>
 			</tr>
-			<tr>
+			<tr data-map-id="astorp">
 				<td align="center">
 					<div class="links-bottom">
 						<a href="https://weather.essl.org/storm/" target="_blank" rel="nofollow">ESSL</a>
@@ -435,7 +437,7 @@
 			</tr>
 			<tr class="sp20"></tr>
 
-			<tr>
+			<tr data-map-id="estofex">
 				<td align="center">
 					<div class="radartitle" style="max-width: 800px;">
 						<a href="https://www.estofex.org" target="_blank" rel="nofollow">ESTOFEX | Prognoza nevremena</a>
@@ -456,7 +458,7 @@
 					</div>
 				</td>
 			</tr>
-			<tr>
+			<tr data-map-id="estofex">
 				<td align="center">
 					<div class="links-bottom" style="max-width: 800px">
 						<a href="https://weather.essl.org/storm/" target="_blank" rel="nofollow">ESSL</a>
@@ -467,7 +469,7 @@
 			</tr>
 			<tr class="sp20"></tr>
 
-			<tr>
+			<tr data-map-id="eumetnet">
 				<td align="center">
 					<div class="radartitle">
 						<a href="https://www.eumetnet.eu/observations/opera-radar-animation/" target="_blank" rel="nofollow">EUMETNET</a>
@@ -477,7 +479,7 @@
 					</div>
 				</td>
 			</tr>
-			<tr>
+			<tr data-map-id="eumetnet">
 				<td align="center">
 					<div class="links-bottom">
 						<a href="https://www.windy.com/-Weather-radar-radar?radar,47.5,17.5,5" target="_blank" rel="nofollow">Windy</a>
@@ -493,7 +495,7 @@
 			</tr>
 			<tr class="sp20"></tr>
 
-			<tr>
+			<tr data-map-id="meteociel-satelit">
 				<td align="center">
 					<div class="slideshow" data-slideshow-id="5" data-current-slide="1" style="max-width: 768px;">
 						<div class="slide fade active">
@@ -543,7 +545,7 @@
 					</div>
 				</td>
 			</tr>
-			<tr>
+			<tr data-map-id="meteociel-satelit">
 				<td align="center">
 					<div class="links-bottom" style="max-width: 768px">
 						<a href="https://www.windy.com/-Satellite-satellite?satellite,47.5,17.5,5" target="_blank" rel="nofollow">Windy</a>
@@ -558,7 +560,7 @@
 			</tr>
 			<tr class="sp20"></tr>
 
-			<tr>
+			<tr data-map-id="dwd-sinopticka">
 				<td align="center">
 					<div class="radartitle" style="max-width: 800px;">
 						<a href="https://www.dwd.de/EN/ourservices/hobbymet_wcharts_europe/hobbyeuropecharts.html" target="_blank" rel="nofollow">DWD | Sinoptička karta</a>
@@ -595,7 +597,7 @@
 					</div>
 				</td>
 			</tr>
-			<tr>
+			<tr data-map-id="dwd-sinopticka">
 				<td align="center">
 					<div class="links-bottom" style="max-width: 800px">
 						<a href="https://intranet.chmi.cz/aktualni-situace/aktualni-stav-pocasi/evropa/synopticka-situace" target="_blank" rel="nofollow">ČHMÚ</a>
@@ -605,7 +607,7 @@
 			</tr>
 			<tr class="sp20"></tr>
 
-			<tr>
+			<tr data-map-id="neverin-kamera">
 				<td align="center">
 					<div class="radartitle">
 						<a href="https://www.neverin.hr/kamere/" target="_blank" rel="nofollow">Neverin | Kamera | Zagreb-Remetinečki rotor</a>
@@ -617,7 +619,7 @@
 			</tr>
 			<tr class="sp20"></tr>
 
-			<tr>
+			<tr data-map-id="meteoblue-prognoza">
 				<td align="center">
 					<div class="slideshow" data-slideshow-id="14" data-current-slide="1">
 						<div class="slide fade active">
@@ -663,7 +665,7 @@
 					</div>
 				</td>
 			</tr>
-			<tr>
+			<tr data-map-id="meteoblue-prognoza">
 				<td align="center">
 					<div class="links-bottom">
 						<a href="https://meteo.hr" target="_blank" rel="nofollow">DHMZ</a>
@@ -692,9 +694,25 @@
 		</table>
 		<!-- cnt -->
 	</div>
+	<div class="ms-backdrop" hidden></div>
+	<!-- the manual, built in from MANUAL.md; the landing page carries it too,
+	     which is why the dialog chrome lives in main.js and not in maps.js -->
+	<div class="map-settings manual-dialog" id="manualDialog" data-dialog-key="manualPanel" hidden>
+		<div class="ms-head">
+			<span class="ms-head-left">
+				<a class="ms-home" href="/" title="Početna"><img src="/_assets/img/favicon-32x32.png" alt="Početna"></a>
+				<span class="ms-title">Upute</span>
+			</span>
+			<a class="ms-close" title="Zatvori (Esc)">Zatvori</a>
+		</div>
+		<div class="ms-body" data-include-html="/_components/manual.c.html">
+			<!-- manual -->
+		</div>
+	</div>
 	<footer>
 		<a onclick="scrollToTop()" style="cursor: pointer">Povratak na vrh</a>
 		·
+		<span class="manual-link"><a onclick="toggleManual()" style="cursor: pointer">Upute</a> ·</span>
 		<a href="/customize/index.html">Prilagodi <span class="beta">beta</span></a>
 		|
 		<a href="https://jurakovic.github.io">Projekti</a>

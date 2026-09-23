@@ -261,7 +261,7 @@ body.fs-lock {
 
 /* pop-out widgets (customize page): a map block lifted out of the table into a
    fixed, draggable, resizable box — desktop only, the button stays hidden elsewhere */
-.po-btn, .grp-btn, .rl-btn {
+.po-btn, .grp-btn, .rl-btn, .dup-btn {
 	display: none;
 }
 
@@ -286,8 +286,15 @@ body.fs-lock {
 		display: inline;
 	}
 
+	/* [D] copies the map into a widget of its own, from the page as well as
+	   from a widget: what it makes is a widget either way */
+	.dup-btn {
+		display: inline;
+	}
+
 	/* the fullscreen bar is pinned; no widget toggling from there */
-	.radartitle.fullscreen .po-btn {
+	.radartitle.fullscreen .po-btn,
+	.radartitle.fullscreen .dup-btn {
 		display: none;
 	}
 
@@ -900,6 +907,36 @@ body.fs-lock {
 		grid-template-columns: repeat(3, 1fr);
 	}
 
+	/* the help button is one glyph and takes a column of its own width, so the
+	   named buttons beside it keep their equal shares */
+	.buttons.with-help {
+		grid-template-columns: 1fr 1fr 32px;
+	}
+
+	.buttons.three.with-help {
+		grid-template-columns: repeat(3, 1fr) 32px;
+	}
+
+		.buttons .help-btn {
+			font-size: 15px;
+			line-height: 1;
+		}
+
+	/* the manual switched off (MANUAL_ENABLED in main.js): its entries go, and
+	   the help button's column with them */
+	html.no-manual .help-btn,
+	html.no-manual .manual-link {
+		display: none;
+	}
+
+	html.no-manual .buttons.with-help {
+		grid-template-columns: 49.5% 49.5%;
+	}
+
+	html.no-manual .buttons.three.with-help {
+		grid-template-columns: repeat(3, 1fr);
+	}
+
 	/* same expand affordance as the .expandable "Linkovi" button */
 	.buttons button.btn {
 		position: relative;
@@ -976,7 +1013,7 @@ body.fs-lock {
 
 /* the settings dialog: fixed over everything — the page, the columns, a
    fullscreen map — and over the backdrop that makes the page inert while it is
-   up; the table's width, or what the viewport leaves */
+   up; 750 by 750 to begin with, or what the viewport leaves */
 .map-settings {
 	position: fixed;
 	z-index: 100000;
@@ -984,7 +1021,8 @@ body.fs-lock {
 	left: 0;
 	right: 0;
 	margin: 0 auto;
-	width: 875px; /* the table's max-width */
+	width: 750px;
+	height: 750px;
 	max-width: calc(100% - 32px);
 	max-height: calc(100vh - 48px);
 	display: flex; /* the header stays, the body below it scrolls */
@@ -1007,6 +1045,7 @@ body.fs-lock {
 	.map-settings {
 		top: 0;
 		max-width: 100%;
+		height: auto; /* the content's, up to the screen */
 		/* the visible viewport, not the taller one a collapsible URL bar is
 		   measured out of: at 100vh the dialog's foot hangs below the screen
 		   and the body's scroll ends where it cannot be reached, so the last
@@ -1048,7 +1087,7 @@ body.fs-lock {
 	.map-settings .ms-head {
 		display: flex;
 		justify-content: space-between;
-		align-items: baseline;
+		align-items: center; /* not baseline: the icon at the left end has none */
 		padding: 7px 10px;
 		background-color: #2c3b56;
 		border-bottom: 1px solid #3d4d6a;
@@ -1063,11 +1102,32 @@ body.fs-lock {
 			color: #8fb4ff;
 		}
 
+		/* the way home and the title, together at the left end */
+		.map-settings .ms-head .ms-head-left {
+			display: flex;
+			align-items: center;
+			gap: 8px;
+		}
+
+			.map-settings .ms-head .ms-home {
+				display: flex;
+			}
+
+			/* the site's favicon, round, at the height of the title beside it */
+			.map-settings .ms-head .ms-home img {
+				display: block;
+				width: 16px;
+				height: 16px;
+				border-radius: 50%;
+			}
+
 	/* a word is a target for a cursor, not for a finger: on touch the head
 	   gives its padding to its children instead, so Zatvori is tapped
 	   anywhere in the right end of the bar and the title anywhere in the
-	   left. Both keep the same top padding, so the baseline they are aligned
-	   on does not move and the bar reads as it did */
+	   left. Both keep the same top padding, so the line they are centred
+	   on does not move and the bar reads as it did. The way home takes the
+	   gap to the title into its own padding, split with the title, so the
+	   two ends of it touch and the icon is tapped anywhere up to the word */
 	@media (max-width: 800px) {
 		.map-settings .ms-head {
 			padding: 0;
@@ -1079,6 +1139,18 @@ body.fs-lock {
 
 			.map-settings .ms-head a {
 				padding: 11px 14px;
+			}
+
+			.map-settings .ms-head .ms-head-left {
+				gap: 0;
+			}
+
+			.map-settings .ms-head .ms-home {
+				padding: 11px 4px 11px 10px;
+			}
+
+			.map-settings .ms-head .ms-home + .ms-title {
+				padding-left: 4px;
 			}
 	}
 
@@ -1093,32 +1165,39 @@ body.fs-lock {
 		   overlay kind shows an empty track until hovered and lies over the row
 		   handles. A touch screen has no hover to miss and no handles to cover,
 		   and its overlay scrollbar is what everything else there looks like —
-		   so the native one is left alone below the breakpoint, gutter and all */
+		   so the native one is left alone below the breakpoint, gutter and all.
+		   The tab's [+] menu scrolls the same way */
 		@media (min-width: 801px) and (hover: hover) and (pointer: fine) {
-			.map-settings .ms-body {
+			.map-settings .ms-body,
+			.ms-add-list {
 				scrollbar-gutter: stable;
 			}
 
-			.map-settings .ms-body::-webkit-scrollbar {
+			.map-settings .ms-body::-webkit-scrollbar,
+			.ms-add-list::-webkit-scrollbar {
 				width: 12px;
 			}
 
-			.map-settings .ms-body::-webkit-scrollbar-track {
+			.map-settings .ms-body::-webkit-scrollbar-track,
+			.ms-add-list::-webkit-scrollbar-track {
 				background-color: #1a2536;
 			}
 
-			.map-settings .ms-body::-webkit-scrollbar-thumb {
+			.map-settings .ms-body::-webkit-scrollbar-thumb,
+			.ms-add-list::-webkit-scrollbar-thumb {
 				background-color: #485871;
 				border: 3px solid #1a2536;
 				border-radius: 6px;
 			}
 
-				.map-settings .ms-body::-webkit-scrollbar-thumb:hover {
+				.map-settings .ms-body::-webkit-scrollbar-thumb:hover,
+				.ms-add-list::-webkit-scrollbar-thumb:hover {
 					background-color: #5F6F89;
 				}
 
 			@supports not selector(::-webkit-scrollbar) {
-				.map-settings .ms-body {
+				.map-settings .ms-body,
+				.ms-add-list {
 					scrollbar-width: thin;
 					scrollbar-color: #485871 #1a2536;
 				}
@@ -1174,7 +1253,8 @@ body.fs-lock {
 	}
 
 	.ms-tab:hover,
-	body.ms-open .ms-tab {
+	body.ms-open .ms-tab,
+	body.ms-add-open .ms-tab {
 		opacity: 1;
 	}
 
@@ -1186,6 +1266,13 @@ body.fs-lock {
 		overflow: hidden;
 		text-overflow: ellipsis;
 		text-align: center;
+	}
+
+	/* room either side of the name until the tab is sized by hand, so it starts
+	   out wider than the least it can be; msTabMinWidth measures the floor as a
+	   sized tab, without this */
+	.ms-tab:not(.ms-tab-sized) .ms-tab-name {
+		padding: 0 24px;
 	}
 
 	/* the title bars' cluster, on the tab — and the board's alone. There the tab
@@ -1201,9 +1288,31 @@ body.fs-lock {
 		gap: 8px;
 	}
 
-	body.dashboard .ms-tab-cluster {
+	body.dashboard .ms-tab-cluster,
+	body.refresh-on .ms-tab-cluster {
 		display: inline-flex;
 	}
+
+		/* arranging and the grid switches do nothing off the board, so they are
+		   not offered there; [R] and the countdown belong wherever the tab shows */
+		.ms-tab-cluster .ms-tab-board {
+			display: none;
+		}
+
+		body.dashboard .ms-tab-cluster .ms-tab-board {
+			display: inline;
+		}
+
+		/* tabular figures, so the width does not walk as the seconds come down */
+		.ms-tab-count {
+			min-width: 4ch;
+			text-align: right;
+			font-variant-numeric: tabular-nums;
+		}
+
+		body:not(.refresh-on) .ms-tab-count {
+			display: none;
+		}
 
 		/* a rule between the name and the glyphs: both are text on one strip of
 		   orange, and without it [R] reads as the end of the name. In the cluster
@@ -1225,6 +1334,74 @@ body.fs-lock {
 			opacity: 0.55;
 		}
 
+	/* the tab's [+]: a menu of the maps the board does not show, hung under the
+	   tab (maps.js: openMsAdd). The dialog's colours and its search box, since it
+	   is the dialog's Dostupne karte cut down to the one thing it is for */
+	.ms-add {
+		position: fixed;
+		z-index: 100001; /* over the tab's shadow */
+		display: flex;
+		flex-direction: column;
+		width: 300px;
+		max-width: calc(100vw - 16px);
+		box-sizing: border-box;
+		padding: 6px;
+		border: 1px solid #5F6F89;
+		box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6), 0 2px 8px rgba(0, 0, 0, 0.4);
+		background-color: #202c40;
+		text-align: left;
+		font-size: 13px;
+		color: white;
+	}
+
+		.ms-add-input {
+			flex: 0 0 auto;
+			margin-bottom: 6px;
+			padding: 4px 6px;
+			border: 1px solid #485871;
+			border-radius: 3px;
+			background-color: #1b2735;
+			color: inherit;
+			font-family: inherit;
+			font-size: inherit;
+		}
+
+		.ms-add-input:focus {
+			outline: none;
+			border-color: #ff9800;
+		}
+
+		.ms-add-list {
+			flex: 1 1 auto;
+			min-height: 0;
+			overflow-y: auto;
+		}
+
+		.ms-add-item {
+			padding: 3px 4px;
+			border-radius: 3px;
+			white-space: nowrap;
+			overflow: hidden;
+			text-overflow: ellipsis;
+			cursor: pointer;
+			user-select: none;
+		}
+
+		/* the one Enter would add: lit by the arrows and by the pointer alike */
+		.ms-add-item.active {
+			background-color: #3a4a66;
+		}
+
+		.ms-add-item .ms-glyph {
+			margin: 0 6px 0 0;
+		}
+
+		.ms-add-empty {
+			padding: 3px 4px;
+			font-style: italic;
+			opacity: 0.6;
+		}
+
 	/* not under a fullscreen map, though the page is just as far out of reach
 	   there: that map is one thing to look at and it has its own way out, in
 	   the bar that stays on screen, in Escape and in the double-click. A tab
@@ -1232,7 +1409,11 @@ body.fs-lock {
 	   arrived on the phone too, where fs-lock is the only one of these three a
 	   touch screen can reach at all */
 	body.snap-full .ms-tab,
-	body.dashboard .ms-tab {
+	body.dashboard .ms-tab,
+	/* and wherever the clock runs, which is the countdown's only place to be
+	   read: off the board the page carries its own Karte button, so the tab is
+	   there for the time rather than for the way in */
+	body.refresh-on .ms-tab {
 		display: flex;
 	}
 
@@ -1402,6 +1583,94 @@ body.fs-lock {
 			color: #ff9800;
 		}
 
+	/* the box sits on the list it narrows, under the sort row that heads the
+	   section — the two work the same surface and read as one band */
+	.map-settings .ms-find {
+		position: relative;
+		display: flex;
+		margin-bottom: 6px; /* not padding: the clear button is centred on this box, which has to be the input's */
+	}
+
+		.map-settings .ms-find-input {
+			flex: 1;
+			min-width: 0;
+			padding: 4px 22px 4px 6px;
+			border: 1px solid #485871;
+			border-radius: 3px;
+			background-color: #1b2735;
+			color: inherit;
+			font-family: inherit;
+			font-size: inherit;
+		}
+
+		.map-settings .ms-find-input:focus {
+			outline: none;
+			border-color: #ff9800;
+		}
+
+		/* only once there is something to clear; the room it takes is held by the
+		   input's padding either way, so the text does not shift under it */
+		.map-settings .ms-find-clear {
+			position: absolute;
+			top: 50%;
+			right: 6px;
+			transform: translateY(-50%);
+			display: none;
+			width: 8px;
+			height: 8px;
+			cursor: pointer;
+			user-select: none;
+			font-size: 0; /* the × is drawn below: the glyph sits low in its line, by the font's say */
+			opacity: 0.7;
+		}
+
+			.map-settings .ms-find-clear::before,
+			.map-settings .ms-find-clear::after {
+				content: '';
+				position: absolute;
+				top: 3.25px;
+				left: -1px;
+				width: 10px;
+				height: 1.5px;
+				background-color: currentColor;
+				transform: rotate(45deg);
+			}
+
+			.map-settings .ms-find-clear::after {
+				transform: rotate(-45deg);
+			}
+
+		.map-settings .ms-find.ms-find-set .ms-find-clear {
+			display: block;
+		}
+
+		.map-settings .ms-find-clear:hover {
+			opacity: 1;
+		}
+
+	/* a row the term does not reach. Scoped to the available section: a row
+	   carries the class over to the order above when it is ticked, where
+	   nothing is ever hidden */
+	.map-settings .ms-available .ms-item.ms-filtered {
+		display: none;
+	}
+
+	/* a map switched off by the remote config (maps.js): hidden in both
+	   sections, but there, so the list read off the rows still holds it */
+	.map-settings .ms-item.ms-off {
+		display: none;
+	}
+
+	/* the list is not empty here — every row is filtered out of sight — so
+	   :empty cannot speak for it */
+	.map-settings .ms-available.ms-no-hits::after {
+		content: "Nema karte za taj pojam";
+		display: block;
+		padding: 2px 0;
+		font-style: italic;
+		opacity: 0.6;
+	}
+
 	/* the snapped arrangement, named and undoable (desktop only, like the panes) */
 	/* the board is another way of viewing: its row stands out from the links
 	   around it — a button, a band with a blue edge, lit while on the board */
@@ -1454,6 +1723,65 @@ body.fs-lock {
 		.map-settings .ms-grid.ms-off {
 			opacity: 0.45;
 			cursor: default;
+		}
+
+		/* pushed to the far end of the row: it is the one thing there that acts
+		   at once on what is already on screen rather than setting something */
+		.map-settings .ms-mode .ms-arrange {
+			flex: none;
+			margin-left: auto;
+			padding: 0 14px;
+		}
+
+		.map-settings .ms-mode .ms-arrange:disabled {
+			opacity: 0.45;
+			cursor: default;
+		}
+
+	/* the clock's own row, under the mode row and built like it, but not the
+	   board's: a page left open goes stale on a phone too, so it stands at
+	   every width */
+	.map-settings .ms-refresh {
+		display: flex;
+		align-items: center;
+		gap: 10px;
+		margin: 4px 0;
+		padding: 8px 10px;
+		background-color: #1a2536;
+		border: 1px solid #3d4d6a;
+		border-left: 4px solid #4a8de6;
+		color: #8a94a8;
+	}
+
+		.map-settings .ms-refresh.ms-on {
+			background-color: #22385c;
+			border-color: #4a8de6;
+			color: white;
+		}
+
+		.map-settings .ms-refresh label {
+			display: flex;
+			align-items: center;
+			gap: 6px;
+			cursor: pointer;
+			user-select: none;
+		}
+
+		.map-settings .ms-refresh-every {
+			padding: 2px 4px;
+			border: 1px solid #485871;
+			border-radius: 3px;
+			background-color: #1b2735;
+			color: inherit;
+			font-family: inherit;
+			font-size: inherit;
+		}
+
+		/* pushed to the far end, where it is read rather than stepped over on
+		   the way to the switch */
+		.map-settings .ms-refresh-left {
+			margin-left: auto;
+			font-variant-numeric: tabular-nums;
 		}
 
 	.map-settings .ms-layout {
@@ -1664,6 +1992,121 @@ body.fs-lock {
 		.map-settings .ms-actions + .ms-sort {
 			margin-top: 0;
 		}
+
+/* the manual, built into the page from MANUAL.md (md.ps1). It is a document
+   and not a picker, so the body it sits in gets reading measure and the
+   spacing prose wants; everything else about the dialog is the shared chrome */
+.manual-dialog .ms-body {
+	padding: 4px 14px 16px;
+	line-height: 1.5;
+}
+
+	.manual-dialog .ms-body h2,
+	.manual-dialog .ms-body h3 {
+		margin: 22px 0 8px;
+		font-weight: normal;
+		color: #ff9800;
+	}
+
+	.manual-dialog .ms-body h2 {
+		font-size: 16px;
+		padding-bottom: 4px;
+		border-bottom: 1px solid #485871;
+	}
+
+	.manual-dialog .ms-body h3 {
+		font-size: 14px;
+	}
+
+	.manual-dialog .ms-body p,
+	.manual-dialog .ms-body ul {
+		margin: 8px 0;
+	}
+
+	.manual-dialog .ms-body ul {
+		padding-left: 20px;
+	}
+
+	.manual-dialog .ms-body li {
+		margin: 3px 0;
+	}
+
+	.manual-dialog .ms-body code,
+	.manual-dialog .ms-body kbd {
+		padding: 0 4px;
+		border-radius: 3px;
+		background-color: #1b2735;
+		font-family: inherit;
+		white-space: nowrap;
+	}
+
+	.manual-dialog .ms-body kbd {
+		border: 1px solid #5F6F89;
+	}
+
+	.manual-dialog .ms-body a {
+		color: #ff9800;
+	}
+
+	/* the aside the document sets off from the run of the text */
+	.manual-dialog .ms-body blockquote {
+		margin: 12px 0;
+		padding: 2px 12px;
+		border-left: 3px solid #485871;
+	}
+
+	/* a table can be wider than the dialog once it is pulled narrow, and it is
+	   the table that scrolls then rather than the document under it */
+	.manual-dialog .ms-body table {
+		display: block;
+		overflow-x: auto;
+		margin: 10px 0;
+		border-collapse: collapse;
+	}
+
+		.manual-dialog .ms-body th,
+		.manual-dialog .ms-body td {
+			padding: 4px 10px 4px 0;
+			border-bottom: 1px solid #2b3a52;
+			text-align: left;
+			vertical-align: top;
+		}
+
+		.manual-dialog .ms-body th {
+			font-weight: normal;
+			opacity: 0.7;
+		}
+
+	/* the contents, made of the document's own headings; the indent is the only
+	   thing that tells a section from a subsection, so it carries the level */
+	.manual-dialog .manual-toc {
+		margin: 10px 0 18px;
+		padding: 8px 0;
+		border-top: 1px solid #485871;
+		border-bottom: 1px solid #485871;
+	}
+
+		.manual-dialog .manual-toc ul {
+			margin: 0;
+			padding: 0;
+			list-style: none;
+		}
+
+		.manual-dialog .manual-toc li {
+			margin: 2px 0;
+		}
+
+		.manual-dialog .manual-toc .toc-3 {
+			padding-left: 16px;
+		}
+
+		.manual-dialog .manual-toc a {
+			text-decoration: none;
+		}
+
+			.manual-dialog .manual-toc a:hover {
+				text-decoration: underline;
+			}
 
 /* stands in for the maps when the view resolves to none ("Ništa") */
 .maps-empty {

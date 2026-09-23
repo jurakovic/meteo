@@ -158,10 +158,14 @@ function handleSwipe(slideshow, startX, endX) {
 	}
 }
 
+// bound once per slideshow: a copy made at runtime (popout.js) wires itself
+// through here, and the sweep must pass over everything already bound rather
+// than hang a second set of handlers on it
 function addSwipeEvents() {
-	const slideshows = document.querySelectorAll('.slideshow');
+	const slideshows = document.querySelectorAll('.slideshow:not([data-swipe])');
 
 	slideshows.forEach(slideshow => {
+		slideshow.setAttribute('data-swipe', '');
 		let startX = 0;
 		let startY = 0;
 		let endX = 0;
@@ -371,10 +375,12 @@ function exitFullscreen(if1) {
 	}
 }
 
+// bound once per overlay, for the reason above
 function hideOverlayOnDoubleTap() {
-	const overlays = document.querySelectorAll('.if1 .overlay');
+	const overlays = document.querySelectorAll('.if1 .overlay:not([data-tap])');
 
 	overlays.forEach((overlay) => {
+		overlay.setAttribute('data-tap', '');
 		let lastTap = 0;
 		let multiTouch = false;
 
@@ -561,6 +567,448 @@ function dlog(...args) {
 	if (isDebugEnabled)
 		console.log(...args);
 }
+
+// ---------- dialogs ----------
+
+// Two of them — the maps picker (maps.js) and the manual — over one set of
+// chrome: a fixed panel above everything, dismissed by a press outside, the
+// page held still underneath, and on desktop a window, dragged by its head and
+// resized from any side or corner, each remembering where it was put under the
+// key its element names (data-dialog-key). The chrome sits here and not in
+// maps.js because the landing page carries the manual too and loads neither
+// maps.js nor popout.js.
+//
+// One stands at a time: opening one shuts the other, so there is a single
+// backdrop, a single scroll lock and a single Escape to reason about.
+
+const DIALOG_MQ = window.matchMedia('(min-width: 801px) and (hover: hover) and (pointer: fine)');
+const DIALOG_MIN_WIDTH = 360;
+const DIALOG_MIN_HEIGHT = 120;
+const DIALOG_MARGIN = 8; // kept free of the viewport edge when sizing
+const DIALOG_HANDLES = ['n', 'ne', 'e', 'se', 's', 'sw', 'w', 'nw'];
+
+// the scrollbar the lock takes away, held in its place for as long as a dialog
+// stands (html.ms-gutter) so nothing centred on the page shifts under it. It
+// can only be measured while it is still there, so it is taken when the first
+// dialog opens and kept until the last one shuts. popout.js reads it through
+// dialogGutterPx() rather than by name: this file runs after that one, and a
+// call made before it does gets the 0 that is true of a page with no dialog up
+let dialogGutter = 0;
+
+function dialogGutterPx() {
+	return dialogGutter;
+}
+
+function dialogViewportWidth() {
+	return document.documentElement.clientWidth - dialogGutter;
+}
+
+function dialogViewportHeight() {
+	return document.documentElement.clientHeight;
+}
+
+function dialogClamp(value, min, max) {
+	return Math.min(Math.max(value, min), Math.max(min, max));
+}
+
+function dialogFraction(n) {
+	return Math.round(n * 10000) / 10000;
+}
+
+function dialogPanels() {
+	return [...document.querySelectorAll('.map-settings')];
+}
+
+function openDialogPanel() {
+	return dialogPanels().find(panel => !panel.hidden) || null;
+}
+
+function anyDialogOpen() {
+	return !!openDialogPanel();
+}
+
+// ---------- where and how big a dialog was put ----------
+
+// this browser's, not the view's (the same footing as msTab and the grid
+// switches): it is about this screen and travels in neither a preset nor a
+// link. The left and top go as fractions of the viewport, the width in px, and
+// the height in px only once it has been resized — until when it stays the
+// CSS's, capped to what is left below wherever the top now is
+function dialogStorageKey(panel) {
+	return panel.getAttribute('data-dialog-key');
+}
+
+function loadDialogGeometry(panel) {
+	const key = dialogStorageKey(panel);
+	if (!key) return null;
+	try {
+		const stored = JSON.parse(localStorage.getItem(key));
+		if (!stored || typeof stored !== 'object') return null;
+		if (!Number.isFinite(stored.left) || !Number.isFinite(stored.top) || !(stored.width > 0)) return null;
+		return { left: stored.left, top: stored.top, width: stored.width, height: stored.height > 0 ? stored.height : null };
+	} catch (e) {
+		return null;
+	}
+}
+
+function saveDialogGeometry(panel) {
+	const key = dialogStorageKey(panel);
+	if (!key) return;
+	const rect = panel.getBoundingClientRect();
+	const stored = {
+		left: dialogFraction(rect.left / dialogViewportWidth()),
+		top: dialogFraction(rect.top / dialogViewportHeight()),
+		width: Math.round(rect.width)
+	};
+	if (panel.style.height) stored.height = Math.round(rect.height); // only once resized; else the CSS's
+	try {
+		localStorage.setItem(key, JSON.stringify(stored));
+	} catch (e) { /* storage disabled or full — the dialog still moves this session */ }
+}
+
+function forgetDialogGeometry(panel) {
+	const key = dialogStorageKey(panel);
+	if (!key) return;
+	try {
+		localStorage.removeItem(key);
+	} catch (e) { /* nothing stored is nothing to drop */ }
+}
+
+function dialogMaxWidth() {
+	return Math.max(DIALOG_MIN_WIDTH, dialogViewportWidth() - DIALOG_MARGIN * 2);
+}
+
+function dialogMaxHeight() {
+	return Math.max(DIALOG_MIN_HEIGHT, dialogViewportHeight() - DIALOG_MARGIN * 2);
+}
+
+// height null leaves it the CSS's. The CSS's max-height assumes the top the
+// CSS set, and the dialog may be anywhere now, so it is recomputed from where
+// the top is asked to be; the top is then held to the height that gave
+function placeDialog(panel, left, top, width, height) {
+	width = dialogClamp(width, DIALOG_MIN_WIDTH, dialogMaxWidth());
+	panel.style.width = `${Math.round(width)}px`;
+	panel.style.maxWidth = 'none';
+	panel.style.right = 'auto'; // off the centring
+	panel.style.margin = '0';
+	if (height === null) {
+		panel.style.height = '';
+		panel.style.maxHeight = `${Math.round(Math.max(DIALOG_MIN_HEIGHT, dialogViewportHeight() - Math.max(0, top) - DIALOG_MARGIN))}px`;
+	} else {
+		panel.style.maxHeight = 'none';
+		panel.style.height = `${Math.round(dialogClamp(height, DIALOG_MIN_HEIGHT, dialogMaxHeight()))}px`;
+	}
+	panel.style.left = `${Math.round(dialogClamp(left, 0, Math.max(0, dialogViewportWidth() - panel.offsetWidth)))}px`;
+	panel.style.top = `${Math.round(dialogClamp(top, 0, Math.max(0, dialogViewportHeight() - panel.offsetHeight)))}px`;
+}
+
+function clearDialog(panel) {
+	['left', 'top', 'width', 'height', 'maxWidth', 'maxHeight', 'right', 'margin'].forEach(prop => panel.style[prop] = '');
+}
+
+// on open, and on a window resize, so it cannot be stranded off screen. A phone
+// gets the dialog the CSS draws, as it gets no widgets
+function applyStoredDialog(panel) {
+	if (!panel || panel.hidden) return;
+	const stored = DIALOG_MQ.matches ? loadDialogGeometry(panel) : null;
+	if (!stored) { clearDialog(panel); return; }
+	placeDialog(panel, stored.left * dialogViewportWidth(), stored.top * dialogViewportHeight(), stored.width, stored.height);
+}
+
+// a pointer gesture on a dialog: move and up on document, since nothing moves
+// in the DOM. It is the widgets' gesture without their concerns — no shadows to
+// keep up with, and no Shift, which a dialog has no aspect to hold
+function trackDialogPointer(e, onMove, onEnd) {
+	const startX = e.clientX, startY = e.clientY;
+	const move = (ev) => onMove(ev.clientX - startX, ev.clientY - startY, ev);
+	const stop = () => {
+		document.removeEventListener('pointermove', move);
+		document.removeEventListener('pointerup', stop);
+		document.removeEventListener('pointercancel', stop);
+		document.body.classList.remove('po-dragging');
+		if (onEnd) onEnd();
+	};
+	document.body.classList.add('po-dragging');
+	document.addEventListener('pointermove', move);
+	document.addEventListener('pointerup', stop);
+	document.addEventListener('pointercancel', stop);
+}
+
+// the widgets' own handles, inside the panel so the press that grabs one is a
+// press inside the dialog and misses the backdrop that would shut it. Built
+// again rather than kept, for the picker, whose body is rebuilt on every open
+function buildDialogHandles(panel) {
+	panel.querySelectorAll(':scope > .po-h').forEach(handle => handle.remove());
+	DIALOG_HANDLES.forEach(dir => {
+		const handle = document.createElement('div');
+		handle.className = `po-h po-h-${dir}`;
+		handle.dataset.dir = dir;
+		panel.appendChild(handle);
+	});
+}
+
+// one listener per panel, which outlives the rebuild its children do not
+function initDialogWindow(panel) {
+	panel.addEventListener('pointerdown', (e) => {
+		if (e.button !== 0 || !DIALOG_MQ.matches) return;
+		const handle = e.target.closest('.po-h');
+		// the head is the grip, but a link or a button on it is itself
+		const head = !handle && e.target.closest('.ms-head') && !e.target.closest('a, button, input');
+		if (!handle && !head) return;
+		e.preventDefault();
+		const start = panel.getBoundingClientRect();
+		const dir = handle ? handle.dataset.dir : null;
+		const kept = panel.style.height ? start.height : null; // a drag leaves the height as it was found
+		let moved = false;
+		trackDialogPointer(e, (dx, dy) => {
+			if (!moved && !dx && !dy) return; // a press that never moved stores nothing
+			moved = true;
+			if (!dir) {
+				placeDialog(panel, start.left + dx, start.top + dy, start.width, kept);
+				return;
+			}
+			let width = start.width, height = start.height;
+			if (dir.includes('e')) width = start.width + dx;
+			if (dir.includes('w')) width = start.width - dx;
+			if (dir.includes('s')) height = start.height + dy;
+			if (dir.includes('n')) height = start.height - dy;
+			// clamped here as well as in placeDialog, so the edge that stays put does
+			width = dialogClamp(width, DIALOG_MIN_WIDTH, dialogMaxWidth());
+			height = dialogClamp(height, DIALOG_MIN_HEIGHT, dialogMaxHeight());
+			placeDialog(panel, dir.includes('w') ? start.right - width : start.left,
+				dir.includes('n') ? start.bottom - height : start.top, width, height);
+		}, () => { if (moved) saveDialogGeometry(panel); });
+	});
+	// the way back to the dialog the CSS draws, the head's spare gesture
+	panel.addEventListener('dblclick', (e) => {
+		if (!DIALOG_MQ.matches || !e.target.closest('.ms-head') || e.target.closest('a, button, input')) return;
+		clearDialog(panel);
+		forgetDialogGeometry(panel);
+	});
+}
+
+// ---------- opening and shutting ----------
+
+// the page's own state, read off whichever dialogs are up rather than set by
+// the one being opened: with two of them, a dialog shutting to let another
+// stand must not take the lock, the gutter or the backdrop away with it
+function syncDialogChrome() {
+	const open = anyDialogOpen();
+	if (open && !document.documentElement.classList.contains('ms-gutter')) {
+		const scrollbar = window.innerWidth - document.documentElement.clientWidth;
+		if (scrollbar > 0) {
+			dialogGutter = scrollbar;
+			document.documentElement.classList.add('ms-gutter');
+		}
+	} else if (!open) {
+		dialogGutter = 0;
+		document.documentElement.classList.remove('ms-gutter');
+	}
+	document.body.classList.toggle('ms-open', open);
+	const backdrop = document.querySelector('.ms-backdrop');
+	if (backdrop) {
+		backdrop.hidden = !open;
+		if (open) backdrop.classList.remove('ms-spent'); // it paints again for a dialog that is back
+	}
+	// the columns and the widgets measure against a viewport the gutter changed
+	if (typeof layoutSnapColumns === 'function') layoutSnapColumns();
+}
+
+// every change of state is announced, the one made room for as much as the one
+// asked for: a dialog shut to let another stand is still shut, and what hangs
+// off that — the Karte button's arrow, the manual's hash — has no other way of
+// hearing about it
+function notifyDialog(panel, visible) {
+	document.dispatchEvent(new CustomEvent('dialog-toggled', { detail: { panel, visible } }));
+}
+
+function setDialogVisible(panel, visible) {
+	if (visible) {
+		dialogPanels().forEach(other => {
+			if (other === panel || other.hidden) return;
+			other.hidden = true;
+			notifyDialog(other, false);
+		});
+	}
+	panel.hidden = !visible;
+	syncDialogChrome();
+	if (visible) applyStoredDialog(panel); // where the user put it, measurable only now it is shown
+	notifyDialog(panel, visible);
+}
+
+function toggleDialog(panel) {
+	if (!panel) return;
+	setDialogVisible(panel, panel.hidden);
+}
+
+function closeOpenDialog() {
+	const panel = openDialogPanel();
+	if (panel) setDialogVisible(panel, false);
+	return !!panel;
+}
+
+// A press anywhere outside the dialog shuts it, dropping what was edited in it
+// (the picker is rebuilt from what is stored on the next open). The press lands
+// on the backdrop, which is over everything the dialog is over, so it shuts the
+// dialog and does nothing else: it follows no link, presses no button, takes no
+// widget. The tab stands above the backdrop and keeps its own click, which
+// shuts the dialog the same way.
+//
+// A press is a pointerdown, a release and a click, and all three belong to the
+// dismissal: the backdrop stands until the click has been taken, so none of
+// them can be completed on what the dialog was covering. It stops painting the
+// moment it is pressed, the dialog it dimmed for being on its way out, and the
+// click is swallowed in the capture phase, which is ahead of every listener on
+// the page whatever order they were bound in. The release arms a short fallback
+// for the gestures no click follows — a pointer let go outside the window, a
+// drag
+function initDialogBackdrop() {
+	const backdrop = document.querySelector('.ms-backdrop');
+	if (!backdrop) return;
+	backdrop.addEventListener('pointerdown', (e) => {
+		if (!anyDialogOpen()) return;
+		e.preventDefault();
+		closeOpenDialog();
+		backdrop.hidden = false;
+		backdrop.classList.add('ms-spent');
+		let timer = 0;
+		const done = () => {
+			clearTimeout(timer);
+			backdrop.classList.remove('ms-spent');
+			// a dialog may have been opened again meanwhile (K, ?, the tab), and
+			// then the ground it stands on is not this gesture's to take away
+			backdrop.hidden = !anyDialogOpen();
+			document.removeEventListener('click', swallow, true);
+			document.removeEventListener('pointerup', release);
+			document.removeEventListener('pointercancel', done);
+		};
+		const swallow = (ev) => { ev.stopPropagation(); ev.preventDefault(); done(); };
+		const release = () => { timer = setTimeout(done, 400); };
+		document.addEventListener('click', swallow, true);
+		document.addEventListener('pointerup', release);
+		document.addEventListener('pointercancel', done);
+	});
+}
+
+// Escape shuts whichever dialog is up, wherever the keyboard is — not from a
+// text field, whose own Escape (the find box, the preset name editors) is a way
+// out of the field first
+document.addEventListener('keydown', (e) => {
+	if (e.key !== 'Escape' || e.altKey || e.ctrlKey || e.metaKey) return;
+	if (e.target.matches && e.target.matches('input:not([type="radio"]):not([type="checkbox"]), textarea, [contenteditable]')) return;
+	closeOpenDialog();
+});
+
+// ---------- the manual ----------
+
+// MANUAL.md, converted at build time (md.ps1) and built into both pages. It is
+// a dialog and not a page of its own so it can be read beside the maps it
+// describes rather than in place of them — which costs it the address a page
+// would have had, so #upute stands in: it opens the dialog on load, and the
+// dialog puts it there and takes it away again, which keeps "read this" a link
+// anyone can send.
+const MANUAL_HASH = 'upute';
+
+// the manual is off for now: false hides the ? button and the footer's Upute
+// and leaves H and #upute alone; true brings it all back. The class goes on
+// before the first paint, as board-boot does, so nothing flashes up and away
+const MANUAL_ENABLED = false;
+if (!MANUAL_ENABLED) document.documentElement.classList.add('no-manual');
+
+function manualDialog() {
+	return document.getElementById('manualDialog');
+}
+
+function manualOpen() {
+	const panel = manualDialog();
+	return !!panel && !panel.hidden;
+}
+
+function toggleManual() {
+	toggleDialog(manualDialog());
+}
+
+// a hash as text, without its #. A malformed escape (#%E0) is read as it
+// stands rather than thrown on: it is not the manual, and a throw here would
+// take the rest of initDialogs down with it
+function hashText(hash) {
+	try {
+		return decodeURIComponent(hash.slice(1));
+	} catch (e) {
+		return hash.slice(1);
+	}
+}
+
+// replaceState rather than the hash itself: assigning to location.hash stacks
+// an entry for every open, so Back would walk out through them one at a time
+function syncManualHash(open) {
+	const url = new URL(window.location.href);
+	const already = hashText(url.hash) === MANUAL_HASH;
+	if (open === already) return;
+	url.hash = open ? MANUAL_HASH : '';
+	history.replaceState(null, '', open ? url.href : url.href.replace(/#$/, ''));
+}
+
+// a heading link inside the manual scrolls the dialog's own body. scrollIntoView
+// scrolls every ancestor, so it would drag the page behind the dialog along with
+// it — the offset between the two rects is what the body has to travel
+function scrollManualTo(panel, id) {
+	const body = panel.querySelector('.ms-body');
+	const target = panel.querySelector(`[id="${CSS.escape(id)}"]`);
+	if (!body || !target) return;
+	body.scrollTop += target.getBoundingClientRect().top - body.getBoundingClientRect().top;
+}
+
+function initManual() {
+	const panel = manualDialog();
+	if (!panel || !MANUAL_ENABLED) return;
+
+	const close = panel.querySelector('.ms-close');
+	if (close) close.addEventListener('click', () => setDialogVisible(panel, false));
+
+	panel.addEventListener('click', (e) => {
+		const link = e.target.closest('a[href^="#"]');
+		if (!link || !panel.contains(link)) return;
+		e.preventDefault();
+		scrollManualTo(panel, hashText(link.getAttribute('href')));
+	});
+
+	document.addEventListener('dialog-toggled', (e) => {
+		if (e.detail.panel !== panel) return;
+		syncManualHash(e.detail.visible);
+		if (e.detail.visible) panel.querySelector('.ms-body').scrollTop = 0;
+	});
+
+	// H for help: the letters name the thing, as R, G and S do, and ? would
+	// need Shift on one layout and AltGr on the next
+	document.addEventListener('keydown', (e) => {
+		if ((e.key !== 'h' && e.key !== 'H') || e.altKey || e.ctrlKey || e.metaKey) return;
+		if (e.target.matches && e.target.matches('input:not([type="radio"]):not([type="checkbox"]), textarea, [contenteditable]')) return;
+		e.preventDefault();
+		toggleManual();
+	});
+
+	// the address, on arrival and whenever it is edited afterwards
+	const fromHash = () => {
+		const wanted = hashText(window.location.hash) === MANUAL_HASH;
+		if (wanted !== manualOpen()) setDialogVisible(panel, wanted);
+	};
+	window.addEventListener('hashchange', fromHash);
+	fromHash();
+}
+
+function initDialogs() {
+	dialogPanels().forEach(panel => {
+		buildDialogHandles(panel);
+		initDialogWindow(panel);
+	});
+	initDialogBackdrop();
+	initManual();
+	window.addEventListener('resize', () => applyStoredDialog(openDialogPanel()));
+}
+
+if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', initDialogs);
+else initDialogs();
 
 // wiring for content inside the maps tbody; called on load and again after
 // maps.js re-renders it, so it must only touch freshly created nodes
