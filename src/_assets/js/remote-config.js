@@ -12,9 +12,9 @@
 // - the customize page leaves the map out of what it shows (maps/render.js)
 //   and draws the view again on a change, on the map-config-changed event
 
-const MAP_CONFIG_URL = 'https://meteo-data.jurakovic.workers.dev/config.json';
+import { readJson, STORAGE_KEYS, writeJson } from './lib/storage.js';
 
-const MAP_CONFIG_KEY = 'mapConfig';
+const MAP_CONFIG_URL = 'https://meteo-data.jurakovic.workers.dev/config.json';
 
 // { "maps": { "<id>": { "enabled": false } } } — anything else is ignored
 function disabledMapIds(config) {
@@ -22,12 +22,9 @@ function disabledMapIds(config) {
 	return new Set(Object.keys(maps).filter(id => maps[id] && maps[id].enabled === false));
 }
 
+// nothing readable stored is every map on until the fetch lands
 function loadMapConfig() {
-	try {
-		return JSON.parse(localStorage.getItem(MAP_CONFIG_KEY));
-	} catch {
-		return null; // corrupt storage: every map on until the fetch lands
-	}
+	return readJson(STORAGE_KEYS.mapConfig);
 }
 
 let disabledMaps = new Set();
@@ -63,9 +60,7 @@ function fetchMapConfig() {
 	fetch(MAP_CONFIG_URL, { cache: 'no-cache' })
 		.then(response => response.ok ? response.json() : Promise.reject(response.status))
 		.then(config => {
-			try {
-				localStorage.setItem(MAP_CONFIG_KEY, JSON.stringify(config));
-			} catch { /* storage disabled or full — the copy is for the next load only */ }
+			writeJson(STORAGE_KEYS.mapConfig, config); // the copy is for the next load
 			const disabled = disabledMapIds(config);
 			if (sameIdSet(disabled, disabledMaps)) return;
 			disabledMaps = disabled;

@@ -15,20 +15,17 @@
 import { dlog } from '../lib/debug.js';
 import { viewportHeight, viewportWidth } from '../lib/geometry.js';
 import { DESKTOP_MQ } from '../lib/media.js';
+import { readJson, STORAGE_KEYS, writeJson } from '../lib/storage.js';
 import { syncMsTab } from '../settings/tab.js';
 import { dashboardMode, isDashboard } from './board.js';
 import { GRID_CELL, POPOUT_MIN_HEIGHT, POPOUT_MIN_WIDTH } from './constants.js';
 import { placePopout } from './core.js';
 import { fitWidget, syncBackdrop, unlockAspect } from './popout.js';
 
-const GRID_KEY = 'mapGrid';
-
 function loadGridPrefs() {
-	try {
-		const stored = JSON.parse(localStorage.getItem(GRID_KEY));
-		if (stored && typeof stored === 'object') return { show: stored.show === true, snap: stored.snap === true };
-	} catch { /* unreadable is off */ }
-	return { show: false, snap: false };
+	const stored = readJson(STORAGE_KEYS.grid);
+	if (!stored || typeof stored !== 'object') return { show: false, snap: false };
+	return { show: stored.show === true, snap: stored.snap === true };
 }
 
 let { show: gridShow, snap: gridSnap } = loadGridPrefs();
@@ -45,9 +42,7 @@ export function setGridPrefs(show, snap) {
 	dlog(`setGridPrefs: show=${show} snap=${snap}`);
 	gridShow = show;
 	gridSnap = snap;
-	try {
-		localStorage.setItem(GRID_KEY, JSON.stringify({ show, snap }));
-	} catch { /* storage disabled or full — the grid still works this session */ }
+	writeJson(STORAGE_KEYS.grid, { show, snap });
 	renderGrid();
 	// the switches are in three places — the dialog's ticks, the tab's [G]/[S],
 	// and the keys — so the one that was not used is told. An open dialog holds

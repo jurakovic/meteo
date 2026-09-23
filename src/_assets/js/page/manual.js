@@ -6,18 +6,17 @@
 // dialog puts it there and takes it away again, which keeps "read this" a link
 // anyone can send.
 
+import { FEATURES } from '../features.js';
 import { isTextField } from '../lib/dom.js';
 import { setDialogVisible, toggleDialog } from './dialog.js';
 
 const MANUAL_HASH = 'upute';
 
-// the manual is off for now: false hides the ? button and the footer's Upute
-// and leaves H and #upute alone; true brings it all back. The class goes on
-// before the first paint, as board-boot does, so nothing flashes up and away
-const MANUAL_ENABLED = false;
-
+// off (features.js), the ? button and the footer's Upute are hidden and H and
+// #upute are left alone. The class goes on before the first paint, as
+// board-boot does, so nothing flashes up and away
 export function applyManualSwitch() {
-	if (!MANUAL_ENABLED) document.documentElement.classList.add('no-manual');
+	if (!FEATURES.manual) document.documentElement.classList.add('no-manual');
 }
 
 function manualDialog() {
@@ -66,7 +65,7 @@ function scrollManualTo(panel, id) {
 
 export function initManual() {
 	const panel = manualDialog();
-	if (!panel || !MANUAL_ENABLED) return;
+	if (!panel || !FEATURES.manual) return;
 
 	const close = panel.querySelector('.ms-close');
 	if (close) close.addEventListener('click', () => setDialogVisible(panel, false));

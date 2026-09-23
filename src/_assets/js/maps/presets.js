@@ -1,6 +1,7 @@
 // The presets: the built-in views, the ones the user saved, and which
 // built-ins the user hid from the preset bar.
 
+import { readJson, STORAGE_KEYS, writeJson } from '../lib/storage.js';
 import { MAP_CATALOG } from './catalog.js';
 import { getMapPrefs, saveMapPrefs } from './prefs.js';
 
@@ -45,8 +46,6 @@ export const MAP_PRESETS = [
 // are prefixed to keep them out of the built-in namespace, which leaves the
 // name free to change — renaming never breaks a saved preference or selection.
 
-const USER_PRESETS_KEY = 'mapUserPresets';
-
 const USER_PRESET_PREFIX = 'u:';
 
 export const PRESET_NAME_MAX = 40;
@@ -66,20 +65,15 @@ function isValidPreset(preset) {
 }
 
 function loadUserPresets() {
-	try {
-		const list = JSON.parse(localStorage.getItem(USER_PRESETS_KEY));
-		if (Array.isArray(list)) return list.filter(isValidPreset);
-	} catch { /* corrupt storage falls through to none */ }
-	return [];
+	const list = readJson(STORAGE_KEYS.userPresets);
+	return Array.isArray(list) ? list.filter(isValidPreset) : [];
 }
 
 // read once: allPresets runs on every validation and panel build
 export let userPresets = loadUserPresets();
 
 export function saveUserPresets() {
-	try {
-		localStorage.setItem(USER_PRESETS_KEY, JSON.stringify(userPresets));
-	} catch { /* storage disabled or full — the presets still work this session */ }
+	writeJson(STORAGE_KEYS.userPresets, userPresets);
 }
 
 export function allPresets() {
@@ -152,8 +146,6 @@ export function deleteUserPreset(id) {
 // the zadano fallback and a shared link naming a preset the recipient hides
 // all keep resolving. Only the preset bar filters.
 
-const HIDDEN_PRESETS_KEY = 'mapHiddenPresets';
-
 // one built-in always stays on offer, so the row can never come down to
 // "Prilagođeno" alone and there is always a named view to get back to
 const PERMANENT_PRESET_ID = 'zadano';
@@ -163,21 +155,16 @@ export function isHideablePreset(id) {
 }
 
 function loadHiddenPresets() {
-	try {
-		const list = JSON.parse(localStorage.getItem(HIDDEN_PRESETS_KEY));
-		// the permanent one is dropped on the way in, so a list stored before it
-		// became permanent doesn't keep it hidden or skew the counts below
-		if (Array.isArray(list)) return list.filter(id => isHideablePreset(id) && MAP_PRESETS.some(preset => preset.id === id));
-	} catch { /* corrupt storage falls through to none hidden */ }
-	return [];
+	const list = readJson(STORAGE_KEYS.hiddenPresets);
+	// the permanent one is dropped on the way in, so a list stored before it
+	// became permanent doesn't keep it hidden or skew the counts below
+	return Array.isArray(list) ? list.filter(id => isHideablePreset(id) && MAP_PRESETS.some(preset => preset.id === id)) : [];
 }
 
 export let hiddenPresets = loadHiddenPresets();
 
 function saveHiddenPresets() {
-	try {
-		localStorage.setItem(HIDDEN_PRESETS_KEY, JSON.stringify(hiddenPresets));
-	} catch { /* storage disabled or full — the choice still holds this session */ }
+	writeJson(STORAGE_KEYS.hiddenPresets, hiddenPresets);
 }
 
 export function isPresetHidden(id) {

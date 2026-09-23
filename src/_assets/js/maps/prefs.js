@@ -2,13 +2,12 @@
 // pick), stored in this browser — or, while a shared link is open, the view
 // that link carries, which overrides the stored one for the session.
 
+import { readJson, STORAGE_KEYS, writeJson } from '../lib/storage.js';
 import { DESKTOP_MQ } from '../lib/media.js';
 import { persistSnapLayout } from '../widgets/layout.js';
 import { CATALOG_BY_ID } from './catalog.js';
 import { allPresets, MAP_PRESETS, userPresets } from './presets.js';
 import { decodeMapView } from './share.js';
-
-const MAP_PREFS_KEY = 'mapPrefs';
 
 // guards both untrusted sources (localStorage, ?v=): 'custom' is a runtime-only
 // preset (not in MAP_PRESETS), everything else must name a real preset or it
@@ -19,18 +18,14 @@ export function isValidPrefs(prefs) {
 		&& (prefs.preset === 'custom' || allPresets().some(p => p.id === prefs.preset));
 }
 
+// read afresh every time: the page and another tab both write it
 export function getMapPrefs() {
-	try {
-		const prefs = JSON.parse(localStorage.getItem(MAP_PREFS_KEY));
-		if (isValidPrefs(prefs)) return prefs;
-	} catch { /* corrupt storage falls through to default */ }
-	return { preset: 'zadano' };
+	const prefs = readJson(STORAGE_KEYS.mapPrefs);
+	return isValidPrefs(prefs) ? prefs : { preset: 'zadano' };
 }
 
 export function saveMapPrefs(prefs) {
-	try {
-		localStorage.setItem(MAP_PREFS_KEY, JSON.stringify(prefs));
-	} catch { /* storage disabled or full — still apply the view this session */ }
+	writeJson(STORAGE_KEYS.mapPrefs, prefs);
 }
 
 export function presetMapIds(presetId) {
