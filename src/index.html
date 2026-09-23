@@ -10,8 +10,7 @@
 	<title>Meteo radari</title>
 	<!-- seo -->
 	<link rel="stylesheet" href="/_assets/css/styles.css">
-	<script src="/_assets/js/config.js" defer></script>
-	<script src="/_assets/js/main.js" defer></script>
+	<script type="module" src="/_assets/js/landing.js"></script>
 	<script src="/_assets/js/include.js" defer></script>
 	<!-- gtag -->
 </head>
@@ -28,10 +27,10 @@
 					<div class="buttons with-help">
 						<a href="/customize/index.html" style="text-decoration: none"><div class="btn">Prilagodi <span class="beta">beta</span></div></a>
 						<div class="links-btn">
-							<button type="button" class="btn" onclick="scrollToElement('links')">Linkovi</button>
-							<input type="checkbox" class="links-toggle" onchange="toggleLinksBottom(this)" title="Prikaži linkove ispod karata" />
+							<button type="button" class="btn" data-action="links">Linkovi</button>
+							<input type="checkbox" class="links-toggle" data-action="links-bottom" title="Prikaži linkove ispod karata" />
 						</div>
-						<button type="button" class="btn help-btn" onclick="toggleManual()" title="Upute (H)">?</button>
+						<button type="button" class="btn help-btn" data-action="manual" title="Upute (H)">?</button>
 					</div>
 				</td>
 			</tr>
@@ -52,8 +51,8 @@
 						<div class="slide fade">
 							<img data-src="https://maps.neverin.hr/radar/latest/hr/anim_6h.webp" class="lazy" />
 						</div>
-						<a class="prev" onclick="plusSlides(1, -1)">&#10094;</a>
-						<a class="next" onclick="plusSlides(1, 1)">&#10095;</a>
+						<a class="prev" data-action="slide" data-step="-1">&#10094;</a>
+						<a class="next" data-action="slide" data-step="1">&#10095;</a>
 					</div>
 					<div class="indicators-container" data-slideshow-id="1">
 						<span class="indicator"></span>
@@ -94,8 +93,8 @@
 						<div class="slide fade">
 							<img data-src="https://maps.neverin.hr/satellite/rgb_geocolour/latest/hr/anim_6h.webp" class="lazy" />
 						</div>
-						<a class="prev" onclick="plusSlides(2, -1)">&#10094;</a>
-						<a class="next" onclick="plusSlides(2, 1)">&#10095;</a>
+						<a class="prev" data-action="slide" data-step="-1">&#10094;</a>
+						<a class="next" data-action="slide" data-step="1">&#10095;</a>
 					</div>
 					<div class="indicators-container" data-slideshow-id="2">
 						<span class="indicator"></span>
@@ -133,8 +132,8 @@
 						<div class="slide fade">
 							<img data-src="https://maps.neverin.hr/radar/latest/eu2/anim_6h.webp" class="lazy" />
 						</div>
-						<a class="prev" onclick="plusSlides(3, -1)">&#10094;</a>
-						<a class="next" onclick="plusSlides(3, 1)">&#10095;</a>
+						<a class="prev" data-action="slide" data-step="-1">&#10094;</a>
+						<a class="next" data-action="slide" data-step="1">&#10095;</a>
 					</div>
 					<div class="indicators-container" data-slideshow-id="3">
 						<span class="indicator"></span>
@@ -174,8 +173,8 @@
 						<div class="slide fade">
 							<img data-src="https://maps.neverin.hr/satellite/rgb_geocolour/latest/eu2/anim_6h.webp" class="lazy" />
 						</div>
-						<a class="prev" onclick="plusSlides(4, -1)">&#10094;</a>
-						<a class="next" onclick="plusSlides(4, 1)">&#10095;</a>
+						<a class="prev" data-action="slide" data-step="-1">&#10094;</a>
+						<a class="next" data-action="slide" data-step="1">&#10095;</a>
 					</div>
 					<div class="indicators-container" data-slideshow-id="4">
 						<span class="indicator"></span>
@@ -202,11 +201,11 @@
 			<tr data-map-id="windy">
 				<td align="center">
 					<div class="radartitle">
-						<a class="left zoom-btn" data-mode="hr" onclick="switchIframeZoom('windy', this)">[HR]</a>
+						<a class="left zoom-btn" data-mode="hr" data-action="zoom" data-frame="windy">[HR]</a>
 						<a class="center" href="https://www.windy.com/-Radar-lightning-radar?radar,44.5,16.5,7" target="_blank" rel="nofollow">Windy</a>
 						<span class="right right-cluster">
 							<a id="resetWindyFrame" data-frame-id="windy" style="display:none">[X]</a>
-							<a class="fs-btn" onclick="toggleFullscreen('windy', this)">[ ]</a>
+							<a class="fs-btn" data-action="fullscreen" data-frame="windy">[ ]</a>
 						</span>
 					</div>
 					<div class="if1 placeholder">
@@ -248,8 +247,8 @@
 						<div class="slide fade">
 							<img data-src="https://vrijeme.hr/kompozit-stat.png" class="lazy" />
 						</div>
-						<a class="prev" onclick="plusSlides(7, -1)">&#10094;</a>
-						<a class="next" onclick="plusSlides(7, 1)">&#10095;</a>
+						<a class="prev" data-action="slide" data-step="-1">&#10094;</a>
+						<a class="next" data-action="slide" data-step="1">&#10095;</a>
 					</div>
 					<div class="indicators-container" data-slideshow-id="7" style="max-width: 720px; grid-template-columns: repeat(2, 1fr);">
 						<span class="indicator active"></span>
@@ -293,8 +292,8 @@
 								<img data-src="https://www.meteociel.com/cartes_obs/temp_eur2.png" class="lazy" />
 							</div>
 						</div>
-						<a class="prev shorter" onclick="plusSlides(15, -1)">&#10094;</a>
-						<a class="next shorter" onclick="plusSlides(15, 1)">&#10095;</a>
+						<a class="prev shorter" data-action="slide" data-step="-1">&#10094;</a>
+						<a class="next shorter" data-action="slide" data-step="1">&#10095;</a>
 					</div>
 					<div class="indicators-container" data-slideshow-id="15" style="max-width: 768px; grid-template-columns: repeat(2, 1fr);">
 						<span class="indicator active"></span>
@@ -320,11 +319,11 @@
 			<tr data-map-id="blitzortung">
 				<td align="center">
 					<div class="radartitle">
-						<a class="left zoom-btn" data-mode="hr" onclick="switchIframeZoom('blitzortung', this)">[HR]</a>
+						<a class="left zoom-btn" data-mode="hr" data-action="zoom" data-frame="blitzortung">[HR]</a>
 						<a class="center" href="https://map.blitzortung.org/#6/44.5/16.5" target="_blank" rel="nofollow">Blitzortung.org | Munje</a>
 						<span class="right right-cluster">
 							<a id="resetBlitzortungFrame" data-frame-id="blitzortung" style="display:none">[X]</a>
-							<a class="fs-btn" onclick="toggleFullscreen('blitzortung', this)">[ ]</a>
+							<a class="fs-btn" data-action="fullscreen" data-frame="blitzortung">[ ]</a>
 						</span>
 					</div>
 					<div class="if1 placeholder">
@@ -364,8 +363,8 @@
 						<div class="slide fade">
 							<img data-src="https://meteo-data.jurakovic.workers.dev/essl/img3.png" class="lazy" />
 						</div>
-						<a class="prev" onclick="plusSlides(16, -1)">&#10094;</a>
-						<a class="next" onclick="plusSlides(16, 1)">&#10095;</a>
+						<a class="prev" data-action="slide" data-step="-1">&#10094;</a>
+						<a class="next" data-action="slide" data-step="1">&#10095;</a>
 					</div>
 					<div class="indicators-container" data-slideshow-id="16" style="grid-template-columns: repeat(3, 1fr);">
 						<span class="indicator"></span>
@@ -412,8 +411,8 @@
 						<div class="slide fade">
 							<img data-src="https://rawinsonde.com/ASTORP/Results/ESTOFEX_DAY_7.jpg" class="lazy" />
 						</div>
-						<a class="prev" onclick="plusSlides(19, -1)">&#10094;</a>
-						<a class="next" onclick="plusSlides(19, 1)">&#10095;</a>
+						<a class="prev" data-action="slide" data-step="-1">&#10094;</a>
+						<a class="next" data-action="slide" data-step="1">&#10095;</a>
 					</div>
 					<div class="indicators-container" data-slideshow-id="19" style="grid-template-columns: repeat(7, 1fr);">
 						<span class="indicator active"></span>
@@ -449,8 +448,8 @@
 						<div class="slide fade">
 							<img data-src="https://meteo-data.jurakovic.workers.dev/estofex/img2.png" class="lazy" />
 						</div>
-						<a class="prev" onclick="plusSlides(18, -1)">&#10094;</a>
-						<a class="next" onclick="plusSlides(18, 1)">&#10095;</a>
+						<a class="prev" data-action="slide" data-step="-1">&#10094;</a>
+						<a class="next" data-action="slide" data-step="1">&#10095;</a>
 					</div>
 					<div class="indicators-container" data-slideshow-id="18" style="max-width: 800px; grid-template-columns: repeat(2, 1fr);">
 						<span class="indicator active"></span>
@@ -532,8 +531,8 @@
 							</div>
 						</div>
 						-->
-						<a class="prev shorter" onclick="plusSlides(5, -1)">&#10094;</a>
-						<a class="next shorter" onclick="plusSlides(5, 1)">&#10095;</a>
+						<a class="prev shorter" data-action="slide" data-step="-1">&#10094;</a>
+						<a class="next shorter" data-action="slide" data-step="1">&#10095;</a>
 					</div>
 					<div class="indicators-container" data-slideshow-id="5" style="max-width: 768px; grid-template-columns: repeat(2, 1fr);">
 						<span class="indicator active"></span>
@@ -584,8 +583,8 @@
 						<div class="slide fade">
 							<img data-src="https://www.dwd.de/DWD/wetter/wv_spez/hobbymet/wetterkarten/ico_tkboden_na_108.png" class="lazy" />
 						</div>
-						<a class="prev" onclick="plusSlides(17, -1)">&#10094;</a>
-						<a class="next" onclick="plusSlides(17, 1)">&#10095;</a>
+						<a class="prev" data-action="slide" data-step="-1">&#10094;</a>
+						<a class="next" data-action="slide" data-step="1">&#10095;</a>
 					</div>
 					<div class="indicators-container" data-slideshow-id="17" style="max-width: 800px; grid-template-columns: repeat(6, 1fr);">
 						<span class="indicator active"></span>
@@ -654,8 +653,8 @@
 								<img src="https://meteo-data.jurakovic.workers.dev/meteoblue/meteogram/osijek.png" />
 							</div>
 						</div>
-						<a class="prev shorter" onclick="plusSlides(14, -1)">&#10094;</a>
-						<a class="next shorter" onclick="plusSlides(14, 1)">&#10095;</a>
+						<a class="prev shorter" data-action="slide" data-step="-1">&#10094;</a>
+						<a class="next shorter" data-action="slide" data-step="1">&#10095;</a>
 					</div>
 					<div class="indicators-container" data-slideshow-id="14" style="grid-template-columns: repeat(4, 1fr);">
 						<span class="indicator active"></span>
@@ -710,9 +709,9 @@
 		</div>
 	</div>
 	<footer>
-		<a onclick="scrollToTop()" style="cursor: pointer">Povratak na vrh</a>
+		<a data-action="top" style="cursor: pointer">Povratak na vrh</a>
 		·
-		<span class="manual-link"><a onclick="toggleManual()" style="cursor: pointer">Upute</a> ·</span>
+		<span class="manual-link"><a data-action="manual" style="cursor: pointer">Upute</a> ·</span>
 		<a href="/customize/index.html">Prilagodi <span class="beta">beta</span></a>
 		|
 		<a href="https://jurakovic.github.io">Projekti</a>

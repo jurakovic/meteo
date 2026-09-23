@@ -6,14 +6,13 @@ export default [
 	{ ignores: ['docs/**', 'node_modules/**', 'test-results/**', 'playwright-report/**'] },
 	js.configs.recommended,
 	{
-		files: ['src/**/*.js'],
-		languageOptions: { sourceType: 'script', globals: globals.browser },
-		rules: {
-			// the site's scripts still share one global scope, each using what the
-			// others declare — both come back on once they are modules (S4)
-			'no-undef': 'off',
-			'no-unused-vars': 'off'
-		}
+		files: ['src/_assets/js/**/*.js'],
+		languageOptions: { sourceType: 'module', globals: globals.browser }
+	},
+	{
+		// dev only (the build inlines what it fetches)
+		files: ['src/_assets/js/include.js'],
+		languageOptions: { sourceType: 'script' }
 	},
 	{
 		files: ['scripts/**', 'tests/**', '*.config.js'],

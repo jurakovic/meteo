@@ -1,0 +1,353 @@
+// The arrangement — what is popped out, where, in which column, grouped with
+// what, and whether the view is a board — as data: read off the screen,
+// checked on the way in from storage or a link, applied after a render, and
+// written back after every gesture.
+
+import { clamp, roundFraction, viewportHeight, viewportWidth } from '../lib/geometry.js';
+import { DESKTOP_MQ } from '../lib/media.js';
+import { getActiveMapPrefs, getMapPrefs, resolveMapIds, saveMapPrefs, sharedMapView } from '../maps/prefs.js';
+import { instKey, instMapId } from '../maps/render.js';
+import { encodeMapView } from '../maps/share.js';
+import { arrangeBoard } from './arrange.js';
+import { dashboardMode, isDashboard, popoutRest, setDashboard } from './board.js';
+import { attachSnapPane, layoutSnapColumns, resetSnapColumns, snapColumns } from './columns.js';
+import { POPOUT_MIN_HEIGHT, POPOUT_MIN_WIDTH, SNAP_MIN_WIDTH } from './constants.js';
+import { instanceFor, isDuplicate } from './copies.js';
+import { floatingBlocks, placePopout, popoutMaxWidth, raisePopout } from './core.js';
+import { hasFullscreen, restoreFullscreen } from './fullscreen.js';
+import { newGroupId, updateGroups } from './groups.js';
+import { syncShadows, updateCovered } from './overlap.js';
+import { dockAllPopouts, popoutMap, unlockAspect } from './popout.js';
+
+export function initLayoutBreakpoint() {
+	// widgets are a desktop thing: shrinking below the breakpoint puts them back,
+	// and widening brings back what was put away — the arrangement belongs to the
+	// view, not to the window, so it waits out a narrow one rather than being
+	// unmade by it
+	DESKTOP_MQ.addEventListener('change', (e) => {
+		if (e.matches) { applySnapLayout(unappliedSnapLayout); return; }
+		// what the view stores rather than what is on screen: the viewport has
+		// narrowed already, and the fractions read off the screen now would be of
+		// the narrow width (B1). Every gesture writes the arrangement as it ends,
+		// so the stored one is the one on screen
+		unappliedSnapLayout = sanitizeSnapLayout(getActiveMapPrefs().layout, resolveMapIds());
+		withPersistPaused(dockAllPopouts); // the stored arrangement is kept for a desktop window
+	});
+}
+
+// the arrangement as data: per side the column width and the panes as map
+// ids with their tops (and a free pane's height), every number a fraction of
+// the viewport, so another window or screen gets the proportions. Null when
+// nothing is snapped. It rides in mapPrefs next to the map list, in a saved
+// preset next to its maps, and in the ?v= payload — always a subset of the
+// map list it sits beside, which is what sanitizeSnapLayout() holds it to on
+// the way back. A group is a number shared by its members' entries, counted
+// in order of appearance across the columns and the floating widgets
+// the key each showing is stored under. Which showing is which is only a
+// matter of the moment — any can be closed and another take the page's place —
+// so the keys are dealt afresh on every write: the page's own showing first,
+// under the plain map id, which is the block the render gives back on load, and
+// the rest #2, #3 on in the page's order. A layout thus never names a copy of a
+// map without the map itself, whichever of its showings were left
+function layoutKeys() {
+	const keys = new Map(), counts = new Map();
+	const blocks = [...document.querySelectorAll('.map-block')];
+	[...blocks.filter(b => !isDuplicate(b)), ...blocks.filter(isDuplicate)].forEach(block => {
+		const id = block.dataset.mapId;
+		const index = (counts.get(id) || 0) + 1;
+		counts.set(id, index);
+		keys.set(block, instKey(id, index));
+	});
+	return keys;
+}
+
+function snapLayout() {
+	const layout = {};
+	const keys = layoutKeys();
+	const groupNumbers = new Map();
+	const groupNumber = (block) => {
+		if (!block._group) return undefined;
+		if (!groupNumbers.has(block._group)) groupNumbers.set(block._group, groupNumbers.size + 1);
+		return groupNumbers.get(block._group);
+	};
+	Object.values(snapColumns).forEach(col => {
+		if (!col.panes.length) return;
+		layout[col.side] = {
+			width: roundFraction(col.width),
+			panes: [...col.panes].sort((a, b) => a.top - b.top).map(p => {
+				const entry = { id: keys.get(p.block), top: roundFraction(p.top) };
+				if (p.height !== undefined) entry.height = roundFraction(p.height);
+				const group = groupNumber(p.block);
+				if (group) entry.group = group;
+				if (p.block.classList.contains('fs-host')) entry.fullscreen = true;
+				return entry;
+			})
+		};
+	});
+	// widgets floating over the page, bottom to top, so they stack the same
+	// way again; a locked one has no height of its own to store
+	const floating = floatingBlocks()
+		.sort((a, b) => (Number(a.style.zIndex) || 0) - (Number(b.style.zIndex) || 0))
+		.map(block => {
+			const rect = block.getBoundingClientRect();
+			const entry = {
+				id: keys.get(block),
+				left: roundFraction(rect.left / viewportWidth()),
+				top: roundFraction(rect.top / viewportHeight()),
+				width: roundFraction(rect.width / viewportWidth())
+			};
+			if (block.classList.contains('free')) entry.height = roundFraction(rect.height / viewportHeight());
+			const group = groupNumber(block);
+			if (group) entry.group = group;
+			if (block.classList.contains('fs-host')) entry.fullscreen = true;
+			return entry;
+		});
+	if (floating.length) layout.floating = floating;
+	if (dashboardMode) layout.dashboard = true;
+	return Object.keys(layout).length ? layout : null;
+}
+
+// rebuilt rather than trusted (storage, links, a saved entry): a pane must
+// name a map in the list, once across both columns and the floating widgets,
+// and carry a top (a layout from before panes were placed freely carries a
+// height share instead: those are stacked from the top as they were); the
+// two widths are held to the viewport. A map dropped from the list leaves
+// the layout, and an emptied column with it. A group is its members' place
+// as much as their number: fewer than two, or spread over two places, is no
+// group
+export function sanitizeSnapLayout(layout, mapIds) {
+	if (!layout || typeof layout !== 'object') return null;
+	const clean = {};
+	const seen = new Set();
+	const fraction = (n, max = 1) => Number.isFinite(n) && n >= 0 && n <= max;
+	const groupOf = (entry) => Number.isInteger(entry.group) && entry.group > 0 ? entry.group : undefined;
+	const board = layout.dashboard === true;
+	['left', 'right'].forEach(side => {
+		if (board) return; // a board has no columns: its panes are dropped here and come back as widgets, through popoutRest
+		const col = layout[side];
+		if (!col || typeof col !== 'object' || !Array.isArray(col.panes)) return;
+		const width = Number(col.width);
+		if (!(width > 0 && width <= 1)) return;
+		const panes = [];
+		let stacked = 0;
+		col.panes.forEach(p => {
+			if (!(p && typeof p.id === 'string' && mapIds.includes(instMapId(p.id)) && !seen.has(p.id))) return;
+			const entry = { id: p.id };
+			const top = Number(p.top), height = Number(p.height), share = Number(p.share);
+			if (fraction(top)) {
+				entry.top = roundFraction(top);
+			} else if (share > 0 && share <= 1) {
+				entry.top = roundFraction(stacked);
+				entry.height = roundFraction(share);
+				stacked += share;
+			} else {
+				return;
+			}
+			if (fraction(height) && height > 0) entry.height = roundFraction(height);
+			const group = groupOf(p);
+			if (group) entry.group = group;
+			if (p.fullscreen === true && hasFullscreen(p.id)) entry.fullscreen = true;
+			seen.add(p.id);
+			panes.push(entry);
+		});
+		if (!panes.length) return;
+		clean[side] = { width: roundFraction(width), panes };
+	});
+	if (clean.left && clean.right && clean.left.width + clean.right.width > 1) {
+		clean.right.width = roundFraction(1 - clean.left.width);
+		if (clean.right.width <= 0) delete clean.right;
+	}
+	if (Array.isArray(layout.floating)) {
+		const floating = layout.floating
+			.filter(f => f && typeof f.id === 'string' && mapIds.includes(instMapId(f.id)) && !seen.has(f.id)
+				&& fraction(Number(f.left)) && fraction(Number(f.top)) && fraction(Number(f.width)) && Number(f.width) > 0)
+			.map(f => {
+				seen.add(f.id);
+				const entry = { id: f.id, left: roundFraction(Number(f.left)), top: roundFraction(Number(f.top)), width: roundFraction(Number(f.width)) };
+				if (fraction(Number(f.height)) && Number(f.height) > 0) entry.height = roundFraction(Number(f.height));
+				const group = groupOf(f);
+				if (group) entry.group = group;
+				if (f.fullscreen === true && hasFullscreen(f.id)) entry.fullscreen = true;
+				return entry;
+			});
+		if (floating.length) clean.floating = floating;
+	}
+	const lists = [clean.left && clean.left.panes, clean.right && clean.right.panes, clean.floating].filter(Boolean);
+	const groups = new Map(); // group number → how many members, over how many places
+	lists.forEach(list => list.forEach(entry => {
+		if (!entry.group) return;
+		if (!groups.has(entry.group)) groups.set(entry.group, { count: 0, places: new Set() });
+		groups.get(entry.group).count++;
+		groups.get(entry.group).places.add(list);
+	}));
+	lists.forEach(list => list.forEach(entry => {
+		const group = groups.get(entry.group);
+		if (group && (group.count < 2 || group.places.size > 1)) delete entry.group;
+	}));
+	if (board) clean.dashboard = true; // a board with nothing placed yet is still a board
+	return Object.keys(clean).length ? clean : null;
+}
+
+export function sameSnapLayout(a, b) {
+	return JSON.stringify(a || null) === JSON.stringify(b || null);
+}
+
+// the columns from a (sanitized) layout, after a render: each pane is popped
+// out and attached to its column as stored, then the widths are set as
+// stored. Desktop only, like the gestures — on a phone the layout is carried,
+// not shown
+export function applySnapLayout(layout) {
+	resetSnapColumns();
+	// the mode before anything is measured: the page's scrollbar goes with it
+	setDashboard(!!(layout && layout.dashboard && DESKTOP_MQ.matches));
+	// nothing to place, but the sweep still has to run: the widgets this replaces
+	// go with the tbody (renderMaps) rather than being docked, so their shadows
+	// are left in the layer with no widget to own them, and the updateCovered
+	// that sweeps them is below this return
+	if (!layout || !DESKTOP_MQ.matches) {
+		// a narrow window is not a change of mind: the arrangement it cannot
+		// show is kept whole, to be written on the view's behalf and applied
+		// once there is a desktop window again
+		unappliedSnapLayout = DESKTOP_MQ.matches ? null : layout;
+		syncShadows();
+		return;
+	}
+	unappliedSnapLayout = null;
+	// what is being applied is already what is stored
+	const tiled = withPersistPaused(() => placeSnapLayout(layout));
+	// the tiling was decided here rather than read from the layout, so it is
+	// the one thing this function has to write back
+	if (tiled) persistSnapLayout();
+}
+
+// the widgets and panes a layout names, put in place; true when the board had
+// nothing placed and was tiled instead
+function placeSnapLayout(layout) {
+	const toFullscreen = [];
+	const groupIds = new Map(); // stored group number → a fresh id
+	const setGroup = (block, group) => {
+		if (!group) return;
+		if (!groupIds.has(group)) groupIds.set(group, newGroupId());
+		block._group = groupIds.get(group);
+	};
+	['left', 'right'].forEach(side => {
+		const stored = layout[side];
+		if (!stored) return;
+		const col = snapColumns[side];
+		stored.panes.forEach(({ id, top, height, group, fullscreen }) => {
+			const block = instanceFor(id);
+			if (!block || block.classList.contains('popout')) return;
+			popoutMap(block);
+			if (height && !block.classList.contains('free')) unlockAspect(block); // a locked map stored with a height was freed
+			attachSnapPane(col, block, top, height);
+			setGroup(block, group);
+			if (fullscreen) toFullscreen.push(block);
+		});
+		if (!col.panes.length) return;
+		col.width = clamp(stored.width * viewportWidth(), SNAP_MIN_WIDTH, viewportWidth()) / viewportWidth();
+	});
+	const { left, right } = snapColumns;
+	if (left.panes.length && right.panes.length && left.width + right.width > 1) right.width = 1 - left.width;
+	layoutSnapColumns();
+	(layout.floating || []).forEach(({ id, left, top, width, height, group, fullscreen }) => {
+		const block = instanceFor(id);
+		if (!block || block.classList.contains('popout')) return;
+		popoutMap(block);
+		if (height && !block.classList.contains('free')) unlockAspect(block);
+		// the stored width as stored, held to the widget limits
+		block.style.width = `${Math.round(clamp(width * viewportWidth(), POPOUT_MIN_WIDTH, popoutMaxWidth()))}px`;
+		if (block.classList.contains('free') && height)
+			block.style.height = `${Math.round(clamp(height * viewportHeight(), POPOUT_MIN_HEIGHT, viewportHeight()))}px`;
+		placePopout(block, left * viewportWidth(), top * viewportHeight());
+		raisePopout(block); // in stored order, so the last one is on top again
+		setGroup(block, group);
+		if (fullscreen) toFullscreen.push(block);
+	});
+	// a board the layout places nothing on is a new one, and a new board is
+	// tiled rather than cascaded. Where it does place some, the rest cascade in
+	// beside them: an arrangement already made is not taken apart to make room
+	const tiled = dashboardMode && !(layout.floating || []).length;
+	if (dashboardMode) popoutRest(); // the maps of the list the layout does not place: onto the board
+	if (tiled) arrangeBoard();
+	// once everything stands where it belongs: a pane's fullscreen is placed
+	// by its column, and page/iframe.js reads off the pane whether to lock the page
+	toFullscreen.forEach(restoreFullscreen);
+	updateGroups();
+	updateCovered(); // persistence is paused, so this is not reached through it
+	return tiled;
+}
+
+export function applyStoredSnapLayout() {
+	applySnapLayout(sanitizeSnapLayout(getActiveMapPrefs().layout, resolveMapIds()));
+}
+
+let snapPersistPaused = false;
+
+// fn with the arrangement's writes held back, and whatever was in force
+// before put back afterwards — also when fn throws, which would otherwise
+// leave every later gesture unsaved for the rest of the session
+export function withPersistPaused(fn) {
+	const paused = snapPersistPaused;
+	snapPersistPaused = true;
+	try {
+		return fn();
+	} finally {
+		snapPersistPaused = paused;
+	}
+}
+
+// the arrangement the view holds but the window is too narrow to show. Below
+// the breakpoint applySnapLayout() places nothing, so the board stands empty
+// while the preferences still describe a desktop arrangement — and snapLayout(),
+// which reads the screen, would describe that emptiness. Everything that writes
+// the arrangement, or asks the dialog what the view holds, goes through
+// currentSnapLayout() instead, so a narrow window never writes the empty board
+// over what a desktop window put there. Cleared the moment it is applied
+let unappliedSnapLayout = null;
+
+// what is on screen, or — where none of it is placed — what is stored waiting
+// for a desktop window
+export function currentSnapLayout() {
+	return unappliedSnapLayout || snapLayout();
+}
+
+// the mode the view holds, which below the breakpoint is the stored one: the
+// board is not on screen there, but it is still what the view says, and the
+// dialog's mode row would otherwise tick itself off and apply that
+export function isDashboardView() {
+	return unappliedSnapLayout ? unappliedSnapLayout.dashboard === true : isDashboard();
+}
+
+// the arrangement is written as it changes — it is direct manipulation, not
+// a form with an apply button — next to the map list it belongs to: into the
+// preferences, or, while a shared view is on, into that view and back into
+// the address bar, so the link stays re-copyable with the arrangement as it
+// is now and a refresh keeps it (the recipient's storage is still never
+// written). Paused while the breakpoint docks everything: that is the window
+// changing, not the arrangement
+export function persistSnapLayout() {
+	// every gesture ends here: what touches what, and what lies over what, may
+	// both have changed
+	updateGroups();
+	updateCovered();
+	if (snapPersistPaused) return;
+	const layout = currentSnapLayout();
+	if (sharedMapView) {
+		if (layout) sharedMapView.layout = layout;
+		else delete sharedMapView.layout;
+		const url = new URL(window.location);
+		url.searchParams.set('v', encodeMapView(sharedMapView));
+		history.replaceState(null, '', url);
+	} else {
+		const prefs = getMapPrefs();
+		if (layout) prefs.layout = layout;
+		else delete prefs.layout;
+		saveMapPrefs(prefs);
+	}
+	// the settings panel, if open, names the arrangement and offers Ažuriraj off
+	// it. A press outside the dialog is taken by the backdrop and shuts it, so
+	// what reaches this with the panel still up is what the panel itself drives:
+	// Vrati sve on the layout line
+	const panel = document.getElementById('mapSettings');
+	if (panel && !panel.hidden && panel._onLayoutChange) panel._onLayoutChange();
+}

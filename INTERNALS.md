@@ -58,7 +58,7 @@ Open <http://localhost:8081/meteo/>
 [`scripts/build.mjs`](./scripts/build.mjs) produces `docs/` from `src/` by processing every `.html` file (except `_components/`):
 
 1. injects the manual ([`scripts/manual.mjs`](./scripts/manual.mjs)) at `<!-- manual -->` and drops the dialog body's dev-only include (the fragment is also written to `_components/manual.c.html` for the dev pages), above the rewrites below so a path it grows later is rewritten with every other
-2. minifies the CSS (clean-css) and the scripts (terser) in memory and inlines them in place of their `<link>`/`<script>` tags, each line indented
+2. minifies the CSS (clean-css), bundles each page's entry module with everything it imports (esbuild) and minifies it (terser), and inlines both in place of their `<link>`/`<script type="module">` tags, each line indented
 3. injects `_components/*.c.html` (seo, gtag, links) at their placeholders
 4. rewrites dev paths to GitHub Pages paths (`href="/customize/index.html` → `/meteo/customize/`, `href="/"` → `/meteo/"`, image paths, the extras stub's `url=`)
 5. strips HTML comments, trims trailing whitespace, collapses blank lines, and writes CRLF
@@ -68,6 +68,22 @@ The indentation splits on CRLF, as the PowerShell build it replaced did, so a fr
 ### Tests
 
 The browser suite ([`tests/e2e`](./tests/e2e)) drives both the dev tree and the built site. Every request that leaves the local server is answered by [`fixtures.js`](./tests/e2e/fixtures.js) — map images as an SVG of a map's size, frames as an empty page, the worker's `config.json` as a test chooses — so it runs offline and the same way every time, and a script error on a page fails the test. Chromium resolves `localhostmeteo` (the origin the worker allows) to the local server by a launch flag, no hosts entry needed.
+
+### Code map
+
+The scripts are ES modules under [`src/_assets/js`](./src/_assets/js). The dev pages load them as they are (`<script type="module">`); the build bundles each page's entry into one inlined script.
+
+| Where | What |
+|---|---|
+| `landing.js`, `customize.js` | the two pages' entry points. Modules only declare; an entry wires them up, in order — what must be in place before the first paint at once (in the build the script runs in `<head>`), the rest once the document is parsed (`onReady`, each step on its own so one failing does not stop the others) |
+| `lib/` | helpers with no knowledge of maps: `dom` (`el`, `onReady`, `isTextField`), `geometry` (`clamp`, the viewport), `pointer` (a drag or resize gesture), `media` (the breakpoint), `debug` (`dlog`) |
+| `remote-config.js` | which maps the worker's `config.json` switches off |
+| `page/` | what both pages have: the slideshows, the interactive maps' gate and fullscreen (`iframe`), the links, the progress bar, the dialog chrome, the manual, and `actions` — the `data-action` controls in the markup, run by one click listener |
+| `maps/` | the customize page's data and view: the `catalog`, the `presets`, the stored or shared view (`prefs`), share links (`share`), `find`, and `render` |
+| `settings/` | the settings dialog (`panel`), the tab at the top edge (`tab`) and its `[+]` menu (`add-menu`) |
+| `widgets/` | the pop-out widgets (desktop): `constants`, `core`, `popout`, `copies`, `drag`, `resize` (and seams), `groups`, `overlap` (covered frames, shadows), `columns`, `fullscreen`, `board`, `grid`, `arrange`, `keyboard`, `gestures`, `reload`, `refresh`, `layout` (the arrangement as data: read, checked, applied, written), `responsive` |
+
+Modules import each other freely, cycles included: a cycle is harmless because no module runs anything when it is imported other than defining constants — every listener and every start-up step is a function an entry calls.
 
 ### Maps catalog
 

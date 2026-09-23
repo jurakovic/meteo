@@ -5,13 +5,15 @@
 // not name is on, and so is every map when there is no copy yet or the fetch
 // fails: a broken file hides nothing.
 //
-// Loaded first on both pages, since maps.js asks isMapEnabled() while it renders,
-// which in dev is as soon as it runs. Off is hidden, not removed, on both:
+// Started first on both pages, since the render asks isMapEnabled(). Off is
+// hidden, not removed, on both:
 // - the landing page's maps are static rows carrying data-map-id, so a style
 //   rule takes a map's rows out, with the spacer after them
-// - the customize page leaves the map out of what it shows (maps.js) and draws
-//   the view again on a change, on the map-config-changed event
+// - the customize page leaves the map out of what it shows (maps/render.js)
+//   and draws the view again on a change, on the map-config-changed event
+
 const MAP_CONFIG_URL = 'https://meteo-data.jurakovic.workers.dev/config.json';
+
 const MAP_CONFIG_KEY = 'mapConfig';
 
 // { "maps": { "<id>": { "enabled": false } } } — anything else is ignored
@@ -23,14 +25,14 @@ function disabledMapIds(config) {
 function loadMapConfig() {
 	try {
 		return JSON.parse(localStorage.getItem(MAP_CONFIG_KEY));
-	} catch (e) {
+	} catch {
 		return null; // corrupt storage: every map on until the fetch lands
 	}
 }
 
-let disabledMaps = disabledMapIds(loadMapConfig());
+let disabledMaps = new Set();
 
-function isMapEnabled(id) {
+export function isMapEnabled(id) {
 	return !disabledMaps.has(id);
 }
 
@@ -63,7 +65,7 @@ function fetchMapConfig() {
 		.then(config => {
 			try {
 				localStorage.setItem(MAP_CONFIG_KEY, JSON.stringify(config));
-			} catch (e) { /* storage disabled or full — the copy is for the next load only */ }
+			} catch { /* storage disabled or full — the copy is for the next load only */ }
 			const disabled = disabledMapIds(config);
 			if (sameIdSet(disabled, disabledMaps)) return;
 			disabledMaps = disabled;
@@ -73,5 +75,10 @@ function fetchMapConfig() {
 		.catch(() => { /* the copy in hand stands: the file out of reach is no reason to show less */ });
 }
 
-styleDisabledMaps();
-fetchMapConfig();
+// the stored copy at once — from <head> in the build, so a map already off is
+// never painted — and the file fetched behind it
+export function initRemoteConfig() {
+	disabledMaps = disabledMapIds(loadMapConfig());
+	styleDisabledMaps();
+	fetchMapConfig();
+}
