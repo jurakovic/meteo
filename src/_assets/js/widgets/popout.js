@@ -1,9 +1,5 @@
 // Pop-out widgets (desktop): a map block lifted out of the page into a fixed,
-// draggable, resizable widget, so it stays visible while the rest of the page
-// scrolls. Nothing moves in the DOM (an iframe would reload): the block only
-// gets a class and inline left/top/width, the same trick as the iframe
-// fullscreen. A gap of the block's height keeps its place in the list and
-// offers a way back.
+// draggable, resizable widget. See INTERNALS.md, Pop-out.
 
 import { buildReloadButton } from './reload.js';
 import { buildGroupButton } from './groups.js';
@@ -82,11 +78,8 @@ export function popoutMap(block) {
 	arrangementChanged();
 }
 
-// a locked widget freed of its aspect: it becomes a free widget (an inline
-// height, the column layout, the height stored in the layout) with the
-// media letterboxed in what the title bar leaves (.letterbox, CSS) over a
-// blurred and darkened copy of the image showing (.po-backdrop, the image
-// in --po-img), so the bars around it are of the map and not of the frame
+// a locked widget freed of its aspect, its map letterboxed (INTERNALS.md,
+// Freeing and letterboxing)
 /** @param {HTMLElement} block */
 export function unlockAspect(block) {
 	if (block.classList.contains('free')) return;
@@ -167,11 +160,8 @@ function unfitTitles(block) {
 	});
 }
 
-// A letterboxed image (object-fit: contain) is painted smaller than its box,
-// and CSS cannot see the painted rect, so the arrows and indicators would span
-// the whole widget. It is worked out here from the natural ratio and published
-// as insets (--lb-*) for the arrows and a width for the indicators; measured
-// again whenever the box or the image changes
+// the painted rect of a letterboxed image, which CSS cannot see, published
+// for the arrows and the indicators (INTERNALS.md, Freeing and letterboxing)
 function fitLetterbox(block) {
 	const props = ['--lb-l', '--lb-r', '--lb-t', '--lb-b', '--lb-w'];
 	const box = block.querySelector('.slideshow');

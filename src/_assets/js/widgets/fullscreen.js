@@ -1,22 +1,6 @@
 // An interactive map's fullscreen when its widget is on the board or in a
 // column: the room it fills, and the widget's place in the stacking order.
-//
-// The board's answer to the same question. A column gives a pane one axis to
-// grow in — the strip is the width, the panes above and below are the ends —
-// and the board gives a widget four sides: the map takes the whole viewport,
-// and a side comes in only where another widget *walls it off*, that is where
-// the widgets on that side together cover the rectangle from end to end of its
-// other axis. A widget that does not reach across walls nothing off and is
-// floated over; the widgets keep their z-index range above the fullscreen map,
-// so one in a corner stays where it is, over the corner of a map of the whole
-// board. A widget lying over the host is on no side of it and so is never a
-// wall.
-//
-// The walls are looked for again once the sides have come in, since narrowing
-// the rectangle is what lets a widget reach across it: a widget over the right
-// half alone walls off nothing of the viewport, and walls off the top of a
-// rectangle that is already the right half. It settles in a pass or two —
-// every pass only narrows — and stops when nothing moves.
+// See INTERNALS.md, Fullscreen.
 
 import { cssNumber, query, queryAll } from '../lib/dom.js';
 import { EVENTS, on } from '../lib/events.js';
@@ -122,11 +106,8 @@ export function initWidgetFullscreen() {
 	// hide its dividers under it — and, when the page's scroll lock takes the
 	// scrollbar, the viewport the columns are laid out in has changed width
 	on(EVENTS.mapFullscreen, () => {
-		// only the bar and the map move to the fullscreen place; the widget's box
-		// would stay behind, an empty frame over whatever it was floating on.
-		// The widgets floating over the page stay in view over the fullscreen map:
-		// the host goes under every other widget for as long as it hosts one (the
-		// page's own fullscreen sits there through the CSS), then back on top
+		// the host marked, lowered under every other widget while it hosts, and
+		// raised again after (INTERNALS.md, Fullscreen)
 		queryAll('.map-block.popout').forEach(block => {
 			const hosting = !!block.querySelector('.if1.fullscreen');
 			const wasHosting = block.classList.contains('fs-host');

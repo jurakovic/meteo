@@ -506,13 +506,9 @@ export const MAP_CATALOG = [
 		titleHref: 'https://www.idokep.hu/muhold',
 		aspect: '1070 / 713',
 		src: 'https://www.idokep.hu/radar/sat-eu.mp4',
-		// a video has no image for the letterbox backdrop to take (syncBackdrop),
-		// and its frame cannot be read out of a canvas either: the source sends
-		// Access-Control-Allow-Origin for idokep.hu alone, so drawImage taints the
-		// canvas and crossorigin='anonymous' would stop the video loading at all.
-		// One frame, stored here instead. It is scaled to cover and blurred by 14px,
-		// which leaves colour and coarse shape and nothing else, so 64x43 at q60 is
-		// indistinguishable from the full frame and costs 1.8 kB
+		// one frame of the video, for the letterbox backdrop (INTERNALS.md,
+		// Map descriptors). The source sends Access-Control-Allow-Origin for
+		// idokep.hu alone, so the frame cannot be read off the video itself
 		backdrop: 'data:image/jpeg;base64,/9j/4AAQSkZJRgABAQEAYABgAAD/2wBDAA0JCgsKCA0LCwsPDg0QFCEVFBISFCgdHhghMCoyMS8qLi00O0tANDhHOS0uQllCR05QVFVUMz9dY1xSYktTVFH/2wBDAQ4PDxQRFCcVFSdRNi42UVFRUVFRUVFRUVFRUVFRUVFRUVFRUVFRUVFRUVFRUVFRUVFRUVFRUVFRUVFRUVFRUVH/wAARCAArAEADASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9oADAMBAAIRAxEAPwBljPoksUEElnNNdFRuYRLgnufvdK1reHR5XKx20qjH3hEMfh81YmgR5hN2UB3MU4OSOK1rGdCGcrsEJHU85JNXzsjkibEIW0t1nk3FBjaAvzGp7u5huNPcSBDGM5IGQR7VkSXQkkhQuqgEuRuwcHnHuKgF5vJjlHlgJ/eyAST+uRUFjNbjhbSVSMboUP8ADjPI/n7e9YOl28+oRbLaGMeXkZZif0rbNkZ1MKTERFAH2nkMMFSD6g/yrQKC0sv3hKqgyzJwSPSjS2orFXTLF7ZZleMFnxuJIC4A6AVoLd2rMqNPGHz3HANZV1qiJuS3XCkgeY3zHp1rLjSaU7IkaRc8HZ+tZuaWhSRV0W6EeiSNISI97HjqRxwPrUltes7mWVwkbHJwOnpisC4l8pIrWNiNo+cH19DVmOOXcipISdu45rUR201zYGEec3y/dG3r0/Q1C1zYXLAxoc/x5XPGMAn1rmLaKdHk8wjBxgZ708aolm22OT94xIIAHyjuTn0qG3eyH0OzsonhgcRwMDuwD656tz29qpalLK141oD5keBuI4JA5wfSoLPWbSzELSSs8jJnezZVR6ZPrVa5v2/tQ3iL8zHofpUTmkkNK5v6Bp0ElqbmVY8lioHbGayNX1O5tr7bGvlhSOCOn+NWYdZj1CGC3s7SaKJZA87qQAvqc+9ZOqyreahIwY5VtrAnPAPGPanJ8sdCoW5veOKy4fIBJ6k1q6c4Vg0gPTj2rIikdhtLEgDIrd0hQ7fMM4Ga1ZmS3juUaKMOZDxkf41nrYXIlZhGgJQrhm4GeDXTQxo0XIzzViOCJraQlBkZqG3ayNVFPVmXpvhjV9T0hpo5VdWUKkbgLjBI4/AfrVe6uHs1jinLpPG4SdMcAAY9OM9fwre0+WWyvES3ldEjj+RdxIXLjOAa5Lxa7ya1PI7Es+/cc9cdKHFMjU1k1ZZLfyIJ08pRghDkE56mmzyzJE1xNOSsQycsTxXJaZzqNuhJ2tIoYZ6810Ws3Ev9nLFlSjNkgoDnr3xUOF3ZmkZaXP/Z',
 		links: SAT_EU_LINKS
 	},

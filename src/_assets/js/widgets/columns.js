@@ -1,29 +1,5 @@
-// The snap columns (desktop, over the page).
-//
-// a widget dragged to the left or right edge of the viewport snaps into a
-// column there: a strip of the viewport's height in which panes sit freely one
-// above another, the page laid out in what is left between the columns (body
-// padding, through --snap-l/--snap-r). A pane is still a pop-out widget — same
-// block, same fixed positioning, nothing moves in the DOM — only its width is
-// the column's and its place comes from layoutSnapColumns(): a column has a
-// width and each pane a top (a free pane a height too), all fractions of the
-// viewport so a window resize keeps the proportions. Up and down the column a
-// pane moves as a widget does over the page, the column's ends and the other
-// panes its magnets; pulled sideways it floats again. The column's inner edge is
-// its resize handle (.snap-ui, above the panes); .snap-col paints the column's
-// ground below them. A free (iframe) pane keeps its own height; a locked one
-// takes the column's width whole and the height its aspect gives at it. Either
-// resizes by its top and bottom edge, a pull on a locked one letting the aspect
-// go, since at a width that is not the pane's to give that is the only way a
-// height changes. A group is a stack, kept one under another by every layout
-// (settleSnapStacks). A fullscreen map in a pane fills what the column leaves
-// free around it (fitSnapFullscreen).
-//
-// The columns can take the whole width — two of them meeting, or one at full
-// width — which hides the page (body.snap-full also drops its scrollbar). An
-// edge dragged that close snaps shut; a double-click on an edge shuts it too, or
-// opens it back to the widths from before. Two columns that meet share one seam
-// handle that moves width between them.
+// The snap columns (desktop, over the page): a widget dragged to a viewport
+// edge becomes a pane in a column there. See INTERNALS.md, Snap columns.
 
 import { dlog } from '../lib/debug.js';
 import { el } from '../lib/dom.js';

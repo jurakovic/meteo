@@ -14,11 +14,8 @@ export function readPanelPrefs(presetId, mapIds) {
 	return { preset: presetId };
 }
 
-// The toggle, not the layout, decides whether the view is a board. Ticked, any
-// layout becomes one (an empty one is filled by applySnapLayout). Unticked, a
-// board's placements go with the flag: over the page they would be a pile.
-// Called before sanitizeSnapLayout, which then holds a board to what a board
-// can hold (no columns)
+// the mode row's toggle set on a layout, before sanitizeSnapLayout holds it
+// to what a board can hold (INTERNALS.md, The board: Entering)
 /** @param {import('../widgets/layout.js').SnapLayout | null} layout @param {boolean} on */
 export function withDashboard(layout, on) {
 	if (!on) return layout && layout.dashboard ? null : layout;
@@ -27,11 +24,8 @@ export function withDashboard(layout, on) {
 	return board;
 }
 
-// the arrangement to go with a prefs object. A preset is a whole view:
-// applying a saved one brings its own arrangement (none, if it was saved
-// with nothing popped out), and a built-in has none, so everything docks.
-// Only the custom list keeps what is on screen, as far as its maps allow —
-// that is an edit of the current view, not a switch to another one
+// the arrangement to go with a prefs object (INTERNALS.md, Remembered and
+// shared layouts: In the dialog)
 /** @param {import('../maps/prefs.js').MapPrefs} prefs @param {boolean} dashboardChecked @param {import('../widgets/layout.js').SnapLayout | null} [current] */
 export function layoutForPrefs(prefs, dashboardChecked, current = currentSnapLayout()) {
 	const stored = prefs.preset === 'custom'
@@ -71,11 +65,9 @@ export function layoutParts(layout) {
 	return parts;
 }
 
-// Whether a saved preset's row offers Ažuriraj: only for the preset the list
-// came from, and only a saved one (editingPresetId can be a built-in's, which
-// storeUserPreset would fork rather than update). The arrangement counts as an
-// edit here, being part of what the preset stores; the chip's origin dot
-// marks list changes only.
+// Whether a saved preset's row offers Ažuriraj. editingPresetId can be a
+// built-in's, which storeUserPreset would fork rather than update
+// (INTERNALS.md, Saved presets)
 /** @param {import('../maps/presets.js').Preset} preset @param {string} editingPresetId @param {string[]} mapIds @param {import('../widgets/layout.js').SnapLayout | null} layout */
 export function hasPendingEdits(preset, editingPresetId, mapIds, layout) {
 	return isUserPresetId(preset.id) && preset.id === editingPresetId

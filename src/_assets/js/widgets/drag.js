@@ -1,16 +1,5 @@
 // Dragging a widget or a group: the magnets, the snap to a column, the grid.
-//
-// the widget follows the pointer by the point of the title bar it was grabbed
-// at. Once its edge reaches a viewport edge (wherever it is held — the place
-// the pointer asks for is checked, not the clamped one, so pushing on past
-// the edge still counts) it has a snap slot, previewed and taken on release.
-// A snapped pane moves up and down its column until the drag is decidedly
-// sideways, then floats again as it stood, the title bar kept under the
-// pointer. Away from the viewport edges the other floating widgets are
-// magnets: an edge brought close to one of theirs is pulled onto it. A
-// grouped widget takes its group along: the members move by one offset, and
-// the magnets, the viewport and the column snap see the group's bounding
-// box in place of the widget held
+// See INTERNALS.md, Dragging and magnets, and Snap columns.
 
 import { clamp } from '../lib/geometry.js';
 import { movePanes, showSnapPreview, snapColumnOf, snapPanes, snapSideAt, snapSlot, unsnapPane } from './columns.js';
@@ -81,13 +70,9 @@ export function magnetRects(block, along = []) {
 		.map(other => other.getBoundingClientRect());
 }
 
-// where a widget of this size asked to left/top is pulled to. An edge within
-// MAGNET of another widget's opposite edge meets it — beside it when the two
-// overlap in height, above or below it when they overlap in width — and once
-// they meet on one axis the nearer of the like edges lines up on the other,
-// so a widget dropped below another sits flush with its left or right side.
-// The closest edge wins on each axis; nothing within reach leaves the widget
-// where it was asked
+// where a widget of this size asked to left/top is pulled to by the magnets
+// (INTERNALS.md, Dragging and magnets); nothing within reach leaves it where
+// it was asked
 export function magnetPosition(rects, left, top, width, height) {
 	const right = left + width, bottom = top + height;
 	// the candidate carrying the closest edge within reach, with its widget

@@ -9,11 +9,9 @@ import { POPOUT_MARGIN, POPOUT_MAX_WIDTH, POPOUT_TITLE_HEIGHT } from './constant
 import { groupMembers } from './groups.js';
 import { refreshOverlap } from './overlap.js';
 
-// The widgets' stacking band, from the stylesheet's layers (styles.css :root):
-// a raise puts the widget on top by giving it the next number, and once the
-// numbers reach the top of the band — they only ever climb, one a press — the
-// order is packed down to its bottom again, so a board worked for days never
-// climbs over the columns' edges or a fullscreen map (B5)
+// The widgets' stacking band, from the stylesheet's layers: a raise takes the
+// next number, and the order is packed down when the band runs out
+// (INTERNALS.md, Stacking)
 let popoutZ = 0;
 
 function widgetsBand() {

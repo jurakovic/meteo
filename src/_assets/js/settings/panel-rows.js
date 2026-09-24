@@ -11,10 +11,9 @@ import { dockAllPopouts } from '../widgets/popout.js';
 import { isRefreshOn, REFRESH_CHOICES, refreshEveryMinutes, refreshLabel, setRefreshPrefs } from '../widgets/refresh.js';
 import { layoutParts } from './panel-view.js';
 
-// The board's row: its button is a toggle like the list's ticks, so nothing
-// moves until Primijeni, and the lit band (.ms-on) says whether it is ticked.
-// Beside it the grid switches and Posloži, which only mean anything on a
-// board: greyed while it is unticked, their state kept.
+// The board's row: a toggle Primijeni applies, lit (.ms-on) while ticked, and
+// beside it the grid switches and Posloži, greyed while it is not
+// (INTERNALS.md, The board).
 // panel is the dialog (settings/panel.js), holding the ticks
 export function createModeRow(panel) {
 	const modeDiv = el('div', { class: 'ms-mode' });

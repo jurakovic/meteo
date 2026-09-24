@@ -63,7 +63,7 @@ Open <http://localhost:8081/meteo/>
 4. rewrites dev paths to GitHub Pages paths (`href="/customize/index.html` → `/meteo/customize/`, `href="/"` → `/meteo/"`, image paths, the extras stub's `url=`)
 5. strips HTML comments, trims trailing whitespace, collapses blank lines, and writes CRLF
 
-The inlined blocks are indented by splitting on CRLF, as the PowerShell build it replaced did, so a fragment with LF endings (`links.c.html`) is one line to it. That is kept as it was: the Node build was checked to produce the PowerShell build's `docs/` byte for byte.
+The inlined blocks are indented by splitting on CRLF, so a fragment with LF endings (`links.c.html`) is indented as one line.
 
 ## Tests
 
@@ -145,7 +145,7 @@ Every map is one object (`CatalogMap`) with:
 | `iframe` | an interactive map with the HR/EU zoom switch, the overlay gate and a fullscreen; `frameId` plus `srcHr`/`srcEu` and the four `zoom*` marker strings that `setIframeSrc()` (`page/iframe.js`) swaps for a phone |
 | `iframe-basic` | a plain lazy iframe (`src`), no overlay or zoom |
 
-A titled slide's `.slide.active` and its `.placeholder` are both `width: 100%`, so the box comes from the slideshow above rather than the image below. Otherwise a slide, being a flex item sized by its content, falls in to the width of its title's words when its image fails to load (an `img` with `max-width` and no `width` is 0×0 then), and a map whose source is down becomes a small tile. The `.placeholder`'s `aspect-ratio` and `max-width` say how big the map is with no image to ask, and the `img` is centred by `margin-inline: auto`. An untitled slideshow never had this: its container is the `.placeholder` itself.
+A titled slide's `.slide.active` and its `.placeholder` are both `width: 100%`, so the box comes from the slideshow above rather than the image below. Otherwise a slide, being a flex item sized by its content, falls in to the width of its title's words when its image fails to load (an `img` with `max-width` and no `width` is 0×0 then), and a map whose source is down becomes a small tile. The `.placeholder`'s `aspect-ratio` and `max-width` say how big the map is with no image to ask, and the `img` is centred by `margin-inline: auto`. An untitled slideshow does not need this: its container is the `.placeholder` itself.
 
 The repeated link bars come from shared groups (`RADAR_HR_LINKS`, `SAT_EU_LINKS`, …); `except(group, 'Name')` is the "same set minus the map itself" pattern.
 
@@ -153,7 +153,7 @@ The repeated link bars come from shared groups (`RADAR_HR_LINKS`, `SAT_EU_LINKS`
 
 A map can be on screen more than once (see *Copies*), so a block is named twice: by the map it shows (`data-map-id`, the catalog's) and by which showing of it this is (`data-inst`). The render's own block is the first showing, so its instance key is the plain id, which is why every layout written before copies existed still reads; a further one carries `#2`, `#3`. `instMapId()` and `instIndex()` take a key apart.
 
-The ids inside a block (a slideshow and its indicators, a frame and the ids built off it) take a suffix from the index instead of the key (`instSuffix()`, `Copy2`): a frame's id is pasted into other ids (`reset…Frame`, `overlay…Frame`) and read back with `getElementById`, where a `#` has no place. The first showing gets an empty suffix, so the original's ids are what they always were.
+The ids inside a block (a slideshow and its indicators, a frame and the ids built off it) take a suffix from the index instead of the key (`instSuffix()`, `Copy2`): a frame's id is pasted into other ids (`reset…Frame`, `overlay…Frame`) and read back with `getElementById`, where a `#` has no place. The first showing gets an empty suffix, so its ids are the map's plain ones.
 
 ## Presets, preferences and share links
 
@@ -162,7 +162,7 @@ The ids inside a block (a slideshow and its indicators, a frame and the ids buil
 `DEFAULT_MAPS` (in the catalog) is the default view: the landing page's list, and the customize page's until the user picks another. `MAP_PRESETS` lists the built-in presets, each carrying its own `maps` list so resolving one is a plain lookup:
 
 - `zadano` is the default set, shown as *Osnovno*; the id stays `zadano` because it is written into saved preferences and shared links;
-- `vise` is the former extras set, `sve` the whole catalog, `nista` none.
+- `vise` (*Više*) is a larger set, `sve` the whole catalog, `nista` none.
 
 *Primijeni* stores the view as `mapPrefs` (`{"preset":"radari"}` or `{"preset":"custom","maps":[…]}`, with the arrangement as `layout`), draws the maps again and wires the fresh DOM (`initDynamicContent()`: lazy images, swipe, iframe `src`, overlays, link shadows, the progress bar). `renderMaps()` takes a fullscreen map down first (`exitFullscreen()`, with persistence paused): the map goes with the list, and the page's scroll lock would otherwise stay behind it.
 
@@ -455,7 +455,9 @@ The arrangement is part of the view, so it travels with the map list rather than
 
 **Written as it changes.** It is direct manipulation, not a form with an apply button, so `arrangementChanged()` writes it at the end of every pop-out and dock, drag and resize, snap, handle drag and page toggle, and on `map-fullscreen`: into `mapPrefs` next to whatever list is there (`storeViewLayout()`), or, under a shared view, into that view and back into the address bar, so the link stays re-copyable with the arrangement as it is now and a refresh keeps it, while the recipient's storage is never written.
 
-**Below the breakpoint** the widgets are docked with persistence paused (`withPersistPaused()`): that is the window changing, not the arrangement. `applySnapLayout()` places nothing there either, so the screen would describe an empty board while the preferences still hold a desktop arrangement. The arrangement a narrow window cannot show is kept (`unappliedSnapLayout`: by `applySnapLayout()` on a narrow load, and by the breakpoint on the way down, read before the dock empties the screen), and everything that writes the arrangement or asks what the view holds goes through `currentSnapLayout()`, which answers with the kept one while there is one. Widening applies it and clears it.
+**Below the breakpoint** the widgets are docked with persistence paused (`withPersistPaused()`): that is the window changing, not the arrangement. `applySnapLayout()` places nothing there either, so the screen would describe an empty board while the preferences still hold a desktop arrangement. The arrangement a narrow window cannot show is kept (`unappliedSnapLayout`), and everything that writes the arrangement or asks what the view holds goes through `currentSnapLayout()`, which answers with the kept one while there is one. Widening applies it and clears it.
+
+On a narrow load `applySnapLayout()` keeps the layout it was given. On the way down the breakpoint keeps the arrangement this tab last applied or wrote (`heldSnapLayout`). It cannot read the screen, whose widgets are laid out for the narrow width by then, nor storage, which another tab may have written since. A nudge holds its arrangement at once (`holdSnapLayout()`) though its write waits, so a window narrowed meanwhile does not lose it.
 
 **In the dialog.**
 

@@ -8,12 +8,8 @@ import { registerCommand } from '../page/commands.js';
 import { isMapEnabled } from '../remote-config.js';
 import { addToDashboard, isDashboard } from '../widgets/board.js';
 
-// A small menu hung under the tab: a find box over the maps the board does
-// not show yet. The arrows walk the list, Enter or a click puts the lit map on
-// the board (addToDashboard) and shuts the menu; so do Escape, a press outside,
-// the dialog opening and a resize. Built afresh on every open. It sits outside
-// the tab (a <button>, no place for a text box), and the focus stays in its
-// box, which keeps the page's keys off it
+// The tab's [+] menu: a find box over the maps the board does not show yet.
+// See INTERNALS.md, The add menu.
 let msAdd = null; // { menu, anchor } while open
 
 const MS_ADD_MAX_HEIGHT = 420; // a menu, not a second dialog: the list scrolls past this

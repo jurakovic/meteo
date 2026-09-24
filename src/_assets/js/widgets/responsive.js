@@ -35,11 +35,10 @@ export function initWidgetResponsiveness() {
 		}, 200);
 	});
 
-	// a locked pane's height can change under the fit: a titled slideshow takes
-	// its width from the image (so the real height is there once it has loaded)
-	// and changes aspect with the slide (arrows and swipe end in a click or a
-	// pointerup) — fit again after the change has been applied
-	// — and the same events bring a slide's title bar on screen, to be fitted
+	// fitted again after a load, a click or a pointerup in a widget: a titled
+	// slideshow's height is right once its image has loaded, it changes aspect
+	// with the slide (arrows and swipe end in a click or a pointerup), and the
+	// same events bring a slide's title bar on screen
 	['load', 'click', 'pointerup'].forEach(type => {
 		document.addEventListener(type, (e) => {
 			const target = /** @type {Element} */ (e.target);

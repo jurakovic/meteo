@@ -1,13 +1,5 @@
-// What this browser remembers, in one place: every key the site stores, and
-// reading and writing that never throw. Storage can be disabled (a private
-// window), full, or hold something another version wrote, and none of that is
-// a reason for the page to break — a read that fails is nothing stored, and a
-// write that fails is remembered for this session. Values are JSON; what one
-// holds is checked by the module that reads it.
-//
-// The view (a preset or a list, and its arrangement) travels in presets and
-// share links too; everything else here is this browser's alone: how this
-// screen is worked, not what it shows.
+// What this browser remembers: every key the site stores, and reads and
+// writes that never throw. See INTERNALS.md, Storage.
 
 export const STORAGE_KEYS = {
 	mapPrefs: 'mapPrefs', // the view: a preset or a custom list, with its arrangement (maps/prefs.js)

@@ -28,7 +28,7 @@ function toCrlf(text) {
 
 // every non-empty line indented by num tabs — the line at `skip` by one less
 // (a fragment put in after the placeholder's own indentation). Lines are CRLF
-// ones: a fragment with LF endings is one line to this, as it always was
+// ones: a fragment with LF endings is one line to this
 function indent(text, num, skip = -1) {
 	return text.split(CRLF).map((line, i) => {
 		if (line === '') return line;

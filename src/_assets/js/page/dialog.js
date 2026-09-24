@@ -1,13 +1,5 @@
-// The dialogs — the maps picker (settings/panel.js) and the manual — over one
-// set of chrome: a fixed panel above everything, dismissed by a press outside,
-// the page held still underneath, and on desktop a window, dragged by its head
-// and resized from any side or corner, each remembering where it was put under
-// the key its element names (data-dialog-key). Both pages carry the manual, so
-// this is page chrome rather than the customize page's.
-//
-// One stands at a time: opening one shuts the other, so there is a single
-// backdrop, a single scroll lock and a single Escape to reason about. Every
-// change is announced as a dialog-toggled event.
+// The dialogs, the maps picker (settings/panel.js) and the manual, over one
+// set of chrome. See INTERNALS.md, Dialogs.
 
 import { query, queryAll } from '../lib/dom.js';
 import { emit, EVENTS } from '../lib/events.js';
@@ -34,11 +26,8 @@ export function anyDialogOpen() {
 	return !!openDialogPanel();
 }
 
-// this browser's, not the view's (the same footing as msTab and the grid
-// switches): it is about this screen and travels in neither a preset nor a
-// link. The left and top go as fractions of the viewport, the width in px, and
-// the height in px only once it has been resized — until when it stays the
-// CSS's, capped to what is left below wherever the top now is
+// where each dialog was put and how big, stored in this browser only under
+// the key its element names (INTERNALS.md, Dialogs)
 function dialogStorageKey(panel) {
 	return panel.getAttribute('data-dialog-key');
 }
@@ -222,13 +211,8 @@ export function closeOpenDialog() {
 	return !!panel;
 }
 
-// A press outside the dialog shuts it, dropping its edits, and does nothing
-// else: it lands on the backdrop, so it follows no link and takes no widget.
-// (The tab stands above the backdrop and shuts the dialog with its own click.)
-// The pointerdown, the release and the click all belong to the dismissal, so
-// the backdrop stops painting at once but stays until the click, which is
-// swallowed in the capture phase; a release no click follows (let go outside
-// the window, a drag) takes it down after a moment
+// A press outside the dialog shuts it and does nothing else; the backdrop
+// stays until the press's click (INTERNALS.md, Dialogs: The backdrop)
 function initDialogBackdrop() {
 	const backdrop = query('.ms-backdrop');
 	if (!backdrop) return;

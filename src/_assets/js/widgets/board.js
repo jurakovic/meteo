@@ -1,16 +1,5 @@
-// The dashboard (desktop).
-//
-// the page out of sight and every map of the list a widget, floating or in a
-// column — a mode of the view, `dashboard: true` on the layout, so it rides
-// with the list in the preferences, a saved preset and a share link, and
-// comes back with them (applySnapLayout). Which is also the only way onto it:
-// the dialog's mode row ticks the mode and Primijeni applies it with the list,
-// so nothing enters the board on its own. Left the same way, or by docking
-// everything (Vrati sve, the breakpoint). On the board the widget's [=] is [x]
-// and takes the map off the list; a map added to the list comes onto the board
-// at the next free step of a cascade (popoutRest). Desktop only, like the
-// widgets: the breakpoint docks everything, with persistence paused, so the
-// stored view keeps the mode
+// The board (desktop): the page out of sight and every map of the list a
+// widget. See INTERNALS.md, The board.
 
 import { dlog } from '../lib/debug.js';
 import { query, queryAll } from '../lib/dom.js';
@@ -53,12 +42,9 @@ export function popoutRest() {
 	let top = POPOUT_MARGIN, round = 0;
 	queryAll('.map-block:not(.popout)').forEach(block => {
 		popoutMap(block);
-		// the widget's own height says whether it still fits, but the step it
-		// lands on is the cascade's own count rather than a number of steps
-		// derived from that height: widgets are of every height, so a per-widget
-		// count is a different modulus for each and lands several of them on the
-		// very same place. The first of a round goes down whatever its height, or
-		// one taller than the viewport would start a round of its own for ever
+		// the step is the cascade's own count, not one per widget height
+		// (INTERNALS.md, The board). The first of a round goes down whatever its
+		// height, or one taller than the viewport would start a round for ever
 		if (top > POPOUT_MARGIN && top + block.offsetHeight > viewportHeight()) {
 			top = POPOUT_MARGIN;
 			round++;
@@ -71,10 +57,8 @@ export function popoutRest() {
 	});
 }
 
-// [x] on the board, on a map's last showing: the map leaves the list it is
-// shown from — the widget goes, with its entry in the (hidden) list, and the
-// list is stored without it (maps/prefs.js), as the dialog would store it after the
-// map was unticked
+// [x] on the board, on a map's last showing: the widget goes, its entry in
+// the (hidden) list with it, and the list is stored without it (maps/prefs.js)
 /** @param {HTMLElement} block */
 export function removeFromDashboard(block) {
 	dlog(`removeFromDashboard: ${block.dataset.mapId}`);
@@ -84,11 +68,8 @@ export function removeFromDashboard(block) {
 	removeMapFromList(id);
 }
 
-// the tab's [+], the other way round: the map joins the end of the list, its
-// entry joins the end of the (hidden) list the way the render would have laid
-// them, and it comes onto the board the way any map new to the list does, at
-// the cascade's first step (popoutRest — every other map is a widget already).
-// Nothing is rendered again, so nothing else on the board reloads
+// the tab's [+]: the map joins the end of the list and comes on at the
+// cascade's first step. Nothing is rendered again, so nothing else reloads
 /** @param {string} mapId */
 export function addToDashboard(mapId) {
 	const map = catalogMap(mapId);

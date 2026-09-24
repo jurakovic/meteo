@@ -76,11 +76,8 @@ export function initMapSettings() {
 	});
 }
 
-// The dialog is built afresh on every open, from what is stored, so a
-// dismissal drops the edits. Its sections — the preset bar, the rows, the two
-// lists, the preset management — do not call one another: what one changes
-// that another shows goes through the panel object below, which holds what
-// the dialog is editing (a Mediator)
+// Built afresh on every open. The sections talk through the panel object
+// below (INTERNALS.md, How the modules work together: The dialog)
 function buildMapSettings(element) {
 	element.replaceChildren();
 

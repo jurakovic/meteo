@@ -11,11 +11,8 @@ import { arrangementChanged, holdSnapLayout } from './layout.js';
 import { refreshOverlap } from './overlap.js';
 import { reloadAllMaps } from './reload.js';
 
-// The widgets' commands: R reloads (the bar's [R]), G the grid, S its snap,
-// A arranges, D duplicates, the arrows nudge. The letters name the thing, not
-// a word for it. (K is the dialog's, Escape the page's: page/commands.js.)
-// A key pressed inside a frame never reaches the page, so the focus has to be
-// on the page or a title bar first
+// The widgets' commands and their keys (INTERNALS.md, Keyboard and the title
+// bar's gestures)
 const NUDGE_KEYS = { ArrowLeft: [-1, 0], ArrowRight: [1, 0], ArrowUp: [0, -1], ArrowDown: [0, 1] };
 
 export function initWidgetKeys() {

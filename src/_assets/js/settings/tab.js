@@ -1,12 +1,6 @@
 // The tab at the top edge: the way to the dialog where the page's own Karte
 // button is out of reach (the board, a hidden page), with the board's glyphs.
-//
-// the fixed tab to the dialog can be dragged along the top edge and pulled
-// wider or narrower by either side — no narrower than its name, no wider
-// than msTabMaxWidth(), held inside the viewport — and where it was put is
-// remembered in this browser only (msTab: the left as a fraction of the
-// viewport, the width in px), not in the arrangement; a click that did not
-// move opens the dialog
+// See INTERNALS.md, The tab.
 
 import { el, query } from '../lib/dom.js';
 import { EVENTS, on } from '../lib/events.js';
@@ -78,11 +72,8 @@ function applyStoredMsTab() {
 	if (tab && stored) placeMsTab(tab, stored.left * viewportWidth(), stored.width);
 }
 
-// On a board the tab is the only chrome, so it carries a glyph cluster as a
-// title bar does: [R] reloads every map, [G] and [S] are the grid switches
-// (through setGridPrefs, so the dialog cannot disagree). Each glyph is named
-// after its key. They are <a> without href, which a <button> may contain, and
-// their click is kept off the tab's own
+// the board's glyph cluster. The grid switches go through setGridPrefs, so
+// the dialog follows; a glyph's click is kept off the tab's own
 function buildMsTabCluster(tab) {
 	// the board's own way to add a map, without the dialog (see openMsAdd)
 	const glyph = (text, command, title, extra = {}) =>

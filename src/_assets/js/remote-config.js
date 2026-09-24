@@ -1,13 +1,5 @@
-// Which maps are switched off, from a file beside the maps' own sources, so a
-// map whose source is down can be taken off both pages without a build. It is
-// read from the last copy this browser saw, at once, and fetched again behind
-// that for the next load — or for this one, if it changed. A map the file does
-// not name is on, and so is every map when there is no copy yet or the fetch
-// fails: a broken file hides nothing.
-//
-// Started first on both pages, since the render asks isMapEnabled(): both
-// leave a map that is off out of what they draw, and draw again on a change
-// (map-config-changed)
+// Which maps are switched off, so a map whose source is down comes off both
+// pages without a build. See INTERNALS.md, Remote config.
 
 import { emit, EVENTS } from './lib/events.js';
 import { readJson, STORAGE_KEYS, writeJson } from './lib/storage.js';

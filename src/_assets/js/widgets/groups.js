@@ -1,15 +1,5 @@
-// Groups of widgets.
-//
-// widgets that touch (an edge of one on an edge of the other, the two
-// overlapping along it — what the magnets leave) can be grouped: the group
-// drags and raises as one, each member still resizes on its own. The title
-// bar's [+] joins a widget with what it touches (and their groups, into
-// one), [-] takes it out again; a group left with one member is no group.
-// Explicit only: touching alone groups nothing. Widgets touch in one place —
-// floating over the page, or panes of the same column — so a group is always
-// in one place, and goes into or out of a column as one. A group lives in
-// groupOf(block) (an id shared by its members) and rides in the stored layout
-// as a group number on each member's entry. Docking a member takes it out.
+// Groups of widgets: touching widgets joined to drag and raise as one. See
+// INTERNALS.md, Groups.
 
 import { dlog } from '../lib/debug.js';
 import { el, queryAll } from '../lib/dom.js';

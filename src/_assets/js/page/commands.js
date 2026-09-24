@@ -1,16 +1,6 @@
 // The page's commands: everything a control or a key can do, registered once
-// by id with what runs it, the keys that do (if any) and when it is on offer.
-// A control declares the command it runs in the markup — data-action="id" on a
-// button, a link, a checkbox or a tab glyph — and one click listener runs it;
-// one keydown listener runs the commands keys are bound to. So no handler has
-// to be a global for an onclick to reach, a key and the glyph that shows it
-// cannot drift apart, and a title names the key the registry binds (withKey).
-//
-// Keys are the page's only while the focus is: not in a text field, whose own
-// keys (Escape out of it, Enter to commit, letters to type) come first, and
-// not under Alt, Ctrl or Meta, which belong to the browser. None reach the
-// page while an iframe holds the focus: a press inside a frame belongs to the
-// frame's document, and the maps are another origin.
+// by id. See INTERNALS.md, How the modules work together (Commands), and
+// Keyboard and the title bar's gestures.
 
 import { isTextField } from '../lib/dom.js';
 import { anyDialogOpen, closeOpenDialog } from './dialog.js';

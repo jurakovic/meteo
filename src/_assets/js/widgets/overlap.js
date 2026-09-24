@@ -1,19 +1,6 @@
 // What lies over what: frames covered by another widget stop taking the
 // pointer, and every widget's shadow is drawn in a layer beneath them all.
-//
-// An iframe takes the pointer itself, and a press inside it belongs to the
-// frame's document: the page never sees it, so a widget clicked into would stay
-// under the one over it. Most maps are spared by their gate, an .overlay over
-// the frame that takes the press, but a basic iframe (.if2) has none and an
-// interactive one loses its own once the gate is let through. Nor can the page
-// be told after the fact — the focus moving from one frame to another raises no
-// event it can hear (see the blur handler below, which catches only the move in
-// from the page itself). So a frame with another widget lying over it stops
-// taking the pointer at all (`covered`, the CSS): the press lands on the widget
-// instead and raises it, the class goes with the raise, and the frame is live
-// for the next press. Click it to the front, then work the map — which is what a
-// window does. A widget nothing overlaps is never covered, so a map standing on
-// its own is untouched
+// See INTERNALS.md, Covered frames and shadows.
 
 import { el, queryAll } from '../lib/dom.js';
 import { trackPointer } from '../lib/pointer.js';
@@ -46,15 +33,8 @@ export function refreshOverlap() {
 	syncShadows();
 }
 
-// Shadows are drawn under all the widgets, not by each widget, which would lay
-// its shadow across a lower neighbour (a grouped one too). Each widget has a
-// box of its size in a layer below the widget band that paints only the halo
-// (a box-shadow is clipped out of its own box). A pane in a column has none,
-// nor has a widget hosting a fullscreen map.
-//
-// There are two such layers, either side of a fullscreen map: a widget over
-// the map casts onto it, one beside it casts under it. syncShadows() picks the
-// layer; the CSS gives them their z-index.
+// Shadows: a box per widget in a layer under all of them, two layers either
+// side of a fullscreen map
 
 // over is the layer over a fullscreen map, and the only one while none is up
 function shadowLayer(over) {
@@ -85,9 +65,6 @@ function fullscreenRect() {
 	};
 }
 
-// every widget's box placed on its rect, in the layer its standing asks for,
-// and any box left without a widget — one docked, or gone with the list —
-// swept out of both
 // each widget's box in the shadow layer
 const shadowOf = new WeakMap();
 
@@ -99,6 +76,9 @@ export function dropShadow(block) {
 	shadowOf.delete(block);
 }
 
+// every widget's box placed on its rect, in the layer its standing asks for,
+// and any box left without a widget — one docked, or gone with the list —
+// swept out of both
 export function syncShadows() {
 	const live = new Set();
 	const fs = fullscreenRect();

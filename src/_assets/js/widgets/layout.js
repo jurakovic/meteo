@@ -27,9 +27,8 @@ export function initLayoutBreakpoint() {
 	// unmade by it
 	DESKTOP_MQ.addEventListener('change', (e) => {
 		if (e.matches) { applySnapLayout(unappliedSnapLayout); return; }
-		// the one this tab holds rather than what is on screen: the viewport has
-		// narrowed already, and the widgets read off the screen now would be of
-		// the narrow width (B1). Nor what is stored, which another tab writes too
+		// the one this tab holds: not the screen, whose widgets are laid out
+		// for the narrow width by now, nor storage, which another tab writes too
 		unappliedSnapLayout = heldSnapLayout;
 		withPersistPaused(dockAllPopouts); // the stored arrangement is kept for a desktop window
 	});
@@ -134,13 +133,9 @@ function snapLayout() {
 	return Object.keys(layout).length ? layout : null;
 }
 
-// Rebuilt rather than trusted (storage, links, a saved entry): each entry must
-// name a map of the list, once across the columns and the floating widgets;
-// an emptied column goes, and the widths are held to the viewport. A pane
-// stored before panes were placed freely has a height share instead of a top
-// and is stacked from the top. A group needs two members in one place.
-// Keys keep their order: layouts are compared as JSON (sameSnapLayout), and
-// an old one must still compare equal to itself read back
+// Rebuilt rather than trusted (storage, links, a saved entry); see
+// INTERNALS.md, Remembered and shared layouts (Read back). Keys keep their
+// order: layouts are compared as JSON (sameSnapLayout)
 /** @param {any} layout @param {string[]} mapIds @returns {SnapLayout | null} */
 export function sanitizeSnapLayout(layout, mapIds) {
 	if (!layout || typeof layout !== 'object') return null;

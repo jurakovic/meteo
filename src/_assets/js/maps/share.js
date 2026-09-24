@@ -1,15 +1,10 @@
 import { isValidPrefs } from './prefs.js';
 import { cleanPresetName } from './presets.js';
 
-// A shared link overrides the saved preferences for the session only; the
-// parameter is kept in the address bar (re-copyable, refresh-safe) and is
-// removed once the user applies their own settings.
+// The view in a link's ?v=. See INTERNALS.md, Share links.
 
-// btoa only takes code points up to U+00FF, and a saved preset's name rides
-// along in the payload — every Croatian diacritic (č ć š ž đ) is above that.
-// Escaping them as \uXXXX first keeps the input ASCII; JSON.parse reads those
-// back on its own, so decodeMapView needs no counterpart and links shared by
-// an older version (ASCII throughout) still decode unchanged.
+// non-ASCII escaped to \uXXXX first: btoa takes nothing above U+00FF, and
+// JSON.parse reads the escapes back, so decodeMapView needs no counterpart
 /** @param {import('./prefs.js').MapPrefs} prefs @returns {string} */
 export function encodeMapView(prefs) {
 	const json = JSON.stringify(prefs)

@@ -53,7 +53,7 @@ export function addExpandableClickEventListener() {
 /** @param {HTMLInputElement} checkbox */
 export function toggleLinksBottom(checkbox) {
 	document.body.classList.toggle('show-links-bottom', checkbox.checked);
-	writeJson(STORAGE_KEYS.linksBottom, checkbox.checked ? 1 : 0); // "1" or "0", as it always was
+	writeJson(STORAGE_KEYS.linksBottom, checkbox.checked ? 1 : 0); // "1" or "0" in storage
 	updateLinksScrollShadows();
 }
 

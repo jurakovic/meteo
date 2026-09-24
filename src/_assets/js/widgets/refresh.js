@@ -3,11 +3,7 @@ import { emit, EVENTS } from '../lib/events.js';
 import { readJson, STORAGE_KEYS, writeJson } from '../lib/storage.js';
 import { reloadAllMaps } from './reload.js';
 
-// Images go stale on a page left open, and on a board left running for the
-// room to glance at they are the whole point. This re-fetches what [R] does,
-// on an interval — off until it is asked for, and a way of working rather than
-// part of the view, so it travels in neither a preset nor a link and keeps the
-// same footing as the grid switches.
+// Auto-refresh: what [R] does, on an interval. See INTERNALS.md, Auto-refresh.
 export const REFRESH_CHOICES = [5, 10, 15, 30, 60];
 
 const REFRESH_DEFAULT = 5;
@@ -42,11 +38,9 @@ export function refreshLabel() {
 	return `${Math.floor(left / 60)}:${String(left % 60).padStart(2, '0')}`;
 }
 
-// counted off a deadline rather than by stepping a number down: a background
-// tab throttles its timers to about one a minute, and a counter stepped down
-// would lose exactly the time the page spent unattended — which is the page
-// this is for. The clock starts over here, so every way of refreshing by hand
-// (the key, the tab's [R], a widget's own) puts the interval back to full
+// counted off a deadline, which a throttled background tab cannot slow
+// (INTERNALS.md, Auto-refresh). The clock starts over here: on a load, a
+// change of the setting, and a refresh by hand of every map it sweeps
 export function restartRefresh() {
 	clearInterval(refreshTicker);
 	refreshTicker = 0;

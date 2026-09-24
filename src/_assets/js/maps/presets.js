@@ -34,10 +34,8 @@ export const MAP_PRESETS = [
 	{ id: 'nista', name: 'Ništa', maps: [] }
 ];
 
-// Saved views take the same { id, name, maps } shape as the built-ins, so the
-// preset bar, presetMapIds and the stored preferences treat both alike. Ids
-// are prefixed to keep them out of the built-in namespace, which leaves the
-// name free to change — renaming never breaks a saved preference or selection.
+// Saved presets take the built-ins' shape, their ids prefixed out of the
+// built-ins' namespace (INTERNALS.md, Saved presets).
 
 const USER_PRESET_PREFIX = 'u:';
 
@@ -108,10 +106,8 @@ export function findUserPresetByName(name) {
 	return userPresets.find(preset => preset.name.toLowerCase() === name.toLowerCase());
 }
 
-// saving under an existing name updates that preset — the way to amend a saved
-// view is to edit the list and save it again under the same name. The layout
-// (the snapped arrangement, null for none) is part of what is saved: a preset
-// is the whole view, and applying it brings the arrangement back
+// saving under an existing name updates that preset. The layout (null for
+// none) is saved with it: a preset is the whole view
 /**
  * @param {string} name @param {string[]} maps
  * @param {import('../widgets/layout.js').SnapLayout | null} [layout]
@@ -159,11 +155,8 @@ export function uniquePresetName(name) {
 	return candidate;
 }
 
-// deleting writes to storage at once, unlike the rest of the panel, which only
-// commits on Primijeni — so a saved preference naming this preset has to be
-// rewritten in the same breath. Left alone it would fail isValidPrefs on the
-// next load and fall back to Osnovno, losing the view still on screen. The
-// stored contents are what gets kept, not the panel's possibly-edited list.
+// deleting writes at once, so a mapPrefs naming the preset becomes a custom
+// copy of its stored maps, not of the panel's list (INTERNALS.md, Saved presets)
 /** @param {string} id */
 export function deleteUserPreset(id) {
 	const preset = userPresets.find(p => p.id === id);
@@ -173,10 +166,8 @@ export function deleteUserPreset(id) {
 	saveUserPresets();
 }
 
-// Built-ins are code, so they are hidden rather than deleted — and hiding is a
-// display choice only. allPresets keeps returning them, so a saved preference,
-// the zadano fallback and a shared link naming a preset the recipient hides
-// all keep resolving. Only the preset bar filters.
+// Built-ins are hidden rather than deleted, and only the preset bar filters
+// them (INTERNALS.md, Saved presets).
 
 // one built-in always stays on offer, so the row can never come down to
 // "Prilagođeno" alone and there is always a named view to get back to

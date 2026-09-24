@@ -125,22 +125,17 @@ function raiseFocusedFrame() {
 	if (block && !block.classList.contains('fs-host')) raisePopout(block);
 }
 
-// The title bar works as a window's does: beside the drag, a double-click
-// toggles fullscreen and a middle click is the bar's [=]/[x]. On the bar only:
-// over a frame the page never sees them, and on an interactive map a
-// double-click already opens the gate (page/iframe.js). A link or button on
-// the bar keeps its own clicks (the title is a link to the source)
+// The title bar's gestures beside the drag: a double-click toggles
+// fullscreen, a middle click is the bar's [=]/[x] (INTERNALS.md, Keyboard and
+// the title bar's gestures)
 function titleBarOf(e) {
 	if (!e.target.closest || e.target.closest('a, button, input')) return null;
 	return e.target.closest('.map-block.popout .radartitle');
 }
 
-// through the bar's own [ ] button, which keeps its label and the snapshot of
-// the overlay gate; toggleFullscreen() reads the class, so the one press both
-// enters and leaves, and the bar is still on screen in fullscreen to leave by.
-// Only an interactive map (.if1) has the button — this is the same element the
-// aspect lock below is on, and never the same widget: an iframe is always free
-// (isFreePopout) and so is never letterboxed
+// through the bar's own [ ] button, which keeps its label and the gate's
+// snapshot. Only an interactive map has one, and it is never letterboxed, so
+// this never meets the aspect lock's double-click below
 function toggleBarFullscreen(bar) {
 	const fsBtn = bar.closest('.map-block').querySelector('.fs-btn');
 	if (fsBtn) fsBtn.click();

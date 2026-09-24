@@ -1,10 +1,6 @@
-// The manual: MANUAL.md, converted at build time (scripts/manual.mjs) and
-// built into both pages. It is
-// a dialog and not a page of its own so it can be read beside the maps it
-// describes rather than in place of them — which costs it the address a page
-// would have had, so #upute stands in: it opens the dialog on load, and the
-// dialog puts it there and takes it away again, which keeps "read this" a link
-// anyone can send.
+// The manual: MANUAL.md, converted at build time (scripts/manual.mjs), in a
+// dialog on both pages, with #upute for its address. See INTERNALS.md, The
+// manual on the site.
 
 import { FEATURES } from '../features.js';
 import { EVENTS, on } from '../lib/events.js';

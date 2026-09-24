@@ -1,15 +1,5 @@
-// Arranging the board (A, Posloži).
-//
-// Every widget the same size, tiled edge to edge over the whole board. It is
-// what a board left running for the room to glance at wants — none of the
-// screen spent on gaps, and nothing to line up by hand — and it is what makes
-// the seams useful: tiled with no gap, every inside edge is one.
-//
-// The widgets are freed on the way. "The same size" and "the shape its image
-// has" cannot both hold: given one width, locked widgets come out at as many
-// heights as there are maps and no row would line up. A freed widget
-// letterboxes its map over a blurred copy of it, and the double-click on the
-// bar is the way back to its own shape, one map at a time.
+// Arranging the board (A, Posloži): every widget the same size, tiled edge to
+// edge. See INTERNALS.md, Arranging the board.
 
 import { dlog } from '../lib/debug.js';
 import { queryAll } from '../lib/dom.js';
@@ -25,9 +15,7 @@ import { syncShadows } from './overlap.js';
 import { fitWidget, unlockAspect } from './popout.js';
 
 // how many columns n widgets go in: the shape that shows each map biggest,
-// a map being contained in what its cell leaves under the title bar (ten maps
-// go 4x3 with two holes rather than 2x5 in thin strips). An empty cell costs a
-// hair, so a tidy 3x3 wins over a 4x3 whose maps come out the same size
+// an empty cell costing a hair
 /** @param {number} n */
 export function arrangeShape(n, width, height, aspect) {
 	let best = { cols: 1, rows: n, score: -Infinity };
@@ -42,12 +30,8 @@ export function arrangeShape(n, width, height, aspect) {
 	return best;
 }
 
-// the shape of what a widget shows: the image's or the video's own, or, for a
-// locked widget of anything else, what its map takes of it under the bar. A
-// freed widget's rect is not measured — it is the cell a previous arrangement
-// cut, and reading it back would hand the next one the same shape whatever the
-// maps are. A freed frame has no shape of its own and fills any cell, so it
-// has no say
+// the shape of what a widget shows. A freed widget's rect is the cell an
+// earlier arrangement cut, so it is not read, and a freed frame has no say
 function mapAspect(block) {
 	const img = shownImage(block);
 	if (img && img.naturalWidth && img.naturalHeight) return img.naturalWidth / img.naturalHeight;

@@ -11,11 +11,7 @@ export function createPresetBar(panel) {
 	const presetsDiv = el('div', { class: 'ms-presets' });
 
 	// The dot marks the preset the list on screen started from, once it no longer
-	// matches it. "Prilagođeno" keeps the selection — what travels in a share link
-	// is a bare list, and a chip left looking selected would promise a name the
-	// payload cannot carry — so the dot says which named view the edits are a copy
-	// of without claiming to be it. Clicking that chip reloads the preset and
-	// drops the edits, which the radio already does: it is the unchecked one.
+	// matches it (INTERNALS.md, The origin dot).
 	function updateOriginMark() {
 		presetsDiv.querySelectorAll('.ms-origin').forEach(chip => chip.classList.remove('ms-origin'));
 		const preset = allPresets().find(p => p.id === panel.editingPresetId);

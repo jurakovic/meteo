@@ -1,16 +1,5 @@
-// The grid (desktop, on the board).
-//
-// Graph paper under the widgets, and the lines a widget settles onto when let
-// go. The cell is a size, not a count: the lines are its multiples, so they are
-// whole pixels by construction whatever the window, the cells stay square on
-// every screen, and the paper is one repeating gradient however fine it gets.
-// Two edges land on the same line whenever they lie within half a cell of each
-// other, so at 16 the grid forgives 8px — many times the fraction of a pixel an
-// aspect-derived height leaves between two widgets, which is what makes a
-// snapped board exact where a placed one is only nearly so. Both switches are the
-// browser's, not the view's (mapGrid, like msTab and msPanel): they are a way
-// of working, so they do not travel in a preset or a link, and they keep their
-// state while the board is off, when they do nothing
+// The grid (desktop, on the board): graph paper under the widgets, and the
+// lines a widget settles onto when let go. See INTERNALS.md, The grid.
 
 import { dlog } from '../lib/debug.js';
 import { query } from '../lib/dom.js';

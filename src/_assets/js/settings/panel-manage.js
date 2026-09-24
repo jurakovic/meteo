@@ -144,11 +144,8 @@ export function createPresetManager(panel) {
 		const renameLink = el('a', { text: 'Preimenuj' });
 		const deleteLink = el('a', { text: 'Obriši' });
 
-		// Ažuriraj writes the list on screen over this preset, keeping its id, so
-		// preferences and links naming it follow; the page changes on Primijeni.
-		// It takes Podijeli's slot while there are edits (a fourth column would
-		// not fit a phone row): Podijeli shares the preset as saved, least useful
-		// just then, and the panel's own Podijeli covers the list on screen
+		// Ažuriraj takes Podijeli's slot while the row has edits (INTERNALS.md,
+		// Saved presets)
 		let firstLink;
 		if (hasPendingEdits(preset, panel.editingPresetId, panel.selectedMapIds(), panel.selectedLayout())) {
 			firstLink = el('a', { text: 'Ažuriraj' });

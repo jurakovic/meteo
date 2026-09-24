@@ -15,12 +15,7 @@ import { arrangementChanged } from './layout.js';
 import { dropShadow, syncShadows } from './overlap.js';
 import { fitWidget, handGapTo, popoutMap, unlockAspect, WIDGET_RENDER } from './popout.js';
 
-// [D] makes another showing of a map, and no showing is the original: any can
-// be closed while the others stay. The page keeps one entry per map, and its
-// place to dock into belongs to the showing not marked .duplicate; closing that
-// one hands the place on (removeShowing), so only the last showing docks (on
-// the board, leaves the list). A copy is built from the catalog, not cloned,
-// so its slideshow and frame ids are its own (maps/render.js: instSuffix)
+// [D]: another showing of a map. See INTERNALS.md, Copies.
 export function buildDuplicateButton() {
 	const btn = el('a', { class: 'dup-btn', text: '[D]', title: withKey('Udvostruči kartu', 'duplicate') });
 	btn.addEventListener('click', () => duplicateMap(btn.closest('.map-block')));
@@ -61,10 +56,8 @@ function freeInstance(mapId) {
 	}
 }
 
-// the copy's own wiring and only its own. initDynamicContent() sweeps the page,
-// and setting an iframe's src again reloads every interactive map already on
-// screen, costing each of them its pan and its zoom; the two sweeps below are
-// safe because they bind once per node and skip what is bound (page/slideshow.js, page/iframe.js)
+// the copy's wiring and only its own: initDynamicContent() would set every
+// iframe's src again. The two sweeps below skip what they have bound already
 /** @param {HTMLElement} block */
 export function wireDuplicate(block) {
 	block.querySelectorAll('img.lazy').forEach((/** @type {HTMLImageElement} */ img) => {
@@ -101,11 +94,8 @@ export function duplicateMap(block) {
 	if (!copy) return null;
 	popoutMap(copy);
 	const popped = block.classList.contains('popout');
-	// the size of the widget it came from: its width, and its height too where
-	// the height is its own (an interactive map, or a map freed of its aspect,
-	// which the copy is freed of as well), held to the widget limits like a
-	// stored one — a pane's width is its column's and may be wider. A map
-	// copied from the page starts at the size any widget starts at
+	// the size of the widget it came from, held to the widget limits: a pane's
+	// width is its column's and may be wider (INTERNALS.md, Copies)
 	if (popped) {
 		const size = block.getBoundingClientRect();
 		if (block.classList.contains('free') && !copy.classList.contains('free')) unlockAspect(copy);
@@ -125,10 +115,8 @@ export function duplicateMap(block) {
 	return copy;
 }
 
-// the block a stored entry names: the plain key is the showing that holds the
-// page's place, whatever it is called by now; any other key is a copy, made
-// here under a free name (a stored key is a position in the layout, not a name
-// anything on screen answers to)
+// the block a stored entry names: the plain key is the showing holding the
+// page's place; any other key is a copy, made here under a free name
 /** @param {string} inst */
 export function instanceFor(inst) {
 	const mapId = instMapId(inst);
@@ -137,11 +125,8 @@ export function instanceFor(inst) {
 	return copy && isDuplicate(copy) ? copy : makeDuplicate(mapId, freeInstance(mapId));
 }
 
-// a showing closed while others of its map stay out: it goes, and if it held
-// the page's place, the next showing takes the place over — the gap and its
-// way back with it. Nothing moves in the DOM for that (an iframe would reload):
-// every other showing is a widget, fixed, so the heir docks where the gap is
-// from wherever it sits in the row
+// a showing closed while others of its map stay out; if it held the page's
+// place, the next showing inherits it (INTERNALS.md, Copies)
 /** @param {HTMLElement} block */
 export function removeShowing(block) {
 	dlog(`removeShowing: ${block.dataset.inst}`);

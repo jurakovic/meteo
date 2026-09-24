@@ -1,19 +1,12 @@
 import { el } from '../lib/dom.js';
 import { MAP_TYPES } from './types.js';
 
-// Drawing maps from their catalog entries: a block's title bar, its map as
-// its type draws it, the links under it, and the entry a map takes in the list.
-// Both pages draw with this. The customize page passes the widgets' buttons in
-// (options.titleButtons, told whether the map is interactive) so that this
-// module knows nothing of widgets.
+// Drawing maps from their catalog entries, for both pages. The widgets'
+// buttons come in through options.titleButtons (INTERNALS.md, Maps).
 /** @typedef {{ titleButtons?: (interactive: boolean) => HTMLElement[] }} RenderOptions */
 
-// A map can be on screen more than once ([D], widgets/copies.js), so a block
-// is named twice: by its map (`data-map-id`) and by which showing it is
-// (`data-inst`). The render's own block is the first, keyed by the plain id,
-// so layouts written before copies existed still read; later ones are `#2`,
-// `#3`. Ids inside a block (a slideshow, a frame) take a suffix from the index
-// instead, since they end up in other ids and in getElementById.
+// A block is named by its map (data-map-id) and by which showing of it it is
+// (data-inst). See INTERNALS.md, Showings and instance keys.
 const INST_SEP = '#';
 
 /** @param {string} mapId @param {number} index */

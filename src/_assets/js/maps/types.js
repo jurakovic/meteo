@@ -1,8 +1,6 @@
-// The kinds of map the catalog holds, and what each kind means wherever that
-// matters, in one place: how it is drawn, whether its widget follows the
-// map's shape or is sized freely, whether it has a fullscreen of its own, and
-// how it is fetched afresh. A new kind of map is an entry here and its build
-// function (maps/render.js); nothing else asks what type a map is.
+// The kinds of map the catalog holds, and what each means: how it is drawn,
+// sized, put in fullscreen and fetched afresh. A new kind is an entry here and
+// its build function (maps/render.js); nothing else asks what type a map is.
 
 import { catalogMap } from './catalog.js';
 import { buildBasicIframe, buildIframe, buildImage, buildSlideshow, buildVideo } from './render.js';

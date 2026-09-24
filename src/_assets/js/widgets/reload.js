@@ -1,9 +1,5 @@
-// Fetching a map afresh: a widget's [R], the key R and the tab's [R].
-//
-// a widget's [R] fetches its map afresh — the page may have been open long
-// enough for new images to be out — without reloading the page. First in
-// the cluster, shown only on a popped-out widget (CSS). Not on an
-// interactive map, whose bar keeps its own [X]/[R] gate button
+// Fetching a map afresh, without reloading the page: a widget's [R], the key
+// R and the tab's [R]. See INTERNALS.md, Pop-out (the title bar).
 
 import { dlog } from '../lib/debug.js';
 import { el, queryAll } from '../lib/dom.js';

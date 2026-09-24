@@ -1,8 +1,5 @@
-// The customize page: the maps the user picked, in their order, with the
-// settings dialog, the widgets and the board. Modules only declare; this wires
-// them up. In the build it runs from <head>, before the body exists, so what
-// must be in place before the first paint happens at once and the rest once
-// the document is parsed (onReady), each step on its own.
+// The customize page: the maps the user picked, with the settings dialog, the
+// widgets and the board. This wires the modules up; see INTERNALS.md, Code map.
 
 import { onReady } from './lib/dom.js';
 import { EVENTS, on } from './lib/events.js';

@@ -369,8 +369,8 @@ body.fs-lock {
 	}
 
 	/* a popped-out widget's title keeps out from under the button clusters:
-	   popout.js measures the room they leave into max-width, and a shift into
-	   the gap between them when centred room runs out (fitTitles) */
+	   widgets/popout.js measures the room they leave into max-width, and a
+	   shift into the gap between them when centred room runs out (fitTitles) */
 	.map-block.popout .radartitle:not(.fullscreen) > a:not(.left):not(.right) {
 		display: inline-block;
 		max-width: 100%;
@@ -390,8 +390,8 @@ body.fs-lock {
 		display: inline;
 	}
 
-	/* the grouping button of a widget, shown by popout.js only while there is
-	   something to do: [+] touching another widget, [-] in a group */
+	/* the grouping button of a widget, shown by widgets/groups.js only while
+	   there is something to do: [+] touching another widget, [-] in a group */
 	.map-block.popout .radartitle:not(.fullscreen) .grp-btn:not([hidden]) {
 		display: inline;
 	}
@@ -428,14 +428,11 @@ body.fs-lock {
 		   inherits the visibility: hidden of .fs-host, which is what takes the
 		   frame away under a fullscreen map.
 		   Two widgets set flush therefore show a two pixel seam, one edge of
-		   each, and a grouped one beside a loose one shows both colours. That
-		   is wanted: every widget's frame is its own, drawn the same whatever
-		   stands beside it. Collapsing the seam to one pixel would mean asking,
-		   on every drag, resize, group and snap, which edges have a neighbour
-		   and which of the pair gives way — the order-dependence a pseudo has
-		   none of, put back by hand. Each edge lands on the box edge, so a snapped
-		   widget's left and top cover their grid line and its right and bottom
-		   sit the one pixel inside it that a one pixel line leaves. */
+		   each: every widget's frame is its own, drawn the same whatever stands
+		   beside it, with no asking which of a pair gives way. Each edge lands
+		   on the box edge, so a snapped widget's left and top cover their grid
+		   line and its right and bottom sit the one pixel inside it that a one
+		   pixel line leaves. */
 		.map-block.popout::after {
 			content: '';
 			position: absolute;
@@ -464,12 +461,10 @@ body.fs-lock {
 
 			/* and the map fills what it is given, past its natural width where
 			   the widget asks for that: an img carries max-width and no width,
-			   so it stopped there and sat in the middle of a frame grown past
-			   it, the frame's own ground either side. A locked widget was held
-			   to what its content spanned for want of this — a limit on the
-			   widget to hide that the map had none. Freed, the rules below take
-			   over: the box is filled in both axes and the contain gives the
-			   aspect back to the image, which is the letterbox */
+			   and would stop there in the middle of a wider frame. Freed, the
+			   rules below take over: the box is filled in both axes and the
+			   contain gives the aspect back to the image, which is the
+			   letterbox */
 			.map-block.popout .placeholder img {
 				width: 100%;
 			}
@@ -492,11 +487,12 @@ body.fs-lock {
 				padding-top: 0;
 			}
 
-		/* a widget freed of its aspect (a plain pull of an edge, popout.js; Shift
-		   holds the aspect instead): the media is letterboxed in what the title
-		   bar leaves — the placeholder's inline aspect and max-width undone —
-		   and a blurred, darkened copy of the image (--po-img) fills the frame
-		   behind it, so the bars are of the map */
+		/* a widget freed of its aspect (a plain pull of an edge,
+		   widgets/resize.js; Shift holds the aspect instead): the media is
+		   letterboxed in what the title bar leaves — the placeholder's inline
+		   aspect and max-width undone — and a blurred, darkened copy of the
+		   image (--po-img) fills the frame behind it, so the bars are of the
+		   map */
 		.map-block.popout.letterbox .placeholder {
 			flex: 1;
 			min-height: 0;
@@ -544,14 +540,11 @@ body.fs-lock {
 
 		/* the indicators run under the map and are as wide as it is — which,
 		   letterboxed, is the painted image and not the box it is centred in.
-		   They sit under it too: the media box takes all the height the bars
-		   leave, so in a widget much taller than its image the contain leaves
-		   ground below it and the indicators were left at the foot of the
-		   frame, a long way from what they index. --lb-b is how far the image's
-		   bottom is off the box's, the same inset the arrows are held to, and
-		   they are lifted by it — by a transform, laying nothing out: a margin
-		   would take the height out of the column the media box is measured in,
-		   which would move the image, which would move the indicators again */
+		   They are lifted by --lb-b, how far the image's bottom is off the
+		   box's, to sit under the image rather than at the foot of the frame;
+		   by a transform, since a margin would take height out of the column
+		   the media box is measured in, moving the image and with it the
+		   indicators again */
 		.map-block.popout.letterbox .indicators-container {
 			width: var(--lb-w, 100%);
 			margin-left: auto;
@@ -605,11 +598,11 @@ body.fs-lock {
 			z-index: 1;
 		}
 
-		/* a widget with another lying over it hands the pointer back to the page:
-		   a press inside an iframe is the frame's own and the page never sees it,
-		   so the widget could not be clicked to the front (popout.js sets the
-		   class). The press lands on the widget instead and raises it, and the
-		   frame is live again for the next one */
+		/* a widget with another lying over it hands the pointer back to the
+		   page: a press inside an iframe is the frame's own and the page never
+		   sees it, so the widget could not be clicked to the front
+		   (widgets/overlap.js sets the class). The press lands on the widget
+		   instead and raises it, and the frame is live again for the next one */
 		.map-block.popout.covered iframe {
 			pointer-events: none;
 		}
@@ -692,8 +685,9 @@ body.fs-lock {
 		.snap-right .snap-edge { left: -4px; }
 
 	/* a pane's width is the column's, so only its top and bottom edge resize —
-	   a locked pane's as well: a pull there lets the aspect go (popout.js), which
-	   is the only way a height changes at a width that is not the pane's to give */
+	   a locked pane's as well: a pull there lets the aspect go
+	   (widgets/resize.js), which is the only way a height changes at a width
+	   that is not the pane's to give */
 	.map-block.popout.snapped .po-h-e,
 	.map-block.popout.snapped .po-h-w,
 	.map-block.popout.snapped .po-h-ne,
@@ -704,9 +698,9 @@ body.fs-lock {
 	}
 
 	/* a fullscreen map in a pane fills its column — what the other panes leave
-	   free of it, above and below (--fs-top/--fs-bottom, set by popout.js) — and
-	   the page hidden behind the columns leaves a floating widget's fullscreen
-	   the whole viewport */
+	   free of it, above and below (--fs-top/--fs-bottom, set by
+	   widgets/columns.js) — and the page hidden behind the columns leaves a
+	   floating widget's fullscreen the whole viewport */
 	body.snap-full .radartitle.fullscreen,
 	body.snap-full .if1.fullscreen,
 	body.dashboard .radartitle.fullscreen,
@@ -718,12 +712,9 @@ body.fs-lock {
 	/* the dashboard: the page — and all on it but the widgets, which are
 	   fixed and stay rendered — out of sight and out of reach, no scrollbar;
 	   the widgets, the columns and the dialog are all there is */
-	/* the board before the board is there: maps.js reads the view out of storage
-	   or the address while <head> is parsing and sets this on <html>, since the
-	   arrangement itself waits on the render and cannot be applied until
-	   DOMContentLoaded (cloakBoard). The same two things hidden as below, and
-	   the scrollbar with them, so what shows meanwhile is the ground the widgets
-	   are about to stand on rather than the page they are not going to be in */
+	/* the board before the board is there (cloakBoard, maps/prefs.js; see
+	   INTERNALS.md, The board): the same two things hidden as below, and the
+	   scrollbar with them */
 	html.board-boot {
 		overflow: hidden;
 	}
@@ -746,18 +737,10 @@ body.fs-lock {
 			visibility: visible;
 		}
 
-	/* the widgets' shadows, drawn for them rather than by them, so a widget's
-	   shadow falls on what is behind the widgets and never on the widget beside
-	   it. Each box is a widget's own rect placed by popout.js; an outer box-shadow
-	   is clipped out of its own border box, so a box paints the halo and nothing
-	   else, and takes no pointer. Both layers are under the widget range, which
-	   starts at 5000 and climbs from there, and over the page and the docked maps
-	   on it, the columns' ground and the board's graph paper.
-	   A fullscreen map at 4500/4501 lies between them, and popout.js sorts the
-	   boxes either side of it: the shadow of a widget standing on that map goes
-	   over it, as it would over the page, and the shadow of one merely standing
-	   beside it goes under, so a halo cannot spill onto a map that begins where
-	   its widget ends */
+	/* the widgets' shadows, drawn for them rather than by them
+	   (widgets/overlap.js; see INTERNALS.md, Covered frames and shadows). A box
+	   paints the halo alone, an outer box-shadow being clipped out of its own
+	   box, and takes no pointer */
 	.po-shadows,
 	.po-shadows-under {
 		position: fixed;
@@ -779,9 +762,9 @@ body.fs-lock {
 		}
 
 	/* the board's graph paper: under the widgets and over the columns' ground,
-	   its lines the multiples of the cell popout.js snaps to (--grid-cell). It
-	   hangs off body rather than the container the board hides, and takes no
-	   pointer: it is something to see, not to touch */
+	   its lines the multiples of the cell widgets/grid.js snaps to
+	   (--grid-cell). It hangs off body rather than the container the board
+	   hides, and takes no pointer: it is something to see, not to touch */
 	.po-grid {
 		position: fixed;
 		inset: 0;
@@ -844,8 +827,8 @@ body.fs-lock {
 		}
 
 	/* the widgets floating over the page stay in view over a fullscreen map:
-	   the page's fullscreen goes under them (above the columns' ground), and
-	   a widget hosting one is lowered to the same place by popout.js */
+	   the page's fullscreen goes under them (above the columns' ground), and a
+	   widget hosting one is lowered to the same place by widgets/fullscreen.js */
 	.radartitle.fullscreen {
 		z-index: var(--z-fullscreen-host-bar);
 	}
@@ -983,8 +966,8 @@ body.fs-lock {
 			line-height: 1;
 		}
 
-	/* the manual switched off (MANUAL_ENABLED in main.js): its entries go, and
-	   the help button's column with them */
+	/* the manual switched off (FEATURES.manual in features.js): its entries go,
+	   and the help button's column with them */
 	html.no-manual .help-btn,
 	html.no-manual .manual-link {
 		display: none;
@@ -1118,9 +1101,9 @@ body.fs-lock {
 }
 
 /* on desktop the dialog is a window: dragged by its head and resized from any
-   side or corner through the widgets' own handles, which maps.js appends and
-   drives — inside the panel, so the press that grabs one is a press inside the
-   dialog and misses the backdrop that would shut it */
+   side or corner through the widgets' own handles, which page/dialog.js appends
+   and drives — inside the panel, so the press that grabs one is a press inside
+   the dialog and misses the backdrop that would shut it */
 @media (min-width: 801px) and (hover: hover) and (pointer: fine) {
 	.map-settings .po-h {
 		position: absolute;
@@ -1140,7 +1123,7 @@ body.fs-lock {
 
 	/* the lock drops the page's scrollbar, which would widen the page and
 	   shift what is centred in it: its gutter is kept while the page had one
-	   (maps.js sets the class only then) */
+	   (page/dialog.js sets the class only then) */
 	html.ms-gutter {
 		scrollbar-gutter: stable;
 	}
@@ -1296,7 +1279,7 @@ body.fs-lock {
 	   the dialog it opens is up — where it is the button that is pressed in */
 	opacity: 0.55;
 	transition: opacity 0.15s ease;
-	/* dragged along the top and pulled wider by its sides (maps.js) */
+	/* dragged along the top and pulled wider by its sides (settings/tab.js) */
 	box-sizing: border-box;
 	/* its name and its glyphs in a row: the width they take together is also the
 	   narrowest it goes, msTabMinWidth() measuring it with the width unset, so
@@ -1396,8 +1379,9 @@ body.fs-lock {
 		}
 
 	/* the tab's [+]: a menu of the maps the board does not show, hung under the
-	   tab (maps.js: openMsAdd). The dialog's colours and its search box, since it
-	   is the dialog's Dostupne karte cut down to the one thing it is for */
+	   tab (settings/add-menu.js). The dialog's colours and its search box,
+	   since it is the dialog's Dostupne karte cut down to the one thing it is
+	   for */
 	.ms-add {
 		position: fixed;
 		z-index: var(--z-menu); /* over the tab's shadow */
@@ -1539,11 +1523,9 @@ body.fs-lock {
 				border-left: 7px solid transparent;
 			}
 
-			/* the list on screen started here and has been edited since, while
-			   "Prilagođeno" holds the selection — so the bar still names the view
-			   the edits came from. Left edge, clear of the corner triangle, which
-			   a saved preset carries at the same time. Grey like the triangle:
-			   both are marks about the chip, and orange stays "selected" */
+			/* the origin dot (INTERNALS.md, The origin dot): left edge, clear
+			   of a saved preset's corner triangle, and grey like it, since
+			   orange is "selected" */
 			/* a preset that is a board carries the board's mark, the blue edge of
 			   the mode row, on its chip and its row in the list; the origin dot
 			   sits inside it, in the padding */
@@ -1716,8 +1698,9 @@ body.fs-lock {
 		display: none;
 	}
 
-	/* a map switched off by the remote config (maps.js): hidden in both
-	   sections, but there, so the list read off the rows still holds it */
+	/* the row of a map switched off by the remote config (settings/panel-list.js
+	   marks it): hidden in both sections, but there, so the list read off the
+	   rows still holds it */
 	.map-settings .ms-item.ms-off {
 		display: none;
 	}
@@ -1780,7 +1763,8 @@ body.fs-lock {
 		}
 
 		/* by class rather than :has(input:disabled), which is newer than the
-		   rest of this sheet leans on; maps.js sets it with the disabled state */
+		   rest of this sheet leans on; settings/panel-rows.js sets it with the
+		   disabled state */
 		.map-settings .ms-grid.ms-off {
 			opacity: 0.45;
 			cursor: default;
@@ -2191,17 +2175,8 @@ body.fs-lock {
 
 	.slide.active {
 		display: block;
-		/* the slide is the slideshow's width, not its image's. A slide is a flex
-		   item and was sized by its content, which is the image — and an image
-		   that fails to load is 0x0 (img carries max-width and no width), so the
-		   slide fell in to the width of the words in its title bar and the map
-		   became a small blue tile. An untitled slideshow never had this: its
-		   container is the .placeholder itself and carries the aspect-ratio, so
-		   it keeps its box whatever becomes of the image, which is why a failed
-		   ESSL or ESTOFEX leaves a full-size one and a failed ČHMÚ or meteoblue
-		   did not. Titled slides get the same by taking the width from above
-		   instead of from below, which leaves the .placeholder's own aspect and
-		   max-width to say how tall and how wide the map is. */
+		/* the slide is the slideshow's width, not its image's, so an image that
+		   fails to load leaves a map-sized box (INTERNALS.md, Map descriptors) */
 		width: 100%;
 	}
 
@@ -2228,10 +2203,8 @@ body.fs-lock {
 	opacity: 0.7;
 	font-weight: bold;
 	font-size: 36px;
-	/* the hover fade only. It was `0.6s ease` — every property — which was
-	   nothing while the arrows were fixed to their container, and is a lag the
-	   moment they follow a letterboxed image: they would slide to the new place
-	   over half a second behind a resize that had already finished */
+	/* the hover fade only: the arrows follow a letterboxed image, and a
+	   transition on every property would slide them after it half a second late */
 	transition: color 0.6s ease, background-image 0.6s ease;
 	user-select: none;
 }

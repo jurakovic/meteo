@@ -51,10 +51,9 @@ export function resolveMapIds() {
 	return prefsMapIds(getActiveMapPrefs());
 }
 
-// the list the page shows, edited on the board (widgets/board.js) rather than in the
-// dialog, stored as a custom list: into the preferences — or into the shared
-// view, which stays a shared view, the arrangement written after it into the
-// address bar as always
+// the list the page shows, edited on the board (widgets/board.js) rather than
+// in the dialog, stored as a custom list: into the preferences, or into the
+// shared view, which stays a shared view
 function storeShownList(maps) {
 	const prefs = sharedMapView || getMapPrefs();
 	prefs.preset = 'custom';
@@ -76,10 +75,9 @@ export function addMapToList(mapId) {
 	storeShownList(resolveMapIds().filter(id => id !== mapId).concat(mapId));
 }
 
-// the list a preferences object names — deduped as well as filtered: a
-// hand-crafted ?v= can name the same map twice, and two rendered copies would
-// share one data-slideshow-id (the arrows drive whichever comes first while
-// both sets of indicators light up)
+// the list a preferences object names, deduped as well as filtered: a
+// hand-crafted ?v= can name a map twice, and two renderings of it would share
+// one data-slideshow-id
 /** @param {MapPrefs} prefs @returns {string[]} */
 export function prefsMapIds(prefs) {
 	if (prefs.preset === 'custom' && Array.isArray(prefs.maps))
@@ -94,13 +92,8 @@ export function sameMapIds(a, b) {
 	return a.length === b.length && a.every((id, index) => id === b[index]);
 }
 
-// A shared preset arrives without an id (see presetSharePrefs), so the bar has
-// nothing to match and falls back to "Prilagođeno" — including when you open
-// your own link, where the list is one of your saved presets. Matching on
-// contents finds it again. The name is not part of the test: it is a label the
-// recipient may already have used for something else, and a renamed preset is
-// still the same view. Saved presets are searched before the built-ins, so a
-// saved copy of a built-in list selects the copy rather than the original.
+// the preset a shared list is, matched on contents and order, saved presets
+// first (INTERNALS.md, Share links)
 /** @param {string[]} mapIds @returns {string | null} */
 export function presetIdForMapIds(mapIds) {
 	const match = getUserPresets().concat(MAP_PRESETS).find(preset => sameMapIds(preset.maps, mapIds));
@@ -126,10 +119,8 @@ export function getActiveMapPrefs() {
 	return sharedMapView || getMapPrefs();
 }
 
-// Whether the view is a board is known from <head> (storage or ?v=), long
-// before the render on DOMContentLoaded builds one. Until the arrangement is
-// applied the cloak hides what body.dashboard hides, so a slow load does not
-// paint the ordinary page first and then take it away.
+// the page hidden from <head> until a board's arrangement is applied, so a
+// slow load does not show the ordinary page first (INTERNALS.md, The board)
 export function cloakBoard() {
 	const layout = getActiveMapPrefs().layout;
 	if (layout && layout.dashboard && DESKTOP_MQ.matches) document.documentElement.classList.add('board-boot');
@@ -143,9 +134,7 @@ export function uncloakBoard() {
 }
 
 // which chip the panel opens on. Only a shared list is matched back to a
-// preset: saved preferences hold "custom" because the user applied a list
-// without saving it, and binding that to a preset id behind their back would
-// hand later edits of that preset to a view that only happens to match today.
+// preset (INTERNALS.md, Share links)
 /** @returns {string} */
 export function activePresetId() {
 	const prefs = getActiveMapPrefs();
@@ -161,12 +150,9 @@ export function clearSharedMapView() {
 	history.replaceState(null, '', url);
 }
 
-// the arrangement is written as it changes — it is direct manipulation, not
-// a form with an apply button — next to the map list it belongs to: into the
-// preferences, or, while a shared view is on, into that view and back into
-// the address bar, so the link stays re-copyable with the arrangement as it
-// is now and a refresh keeps it (the recipient's storage is still never
-// written)
+// the arrangement, next to the map list it belongs to: into the preferences,
+// or into the shared view and its address (INTERNALS.md, Remembered and shared
+// layouts)
 /** @param {import('../widgets/layout.js').SnapLayout | null} layout */
 export function storeViewLayout(layout) {
 	if (sharedMapView) {

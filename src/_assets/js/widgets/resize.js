@@ -1,21 +1,5 @@
-// Resizing a widget, a group or a seam.
-//
-// Widgets: resizing from any side or corner. Width is the dimension every widget has; a
-// locked (aspect) widget derives its height from it, so a pull on its top or
-// bottom edge is turned into the width that gives that height, and a corner
-// follows whichever axis asks for more. Pulling the left or top edge keeps the
-// opposite edge where it is by moving the widget along. The pulled edge is drawn
-// by the other floating widgets too (magnets, as on drag): onto the facing edge
-// of one beside it, or into line with the like edge of one above or below it —
-// exact for a width, and through the aspect ratio for a locked widget's height,
-// whose width then has a moving edge of its own to pull, so the widget lines up
-// by that edge too. A free pane in a column keeps the column's width: its top or
-// bottom edge is drawn to the column's ends and the other panes, and the top it
-// carries follows. A grouped floating widget's handles resize the whole group
-// (resizeGroup); a grouped pane resizes on its own in its stack, which keeps
-// together — the members above it move up with its top edge, the ones below down
-// with its bottom edge (the settle in layoutSnapColumn), and the stack's ends
-// stop at the column's
+// Resizing a widget, a group or a seam. See INTERNALS.md, Resizing, Groups
+// and Seams.
 
 import { dlog } from '../lib/debug.js';
 import { clamp, viewportHeight, viewportWidth } from '../lib/geometry.js';
@@ -30,11 +14,8 @@ import { arrangementChanged } from './layout.js';
 import { trackWidgetPointer } from './overlap.js';
 import { fitWidget, lockAspect, unlockAspect } from './popout.js';
 
-// Two widgets sharing a whole edge form a seam: dragging it moves it, one side
-// giving what the other takes, which is what a tiled board needs (and either
-// widget's handle, lying on top of each other there, means the same). Side
-// handles only: a corner belongs to two edges, and an edge of unequal sides
-// cannot move without tearing one of them off its other neighbours.
+// the widget sharing the whole of this edge with block, if one does: a seam
+// (INTERNALS.md, Seams)
 /** @param {HTMLElement} block */
 export function seamNeighbour(block, dir) {
 	if (dir.length !== 1 || isSnapped(block) || block.classList.contains('fs-host')) return null;
@@ -107,10 +88,7 @@ export function resizeSeam(block, other, dir, e) {
 	});
 }
 
-// Shift holds the aspect and a plain pull lets it go, as in an image editor;
-// the key counts through the whole gesture (trackWidgetPointer). In a column
-// the width is the column's, so a plain pull frees a locked pane's height and
-// Shift holds it. The title bar's double-click takes the aspect back.
+// Shift holds the aspect and a plain pull lets it go (INTERNALS.md, Resizing)
 /** @param {HTMLElement} block */
 export function resizePopout(block, dir, e) {
 	const members = groupMembers(block);
@@ -209,11 +187,9 @@ function lockedResizeWidth(block, dir, start, w, h, ratio, magnets, room) {
 	if (!(dir.includes('e') || dir.includes('w')) || dir.length === 2)
 		w = pullResizeEdges(magnets, dir.includes('w') ? 'w' : 'e', start, w, h).w;
 	w = clamp(w, POPOUT_MIN_WIDTH, room.width);
-	// and the same the other way about: a width pulled by a side handle
-	// carries the bottom edge down with it, since a locked height follows
-	// the width, so that edge is offered the same magnets and the width
-	// is taken back from the height that lands on one — which is how a
-	// widget widened beside a taller one stops level with its bottom
+	// and the other way about: a side pull carries a locked widget's bottom
+	// edge with it, so that edge gets the magnets too, and the width is taken
+	// back from the height that lands on one
 	if (dir !== 'n' && dir !== 's') {
 		const vert = (dir.includes('n') ? 'n' : 's') + (dir.includes('w') ? 'w' : '');
 		const at = lockedHeightAt(block, w);
