@@ -193,7 +193,7 @@ export function buildBasicIframe(map, inst, options = {}) {
 }
 
 /** @param {import('./catalog.js').CatalogMap} map */
-export function buildLinksBottom(map) {
+function buildLinksBottom(map) {
 	const bar = el('div', { class: 'links-bottom', style: maxWidthStyle(map) || undefined });
 	map.links.forEach((link, i) => {
 		if (i > 0) bar.appendChild(document.createTextNode(' · '));

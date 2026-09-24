@@ -40,7 +40,7 @@ export function withKey(label, id) {
 	return `${label} (${key.length === 1 ? key.toUpperCase() : key === 'Escape' ? 'Esc' : key})`;
 }
 
-export function runCommand(id, control = null, event = null) {
+function runCommand(id, control = null, event = null) {
 	const command = commands.get(id);
 	if (command) command.run(control, event);
 }

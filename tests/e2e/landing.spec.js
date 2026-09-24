@@ -27,6 +27,11 @@ test.describe('landing page', () => {
 		await expect(page.locator('.progress-container')).toBeHidden();
 	});
 
+	test('the bar ends at 100%: an image counts once, even one complete before its load event has run', async ({ page }) => {
+		await expect(page.locator('.progress-container')).toBeHidden();
+		expect(await page.locator('.progress-bar').evaluate(bar => parseFloat(bar.style.width))).toBe(100);
+	});
+
 	test('slideshow arrows and indicators move together', async ({ page }) => {
 		const slideshow = page.locator('.slideshow[data-slideshow-id="neverin-radar-hr"]');
 		const indicators = page.locator('.indicators-container[data-slideshow-id="neverin-radar-hr"] .indicator');

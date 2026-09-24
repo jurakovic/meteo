@@ -29,7 +29,7 @@ function manualOpen() {
 	return !!panel && !panel.hidden;
 }
 
-export function toggleManual() {
+function toggleManual() {
 	toggleDialog(manualDialog());
 }
 

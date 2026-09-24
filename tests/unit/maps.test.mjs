@@ -6,7 +6,7 @@ import assert from 'node:assert/strict';
 import { catalogMap, DEFAULT_MAPS, MAP_CATALOG } from '../../src/_assets/js/maps/catalog.js';
 import { findTerms, foldText, matchesFind } from '../../src/_assets/js/maps/find.js';
 import { isValidPrefs, prefsMapIds, presetIdForMapIds, sameMapIds } from '../../src/_assets/js/maps/prefs.js';
-import { cleanPresetName, MAP_PRESETS, uniquePresetName, storeUserPreset } from '../../src/_assets/js/maps/presets.js';
+import { cleanPresetName, getUserPresets, MAP_PRESETS, renameUserPreset, storeUserPreset, uniquePresetName } from '../../src/_assets/js/maps/presets.js';
 import { instIndex, instKey, instMapId, instSuffix } from '../../src/_assets/js/maps/render.js';
 import { decodeMapView, encodeMapView } from '../../src/_assets/js/maps/share.js';
 
@@ -96,4 +96,16 @@ test('a fresh address replaces its own reload parameter and keeps the rest', asy
 	assert.match(freshUrl('https://x/a.gif?nocache'), /^https:\/\/x\/a\.gif\?nocache&_r=\d+$/);
 	assert.match(freshUrl('https://x/a.gif?_r=1&k=2'), /^https:\/\/x\/a\.gif\?k=2&_r=\d+$/);
 	assert.match(freshUrl('https://x/a.gif?k=2&_r=1'), /^https:\/\/x\/a\.gif\?k=2&_r=\d+$/);
+});
+
+test('a rename is refused when the name is empty or taken, and cleaned when not', () => {
+	const kept = storeUserPreset('Rename me', ['windy']);
+	storeUserPreset('Taken', ['windy']);
+	assert.equal(renameUserPreset(kept.id, '   '), false);
+	assert.equal(renameUserPreset(kept.id, 'taken'), false); // names compare without case
+	assert.equal(renameUserPreset('u:nobody', 'Anything'), false);
+	assert.equal(kept.name, 'Rename me');
+	assert.equal(renameUserPreset(kept.id, '  Renamed   one '), true);
+	assert.equal(getUserPresets().find(p => p.id === kept.id).name, 'Renamed one');
+	assert.equal(renameUserPreset(kept.id, 'Renamed one'), true); // its own name is no clash
 });

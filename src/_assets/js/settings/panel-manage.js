@@ -4,7 +4,7 @@
 
 import { el, flashLabel } from '../lib/dom.js';
 import { getSharedMapView, resolveMapIds, sameMapIds } from '../maps/prefs.js';
-import { cleanPresetName, deleteUserPreset, findUserPresetByName, getHiddenPresets, getUserPresets, hideablePresets, hideAllPresets, isBoardPreset, isHideablePreset, isPresetHidden, MAP_PRESETS, PRESET_NAME_MAX, saveUserPresets, setPresetHidden, showAllPresets, storeUserPreset, uniquePresetName } from '../maps/presets.js';
+import { cleanPresetName, deleteUserPreset, getHiddenPresets, getUserPresets, hideablePresets, hideAllPresets, isBoardPreset, isHideablePreset, isPresetHidden, MAP_PRESETS, PRESET_NAME_MAX, renameUserPreset, setPresetHidden, showAllPresets, storeUserPreset, uniquePresetName } from '../maps/presets.js';
 import { copyMapViewLink, presetSharePrefs } from '../maps/share.js';
 import { hasPendingEdits } from './panel-view.js';
 
@@ -71,19 +71,14 @@ export function createPresetManager(panel) {
 	}
 
 	function commitRename() {
-		const preset = getUserPresets().find(p => p.id === renamingId);
-		if (!preset) return;
-		const name = cleanPresetName(renameInput.value);
-		const clash = findUserPresetByName(name);
+		if (!getUserPresets().some(p => p.id === renamingId)) return;
 		// empty, or a name another preset already holds: stay in the editor and
 		// mark the field rather than silently dropping what was typed
-		if (!name || (clash && clash !== preset)) {
+		if (!renameUserPreset(renamingId, renameInput.value)) {
 			renameInput.classList.add('invalid');
 			renameInput.focus();
 			return;
 		}
-		preset.name = name;
-		saveUserPresets();
 		renamingId = null;
 		panel.presetsChanged(panel.checkedPresetId());
 	}
