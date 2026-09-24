@@ -19,7 +19,6 @@ tests/e2e/            Playwright, offline through fixtures.js
 tests/unit/           node --test, DOM stub in setup.mjs
 INTERNALS.md          how it works (the one place for that)
 MANUAL.md             user manual, Croatian, built into the pages
-REFACTORING.md        the architecture review's plan and record
 ```
 
 ## Working rules
@@ -27,7 +26,7 @@ REFACTORING.md        the architecture review's plan and record
 - **Finish with `npm run check`.** A behaviour change also runs `npm run build` and commits the rebuilt `docs/` with the source, as past commits do.
 - **The e2e suite reuses whatever listens on port 8080.** An nginx container serving `src/` there (INTERNALS.md, Run from src) fails every `built` test with 404s. Stop it, or run the suite on a config with another port.
 - **A bug fix comes with a test** that fails without the fix. Prove it by running the test against the unfixed code.
-- **Keep INTERNALS.md true.** When behaviour changes, update its section in the same change. A paragraph that no longer matches the code is a bug.
+- **Keep INTERNALS.md true.** When behaviour changes, update its section in the same change. A paragraph that no longer matches the code is a bug. The history of a change belongs in its commit message, not in a doc in the repo.
 
 ## Files
 
@@ -39,7 +38,7 @@ INTERNALS.md explains how a feature works; a code comment explains the code it s
 
 - **A module header** is one to three lines: what the module is, then a pointer to its section, `See INTERNALS.md, Snap columns.` or inline `(INTERNALS.md, The board)`. The section name must exist.
 - **A comment by the code** gives what the code cannot say: a guard's reason, an ordering constraint, a browser quirk, a number's origin. Keep it even where INTERNALS.md covers the feature, but not a retelling of the INTERNALS.md paragraph.
-- **Only what is true now.** No history ("was", "used to", "as it always was"), no bug or step ids from REFACTORING.md (`B1`, `S4`), no mention of an earlier implementation. Describing old stored data the code still reads ("a layout stored before panes were placed freely") is fine: that is current behaviour.
+- **Only what is true now.** No history ("was", "used to", "as it always was"), no bug, ticket or plan-step ids, no mention of an earlier implementation. Describing old stored data the code still reads ("a layout stored before panes were placed freely") is fine: that is current behaviour.
 - **File names in comments are current paths**, relative to `_assets/js` (`widgets/overlap.js`), including in `styles.css`.
 - **The house style:** lowercase prose fragments naming what the thing is (`// the widest a widget goes: …`), full sentences in headers, about 80 columns with tabs counted as 4, CSS continuation lines indented three spaces. Match the density around the edit.
 - **Types** are JSDoc, checked by `npm run typecheck`; shared shapes are named where they are owned (INTERNALS.md, Types).
