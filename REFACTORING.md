@@ -76,7 +76,7 @@ Status: ⬜ todo · 🔄 in progress · ✅ done
 
 | | Before | After |
 |---|---|---|
-| Scripts | 5 files, 6,447 lines, loaded in a fixed order through globals; `popout.js` 2,793 lines | 56 ES modules, 7,390 lines (JSDoc included), wired by two entries; the largest module 615 lines (the catalog's data) |
+| Scripts | 5 files, 6,447 lines, loaded in a fixed order through globals; `popout.js` 2,793 lines | 56 ES modules, 7,331 lines (JSDoc included), wired by two entries; the largest module 615 lines (the catalog's data) |
 | Build | Windows PowerShell and `unix2dos`; minified files made by hand | `npm run build` on any OS, minifying in memory, `docs/` checked byte for byte against the old build at the switch |
 | Checks | none | `npm run check`: ESLint (imports checked), TypeScript over the JSDoc, 36 unit tests, 130 browser tests on the dev tree and the built site, run offline |
 | Landing page | ~720 lines of HTML written by hand beside the catalog | drawn from the catalog by the customize page's renderer |
