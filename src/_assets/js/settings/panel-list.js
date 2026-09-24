@@ -2,7 +2,7 @@
 // page shows them (reordered by dragging), and the available ones below, a
 // finding surface sorted and filtered freely.
 
-import { el } from '../lib/dom.js';
+import { el, queryAll } from '../lib/dom.js';
 import { catalogMap, CATEGORY_GLYPHS, MAP_CATALOG } from '../maps/catalog.js';
 import { findTerms, matchesFind } from '../maps/find.js';
 import { isMapEnabled } from '../remote-config.js';
@@ -118,7 +118,7 @@ export function createMapList(panel) {
 
 			// move the row before the first sibling whose midpoint is below the pointer
 			const reorder = () => {
-				const target = [...selectedDiv.children].find(sibling =>
+				const target = queryAll(':scope > *', selectedDiv).find(sibling =>
 					sibling !== row && lastY < sibling.getBoundingClientRect().top + sibling.offsetHeight / 2);
 				if (target) {
 					if (target.previousElementSibling !== row) selectedDiv.insertBefore(row, target);

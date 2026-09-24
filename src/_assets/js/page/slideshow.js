@@ -1,6 +1,9 @@
 // The slideshows: arrows, indicators, swipe and mouse drag.
 
+import { query, queryAll } from '../lib/dom.js';
+
 // n slides on from the one showing, wrapping round at either end
+/** @param {HTMLElement} slideshow @param {number} n */
 export function plusSlides(slideshow, n) {
 	showSlides(slideshow, parseInt(slideshow.getAttribute('data-current-slide')) + n);
 }
@@ -24,8 +27,8 @@ function updateSlideshowWidth(slideshow) {
 	if (!slideshow.hasAttribute('data-dynamic-width')) return;
 
 	const slideshowId = slideshow.getAttribute('data-slideshow-id');
-	const indicatorsContainer = document.querySelector(`.indicators-container[data-slideshow-id='${slideshowId}']`);
-	const activeSlide = slideshow.querySelector('.slide.active .placeholder');
+	const indicatorsContainer = query(`.indicators-container[data-slideshow-id='${slideshowId}']`);
+	const activeSlide = query('.slide.active .placeholder', slideshow);
 	if (!activeSlide) return; // only titled slides have a .placeholder wrapper
 
 	slideshow.style.maxWidth = activeSlide.style.maxWidth;
@@ -45,7 +48,7 @@ function handleSwipe(slideshow, startX, endX) {
 // through here, and the sweep must pass over everything already bound rather
 // than hang a second set of handlers on it
 export function addSwipeEvents() {
-	document.querySelectorAll('.slideshow:not([data-swipe])').forEach(slideshow => {
+	queryAll('.slideshow:not([data-swipe])').forEach(slideshow => {
 		slideshow.setAttribute('data-swipe', '');
 		// an image's own drag would take the gesture
 		slideshow.querySelectorAll('img').forEach(img => {

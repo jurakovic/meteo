@@ -43,11 +43,21 @@ const USER_PRESET_PREFIX = 'u:';
 
 export const PRESET_NAME_MAX = 40;
 
+/**
+ * @typedef {object} Preset
+ * @property {string} id a built-in's name-like id, or 'u:' and a random one for a saved preset
+ * @property {string} name
+ * @property {string[]} maps in render order
+ * @property {import('../widgets/layout.js').SnapLayout | null} [layout] a saved preset's arrangement
+ */
+
+/** @param {string} id @returns {boolean} */
 export function isUserPresetId(id) {
 	return typeof id === 'string' && id.startsWith(USER_PRESET_PREFIX);
 }
 
 // a saved preset that is a board: its layout carries the mode (widgets/board.js)
+/** @param {{ id: string, layout?: import('../widgets/layout.js').SnapLayout | null }} preset @returns {boolean} */
 export function isBoardPreset(preset) {
 	return !!(preset && preset.layout && preset.layout.dashboard === true);
 }
@@ -66,6 +76,7 @@ function loadUserPresets() {
 let userPresets = loadUserPresets();
 
 // the saved presets, in the order they were made
+/** @returns {Preset[]} */
 export function getUserPresets() {
 	return userPresets;
 }
@@ -74,6 +85,7 @@ export function saveUserPresets() {
 	writeJson(STORAGE_KEYS.userPresets, userPresets);
 }
 
+/** @returns {Preset[]} */
 export function allPresets() {
 	return MAP_PRESETS.concat(userPresets);
 }
@@ -86,10 +98,12 @@ function newPresetId() {
 }
 
 // the name is the handle for overwriting, so it has to stay printable and bounded
+/** @param {string} name @returns {string} */
 export function cleanPresetName(name) {
 	return String(name).trim().replace(/\s+/g, ' ').slice(0, PRESET_NAME_MAX);
 }
 
+/** @param {string} name @returns {Preset | undefined} */
 export function findUserPresetByName(name) {
 	return userPresets.find(preset => preset.name.toLowerCase() === name.toLowerCase());
 }
@@ -98,6 +112,11 @@ export function findUserPresetByName(name) {
 // view is to edit the list and save it again under the same name. The layout
 // (the snapped arrangement, null for none) is part of what is saved: a preset
 // is the whole view, and applying it brings the arrangement back
+/**
+ * @param {string} name @param {string[]} maps
+ * @param {import('../widgets/layout.js').SnapLayout | null} [layout]
+ * @returns {Preset}
+ */
 export function storeUserPreset(name, maps, layout = null) {
 	const existing = findUserPresetByName(name);
 	if (existing) {
@@ -113,6 +132,7 @@ export function storeUserPreset(name, maps, layout = null) {
 
 // for a preset arriving from someone else's link, where silently overwriting a
 // preset of the recipient's own would lose their list
+/** @param {string} name @returns {string} */
 export function uniquePresetName(name) {
 	// the budget is spent before the clash is looked up, not after: appending
 	// the suffix and slicing back to PRESET_NAME_MAX would hand a full-length
@@ -131,6 +151,7 @@ export function uniquePresetName(name) {
 // rewritten in the same breath. Left alone it would fail isValidPrefs on the
 // next load and fall back to Osnovno, losing the view still on screen. The
 // stored contents are what gets kept, not the panel's possibly-edited list.
+/** @param {string} id */
 export function deleteUserPreset(id) {
 	const preset = userPresets.find(p => p.id === id);
 	if (preset && getMapPrefs().preset === id)
@@ -148,6 +169,7 @@ export function deleteUserPreset(id) {
 // "Prilagođeno" alone and there is always a named view to get back to
 const PERMANENT_PRESET_ID = 'zadano';
 
+/** @param {string} id @returns {boolean} */
 export function isHideablePreset(id) {
 	return id !== PERMANENT_PRESET_ID;
 }
@@ -162,6 +184,7 @@ function loadHiddenPresets() {
 let hiddenPresets = loadHiddenPresets();
 
 // the ids of the built-ins taken off the preset bar
+/** @returns {string[]} */
 export function getHiddenPresets() {
 	return hiddenPresets;
 }
@@ -170,10 +193,12 @@ function saveHiddenPresets() {
 	writeJson(STORAGE_KEYS.hiddenPresets, hiddenPresets);
 }
 
+/** @param {string} id @returns {boolean} */
 export function isPresetHidden(id) {
 	return hiddenPresets.includes(id);
 }
 
+/** @param {string} id @param {boolean} hidden */
 export function setPresetHidden(id, hidden) {
 	if (hidden && !isHideablePreset(id)) return; // no row offers this, but the rule lives here
 	hiddenPresets = hiddenPresets.filter(hiddenId => hiddenId !== id);
@@ -181,6 +206,7 @@ export function setPresetHidden(id, hidden) {
 	saveHiddenPresets();
 }
 
+/** @returns {Preset[]} */
 export function hideablePresets() {
 	return MAP_PRESETS.filter(preset => isHideablePreset(preset.id));
 }
@@ -196,6 +222,7 @@ export function showAllPresets() {
 }
 
 // what the preset bar offers, as opposed to what still resolves
+/** @returns {Preset[]} */
 export function visiblePresets() {
 	return allPresets().filter(preset => !isPresetHidden(preset.id));
 }

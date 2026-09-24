@@ -20,11 +20,13 @@ export const EVENTS = {
 	refreshTick: 'refresh-tick'
 };
 
+/** @param {string} name one of EVENTS @param {unknown} [detail] */
 export function emit(name, detail) {
 	document.dispatchEvent(new CustomEvent(name, { detail }));
 }
 
 // handler(detail) on every emit of name
+/** @param {string} name one of EVENTS @param {(detail: any) => void} handler */
 export function on(name, handler) {
-	document.addEventListener(name, (e) => handler(e.detail));
+	document.addEventListener(name, (e) => handler(/** @type {CustomEvent} */ (e).detail));
 }

@@ -6,7 +6,7 @@
 // interactive map, whose bar keeps its own [X]/[R] gate button
 
 import { dlog } from '../lib/debug.js';
-import { el } from '../lib/dom.js';
+import { el, queryAll } from '../lib/dom.js';
 import { mapTypeOf } from '../maps/types.js';
 import { restartRefresh } from './refresh.js';
 
@@ -36,7 +36,7 @@ function reloadMap(block) {
 // but the interactive maps, the same rule that decides whether a title bar
 // gets an [R] at all
 function reloadableBlocks() {
-	return [...document.querySelectorAll('.map-block')].filter(block => {
+	return queryAll('.map-block').filter(block => {
 		const type = mapTypeOf(block.dataset.mapId);
 		return !!type && !!type.reload;
 	});

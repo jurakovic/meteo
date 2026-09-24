@@ -72,7 +72,7 @@ export function initManual() {
 	if (close) close.addEventListener('click', () => setDialogVisible(panel, false));
 
 	panel.addEventListener('click', (e) => {
-		const link = e.target.closest('a[href^="#"]');
+		const link = /** @type {Element} */ (e.target).closest('a[href^="#"]');
 		if (!link || !panel.contains(link)) return;
 		e.preventDefault();
 		scrollManualTo(panel, hashText(link.getAttribute('href')));

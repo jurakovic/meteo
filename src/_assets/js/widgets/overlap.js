@@ -15,7 +15,7 @@
 // window does. A widget nothing overlaps is never covered, so a map standing on
 // its own is untouched
 
-import { el } from '../lib/dom.js';
+import { el, queryAll } from '../lib/dom.js';
 import { trackPointer } from '../lib/pointer.js';
 import { isSnapped } from './columns.js';
 import { allPopouts } from './core.js';
@@ -103,6 +103,7 @@ function fullscreenRect() {
 const shadowOf = new WeakMap();
 
 // a widget going away takes its shadow with it
+/** @param {HTMLElement} block */
 export function dropShadow(block) {
 	const shadow = shadowOf.get(block);
 	if (shadow) shadow.remove();
@@ -136,7 +137,7 @@ export function syncShadows() {
 			`left: ${rect.left}px; top: ${rect.top}px; width: ${rect.width}px; height: ${rect.height}px;`;
 		live.add(shadow);
 	});
-	document.querySelectorAll('.po-shadows, .po-shadows-under').forEach(layer =>
+	queryAll('.po-shadows, .po-shadows-under').forEach(layer =>
 		[...layer.children].forEach(box => { if (!live.has(box)) box.remove(); }));
 }
 

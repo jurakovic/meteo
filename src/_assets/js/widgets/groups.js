@@ -12,7 +12,7 @@
 // as a group number on each member's entry. Docking a member takes it out.
 
 import { dlog } from '../lib/debug.js';
-import { el } from '../lib/dom.js';
+import { el, queryAll } from '../lib/dom.js';
 import { subpixel, viewportHeight, viewportWidth } from '../lib/geometry.js';
 import { snapColumnOf, snapPaneOf } from './columns.js';
 import { GROUP_TOUCH } from './constants.js';
@@ -25,11 +25,13 @@ let groupSeq = 0;
 // the group each grouped widget is in, by id
 const groupOfBlock = new WeakMap();
 
+/** @param {HTMLElement} block */
 export function groupOf(block) {
 	return groupOfBlock.get(block) || null;
 }
 
 // null takes the widget out of its group
+/** @param {HTMLElement} block */
 export function setGroupOf(block, id) {
 	if (id) groupOfBlock.set(block, id);
 	else groupOfBlock.delete(block);
@@ -40,6 +42,7 @@ export function newGroupId() {
 	return `g${++groupSeq}`;
 }
 
+/** @param {HTMLElement} block */
 export function groupMembers(block) {
 	const group = groupOf(block);
 	return group ? allPopouts().filter(b => groupOf(b) === group) : [block];
@@ -94,6 +97,7 @@ function joinGroup(block) {
 // a member leaves; what is left with one member is no group. In a column a
 // group is a stack, so a middle member leaving splits it in two, the members
 // above it and the ones below, each a group of its own if two or more
+/** @param {HTMLElement} block */
 export function leaveGroup(block) {
 	dlog(`leaveGroup: ${block.dataset.mapId}`);
 	const id = groupOf(block);
@@ -118,7 +122,7 @@ export function updateGroups() {
 		const grouped = !!groupOf(block);
 		block.classList.toggle('grouped', grouped);
 		const can = grouped || touchingBlocks(block).length > 0;
-		block.querySelectorAll('.grp-btn').forEach(btn => {
+		queryAll('.grp-btn', block).forEach(btn => {
 			btn.hidden = !can;
 			btn.textContent = grouped ? '[-]' : '[+]';
 			btn.title = grouped ? 'Odvoji prozor od skupine' : 'Spoji prozor s prozorima koje dodiruje';
@@ -128,6 +132,7 @@ export function updateGroups() {
 }
 
 // where the members stand, to move them from
+/** @param {HTMLElement[]} members */
 export function groupStarts(members) {
 	return members.map(block => {
 		const rect = block.getBoundingClientRect();

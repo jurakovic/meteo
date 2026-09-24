@@ -1,6 +1,7 @@
 // The page's own content, on both pages: the maps' wiring, the links under
 // them and at the foot of the page, and what follows the window's width.
 
+import { queryAll } from '../lib/dom.js';
 import { hideOverlayOnDoubleTap, updateHintText, updateIframeSrc } from './iframe.js';
 import { addExpandableClickEventListener, addLinksScrollShadows, initLinksBottom, updateLinksScrollShadows } from './links.js';
 import { showProgress } from './progress.js';
@@ -9,7 +10,7 @@ import { addSwipeEvents } from './slideshow.js';
 // wiring for content inside the maps list; called on load and again after
 // maps/render.js re-renders it, so it must only touch freshly created nodes
 export function initDynamicContent() {
-	document.querySelectorAll('img.lazy').forEach(img => {
+	queryAll('img.lazy').forEach((/** @type {HTMLImageElement} */ img) => {
 		img.src = img.getAttribute('data-src');
 		img.classList.remove('lazy');
 	});

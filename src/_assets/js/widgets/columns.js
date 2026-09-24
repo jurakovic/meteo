@@ -25,28 +25,44 @@
 // opens it back to the widths from before. Two columns that meet share one seam
 // handle that moves width between them.
 
-import { groupOf } from './groups.js';
 import { dlog } from '../lib/debug.js';
 import { el } from '../lib/dom.js';
 import { clamp, viewportHeight, viewportWidth } from '../lib/geometry.js';
 import { isDashboard, setDashboard } from './board.js';
 import { POPOUT_MAX_WIDTH, POPOUT_MIN_HEIGHT, POPOUT_TITLE_HEIGHT, SNAP_EDGE, SNAP_MIN_WIDTH, SNAP_SHUT } from './constants.js';
 import { magnetEdge } from './drag.js';
+import { groupOf } from './groups.js';
 import { arrangementChanged } from './layout.js';
 import { trackWidgetPointer } from './overlap.js';
 import { fitWidget } from './popout.js';
 
+/**
+ * A pane: a widget in a column. top and height are fractions of the viewport;
+ * a pane that follows its aspect has no height of its own.
+ * @typedef {{ block: HTMLElement, top: number, height?: number }} Pane
+ *
+ * @typedef {object} SnapColumn
+ * @property {'left' | 'right'} side
+ * @property {number | null} width a fraction of the viewport, null while never opened
+ * @property {Pane[]} panes
+ * @property {HTMLElement | null} node the column's ground (.snap-col)
+ * @property {HTMLElement | null} ui its edge handle (.snap-ui)
+ */
+
+/** @type {{ left: SnapColumn, right: SnapColumn }} */
 const snapColumns = {
 	left: { side: 'left', width: null, panes: [], node: null, ui: null },
 	right: { side: 'right', width: null, panes: [], node: null, ui: null }
 };
 
 // a column by its side, 'left' or 'right': { side, width, panes, … }
+/** @param {'left' | 'right'} side */
 export function snapColumn(side) {
 	return snapColumns[side];
 }
 
 // a column's width, as a fraction of the viewport, as the layout restores it
+/** @param {'left' | 'right'} side @param {number} fraction */
 export function setSnapColumnWidth(side, fraction) {
 	snapColumns[side].width = fraction;
 }
@@ -55,14 +71,17 @@ let snapPreview = null;
 
 let snapPageWidths = null; // the column widths before the page was hidden, for the way back
 
+/** @param {HTMLElement} block */
 export function isSnapped(block) {
 	return block.classList.contains('snapped');
 }
 
+/** @param {HTMLElement} block */
 export function snapColumnOf(block) {
 	return Object.values(snapColumns).find(col => col.panes.some(p => p.block === block)) || null;
 }
 
+/** @param {HTMLElement} block */
 export function snapPaneOf(block) {
 	const col = snapColumnOf(block);
 	return col ? col.panes.find(p => p.block === block) : null;
@@ -76,6 +95,7 @@ function snapColumnWidth(col) {
 	return col.panes.length ? col.width : 0;
 }
 
+/** @param {import('./columns.js').SnapColumn} col */
 export function snapColumnPx(col) {
 	return Math.round(snapColumnWidth(col) * viewportWidth());
 }
@@ -97,6 +117,7 @@ export function snapSideAt(left, right) {
 // the edges a pane's top or bottom is drawn to in its column: the column's
 // ends and the other panes' tops and bottoms (every pane spans the column, so
 // all of them are in reach), the blocks given left out
+/** @param {import('./columns.js').SnapColumn} col */
 export function paneMagnetEdges(col, exclude = []) {
 	const edges = [0, viewportHeight()];
 	col.panes.forEach(p => {
@@ -119,6 +140,7 @@ function paneTop(col, top, height, exclude = []) {
 // the column's width (a new column takes the box's own, held to what the
 // other column leaves) and the height the blocks stack to at that width — a
 // free one keeps its height, a locked one's follows the width
+/** @param {HTMLElement[]} blocks @param {'left' | 'right'} side */
 export function snapSlot(blocks, side, boxTop) {
 	const col = snapColumns[side];
 	const boxWidth = Math.max(...blocks.map(b => b.offsetWidth));
@@ -149,6 +171,7 @@ export function showSnapPreview(rect) {
 
 // blocks dropped into the column at side, stacked from the slot's top in
 // their order: the first where the slot says, each next under the one before
+/** @param {HTMLElement[]} blocks @param {'left' | 'right'} side */
 export function snapPanes(blocks, side, slot) {
 	const col = snapColumns[side];
 	if (!col.panes.length) col.width = slot.width / viewportWidth();
@@ -166,6 +189,7 @@ export function snapPanes(blocks, side, slot) {
 // a popped-out block becomes a pane of the column with its top there (a free
 // one bringing its height along, the one it has unless stored); the first
 // one brings the column's ground and handle with it
+/** @param {import('./columns.js').SnapColumn} col @param {HTMLElement} block */
 export function attachSnapPane(col, block, top, height) {
 	if (!col.node) {
 		col.node = el('div', { class: `snap-col snap-${col.side}` });
@@ -181,6 +205,7 @@ export function attachSnapPane(col, block, top, height) {
 }
 
 // the pane floats again as it stood in the column, size and place kept
+/** @param {HTMLElement} block */
 export function unsnapPane(block) {
 	const col = snapColumnOf(block);
 	if (!col) return;
@@ -314,6 +339,7 @@ function fitSnapPane(pane, x, width) {
 // panes moved up or down their column by one offset from where they stood
 // (starts, their box): the box is drawn to the column's magnets and held
 // inside the viewport, and the tops the panes carry follow
+/** @param {import('./columns.js').SnapColumn} col */
 export function movePanes(col, starts, box, dy) {
 	const top = paneTop(col, box.top + dy, box.height, starts.map(s => s.block));
 	dy = top - box.top;
@@ -355,6 +381,7 @@ function resizeSnapSeam(e) {
 // double-click on an edge: hide the page behind the columns — this column
 // takes what the other leaves — or bring it back, to the widths from before
 // the page was hidden, else with a gap wide enough for the page's list
+/** @param {import('./columns.js').SnapColumn} col */
 export function toggleSnapPage(col) {
 	const other = otherSnapColumn(col);
 	if (!isSnapPageHidden()) {

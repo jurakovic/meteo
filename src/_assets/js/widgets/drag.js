@@ -21,6 +21,7 @@ import { groupBox, groupMembers, groupStarts, moveGroup } from './groups.js';
 import { arrangementChanged } from './layout.js';
 import { trackWidgetPointer } from './overlap.js';
 
+/** @param {HTMLElement} block */
 export function dragPopout(block, e) {
 	let rect = block.getBoundingClientRect();
 	const grab = { x: e.clientX - rect.left, y: e.clientY - rect.top };
@@ -73,6 +74,7 @@ function byPlace(blocks) {
 // the widgets floating over the page other than this one and the others
 // moving with it — a pane is out of reach in its column, and a widget hosting
 // a fullscreen map is not to be seen
+/** @param {HTMLElement} block */
 export function magnetRects(block, along = []) {
 	return floatingBlocks()
 		.filter(other => other !== block && !along.includes(other) && !other.classList.contains('fs-host'))

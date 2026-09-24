@@ -7,6 +7,12 @@ export const RESIZE_HANDLES = ['n', 'ne', 'e', 'se', 's', 'sw', 'w', 'nw'];
 // the size a box that started as start (width/height) is pulled to by the
 // handle dir moved dx, dy: an east edge adds to the width, a west one takes
 // away, and so on; a corner both
+/**
+ * @param {string} dir one of RESIZE_HANDLES
+ * @param {{ width: number, height: number }} start
+ * @param {number} dx @param {number} dy
+ * @returns {{ w: number, h: number }}
+ */
 export function pulledSize(dir, start, dx, dy) {
 	let w = start.width, h = start.height;
 	if (dir.includes('e')) w = start.width + dx;
@@ -28,6 +34,12 @@ export function pulledSize(dir, start, dx, dy) {
 // goes down or comes up, with the pointer held still. A KeyboardEvent
 // carries no coordinates, so the pointer's last stand in — the same move
 // over again, which every onMove here takes without moving anything
+/**
+ * @param {PointerEvent} e the pointerdown
+ * @param {(dx: number, dy: number, ev: { clientX: number, clientY: number, shiftKey: boolean }) => void} onMove
+ * @param {() => void} [onEnd]
+ * @param {() => void} [afterMove]
+ */
 export function trackPointer(e, onMove, onEnd, afterMove) {
 	const startX = e.clientX, startY = e.clientY;
 	let dx = 0, dy = 0, at = e; // where the pointer was left, for the key to repeat

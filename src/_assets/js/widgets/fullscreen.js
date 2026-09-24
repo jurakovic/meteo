@@ -18,7 +18,7 @@
 // rectangle that is already the right half. It settles in a pass or two —
 // every pass only narrows — and stops when nothing moves.
 
-import { cssNumber } from '../lib/dom.js';
+import { cssNumber, query, queryAll } from '../lib/dom.js';
 import { EVENTS, on } from '../lib/events.js';
 import { viewportHeight, viewportWidth } from '../lib/geometry.js';
 import { DESKTOP_MQ } from '../lib/media.js';
@@ -102,6 +102,7 @@ export function fitBoardFullscreen() {
 }
 
 // only an interactive map has a fullscreen to be stored
+/** @param {string} inst */
 export function hasFullscreen(inst) {
 	const type = mapTypeOf(instMapId(inst));
 	return !!type && type.fullscreen;
@@ -109,8 +110,9 @@ export function hasFullscreen(inst) {
 
 // a map put fullscreen as stored: through its own button, so page/iframe.js does
 // everything a click does (the gate, the [R], the scroll lock, the event)
+/** @param {HTMLElement} block */
 export function restoreFullscreen(block) {
-	const btn = block.querySelector('.fs-btn');
+	const btn = query('.fs-btn', block);
 	if (btn && !block.querySelector('.if1.fullscreen')) btn.click();
 }
 
@@ -125,13 +127,13 @@ export function initWidgetFullscreen() {
 		// The widgets floating over the page stay in view over the fullscreen map:
 		// the host goes under every other widget for as long as it hosts one (the
 		// page's own fullscreen sits there through the CSS), then back on top
-		document.querySelectorAll('.map-block.popout').forEach(block => {
+		queryAll('.map-block.popout').forEach(block => {
 			const hosting = !!block.querySelector('.if1.fullscreen');
 			const wasHosting = block.classList.contains('fs-host');
 			block.classList.toggle('fs-host', hosting);
 			// under every other widget, over the columns' ground (styles.css puts
 			// the page's fullscreen map in the same layer)
-			if (hosting) block.style.zIndex = cssNumber('--z-fullscreen-host', 4500);
+			if (hosting) block.style.zIndex = String(cssNumber('--z-fullscreen-host', 4500));
 			else if (wasHosting) raisePopout(block);
 		});
 		fitBoardFullscreen(); // on the board there is no column to fit it, and no page either

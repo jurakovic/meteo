@@ -13,6 +13,7 @@
 // state while the board is off, when they do nothing
 
 import { dlog } from '../lib/debug.js';
+import { query } from '../lib/dom.js';
 import { emit, EVENTS } from '../lib/events.js';
 import { viewportHeight, viewportWidth } from '../lib/geometry.js';
 import { DESKTOP_MQ } from '../lib/media.js';
@@ -38,6 +39,7 @@ export function isGridSnapped() {
 	return gridSnap;
 }
 
+/** @param {boolean} show */
 export function setGridPrefs(show, snap) {
 	dlog(`setGridPrefs: show=${show} snap=${snap}`);
 	gridShow = show;
@@ -54,7 +56,7 @@ export function setGridPrefs(show, snap) {
 // multiple of the cell and is not drawn — it is the edge of the screen
 export function renderGrid() {
 	const on = gridShow && isDashboard() && DESKTOP_MQ.matches;
-	let grid = document.querySelector('.po-grid');
+	let grid = query('.po-grid');
 	if (!on) {
 		if (grid) grid.remove();
 		return;
@@ -116,6 +118,7 @@ function snapBlockToGrid(block) {
 
 // on release only, never while the gesture runs: the widget follows the
 // pointer and settles onto the grid when it is let go
+/** @param {HTMLElement[]} blocks */
 export function snapToGrid(blocks) {
 	if (!gridSnap || !isDashboard() || !DESKTOP_MQ.matches) return;
 	blocks.forEach(block => {

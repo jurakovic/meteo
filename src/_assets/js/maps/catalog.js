@@ -3,6 +3,46 @@
 // The ids are written into saved preferences and shared links, so an id,
 // once published, stays.
 
+/** @typedef {{ text: string, href: string }} MapLink */
+
+/**
+ * A slide with a title bar of its own; a slideshow without titles lists bare
+ * image addresses instead.
+ * @typedef {{ title: { text?: string, href: string }, img: string, aspect: string, maxWidth?: number }} TitledSlide
+ */
+
+/**
+ * One map. Which of the optional fields apply depends on its `type`, the key
+ * into maps/types.js.
+ * @typedef {object} CatalogMap
+ * @property {string} id stable: saved preferences and shared links carry it
+ * @property {string} category a key of CATEGORY_GLYPHS
+ * @property {string} name the name in the picker and on the title bar
+ * @property {'slideshow' | 'iframe' | 'iframe-basic' | 'image' | 'video'} type
+ * @property {string} [title] a fuller title bar than the picker's name
+ * @property {string} [titleHref] where the title bar links to
+ * @property {string} [aspect] width / height, as CSS aspect-ratio takes it
+ * @property {number} [maxWidth] the width the map was made for (px)
+ * @property {MapLink[]} [links] the bar of links under the map
+ * @property {(string | TitledSlide)[]} [slides] slideshow: its images
+ * @property {number} [startSlide] slideshow: the one shown first, from 1
+ * @property {boolean} [eagerSlides] slideshow: load every slide at once
+ * @property {boolean} [dynamicWidth] slideshow: the width follows the slide
+ * @property {string} [img] image: its address
+ * @property {string} [alt] image: its text
+ * @property {string} [src] video, basic frame: its address
+ * @property {string} [frameId] interactive frame: the id its controls name
+ * @property {string} [srcHr] interactive frame: the Croatian view
+ * @property {string} [srcEu] interactive frame: the European view
+ * @property {string} [zoomHrDesktop] interactive frame: zoom levels, per view and screen
+ * @property {string} [zoomHrMobile]
+ * @property {string} [zoomEuDesktop]
+ * @property {string} [zoomEuMobile]
+ * @property {boolean} [scaled] interactive frame: drawn at a larger size and scaled down
+ * @property {string} [loading] interactive frame: the iframe's loading, lazy unless said
+ * @property {string} [backdrop] a letterboxed widget's ground when there is no image to take it from
+ */
+
 const RADAR_HR_LINKS = [
 	{ text: 'Windy', href: 'https://www.windy.com/-Weather-radar-radar?radar,44.5,16.5,7' },
 	{ text: 'Zoom Earth', href: 'https://zoom.earth/maps/radar/#view=44.5,16.5,7z' },
@@ -80,6 +120,8 @@ export const CATEGORY_GLYPHS = {
 	prognoza: '📈'
 };
 
+// one of DHMZ's radar stations: its loop and its latest picture, as a slideshow
+/** @param {string} id @param {string} name @returns {CatalogMap} */
 function dhmzMrcRadar(id, name) {
 	return {
 		id: `dhmz-${id}`,
@@ -93,6 +135,7 @@ function dhmzMrcRadar(id, name) {
 	};
 }
 
+/** @type {CatalogMap[]} */
 export const MAP_CATALOG = [
 	{
 		id: 'neverin-radar-hr',
@@ -558,6 +601,7 @@ export const MAP_CATALOG = [
 export const CATALOG_BY_ID = new Map(MAP_CATALOG.map(map => [map.id, map]));
 
 // the catalog entry of a map id, null for an id it does not know
+/** @param {string} id @returns {CatalogMap | null} */
 export function catalogMap(id) {
 	return CATALOG_BY_ID.get(id) || null;
 }

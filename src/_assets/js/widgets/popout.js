@@ -9,7 +9,7 @@ import { buildReloadButton } from './reload.js';
 import { buildGroupButton } from './groups.js';
 import { buildDuplicateButton } from './copies.js';
 import { dlog } from '../lib/debug.js';
-import { el } from '../lib/dom.js';
+import { el, query, queryAll } from '../lib/dom.js';
 import { DESKTOP_MQ } from '../lib/media.js';
 import { RESIZE_HANDLES } from '../lib/pointer.js';
 import { catalogMap } from '../maps/catalog.js';
@@ -18,7 +18,7 @@ import { isDashboard, removeFromDashboard, setDashboard } from './board.js';
 import { isSnapped, layoutSnapColumns, unsnapPane } from './columns.js';
 import { POPOUT_WIDTH, TITLE_GAP } from './constants.js';
 import { isDuplicate, otherShowings, removeShowing } from './copies.js';
-import { isFreePopout, placePopout, popoutMaxWidth, raisePopout } from './core.js';
+import { isFreePopout, placePopout, popoutMaxWidth, raisePopout, shownImage } from './core.js';
 import { groupOf, leaveGroup } from './groups.js';
 import { arrangementChanged, withPersistPaused } from './layout.js';
 import { syncShadows } from './overlap.js';
@@ -31,6 +31,7 @@ export function buildPopoutButton() {
 	return btn;
 }
 
+/** @param {HTMLElement} btn */
 export function setPopoutButton(btn, popped) {
 	// ASCII only: an arrow glyph comes from a fallback font and sits off the baseline of [ ] and [X]
 	// on the board there is no page to go back to: the button takes the map off the board
@@ -38,6 +39,7 @@ export function setPopoutButton(btn, popped) {
 	btn.title = !popped ? 'Izdvoji kartu u pomični prozor' : isDashboard() ? 'Ukloni kartu s ploče' : 'Vrati kartu na stranicu';
 }
 
+/** @param {HTMLElement} block */
 export function togglePopout(block) {
 	if (!block) return;
 	if (!block.classList.contains('popout')) { if (DESKTOP_MQ.matches) popoutMap(block); }
@@ -47,6 +49,7 @@ export function togglePopout(block) {
 	else dockMap(block);
 }
 
+/** @param {HTMLElement} block */
 export function popoutMap(block) {
 	dlog(`popoutMap: ${block.dataset.mapId}`);
 	const rect = block.getBoundingClientRect();
@@ -75,7 +78,7 @@ export function popoutMap(block) {
 	// stays where it was on screen, so it reads as lifted rather than teleported
 	placePopout(block, rect.left, rect.top);
 	raisePopout(block);
-	block.querySelectorAll('.po-btn').forEach(btn => setPopoutButton(btn, true));
+	queryAll('.po-btn', block).forEach(btn => setPopoutButton(btn, true));
 	arrangementChanged();
 }
 
@@ -84,6 +87,7 @@ export function popoutMap(block) {
 // media letterboxed in what the title bar leaves (.letterbox, CSS) over a
 // blurred and darkened copy of the image showing (.po-backdrop, the image
 // in --po-img), so the bars around it are of the map and not of the frame
+/** @param {HTMLElement} block */
 export function unlockAspect(block) {
 	if (block.classList.contains('free')) return;
 	dlog(`unlockAspect: ${block.dataset.mapId}`);
@@ -101,12 +105,13 @@ export function unlockAspect(block) {
 // is the image: whichever axis was holding the contain is the one kept, and the
 // widget only ever comes in. In a column the width is the column's, so a pane
 // simply takes the aspect back
+/** @param {HTMLElement} block */
 export function lockToImage(block) {
 	const rect = block.getBoundingClientRect();
 	lockAspect(block);
 	if (isSnapped(block)) return;
 	// an image not yet there has no painted size to come in to
-	const img = block.querySelector('.slide.active img') || block.querySelector('.placeholder img');
+	const img = shownImage(block);
 	if (img && !(img.complete && img.naturalWidth)) return;
 	// the seed is taken at the width the widget has, which the map follows at
 	// every width, so the ratio read there is the map's and not the ground's
@@ -121,6 +126,7 @@ export function lockToImage(block) {
 }
 
 // back to the height the aspect gives at the width it has
+/** @param {HTMLElement} block */
 export function lockAspect(block) {
 	if (!block.classList.contains('letterbox')) return;
 	dlog(`lockAspect: ${block.dataset.mapId}`);
@@ -135,9 +141,10 @@ export function lockAspect(block) {
 // (the catalog entry says why), so where the map gives a `backdrop` that still
 // frame stands in — which also covers a lazy slide whose src is not swapped in
 // yet, an img carrying its address even when the load then fails
+/** @param {HTMLElement} block */
 export function syncBackdrop(block) {
 	if (!block.classList.contains('letterbox')) return;
-	const img = block.querySelector('.slide.active img') || block.querySelector('img');
+	const img = shownImage(block) || /** @type {HTMLImageElement | null} */ (block.querySelector('img'));
 	const map = catalogMap(block.dataset.mapId);
 	const src = (img && (img.currentSrc || img.src)) || (map && map.backdrop);
 	if (src) block.style.setProperty('--po-img', `url("${src}")`);
@@ -184,7 +191,7 @@ function unfitTitles(block) {
 function fitLetterbox(block) {
 	const props = ['--lb-l', '--lb-r', '--lb-t', '--lb-b', '--lb-w'];
 	const box = block.querySelector('.slideshow');
-	const img = block.querySelector('.slide.active img') || block.querySelector('.placeholder img');
+	const img = shownImage(block);
 	if (!block.classList.contains('letterbox') || !box || !img || !img.naturalWidth || !img.clientWidth) {
 		props.forEach(p => block.style.removeProperty(p));
 		return;
@@ -204,17 +211,19 @@ function fitLetterbox(block) {
 
 // the two go together everywhere: both are the widget's chrome fitted to the
 // box it has now, and every gesture that changes the box changes both
+/** @param {HTMLElement} block */
 export function fitWidget(block) {
 	fitTitles(block);
 	fitLetterbox(block);
 }
 
+/** @param {HTMLElement} block */
 export function dockMap(block) {
 	dlog(`dockMap: ${block.dataset.mapId}`);
 	// a copy has no place in the page to go back to (Vrati sve, the breakpoint)
 	if (isDuplicate(block)) return removeShowing(block);
 	// a fullscreen iframe inside the widget is fixed on its own; take it down first
-	const fs = block.querySelector('.if1.fullscreen');
+	const fs = query('.if1.fullscreen', block);
 	if (fs) exitFullscreen(fs);
 	if (groupOf(block)) leaveGroup(block);
 	unsnapPane(block);
@@ -223,7 +232,7 @@ export function dockMap(block) {
 		.forEach(p => block.style.removeProperty(p));
 	block.querySelectorAll('.po-h, .po-backdrop').forEach(h => h.remove());
 	removeGap(block);
-	block.querySelectorAll('.po-btn').forEach(btn => setPopoutButton(btn, false));
+	queryAll('.po-btn', block).forEach(btn => setPopoutButton(btn, false));
 	unfitTitles(block);
 	arrangementChanged();
 }
@@ -236,7 +245,7 @@ export function dockAllPopouts() {
 	layoutSnapColumns();
 	// one write for the lot: every dockMap would otherwise store the arrangement
 	// on its way out, and the only one worth storing is the last
-	withPersistPaused(() => document.querySelectorAll('.map-block.popout').forEach(dockMap));
+	withPersistPaused(() => queryAll('.map-block.popout').forEach(dockMap));
 	arrangementChanged(); // also with nothing to dock: the mode may have changed
 	syncShadows(); // the breakpoint docks with persistence paused, so the sweep is not reached through it
 }
@@ -259,6 +268,7 @@ function removeGap(block) {
 
 // a showing closed while another of its map stays: the heir takes the gap
 // over, and with it the way back
+/** @param {HTMLElement} block @param {HTMLElement} heir */
 export function handGapTo(block, heir) {
 	const gap = gapOfBlock.get(block);
 	if (!gap) return;

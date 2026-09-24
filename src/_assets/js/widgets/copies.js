@@ -1,5 +1,5 @@
 import { dlog } from '../lib/debug.js';
-import { el } from '../lib/dom.js';
+import { el, query, queryAll } from '../lib/dom.js';
 import { clamp, viewportHeight } from '../lib/geometry.js';
 import { DESKTOP_MQ } from '../lib/media.js';
 import { catalogMap } from '../maps/catalog.js';
@@ -35,25 +35,28 @@ export function buildDuplicateButton() {
 	return btn;
 }
 
+/** @param {HTMLElement} block */
 export function isDuplicate(block) {
 	return !!block && block.classList.contains('duplicate');
 }
 
 function showingsOf(mapId) {
-	return [...document.querySelectorAll(`.map-block[data-map-id="${CSS.escape(mapId)}"]`)];
+	return queryAll(`.map-block[data-map-id="${CSS.escape(mapId)}"]`);
 }
 
+/** @param {HTMLElement} block */
 export function otherShowings(block) {
 	return showingsOf(block.dataset.mapId).filter(b => b !== block);
 }
 
 // the showing that holds the map's place in the page
+/** @param {string} mapId */
 export function pageShowing(mapId) {
 	return showingsOf(mapId).find(b => !isDuplicate(b)) || null;
 }
 
 function blockByInst(inst) {
-	return document.querySelector(`.map-block[data-inst="${CSS.escape(inst)}"]`);
+	return query(`.map-block[data-inst="${CSS.escape(inst)}"]`);
 }
 
 // the lowest free index for this map, so closing the middle showing of three
@@ -70,12 +73,13 @@ function freeInstance(mapId) {
 // and setting an iframe's src again reloads every interactive map already on
 // screen, costing each of them its pan and its zoom; the two sweeps below are
 // safe because they bind once per node and skip what is bound (page/slideshow.js, page/iframe.js)
+/** @param {HTMLElement} block */
 export function wireDuplicate(block) {
-	block.querySelectorAll('img.lazy').forEach(img => {
+	block.querySelectorAll('img.lazy').forEach((/** @type {HTMLImageElement} */ img) => {
 		img.src = img.getAttribute('data-src');
 		img.classList.remove('lazy');
 	});
-	block.querySelectorAll('iframe[data-zoom-hr-desktop]').forEach(iframe => setIframeSrc(iframe));
+	block.querySelectorAll('iframe[data-zoom-hr-desktop]').forEach((/** @type {HTMLIFrameElement} */ iframe) => setIframeSrc(iframe));
 	addSwipeEvents();
 	hideOverlayOnDoubleTap();
 	updateHintText();
@@ -95,6 +99,7 @@ function makeDuplicate(mapId, inst) {
 	return block;
 }
 
+/** @param {HTMLElement} block */
 export function duplicateMap(block) {
 	if (!block || !DESKTOP_MQ.matches) return null;
 	const mapId = block.dataset.mapId;
@@ -136,6 +141,7 @@ export function duplicateMap(block) {
 // not a name anything on screen still answers to. A copy of a map the list no
 // longer holds has nothing to be made from, and sanitizeSnapLayout has already
 // dropped it
+/** @param {string} inst */
 export function instanceFor(inst) {
 	const mapId = instMapId(inst);
 	if (instIndex(inst) === 1) return pageShowing(mapId);
@@ -148,6 +154,7 @@ export function instanceFor(inst) {
 // way back with it. Nothing moves in the DOM for that (an iframe would reload):
 // every other showing is a widget, fixed, so the heir docks where the gap is
 // from wherever it sits in the row
+/** @param {HTMLElement} block */
 export function removeShowing(block) {
 	dlog(`removeShowing: ${block.dataset.inst}`);
 	if (!isDuplicate(block)) {
@@ -157,7 +164,7 @@ export function removeShowing(block) {
 			handGapTo(block, heir);
 		}
 	}
-	const fs = block.querySelector('.if1.fullscreen');
+	const fs = query('.if1.fullscreen', block);
 	if (fs) exitFullscreen(fs);
 	if (groupOf(block)) leaveGroup(block);
 	unsnapPane(block);

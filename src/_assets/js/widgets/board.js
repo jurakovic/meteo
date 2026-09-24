@@ -13,6 +13,7 @@
 // stored view keeps the mode
 
 import { dlog } from '../lib/debug.js';
+import { query, queryAll } from '../lib/dom.js';
 import { viewportHeight } from '../lib/geometry.js';
 import { catalogMap } from '../maps/catalog.js';
 import { addMapToList, removeMapFromList } from '../maps/prefs.js';
@@ -36,11 +37,12 @@ export function isDashboard() {
 
 // the class first: the page's scrollbar goes with it, changing the viewport
 // everything after is measured in; the buttons read the mode
+/** @param {boolean} on */
 export function setDashboard(on) {
 	dashboardMode = on;
 	document.body.classList.toggle('dashboard', on);
 	renderGrid(); // the paper is the board's
-	document.querySelectorAll('.map-block.popout .po-btn').forEach(btn => setPopoutButton(btn, true));
+	queryAll('.map-block.popout .po-btn').forEach(btn => setPopoutButton(btn, true));
 }
 
 // every map of the list not popped out yet becomes a widget, one after
@@ -49,7 +51,7 @@ export function setDashboard(on) {
 // a widget further right
 export function popoutRest() {
 	let top = POPOUT_MARGIN, round = 0;
-	document.querySelectorAll('.map-block:not(.popout)').forEach(block => {
+	queryAll('.map-block:not(.popout)').forEach(block => {
 		popoutMap(block);
 		// the widget's own height says whether it still fits, but the step it
 		// lands on is the cascade's own count rather than a number of steps
@@ -73,6 +75,7 @@ export function popoutRest() {
 // shown from — the widget goes, with its entry in the (hidden) list, and the
 // list is stored without it (maps/prefs.js), as the dialog would store it after the
 // map was unticked
+/** @param {HTMLElement} block */
 export function removeFromDashboard(block) {
 	dlog(`removeFromDashboard: ${block.dataset.mapId}`);
 	const id = block.dataset.mapId;
@@ -86,6 +89,7 @@ export function removeFromDashboard(block) {
 // them, and it comes onto the board the way any map new to the list does, at
 // the cascade's first step (popoutRest — every other map is a widget already).
 // Nothing is rendered again, so nothing else on the board reloads
+/** @param {string} mapId */
 export function addToDashboard(mapId) {
 	const map = catalogMap(mapId);
 	const list = document.querySelector('[data-maps]');
@@ -95,7 +99,7 @@ export function addToDashboard(mapId) {
 	const empty = list.querySelector('.maps-empty');
 	if (empty) list.replaceChildren(); // the "nothing selected" line
 	const block = appendMapRows(list, map, WIDGET_RENDER);
-	const links = block.parentElement.querySelector('.links-bottom');
+	const links = query('.links-bottom', block.parentElement);
 	if (links) links.addEventListener('scroll', () => updateLinksScrollShadow(links), { passive: true });
 	wireDuplicate(block); // its own wiring and only its own, as a copy's
 	popoutRest();

@@ -12,12 +12,13 @@
 // bar is the way back to its own shape, one map at a time.
 
 import { dlog } from '../lib/debug.js';
+import { queryAll } from '../lib/dom.js';
 import { viewportHeight, viewportWidth } from '../lib/geometry.js';
 import { DESKTOP_MQ } from '../lib/media.js';
 import { isDashboard } from './board.js';
 import { isSnapped } from './columns.js';
 import { ARRANGE_ASPECT, ARRANGE_HOLE, POPOUT_TITLE_HEIGHT } from './constants.js';
-import { placePopout } from './core.js';
+import { placePopout, shownImage } from './core.js';
 import { updateGroups } from './groups.js';
 import { arrangementChanged } from './layout.js';
 import { syncShadows } from './overlap.js';
@@ -33,6 +34,7 @@ import { fitWidget, unlockAspect } from './popout.js';
 // out the same size. Falls out as 2x2 for four, 3x2 for six and 4x3 for
 // twelve, and on a wide screen puts two side by side rather than one above
 // the other
+/** @param {number} n */
 export function arrangeShape(n, width, height, aspect) {
 	let best = { cols: 1, rows: n, score: -Infinity };
 	for (let cols = 1; cols <= n; cols++) {
@@ -53,7 +55,7 @@ export function arrangeShape(n, width, height, aspect) {
 // maps are. A freed frame has no shape of its own and fills any cell, so it
 // has no say
 function mapAspect(block) {
-	const img = block.querySelector('.slide.active img') || block.querySelector('.placeholder img');
+	const img = shownImage(block);
 	if (img && img.naturalWidth && img.naturalHeight) return img.naturalWidth / img.naturalHeight;
 	const video = block.querySelector('video');
 	if (video && video.videoWidth && video.videoHeight) return video.videoWidth / video.videoHeight;
@@ -72,6 +74,7 @@ function arrangeAspect(blocks) {
 // n whole numbers summing to total, the remainder over the first of them: a
 // fraction left on any cell would leave a hairline between two tiles, and a
 // hairline is the difference between an edge that is a seam and one that is not
+/** @param {number} n */
 export function shareOut(total, n) {
 	const base = Math.floor(total / n);
 	const extra = Math.round(total) - base * n;
@@ -89,7 +92,7 @@ export function runningTotal(sizes, upTo) {
 export function arrangeBoard() {
 	if (!isDashboard() || !DESKTOP_MQ.matches) return;
 	// in the list's order, which is the DOM's; on a board every map is a widget
-	const blocks = [...document.querySelectorAll('.map-block.popout')]
+	const blocks = queryAll('.map-block.popout')
 		.filter(block => !isSnapped(block) && !block.classList.contains('fs-host'));
 	if (!blocks.length) return;
 	dlog(`arrangeBoard: ${blocks.length} widgets`);

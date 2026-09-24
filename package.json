@@ -6,9 +6,10 @@
   "scripts": {
     "build": "node scripts/build.mjs",
     "lint": "eslint .",
+    "typecheck": "tsc -p jsconfig.json",
     "test": "node --test \"tests/unit/**/*.test.mjs\"",
     "test:e2e": "playwright test",
-    "check": "npm run lint && npm test && npm run build && npm run test:e2e"
+    "check": "npm run lint && npm run typecheck && npm test && npm run build && npm run test:e2e"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
@@ -19,6 +20,7 @@
     "eslint-plugin-import-x": "^4.17.1",
     "globals": "^17.12.0",
     "linkedom": "^0.18.13",
-    "terser": "^5.51.2"
+    "terser": "^5.51.2",
+    "typescript": "^5.9.3"
   }
 }

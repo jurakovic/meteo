@@ -1,7 +1,7 @@
 // What every widget module shares: the widgets on screen, where one may go,
 // and the stacking order.
 
-import { cssNumber } from '../lib/dom.js';
+import { cssNumber, queryAll } from '../lib/dom.js';
 import { subpixel, viewportHeight, viewportWidth } from '../lib/geometry.js';
 import { mapTypeOf } from '../maps/types.js';
 import { isDashboard } from './board.js';
@@ -27,11 +27,12 @@ function repackPopouts(base) {
 	allPopouts()
 		.filter(block => !block.classList.contains('fs-host'))
 		.sort((a, b) => (Number(a.style.zIndex) || 0) - (Number(b.style.zIndex) || 0))
-		.forEach(block => block.style.zIndex = ++popoutZ);
+		.forEach(block => block.style.zIndex = String(++popoutZ));
 }
 
 // iframes have no intrinsic aspect, so their widgets resize in both dimensions;
 // images, slideshows and videos keep the height their aspect ratio gives them
+/** @param {HTMLElement} block */
 export function isFreePopout(block) {
 	const type = mapTypeOf(block.dataset.mapId);
 	return !!type && type.freeAspect;
@@ -46,6 +47,7 @@ export function popoutMaxWidth() {
 
 // keep the whole widget inside the viewport when it fits, else at least its
 // top-left corner so the title bar can always be grabbed
+/** @param {HTMLElement} block */
 export function placePopout(block, left, top) {
 	const maxLeft = Math.max(0, viewportWidth() - block.offsetWidth);
 	const maxTop = Math.max(0, viewportHeight() - Math.max(block.offsetHeight, POPOUT_TITLE_HEIGHT));
@@ -54,6 +56,7 @@ export function placePopout(block, left, top) {
 }
 
 // a grouped widget comes up with its group, the order within it kept
+/** @param {HTMLElement} block */
 export function raisePopout(block) {
 	const members = groupMembers(block);
 	const band = widgetsBand();
@@ -61,14 +64,20 @@ export function raisePopout(block) {
 	if (popoutZ + members.length > band.top) repackPopouts(band.base);
 	members
 		.sort((a, b) => (Number(a.style.zIndex) || 0) - (Number(b.style.zIndex) || 0))
-		.forEach(member => member.style.zIndex = ++popoutZ);
+		.forEach(member => member.style.zIndex = String(++popoutZ));
 	refreshOverlap();
 }
 
+// the image a widget shows: the active slide's, or the map's own
+/** @param {HTMLElement} block @returns {HTMLImageElement | null} */
+export function shownImage(block) {
+	return /** @type {HTMLImageElement | null} */ (block.querySelector('.slide.active img') || block.querySelector('.placeholder img'));
+}
+
 export function allPopouts() {
-	return [...document.querySelectorAll('.map-block.popout')];
+	return queryAll('.map-block.popout');
 }
 
 export function floatingBlocks() {
-	return [...document.querySelectorAll('.map-block.popout:not(.snapped)')];
+	return queryAll('.map-block.popout:not(.snapped)');
 }

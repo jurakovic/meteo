@@ -4,6 +4,7 @@
 // fullscreen. The page's own; a widget hosting one is widgets/fullscreen.js'.
 
 import { dlog } from '../lib/debug.js';
+import { query, queryAll } from '../lib/dom.js';
 import { emit, EVENTS } from '../lib/events.js';
 import { isNarrowViewport } from '../lib/media.js';
 
@@ -11,12 +12,19 @@ import { isNarrowViewport } from '../lib/media.js';
 // across the breakpoint, and setting one reloads it
 let previousWidth = 0;
 
+/** @param {boolean} [force] */
 export function updateIframeSrc(force = false) {
 	if (!force && window.innerWidth === previousWidth) return;
 	previousWidth = window.innerWidth;
-	document.querySelectorAll('iframe[data-zoom-hr-desktop]').forEach(iframe => setIframeSrc(iframe));
+	queryAll('iframe[data-zoom-hr-desktop]').forEach((/** @type {HTMLIFrameElement} */ iframe) => setIframeSrc(iframe));
 }
 
+/** @param {string} frameId @returns {HTMLIFrameElement} */
+function frameById(frameId) {
+	return /** @type {HTMLIFrameElement} */ (document.getElementById(frameId));
+}
+
+/** @param {HTMLIFrameElement} iframe */
 export function setIframeSrc(iframe) {
 	dlog(`Updating iframe src for ${iframe.id}`);
 	const mode = iframe.getAttribute('data-zoom-mode');
@@ -40,6 +48,7 @@ export function setIframeSrc(iframe) {
 //   button stays, for repeated use
 const GATE_LABELS = { hidden: '[X]', exit: '[X]', reset: '[R]', fullscreen: '[R]' };
 
+/** @returns {HTMLElement | null} */
 function gateButton(frameId) {
 	return document.querySelector(`a[data-frame-id="${frameId}"]`);
 }
@@ -59,6 +68,7 @@ function setGateState(frameId, state) {
 	else btn.style.removeProperty('display');
 }
 
+/** @returns {HTMLElement} */
 function overlayOf(frameId) {
 	return document.getElementById(frameId).parentElement.querySelector('.overlay');
 }
@@ -70,6 +80,7 @@ function openGate(frameId) {
 }
 
 // the gate's button pressed (the gate command, page/commands.js)
+/** @param {HTMLElement} btn */
 export function pressGateButton(btn) {
 	const frameId = btn.dataset.frameId;
 	switch (btn.dataset.state) {
@@ -78,18 +89,19 @@ export function pressGateButton(btn) {
 			setGateState(frameId, 'reset');
 			break;
 		case 'reset':
-			setIframeSrc(document.getElementById(frameId));
+			setIframeSrc(frameById(frameId));
 			setGateState(frameId, 'hidden');
 			break;
 		case 'fullscreen':
-			setIframeSrc(document.getElementById(frameId));
+			setIframeSrc(frameById(frameId));
 			break;
 	}
 }
 
+/** @param {string} frameId @param {HTMLElement} btn */
 export function switchIframeZoom(frameId, btn) {
 	const newMode = btn.getAttribute('data-mode') === 'hr' ? 'eu' : 'hr';
-	const iframe = document.getElementById(frameId);
+	const iframe = frameById(frameId);
 	iframe.setAttribute('data-zoom-mode', newMode);
 	setIframeSrc(iframe);
 	btn.setAttribute('data-mode', newMode);
@@ -102,6 +114,7 @@ export function switchIframeZoom(frameId, btn) {
 // whether the gate was up as a map went into fullscreen, to put it back so
 const gateBeforeFullscreen = new WeakMap();
 
+/** @param {string} frameId @param {HTMLElement} btn */
 export function toggleFullscreen(frameId, btn) {
 	dlog(`toggleFullscreen: ${frameId}`);
 	const if1 = document.getElementById(frameId).parentElement;
@@ -109,7 +122,7 @@ export function toggleFullscreen(frameId, btn) {
 		exitFullscreen(if1);
 		return;
 	}
-	const overlay = if1.querySelector('.overlay');
+	const overlay = /** @type {HTMLElement | null} */ (if1.querySelector('.overlay'));
 	gateBeforeFullscreen.set(if1, !overlay || overlay.style.display !== 'none');
 	if1.classList.add('fullscreen');
 	if1.previousElementSibling.classList.add('fullscreen');
@@ -125,13 +138,14 @@ export function toggleFullscreen(frameId, btn) {
 	setGateState(frameId, 'fullscreen');
 }
 
+/** @param {HTMLElement} if1 */
 export function exitFullscreen(if1) {
 	if1.classList.remove('fullscreen');
 	const title = if1.previousElementSibling;
 	title.classList.remove('fullscreen');
 	const btn = title.querySelector('.fs-btn');
 	if (btn) btn.textContent = '[ ]';
-	if (![...document.querySelectorAll('.if1.fullscreen')].some(f => !f.closest('.map-block.snapped')))
+	if (!queryAll('.if1.fullscreen').some(f => !f.closest('.map-block.snapped')))
 		document.body.classList.remove('fs-lock');
 	emit(EVENTS.mapFullscreen);
 	// the gate as it was before; and the map was likely panned or zoomed in
@@ -139,7 +153,7 @@ export function exitFullscreen(if1) {
 	// through, [R] if it was up
 	const wasUnlocked = gateBeforeFullscreen.get(if1) === false;
 	gateBeforeFullscreen.delete(if1);
-	const overlay = if1.querySelector('.overlay');
+	const overlay = query('.overlay', if1);
 	if (overlay) {
 		if (wasUnlocked) overlay.style.display = 'none';
 		else overlay.removeAttribute('style');
@@ -153,7 +167,7 @@ const hintTimers = new WeakMap();
 // bound once per overlay: a double click, or a double tap, lets the map
 // through; a single tap shows the hint that says so
 export function hideOverlayOnDoubleTap() {
-	document.querySelectorAll('.if1 .overlay:not([data-tap])').forEach((overlay) => {
+	queryAll('.if1 .overlay:not([data-tap])').forEach((/** @type {HTMLElement} */ overlay) => {
 		overlay.setAttribute('data-tap', '');
 		const frameId = overlay.dataset.frameId;
 		let lastTap = 0;
@@ -184,7 +198,7 @@ export function hideOverlayOnDoubleTap() {
 			lastTap = currentTime;
 		});
 
-		const hint = overlay.querySelector('.hint');
+		const hint = /** @type {HTMLElement | null} */ (overlay.querySelector('.hint'));
 		let startY = 0;
 		let startX = 0;
 
@@ -211,15 +225,15 @@ export function hideOverlayOnDoubleTap() {
 
 export function updateHintText() {
 	const isMobile = isNarrowViewport();
-	document.querySelectorAll('.hint').forEach(hint => {
+	queryAll('.hint').forEach(hint => {
 		hint.textContent = isMobile
-			? "Dvostruki dodir za pristup interaktivnoj karti"
-			: "Dvostruki klik za pristup interaktivnoj karti";
+			? 'Dvostruki dodir za pristup interaktivnoj karti'
+			: 'Dvostruki klik za pristup interaktivnoj karti';
 	});
 }
 
 // whichever interactive map is in fullscreen, out of it (Escape)
 export function exitAnyFullscreen() {
-	const fs = document.querySelector('.if1.fullscreen');
+	const fs = query('.if1.fullscreen');
 	if (fs) exitFullscreen(fs);
 }

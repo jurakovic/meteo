@@ -2,7 +2,7 @@
 // board's mode and grid, auto-refresh, saved presets and share links.
 // Nothing is applied until Primijeni, except the grid and refresh switches.
 
-import { el, flashLabel } from '../lib/dom.js';
+import { el, flashLabel, query } from '../lib/dom.js';
 import { EVENTS, on } from '../lib/events.js';
 import { activePresetId, clearSharedMapView, resolveMapIds, saveMapPrefs } from '../maps/prefs.js';
 import { isBoardPreset } from '../maps/presets.js';
@@ -67,7 +67,7 @@ export function initMapSettings() {
 			return !e.shiftKey && !e.isComposing && !!element && !element.hidden
 				&& !(e.target.matches && e.target.matches('select')) && !!element.querySelector('.ms-apply');
 		},
-		run: () => document.querySelector('#mapSettings .ms-apply').click()
+		run: () => query('#mapSettings .ms-apply').click()
 	});
 
 	// the page's Karte button wears the picker's state as an arrow
@@ -234,7 +234,7 @@ function buildMapSettings(element) {
 	// so Ctrl and the middle button open it beside the page as any link does.
 	// It shows the site's favicon, taken off the page's own <link> so the
 	// address is whatever the build made it
-	const icon = document.querySelector('link[rel="icon"][sizes="32x32"]');
+	const icon = /** @type {HTMLLinkElement | null} */ (document.querySelector('link[rel="icon"][sizes="32x32"]'));
 	const homeLink = el('a', { class: 'ms-home', href: new URL('../', window.location.href).href, title: 'Početna' }, [
 		el('img', { src: icon ? icon.href : undefined, alt: 'Početna' })
 	]);

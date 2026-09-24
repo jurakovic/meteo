@@ -10,6 +10,7 @@ import { MAP_TYPES } from './types.js';
 // options.titleButtons(interactive): the extra buttons of a title bar, or
 // nothing; interactive for an interactive map, whose bar has its own gate
 // button in place of a reload
+/** @typedef {{ titleButtons?: (interactive: boolean) => HTMLElement[] }} RenderOptions */
 
 // A map can be on screen more than once: the widget's [D] makes another showing
 // of it (widgets/copies.js), and a showing beyond the first is a widget and nothing
@@ -25,19 +26,23 @@ import { MAP_TYPES } from './types.js';
 // and read back with getElementById, where a `#` has no business being.
 const INST_SEP = '#';
 
+/** @param {string} mapId @param {number} index */
 export function instKey(mapId, index) {
 	return index > 1 ? `${mapId}${INST_SEP}${index}` : mapId;
 }
 
+/** @param {string} inst */
 export function instMapId(inst) {
 	return String(inst).split(INST_SEP)[0];
 }
 
+/** @param {string} inst */
 export function instIndex(inst) {
 	const index = Number(String(inst).split(INST_SEP)[1]);
 	return index > 1 ? index : 1;
 }
 
+/** @param {string} inst */
 export function instSuffix(inst) {
 	const index = instIndex(inst);
 	return index > 1 ? `Copy${index}` : '';
@@ -67,10 +72,11 @@ function buildMapTitleBar(map, options) {
 	return buildTitleBar({ text: map.title || map.name, href: map.titleHref }, map, titleButtons(options));
 }
 
+/** @param {import('./catalog.js').CatalogMap} map @param {string} inst @param {import('./render.js').RenderOptions} [options] */
 export function buildSlideshow(map, inst, options = {}) {
 	const slideshowId = map.id + instSuffix(inst);
 	const start = map.startSlide || 1;
-	const titled = map.slides.some(slide => slide.title);
+	const titled = map.slides.some(slide => typeof slide !== 'string');
 
 	const container = el('div', {
 		class: titled ? 'slideshow' : 'slideshow placeholder',
@@ -82,20 +88,21 @@ export function buildSlideshow(map, inst, options = {}) {
 
 	map.slides.forEach((slide, i) => {
 		const active = i === start - 1;
-		const url = titled ? slide.img : slide;
+		const titledSlide = titled ? /** @type {import('./catalog.js').TitledSlide} */ (slide) : null;
+		const url = titledSlide ? titledSlide.img : /** @type {string} */ (slide);
 		const img = (active || map.eagerSlides)
 			? el('img', { src: url })
 			: el('img', { 'data-src': url, class: 'lazy' });
 		const slideDiv = el('div', { class: 'slide fade' + (active ? ' active' : '') });
-		if (titled) {
-			const width = slide.maxWidth || map.maxWidth;
+		if (titledSlide) {
+			const width = titledSlide.maxWidth || map.maxWidth;
 			// a slide may omit its title text to inherit the map name (its href still differs per slide);
 			// without a map-level title bar the slide bars carry the pop-out button instead
-			const title = { text: slide.title.text || map.name, href: slide.title.href };
+			const title = { text: titledSlide.title.text || map.name, href: titledSlide.title.href };
 			slideDiv.appendChild(buildTitleBar(title, {}, map.titleHref ? null : titleButtons(options)));
 			slideDiv.appendChild(el('div', {
 				class: 'placeholder',
-				style: `${width ? `max-width: ${width}px; ` : ''}aspect-ratio: ${slide.aspect};`
+				style: `${width ? `max-width: ${width}px; ` : ''}aspect-ratio: ${titledSlide.aspect};`
 			}, [img]));
 		} else {
 			slideDiv.appendChild(img);
@@ -120,6 +127,7 @@ export function buildSlideshow(map, inst, options = {}) {
 	return [map.titleHref ? buildMapTitleBar(map, options) : null, container, indicators];
 }
 
+/** @param {import('./catalog.js').CatalogMap} map @param {string} inst @param {import('./render.js').RenderOptions} [options] */
 export function buildImage(map, inst, options = {}) {
 	return [
 		buildMapTitleBar(map, options),
@@ -129,6 +137,7 @@ export function buildImage(map, inst, options = {}) {
 	];
 }
 
+/** @param {import('./catalog.js').CatalogMap} map @param {string} inst @param {import('./render.js').RenderOptions} [options] */
 export function buildVideo(map, inst, options = {}) {
 	const video = el('video', { controls: '' }, [el('source', { type: 'video/mp4', src: map.src })]);
 	video.muted = true;
@@ -144,6 +153,7 @@ export function buildVideo(map, inst, options = {}) {
 	];
 }
 
+/** @param {import('./catalog.js').CatalogMap} map @param {string} inst @param {import('./render.js').RenderOptions} [options] */
 export function buildIframe(map, inst, options = {}) {
 	const frameId = map.frameId + instSuffix(inst);
 	const pascal = frameId[0].toUpperCase() + frameId.slice(1);
@@ -182,6 +192,7 @@ export function buildIframe(map, inst, options = {}) {
 	return [title, body];
 }
 
+/** @param {import('./catalog.js').CatalogMap} map @param {string} inst @param {import('./render.js').RenderOptions} [options] */
 export function buildBasicIframe(map, inst, options = {}) {
 	return [
 		buildMapTitleBar(map, options),
@@ -191,6 +202,7 @@ export function buildBasicIframe(map, inst, options = {}) {
 	];
 }
 
+/** @param {import('./catalog.js').CatalogMap} map */
 export function buildLinksBottom(map) {
 	const bar = el('div', { class: 'links-bottom', style: maxWidthStyle(map) || undefined });
 	map.links.forEach((link, i) => {
@@ -201,12 +213,14 @@ export function buildLinksBottom(map) {
 }
 
 // a map's block contents, drawn the way its type draws it (maps/types.js)
+/** @param {import('./catalog.js').CatalogMap} map @param {string} [inst] @param {import('./render.js').RenderOptions} [options] */
 export function buildMapContent(map, inst = map.id, options = {}) {
 	const type = MAP_TYPES[map.type];
 	return type ? type.build(map, inst, options) : [];
 }
 
 // the list's entries for a list of maps, or a line saying there are none
+/** @param {import('./render.js').RenderOptions} [options] */
 export function renderMapRows(list, maps, options = {}) {
 	list.replaceChildren();
 	if (!maps.length) {
@@ -221,6 +235,7 @@ export function renderMapRows(list, maps, options = {}) {
 // the entry a map takes at the end of the list — its block and the links
 // under it — returning the block. One block per map, so the pop-out can lift
 // title, map and indicators together
+/** @param {import('./catalog.js').CatalogMap} map @param {import('./render.js').RenderOptions} [options] */
 export function appendMapRows(list, map, options = {}) {
 	const block = el('div', { class: 'map-block', 'data-map-id': map.id, 'data-inst': map.id }, buildMapContent(map, map.id, options));
 	const entry = el('div', { class: 'map-entry' }, [block]);
