@@ -30,18 +30,11 @@ import { arrangementChanged } from './layout.js';
 import { trackWidgetPointer } from './overlap.js';
 import { fitWidget, lockAspect, unlockAspect } from './popout.js';
 
-// Two widgets edge to edge with the shared edge running the whole of both
-// sides: then it is a seam, and dragging it moves it — one side giving what
-// the other takes, the pair keeping the room it had and everything around them
-// left where it stands. It is what a tiled board is for, and it settles a press
-// that was always ambiguous: the two widgets' handles lie on top of each other
-// along that edge, so which of them was grabbed came down to which was raised
-// last. Either one now means the same thing.
-//
-// A side handle only, never a corner: a corner belongs to two edges at once and
-// to however many widgets meet there. And whole edges only — a seam between
-// sides of unequal length cannot move without tearing one of them off the
-// neighbours it meets further along.
+// Two widgets sharing a whole edge form a seam: dragging it moves it, one side
+// giving what the other takes, which is what a tiled board needs (and either
+// widget's handle, lying on top of each other there, means the same). Side
+// handles only: a corner belongs to two edges, and an edge of unequal sides
+// cannot move without tearing one of them off its other neighbours.
 /** @param {HTMLElement} block */
 export function seamNeighbour(block, dir) {
 	if (dir.length !== 1 || isSnapped(block) || block.classList.contains('fs-host')) return null;
@@ -114,17 +107,10 @@ export function resizeSeam(block, other, dir, e) {
 	});
 }
 
-// Shift holds the aspect and a plain pull is free of it, the way round an
-// image editor has it. The key is read through the gesture rather than at the
-// start of it: press or release it mid-pull and the rest of the pull answers,
-// the widget taking its aspect back or letting it go where it stands, so what
-// it is left as is what the key said when it was let go. The pointer need not
-// move for this — trackWidgetPointer repeats the last move on the key itself.
-// In a column the width is the column's, so the height is the only thing a
-// pull can change and letting the aspect go is the only way to change it: a
-// plain pull frees a locked pane, as it does over the page, and Shift holds
-// the aspect and with it the pane. The double-click on the title bar is the
-// way back to the aspect, there as anywhere.
+// Shift holds the aspect and a plain pull lets it go, as in an image editor;
+// the key counts through the whole gesture (trackWidgetPointer). In a column
+// the width is the column's, so a plain pull frees a locked pane's height and
+// Shift holds it. The title bar's double-click takes the aspect back.
 /** @param {HTMLElement} block */
 export function resizePopout(block, dir, e) {
 	const members = groupMembers(block);
@@ -180,15 +166,10 @@ function resizeFloating(block, dir, e) {
 	setMode(e.shiftKey);
 	const start = block.getBoundingClientRect();
 	ratio = start.width / start.height;
-	// one ceiling for both axes, the map following the widget to any width it is
-	// pulled to. What the pulled edge may reach is the room between the edge that
-	// is not moving and the viewport edge it is pulled towards, and it is the
-	// size that is held to that room rather than the widget put back inside the
-	// viewport afterwards — which would move the edge that is not being dragged.
-	// No margin is kept off the viewport edge here, so either axis can be filled
-	// to it; placePopout keeps its own clamp. A widget always starts inside the
-	// viewport (placePopout sees to it), so the room is never less than the side
-	// it is the room for, and no gesture is forced to shrink one
+	// the size is held to the room between the edge that stays and the viewport
+	// edge the pull heads for, rather than the widget pushed back inside after
+	// (which would move the edge that stays). A widget starts inside the
+	// viewport, so the room is never less than its size
 	const room = {
 		width: Math.min(popoutMaxWidth(), dir.includes('w') ? start.right : viewportWidth() - start.left),
 		height: dir.includes('n') ? start.bottom : viewportHeight() - start.top
@@ -265,15 +246,10 @@ function pullResizeEdges(magnets, dir, start, w, h) {
 	return { w, h };
 }
 
-// the width at which a locked widget stands exactly h high. Its height is its
-// title bar and indicators, which keep their height whatever the width, plus
-// the map, which scales with it — so height is not proportional to width, and
-// a ratio only approximates the width a wanted height asks for: it is out by
-// about the bar's share of the height, a dozen pixels, which is the whole of
-// MAGNET. Setting the width and reading back the height it gave closes that,
-// since the error left is the bar's share of the error — under a tenth — so
-// the second pass lands on the pixel. Cheap enough per move: the height is read
-// back once anyway
+// the width at which a locked widget stands exactly h high. The title bar does
+// not scale with the width, so a ratio is out by about a bar's height (all of
+// MAGNET); a second pass, from the height the first width gave, lands on the
+// pixel
 /** @param {HTMLElement} block */
 export function lockedWidthFor(block, h, w, ratio, maxWidth) {
 	for (let i = 0; i < 3; i++) {
@@ -294,14 +270,10 @@ export function lockedHeightAt(block, w) {
 	return block.getBoundingClientRect().height;
 }
 
-// a group resizes as one thing: its box is pulled as a locked widget's is —
-// one scale for the whole, from the pulled axis, a corner following whichever
-// asks for more — from the edge or corner opposite the one pulled, the other
-// widgets its magnets. Every member is scaled by it (a free one in height
-// too; a locked one's height follows its width, with the title bar not
-// scaling along), then placed at its scaled offset and settled onto the
-// members it touched or lined up with before (groupRelations), so a stack
-// stays a stack whatever the title bars do
+// a group resizes as one: one scale for its box, as for a locked widget, from
+// the corner opposite the pull. Each member is scaled and placed at its scaled
+// offset, then settled onto the members it touched before (groupRelations),
+// since title bars do not scale and a stack must stay a stack
 function resizeGroup(members, dir, e) {
 	const starts = groupStarts(members).map(s => ({
 		...s,

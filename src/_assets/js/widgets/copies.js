@@ -15,20 +15,12 @@ import { arrangementChanged } from './layout.js';
 import { dropShadow, syncShadows } from './overlap.js';
 import { fitWidget, handGapTo, popoutMap, unlockAspect, WIDGET_RENDER } from './popout.js';
 
-// A map can be on screen more than once. [D] makes another showing of it, and
-// no showing is the original: each is a widget like the rest, and any of them
-// can be closed while the others stay. The page still keeps one row per map,
-// so there is no question of where a copy sits in a list it was never in, and
-// the row's one place to dock into belongs to whichever showing holds it — the
-// one not marked .duplicate. Closing that one hands the place to another
-// (removeShowing), so the page always keeps a way back for the map, and only
-// the map's last showing docks — or, on the board, takes the map off the list.
-//
-// A copy is built from the catalog rather than cloned from the DOM, so the
-// names its parts carry are its own (maps/render.js: instSuffix). Two renderings
-// sharing one slideshow id is the very thing prefsMapIds() dedupes to avoid —
-// the arrows would drive whichever came first while both sets of indicators
-// lit up.
+// [D] makes another showing of a map, and no showing is the original: any can
+// be closed while the others stay. The page keeps one entry per map, and its
+// place to dock into belongs to the showing not marked .duplicate; closing that
+// one hands the place on (removeShowing), so only the last showing docks (on
+// the board, leaves the list). A copy is built from the catalog, not cloned,
+// so its slideshow and frame ids are its own (maps/render.js: instSuffix)
 export function buildDuplicateButton() {
 	const btn = el('a', { class: 'dup-btn', text: '[D]', title: withKey('Udvostruči kartu', 'duplicate') });
 	btn.addEventListener('click', () => duplicateMap(btn.closest('.map-block')));
@@ -133,14 +125,10 @@ export function duplicateMap(block) {
 	return copy;
 }
 
-// the block a stored entry names: the plain key is the showing holding the
-// page's place, whatever it is called by now (the breakpoint docks it, and it
-// may have inherited the place from a #2); any other key is a copy, which
-// exists only in the arrangement and so is made here as the arrangement is laid
-// out — under a free name, the stored one being a position in the layout and
-// not a name anything on screen still answers to. A copy of a map the list no
-// longer holds has nothing to be made from, and sanitizeSnapLayout has already
-// dropped it
+// the block a stored entry names: the plain key is the showing that holds the
+// page's place, whatever it is called by now; any other key is a copy, made
+// here under a free name (a stored key is a position in the layout, not a name
+// anything on screen answers to)
 /** @param {string} inst */
 export function instanceFor(inst) {
 	const mapId = instMapId(inst);

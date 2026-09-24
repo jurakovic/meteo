@@ -146,15 +146,10 @@ export function groupBox(starts) {
 	return { left, top, width: right - left, height: bottom - top };
 }
 
-// the members moved by one offset, the group's box kept inside the viewport
-// when it fits, else at least its top-left corner — placePopout()'s rule.
-// The offset is not rounded to whole pixels: a locked widget's height is its
-// title bar plus the width over its aspect, so its bottom edge lands on a
-// fraction of a pixel, and a widget magneted under it would sit half a pixel
-// into it — both borders drawn, a seam of about one and a half. Only a landing
-// on such an edge carries a fraction (a width is whole, so the sides are too),
-// and it costs that widget's border no more than the crispness of sitting on
-// the grid. Thousandths: the layout unit is 1/64px
+// the members moved by one offset, the group's box kept in the viewport as
+// placePopout() keeps a widget. Not rounded to whole pixels: a locked widget's
+// bottom edge falls on a fraction, and one magneted under it would overlap it
+// by half a pixel. Thousandths, as the layout unit is 1/64px
 export function moveGroup(starts, box, dx, dy) {
 	const left = Math.min(Math.max(0, box.left + dx), Math.max(0, viewportWidth() - box.width));
 	const top = Math.min(Math.max(0, box.top + dy), Math.max(0, viewportHeight() - box.height));

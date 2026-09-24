@@ -22,18 +22,13 @@ export function pulledSize(dir, start, dx, dy) {
 	return { w, h };
 }
 
-// move and up listeners on document (nothing moves in the DOM), and
-// .po-dragging turns iframe pointer events off so the pointer is not
-// swallowed when it crosses one mid-gesture. onMove gets the offset from the
-// start and the event; onEnd runs once the pointer is released (or the
-// gesture cancelled); afterMove, when given, after every move.
+// Listens on the document, and .po-dragging turns iframe pointer events off so
+// a frame crossed mid-gesture cannot swallow the pointer. onMove gets the
+// offset from the start; onEnd runs on release or cancel.
 //
-// Shift is answered while the gesture runs and not only as it stood when it
-// began (resizePopout): the last move is made again with the key as it now
-// is, so a pull already under way changes what it does the moment the key
-// goes down or comes up, with the pointer held still. A KeyboardEvent
-// carries no coordinates, so the pointer's last stand in — the same move
-// over again, which every onMove here takes without moving anything
+// Shift counts while the gesture runs, not only at its start: a press or
+// release of it repeats the last move with the key as it now is (a
+// KeyboardEvent has no coordinates, so the pointer's last ones stand in)
 /**
  * @param {PointerEvent} e the pointerdown
  * @param {(dx: number, dy: number, ev: { clientX: number, clientY: number, shiftKey: boolean }) => void} onMove

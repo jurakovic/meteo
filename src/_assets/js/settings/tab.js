@@ -78,14 +78,11 @@ export function applyStoredMsTab() {
 	if (tab && stored) placeMsTab(tab, stored.left * viewportWidth(), stored.width);
 }
 
-// On a board the tab is the only chrome there is, so it carries the same glyph
-// cluster a widget's title bar does, and for the same reason: the common moves
-// without opening the dialog. [R] reloads every widget's map (widgets/reload.js), [G]
-// and [S] are the board's two grid switches — the dialog's own, through
-// setGridPrefs, so the three places cannot disagree. Each glyph is the key that
-// does the same thing, and says so in its title, the way the tab itself does.
-// They are <a> without href, as the title bars' glyphs are, so they are no
-// interactive content inside the button; their click is kept off the tab's own
+// On a board the tab is the only chrome, so it carries a glyph cluster as a
+// title bar does: [R] reloads every map, [G] and [S] are the grid switches
+// (through setGridPrefs, so the dialog cannot disagree). Each glyph is named
+// after its key. They are <a> without href, which a <button> may contain, and
+// their click is kept off the tab's own
 function buildMsTabCluster(tab) {
 	// the board's own way to add a map, without the dialog (see openMsAdd)
 	const glyph = (text, command, title, extra = {}) =>

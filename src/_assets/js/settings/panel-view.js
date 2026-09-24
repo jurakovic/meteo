@@ -14,15 +14,11 @@ export function readPanelPrefs(presetId, mapIds) {
 	return { preset: presetId };
 }
 
-// the mode is the panel's, not the arrangement's: whatever layout is going to
-// be applied, the toggle decides whether it is a board. Ticked, it turns any
-// layout into one — a built-in's nothing included, which applySnapLayout then
-// fills with every map of the list. Unticked, a board loses its placements
-// along with the flag: a board holds the whole list as widgets, and over the
-// visible page that is a pile rather than an arrangement.
-// It runs before sanitizeSnapLayout rather than after, so what it marks a
-// board is held to what a board can hold — no columns — by the same guard
-// every layout read back from storage or a link passes
+// The toggle, not the layout, decides whether the view is a board. Ticked, any
+// layout becomes one (an empty one is filled by applySnapLayout). Unticked, a
+// board's placements go with the flag: over the page they would be a pile.
+// Called before sanitizeSnapLayout, which then holds a board to what a board
+// can hold (no columns)
 /** @param {import('../widgets/layout.js').SnapLayout | null} layout @param {boolean} on */
 export function withDashboard(layout, on) {
 	if (!on) return layout && layout.dashboard ? null : layout;
@@ -75,17 +71,11 @@ export function layoutParts(layout) {
 	return parts;
 }
 
-// only the preset the list came from: any other row would take an overwrite
-// with a list that has nothing to do with it. Saving under the same name in
-// the add form still works and is unchanged — this is the same write, minus
-// having to know that the name is the handle. The saved-preset guard is not
-// redundant: editingPresetId also holds built-in ids (they carry the origin
-// dot), and a built-in reaching storeUserPreset would fork a saved copy of
-// itself under its own name rather than update anything.
-// The arrangement counts as an edit too — it is part of what the preset
-// stores — but only here: the origin dot on the chip marks a changed list,
-// which is what the panel itself edits, and a rearranged page still shows
-// the preset's maps.
+// Whether a saved preset's row offers Ažuriraj: only for the preset the list
+// came from, and only a saved one (editingPresetId can be a built-in's, which
+// storeUserPreset would fork rather than update). The arrangement counts as an
+// edit here, being part of what the preset stores; the chip's origin dot
+// marks list changes only.
 /** @param {import('../maps/presets.js').Preset} preset @param {string} editingPresetId @param {string[]} mapIds @param {import('../widgets/layout.js').SnapLayout | null} layout */
 export function hasPendingEdits(preset, editingPresetId, mapIds, layout) {
 	return isUserPresetId(preset.id) && preset.id === editingPresetId

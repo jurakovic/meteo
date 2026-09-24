@@ -8,15 +8,12 @@ import { registerCommand } from '../page/commands.js';
 import { isMapEnabled } from '../remote-config.js';
 import { addToDashboard, isDashboard } from '../widgets/board.js';
 
-// A small menu hung under the tab rather than a dialog: a box to type in and
-// the maps the board does not show yet, in the catalog's order, each with its
-// kind's glyph. Typing narrows the list as the dialog's box does; the arrows
-// walk it, Enter or a click puts the lit one on the board (addToDashboard,
-// widgets/board.js) and shuts the menu. Escape, a press anywhere outside, the dialog
-// opening and the window resizing shut it too. It is built afresh on every
-// open, so it lists what the board holds by then. Outside the tab, which is a
-// <button> and so no place for a text box, and the focus stays in the box,
-// so the page's keys (K, R, A, D, the arrows on a widget) keep off it
+// A small menu hung under the tab: a find box over the maps the board does
+// not show yet. The arrows walk the list, Enter or a click puts the lit map on
+// the board (addToDashboard) and shuts the menu; so do Escape, a press outside,
+// the dialog opening and a resize. Built afresh on every open. It sits outside
+// the tab (a <button>, no place for a text box), and the focus stays in its
+// box, which keeps the page's keys off it
 let msAdd = null; // { menu, anchor } while open
 
 const MS_ADD_MAX_HEIGHT = 420; // a menu, not a second dialog: the list scrolls past this

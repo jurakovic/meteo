@@ -24,16 +24,10 @@ import { arrangementChanged } from './layout.js';
 import { syncShadows } from './overlap.js';
 import { fitWidget, unlockAspect } from './popout.js';
 
-// how many columns n widgets go in: the shape that shows each map biggest. A
-// map is contained in what its cell leaves under the title bar, so its size is
-// the cell's area only when the cell has the map's shape, and too wide or too
-// tall a cell is spent on ground. That is what the eye asks of a board — ten
-// maps go 4x3 with two holes rather than 2x5 in strips too thin to read, or
-// 5x2 when the maps are square enough to be bigger that way. An empty cell
-// costs a hair, so a tidy 3x3 is not passed over for a 4x3 whose maps come
-// out the same size. Falls out as 2x2 for four, 3x2 for six and 4x3 for
-// twelve, and on a wide screen puts two side by side rather than one above
-// the other
+// how many columns n widgets go in: the shape that shows each map biggest,
+// a map being contained in what its cell leaves under the title bar (ten maps
+// go 4x3 with two holes rather than 2x5 in thin strips). An empty cell costs a
+// hair, so a tidy 3x3 wins over a 4x3 whose maps come out the same size
 /** @param {number} n */
 export function arrangeShape(n, width, height, aspect) {
 	let best = { cols: 1, rows: n, score: -Infinity };

@@ -113,14 +113,10 @@ function onDoubleClick(e) {
 	}
 }
 
-// The covering widget's frame is dealt with by `covered` above, which is the
-// case that matters. This is the rest of it: a widget nothing lies over is
-// never covered, so its frame does take the press, and the page hears of it
-// only as its own window handing the focus to the frame. Raising it then keeps
-// the order honest for when something is later dragged over it. It catches the
-// move in from the page alone — the focus going from one frame straight to
-// another raises no event here at all, the window having none left to lose —
-// which is why the covered case cannot be built on this
+// A press into the frame of a widget nothing covers reaches the frame, and the
+// page hears of it only as the window's blur; raising the widget then keeps the
+// order right for later. It sees a move in from the page only (frame to frame
+// raises nothing here), which is why covered widgets are handled by `covered`
 function raiseFocusedFrame() {
 	const frame = document.activeElement;
 	if (!frame || frame.tagName !== 'IFRAME') return;
@@ -129,16 +125,11 @@ function raiseFocusedFrame() {
 	if (block && !block.classList.contains('fs-host')) raisePopout(block);
 }
 
-// A widget is a window, and its title bar is where a window is worked from.
-// Beside the drag it already is: a double-click on it puts the map in
-// fullscreen and takes it out again, and a middle click is the bar's own
-// [=]/[x] without having to aim at two characters. Both are on the bar alone,
-// never on the map — over a frame the page would never see them, and on an
-// interactive map a double-click is already the site's own gesture (the
-// overlay gate, page/iframe.js: "Dvostruki klik za pristup interaktivnoj karti") and
-// then the map's own zoom. A link or a button on the bar is itself, as it is
-// for the drag: the title is an <a> to the source, and a middle click on it
-// belongs to the browser
+// The title bar works as a window's does: beside the drag, a double-click
+// toggles fullscreen and a middle click is the bar's [=]/[x]. On the bar only:
+// over a frame the page never sees them, and on an interactive map a
+// double-click already opens the gate (page/iframe.js). A link or button on
+// the bar keeps its own clicks (the title is a link to the source)
 function titleBarOf(e) {
 	if (!e.target.closest || e.target.closest('a, button, input')) return null;
 	return e.target.closest('.map-block.popout .radartitle');

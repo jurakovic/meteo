@@ -225,15 +225,10 @@ function buildMapSettings(element) {
 	const closeLink = el('a', { text: 'Zatvori', title: withKey('Zatvori', 'dialog-close') });
 	closeLink.addEventListener('click', () => panel.close());
 
-	// the header stays put and the body under it scrolls (CSS); in the body
-	// the actions sit right under the render order they act on, rather than
-	// at the far end of the picker and the preset management below it
-	// and before the title the way home, which the board and the hidden page
-	// take out of sight. Resolved off this page's own address rather than
-	// written as /, since the built site lives under /meteo/, and a real href,
-	// so Ctrl and the middle button open it beside the page as any link does.
-	// It shows the site's favicon, taken off the page's own <link> so the
-	// address is whatever the build made it
+	// the way home, before the title, since the board and a hidden page take
+	// the page's own link out of sight. A real href (Ctrl and the middle button
+	// work), resolved off this page's address because the built site lives
+	// under /meteo/; the icon is the page's own favicon, wherever the build put it
 	const icon = /** @type {HTMLLinkElement | null} */ (document.querySelector('link[rel="icon"][sizes="32x32"]'));
 	const homeLink = el('a', { class: 'ms-home', href: new URL('../', window.location.href).href, title: 'Početna' }, [
 		el('img', { src: icon ? icon.href : undefined, alt: 'Početna' })
@@ -242,6 +237,8 @@ function buildMapSettings(element) {
 		el('span', { class: 'ms-head-left' }, [homeLink, el('span', { class: 'ms-title', text: 'Karte' })]),
 		closeLink
 	]));
+	// the header stays put and the body scrolls (CSS); in the body the actions
+	// sit right under the render order they act on
 	element.appendChild(el('div', { class: 'ms-body' }, [
 		presets.element,
 		mode.element,

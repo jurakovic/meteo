@@ -97,14 +97,9 @@ export function unlockAspect(block) {
 	syncBackdrop(block);
 }
 
-// the double-click's lock: the widget comes in to the image as it is painted,
-// rather than the image being blown up to the width the widget happens to have.
-// A letterboxed image is contained in its box, so one axis is the image's and
-// the other is ground beside it. Of the two ways to take the aspect back — at
-// the width it has, or at the width that gives the height it has — the smaller
-// is the image: whichever axis was holding the contain is the one kept, and the
-// widget only ever comes in. In a column the width is the column's, so a pane
-// simply takes the aspect back
+// the double-click's lock: the widget comes in to the image as it is painted
+// (letterboxed, one axis is ground), keeping whichever axis holds the image, so
+// it only ever shrinks. A pane keeps its column's width and takes the aspect
 /** @param {HTMLElement} block */
 export function lockToImage(block) {
 	const rect = block.getBoundingClientRect();
@@ -177,17 +172,11 @@ function unfitTitles(block) {
 	});
 }
 
-// A letterboxed image is painted smaller than the box it is centred in:
-// object-fit contains it inside the element and lays nothing out, so the arrows
-// (absolute in the .slideshow) and the indicators (as wide as it) would span the
-// whole widget rather than the image they belong to. CSS cannot see a
-// contain-fitted image's rect, so it is worked out here — the natural ratio
-// against the element's box — and published as the four insets from the
-// .slideshow the arrows are positioned in (which takes the slide's own title bar
-// off the top for free) and the painted width for the indicators to take and
-// centre themselves in. Measured wherever the title is, and for the same
-// reasons: the box changes with every gesture, and the image with a slide or a
-// reload
+// A letterboxed image (object-fit: contain) is painted smaller than its box,
+// and CSS cannot see the painted rect, so the arrows and indicators would span
+// the whole widget. It is worked out here from the natural ratio and published
+// as insets (--lb-*) for the arrows and a width for the indicators; measured
+// again whenever the box or the image changes
 function fitLetterbox(block) {
 	const props = ['--lb-l', '--lb-r', '--lb-t', '--lb-b', '--lb-w'];
 	const box = block.querySelector('.slideshow');
