@@ -27,11 +27,10 @@ export function initLayoutBreakpoint() {
 	// unmade by it
 	DESKTOP_MQ.addEventListener('change', (e) => {
 		if (e.matches) { applySnapLayout(unappliedSnapLayout); return; }
-		// what the view stores rather than what is on screen: the viewport has
-		// narrowed already, and the fractions read off the screen now would be of
-		// the narrow width (B1). Every gesture writes the arrangement as it ends,
-		// so the stored one is the one on screen
-		unappliedSnapLayout = sanitizeSnapLayout(getActiveMapPrefs().layout, resolveMapIds());
+		// the one this tab holds rather than what is on screen: the viewport has
+		// narrowed already, and the widgets read off the screen now would be of
+		// the narrow width (B1). Nor what is stored, which another tab writes too
+		unappliedSnapLayout = heldSnapLayout;
 		withPersistPaused(dockAllPopouts); // the stored arrangement is kept for a desktop window
 	});
 }
@@ -252,6 +251,7 @@ export function sameSnapLayout(a, b) {
 // not shown
 /** @param {SnapLayout | null} layout */
 export function applySnapLayout(layout) {
+	heldSnapLayout = layout;
 	resetSnapColumns();
 	// the mode before anything is measured: the page's scrollbar goes with it
 	setDashboard(!!(layout && layout.dashboard && DESKTOP_MQ.matches));
@@ -373,6 +373,15 @@ export function isDashboardView() {
 	return unappliedSnapLayout ? unappliedSnapLayout.dashboard === true : isDashboard();
 }
 
+// the arrangement this tab last applied or wrote, kept for the breakpoint
+// to take over. A gesture writes it as it ends; one whose write waits (a
+// nudge) holds it at once, so a window narrowed meanwhile does not lose it
+let heldSnapLayout = null;
+
+export function holdSnapLayout() {
+	if (!snapPersistPaused) heldSnapLayout = currentSnapLayout();
+}
+
 // the arrangement changed (a gesture ended, a widget came or went): the group
 // buttons, the overlaps and the shadows are worked out again, and the
 // arrangement is stored with the view and announced (layout-changed), unless
@@ -382,6 +391,7 @@ export function arrangementChanged() {
 	updateGroups();
 	refreshOverlap();
 	if (snapPersistPaused) return;
-	storeViewLayout(currentSnapLayout());
+	holdSnapLayout();
+	storeViewLayout(heldSnapLayout);
 	emit(EVENTS.layoutChanged);
 }

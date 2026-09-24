@@ -7,7 +7,7 @@ import { duplicateMap } from './copies.js';
 import { floatingBlocks, placePopout } from './core.js';
 import { toggleGridShown, toggleGridSnapped } from './grid.js';
 import { groupBox, groupMembers, groupStarts, moveGroup } from './groups.js';
-import { arrangementChanged } from './layout.js';
+import { arrangementChanged, holdSnapLayout } from './layout.js';
 import { refreshOverlap } from './overlap.js';
 import { reloadAllMaps } from './reload.js';
 
@@ -65,6 +65,7 @@ function nudgePopout(dx, dy) {
 		placePopout(block, rect.left + dx, rect.top + dy);
 	}
 	refreshOverlap(); // the shadows and the order follow at once; the writing waits
+	holdSnapLayout();
 	nudgePersist();
 }
 

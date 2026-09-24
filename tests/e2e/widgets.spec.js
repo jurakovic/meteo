@@ -250,6 +250,40 @@ test.describe('pop-out widgets', () => {
 		await expect(block(page, 'neverin-radar-hr')).toHaveClass(/popout/);
 		expect(Math.abs((await box(block(page, 'neverin-radar-hr'))).x - placed.x)).toBeLessThan(1);
 	});
+
+	test('a narrow window keeps this tab\'s arrangement, not one another tab stored', async ({ page }) => {
+		const wide = page.viewportSize();
+		await popout(page, 'neverin-radar-hr');
+		await moveWidget(page, 'neverin-radar-hr', 200, 100);
+		const placed = await box(block(page, 'neverin-radar-hr'));
+		// another tab of the same view arranges it otherwise
+		await page.evaluate(() => {
+			const prefs = JSON.parse(localStorage.getItem('mapPrefs'));
+			prefs.layout = { floating: [{ id: 'windy', left: 0.5, top: 0.5, width: 0.3 }] };
+			localStorage.setItem('mapPrefs', JSON.stringify(prefs));
+		});
+		await page.setViewportSize({ width: 700, height: 900 });
+		await expect(page.locator('.map-block.popout')).toHaveCount(0);
+		await page.setViewportSize(wide);
+		await expect(block(page, 'neverin-radar-hr')).toHaveClass(/popout/);
+		await expect(block(page, 'windy')).not.toHaveClass(/popout/);
+		expect(Math.abs((await box(block(page, 'neverin-radar-hr'))).x - placed.x)).toBeLessThan(1);
+	});
+
+	test('a nudge not yet written when the window narrows is kept', async ({ page }) => {
+		const wide = page.viewportSize();
+		await popout(page, 'neverin-radar-hr');
+		await moveWidget(page, 'neverin-radar-hr', 200, 100);
+		await page.keyboard.press('ArrowRight');
+		const nudged = await box(block(page, 'neverin-radar-hr'));
+		const clientWidth = await page.evaluate(() => document.documentElement.clientWidth);
+		await page.setViewportSize({ width: 700, height: 900 }); // within the nudge's 300ms
+		await expect(page.locator('.map-block.popout')).toHaveCount(0);
+		await expect.poll(async () => (await floating(page))[0].left).toBeCloseTo(nudged.x / clientWidth, 3);
+		await page.setViewportSize(wide);
+		await expect(block(page, 'neverin-radar-hr')).toHaveClass(/popout/);
+		expect(Math.abs((await box(block(page, 'neverin-radar-hr'))).x - nudged.x)).toBeLessThan(1);
+	});
 });
 
 test('an empty list says so, centred in the column, and a list picked after it draws again', async ({ page, paths }) => {
