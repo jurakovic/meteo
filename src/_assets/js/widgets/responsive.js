@@ -42,7 +42,8 @@ export function initWidgetResponsiveness() {
 	// — and the same events bring a slide's title bar on screen, to be fitted
 	['load', 'click', 'pointerup'].forEach(type => {
 		document.addEventListener(type, (e) => {
-			const block = e.target.closest && e.target.closest('.map-block.popout');
+			const target = /** @type {Element} */ (e.target);
+			const block = target.closest && /** @type {HTMLElement | null} */ (target.closest('.map-block.popout'));
 			if (!block) return;
 			setTimeout(() => {
 				if (isSnapped(block) && !block.classList.contains('free')) layoutSnapColumns();

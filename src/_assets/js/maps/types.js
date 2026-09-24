@@ -25,6 +25,7 @@ export const MAP_TYPES = {
 };
 
 // the type of a map, by its id; null for an id the catalog does not know
+/** @param {string} mapId */
 export function mapTypeOf(mapId) {
 	const map = catalogMap(mapId);
 	return (map && MAP_TYPES[map.type]) || null;

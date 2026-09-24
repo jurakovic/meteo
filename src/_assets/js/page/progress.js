@@ -1,6 +1,7 @@
 // The progress bar over the top of the page while the images load.
 
 import { dlog } from '../lib/debug.js';
+import { query } from '../lib/dom.js';
 
 // the run in progress, so listeners left over from a superseded one stand
 // down, and the hide it scheduled
@@ -10,8 +11,8 @@ let progressHideTimer = 0;
 export function showProgress() {
 	// Get all images on the page
 	const images = document.querySelectorAll('img');
-	const progressBar = document.querySelector('.progress-bar');
-	const progressContainer = document.querySelector('.progress-container');
+	const progressBar = query('.progress-bar');
+	const progressContainer = query('.progress-container');
 	let imagesLoaded = 0;
 
 	// each invocation gets a token; listeners left over from a superseded run

@@ -8,7 +8,7 @@
 // viewport, the width in px), not in the arrangement; a click that did not
 // move opens the dialog
 
-import { el } from '../lib/dom.js';
+import { el, query } from '../lib/dom.js';
 import { EVENTS, on } from '../lib/events.js';
 import { clamp, roundFraction, viewportWidth } from '../lib/geometry.js';
 import { trackPointer } from '../lib/pointer.js';
@@ -123,25 +123,27 @@ function syncRefreshLabel() {
 }
 
 export function initMsTab() {
-	const tab = document.querySelector('.ms-tab');
+	const tab = query('.ms-tab');
 	if (!tab) return;
+	// a press on one of the glyphs is the glyph's, not the tab's
+	const onGlyph = (/** @type {Event} */ e) => !!/** @type {Element} */ (e.target).closest('.ms-tab-btn');
 	tab.title = withKey('Karte', 'map-settings');
 	buildMsTabCluster(tab); // before the first measure: the glyphs are part of the width its name gives it
 	applyStoredMsTab();
 	tab.addEventListener('click', (e) => {
-		if (e.target.closest('.ms-tab-btn')) return; // a glyph is itself, as on a title bar
+		if (onGlyph(e)) return; // a glyph is itself, as on a title bar
 		if (msTabMoved) { msTabMoved = false; return; }
 		toggleMapSettings();
 	});
 	// the cursor says which it will be
 	tab.addEventListener('pointermove', (e) => {
-		if (e.target.closest('.ms-tab-btn')) { tab.style.cursor = ''; return; }
+		if (onGlyph(e)) { tab.style.cursor = ''; return; }
 		const rect = tab.getBoundingClientRect();
 		const side = e.clientX - rect.left <= MS_TAB_EDGE || rect.right - e.clientX <= MS_TAB_EDGE;
 		tab.style.cursor = side ? 'ew-resize' : '';
 	});
 	tab.addEventListener('pointerdown', (e) => {
-		if (e.button !== 0 || e.target.closest('.ms-tab-btn')) return;
+		if (e.button !== 0 || onGlyph(e)) return;
 		e.preventDefault();
 		const rect = tab.getBoundingClientRect();
 		const mode = e.clientX - rect.left <= MS_TAB_EDGE ? 'w' : rect.right - e.clientX <= MS_TAB_EDGE ? 'e' : 'move';

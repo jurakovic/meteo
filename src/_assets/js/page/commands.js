@@ -62,7 +62,8 @@ export function initCommands() {
 	registerCommand('fullscreen-exit', { keys: ['Escape'], keyWhen: () => !anyDialogOpen(), keepDefault: true, run: () => exitAnyFullscreen() });
 
 	document.addEventListener('click', (e) => {
-		const control = e.target.closest && e.target.closest('[data-action]');
+		const target = /** @type {Element} */ (e.target);
+		const control = target.closest && /** @type {HTMLElement | null} */ (target.closest('[data-action]'));
 		if (control) runCommand(control.dataset.action, control, e);
 	});
 	// captured, ahead of every listener on the page, so a command that keeps

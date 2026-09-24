@@ -3,6 +3,7 @@
 // checked on the way in from storage or a link, applied after a render, and
 // written back after every gesture.
 
+import { queryAll } from '../lib/dom.js';
 import { emit, EVENTS } from '../lib/events.js';
 import { clamp, roundFraction, viewportHeight, viewportWidth } from '../lib/geometry.js';
 import { DESKTOP_MQ } from '../lib/media.js';
@@ -51,7 +52,7 @@ export function initLayoutBreakpoint() {
 // map without the map itself, whichever of its showings were left
 function layoutKeys() {
 	const keys = new Map(), counts = new Map();
-	const blocks = [...document.querySelectorAll('.map-block')];
+	const blocks = queryAll('.map-block');
 	[...blocks.filter(b => !isDuplicate(b)), ...blocks.filter(isDuplicate)].forEach(block => {
 		const id = block.dataset.mapId;
 		const index = (counts.get(id) || 0) + 1;
@@ -120,6 +121,37 @@ function snapLayout() {
 // The keys go in the order they always have: layouts are compared as JSON
 // (sameSnapLayout), and one saved by an earlier version must still compare
 // equal to itself read back
+/**
+ * A widget or pane, by its instance key: the map id, and #2, #3 on a copy.
+ * Positions are fractions of the viewport (a pane's of its column).
+ * @typedef {object} PaneEntry
+ * @property {string} id
+ * @property {number} top
+ * @property {number} [height] left out where the pane follows its aspect
+ * @property {number} [group] widgets with the same number move as one
+ * @property {boolean} [fullscreen] hosting a fullscreen map
+ *
+ * @typedef {object} FloatingEntry
+ * @property {string} id
+ * @property {number} left
+ * @property {number} top
+ * @property {number} width
+ * @property {number} [height] only on a widget free of its aspect
+ * @property {number} [group]
+ * @property {boolean} [fullscreen]
+ *
+ * @typedef {{ width: number, panes: PaneEntry[] }} ColumnLayout
+ *
+ * The arrangement a view carries: the snap columns, the floating widgets and
+ * whether it is a board. null is the page with nothing out of it.
+ * @typedef {object} SnapLayout
+ * @property {ColumnLayout} [left]
+ * @property {ColumnLayout} [right]
+ * @property {FloatingEntry[]} [floating] bottom to top
+ * @property {boolean} [dashboard]
+ */
+
+/** @param {any} layout @param {string[]} mapIds @returns {SnapLayout | null} */
 export function sanitizeSnapLayout(layout, mapIds) {
 	if (!layout || typeof layout !== 'object') return null;
 	const clean = {};
@@ -218,6 +250,7 @@ function dropLoneGroups(lists) {
 	}));
 }
 
+/** @param {SnapLayout | null | undefined} a @param {SnapLayout | null | undefined} b @returns {boolean} */
 export function sameSnapLayout(a, b) {
 	return JSON.stringify(a || null) === JSON.stringify(b || null);
 }
@@ -226,6 +259,7 @@ export function sameSnapLayout(a, b) {
 // out and attached to its column as stored, then the widths are set as
 // stored. Desktop only, like the gestures — on a phone the layout is carried,
 // not shown
+/** @param {SnapLayout | null} layout */
 export function applySnapLayout(layout) {
 	resetSnapColumns();
 	// the mode before anything is measured: the page's scrollbar goes with it
@@ -260,7 +294,7 @@ function placeSnapLayout(layout) {
 		if (!groupIds.has(group)) groupIds.set(group, newGroupId());
 		setGroupOf(block, groupIds.get(group));
 	};
-	['left', 'right'].forEach(side => {
+	/** @type {('left' | 'right')[]} */ (['left', 'right']).forEach(side => {
 		const stored = layout[side];
 		if (!stored) return;
 		const col = snapColumn(side);
@@ -316,6 +350,7 @@ let snapPersistPaused = false;
 // fn with the arrangement's writes held back, and whatever was in force
 // before put back afterwards — also when fn throws, which would otherwise
 // leave every later gesture unsaved for the rest of the session
+/** @template T @param {() => T} fn @returns {T} */
 export function withPersistPaused(fn) {
 	const paused = snapPersistPaused;
 	snapPersistPaused = true;
@@ -337,6 +372,7 @@ let unappliedSnapLayout = null;
 
 // what is on screen, or — where none of it is placed — what is stored waiting
 // for a desktop window
+/** @returns {SnapLayout | null} */
 export function currentSnapLayout() {
 	return unappliedSnapLayout || snapLayout();
 }
@@ -344,6 +380,7 @@ export function currentSnapLayout() {
 // the mode the view holds, which below the breakpoint is the stored one: the
 // board is not on screen there, but it is still what the view says, and the
 // dialog's mode row would otherwise tick itself off and apply that
+/** @returns {boolean} */
 export function isDashboardView() {
 	return unappliedSnapLayout ? unappliedSnapLayout.dashboard === true : isDashboard();
 }

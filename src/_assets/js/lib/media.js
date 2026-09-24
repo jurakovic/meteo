@@ -7,6 +7,7 @@ export const DESKTOP_MQ = window.matchMedia('(min-width: 801px) and (hover: hove
 
 // narrow by width alone, touch or not: the interactive maps load at their
 // mobile zoom and the gate's hint speaks of a tap
+/** @returns {boolean} */
 export function isNarrowViewport() {
 	return window.innerWidth < 800;
 }

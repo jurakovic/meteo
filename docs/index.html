@@ -246,62 +246,66 @@
 	</style>
 	<script>
 		(()=>{var e="dialog-toggled",t="map-config-changed",r="map-fullscreen";function a(e,t){document.dispatchEvent(new CustomEvent(e,{detail:t}))
-		}function n(e,t){document.addEventListener(e,e=>t(e.detail))}var o="1"===new URLSearchParams(window.location.search).get("debug")
-		;function i(...e){o&&console.log(...e)}var s=window.matchMedia("(min-width: 801px) and (hover: hover) and (pointer: fine)");function l(){
-		return window.innerWidth<800}var c=0;function d(e=!1){(e||window.innerWidth!==c)&&(c=window.innerWidth,
-		document.querySelectorAll("iframe[data-zoom-hr-desktop]").forEach(e=>m(e)))}function m(e){i(`Updating iframe src for ${e.id}`)
-		;const t=e.getAttribute("data-zoom-mode");let r="eu"===t?e.getAttribute("data-src-eu"):e.getAttribute("data-src-hr");if(l()){
+		}function n(e,t){document.addEventListener(e,e=>t(e.detail))}function o(e,t={},r=[]){const a=document.createElement(e)
+		;for(const[e,r]of Object.entries(t))null!=r&&!1!==r&&("text"===e?a.textContent=String(r):"html"===e?a.innerHTML=String(r):a.setAttribute(e,String(r)))
+		;for(const e of r)e&&a.appendChild(e);return a}function i(e){const t=()=>{try{e()}catch(e){reportError(e)}}
+		;"loading"===document.readyState?document.addEventListener("DOMContentLoaded",t):t()}function s(e,t=document){
+		return[...t.querySelectorAll(e)]}function l(e,t=document){return t.querySelector(e)}
+		var c="1"===new URLSearchParams(window.location.search).get("debug");function d(...e){c&&console.log(...e)}
+		var m=window.matchMedia("(min-width: 801px) and (hover: hover) and (pointer: fine)");function p(){return window.innerWidth<800}var h=0
+		;function u(e=!1){(e||window.innerWidth!==h)&&(h=window.innerWidth,s("iframe[data-zoom-hr-desktop]").forEach(e=>f(e)))}function w(e){
+		return document.getElementById(e)}function f(e){d(`Updating iframe src for ${e.id}`);const t=e.getAttribute("data-zoom-mode")
+		;let r="eu"===t?e.getAttribute("data-src-eu"):e.getAttribute("data-src-hr");if(p()){
 		const a="eu"===t?"data-zoom-eu-desktop":"data-zoom-hr-desktop",n="eu"===t?"data-zoom-eu-mobile":"data-zoom-hr-mobile"
-		;r=r.replace(e.getAttribute(a),e.getAttribute(n))}e.src=r}var p={hidden:"[X]",exit:"[X]",reset:"[R]",fullscreen:"[R]"};function h(e){
-		return document.querySelector(`a[data-frame-id="${e}"]`)}function u(e,t){const r=h(e);r&&(i(`gate ${e}: ${t}`),r.dataset.state=t,
-		r.textContent=p[t],"hidden"===t?r.style.display="none":r.style.removeProperty("display"))}function w(e){
-		return document.getElementById(e).parentElement.querySelector(".overlay")}function g(e){w(e).style.display="none",u(e,"exit")}
-		function f(e,t){const r="hr"===t.getAttribute("data-mode")?"eu":"hr",a=document.getElementById(e);a.setAttribute("data-zoom-mode",r),m(a),
-		t.setAttribute("data-mode",r),t.textContent="hr"===r?"[HR]":"[EU]","reset"===function(e){const t=h(e)
-		;return t?t.dataset.state||"hidden":null}(e)&&u(e,"hidden")}var v=new WeakMap;function y(e){e.classList.remove("fullscreen")
+		;r=r.replace(e.getAttribute(a),e.getAttribute(n))}e.src=r}var g={hidden:"[X]",exit:"[X]",reset:"[R]",fullscreen:"[R]"};function v(e){
+		return document.querySelector(`a[data-frame-id="${e}"]`)}function y(e,t){const r=v(e);r&&(d(`gate ${e}: ${t}`),r.dataset.state=t,
+		r.textContent=g[t],"hidden"===t?r.style.display="none":r.style.removeProperty("display"))}function k(e){
+		return document.getElementById(e).parentElement.querySelector(".overlay")}function b(e){k(e).style.display="none",y(e,"exit")}
+		function E(e,t){const r="hr"===t.getAttribute("data-mode")?"eu":"hr",a=w(e);a.setAttribute("data-zoom-mode",r),f(a),
+		t.setAttribute("data-mode",r),t.textContent="hr"===r?"[HR]":"[EU]","reset"===function(e){const t=v(e)
+		;return t?t.dataset.state||"hidden":null}(e)&&y(e,"hidden")}var x=new WeakMap;function z(e){e.classList.remove("fullscreen")
 		;const t=e.previousElementSibling;t.classList.remove("fullscreen");const n=t.querySelector(".fs-btn");n&&(n.textContent="[ ]"),
-		[...document.querySelectorAll(".if1.fullscreen")].some(e=>!e.closest(".map-block.snapped"))||document.body.classList.remove("fs-lock"),a(r)
-		;const o=!1===v.get(e);v.delete(e);const i=e.querySelector(".overlay");i&&(o?i.style.display="none":i.removeAttribute("style")),
-		u(e.querySelector("iframe").id,o?"exit":"reset")}var k=new WeakMap;function b(){const e=l();document.querySelectorAll(".hint").forEach(t=>{
+		s(".if1.fullscreen").some(e=>!e.closest(".map-block.snapped"))||document.body.classList.remove("fs-lock"),a(r);const o=!1===x.get(e)
+		;x.delete(e);const i=l(".overlay",e);i&&(o?i.style.display="none":i.removeAttribute("style")),
+		y(e.querySelector("iframe").id,o?"exit":"reset")}var A=new WeakMap;function S(){const e=p();s(".hint").forEach(t=>{
 		t.textContent=e?"Dvostruki dodir za pristup interaktivnoj karti":"Dvostruki klik za pristup interaktivnoj karti"})}
-		var E="mapConfig",x="showLinksBottom",z=new Map;function A(e){try{return JSON.parse(z.has(e)?z.get(e):localStorage.getItem(e))}catch{
-		return null}}function S(e,t){const r=JSON.stringify(t);try{localStorage.setItem(e,r),z.delete(e)}catch{z.set(e,r)}}function L(e){
-		const t=document.getElementById(e);t&&t.scrollIntoView({behavior:"smooth",block:"start"})}function j(e){
+		var L="mapConfig",j="showLinksBottom",R=new Map;function H(e){try{return JSON.parse(R.has(e)?R.get(e):localStorage.getItem(e))}catch{
+		return null}}function M(e,t){const r=JSON.stringify(t);try{localStorage.setItem(e,r),R.delete(e)}catch{R.set(e,r)}}function _(e){
+		const t=document.getElementById(e);t&&t.scrollIntoView({behavior:"smooth",block:"start"})}function D(e){
 		const t=e.scrollWidth-e.clientWidth,r=e.scrollLeft;e.classList.toggle("can-scroll-left",r>1),
-		e.classList.toggle("can-scroll-right",t>1&&r<t-1)}function R(){document.querySelectorAll(".links-bottom").forEach(j)}var H=0,M=0
-		;function _(e,t){
+		e.classList.toggle("can-scroll-right",t>1&&r<t-1)}function C(){s(".links-bottom").forEach(D)}var W=0,V=0;function F(e,t){
 		const r=e.getAttribute("data-slideshow-id"),a=e.querySelectorAll(".slide"),n=document.querySelectorAll(`.indicators-container[data-slideshow-id="${r}"] .indicator`)
 		;let o=t;o>a.length&&(o=1),o<1&&(o=a.length),e.setAttribute("data-current-slide",o),a.forEach(e=>e.classList.remove("active")),
 		a[o-1].classList.add("active"),n.forEach(e=>e.classList.remove("active")),n[o-1].classList.add("active"),function(e){
 		if(!e.hasAttribute("data-dynamic-width"))return
-		;const t=e.getAttribute("data-slideshow-id"),r=document.querySelector(`.indicators-container[data-slideshow-id='${t}']`),a=e.querySelector(".slide.active .placeholder")
-		;if(!a)return;e.style.maxWidth=a.style.maxWidth,r.style.maxWidth=a.style.maxWidth}(e)}function D(){
-		document.querySelectorAll(".slideshow:not([data-swipe])").forEach(e=>{e.setAttribute("data-swipe",""),e.querySelectorAll("img").forEach(e=>{
+		;const t=e.getAttribute("data-slideshow-id"),r=l(`.indicators-container[data-slideshow-id='${t}']`),a=l(".slide.active .placeholder",e)
+		;if(!a)return;e.style.maxWidth=a.style.maxWidth,r.style.maxWidth=a.style.maxWidth}(e)}function T(){
+		s(".slideshow:not([data-swipe])").forEach(e=>{e.setAttribute("data-swipe",""),e.querySelectorAll("img").forEach(e=>{
 		e.addEventListener("dragstart",e=>e.preventDefault())}),function(e){let t=null,r=null,a=!1;e.addEventListener("touchstart",e=>{a=!1,
 		e.touches.length>1||(t=r={x:e.touches[0].clientX,y:e.touches[0].clientY})}),e.addEventListener("touchmove",e=>{
 		e.touches.length>1||!t?a=!1:(r={x:e.touches[0].clientX,y:e.touches[0].clientY},Math.abs(r.x-t.x)>Math.abs(r.y-t.y)&&(a=!0))}),
-		e.addEventListener("touchend",()=>{a&&C(e,t,r)})}(e),function(e){e.querySelectorAll(".prev, .next").forEach(e=>{let t=!1
+		e.addEventListener("touchend",()=>{a&&I(e,t,r)})}(e),function(e){e.querySelectorAll(".prev, .next").forEach(e=>{let t=!1
 		;e.addEventListener("touchstart",e=>{e.touches.length>1&&(t=!0)}),e.addEventListener("touchend",e=>{t&&e.preventDefault(),
 		0===e.touches.length&&(t=!1)})})}(e),function(e){let t=null;e.addEventListener("mousedown",e=>{t={x:e.clientX,y:e.clientY}}),
-		e.addEventListener("mouseup",r=>{t&&(C(e,t,{x:r.clientX,y:r.clientY}),t=null)}),e.addEventListener("mouseleave",()=>{t=null})}(e)})}
-		function C(e,t,r){Math.abs(r.x-t.x)>Math.abs(r.y-t.y)&&function(e,t,r){const a=r-t;if(Math.abs(a)>50){
-		const t=parseInt(e.getAttribute("data-current-slide"));_(e,t+(a>0?-1:1))}}(e,t.x,r.x)}function W(){
-		document.querySelectorAll("img.lazy").forEach(e=>{e.src=e.getAttribute("data-src"),e.classList.remove("lazy")}),D(),d(!0),
-		document.querySelectorAll(".if1 .overlay:not([data-tap])").forEach(e=>{e.setAttribute("data-tap","");const t=e.dataset.frameId;let r=0,a=!1
-		;e.addEventListener("dblclick",()=>g(t)),e.addEventListener("touchstart",e=>{e.touches.length>1&&(a=!0)}),e.addEventListener("touchend",e=>{
-		if(a)return void(0===e.touches.length&&(a=!1,r=0));const n=(new Date).getTime(),o=n-r;o>0&&o<200&&(g(t),e.preventDefault()),r=n})
+		e.addEventListener("mouseup",r=>{t&&(I(e,t,{x:r.clientX,y:r.clientY}),t=null)}),e.addEventListener("mouseleave",()=>{t=null})}(e)})}
+		function I(e,t,r){Math.abs(r.x-t.x)>Math.abs(r.y-t.y)&&function(e,t,r){const a=r-t;if(Math.abs(a)>50){
+		const t=parseInt(e.getAttribute("data-current-slide"));F(e,t+(a>0?-1:1))}}(e,t.x,r.x)}function B(){s("img.lazy").forEach(e=>{
+		e.src=e.getAttribute("data-src"),e.classList.remove("lazy")}),T(),u(!0),s(".if1 .overlay:not([data-tap])").forEach(e=>{
+		e.setAttribute("data-tap","");const t=e.dataset.frameId;let r=0,a=!1;e.addEventListener("dblclick",()=>b(t)),
+		e.addEventListener("touchstart",e=>{e.touches.length>1&&(a=!0)}),e.addEventListener("touchend",e=>{
+		if(a)return void(0===e.touches.length&&(a=!1,r=0));const n=(new Date).getTime(),o=n-r;o>0&&o<200&&(b(t),e.preventDefault()),r=n})
 		;const n=e.querySelector(".hint");let o=0,i=0;e.addEventListener("touchstart",e=>{1===e.touches.length&&(i=e.touches[0].clientX,
 		o=e.touches[0].clientY)}),e.addEventListener("touchend",e=>{if(!n)return
 		;const t=Math.abs(e.changedTouches[0].clientX-i),r=Math.abs(e.changedTouches[0].clientY-o);t<10&&r<10&&(n.style.opacity="0.6",
-		clearTimeout(k.get(n)),k.set(n,setTimeout(()=>n.style.removeProperty("opacity"),2e3)))})}),b(),
-		document.querySelectorAll(".links-bottom").forEach(e=>{e.addEventListener("scroll",()=>j(e),{passive:!0})}),R(),function(){
-		const e=document.querySelectorAll("img"),t=document.querySelector(".progress-bar"),r=document.querySelector(".progress-container");let a=0
-		;const n=++H;if(clearTimeout(M),t.style.width="0",r.style.removeProperty("display"),0===e.length)return void(r.style.display="none")
-		;const o=()=>{if(H!==n)return;const o=a/e.length*100;t.style.width=o+"%",a===e.length&&(M=setTimeout(()=>{r.style.display="none"},500))}
-		;e.forEach(e=>{e.addEventListener("load",()=>{a++,o()}),e.addEventListener("error",()=>{a++,i(`Error loading image: ${e.src}`),
-		e.removeAttribute("src"),o()}),e.complete&&e.dispatchEvent(new Event("load"))})}()}var V=0;function F(e){
-		const t=e&&e.maps&&"object"==typeof e.maps?e.maps:{};return new Set(Object.keys(t).filter(e=>t[e]&&!1===t[e].enabled))}var T=new Set
-		;var I=[{text:"Windy",href:"https://www.windy.com/-Weather-radar-radar?radar,44.5,16.5,7"},{text:"Zoom Earth",
+		clearTimeout(A.get(n)),A.set(n,setTimeout(()=>n.style.removeProperty("opacity"),2e3)))})}),S(),s(".links-bottom").forEach(e=>{
+		e.addEventListener("scroll",()=>D(e),{passive:!0})}),C(),function(){
+		const e=document.querySelectorAll("img"),t=l(".progress-bar"),r=l(".progress-container");let a=0;const n=++W;if(clearTimeout(V),
+		t.style.width="0",r.style.removeProperty("display"),0===e.length)return void(r.style.display="none");const o=()=>{if(W!==n)return
+		;const o=a/e.length*100;t.style.width=o+"%",a===e.length&&(V=setTimeout(()=>{r.style.display="none"},500))};e.forEach(e=>{
+		e.addEventListener("load",()=>{a++,o()}),e.addEventListener("error",()=>{a++,d(`Error loading image: ${e.src}`),e.removeAttribute("src"),o()
+		}),e.complete&&e.dispatchEvent(new Event("load"))})}()}var O=0;function P(e){const t=e&&e.maps&&"object"==typeof e.maps?e.maps:{}
+		;return new Set(Object.keys(t).filter(e=>t[e]&&!1===t[e].enabled))}var Z=new Set;var U=[{text:"Windy",
+		href:"https://www.windy.com/-Weather-radar-radar?radar,44.5,16.5,7"},{text:"Zoom Earth",
 		href:"https://zoom.earth/maps/radar/#view=44.5,16.5,7z"},{text:"meteoblue",
 		href:"https://www.meteoblue.com/en/weather/maps/croatia_croatia_3202326#map=radar~radarMapEU~none~none~none&coords=6/44.5/16.5"},{
 		text:"Rain Viewer",href:"https://www.rainviewer.com/map.html?loc=44.5,16.5,6&oCS=1&c=5&lm=1&layer=radar&sm=1&sn=2&ts=1"},{text:"Ventusky",
@@ -309,36 +313,36 @@
 		href:"https://www.vrijemeradar.hr/vremenski-radar/zagreb/18138691?center=44.5,16.5&zoom=7&layer=wr&tz=Europe%2FZagreb"},{text:"Sat24",
 		href:"https://www.sat24.com/en-gb/country/hr/hd#selectedLayer=euRadarSat"},{text:"I'm Weather",
 		href:"https://imweather.com/?model=nowcast&run=&member=&element=radsat&level=&lat=44.5000&lng=16.5000&z=6"},{text:"Időkép",
-		href:"https://www.idokep.eu/adria"}],q=[{text:"Windy",href:"https://www.windy.com/-Weather-radar-radar?radar,47.5,17.5,5"},{
+		href:"https://www.idokep.eu/adria"}],N=[{text:"Windy",href:"https://www.windy.com/-Weather-radar-radar?radar,47.5,17.5,5"},{
 		text:"Zoom Earth",href:"https://zoom.earth/maps/radar/#view=47.5,17.5,5z"},{text:"meteoblue",
 		href:"https://www.meteoblue.com/en/weather/maps/croatia_croatia_3202326#map=radar~radarMapEU~none~none~none&coords=4/47.5/17.5"},{
 		text:"Rain Viewer",href:"https://www.rainviewer.com/map.html?loc=47.5,17.5,4&oCS=1&c=5&lm=1&layer=radar&sm=1&sn=2&ts=1"},{text:"Ventusky",
 		href:"https://www.ventusky.com/?p=47.5;17.5;4&l=radar&w=off"},{text:"Vrijeme&Radar",
 		href:"https://www.vrijemeradar.hr/vremenski-radar/zagreb/18138691?center=47.5,15.5&zoom=5&layer=wr&tz=Europe%2FZagreb"},{text:"Sat24",
 		href:"https://www.sat24.com/en-gb/continent/eu/hd#selectedLayer=euRadarSat"},{text:"I'm Weather",
-		href:"https://imweather.com/?model=nowcast&run=&member=&element=radsat&level=&lat=47.5000&lng=17.5000&z=4.2"}],B=[{text:"Windy",
+		href:"https://imweather.com/?model=nowcast&run=&member=&element=radsat&level=&lat=47.5000&lng=17.5000&z=4.2"}],q=[{text:"Windy",
 		href:"https://www.windy.com/-Satellite-satellite?satellite,47.5,17.5,5"},{text:"Zoom Earth",
 		href:"https://zoom.earth/maps/satellite/#view=47.5,17.5,5z"},{text:"meteoblue",
 		href:"https://www.meteoblue.com/en/weather/maps/croatia_croatia_3202326#map=satellite~radar~none~none~none&coords=4/47.5/17.5"},{
 		text:"Ventusky",href:"https://www.ventusky.com/?p=47.5;17.5;4&l=satellite&w=off"},{text:"Sat24",
 		href:"https://www.sat24.com/en-gb/continent/eu/hd"},{text:"I'm Weather",
 		href:"https://imweather.com/?model=nowcast&element=satellite&run=&member=&level=&lat=47.5000&lng=17.5000&z=4.2"},{text:"Wetterzentrale",
-		href:"https://www.wetterzentrale.de/en/reanalysis.php?map=1&model=sat&var=404&nmaps=32"}],O=[{text:"Windy",
+		href:"https://www.wetterzentrale.de/en/reanalysis.php?map=1&model=sat&var=404&nmaps=32"}],X=[{text:"Windy",
 		href:"https://www.windy.com/-Temperature-temp?temp,44.5,16.5,7"},{text:"Zoom Earth",
 		href:"https://zoom.earth/maps/temperature/#view=44.5,16.5,7z/model=icon"},{text:"meteoblue",
 		href:"https://www.meteoblue.com/en/weather/maps/croatia_croatia_3202326#map=temperature~daily-max~auto~2%20m%20above%20gnd~none&coords=6/44.5/16.5"
 		},{text:"Ventusky",href:"https://www.ventusky.com/?p=44.49;16.50;6&l=temperature-2m&w=off"},{text:"Vrijeme&Radar",
 		href:"https://www.vrijemeradar.hr/vremenski-radar/zagreb/18138691?center=44.5,16.5&zoom=7&layer=tr&tz=Europe%2FZagreb"},{text:"Meteoradar",
 		href:"https://www.meteoradar.co.uk/en-gb/country/hr/maps/temperature"},{text:"Meteociel",
-		href:"https://www.meteociel.fr/observations-meteo/temperatures.php?region=it"},{text:"Pljusak",href:"https://pljusak.com/karta.php"}],P=[{
+		href:"https://www.meteociel.fr/observations-meteo/temperatures.php?region=it"},{text:"Pljusak",href:"https://pljusak.com/karta.php"}],Q=[{
 		text:"ESSL",href:"https://weather.essl.org/storm/"},{text:"ASTORP",href:"https://rawinsonde.com/ASTORP/ESTOFEX.html"},{text:"ESTOFEX",
-		href:"https://www.estofex.org"},{text:"ESWD",href:"https://www.eswd.eu"}];function Z(e,t){return e.filter(e=>e.text!==t)}function U(e,t){
+		href:"https://www.estofex.org"},{text:"ESWD",href:"https://www.eswd.eu"}];function $(e,t){return e.filter(e=>e.text!==t)}function Y(e,t){
 		return{id:`dhmz-${e}`,category:"radar",name:`DHMZ | MRC ${t}`,type:"slideshow",
 		titleHref:`https://meteo.hr/podaci.php?section=podaci_mjerenja&param=radari&el=${e}&acto=anim`,maxWidth:720,aspect:"720 / 751",
-		slides:[`https://vrijeme.hr/anim_${e}.gif`,`https://vrijeme.hr/${e}-stat.png`]}}var N=[{id:"neverin-radar-hr",category:"radar",
+		slides:[`https://vrijeme.hr/anim_${e}.gif`,`https://vrijeme.hr/${e}-stat.png`]}}var K=[{id:"neverin-radar-hr",category:"radar",
 		name:"Neverin | Radar | Hrvatska",type:"slideshow",titleHref:"https://www.neverin.hr/radar/",aspect:"880 / 640",startSlide:2,
 		slides:["https://maps.neverin.hr/radar/latest/hr/latest.webp","https://maps.neverin.hr/radar/latest/hr/anim.webp","https://maps.neverin.hr/radar/latest/hr/anim_6h.webp"],
-		links:I},{id:"neverin-satelit-hr",category:"satelit",name:"Neverin | Satelit | Hrvatska",type:"slideshow",
+		links:U},{id:"neverin-satelit-hr",category:"satelit",name:"Neverin | Satelit | Hrvatska",type:"slideshow",
 		titleHref:"https://www.neverin.hr/satelit/",aspect:"880 / 640",startSlide:2,
 		slides:["https://maps.neverin.hr/satellite/rgb_geocolour/latest/hr/latest.webp","https://maps.neverin.hr/satellite/rgb_geocolour/latest/hr/anim.webp","https://maps.neverin.hr/satellite/rgb_geocolour/latest/hr/anim_6h.webp"],
 		links:[{text:"Windy",href:"https://www.windy.com/-Satellite-satellite?satellite,44.5,16.5,7"},{text:"Zoom Earth",
@@ -349,21 +353,21 @@
 		href:"https://imweather.com/?model=nowcast&element=satellite&run=&member=&level=&lat=44.5000&lng=16.5000&z=6"}]},{id:"neverin-radar-eu",
 		category:"radar",name:"Neverin | Radar | Europa",type:"slideshow",titleHref:"https://www.neverin.hr/radar/",aspect:"880 / 640",startSlide:2,
 		slides:["https://maps.neverin.hr/radar/latest/eu2/latest.webp","https://maps.neverin.hr/radar/latest/eu2/anim.webp","https://maps.neverin.hr/radar/latest/eu2/anim_6h.webp"],
-		links:q},{id:"neverin-satelit-eu",category:"satelit",name:"Neverin | Satelit | Europa",type:"slideshow",
+		links:N},{id:"neverin-satelit-eu",category:"satelit",name:"Neverin | Satelit | Europa",type:"slideshow",
 		titleHref:"https://www.neverin.hr/satelit/",aspect:"880 / 640",startSlide:2,
 		slides:["https://maps.neverin.hr/satellite/rgb_geocolour/latest/eu2/latest.webp","https://maps.neverin.hr/satellite/rgb_geocolour/latest/eu2/anim.webp","https://maps.neverin.hr/satellite/rgb_geocolour/latest/eu2/anim_6h.webp"],
-		links:B},{id:"windy",category:"radar",name:"Windy",type:"iframe",frameId:"windy",
+		links:q},{id:"windy",category:"radar",name:"Windy",type:"iframe",frameId:"windy",
 		titleHref:"https://www.windy.com/-Radar-lightning-radar?radar,44.5,16.5,7",
 		srcHr:"https://embed.windy.com/embed2.html?lat=44.5&lon=16.56&zoom=7&level=surface&overlay=radar&menu=&message=true&marker=&calendar=&pressure=&type=map&location=coordinates&detail=&detailLat=45.798&detailLon=15.936&metricWind=m%2Fs&metricTemp=%C2%B0C&radarRange=-1",
 		zoomHrDesktop:"&zoom=7",zoomHrMobile:"&zoom=6",
 		srcEu:"https://embed.windy.com/embed2.html?lat=48.0&lon=10.00&zoom=5&level=surface&overlay=radar&menu=&message=true&marker=&calendar=&pressure=&type=map&location=coordinates&detail=&detailLat=45.798&detailLon=15.936&metricWind=m%2Fs&metricTemp=%C2%B0C&radarRange=-1",
-		zoomEuDesktop:"&zoom=5",zoomEuMobile:"&zoom=3",links:Z(I,"Windy")},{id:"dhmz-radar",category:"radar",name:"DHMZ | Radar | Hrvatska",
+		zoomEuDesktop:"&zoom=5",zoomEuMobile:"&zoom=3",links:$(U,"Windy")},{id:"dhmz-radar",category:"radar",name:"DHMZ | Radar | Hrvatska",
 		type:"slideshow",titleHref:"https://meteo.hr/podaci.php?section=podaci_mjerenja&param=radari&el=kompozit&acto=anim",maxWidth:720,
-		aspect:"720 / 751",slides:["https://vrijeme.hr/anim_kompozit.gif","https://vrijeme.hr/kompozit-stat.png"],links:I},{id:"meteociel-temp",
+		aspect:"720 / 751",slides:["https://vrijeme.hr/anim_kompozit.gif","https://vrijeme.hr/kompozit-stat.png"],links:U},{id:"meteociel-temp",
 		category:"temperatura",name:"Meteociel.fr | Temperatura",type:"slideshow",maxWidth:768,slides:[{title:{text:"Meteociel.fr | Temperatura",
 		href:"https://www.meteociel.fr/observations-meteo/temperatures.php?region=it"},img:"https://www.meteociel.fr/cartes_obs/temp_it.png",
 		aspect:"1"},{title:{text:"Meteociel.fr | Temperatura",href:"https://www.meteociel.fr/observations-meteo/temperatures.php?region=eur2"},
-		img:"https://www.meteociel.com/cartes_obs/temp_eur2.png",aspect:"1"}],links:Z(O,"Meteociel")},{id:"blitzortung",category:"munje",
+		img:"https://www.meteociel.com/cartes_obs/temp_eur2.png",aspect:"1"}],links:$(X,"Meteociel")},{id:"blitzortung",category:"munje",
 		name:"Blitzortung.org | Munje",type:"iframe",frameId:"blitzortung",titleHref:"https://map.blitzortung.org/#6/44.5/16.5",
 		srcHr:"https://map.blitzortung.org/index.php?interactive=1&NavigationControl=1&FullScreenControl=0&Cookies=0&InfoDiv=0&MenuButtonDiv=0&ScaleControl=0&CirclesRangeValue=1&LinksCheckboxChecked=0&LinksRangeValue=0&MapStyle=1&MapStyleRangeValue=3&Advertisment=0#6/44.5/16.5",
 		zoomHrDesktop:"#6/",zoomHrMobile:"#5/",
@@ -373,20 +377,20 @@
 		text:"Neverin",href:"https://www.neverin.hr/munje/"}]},{id:"essl",category:"nevrijeme",name:"ESSL | Prognoza nevremena",type:"slideshow",
 		titleHref:"https://stormforecast.eu",maxWidth:900,aspect:"900 / 600",startSlide:2,
 		slides:["https://meteo-data.jurakovic.workers.dev/essl/img1.png","https://meteo-data.jurakovic.workers.dev/essl/img2.png","https://meteo-data.jurakovic.workers.dev/essl/img3.png"],
-		links:Z(P,"ESSL")},{id:"astorp",category:"nevrijeme",name:"ASTORP | Prognoza nevremena",type:"slideshow",
+		links:$(Q,"ESSL")},{id:"astorp",category:"nevrijeme",name:"ASTORP | Prognoza nevremena",type:"slideshow",
 		titleHref:"https://rawinsonde.com/ASTORP/ESTOFEX.html",aspect:"1048 / 850",
 		slides:["https://rawinsonde.com/ASTORP/Results/ESTOFEX_DAY_1.jpg","https://rawinsonde.com/ASTORP/Results/ESTOFEX_DAY_2.jpg","https://rawinsonde.com/ASTORP/Results/ESTOFEX_DAY_3.jpg","https://rawinsonde.com/ASTORP/Results/ESTOFEX_DAY_4.jpg","https://rawinsonde.com/ASTORP/Results/ESTOFEX_DAY_5.jpg","https://rawinsonde.com/ASTORP/Results/ESTOFEX_DAY_6.jpg","https://rawinsonde.com/ASTORP/Results/ESTOFEX_DAY_7.jpg"],
-		links:Z(P,"ASTORP")},{id:"estofex",category:"nevrijeme",name:"ESTOFEX | Prognoza nevremena",type:"slideshow",
+		links:$(Q,"ASTORP")},{id:"estofex",category:"nevrijeme",name:"ESTOFEX | Prognoza nevremena",type:"slideshow",
 		titleHref:"https://www.estofex.org",maxWidth:800,aspect:"1",
 		slides:["https://meteo-data.jurakovic.workers.dev/estofex/img1.png","https://meteo-data.jurakovic.workers.dev/estofex/img2.png"],
-		links:Z(P,"ESTOFEX")},{id:"eumetnet",category:"radar",name:"EUMETNET",type:"iframe-basic",
+		links:$(Q,"ESTOFEX")},{id:"eumetnet",category:"radar",name:"EUMETNET",type:"iframe-basic",
 		titleHref:"https://www.eumetnet.eu/observations/opera-radar-animation/",src:"https://cdn.fmi.fi/demos/eumetnet-web-site-radar-animator/",
-		links:q},{id:"meteociel-satelit",category:"satelit",name:"Meteociel.fr | Satelit",type:"slideshow",maxWidth:768,slides:[{title:{
+		links:N},{id:"meteociel-satelit",category:"satelit",name:"Meteociel.fr | Satelit",type:"slideshow",maxWidth:768,slides:[{title:{
 		text:"Meteociel.fr | Satelit",
 		href:"https://www.meteociel.fr/observations-meteo/satellite.php?mode=animation-infrarouge-noir-et-blanc-hd-mtg"},
 		img:"https://modeles20.meteociel.fr/satellite/animsatirmtgeu.gif",aspect:"1"},{title:{text:"Meteociel.fr | Satelit",
 		href:"https://www.meteociel.fr/observations-meteo/satellite.php?mode=infrarouge-noir-et-blanc-hd-mtg"},
-		img:"https://modeles20.meteociel.fr/satellite/latestsatirmtgeu.png",aspect:"1"}],links:B},{id:"chmi-sinopticka",category:"sinoptika",
+		img:"https://modeles20.meteociel.fr/satellite/latestsatirmtgeu.png",aspect:"1"}],links:q},{id:"chmi-sinopticka",category:"sinoptika",
 		name:"ČHMÚ | Sinoptička karta",type:"slideshow",maxWidth:760,dynamicWidth:!0,slides:[{title:{
 		href:"https://intranet.chmi.cz/aktualni-situace/aktualni-stav-pocasi/evropa/synopticka-situace"},
 		img:"https://intranet.chmi.cz/files/portal/docs/meteo/om/evropa/analyza.gif",aspect:"760 / 492"},{title:{
@@ -415,25 +419,25 @@
 		name:"Ventusky",type:"iframe",frameId:"ventusky",scaled:!0,loading:"eager",
 		titleHref:"https://www.ventusky.com/?p=44.5;16.5;6&l=radar&w=off",srcHr:"https://embed.ventusky.com/?p=44.5;16.5;6&l=radar&w=off",
 		zoomHrDesktop:";6&",zoomHrMobile:";6&",srcEu:"https://embed.ventusky.com/?p=48.0;10.0;4&l=radar&w=off",zoomEuDesktop:";4&",
-		zoomEuMobile:";3&",links:Z(I,"Ventusky")},{id:"rainviewer",category:"radar",name:"Rain Viewer",type:"iframe",frameId:"rainViewer",scaled:!0,
+		zoomEuMobile:";3&",links:$(U,"Ventusky")},{id:"rainviewer",category:"radar",name:"Rain Viewer",type:"iframe",frameId:"rainViewer",scaled:!0,
 		titleHref:"https://www.rainviewer.com/map.html?loc=44.5,16.5,6&oCS=1&c=5&lm=1&layer=radar&sm=1&sn=2&ts=1",
 		srcHr:"https://www.rainviewer.com/map.html?loc=44.8,16.5,6.3&oCS=1&c=5&lm=1&layer=radar&sm=1&sn=2&ts=1",zoomHrDesktop:",6.3&",
 		zoomHrMobile:",5.8&",srcEu:"https://www.rainviewer.com/map.html?loc=48.0,10.0,4.0&oCS=1&c=5&lm=1&layer=radar&sm=1&sn=2&ts=1",
-		zoomEuDesktop:",4.0&",zoomEuMobile:",3.2&",links:Z(I,"Rain Viewer")},{id:"weatherandradar",category:"radar",name:"Vrijeme&Radar",
+		zoomEuDesktop:",4.0&",zoomEuMobile:",3.2&",links:$(U,"Rain Viewer")},{id:"weatherandradar",category:"radar",name:"Vrijeme&Radar",
 		type:"iframe",frameId:"weatherAndRadar",scaled:!0,
 		titleHref:"https://www.vrijemeradar.hr/vremenski-radar/zagreb/18138691?center=44.5,16.5&zoom=7&layer=wr&tz=Europe%2FZagreb",
 		srcHr:"https://radar.wo-cloud.com/pwa/?center=44.5,16.5&zoom=7.2&tz=Europe/Zagreb&tf=HH:mm&tempunit=celsius&windunit=kph&showShareButton=false&lang=en-US&placemarkName=Zagreb&desktop=true&fadeTop=true",
 		zoomHrDesktop:"&zoom=7.2",zoomHrMobile:"&zoom=6.8",
 		srcEu:"https://radar.wo-cloud.com/pwa/?center=48.0,10.0&zoom=5.0&tz=Europe/Zagreb&tf=HH:mm&tempunit=celsius&windunit=kph&showShareButton=false&lang=en-US&placemarkName=Zagreb&desktop=true&fadeTop=true",
-		zoomEuDesktop:"&zoom=5.0",zoomEuMobile:"&zoom=4.0",links:Z(I,"Vrijeme&Radar")},{id:"meteo-si",category:"radar",name:"meteo.si",
+		zoomEuDesktop:"&zoom=5.0",zoomEuMobile:"&zoom=4.0",links:$(U,"Vrijeme&Radar")},{id:"meteo-si",category:"radar",name:"meteo.si",
 		type:"slideshow",titleHref:"https://meteo.arso.gov.si/met/sl/weather/observ/radar/",maxWidth:821,aspect:"821 / 660",
 		slides:["https://meteo.arso.gov.si/uploads/probase/www/observ/radar/si0-rm-anim.gif?nocache","https://meteo.arso.gov.si/uploads/probase/www/observ/radar/si0-rm.gif?nocache"],
-		links:I},{id:"idokep-radar-eu",category:"radar",name:"Időkép | Radar | Europa",type:"image",titleHref:"https://www.idokep.eu/ceu/radar",
-		maxWidth:840,aspect:"840 / 600",img:"https://www.idokep.eu/terkep/eu/radar.gif",links:q},{id:"idokep-satelit-eu",category:"satelit",
+		links:U},{id:"idokep-radar-eu",category:"radar",name:"Időkép | Radar | Europa",type:"image",titleHref:"https://www.idokep.eu/ceu/radar",
+		maxWidth:840,aspect:"840 / 600",img:"https://www.idokep.eu/terkep/eu/radar.gif",links:N},{id:"idokep-satelit-eu",category:"satelit",
 		name:"Időkép | Satelit | Europa",type:"video",titleHref:"https://www.idokep.hu/muhold",aspect:"1070 / 713",
 		src:"https://www.idokep.hu/radar/sat-eu.mp4",
 		backdrop:"data:image/jpeg;base64,/9j/4AAQSkZJRgABAQEAYABgAAD/2wBDAA0JCgsKCA0LCwsPDg0QFCEVFBISFCgdHhghMCoyMS8qLi00O0tANDhHOS0uQllCR05QVFVUMz9dY1xSYktTVFH/2wBDAQ4PDxQRFCcVFSdRNi42UVFRUVFRUVFRUVFRUVFRUVFRUVFRUVFRUVFRUVFRUVFRUVFRUVFRUVFRUVFRUVFRUVH/wAARCAArAEADASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9oADAMBAAIRAxEAPwBljPoksUEElnNNdFRuYRLgnufvdK1reHR5XKx20qjH3hEMfh81YmgR5hN2UB3MU4OSOK1rGdCGcrsEJHU85JNXzsjkibEIW0t1nk3FBjaAvzGp7u5huNPcSBDGM5IGQR7VkSXQkkhQuqgEuRuwcHnHuKgF5vJjlHlgJ/eyAST+uRUFjNbjhbSVSMboUP8ADjPI/n7e9YOl28+oRbLaGMeXkZZif0rbNkZ1MKTERFAH2nkMMFSD6g/yrQKC0sv3hKqgyzJwSPSjS2orFXTLF7ZZleMFnxuJIC4A6AVoLd2rMqNPGHz3HANZV1qiJuS3XCkgeY3zHp1rLjSaU7IkaRc8HZ+tZuaWhSRV0W6EeiSNISI97HjqRxwPrUltes7mWVwkbHJwOnpisC4l8pIrWNiNo+cH19DVmOOXcipISdu45rUR201zYGEec3y/dG3r0/Q1C1zYXLAxoc/x5XPGMAn1rmLaKdHk8wjBxgZ708aolm22OT94xIIAHyjuTn0qG3eyH0OzsonhgcRwMDuwD656tz29qpalLK141oD5keBuI4JA5wfSoLPWbSzELSSs8jJnezZVR6ZPrVa5v2/tQ3iL8zHofpUTmkkNK5v6Bp0ElqbmVY8lioHbGayNX1O5tr7bGvlhSOCOn+NWYdZj1CGC3s7SaKJZA87qQAvqc+9ZOqyreahIwY5VtrAnPAPGPanJ8sdCoW5veOKy4fIBJ6k1q6c4Vg0gPTj2rIikdhtLEgDIrd0hQ7fMM4Ga1ZmS3juUaKMOZDxkf41nrYXIlZhGgJQrhm4GeDXTQxo0XIzzViOCJraQlBkZqG3ayNVFPVmXpvhjV9T0hpo5VdWUKkbgLjBI4/AfrVe6uHs1jinLpPG4SdMcAAY9OM9fwre0+WWyvES3ldEjj+RdxIXLjOAa5Lxa7ya1PI7Es+/cc9cdKHFMjU1k1ZZLfyIJ08pRghDkE56mmzyzJE1xNOSsQycsTxXJaZzqNuhJ2tIoYZ6810Ws3Ev9nLFlSjNkgoDnr3xUOF3ZmkZaXP/Z",
-		links:B},{id:"istramet-munje",category:"munje",name:"Istramet | Munje",type:"image",titleHref:"https://www.istramet.hr/radari-munja/",
+		links:q},{id:"istramet-munje",category:"munje",name:"Istramet | Munje",type:"image",titleHref:"https://www.istramet.hr/radari-munja/",
 		maxWidth:804,aspect:"804 / 687",img:"https://www.istramet.hr/wp-content/themes/istramet/img/munje_hr.png",links:[{text:"Blitzortung.org",
 		href:"https://map.blitzortung.org/#6.5/44.5/16.5"},{text:"LightningMaps.org",
 		href:"https://www.lightningmaps.org/?lang=en#m=sen;t=3;s=200;o=0;b=0.00;ts=0;z=7;y=44.5;x=16.5;d=4;dl=6;dc=0;"},{text:"Neverin",
@@ -445,7 +449,7 @@
 		name:"Wetterzentrale | Temperatura",type:"image",
 		titleHref:"https://www.wetterzentrale.de/en/topkarten.php?map=17&model=ecm&var=5&run=6&time=0&lid=OP&h=1&mv=0&tr=1",aspect:"959 / 741",
 		img:"https://www.wetterzentrale.de/en/create_gif.php?model=ECM&member=OP&var=5&map=IT&run=06&speed=250&times=0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47",
-		alt:"Wetterzentrale Temperatura",links:O},{id:"dhmz-sinopticka",category:"sinoptika",name:"DHMZ | Sinoptička karta",type:"image",
+		alt:"Wetterzentrale Temperatura",links:X},{id:"dhmz-sinopticka",category:"sinoptika",name:"DHMZ | Sinoptička karta",type:"image",
 		titleHref:"https://meteo.hr/prognoze.php?section=prognoze_model&param=web_fronte_sutra12",maxWidth:720,aspect:"1",
 		img:"https://prognoza.hr/web_fronte_sutra12.jpg",links:[{text:"ČHMÚ",
 		href:"https://intranet.chmi.cz/aktualni-situace/aktualni-stav-pocasi/evropa/synopticka-situace"}]},{id:"dwd-sinopticka",
@@ -454,129 +458,124 @@
 		slides:["https://www.dwd.de/DWD/wetter/wv_spez/hobbymet/wetterkarten/ico_tkboden_na_v36.png","https://www.dwd.de/DWD/wetter/wv_spez/hobbymet/wetterkarten/ico_tkboden_na_036.png","https://www.dwd.de/DWD/wetter/wv_spez/hobbymet/wetterkarten/ico_tkboden_na_048.png","https://www.dwd.de/DWD/wetter/wv_spez/hobbymet/wetterkarten/ico_tkboden_na_060.png","https://www.dwd.de/DWD/wetter/wv_spez/hobbymet/wetterkarten/ico_tkboden_na_084.png","https://www.dwd.de/DWD/wetter/wv_spez/hobbymet/wetterkarten/ico_tkboden_na_108.png"],
 		links:[{text:"ČHMÚ",href:"https://intranet.chmi.cz/aktualni-situace/aktualni-stav-pocasi/evropa/synopticka-situace"},{text:"DHMZ",
 		href:"https://meteo.hr/prognoze.php?section=prognoze_model&param=web_fronte_sutra12"}]
-		},U("puntijarka","Puntijarka"),U("bilogora","Bilogora"),U("gradiste","Gradište"),U("goli","Goli"),U("debeljak","Debeljak"),U("uljenje","Uljenje")],X=new Map(N.map(e=>[e.id,e]))
-		;function Q(e){return X.get(e)||null}
-		var Y=["neverin-radar-hr","neverin-satelit-hr","neverin-radar-eu","neverin-satelit-eu","windy","dhmz-radar","meteociel-temp","blitzortung","essl","astorp","estofex","eumetnet","meteociel-satelit","dwd-sinopticka","neverin-kamera","meteoblue-prognoza"]
-		;function $(e,t={},r=[]){const a=document.createElement(e)
-		;for(const[e,r]of Object.entries(t))null!=r&&!1!==r&&("text"===e?a.textContent=r:"html"===e?a.innerHTML=r:a.setAttribute(e,r))
-		;for(const e of r)e&&a.appendChild(e);return a}function K(e){const t=()=>{try{e()}catch(e){reportError(e)}}
-		;"loading"===document.readyState?document.addEventListener("DOMContentLoaded",t):t()}var J={slideshow:{build:function(e,t,r={}){
-		const a=e.id+re(t),n=e.startSlide||1,o=e.slides.some(e=>e.title),i=$("div",{class:o?"slideshow":"slideshow placeholder",
-		"data-slideshow-id":a,"data-current-slide":n,"data-dynamic-width":e.dynamicWidth?"":void 0,
-		style:(ae(e)+(o?"":` aspect-ratio: ${e.aspect};`)).trim()||void 0});e.slides.forEach((t,a)=>{
-		const s=a===n-1,l=o?t.img:t,c=s||e.eagerSlides?$("img",{src:l}):$("img",{"data-src":l,class:"lazy"}),d=$("div",{
-		class:"slide fade"+(s?" active":"")});if(o){const a=t.maxWidth||e.maxWidth,n={text:t.title.text||e.name,href:t.title.href}
-		;d.appendChild(ne(n,{},e.titleHref?null:oe(r))),d.appendChild($("div",{class:"placeholder",
-		style:`${a?`max-width: ${a}px; `:""}aspect-ratio: ${t.aspect};`},[c]))}else d.appendChild(c);i.appendChild(d)});const s=$("a",{
-		class:"prev"+(o?" shorter":""),"data-action":"slide","data-step":"-1",html:"&#10094;"}),l=$("a",{class:"next"+(o?" shorter":""),
-		"data-action":"slide","data-step":"1",html:"&#10095;"});i.appendChild(s),i.appendChild(l);const c=$("div",{class:"indicators-container",
-		"data-slideshow-id":a,style:`${ae(e)} grid-template-columns: repeat(${e.slides.length}, 1fr);`.trim()});return e.slides.forEach((e,t)=>{
-		c.appendChild($("span",{class:"indicator"+(t===n-1?" active":"")}))}),[e.titleHref?ie(e,r):null,i,c]},freeAspect:!1,fullscreen:!1,reload:G},
-		image:{build:function(e,t,r={}){return[ie(e,r),$("div",{class:"placeholder",style:`${ae(e)} aspect-ratio: ${e.aspect};`.trim()},[$("img",{
-		src:e.img,alt:e.alt})])]},freeAspect:!1,fullscreen:!1,reload:G},video:{build:function(e,t,r={}){const a=$("video",{controls:""
-		},[$("source",{type:"video/mp4",src:e.src})]);a.muted=!0,a.autoplay=!0,a.loop=!0
-		;const n=`${ae(e)}${e.aspect?` aspect-ratio: ${e.aspect};`:""}`.trim();return[ie(e,r),$("div",{class:"placeholder",style:n||void 0
-		},[$("div",{class:"vid1"},[a])])]},freeAspect:!1,fullscreen:!1,reload:function(e){e.querySelectorAll("video").forEach(e=>{
-		e.querySelectorAll("source[src]").forEach(e=>{e.src=ee(e.getAttribute("src"))}),e.load()})}},iframe:{build:function(e,t,r={}){
-		const a=e.frameId+re(t),n=a[0].toUpperCase()+a.slice(1),o=$("a",{class:"left zoom-btn","data-mode":"hr","data-action":"zoom","data-frame":a,
-		text:"[HR]"}),i=$("a",{class:"fs-btn","data-action":"fullscreen","data-frame":a,text:"[ ]"}),s=$("div",{class:"radartitle"},[o,$("a",{
-		class:"center",href:e.titleHref,target:"_blank",rel:"nofollow",text:e.name}),$("span",{class:"right right-cluster"},[...oe(r,!0)||[],$("a",{
-		id:`reset${n}Frame`,"data-frame-id":a,"data-action":"gate",style:"display:none",text:"[X]"}),i])]),l=$("div",{class:"if1 placeholder"
-		},[$("iframe",{id:a,class:e.scaled?"scaled-iframe":void 0,loading:e.loading||"lazy",frameborder:"0","data-src-hr":e.srcHr,
+		},Y("puntijarka","Puntijarka"),Y("bilogora","Bilogora"),Y("gradiste","Gradište"),Y("goli","Goli"),Y("debeljak","Debeljak"),Y("uljenje","Uljenje")],J=new Map(K.map(e=>[e.id,e]))
+		;function G(e){return J.get(e)||null}
+		var ee=["neverin-radar-hr","neverin-satelit-hr","neverin-radar-eu","neverin-satelit-eu","windy","dhmz-radar","meteociel-temp","blitzortung","essl","astorp","estofex","eumetnet","meteociel-satelit","dwd-sinopticka","neverin-kamera","meteoblue-prognoza"],te={
+		slideshow:{build:function(e,t,r={}){const a=e.id+oe(t),n=e.startSlide||1,i=e.slides.some(e=>"string"!=typeof e),s=o("div",{
+		class:i?"slideshow":"slideshow placeholder","data-slideshow-id":a,"data-current-slide":n,"data-dynamic-width":e.dynamicWidth?"":void 0,
+		style:(ie(e)+(i?"":` aspect-ratio: ${e.aspect};`)).trim()||void 0});e.slides.forEach((t,a)=>{
+		const l=a===n-1,c=i?t:null,d=c?c.img:t,m=l||e.eagerSlides?o("img",{src:d}):o("img",{"data-src":d,class:"lazy"}),p=o("div",{
+		class:"slide fade"+(l?" active":"")});if(c){const t=c.maxWidth||e.maxWidth,a={text:c.title.text||e.name,href:c.title.href}
+		;p.appendChild(se(a,{},e.titleHref?null:le(r))),p.appendChild(o("div",{class:"placeholder",
+		style:`${t?`max-width: ${t}px; `:""}aspect-ratio: ${c.aspect};`},[m]))}else p.appendChild(m);s.appendChild(p)});const l=o("a",{
+		class:"prev"+(i?" shorter":""),"data-action":"slide","data-step":"-1",html:"&#10094;"}),c=o("a",{class:"next"+(i?" shorter":""),
+		"data-action":"slide","data-step":"1",html:"&#10095;"});s.appendChild(l),s.appendChild(c);const d=o("div",{class:"indicators-container",
+		"data-slideshow-id":a,style:`${ie(e)} grid-template-columns: repeat(${e.slides.length}, 1fr);`.trim()});return e.slides.forEach((e,t)=>{
+		d.appendChild(o("span",{class:"indicator"+(t===n-1?" active":"")}))}),[e.titleHref?ce(e,r):null,s,d]},freeAspect:!1,fullscreen:!1,reload:re
+		},image:{build:function(e,t,r={}){return[ce(e,r),o("div",{class:"placeholder",style:`${ie(e)} aspect-ratio: ${e.aspect};`.trim()},[o("img",{
+		src:e.img,alt:e.alt})])]},freeAspect:!1,fullscreen:!1,reload:re},video:{build:function(e,t,r={}){const a=o("video",{controls:""
+		},[o("source",{type:"video/mp4",src:e.src})]);a.muted=!0,a.autoplay=!0,a.loop=!0
+		;const n=`${ie(e)}${e.aspect?` aspect-ratio: ${e.aspect};`:""}`.trim();return[ce(e,r),o("div",{class:"placeholder",style:n||void 0
+		},[o("div",{class:"vid1"},[a])])]},freeAspect:!1,fullscreen:!1,reload:function(e){e.querySelectorAll("video").forEach(e=>{
+		e.querySelectorAll("source[src]").forEach(e=>{e.src=ae(e.getAttribute("src"))}),e.load()})}},iframe:{build:function(e,t,r={}){
+		const a=e.frameId+oe(t),n=a[0].toUpperCase()+a.slice(1),i=o("a",{class:"left zoom-btn","data-mode":"hr","data-action":"zoom","data-frame":a,
+		text:"[HR]"}),s=o("a",{class:"fs-btn","data-action":"fullscreen","data-frame":a,text:"[ ]"}),l=o("div",{class:"radartitle"},[i,o("a",{
+		class:"center",href:e.titleHref,target:"_blank",rel:"nofollow",text:e.name}),o("span",{class:"right right-cluster"},[...le(r,!0)||[],o("a",{
+		id:`reset${n}Frame`,"data-frame-id":a,"data-action":"gate",style:"display:none",text:"[X]"}),s])]),c=o("div",{class:"if1 placeholder"
+		},[o("iframe",{id:a,class:e.scaled?"scaled-iframe":void 0,loading:e.loading||"lazy",frameborder:"0","data-src-hr":e.srcHr,
 		"data-zoom-hr-desktop":e.zoomHrDesktop,"data-zoom-hr-mobile":e.zoomHrMobile,"data-src-eu":e.srcEu,"data-zoom-eu-desktop":e.zoomEuDesktop,
-		"data-zoom-eu-mobile":e.zoomEuMobile}),$("div",{class:"overlay",id:`overlay${n}Frame`,"data-frame-id":a},[$("span",{class:"hint",
-		text:"Dvostruki klik za pristup interaktivnoj karti"})])]);return[s,l]},freeAspect:!0,fullscreen:!0,reload:null},"iframe-basic":{
-		build:function(e,t,r={}){return[ie(e,r),$("div",{class:"if2 placeholder"},[$("iframe",{loading:"lazy",src:e.src,frameborder:"0",
+		"data-zoom-eu-mobile":e.zoomEuMobile}),o("div",{class:"overlay",id:`overlay${n}Frame`,"data-frame-id":a},[o("span",{class:"hint",
+		text:"Dvostruki klik za pristup interaktivnoj karti"})])]);return[l,c]},freeAspect:!0,fullscreen:!0,reload:null},"iframe-basic":{
+		build:function(e,t,r={}){return[ce(e,r),o("div",{class:"if2 placeholder"},[o("iframe",{loading:"lazy",src:e.src,frameborder:"0",
 		scrolling:"no"})])]},freeAspect:!0,fullscreen:!1,reload:function(e){e.querySelectorAll("iframe[src]").forEach(e=>{
-		e.src=e.getAttribute("src")})}}};function G(e){e.querySelectorAll("img[src]").forEach(e=>{e.src=ee(e.getAttribute("src"))})}function ee(e){
-		const t=e.replace(/([?&])_r=\d+(&|$)/,(e,t,r)=>r?t:"");return`${t}${t.includes("?")?"&":"?"}_r=${Date.now()}`}var te="#";function re(e){
-		const t=function(e){const t=Number(String(e).split(te)[1]);return t>1?t:1}(e);return t>1?`Copy${t}`:""}function ae(e){
-		return e.maxWidth?`max-width: ${e.maxWidth}px;`:""}function ne(e,t={},r=null){return $("div",{class:"radartitle",style:ae(t)||void 0
-		},[$("a",{href:e.href,target:"_blank",rel:"nofollow",text:e.text}),r&&r.length?$("span",{class:"right right-cluster"},r):null])}
-		function oe(e,t=!1){return e.titleButtons?e.titleButtons(t):null}function ie(e,t){return ne({text:e.title||e.name,href:e.titleHref},e,oe(t))
-		}function se(e,t,r={}){e.replaceChildren(),t.length?t.forEach(t=>function(e,t,r={}){const a=$("div",{class:"map-block","data-map-id":t.id,
-		"data-inst":t.id},function(e,t=e.id,r={}){const a=J[e.type];return a?a.build(e,t,r):[]}(t,t.id,r)),n=$("div",{class:"map-entry"},[a])
-		;t.links&&t.links.length&&n.appendChild(function(e){const t=$("div",{class:"links-bottom",style:ae(e)||void 0})
-		;return e.links.forEach((e,r)=>{r>0&&t.appendChild(document.createTextNode(" · ")),t.appendChild($("a",{href:e.href,target:"_blank",
-		rel:"nofollow",text:e.text}))}),t}(t));return e.appendChild(n),a}(e,t,r)):e.appendChild($("div",{class:"map-entry"},[$("div",{
-		class:"maps-empty",text:'Nema odabranih karata. Odaberite ih pod "Karte".'})]))}function le(){const e=document.querySelector("[data-maps]")
-		;e&&se(e,Y.map(Q).filter(e=>{return e&&(t=e.id,!T.has(t));var t}))}function ce(e,t,r){return Math.min(Math.max(e,t),Math.max(t,r))}
-		function de(e){return Math.round(1e4*e)/1e4}var me=0;function pe(e){me=e}function he(){return document.documentElement.clientWidth-me}
-		function ue(){return document.documentElement.clientHeight}var we=["n","ne","e","se","s","sw","w","nw"];var ge=120;function fe(){
-		return[...document.querySelectorAll(".map-settings")]}function ve(){return fe().find(e=>!e.hidden)||null}function ye(){return!!ve()}
-		function ke(e){return e.getAttribute("data-dialog-key")}function be(e){const t=ke(e);t&&function(e){z.delete(e);try{
-		localStorage.removeItem(e)}catch{}}(t)}function Ee(){return Math.max(360,he()-16)}function xe(){return Math.max(ge,ue()-16)}
-		function ze(e,t,r,a,n){a=ce(a,360,Ee()),e.style.width=`${Math.round(a)}px`,e.style.maxWidth="none",e.style.right="auto",e.style.margin="0",
-		null===n?(e.style.height="",e.style.maxHeight=`${Math.round(Math.max(ge,ue()-Math.max(0,r)-8))}px`):(e.style.maxHeight="none",
-		e.style.height=`${Math.round(ce(n,ge,xe()))}px`),e.style.left=`${Math.round(ce(t,0,Math.max(0,he()-e.offsetWidth)))}px`,
-		e.style.top=`${Math.round(ce(r,0,Math.max(0,ue()-e.offsetHeight)))}px`}function Ae(e){
-		["left","top","width","height","maxWidth","maxHeight","right","margin"].forEach(t=>e.style[t]="")}function Se(e){if(!e||e.hidden)return
-		;const t=s.matches?function(e){const t=ke(e);if(!t)return null;const r=A(t)
+		e.src=e.getAttribute("src")})}}};function re(e){e.querySelectorAll("img[src]").forEach(e=>{e.src=ae(e.getAttribute("src"))})}function ae(e){
+		const t=e.replace(/([?&])_r=\d+(&|$)/,(e,t,r)=>r?t:"");return`${t}${t.includes("?")?"&":"?"}_r=${Date.now()}`}var ne="#";function oe(e){
+		const t=function(e){const t=Number(String(e).split(ne)[1]);return t>1?t:1}(e);return t>1?`Copy${t}`:""}function ie(e){
+		return e.maxWidth?`max-width: ${e.maxWidth}px;`:""}function se(e,t={},r=null){return o("div",{class:"radartitle",style:ie(t)||void 0
+		},[o("a",{href:e.href,target:"_blank",rel:"nofollow",text:e.text}),r&&r.length?o("span",{class:"right right-cluster"},r):null])}
+		function le(e,t=!1){return e.titleButtons?e.titleButtons(t):null}function ce(e,t){return se({text:e.title||e.name,href:e.titleHref},e,le(t))
+		}function de(e,t,r={}){e.replaceChildren(),t.length?t.forEach(t=>function(e,t,r={}){const a=o("div",{class:"map-block","data-map-id":t.id,
+		"data-inst":t.id},function(e,t=e.id,r={}){const a=te[e.type];return a?a.build(e,t,r):[]}(t,t.id,r)),n=o("div",{class:"map-entry"},[a])
+		;t.links&&t.links.length&&n.appendChild(function(e){const t=o("div",{class:"links-bottom",style:ie(e)||void 0})
+		;return e.links.forEach((e,r)=>{r>0&&t.appendChild(document.createTextNode(" · ")),t.appendChild(o("a",{href:e.href,target:"_blank",
+		rel:"nofollow",text:e.text}))}),t}(t));return e.appendChild(n),a}(e,t,r)):e.appendChild(o("div",{class:"map-entry"},[o("div",{
+		class:"maps-empty",text:'Nema odabranih karata. Odaberite ih pod "Karte".'})]))}function me(){const e=document.querySelector("[data-maps]")
+		;e&&de(e,ee.map(G).filter(e=>{return e&&(t=e.id,!Z.has(t));var t}))}function pe(e,t,r){return Math.min(Math.max(e,t),Math.max(t,r))}
+		function he(e){return Math.round(1e4*e)/1e4}var ue=0;function we(e){ue=e}function fe(){return document.documentElement.clientWidth-ue}
+		function ge(){return document.documentElement.clientHeight}var ve=["n","ne","e","se","s","sw","w","nw"];var ye=120;function ke(){
+		return s(".map-settings")}function be(){return ke().find(e=>!e.hidden)||null}function Ee(){return!!be()}function xe(e){
+		return e.getAttribute("data-dialog-key")}function ze(e){const t=xe(e);t&&function(e){R.delete(e);try{localStorage.removeItem(e)}catch{}}(t)}
+		function Ae(){return Math.max(360,fe()-16)}function Se(){return Math.max(ye,ge()-16)}function Le(e,t,r,a,n){a=pe(a,360,Ae()),
+		e.style.width=`${Math.round(a)}px`,e.style.maxWidth="none",e.style.right="auto",e.style.margin="0",null===n?(e.style.height="",
+		e.style.maxHeight=`${Math.round(Math.max(ye,ge()-Math.max(0,r)-8))}px`):(e.style.maxHeight="none",
+		e.style.height=`${Math.round(pe(n,ye,Se()))}px`),e.style.left=`${Math.round(pe(t,0,Math.max(0,fe()-e.offsetWidth)))}px`,
+		e.style.top=`${Math.round(pe(r,0,Math.max(0,ge()-e.offsetHeight)))}px`}function je(e){
+		["left","top","width","height","maxWidth","maxHeight","right","margin"].forEach(t=>e.style[t]="")}function Re(e){if(!e||e.hidden)return
+		;const t=m.matches?function(e){const t=xe(e);if(!t)return null;const r=H(t)
 		;return r&&"object"==typeof r&&Number.isFinite(r.left)&&Number.isFinite(r.top)&&r.width>0?{left:r.left,top:r.top,width:r.width,
-		height:r.height>0?r.height:null}:null}(e):null;t?ze(e,t.left*he(),t.top*ue(),t.width,t.height):Ae(e)}function Le(e){
-		e.addEventListener("pointerdown",t=>{if(0!==t.button||!s.matches)return
+		height:r.height>0?r.height:null}:null}(e):null;t?Le(e,t.left*fe(),t.top*ge(),t.width,t.height):je(e)}function He(e){
+		e.addEventListener("pointerdown",t=>{if(0!==t.button||!m.matches)return
 		;const r=t.target.closest(".po-h"),a=!r&&t.target.closest(".ms-head")&&!t.target.closest("a, button, input");if(!r&&!a)return
-		;t.preventDefault();const n=e.getBoundingClientRect(),o=r?r.dataset.dir:null,i=e.style.height?n.height:null;let l=!1;!function(e,t,r,a){
+		;t.preventDefault();const n=e.getBoundingClientRect(),o=r?r.dataset.dir:null,i=e.style.height?n.height:null;let s=!1;!function(e,t,r,a){
 		const n=e.clientX,o=e.clientY;let i=0,s=0,l=e;const c=e=>{l=e,i=e.clientX-n,s=e.clientY-o,t(i,s,e),a&&a()},d=e=>{
 		"Shift"!==e.key||e.repeat||(t(i,s,{clientX:l.clientX,clientY:l.clientY,shiftKey:"keydown"===e.type}),a&&a())},m=()=>{
 		document.removeEventListener("pointermove",c),document.removeEventListener("pointerup",m),document.removeEventListener("pointercancel",m),
 		document.removeEventListener("keydown",d),document.removeEventListener("keyup",d),document.body.classList.remove("po-dragging"),r&&r()}
 		;document.body.classList.add("po-dragging"),document.addEventListener("pointermove",c),document.addEventListener("pointerup",m),
 		document.addEventListener("pointercancel",m),document.addEventListener("keydown",d),document.addEventListener("keyup",d)}(t,(t,r)=>{
-		if(!l&&!t&&!r)return;if(l=!0,!o)return void ze(e,n.left+t,n.top+r,n.width,i);let{w:a,h:s}=function(e,t,r,a){let n=t.width,o=t.height
+		if(!s&&!t&&!r)return;if(s=!0,!o)return void Le(e,n.left+t,n.top+r,n.width,i);let{w:a,h:l}=function(e,t,r,a){let n=t.width,o=t.height
 		;return e.includes("e")&&(n=t.width+r),e.includes("w")&&(n=t.width-r),e.includes("s")&&(o=t.height+a),e.includes("n")&&(o=t.height-a),{w:n,
-		h:o}}(o,n,t,r);a=ce(a,360,Ee()),s=ce(s,ge,xe()),ze(e,o.includes("w")?n.right-a:n.left,o.includes("n")?n.bottom-s:n.top,a,s)},()=>{
-		l&&function(e){const t=ke(e);if(!t)return;const r=e.getBoundingClientRect(),a={left:de(r.left/he()),top:de(r.top/ue()),
-		width:Math.round(r.width)};e.style.height&&(a.height=Math.round(r.height)),S(t,a)}(e)})}),e.addEventListener("dblclick",t=>{
-		s.matches&&t.target.closest(".ms-head")&&!t.target.closest("a, button, input")&&(Ae(e),be(e))})}function je(t,r){a(e,{panel:t,visible:r})}
-		function Re(e,t){t&&fe().forEach(t=>{t===e||t.hidden||(t.hidden=!0,je(t,!1))}),e.hidden=!t,function(){const e=ye()
+		h:o}}(o,n,t,r);a=pe(a,360,Ae()),l=pe(l,ye,Se()),Le(e,o.includes("w")?n.right-a:n.left,o.includes("n")?n.bottom-l:n.top,a,l)},()=>{
+		s&&function(e){const t=xe(e);if(!t)return;const r=e.getBoundingClientRect(),a={left:he(r.left/fe()),top:he(r.top/ge()),
+		width:Math.round(r.width)};e.style.height&&(a.height=Math.round(r.height)),M(t,a)}(e)})}),e.addEventListener("dblclick",t=>{
+		m.matches&&t.target.closest(".ms-head")&&!t.target.closest("a, button, input")&&(je(e),ze(e))})}function Me(t,r){a(e,{panel:t,visible:r})}
+		function _e(e,t){t&&ke().forEach(t=>{t===e||t.hidden||(t.hidden=!0,Me(t,!1))}),e.hidden=!t,function(){const e=Ee()
 		;if(e&&!document.documentElement.classList.contains("ms-gutter")){const e=window.innerWidth-document.documentElement.clientWidth
-		;e>0&&(pe(e),document.documentElement.classList.add("ms-gutter"))}else e||(pe(0),document.documentElement.classList.remove("ms-gutter"))
-		;document.body.classList.toggle("ms-open",e);const t=document.querySelector(".ms-backdrop");t&&(t.hidden=!e,
-		e&&t.classList.remove("ms-spent"))}(),t&&Se(e),je(e,t)}function He(){const e=ve();return e&&Re(e,!1),!!e}var Me=new Map,_e=[]
-		;function De(e,{run:t,keys:r=[],keyWhen:a=()=>!0,keepDefault:n=!1,capture:o=!1}){const i={id:e,run:t,keys:r,keyWhen:a,keepDefault:n,
-		capture:o};Me.set(e,i),r.length&&_e.push(i)}var Ce=!1,We="upute";function Ve(){return document.getElementById("manualDialog")}function Fe(){
-		var e;(e=Ve())&&Re(e,e.hidden)}function Te(e){try{return decodeURIComponent(e.slice(1))}catch{return e.slice(1)}}T=F(A(E)),
+		;e>0&&(we(e),document.documentElement.classList.add("ms-gutter"))}else e||(we(0),document.documentElement.classList.remove("ms-gutter"))
+		;document.body.classList.toggle("ms-open",e);const t=l(".ms-backdrop");t&&(t.hidden=!e,e&&t.classList.remove("ms-spent"))}(),t&&Re(e),
+		Me(e,t)}function De(){const e=be();return e&&_e(e,!1),!!e}var Ce=new Map,We=[]
+		;function Ve(e,{run:t,keys:r=[],keyWhen:a=()=>!0,keepDefault:n=!1,capture:o=!1}){const i={id:e,run:t,keys:r,keyWhen:a,keepDefault:n,
+		capture:o};Ce.set(e,i),r.length&&We.push(i)}var Fe=!1,Te="upute";function Ie(){return document.getElementById("manualDialog")}function Be(){
+		var e;(e=Ie())&&_e(e,e.hidden)}function Oe(e){try{return decodeURIComponent(e.slice(1))}catch{return e.slice(1)}}Z=P(H(L)),
 		fetch("https://meteo-data.jurakovic.workers.dev/config.json",{cache:"no-cache"}).then(e=>e.ok?e.json():Promise.reject(e.status)).then(e=>{
-		S(E,e);const r=F(e);var n,o;o=T,(n=r).size===o.size&&[...n].every(e=>o.has(e))||(T=r,a(t))}).catch(()=>{}),
-		Ce||document.documentElement.classList.add("no-manual"),De("top",{run:()=>{window.scrollTo({top:0,behavior:"smooth"})}}),De("links",{
-		run:()=>L("links")}),De("links-bottom",{run:e=>function(e){document.body.classList.toggle("show-links-bottom",e.checked),S(x,e.checked?1:0),
-		R()}(e)}),De("slide",{run:e=>{return t=e.closest(".slideshow"),r=Number(e.dataset.step),
-		void _(t,parseInt(t.getAttribute("data-current-slide"))+r);var t,r}}),De("zoom",{run:e=>f(e.dataset.frame,e)}),De("fullscreen",{
-		run:e=>function(e,t){i(`toggleFullscreen: ${e}`);const n=document.getElementById(e).parentElement
-		;if(n.classList.contains("fullscreen"))return void y(n);const o=n.querySelector(".overlay");v.set(n,!o||"none"!==o.style.display),
+		M(L,e);const r=P(e);var n,o;o=Z,(n=r).size===o.size&&[...n].every(e=>o.has(e))||(Z=r,a(t))}).catch(()=>{}),
+		Fe||document.documentElement.classList.add("no-manual"),Ve("top",{run:()=>{window.scrollTo({top:0,behavior:"smooth"})}}),Ve("links",{
+		run:()=>_("links")}),Ve("links-bottom",{run:e=>function(e){document.body.classList.toggle("show-links-bottom",e.checked),M(j,e.checked?1:0),
+		C()}(e)}),Ve("slide",{run:e=>{return t=e.closest(".slideshow"),r=Number(e.dataset.step),
+		void F(t,parseInt(t.getAttribute("data-current-slide"))+r);var t,r}}),Ve("zoom",{run:e=>E(e.dataset.frame,e)}),Ve("fullscreen",{
+		run:e=>function(e,t){d(`toggleFullscreen: ${e}`);const n=document.getElementById(e).parentElement
+		;if(n.classList.contains("fullscreen"))return void z(n);const o=n.querySelector(".overlay");x.set(n,!o||"none"!==o.style.display),
 		n.classList.add("fullscreen"),n.previousElementSibling.classList.add("fullscreen"),
 		n.closest(".map-block.snapped")||document.body.classList.add("fs-lock"),a(r),t.textContent="[-]",o&&(o.style.display="none"),
-		u(e,"fullscreen")}(e.dataset.frame,e)}),De("gate",{run:e=>function(e){const t=e.dataset.frameId;switch(e.dataset.state){case"exit":
-		w(t).removeAttribute("style"),u(t,"reset");break;case"reset":m(document.getElementById(t)),u(t,"hidden");break;case"fullscreen":
-		m(document.getElementById(t))}}(e)}),De("dialog-close",{keys:["Escape"],keyWhen:()=>ye(),keepDefault:!0,run:()=>He()}),
-		De("fullscreen-exit",{keys:["Escape"],keyWhen:()=>!ye(),keepDefault:!0,run:()=>function(){const e=document.querySelector(".if1.fullscreen")
-		;e&&y(e)}()}),document.addEventListener("click",e=>{const t=e.target.closest&&e.target.closest("[data-action]")
-		;t&&function(e,t=null,r=null){const a=Me.get(e);a&&a.run(t,r)}(t.dataset.action,t,e)}),document.addEventListener("keydown",e=>{
-		if(e.altKey||e.ctrlKey||e.metaKey||(t=e.target)&&"function"==typeof t.matches&&t.matches('input:not([type="radio"]):not([type="checkbox"]), textarea, [contenteditable]'))return
-		;var t;const r=_e.find(t=>t.keys.includes(e.key)&&t.keyWhen(e));r&&(r.keepDefault||e.preventDefault(),r.capture&&e.stopPropagation(),
-		r.run(null,e))},!0),window.addEventListener("resize",()=>{clearTimeout(V),V=setTimeout(()=>{d(),b(),R()},200)}),n(t,()=>{le(),W()}),K(le),
-		K(function(){fe().forEach(e=>{!function(e){e.querySelectorAll(":scope > .po-h").forEach(e=>e.remove()),we.forEach(t=>{
-		const r=document.createElement("div");r.className=`po-h po-h-${t}`,r.dataset.dir=t,e.appendChild(r)})}(e),Le(e)}),function(){
-		const e=document.querySelector(".ms-backdrop");e&&e.addEventListener("pointerdown",t=>{if(!ye())return;t.preventDefault(),He(),e.hidden=!1,
-		e.classList.add("ms-spent");let r=0;const a=()=>{clearTimeout(r),e.classList.remove("ms-spent"),e.hidden=!ye(),
+		y(e,"fullscreen")}(e.dataset.frame,e)}),Ve("gate",{run:e=>function(e){const t=e.dataset.frameId;switch(e.dataset.state){case"exit":
+		k(t).removeAttribute("style"),y(t,"reset");break;case"reset":f(w(t)),y(t,"hidden");break;case"fullscreen":f(w(t))}}(e)}),Ve("dialog-close",{
+		keys:["Escape"],keyWhen:()=>Ee(),keepDefault:!0,run:()=>De()}),Ve("fullscreen-exit",{keys:["Escape"],keyWhen:()=>!Ee(),keepDefault:!0,
+		run:()=>function(){const e=l(".if1.fullscreen");e&&z(e)}()}),document.addEventListener("click",e=>{
+		const t=e.target,r=t.closest&&t.closest("[data-action]");r&&function(e,t=null,r=null){const a=Ce.get(e);a&&a.run(t,r)}(r.dataset.action,r,e)
+		}),document.addEventListener("keydown",e=>{if(e.altKey||e.ctrlKey||e.metaKey||function(e){const t=e
+		;return!!t&&"function"==typeof t.matches&&t.matches('input:not([type="radio"]):not([type="checkbox"]), textarea, [contenteditable]')
+		}(e.target))return;const t=We.find(t=>t.keys.includes(e.key)&&t.keyWhen(e));t&&(t.keepDefault||e.preventDefault(),
+		t.capture&&e.stopPropagation(),t.run(null,e))},!0),window.addEventListener("resize",()=>{clearTimeout(O),O=setTimeout(()=>{u(),S(),C()},200)
+		}),n(t,()=>{me(),B()}),i(me),i(function(){ke().forEach(e=>{!function(e){e.querySelectorAll(":scope > .po-h").forEach(e=>e.remove()),
+		ve.forEach(t=>{const r=document.createElement("div");r.className=`po-h po-h-${t}`,r.dataset.dir=t,e.appendChild(r)})}(e),He(e)}),function(){
+		const e=l(".ms-backdrop");e&&e.addEventListener("pointerdown",t=>{if(!Ee())return;t.preventDefault(),De(),e.hidden=!1,
+		e.classList.add("ms-spent");let r=0;const a=()=>{clearTimeout(r),e.classList.remove("ms-spent"),e.hidden=!Ee(),
 		document.removeEventListener("click",n,!0),document.removeEventListener("pointerup",o),document.removeEventListener("pointercancel",a)
 		},n=e=>{e.stopPropagation(),e.preventDefault(),a()},o=()=>{r=setTimeout(a,400)};document.addEventListener("click",n,!0),
-		document.addEventListener("pointerup",o),document.addEventListener("pointercancel",a)})}(),window.addEventListener("resize",()=>Se(ve()))}),
-		K(function(){const t=Ve();if(!t||!Ce)return;const r=t.querySelector(".ms-close");r&&r.addEventListener("click",()=>Re(t,!1)),
+		document.addEventListener("pointerup",o),document.addEventListener("pointercancel",a)})}(),window.addEventListener("resize",()=>Re(be()))}),
+		i(function(){const t=Ie();if(!t||!Fe)return;const r=t.querySelector(".ms-close");r&&r.addEventListener("click",()=>_e(t,!1)),
 		t.addEventListener("click",e=>{const r=e.target.closest('a[href^="#"]');r&&t.contains(r)&&(e.preventDefault(),function(e,t){
 		const r=e.querySelector(".ms-body"),a=e.querySelector(`[id="${CSS.escape(t)}"]`)
-		;r&&a&&(r.scrollTop+=a.getBoundingClientRect().top-r.getBoundingClientRect().top)}(t,Te(r.getAttribute("href"))))}),
-		n(e,({panel:e,visible:r})=>{e===t&&(!function(e){const t=new URL(window.location.href);e!==(Te(t.hash)===We)&&(t.hash=e?We:"",
-		history.replaceState(null,"",e?t.href:t.href.replace(/#$/,"")))}(r),r&&(t.querySelector(".ms-body").scrollTop=0))}),De("manual",{
-		keys:["h","H"],run:()=>Fe()});const a=()=>{const e=Te(window.location.hash)===We;e!==function(){const e=Ve();return!!e&&!e.hidden
-		}()&&Re(t,e)};window.addEventListener("hashchange",a),a()}),K(function(){!function(){const e=document.querySelector(".links-toggle")
-		;e&&(e.checked=1===A(x),document.body.classList.toggle("show-links-bottom",e.checked))}(),W(),
-		document.querySelector(".expandable").addEventListener("click",function(){let e=this.querySelector(".arrow")
-		;const t=document.querySelector(".links");t.style.maxHeight?(t.style.maxHeight=null,
-		e.textContent="▼"):(t.style.maxHeight=t.scrollHeight+"px",e.textContent="▲",setTimeout(()=>{
-		document.documentElement.style.scrollBehavior="auto",document.body.style.scrollBehavior="auto",L("links"),setTimeout(()=>{
-		document.documentElement.style.scrollBehavior="smooth",document.body.style.scrollBehavior="smooth"},50)},310))})})})();
+		;r&&a&&(r.scrollTop+=a.getBoundingClientRect().top-r.getBoundingClientRect().top)}(t,Oe(r.getAttribute("href"))))}),
+		n(e,({panel:e,visible:r})=>{e===t&&(!function(e){const t=new URL(window.location.href);e!==(Oe(t.hash)===Te)&&(t.hash=e?Te:"",
+		history.replaceState(null,"",e?t.href:t.href.replace(/#$/,"")))}(r),r&&(t.querySelector(".ms-body").scrollTop=0))}),Ve("manual",{
+		keys:["h","H"],run:()=>Be()});const a=()=>{const e=Oe(window.location.hash)===Te;e!==function(){const e=Ie();return!!e&&!e.hidden
+		}()&&_e(t,e)};window.addEventListener("hashchange",a),a()}),i(function(){!function(){const e=document.querySelector(".links-toggle")
+		;e&&(e.checked=1===H(j),document.body.classList.toggle("show-links-bottom",e.checked))}(),B(),function(){
+		const e=l(".expandable"),t=l(".links");e.addEventListener("click",()=>{const r=e.querySelector(".arrow")
+		;if(t.style.maxHeight)return t.style.maxHeight="",void(r.textContent="▼");t.style.maxHeight=`${t.scrollHeight}px`,r.textContent="▲",
+		setTimeout(()=>{document.documentElement.style.scrollBehavior="auto",document.body.style.scrollBehavior="auto",_("links"),setTimeout(()=>{
+		document.documentElement.style.scrollBehavior="smooth",document.body.style.scrollBehavior="smooth"},50)},310)})}()})})();
 	</script>
 	<script async src="https://www.googletagmanager.com/gtag/js?id=G-233EMZJM16"></script>
 	<script>

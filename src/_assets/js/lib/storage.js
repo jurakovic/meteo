@@ -27,6 +27,8 @@ export const STORAGE_KEYS = {
 // whatever the storage held before (or nothing)
 const unsaved = new Map();
 
+// the value stored under key, parsed; null when there is none or it is not JSON
+/** @param {string} key one of STORAGE_KEYS @returns {any} */
 export function readJson(key) {
 	try {
 		return JSON.parse(unsaved.has(key) ? unsaved.get(key) : localStorage.getItem(key));
@@ -35,6 +37,8 @@ export function readJson(key) {
 	}
 }
 
+// kept for the session when the browser refuses to store it
+/** @param {string} key one of STORAGE_KEYS @param {unknown} value */
 export function writeJson(key, value) {
 	const json = JSON.stringify(value);
 	try {
@@ -45,6 +49,7 @@ export function writeJson(key, value) {
 	}
 }
 
+/** @param {string} key one of STORAGE_KEYS */
 export function removeKey(key) {
 	unsaved.delete(key);
 	try {

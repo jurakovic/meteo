@@ -9,6 +9,7 @@
 // or down the cascade on a board). Only what is shown leaves it out — the
 // render, the tab's [+] menu and the dialog's rows (hidden, not left out, so a
 // list saved from the dialog still holds it)
+import { queryAll } from '../lib/dom.js';
 import { EVENTS, on } from '../lib/events.js';
 import { initDynamicContent } from '../page/content.js';
 import { exitFullscreen } from '../page/iframe.js';
@@ -35,7 +36,7 @@ export function renderMaps() {
 	// a fullscreen map goes with the list too, and would leave the page's
 	// scroll locked behind it; taken down as the arrangement it is part of
 	// is (what comes back is applied after the render)
-	withPersistPaused(() => document.querySelectorAll('.if1.fullscreen').forEach(exitFullscreen));
+	withPersistPaused(() => queryAll('.if1.fullscreen').forEach(exitFullscreen));
 	resetSnapColumns(); // their panes go with the list
 	mapsRendered = true;
 	const maps = resolveMapIds().map(catalogMap).filter(map => map && isMapEnabled(map.id));

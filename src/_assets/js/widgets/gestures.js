@@ -124,7 +124,7 @@ function onDoubleClick(e) {
 function raiseFocusedFrame() {
 	const frame = document.activeElement;
 	if (!frame || frame.tagName !== 'IFRAME') return;
-	const block = frame.closest('.map-block.popout');
+	const block = /** @type {HTMLElement | null} */ (frame.closest('.map-block.popout'));
 	// as above: a widget hosting a fullscreen map is kept under the others
 	if (block && !block.classList.contains('fs-host')) raisePopout(block);
 }

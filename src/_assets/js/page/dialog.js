@@ -9,6 +9,7 @@
 // backdrop, a single scroll lock and a single Escape to reason about. Every
 // change is announced as a dialog-toggled event.
 
+import { query, queryAll } from '../lib/dom.js';
 import { emit, EVENTS } from '../lib/events.js';
 import { clamp, roundFraction, setScrollbarGutter, viewportHeight, viewportWidth } from '../lib/geometry.js';
 import { DESKTOP_MQ } from '../lib/media.js';
@@ -22,7 +23,7 @@ const DIALOG_MIN_HEIGHT = 120;
 const DIALOG_MARGIN = 8; // kept free of the viewport edge when sizing
 
 function dialogPanels() {
-	return [...document.querySelectorAll('.map-settings')];
+	return queryAll('.map-settings');
 }
 
 function openDialogPanel() {
@@ -180,7 +181,7 @@ function syncDialogChrome() {
 		document.documentElement.classList.remove('ms-gutter');
 	}
 	document.body.classList.toggle('ms-open', open);
-	const backdrop = document.querySelector('.ms-backdrop');
+	const backdrop = query('.ms-backdrop');
 	if (backdrop) {
 		backdrop.hidden = !open;
 		if (open) backdrop.classList.remove('ms-spent'); // it paints again for a dialog that is back
@@ -195,6 +196,7 @@ function notifyDialog(panel, visible) {
 	emit(EVENTS.dialogToggled, { panel, visible });
 }
 
+/** @param {boolean} visible */
 export function setDialogVisible(panel, visible) {
 	if (visible) {
 		dialogPanels().forEach(other => {
@@ -236,7 +238,7 @@ export function closeOpenDialog() {
 // for the gestures no click follows — a pointer let go outside the window, a
 // drag
 function initDialogBackdrop() {
-	const backdrop = document.querySelector('.ms-backdrop');
+	const backdrop = query('.ms-backdrop');
 	if (!backdrop) return;
 	backdrop.addEventListener('pointerdown', (e) => {
 		if (!anyDialogOpen()) return;

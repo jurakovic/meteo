@@ -21,6 +21,7 @@ let msAdd = null; // { menu, anchor } while open
 
 const MS_ADD_MAX_HEIGHT = 420; // a menu, not a second dialog: the list scrolls past this
 
+/** @param {HTMLElement} anchor */
 export function toggleMsAdd(anchor) {
 	if (msAdd) closeMsAdd();
 	else openMsAdd(anchor);

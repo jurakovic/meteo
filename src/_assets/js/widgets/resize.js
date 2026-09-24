@@ -42,6 +42,7 @@ import { fitWidget, lockAspect, unlockAspect } from './popout.js';
 // to however many widgets meet there. And whole edges only — a seam between
 // sides of unequal length cannot move without tearing one of them off the
 // neighbours it meets further along.
+/** @param {HTMLElement} block */
 export function seamNeighbour(block, dir) {
 	if (dir.length !== 1 || isSnapped(block) || block.classList.contains('fs-host')) return null;
 	const a = block.getBoundingClientRect();
@@ -61,6 +62,7 @@ export function seamNeighbour(block, dir) {
 	return found.length === 1 ? found[0] : null;
 }
 
+/** @param {HTMLElement} block @param {HTMLElement} other */
 export function resizeSeam(block, other, dir, e) {
 	dlog(`resizeSeam: ${block.dataset.mapId} | ${other.dataset.mapId} (${dir})`);
 	const sideways = dir === 'e' || dir === 'w';
@@ -123,6 +125,7 @@ export function resizeSeam(block, other, dir, e) {
 // plain pull frees a locked pane, as it does over the page, and Shift holds
 // the aspect and with it the pane. The double-click on the title bar is the
 // way back to the aspect, there as anywhere.
+/** @param {HTMLElement} block */
 export function resizePopout(block, dir, e) {
 	const members = groupMembers(block);
 	const col = snapColumnOf(block);
@@ -271,6 +274,7 @@ function pullResizeEdges(magnets, dir, start, w, h) {
 // since the error left is the bar's share of the error — under a tenth — so
 // the second pass lands on the pixel. Cheap enough per move: the height is read
 // back once anyway
+/** @param {HTMLElement} block */
 export function lockedWidthFor(block, h, w, ratio, maxWidth) {
 	for (let i = 0; i < 3; i++) {
 		w = clamp(w, POPOUT_MIN_WIDTH, maxWidth);
@@ -284,6 +288,7 @@ export function lockedWidthFor(block, h, w, ratio, maxWidth) {
 // the height a locked widget stands at that width. Off the rect, not
 // offsetHeight: the width is a whole pixel and the height it gives is not, and
 // a rounded reading would keep a pixel of the error
+/** @param {HTMLElement} block */
 export function lockedHeightAt(block, w) {
 	block.style.width = `${Math.round(w)}px`;
 	return block.getBoundingClientRect().height;
@@ -298,12 +303,12 @@ export function lockedHeightAt(block, w) {
 // members it touched or lined up with before (groupRelations), so a stack
 // stays a stack whatever the title bars do
 function resizeGroup(members, dir, e) {
-	const starts = groupStarts(members);
-	starts.forEach(s => {
-		s.width = s.right - s.left;
-		s.height = s.bottom - s.top;
-		s.free = s.block.classList.contains('free');
-	});
+	const starts = groupStarts(members).map(s => ({
+		...s,
+		width: s.right - s.left,
+		height: s.bottom - s.top,
+		free: s.block.classList.contains('free')
+	}));
 	const box = groupBox(starts);
 	box.right = box.left + box.width;
 	box.bottom = box.top + box.height;

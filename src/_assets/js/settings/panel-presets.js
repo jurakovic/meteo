@@ -61,12 +61,12 @@ export function createPresetBar(panel) {
 
 		// an edit of the list makes it nobody's; the dot then says whose it was
 		markCustom() {
-			presetsDiv.querySelector('input[name="msPreset"][value="custom"]').checked = true;
+			/** @type {HTMLInputElement} */ (presetsDiv.querySelector('input[name="msPreset"][value="custom"]')).checked = true;
 			updateOriginMark();
 		},
 
 		checkedId() {
-			const checked = presetsDiv.querySelector('input[name="msPreset"]:checked');
+			const checked = /** @type {HTMLInputElement | null} */ (presetsDiv.querySelector('input[name="msPreset"]:checked'));
 			return checked ? checked.value : 'zadano';
 		}
 	};

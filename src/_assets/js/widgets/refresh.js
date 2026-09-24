@@ -61,6 +61,7 @@ function refreshTick() {
 	else emit(EVENTS.refreshTick);
 }
 
+/** @param {boolean} on @param {number} minutes */
 export function setRefreshPrefs(on, minutes) {
 	dlog(`setRefreshPrefs: on=${on} minutes=${minutes}`);
 	refreshOn = on === true;
