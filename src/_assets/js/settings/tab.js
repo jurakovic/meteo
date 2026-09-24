@@ -72,7 +72,7 @@ function placeMsTab(tab, left, width) {
 	tab.classList.add('ms-tab-sized'); // the width is this one now, not the name's plus its room
 }
 
-export function applyStoredMsTab() {
+function applyStoredMsTab() {
 	const tab = document.querySelector('.ms-tab');
 	const stored = loadMsTab();
 	if (tab && stored) placeMsTab(tab, stored.left * viewportWidth(), stored.width);

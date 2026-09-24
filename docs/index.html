@@ -299,13 +299,13 @@
 		;const t=Math.abs(e.changedTouches[0].clientX-i),r=Math.abs(e.changedTouches[0].clientY-o);t<10&&r<10&&(n.style.opacity="0.6",
 		clearTimeout(A.get(n)),A.set(n,setTimeout(()=>n.style.removeProperty("opacity"),2e3)))})}),S(),s(".links-bottom").forEach(e=>{
 		e.addEventListener("scroll",()=>D(e),{passive:!0})}),C(),function(){
-		const e=document.querySelectorAll("img"),t=l(".progress-bar"),r=l(".progress-container");let a=0;const n=++W;if(clearTimeout(V),
-		t.style.width="0",r.style.removeProperty("display"),0===e.length)return void(r.style.display="none");const o=()=>{if(W!==n)return
-		;const o=a/e.length*100;t.style.width=o+"%",a===e.length&&(V=setTimeout(()=>{r.style.display="none"},500))};e.forEach(e=>{
-		e.addEventListener("load",()=>{a++,o()}),e.addEventListener("error",()=>{a++,d(`Error loading image: ${e.src}`),e.removeAttribute("src"),o()
-		}),e.complete&&e.dispatchEvent(new Event("load"))})}()}var O=0;function P(e){const t=e&&e.maps&&"object"==typeof e.maps?e.maps:{}
-		;return new Set(Object.keys(t).filter(e=>t[e]&&!1===t[e].enabled))}var Z=new Set;var U=[{text:"Windy",
-		href:"https://www.windy.com/-Weather-radar-radar?radar,44.5,16.5,7"},{text:"Zoom Earth",
+		const e=document.querySelectorAll("img"),t=l(".progress-bar"),r=l(".progress-container"),a=new Set(e),n=++W;if(clearTimeout(V),
+		t.style.width="0",r.style.removeProperty("display"),0===e.length)return void(r.style.display="none");const o=o=>{
+		W===n&&a.delete(o)&&(t.style.width=(e.length-a.size)/e.length*100+"%",0===a.size&&(V=setTimeout(()=>{r.style.display="none"},500)))}
+		;e.forEach(e=>{e.addEventListener("load",()=>o(e)),e.addEventListener("error",()=>{d(`Error loading image: ${e.src}`),
+		e.removeAttribute("src"),o(e)}),e.complete&&e.dispatchEvent(new Event("load"))})}()}var O=0;function P(e){
+		const t=e&&e.maps&&"object"==typeof e.maps?e.maps:{};return new Set(Object.keys(t).filter(e=>t[e]&&!1===t[e].enabled))}var Z=new Set
+		;var U=[{text:"Windy",href:"https://www.windy.com/-Weather-radar-radar?radar,44.5,16.5,7"},{text:"Zoom Earth",
 		href:"https://zoom.earth/maps/radar/#view=44.5,16.5,7z"},{text:"meteoblue",
 		href:"https://www.meteoblue.com/en/weather/maps/croatia_croatia_3202326#map=radar~radarMapEU~none~none~none&coords=6/44.5/16.5"},{
 		text:"Rain Viewer",href:"https://www.rainviewer.com/map.html?loc=44.5,16.5,6&oCS=1&c=5&lm=1&layer=radar&sm=1&sn=2&ts=1"},{text:"Ventusky",

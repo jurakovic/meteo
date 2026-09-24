@@ -24,7 +24,7 @@ import { arrangementChanged, withPersistPaused } from './layout.js';
 import { syncShadows } from './overlap.js';
 import { lockedHeightAt, lockedWidthFor } from './resize.js';
 
-export function buildPopoutButton() {
+function buildPopoutButton() {
 	const btn = el('a', { class: 'po-btn' });
 	btn.addEventListener('click', () => togglePopout(btn.closest('.map-block')));
 	setPopoutButton(btn, false);

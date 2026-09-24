@@ -81,7 +81,7 @@ export function getUserPresets() {
 	return userPresets;
 }
 
-export function saveUserPresets() {
+function saveUserPresets() {
 	writeJson(STORAGE_KEYS.userPresets, userPresets);
 }
 
@@ -128,6 +128,19 @@ export function storeUserPreset(name, maps, layout = null) {
 	}
 	saveUserPresets();
 	return existing || userPresets[userPresets.length - 1];
+}
+
+// a saved preset under a new name: false, and nothing written, when the
+// name is empty or another preset already holds it
+/** @param {string} id @param {string} name @returns {boolean} */
+export function renameUserPreset(id, name) {
+	const preset = userPresets.find(p => p.id === id);
+	const clean = cleanPresetName(name);
+	const clash = findUserPresetByName(clean);
+	if (!preset || !clean || (clash && clash !== preset)) return false;
+	preset.name = clean;
+	saveUserPresets();
+	return true;
 }
 
 // for a preset arriving from someone else's link, where silently overwriting a
