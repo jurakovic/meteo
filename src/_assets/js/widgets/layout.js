@@ -352,13 +352,10 @@ export function withPersistPaused(fn) {
 	}
 }
 
-// the arrangement the view holds but the window is too narrow to show. Below
-// the breakpoint applySnapLayout() places nothing, so the board stands empty
-// while the preferences still describe a desktop arrangement — and snapLayout(),
-// which reads the screen, would describe that emptiness. Everything that writes
-// the arrangement, or asks the dialog what the view holds, goes through
-// currentSnapLayout() instead, so a narrow window never writes the empty board
-// over what a desktop window put there. Cleared the moment it is applied
+// the arrangement the view holds but a window below the breakpoint cannot
+// show. snapLayout() reads the screen and would describe it as empty, so
+// everything goes through currentSnapLayout(), and a narrow window never
+// writes over what a desktop one stored. Cleared once applied
 let unappliedSnapLayout = null;
 
 // what is on screen, or — where none of it is placed — what is stored waiting
@@ -376,13 +373,11 @@ export function isDashboardView() {
 	return unappliedSnapLayout ? unappliedSnapLayout.dashboard === true : isDashboard();
 }
 
-// the arrangement changed — a gesture ended, a widget came or went. Three
-// things follow, always together: what touches what (the group buttons) and
-// what lies over what (covered frames, the fullscreen's room, the shadows) are
-// worked out again, and the arrangement is stored with the view
-// (storeViewLayout) and announced (layout-changed) — unless held back
-// (withPersistPaused): the breakpoint docking everything is the window
-// changing, not the arrangement
+// the arrangement changed (a gesture ended, a widget came or went): the group
+// buttons, the overlaps and the shadows are worked out again, and the
+// arrangement is stored with the view and announced (layout-changed), unless
+// withPersistPaused holds it back (the breakpoint docking everything is the
+// window changing, not the arrangement)
 export function arrangementChanged() {
 	updateGroups();
 	refreshOverlap();

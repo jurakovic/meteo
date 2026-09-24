@@ -53,12 +53,10 @@ export function initMapSettings() {
 	// chrome's, since it shuts whichever dialog is up
 	registerCommand('map-settings', { keys: ['k', 'K'], run: () => toggleMapSettings() });
 
-	// Enter is Primijeni while the picker is up, wherever the focus is in it — a
-	// chip, a checkbox, a button just pressed. Kept from the focused button,
-	// which would otherwise take it as its own click: a press on Nadzorna ploča
-	// followed by Enter would tick the mode back off instead of applying it
-	// (Space still presses a button). A text field keeps its own Enter (the
-	// preset name editors), and so does the interval list
+	// Enter is Primijeni wherever the focus is in the picker, even on a button
+	// (which would otherwise take it as a click: Nadzorna ploča then Enter would
+	// untick the mode; Space still presses). Text fields and the interval list
+	// keep their own Enter
 	registerCommand('settings-apply', {
 		keys: ['Enter'],
 		capture: true,
@@ -89,11 +87,9 @@ function buildMapSettings(element) {
 	const panel = {
 		element,
 
-		// which preset the list in the picker came from, built-in or saved. Editing
-		// it flips the bar to "Prilagođeno" (see listEdited), so the selection can no
-		// longer say where the list started: this is what the dot on the origin chip
-		// and the "Ažuriraj" link on the saved row both hang off. Null whenever the
-		// list is nobody's — a stored custom view, or a shared one matching nothing.
+		// the preset the list came from, which an edit's switch to "Prilagođeno"
+		// no longer shows: the origin dot and Ažuriraj hang off it. Null when the
+		// list is nobody's (a stored custom view, a shared one matching nothing)
 		editingPresetId: activePresetId() === 'custom' ? null : activePresetId(),
 
 		// the board is a mode of the view the panel edits, not a place it sends you:
@@ -121,11 +117,9 @@ function buildMapSettings(element) {
 			manage.render();
 		},
 
-		// switching to a named preset previews its whole view: its list and its
-		// mode, since a preset saved as a board is a board and a built-in, carrying
-		// no layout, is the page. "Prilagođeno" keeps both as they are, and picking
-		// it by hand detaches the list from wherever it came from: no dot, and no
-		// row offering to take the edits back
+		// a named preset brings its list and its mode (a board preset is a board,
+		// a built-in the page); "Prilagođeno" keeps both and, picked by hand,
+		// detaches the list from its origin (no dot, no Ažuriraj)
 		presetChosen(preset, mapIds) {
 			if (preset.id !== 'custom') {
 				list.fill(mapIds);
