@@ -36,20 +36,10 @@ export function initLayoutBreakpoint() {
 	});
 }
 
-// the arrangement as data: per side the column width and the panes as map
-// ids with their tops (and a free pane's height), every number a fraction of
-// the viewport, so another window or screen gets the proportions. Null when
-// nothing is snapped. It rides in mapPrefs next to the map list, in a saved
-// preset next to its maps, and in the ?v= payload — always a subset of the
-// map list it sits beside, which is what sanitizeSnapLayout() holds it to on
-// the way back. A group is a number shared by its members' entries, counted
-// in order of appearance across the columns and the floating widgets
-// the key each showing is stored under. Which showing is which is only a
-// matter of the moment — any can be closed and another take the page's place —
-// so the keys are dealt afresh on every write: the page's own showing first,
-// under the plain map id, which is the block the render gives back on load, and
-// the rest #2, #3 on in the page's order. A layout thus never names a copy of a
-// map without the map itself, whichever of its showings were left
+// the key each showing is stored under, dealt afresh on every write, since
+// which showing holds the page's place can change: that one under the plain
+// map id (the block the render gives back on load), the rest #2, #3 in the
+// page's order. A layout never names a copy without the map itself
 function layoutKeys() {
 	const keys = new Map(), counts = new Map();
 	const blocks = queryAll('.map-block');
@@ -62,6 +52,42 @@ function layoutKeys() {
 	return keys;
 }
 
+/**
+ * A widget or pane, by its instance key: the map id, and #2, #3 on a copy.
+ * Positions are fractions of the viewport.
+ * @typedef {object} PaneEntry
+ * @property {string} id
+ * @property {number} top
+ * @property {number} [height] left out where the pane follows its aspect
+ * @property {number} [group] widgets with the same number move as one
+ * @property {boolean} [fullscreen] hosting a fullscreen map
+ *
+ * @typedef {object} FloatingEntry
+ * @property {string} id
+ * @property {number} left
+ * @property {number} top
+ * @property {number} width
+ * @property {number} [height] only on a widget free of its aspect
+ * @property {number} [group]
+ * @property {boolean} [fullscreen]
+ *
+ * @typedef {{ width: number, panes: PaneEntry[] }} ColumnLayout
+ *
+ * The arrangement a view carries: the snap columns, the floating widgets and
+ * whether it is a board; null is the page with nothing out of it. Every number
+ * is a fraction of the viewport, so another screen gets the proportions. It
+ * rides beside a map list (in mapPrefs, a saved preset, the ?v= payload) and
+ * names only maps of that list, which sanitizeSnapLayout() holds it to. A
+ * group is a number its members share, counted in order of appearance.
+ * @typedef {object} SnapLayout
+ * @property {ColumnLayout} [left]
+ * @property {ColumnLayout} [right]
+ * @property {FloatingEntry[]} [floating] bottom to top
+ * @property {boolean} [dashboard]
+ */
+
+// the arrangement on screen, as data
+/** @returns {SnapLayout | null} */
 function snapLayout() {
 	const layout = {};
 	const keys = layoutKeys();
@@ -109,48 +135,13 @@ function snapLayout() {
 	return Object.keys(layout).length ? layout : null;
 }
 
-// rebuilt rather than trusted (storage, links, a saved entry): a pane must
-// name a map in the list, once across both columns and the floating widgets,
-// and carry a top (a layout from before panes were placed freely carries a
-// height share instead: those are stacked from the top as they were); the
-// two widths are held to the viewport. A map dropped from the list leaves
-// the layout, and an emptied column with it. A group is its members' place
-// as much as their number: fewer than two, or spread over two places, is no
-// group.
-//
-// The keys go in the order they always have: layouts are compared as JSON
-// (sameSnapLayout), and one saved by an earlier version must still compare
-// equal to itself read back
-/**
- * A widget or pane, by its instance key: the map id, and #2, #3 on a copy.
- * Positions are fractions of the viewport (a pane's of its column).
- * @typedef {object} PaneEntry
- * @property {string} id
- * @property {number} top
- * @property {number} [height] left out where the pane follows its aspect
- * @property {number} [group] widgets with the same number move as one
- * @property {boolean} [fullscreen] hosting a fullscreen map
- *
- * @typedef {object} FloatingEntry
- * @property {string} id
- * @property {number} left
- * @property {number} top
- * @property {number} width
- * @property {number} [height] only on a widget free of its aspect
- * @property {number} [group]
- * @property {boolean} [fullscreen]
- *
- * @typedef {{ width: number, panes: PaneEntry[] }} ColumnLayout
- *
- * The arrangement a view carries: the snap columns, the floating widgets and
- * whether it is a board. null is the page with nothing out of it.
- * @typedef {object} SnapLayout
- * @property {ColumnLayout} [left]
- * @property {ColumnLayout} [right]
- * @property {FloatingEntry[]} [floating] bottom to top
- * @property {boolean} [dashboard]
- */
-
+// Rebuilt rather than trusted (storage, links, a saved entry): each entry must
+// name a map of the list, once across the columns and the floating widgets;
+// an emptied column goes, and the widths are held to the viewport. A pane
+// stored before panes were placed freely has a height share instead of a top
+// and is stacked from the top. A group needs two members in one place.
+// Keys keep their order: layouts are compared as JSON (sameSnapLayout), and
+// an old one must still compare equal to itself read back
 /** @param {any} layout @param {string[]} mapIds @returns {SnapLayout | null} */
 export function sanitizeSnapLayout(layout, mapIds) {
 	if (!layout || typeof layout !== 'object') return null;

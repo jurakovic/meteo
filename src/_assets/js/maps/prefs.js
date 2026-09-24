@@ -126,14 +126,10 @@ export function getActiveMapPrefs() {
 	return sharedMapView || getMapPrefs();
 }
 
-// A board is known long before there is one. The list and its arrangement are
-// in storage or in the `?v=` above, and this file is read in <head> — the build
-// inlines it there — so the answer is in hand while the body is still being
-// parsed. The board itself cannot be: every map of it is a widget, and there
-// are no maps until the render on DOMContentLoaded — and on a slow load the
-// browser paints what it has well before that, which would show the page in its
-// ordinary layout for a moment before taking it away. The cloak hides the same
-// two things body.dashboard does, from now until the arrangement is applied.
+// Whether the view is a board is known from <head> (storage or ?v=), long
+// before the render on DOMContentLoaded builds one. Until the arrangement is
+// applied the cloak hides what body.dashboard hides, so a slow load does not
+// paint the ordinary page first and then take it away.
 export function cloakBoard() {
 	const layout = getActiveMapPrefs().layout;
 	if (layout && layout.dashboard && DESKTOP_MQ.matches) document.documentElement.classList.add('board-boot');

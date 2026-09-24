@@ -222,21 +222,13 @@ export function closeOpenDialog() {
 	return !!panel;
 }
 
-// A press anywhere outside the dialog shuts it, dropping what was edited in it
-// (the picker is rebuilt from what is stored on the next open). The press lands
-// on the backdrop, which is over everything the dialog is over, so it shuts the
-// dialog and does nothing else: it follows no link, presses no button, takes no
-// widget. The tab stands above the backdrop and keeps its own click, which
-// shuts the dialog the same way.
-//
-// A press is a pointerdown, a release and a click, and all three belong to the
-// dismissal: the backdrop stands until the click has been taken, so none of
-// them can be completed on what the dialog was covering. It stops painting the
-// moment it is pressed, the dialog it dimmed for being on its way out, and the
-// click is swallowed in the capture phase, which is ahead of every listener on
-// the page whatever order they were bound in. The release arms a short fallback
-// for the gestures no click follows — a pointer let go outside the window, a
-// drag
+// A press outside the dialog shuts it, dropping its edits, and does nothing
+// else: it lands on the backdrop, so it follows no link and takes no widget.
+// (The tab stands above the backdrop and shuts the dialog with its own click.)
+// The pointerdown, the release and the click all belong to the dismissal, so
+// the backdrop stops painting at once but stays until the click, which is
+// swallowed in the capture phase; a release no click follows (let go outside
+// the window, a drag) takes it down after a moment
 function initDialogBackdrop() {
 	const backdrop = query('.ms-backdrop');
 	if (!backdrop) return;

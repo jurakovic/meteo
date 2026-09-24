@@ -11,16 +11,11 @@ import { arrangementChanged } from './layout.js';
 import { refreshOverlap } from './overlap.js';
 import { reloadAllMaps } from './reload.js';
 
-// The widgets' commands: keys for what the buttons cannot do in one gesture,
-// and the tab's glyphs. The letters name the thing and not the word for it,
-// so they stand whatever language the page comes to speak: R is the [R] the
-// bar already carries, G the grid and S its snap, A arranges and D duplicates.
-// (K, which opens the dialog and is the Croatian Karte, is the dialog's;
-// Escape is the page's, page/commands.js.) R, G and S are also the tab's glyph
-// cluster, which is where they can be read off. A press inside a frame never
-// reaches the page, so a click on the page or on a title bar comes first, as
-// it does for the pointer (see refreshOverlap). The rest act on widgets, which
-// are a desktop thing
+// The widgets' commands: R reloads (the bar's [R]), G the grid, S its snap,
+// A arranges, D duplicates, the arrows nudge. The letters name the thing, not
+// a word for it. (K is the dialog's, Escape the page's: page/commands.js.)
+// A key pressed inside a frame never reaches the page, so the focus has to be
+// on the page or a title bar first
 const NUDGE_KEYS = { ArrowLeft: [-1, 0], ArrowRight: [1, 0], ArrowUp: [0, -1], ArrowDown: [0, 1] };
 
 export function initWidgetKeys() {

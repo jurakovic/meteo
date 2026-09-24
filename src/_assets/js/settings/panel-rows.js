@@ -11,14 +11,10 @@ import { dockAllPopouts } from '../widgets/popout.js';
 import { isRefreshOn, REFRESH_CHOICES, refreshEveryMinutes, refreshLabel, setRefreshPrefs } from '../widgets/refresh.js';
 import { layoutParts } from './panel-view.js';
 
-// the board is another way of viewing altogether, so it gets a row of its
-// own with a button, not a link among the others — a toggle, though, not a
-// way onto it: it ticks dashboardChecked and nothing moves until Primijeni,
-// like the ticks in the list beside it. Whether it is ticked is the lit
-// band's (.ms-on) to say, and what is on screen the layout line's, so the
-// row never narrates. Beside it the board's two grid switches, which only
-// mean anything on it: greyed and unclickable while it is off, their state
-// kept all the same, since they are a way of working rather than a view.
+// The board's row: its button is a toggle like the list's ticks, so nothing
+// moves until Primijeni, and the lit band (.ms-on) says whether it is ticked.
+// Beside it the grid switches and Posloži, which only mean anything on a
+// board: greyed while it is unticked, their state kept.
 // panel is the dialog (settings/panel.js), holding the ticks
 export function createModeRow(panel) {
 	const modeDiv = el('div', { class: 'ms-mode' });
@@ -43,18 +39,14 @@ export function createModeRow(panel) {
 				el('span', { class: 'beta', text: 'beta' })
 			]);
 			btn.addEventListener('click', () => panel.setDashboardChecked(!panel.dashboardChecked));
-			// these take effect on the tick, not on Primijeni: they are a way of
-			// working on the board rather than part of the view it shows, so there is
-			// nothing to hold back — tick the grid on, see it, shut the dialog
-			// arranging acts on the board that is up, not on the tick that may yet be
-			// applied: with the mode ticked but not yet applied there is no board to
-			// arrange, so it waits for Primijeni rather than doing nothing on a press.
-			// And it needs the tick as well, standing down with the grid switches
-			// when the mode is unticked over a board that is still up
+			// Posloži arranges the board that is up, so it needs both a board and
+			// the tick: ticked but not yet applied there is nothing to arrange
 			const tile = el('button', { type: 'button', class: 'btn ms-arrange', 'data-action': 'arrange', title: withKey('Posloži u mrežu', 'arrange') }, [
 				document.createTextNode('Posloži')
 			]);
 			tile.disabled = !panel.dashboardChecked || !isDashboard();
+			// the grid switches act on the tick, not on Primijeni: they are a way
+			// of working on the board rather than part of the view
 			modeDiv.append(btn,
 				buildGridToggle('Prikaži mrežu', panel.gridChecked, (on) => { panel.gridChecked = on; setGridPrefs(panel.gridChecked, panel.snapChecked); }),
 				buildGridToggle('Poravnaj uz mrežu', panel.snapChecked, (on) => { panel.snapChecked = on; setGridPrefs(panel.gridChecked, panel.snapChecked); }),

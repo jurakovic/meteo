@@ -13,9 +13,8 @@ import { buildBasicIframe, buildIframe, buildImage, buildSlideshow, buildVideo }
 // fullscreen: a map with a fullscreen of its own ([ ]), which the stored
 //   arrangement can carry
 // reload(block): its contents fetched afresh past the cache; null for an
-//   interactive map, whose feed is live of its own accord — navigating its
-//   frame again would cost it its pan and its zoom for nothing (its bar keeps
-//   its own [X]/[R] gate button instead)
+//   interactive map, which is live already and would only lose its pan and
+//   zoom (its bar has the [X]/[R] gate button instead)
 export const MAP_TYPES = {
 	slideshow: { build: buildSlideshow, freeAspect: false, fullscreen: false, reload: reloadImages },
 	image: { build: buildImage, freeAspect: false, fullscreen: false, reload: reloadImages },

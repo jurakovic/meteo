@@ -3,27 +3,17 @@ import { MAP_TYPES } from './types.js';
 
 // Drawing maps from their catalog entries: a block's title bar, its map as
 // its type draws it, the links under it, and the entry a map takes in the list.
-// Both pages draw with this — the landing page as it is, the customize page
-// with the widgets' buttons in every title bar, which it passes in
-// (options.titleButtons) so that this knows nothing of widgets.
-//
-// options.titleButtons(interactive): the extra buttons of a title bar, or
-// nothing; interactive for an interactive map, whose bar has its own gate
-// button in place of a reload
+// Both pages draw with this. The customize page passes the widgets' buttons in
+// (options.titleButtons, told whether the map is interactive) so that this
+// module knows nothing of widgets.
 /** @typedef {{ titleButtons?: (interactive: boolean) => HTMLElement[] }} RenderOptions */
 
-// A map can be on screen more than once: the widget's [D] makes another showing
-// of it (widgets/copies.js), and a showing beyond the first is a widget and nothing
-// else — the page keeps one row per map however many float over it. So a block
-// is named twice: by the map it shows (`data-map-id`, which is the catalog's)
-// and by which showing of it this is (`data-inst`). The render's own block is
-// the first, so its instance key is the plain id and every layout written
-// before copies existed still reads; a further one carries `#2`, `#3`.
-//
-// The parts inside a block that carry a name of their own — a slideshow and
-// its indicators, a frame and the ids built off it — take a suffix from the
-// index instead of the key, since a frame's id is also pasted into other ids
-// and read back with getElementById, where a `#` has no business being.
+// A map can be on screen more than once ([D], widgets/copies.js), so a block
+// is named twice: by its map (`data-map-id`) and by which showing it is
+// (`data-inst`). The render's own block is the first, keyed by the plain id,
+// so layouts written before copies existed still read; later ones are `#2`,
+// `#3`. Ids inside a block (a slideshow, a frame) take a suffix from the index
+// instead, since they end up in other ids and in getElementById.
 const INST_SEP = '#';
 
 /** @param {string} mapId @param {number} index */

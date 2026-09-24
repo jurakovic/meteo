@@ -46,26 +46,15 @@ export function refreshOverlap() {
 	syncShadows();
 }
 
-// A widget's shadow belongs to what is behind the widgets, not to the widget
-// beside it: a shadow drawn by the widget itself paints in that widget's place
-// in the order, so of two widgets side by side the raised one lays its shadow
-// across its neighbour. So no widget carries one. Each has a box of its own size
-// in a layer under the whole widget range, over the page and the docked maps on
-// it, the columns' ground and the graph paper, and that box carries the shadow.
-// An outer box-shadow is clipped out of its own border box, so the box paints
-// the halo alone and the widget sits on it exactly. Every widget is then over
-// every shadow whatever the order among themselves, which also lets a grouped
-// widget keep a shadow: a member's falls under the member beside it, not across
-// it. A pane in a column has none (docked into the column's ground rather than
-// floating over it), nor has a widget hosting a fullscreen map, whose box is not
-// to be seen.
+// Shadows are drawn under all the widgets, not by each widget, which would lay
+// its shadow across a lower neighbour (a grouped one too). Each widget has a
+// box of its size in a layer below the widget band that paints only the halo
+// (a box-shadow is clipped out of its own box). A pane in a column has none,
+// nor has a widget hosting a fullscreen map.
 //
-// There are two such layers because a fullscreen map lies between them, and a
-// shadow falls on whatever is behind its own widget: a widget standing on that
-// map casts onto it, as it would onto the page, while one standing beside it —
-// one that walled the map off, so the map begins where the widget ends — casts
-// under, and the map covers the halo exactly as the host's own box did. Which
-// layer a box belongs in is syncShadows(); the CSS gives them their z-index.
+// There are two such layers, either side of a fullscreen map: a widget over
+// the map casts onto it, one beside it casts under it. syncShadows() picks the
+// layer; the CSS gives them their z-index.
 
 // over is the layer over a fullscreen map, and the only one while none is up
 function shadowLayer(over) {
