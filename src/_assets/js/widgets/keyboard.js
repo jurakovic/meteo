@@ -28,12 +28,8 @@ export function initWidgetKeys() {
 	registerCommand('grid-snap', { keys: ['s', 'S'], keyWhen: desktop, run: () => toggleGridSnapped() });
 	registerCommand('arrange', { keys: ['a', 'A'], keyWhen: inSight, run: () => arrangeBoard() });
 	registerCommand('duplicate', { keys: ['d', 'D'], keyWhen: inSight, run: () => duplicateMap(topPopout()) });
-	// the arrows belong to whatever is on top. While the dialog is open that is
-	// the dialog: its body is the only thing that scrolls there, and a widget
-	// behind it is not what an arrow pressed on the map list is aimed at. The
-	// grid keys above are another matter — those two switches are the dialog's
-	// own as well, and it follows them (grid-changed). One grid cell a press,
-	// one pixel with Shift
+	// the arrows move the widget on top, one grid cell a press (a pixel with
+	// Shift), and stand down while the dialog is open, whose body they scroll
 	registerCommand('nudge', {
 		keys: Object.keys(NUDGE_KEYS),
 		keyWhen: inSight,
@@ -45,11 +41,9 @@ export function initWidgetKeys() {
 	});
 }
 
-// the widget the keys move is the one on top. popoutZ already names it and the
-// shadow layer leaves it unmistakable, so it needs no mark of its own: the
-// press shows which it was, and a click on another picks another. A pane is
-// out of it (it lives in its column, where a top is not a place), and so is a
-// widget hosting a fullscreen map, whose box is not to be seen
+// the widget the keys move: the one on top, needing no mark of its own (a
+// click on another picks that one). Not a pane, nor a widget hosting a
+// fullscreen map
 function topPopout() {
 	return floatingBlocks()
 		.filter(block => !block.classList.contains('fs-host'))

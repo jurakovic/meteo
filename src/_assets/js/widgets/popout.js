@@ -130,12 +130,9 @@ export function lockAspect(block) {
 	block.style.removeProperty('--po-img');
 }
 
-// the backdrop shows the image on screen: the active slide's, or the map's;
-// followed on every load and slide change, and through a reload's fresh
-// address. A video has no image to take, and neither can one be read off it
-// (the catalog entry says why), so where the map gives a `backdrop` that still
-// frame stands in — which also covers a lazy slide whose src is not swapped in
-// yet, an img carrying its address even when the load then fails
+// the backdrop shows the image on screen, followed on every load, slide change
+// and reload. A video has none (nor can a frame be read off it), so the map's
+// `backdrop` still stands in; so does it for a lazy slide not yet loaded
 /** @param {HTMLElement} block */
 export function syncBackdrop(block) {
 	if (!block.classList.contains('letterbox')) return;
@@ -145,12 +142,10 @@ export function syncBackdrop(block) {
 	if (src) block.style.setProperty('--po-img', `url("${src}")`);
 }
 
-// a popped-out widget's title would run under the button clusters, which sit
-// on the bar out of flow: it is centred in the gap between them instead,
-// from the pop-out on so it never jumps, and given the gap's width with an
-// ellipsis (CSS) for when it is too long. Measured after every gesture and
-// whenever a button comes or goes; a bar not on screen (a slide not shown)
-// is left for when it is
+// a widget's title is centred in the gap between the button clusters (which
+// sit out of flow) and given its width, with an ellipsis (CSS). Measured after
+// every gesture and whenever a button comes or goes; a bar not on screen is
+// left for when it is
 
 function fitTitles(block) {
 	block.querySelectorAll('.radartitle:not(.fullscreen)').forEach(bar => {
