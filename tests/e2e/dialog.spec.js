@@ -42,15 +42,15 @@ test.describe('settings dialog', () => {
 		const panel = page.locator('#mapSettings');
 		await openDialog(page);
 		await expect(page.locator('.buttons .ms-toggle .arrow')).toHaveText('▲');
-		await expect(page.locator('body')).toHaveClass(/ms-open/);
+		await expect(page.locator('body')).toHaveClass(/dialog-open/);
 		await page.keyboard.press('Escape');
 		await expect(panel).toBeHidden();
 		await expect(page.locator('.buttons .ms-toggle .arrow')).toHaveText('▼');
 		await page.locator('.buttons .ms-toggle').click();
 		await expect(panel).toBeVisible();
-		await panel.locator('.ms-head a', { hasText: 'Zatvori' }).click();
+		await panel.locator('.dialog-head a', { hasText: 'Zatvori' }).click();
 		await expect(panel).toBeHidden();
-		await expect(page.locator('body')).not.toHaveClass(/ms-open/);
+		await expect(page.locator('body')).not.toHaveClass(/dialog-open/);
 	});
 
 	test('a preset applied with Enter replaces the view and is stored', async ({ page }) => {
@@ -212,7 +212,7 @@ test.describe('settings dialog', () => {
 	test('the dialog window moves by its head, is remembered, and a double click resets it', async ({ page }) => {
 		await openDialog(page);
 		const panel = page.locator('#mapSettings');
-		const title = await box(page.locator('#mapSettings .ms-title'));
+		const title = await box(page.locator('#mapSettings .dialog-title'));
 		const before = await box(panel);
 		await drag(page, { x: title.right + 40, y: title.cy }, { x: title.right - 160, y: title.cy + 60 });
 		const after = await box(panel);
@@ -222,7 +222,7 @@ test.describe('settings dialog', () => {
 		await page.keyboard.press('Escape');
 		await openDialog(page);
 		expect(Math.round((await box(panel)).x)).toBe(Math.round(after.x));
-		const head = await box(page.locator('#mapSettings .ms-title'));
+		const head = await box(page.locator('#mapSettings .dialog-title'));
 		await page.mouse.dblclick(head.right + 40, head.cy);
 		expect(await storedJson(page, 'msPanel')).toBeNull();
 		expect(Math.round((await box(panel)).x)).toBe(Math.round(before.x));

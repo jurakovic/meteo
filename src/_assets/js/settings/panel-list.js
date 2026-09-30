@@ -129,7 +129,7 @@ export function createMapList(panel) {
 
 			// keep scrolling (and reordering) while the pointer rests near an edge
 			// of the dialog's body, which is what scrolls (the page holds still)
-			const scroller = row.closest('.ms-body');
+			const scroller = row.closest('.dialog-body');
 			const autoScroll = () => {
 				if (scrollDir !== 0) {
 					scroller.scrollBy(0, scrollDir);

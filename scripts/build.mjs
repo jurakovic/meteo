@@ -79,7 +79,7 @@ async function htmlFiles(dir) {
 function processHtml(html, parts) {
 	const replacements = [
 		// the manual first, so a path it grows later is rewritten with the rest
-		['<div class="ms-body" data-include-html="/_components/manual.c.html">', '<div class="ms-body">'],
+		['<div class="dialog-body" data-include-html="/_components/manual.c.html">', '<div class="dialog-body">'],
 		['<!-- manual -->', parts.manual],
 		['href="/_assets/img', 'href="/meteo/img'],
 		['src="/_assets/img', 'src="/meteo/img'],

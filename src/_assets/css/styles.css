@@ -1042,7 +1042,7 @@ body.fs-lock {
    dims rather than blurs: the maps behind are what the list in front is being
    picked for, and a blur would cost the view its point as well as compositing
    every live frame on the page */
-.ms-backdrop {
+.dialog-backdrop {
 	position: fixed;
 	inset: 0;
 	z-index: var(--z-backdrop);
@@ -1051,14 +1051,14 @@ body.fs-lock {
 
 	/* still there to take the rest of the press that dismissed the dialog, but
 	   no longer painting: the dialog it dims for has gone with that press */
-	.ms-backdrop.ms-spent {
+	.dialog-backdrop.dialog-spent {
 		background-color: transparent;
 	}
 
 /* the settings dialog: fixed over everything — the page, the columns, a
    fullscreen map — and over the backdrop that makes the page inert while it is
    up; 750 by 750 to begin with, or what the viewport leaves */
-.map-settings {
+.dialog {
 	position: fixed;
 	z-index: var(--z-dialog);
 	top: 24px;
@@ -1081,12 +1081,12 @@ body.fs-lock {
 }
 
 	/* display: flex would beat the hidden attribute's display: none */
-	.map-settings[hidden] {
+	.dialog[hidden] {
 		display: none;
 	}
 
 @media (max-width: 800px) {
-	.map-settings {
+	.dialog {
 		top: 0;
 		max-width: 100%;
 		height: auto; /* the content's, up to the screen */
@@ -1105,30 +1105,30 @@ body.fs-lock {
    and drives — inside the panel, so the press that grabs one is a press inside
    the dialog and misses the backdrop that would shut it */
 @media (min-width: 801px) and (hover: hover) and (pointer: fine) {
-	.map-settings .po-h {
+	.dialog .po-h {
 		position: absolute;
 		z-index: 1;
 	}
 
-	.map-settings .ms-head {
+	.dialog .dialog-head {
 		cursor: move;
 	}
 }
 
 	/* the page holds still under the dialog (the scroll goes to the dialog's
 	   body, and the wheel stops at its end rather than going on to the page) */
-	body.ms-open {
+	body.dialog-open {
 		overflow: hidden;
 	}
 
 	/* the lock drops the page's scrollbar, which would widen the page and
 	   shift what is centred in it: its gutter is kept while the page had one
 	   (page/dialog.js sets the class only then) */
-	html.ms-gutter {
+	html.dialog-gutter {
 		scrollbar-gutter: stable;
 	}
 
-	.map-settings .ms-head {
+	.dialog .dialog-head {
 		display: flex;
 		justify-content: space-between;
 		align-items: center; /* not baseline: the icon at the left end has none */
@@ -1137,28 +1137,28 @@ body.fs-lock {
 		border-bottom: 1px solid var(--c-line);
 	}
 
-		.map-settings .ms-head .ms-title {
+		.dialog .dialog-head .dialog-title {
 			font-weight: bold;
 		}
 
-		.map-settings .ms-head a {
+		.dialog .dialog-head a {
 			cursor: pointer;
 			color: #8fb4ff;
 		}
 
 		/* the way home and the title, together at the left end */
-		.map-settings .ms-head .ms-head-left {
+		.dialog .dialog-head .dialog-head-left {
 			display: flex;
 			align-items: center;
 			gap: 8px;
 		}
 
-			.map-settings .ms-head .ms-home {
+			.dialog .dialog-head .dialog-home {
 				display: flex;
 			}
 
 			/* the site's favicon, round, at the height of the title beside it */
-			.map-settings .ms-head .ms-home img {
+			.dialog .dialog-head .dialog-home img {
 				display: block;
 				width: 16px;
 				height: 16px;
@@ -1173,32 +1173,32 @@ body.fs-lock {
 	   gap to the title into its own padding, split with the title, so the
 	   two ends of it touch and the icon is tapped anywhere up to the word */
 	@media (max-width: 800px) {
-		.map-settings .ms-head {
+		.dialog .dialog-head {
 			padding: 0;
 		}
 
-			.map-settings .ms-head .ms-title {
+			.dialog .dialog-head .dialog-title {
 				padding: 11px 10px;
 			}
 
-			.map-settings .ms-head a {
+			.dialog .dialog-head a {
 				padding: 11px 14px;
 			}
 
-			.map-settings .ms-head .ms-head-left {
+			.dialog .dialog-head .dialog-head-left {
 				gap: 0;
 			}
 
-			.map-settings .ms-head .ms-home {
+			.dialog .dialog-head .dialog-home {
 				padding: 11px 4px 11px 10px;
 			}
 
-			.map-settings .ms-head .ms-home + .ms-title {
+			.dialog .dialog-head .dialog-home + .dialog-title {
 				padding-left: 4px;
 			}
 	}
 
-	.map-settings .ms-body {
+	.dialog .dialog-body {
 		min-height: 0;
 		overflow-y: auto;
 		overscroll-behavior: contain;
@@ -1212,35 +1212,35 @@ body.fs-lock {
 		   so the native one is left alone below the breakpoint, gutter and all.
 		   The tab's [+] menu scrolls the same way */
 		@media (min-width: 801px) and (hover: hover) and (pointer: fine) {
-			.map-settings .ms-body,
+			.dialog .dialog-body,
 			.ms-add-list {
 				scrollbar-gutter: stable;
 			}
 
-			.map-settings .ms-body::-webkit-scrollbar,
+			.dialog .dialog-body::-webkit-scrollbar,
 			.ms-add-list::-webkit-scrollbar {
 				width: 12px;
 			}
 
-			.map-settings .ms-body::-webkit-scrollbar-track,
+			.dialog .dialog-body::-webkit-scrollbar-track,
 			.ms-add-list::-webkit-scrollbar-track {
 				background-color: var(--c-surface-deep);
 			}
 
-			.map-settings .ms-body::-webkit-scrollbar-thumb,
+			.dialog .dialog-body::-webkit-scrollbar-thumb,
 			.ms-add-list::-webkit-scrollbar-thumb {
 				background-color: var(--c-control);
 				border: 3px solid var(--c-surface-deep);
 				border-radius: 6px;
 			}
 
-				.map-settings .ms-body::-webkit-scrollbar-thumb:hover,
+				.dialog .dialog-body::-webkit-scrollbar-thumb:hover,
 				.ms-add-list::-webkit-scrollbar-thumb:hover {
 					background-color: var(--c-control-hover);
 				}
 
 			@supports not selector(::-webkit-scrollbar) {
-				.map-settings .ms-body,
+				.dialog .dialog-body,
 				.ms-add-list {
 					scrollbar-width: thin;
 					scrollbar-color: var(--c-control) var(--c-surface-deep);
@@ -1248,7 +1248,7 @@ body.fs-lock {
 			}
 		}
 
-	.map-settings label {
+	.dialog label {
 		cursor: pointer;
 	}
 
@@ -1297,7 +1297,7 @@ body.fs-lock {
 	}
 
 	.ms-tab:hover,
-	body.ms-open .ms-tab,
+	body.dialog-open .ms-tab,
 	body.ms-add-open .ms-tab {
 		opacity: 1;
 	}
@@ -1465,7 +1465,7 @@ body.fs-lock {
 	/* the options wrap onto as many lines as they need — a saved-preset list
 	   can grow long, and it grows in the axis the page already scrolls rather
 	   than off the side of a bar */
-	.map-settings .ms-presets {
+	.dialog .ms-presets {
 		display: flex;
 		flex-wrap: wrap;
 		gap: 6px;
@@ -1477,7 +1477,7 @@ body.fs-lock {
 		/* the radio holds the state and takes the keyboard focus, the chip
 		   beside it carries the whole look and the tap area; absolute keeps
 		   the hidden input from padding out the row */
-		.map-settings .ms-presets label {
+		.dialog .ms-presets label {
 			position: relative;
 			/* the leftover on each line is split between that line's chips, so
 			   every row reaches both edges instead of ending ragged. Widths
@@ -1489,18 +1489,18 @@ body.fs-lock {
 		/* zero-basis, so it never forces a wrap of its own and always ends up
 		   on the last line; the outsized grow then leaves that line's chips
 		   with a fraction of a pixel each, i.e. their natural width */
-		.map-settings .ms-presets .ms-fill {
+		.dialog .ms-presets .ms-fill {
 			flex: 1000 1 0;
 			height: 0;
 		}
 
-		.map-settings .ms-presets input {
+		.dialog .ms-presets input {
 			position: absolute;
 			margin: 0;
 			opacity: 0;
 		}
 
-		.map-settings .ms-chip {
+		.dialog .ms-chip {
 			display: block;
 			position: relative; /* for the saved-preset corner mark */
 			text-align: center; /* the chips are wider than their names once stretched */
@@ -1514,7 +1514,7 @@ body.fs-lock {
 			   name: the chips stretch to fill the line and centre their names, so
 			   anything taking inline space shifts the name and eats the width.
 			   Grey, not the accent — orange means "selected" on this bar */
-			.map-settings .ms-chip.ms-user::after {
+			.dialog .ms-chip.ms-user::after {
 				content: '';
 				position: absolute;
 				top: 0;
@@ -1529,16 +1529,16 @@ body.fs-lock {
 			/* a preset that is a board carries the board's mark, the blue edge of
 			   the mode row, on its chip and its row in the list; the origin dot
 			   sits inside it, in the padding */
-			.map-settings .ms-chip.ms-board,
-			.map-settings .ms-manage-name.ms-board {
+			.dialog .ms-chip.ms-board,
+			.dialog .ms-manage-name.ms-board {
 				border-left: 3px solid var(--c-board);
 			}
 
-			.map-settings .ms-manage-name.ms-board {
+			.dialog .ms-manage-name.ms-board {
 				padding-left: 6px;
 			}
 
-			.map-settings .ms-chip.ms-origin::before {
+			.dialog .ms-chip.ms-origin::before {
 				content: '';
 				position: absolute;
 				left: 4px;
@@ -1550,60 +1550,60 @@ body.fs-lock {
 				background-color: var(--c-mark);
 			}
 
-		.map-settings .ms-presets label:hover .ms-chip {
+		.dialog .ms-presets label:hover .ms-chip {
 			background-color: var(--c-row-hover);
 		}
 
 		/* the panel's button fill, with the accent on the name alone — the same
 		   way the active sort link is marked. The fill is restated to hold
 		   steady under :hover, which it ties with on specificity */
-		.map-settings .ms-presets input:checked + .ms-chip {
+		.dialog .ms-presets input:checked + .ms-chip {
 			color: var(--c-accent);
 			background-color: var(--c-control);
 		}
 
 		/* white, not the accent: orange now means "selected", and a focus ring in
 		   the same colour would read as a second selected chip */
-		.map-settings .ms-presets input:focus-visible + .ms-chip {
+		.dialog .ms-presets input:focus-visible + .ms-chip {
 			outline: 1px solid white;
 			outline-offset: 1px;
 		}
 
-	.map-settings .ms-item {
+	.dialog .ms-item {
 		display: flex;
 		justify-content: space-between;
 		align-items: center;
 		padding: 2px 0;
 	}
 
-	.map-settings .ms-glyph {
+	.dialog .ms-glyph {
 		margin: 0 6px 0 4px;
 	}
 
 	/* both sections empty out at the ends of the range: "Ništa" leaves nothing
 	   selected, "Sve" leaves nothing available; the lists hold only rows, so
 	   :empty is enough and no placeholder node has to be kept in sync */
-	.map-settings .ms-list:empty::before {
+	.dialog .ms-list:empty::before {
 		display: block;
 		padding: 2px 0;
 		font-style: italic;
 		opacity: 0.6;
 	}
 
-	.map-settings .ms-selected:empty::before {
+	.dialog .ms-selected:empty::before {
 		content: "Nema odabranih karata";
 	}
 
-	.map-settings .ms-available:empty::before {
+	.dialog .ms-available:empty::before {
 		content: "Sve su karte odabrane";
 	}
 
 	/* rows in the available section are not part of the render order */
-	.map-settings .ms-available .ms-handle {
+	.dialog .ms-available .ms-handle {
 		display: none;
 	}
 
-	.map-settings .ms-sort {
+	.dialog .ms-sort {
 		display: flex;
 		/* the ▲/▼ arrow renders in a fallback font with taller metrics on
 		   Android; baseline alignment keeps the links from shifting down */
@@ -1616,25 +1616,25 @@ body.fs-lock {
 		border-top: 1px solid var(--c-control);
 	}
 
-		.map-settings .ms-sort a {
+		.dialog .ms-sort a {
 			cursor: pointer;
 			user-select: none;
 			text-decoration: none;
 		}
 
-		.map-settings .ms-sort a.active {
+		.dialog .ms-sort a.active {
 			color: var(--c-accent);
 		}
 
 	/* the box sits on the list it narrows, under the sort row that heads the
 	   section — the two work the same surface and read as one band */
-	.map-settings .ms-find {
+	.dialog .ms-find {
 		position: relative;
 		display: flex;
 		margin-bottom: 6px; /* not padding: the clear button is centred on this box, which has to be the input's */
 	}
 
-		.map-settings .ms-find-input {
+		.dialog .ms-find-input {
 			flex: 1;
 			min-width: 0;
 			padding: 4px 22px 4px 6px;
@@ -1646,14 +1646,14 @@ body.fs-lock {
 			font-size: inherit;
 		}
 
-		.map-settings .ms-find-input:focus {
+		.dialog .ms-find-input:focus {
 			outline: none;
 			border-color: var(--c-accent);
 		}
 
 		/* only once there is something to clear; the room it takes is held by the
 		   input's padding either way, so the text does not shift under it */
-		.map-settings .ms-find-clear {
+		.dialog .ms-find-clear {
 			position: absolute;
 			top: 50%;
 			right: 6px;
@@ -1667,8 +1667,8 @@ body.fs-lock {
 			opacity: 0.7;
 		}
 
-			.map-settings .ms-find-clear::before,
-			.map-settings .ms-find-clear::after {
+			.dialog .ms-find-clear::before,
+			.dialog .ms-find-clear::after {
 				content: '';
 				position: absolute;
 				top: 3.25px;
@@ -1679,35 +1679,35 @@ body.fs-lock {
 				transform: rotate(45deg);
 			}
 
-			.map-settings .ms-find-clear::after {
+			.dialog .ms-find-clear::after {
 				transform: rotate(-45deg);
 			}
 
-		.map-settings .ms-find.ms-find-set .ms-find-clear {
+		.dialog .ms-find.ms-find-set .ms-find-clear {
 			display: block;
 		}
 
-		.map-settings .ms-find-clear:hover {
+		.dialog .ms-find-clear:hover {
 			opacity: 1;
 		}
 
 	/* a row the term does not reach. Scoped to the available section: a row
 	   carries the class over to the order above when it is ticked, where
 	   nothing is ever hidden */
-	.map-settings .ms-available .ms-item.ms-filtered {
+	.dialog .ms-available .ms-item.ms-filtered {
 		display: none;
 	}
 
 	/* the row of a map switched off by the remote config (settings/panel-list.js
 	   marks it): hidden in both sections, but there, so the list read off the
 	   rows still holds it */
-	.map-settings .ms-item.ms-off {
+	.dialog .ms-item.ms-off {
 		display: none;
 	}
 
 	/* the list is not empty here — every row is filtered out of sight — so
 	   :empty cannot speak for it */
-	.map-settings .ms-available.ms-no-hits::after {
+	.dialog .ms-available.ms-no-hits::after {
 		content: "Nema karte za taj pojam";
 		display: block;
 		padding: 2px 0;
@@ -1718,7 +1718,7 @@ body.fs-lock {
 	/* the snapped arrangement, named and undoable (desktop only, like the panes) */
 	/* the board is another way of viewing: its row stands out from the links
 	   around it — a button, a band with a blue edge, lit while on the board */
-	.map-settings .ms-mode {
+	.dialog .ms-mode {
 		display: flex;
 		align-items: center;
 		gap: 14px;
@@ -1729,11 +1729,11 @@ body.fs-lock {
 		border-left: 4px solid var(--c-board);
 	}
 
-		.map-settings .ms-mode.ms-on {
+		.dialog .ms-mode.ms-on {
 			background-color: var(--c-board-deep);
 			border-color: var(--c-board);
 		}
-		.map-settings .ms-mode .btn {
+		.dialog .ms-mode .btn {
 			flex: none;
 			padding: 0 14px;
 		}
@@ -1742,14 +1742,14 @@ body.fs-lock {
 			   in a fixed cell, so the tag has no centering to shift and is better
 			   left in flow: out of flow it hangs past the button's right edge and
 			   all but closes the gap before the grid switches */
-			.map-settings .ms-mode .btn .beta {
+			.dialog .ms-mode .btn .beta {
 				position: static;
 				transform: none;
 			}
 
 		/* the grid switches ride in the mode row, and are the board's: greyed and
 		   unclickable while it is off, their state kept all the same */
-		.map-settings .ms-grid {
+		.dialog .ms-grid {
 			display: flex;
 			align-items: center;
 			gap: 6px;
@@ -1758,27 +1758,27 @@ body.fs-lock {
 			user-select: none;
 		}
 
-		.map-settings .ms-mode.ms-on .ms-grid {
+		.dialog .ms-mode.ms-on .ms-grid {
 			color: white;
 		}
 
 		/* by class rather than :has(input:disabled), which is newer than the
 		   rest of this sheet leans on; settings/panel-rows.js sets it with the
 		   disabled state */
-		.map-settings .ms-grid.ms-off {
+		.dialog .ms-grid.ms-off {
 			opacity: 0.45;
 			cursor: default;
 		}
 
 		/* pushed to the far end of the row: it is the one thing there that acts
 		   at once on what is already on screen rather than setting something */
-		.map-settings .ms-mode .ms-arrange {
+		.dialog .ms-mode .ms-arrange {
 			flex: none;
 			margin-left: auto;
 			padding: 0 14px;
 		}
 
-		.map-settings .ms-mode .ms-arrange:disabled {
+		.dialog .ms-mode .ms-arrange:disabled {
 			opacity: 0.45;
 			cursor: default;
 		}
@@ -1786,7 +1786,7 @@ body.fs-lock {
 	/* the clock's own row, under the mode row and built like it, but not the
 	   board's: a page left open goes stale on a phone too, so it stands at
 	   every width */
-	.map-settings .ms-refresh {
+	.dialog .ms-refresh {
 		display: flex;
 		align-items: center;
 		gap: 10px;
@@ -1798,13 +1798,13 @@ body.fs-lock {
 		color: var(--c-muted);
 	}
 
-		.map-settings .ms-refresh.ms-on {
+		.dialog .ms-refresh.ms-on {
 			background-color: var(--c-board-deep);
 			border-color: var(--c-board);
 			color: white;
 		}
 
-		.map-settings .ms-refresh label {
+		.dialog .ms-refresh label {
 			display: flex;
 			align-items: center;
 			gap: 6px;
@@ -1812,7 +1812,7 @@ body.fs-lock {
 			user-select: none;
 		}
 
-		.map-settings .ms-refresh-every {
+		.dialog .ms-refresh-every {
 			padding: 2px 4px;
 			border: 1px solid var(--c-control);
 			border-radius: 3px;
@@ -1824,12 +1824,12 @@ body.fs-lock {
 
 		/* pushed to the far end, where it is read rather than stepped over on
 		   the way to the switch */
-		.map-settings .ms-refresh-left {
+		.dialog .ms-refresh-left {
 			margin-left: auto;
 			font-variant-numeric: tabular-nums;
 		}
 
-	.map-settings .ms-layout {
+	.dialog .ms-layout {
 		display: flex;
 		gap: 14px;
 		padding: 6px 0;
@@ -1838,18 +1838,18 @@ body.fs-lock {
 
 	/* both rows are hidden by attribute (on a phone, or with nothing to say),
 	   which their display: flex would otherwise beat */
-	.map-settings .ms-mode[hidden],
-	.map-settings .ms-layout[hidden] {
+	.dialog .ms-mode[hidden],
+	.dialog .ms-layout[hidden] {
 		display: none;
 	}
 
-		.map-settings .ms-layout a {
+		.dialog .ms-layout a {
 			cursor: pointer;
 			user-select: none;
 			text-decoration: none;
 		}
 
-	.map-settings .ms-handle {
+	.dialog .ms-handle {
 		/* touch-action is ignored on non-replaced inline elements, so the
 		   handle must be a box for it to take effect on touch screens */
 		display: inline-block;
@@ -1859,15 +1859,15 @@ body.fs-lock {
 		user-select: none;
 	}
 
-	.map-settings .ms-item.dragging {
+	.dialog .ms-item.dragging {
 		background-color: var(--c-title);
 	}
 
-		.map-settings .ms-item.dragging .ms-handle {
+		.dialog .ms-item.dragging .ms-handle {
 			cursor: grabbing;
 		}
 
-	.map-settings .ms-manage {
+	.dialog .ms-manage {
 		padding-top: 6px;
 		margin-top: 6px;
 		border-top: 1px solid var(--c-control);
@@ -1875,7 +1875,7 @@ body.fs-lock {
 
 		/* the accent means "active" and dimming means "hidden", so weight is what
 		   is left to mark these as structure rather than another row */
-		.map-settings .ms-manage-title {
+		.dialog .ms-manage-title {
 			display: flex;
 			justify-content: space-between;
 			align-items: baseline;
@@ -1883,34 +1883,34 @@ body.fs-lock {
 			font-weight: bold;
 		}
 
-			.map-settings .ms-manage-title a {
+			.dialog .ms-manage-title a {
 				cursor: pointer;
 				user-select: none;
 				text-decoration: none;
 			}
 
 			/* the heading's own actions are links like any other, not part of the label */
-			.map-settings .ms-manage-title-links {
+			.dialog .ms-manage-title-links {
 				display: flex;
 				gap: 12px;
 				font-weight: normal;
 			}
 
 		/* a heading following rows rules the two groups apart */
-		.map-settings .ms-manage-item + .ms-manage-title,
-		.map-settings .ms-manage-empty + .ms-manage-title {
+		.dialog .ms-manage-item + .ms-manage-title,
+		.dialog .ms-manage-empty + .ms-manage-title {
 			padding-top: 8px;
 			margin-top: 8px;
 			border-top: 1px solid var(--c-control);
 		}
 
-		.map-settings .ms-save {
+		.dialog .ms-save {
 			display: flex;
 			gap: 8px;
 			margin-bottom: 6px;
 		}
 
-		.map-settings .ms-name {
+		.dialog .ms-name {
 			/* min-width overrides the input's default intrinsic width, which
 			   would otherwise keep it from shrinking inside the flex row */
 			flex: 1;
@@ -1926,17 +1926,17 @@ body.fs-lock {
 		}
 
 		/* a rejected rename (empty or already taken) keeps the editor open */
-		.map-settings .ms-name.invalid {
+		.dialog .ms-name.invalid {
 			border-color: var(--c-accent);
 		}
 
-		.map-settings .ms-save .btn {
+		.dialog .ms-save .btn {
 			flex: none;
 			padding: 0 14px;
 		}
 
-		.map-settings .ms-manage-item,
-		.map-settings .ms-shared {
+		.dialog .ms-manage-item,
+		.dialog .ms-shared {
 			display: flex;
 			/* three action links leave little room on a phone: rather than pick a
 			   breakpoint, let them drop to their own line once the name is down
@@ -1949,7 +1949,7 @@ body.fs-lock {
 		}
 
 		/* a long name shortens instead of pushing the links off the row */
-		.map-settings .ms-manage-name {
+		.dialog .ms-manage-name {
 			flex: 1;
 			min-width: 6em;
 			overflow: hidden;
@@ -1961,12 +1961,12 @@ body.fs-lock {
 		   The whole row dims so it reads as one "off" unit, and lifts on hover
 		   so the link that undoes it is at full contrast when reached for —
 		   kept legible on its own, since touch never hovers */
-		.map-settings .ms-manage-item.ms-hidden {
+		.dialog .ms-manage-item.ms-hidden {
 			opacity: 0.55;
 		}
 
-			.map-settings .ms-manage-item.ms-hidden:hover,
-			.map-settings .ms-manage-item.ms-hidden:focus-within {
+			.dialog .ms-manage-item.ms-hidden:hover,
+			.dialog .ms-manage-item.ms-hidden:focus-within {
 				opacity: 1;
 			}
 
@@ -1974,7 +1974,7 @@ body.fs-lock {
 		   sitting wherever the word lengths leave them; the panel font is
 		   monospace, so ch widths hold exactly (the widest words are the
 		   9-character "Preimenuj" and the "Kopirano!" the share link flashes) */
-		.map-settings .ms-manage-links {
+		.dialog .ms-manage-links {
 			flex: none;
 			display: grid;
 			grid-template-columns: 9ch 9ch 8ch;
@@ -1982,26 +1982,26 @@ body.fs-lock {
 			white-space: nowrap;
 		}
 
-			.map-settings .ms-manage-links a,
-			.map-settings .ms-shared a {
+			.dialog .ms-manage-links a,
+			.dialog .ms-shared a {
 				cursor: pointer;
 				user-select: none;
 				text-decoration: none;
 			}
 
 			/* armed delete, same accent as the active sort link */
-			.map-settings .ms-manage-links a.active {
+			.dialog .ms-manage-links a.active {
 				color: var(--c-accent);
 			}
 
-		.map-settings .ms-manage-empty {
+		.dialog .ms-manage-empty {
 			padding: 2px 0;
 			font-style: italic;
 			opacity: 0.6;
 		}
 
 	/* shared by the actions row and the save row */
-	.map-settings .btn {
+	.dialog .btn {
 		font-size: 13px;
 		font-family: inherit;
 		color: white;
@@ -2013,20 +2013,20 @@ body.fs-lock {
 		outline: none;
 	}
 
-		.map-settings .btn:hover {
+		.dialog .btn:hover {
 			background-color: var(--c-control-hover);
 		}
 
 	/* flex so the button and the link sit on a common middle rather than on a
 	   shared text baseline, which a 24px button and inline text do not share */
-	.map-settings .ms-actions {
+	.dialog .ms-actions {
 		display: flex;
 		align-items: center;
 		gap: 16px;
 		padding: 10px 0 8px;
 	}
 
-		.map-settings .ms-actions a {
+		.dialog .ms-actions a {
 			cursor: pointer;
 			user-select: none;
 			text-decoration: none;
@@ -2034,50 +2034,50 @@ body.fs-lock {
 
 		/* the sort row brings its own rule, which is what closes the actions off
 		   below; its margin on top of that would push the two apart */
-		.map-settings .ms-actions + .ms-sort {
+		.dialog .ms-actions + .ms-sort {
 			margin-top: 0;
 		}
 
 /* the manual, built into the page from MANUAL.md (md.ps1). It is a document
    and not a picker, so the body it sits in gets reading measure and the
    spacing prose wants; everything else about the dialog is the shared chrome */
-.manual-dialog .ms-body {
+.manual-dialog .dialog-body {
 	padding: 4px 14px 16px;
 	line-height: 1.5;
 }
 
-	.manual-dialog .ms-body h2,
-	.manual-dialog .ms-body h3 {
+	.manual-dialog .dialog-body h2,
+	.manual-dialog .dialog-body h3 {
 		margin: 22px 0 8px;
 		font-weight: normal;
 		color: var(--c-accent);
 	}
 
-	.manual-dialog .ms-body h2 {
+	.manual-dialog .dialog-body h2 {
 		font-size: 16px;
 		padding-bottom: 4px;
 		border-bottom: 1px solid var(--c-control);
 	}
 
-	.manual-dialog .ms-body h3 {
+	.manual-dialog .dialog-body h3 {
 		font-size: 14px;
 	}
 
-	.manual-dialog .ms-body p,
-	.manual-dialog .ms-body ul {
+	.manual-dialog .dialog-body p,
+	.manual-dialog .dialog-body ul {
 		margin: 8px 0;
 	}
 
-	.manual-dialog .ms-body ul {
+	.manual-dialog .dialog-body ul {
 		padding-left: 20px;
 	}
 
-	.manual-dialog .ms-body li {
+	.manual-dialog .dialog-body li {
 		margin: 3px 0;
 	}
 
-	.manual-dialog .ms-body code,
-	.manual-dialog .ms-body kbd {
+	.manual-dialog .dialog-body code,
+	.manual-dialog .dialog-body kbd {
 		padding: 0 4px;
 		border-radius: 3px;
 		background-color: var(--c-field);
@@ -2085,16 +2085,16 @@ body.fs-lock {
 		white-space: nowrap;
 	}
 
-	.manual-dialog .ms-body kbd {
+	.manual-dialog .dialog-body kbd {
 		border: 1px solid var(--c-control-hover);
 	}
 
-	.manual-dialog .ms-body a {
+	.manual-dialog .dialog-body a {
 		color: var(--c-accent);
 	}
 
 	/* the aside the document sets off from the run of the text */
-	.manual-dialog .ms-body blockquote {
+	.manual-dialog .dialog-body blockquote {
 		margin: 12px 0;
 		padding: 2px 12px;
 		border-left: 3px solid var(--c-control);
@@ -2102,7 +2102,7 @@ body.fs-lock {
 
 	/* a table can be wider than the dialog once it is pulled narrow, and it is
 	   the table that scrolls then rather than the document under it */
-	.manual-dialog .ms-body table {
+	.manual-dialog .dialog-body table {
 		display: block;
 		width: 100%;
 		max-width: 875px;
@@ -2111,15 +2111,15 @@ body.fs-lock {
 		border-collapse: collapse;
 	}
 
-		.manual-dialog .ms-body th,
-		.manual-dialog .ms-body td {
+		.manual-dialog .dialog-body th,
+		.manual-dialog .dialog-body td {
 			padding: 4px 10px 4px 0;
 			border-bottom: 1px solid var(--c-chip);
 			text-align: left;
 			vertical-align: top;
 		}
 
-		.manual-dialog .ms-body th {
+		.manual-dialog .dialog-body th {
 			font-weight: normal;
 			opacity: 0.7;
 		}

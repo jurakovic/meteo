@@ -233,20 +233,20 @@ On the customize page the tab's `[+]` menu leaves the map out too. The dialog st
 
 ## Dialogs
 
-There are two dialogs, the picker and the manual, and one set of chrome under both ([`page/dialog.js`](./src/_assets/js/page/dialog.js)), since the landing page carries the manual too. A panel is a dialog by carrying `.map-settings`, and names its storage key with `data-dialog-key` (`msPanel`, `manualPanel`).
+There are two dialogs, the picker and the manual, and one set of chrome under both ([`page/dialog.js`](./src/_assets/js/page/dialog.js)), since the landing page carries the manual too. A panel is a dialog by carrying `.dialog`, and names its storage key with `data-dialog-key` (`msPanel`, `manualPanel`). Class names follow the split: `dialog-*` is the chrome both dialogs share (`dialog-head`, `dialog-body`, `dialog-backdrop`, `body.dialog-open`…), `ms-*` (*map settings*) the settings dialog's own and its tab's.
 
 - **One at a time.** Opening one shuts the other, so there is a single backdrop, a single scroll lock and a single Escape to reason about.
 - **Announced.** `setDialogVisible()` announces every change on `dialog-toggled`, the dialog shut to make room as much as the one asked for: what hangs off a shut (the *Karte* button's arrow, the manual's hash) has no other way of hearing about it.
 - **Over everything.** A dialog is a fixed panel at body level, over the page, the columns, a fullscreen map and the widgets, so it can be reached from any state of the page. It is not modal in the sense of freezing the arrangement, but the page holds still under it.
-- **Scroll.** `body.ms-open` locks the page's scroll and hands it to the dialog's `.ms-body`, the `.ms-head` above staying put. The body has `overscroll-behavior: contain`, so the wheel stops at its end, and on the desktop a classic scrollbar in a stable gutter (the overlay kind shows an empty track until hovered and lies over the row handles). Below the breakpoint the native overlay scrollbar stands, as on everything else on a touch screen.
-- **Gutter.** The lock drops the page's scrollbar, which would widen the page and shift what is centred in it, so `html.ms-gutter` keeps the gutter (`scrollbar-gutter: stable`) while a dialog is up, when there was one. `clientWidth` then counts a gutter nothing is drawn in, so `setScrollbarGutter()` has `viewportWidth()` take it off, and the columns are laid out again.
+- **Scroll.** `body.dialog-open` locks the page's scroll and hands it to the dialog's `.dialog-body`, the `.dialog-head` above staying put. The body has `overscroll-behavior: contain`, so the wheel stops at its end, and on the desktop a classic scrollbar in a stable gutter (the overlay kind shows an empty track until hovered and lies over the row handles). Below the breakpoint the native overlay scrollbar stands, as on everything else on a touch screen.
+- **Gutter.** The lock drops the page's scrollbar, which would widen the page and shift what is centred in it, so `html.dialog-gutter` keeps the gutter (`scrollbar-gutter: stable`) while a dialog is up, when there was one. `clientWidth` then counts a gutter nothing is drawn in, so `setScrollbarGutter()` has `viewportWidth()` take it off, and the columns are laid out again.
 - **`[hidden]`.** A dialog's `display: flex` would beat the `hidden` attribute, so the CSS restates `display: none` for `[hidden]`.
 
-**The backdrop.** A press anywhere outside the dialog shuts it, dropping what was edited (it is rebuilt from what is stored on the next open). The press lands on `.ms-backdrop`, which is over everything the dialog is over and under the dialog and the tab, so the dismissal reaches nothing else: no link is followed, no button pressed, no widget taken. It dims rather than blurs, since the maps behind are what the list in front is being picked for, and a blur would composite every live frame on the page.
+**The backdrop.** A press anywhere outside the dialog shuts it, dropping what was edited (it is rebuilt from what is stored on the next open). The press lands on `.dialog-backdrop`, which is over everything the dialog is over and under the dialog and the tab, so the dismissal reaches nothing else: no link is followed, no button pressed, no widget taken. It dims rather than blurs, since the maps behind are what the list in front is being picked for, and a blur would composite every live frame on the page.
 
 A press is three events, and all three belong to the dismissal, so the backdrop stands until the click has been taken:
 
-- the `pointerdown` stops it painting at once (`ms-spent`);
+- the `pointerdown` stops it painting at once (`dialog-spent`);
 - the click is swallowed in the capture phase, ahead of every listener on the page;
 - the release arms a 400ms fallback for gestures no click follows (a pointer let go outside the window, a drag);
 - if a dialog has been opened again meanwhile (`K`, the tab), the backdrop stays.
@@ -258,7 +258,7 @@ The `.ms-tab` keeps its own click above the backdrop and shuts the dialog the sa
 - Until it is resized its height is the content's, capped to what is left below its top; a resize pins an explicit height.
 - Where and how big (`msPanel`, `manualPanel`): left and top as fractions of the viewport, width in px, and height in px once pinned. Applied on open (measurable only once shown) and on a window resize, so it cannot be stranded off screen. A press that never moved stores nothing.
 - A double-click on the head drops the lot and gives the CSS its dialog back.
-- A link or button on the head is itself: *Zatvori*, and at the left end the way home (`.ms-home`, below).
+- A link or button on the head is itself: *Zatvori*, and at the left end the way home (`.dialog-home`, below).
 
 **On a phone** the dialog is the full-screen one the CSS draws, with no gestures. It drops its border (there is nothing left for an edge to divide it from), and its height is `100dvh` (after `100vh` for browsers that do not know the unit): `vh` is the taller viewport a collapsible URL bar is measured out of, which hangs the dialog's foot below the screen and the last of the preset management out of reach. The head gives its padding to its children, so *Zatvori* is tapped anywhere in the right end of the bar and the title anywhere in the left.
 
@@ -266,7 +266,7 @@ The `.ms-tab` keeps its own click above the backdrop and shuts the dialog the sa
 
 `#mapSettings`, opened by the page's *Karte* button, the tab, or `K`. Shut by *Zatvori*, the button, the tab, Escape, `K`, or a press outside. Escape stands down in a text field: the name and rename editors have an Escape of their own.
 
-- **The way home.** At the head's left end, before the title, `.ms-home` leads to the landing page, which the board and a hidden page take out of sight. Its image is the site's favicon, taken off the page's own `<link rel="icon">` so the build's rewritten path comes with it, and it is a real link resolved as `../` off the page's address (`/meteo/` in the build), so Ctrl and the middle button open it beside the page.
+- **The way home.** At the head's left end, before the title, `.dialog-home` leads to the landing page, which the board and a hidden page take out of sight. Its image is the site's favicon, taken off the page's own `<link rel="icon">` so the build's rewritten path comes with it, and it is a real link resolved as `../` off the page's address (`/meteo/` in the build), so Ctrl and the middle button open it beside the page.
 - **Two lists of the same rows.** `.ms-selected` is the render order, reordered by dragging a row's `≡` handle; `.ms-available` below it is a finding surface, sortable by name or category without touching the order, which is why it alone has the sort links and the find box. Ticking a map appends it to the order; unticking returns it to the shelf.
 - **Rows above the lists.** The preset bar (`panel-presets`); the board's mode row with its grid switches and *Posloži*, the auto-refresh row, and the layout line (`panel-rows`; see *Remembered and shared layouts* and *The board*).
 - **Enter** is *Primijeni* wherever the focus is in the picker. It is taken in the capture phase and kept from the focused element, since a button just pressed (the mode row's) would otherwise take it as a second click and undo itself. Text fields and the interval `<select>` keep their own.
@@ -579,7 +579,7 @@ Details worth keeping in mind when touching the drag and scroll code:
 
 - the drag handle must not be `display: inline`: `touch-action` is ignored on non-replaced inline elements, so touches would scroll the page instead of dragging;
 - pointer capture cannot be used for the picker's row drag: touch pointers implicitly capture the handle, and any capture breaks once the row is moved in the DOM (`insertBefore`). The implicit capture is released on `pointerdown`, and the move and up listeners live on `document`;
-- `scrollIntoView` scrolls *all* ancestors, so it cannot reveal something inside a dialog: it drags the page up to the dialog too. The preset bar wraps its chips for this reason, growing in the axis the dialog already scrolls, and a heading link in the manual scrolls `.ms-body` by hand.
+- `scrollIntoView` scrolls *all* ancestors, so it cannot reveal something inside a dialog: it drags the page up to the dialog too. The preset bar wraps its chips for this reason, growing in the axis the dialog already scrolls, and a heading link in the manual scrolls `.dialog-body` by hand.
 
 ## The manual
 
@@ -589,16 +589,16 @@ It shares no prose with this file on purpose: this one explains mechanism to som
 
 ### The manual on the site
 
-The Markdown is the only source, and the build makes HTML of it ([`scripts/manual.mjs`](./scripts/manual.mjs), which takes `MANUAL.md` and returns the fragment's lines). The built pages get it inlined at `<!-- manual -->`; the build also writes it to `src/_components/manual.c.html`, which the dev pages fetch through `include.js` (the `data-include-html` on the dialog's `.ms-body`, stripped from the built pages). That file is build output and git-ignored, so a page served from `src/` shows the manual as of the last build.
+The Markdown is the only source, and the build makes HTML of it ([`scripts/manual.mjs`](./scripts/manual.mjs), which takes `MANUAL.md` and returns the fragment's lines). The built pages get it inlined at `<!-- manual -->`; the build also writes it to `src/_components/manual.c.html`, which the dev pages fetch through `include.js` (the `data-include-html` on the dialog's `.dialog-body`, stripped from the built pages). That file is build output and git-ignored, so a page served from `src/` shows the manual as of the last build.
 
-It is shown in a dialog rather than on a page of its own, so it can be read beside the maps it describes. Both pages carry it (`#manualDialog`, with the same `.ms-home` in its head as the settings dialog, written as `href="/"` for the build to rewrite), reached by the `?` button, the footer's *Upute* or `H`. A dialog has no address, so `#upute` stands in: it opens the dialog on arrival, and the dialog writes it and takes it away again through `replaceState` (assigning `location.hash` would stack a history entry per open).
+It is shown in a dialog rather than on a page of its own, so it can be read beside the maps it describes. Both pages carry it (`#manualDialog`, with the same `.dialog-home` in its head as the settings dialog, written as `href="/"` for the build to rewrite), reached by the `?` button, the footer's *Upute* or `H`. A dialog has no address, so `#upute` stands in: it opens the dialog on arrival, and the dialog writes it and takes it away again through `replaceState` (assigning `location.hash` would stack a history entry per open).
 
 **The converter** handles a fixed subset (`##`/`###` with slug ids, paragraphs, `-` lists, tables, blockquotes, `**bold**`, `*italic*`, `` `code` ``, `[text](#anchor)` and `<kbd>`) and throws on anything it does not recognise, naming the line, so the manual cannot silently render wrong. `# ` is recognised and dropped, the dialog's head carrying the title.
 
 - Order is the whole of the inline pass: code spans are lifted out to placeholders first, since the document writes glyphs inside them (`[R]`, `❮`, `×`) that the rest would reach into; bold is matched before italic, or `**` reads as an empty emphasis.
 - `&`, `<` and `>` are escaped throughout and `<kbd>` alone is put back, which makes it an allowlist: anything still reading as a tag afterwards throws. Leftover `*` or `](` after the pass throws too, so unbalanced markup is caught rather than shipped.
 - Slugs are GitHub's, since the document links to its own headings and those anchors must resolve in both places: lowercased, punctuation dropped, spaces to hyphens, every letter kept whatever its alphabet (`#nadzorna-ploča` keeps its diacritic).
-- A heading link inside the dialog is intercepted and scrolls `.ms-body` by the offset between the two rects (see *Touch notes*).
+- A heading link inside the dialog is intercepted and scrolls `.dialog-body` by the offset between the two rects (see *Touch notes*).
 
 Rendering it client-side from the raw `.md` was considered and rejected: it needs a Markdown library or a hand-rolled parser in the page, against the no-dependency grain, and leaves the dialog empty without JavaScript.
 

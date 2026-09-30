@@ -221,16 +221,16 @@ function buildMapSettings(element) {
 	// work), resolved off this page's address because the built site lives
 	// under /meteo/; the icon is the page's own favicon, wherever the build put it
 	const icon = /** @type {HTMLLinkElement | null} */ (document.querySelector('link[rel="icon"][sizes="32x32"]'));
-	const homeLink = el('a', { class: 'ms-home', href: new URL('../', window.location.href).href, title: 'Početna' }, [
+	const homeLink = el('a', { class: 'dialog-home', href: new URL('../', window.location.href).href, title: 'Početna' }, [
 		el('img', { src: icon ? icon.href : undefined, alt: 'Početna' })
 	]);
-	element.appendChild(el('div', { class: 'ms-head' }, [
-		el('span', { class: 'ms-head-left' }, [homeLink, el('span', { class: 'ms-title', text: 'Karte' })]),
+	element.appendChild(el('div', { class: 'dialog-head' }, [
+		el('span', { class: 'dialog-head-left' }, [homeLink, el('span', { class: 'dialog-title', text: 'Karte' })]),
 		closeLink
 	]));
 	// the header stays put and the body scrolls (CSS); in the body the actions
 	// sit right under the render order they act on
-	element.appendChild(el('div', { class: 'ms-body' }, [
+	element.appendChild(el('div', { class: 'dialog-body' }, [
 		presets.element,
 		mode.element,
 		refresh.element,

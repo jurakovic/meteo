@@ -54,7 +54,7 @@ function syncManualHash(open) {
 // scrolls every ancestor, so it would drag the page behind the dialog along with
 // it — the offset between the two rects is what the body has to travel
 function scrollManualTo(panel, id) {
-	const body = panel.querySelector('.ms-body');
+	const body = panel.querySelector('.dialog-body');
 	const target = panel.querySelector(`[id="${CSS.escape(id)}"]`);
 	if (!body || !target) return;
 	body.scrollTop += target.getBoundingClientRect().top - body.getBoundingClientRect().top;
@@ -64,7 +64,7 @@ export function initManual() {
 	const panel = manualDialog();
 	if (!panel || !FEATURES.manual) return;
 
-	const close = panel.querySelector('.ms-close');
+	const close = panel.querySelector('.dialog-close');
 	if (close) close.addEventListener('click', () => setDialogVisible(panel, false));
 
 	panel.addEventListener('click', (e) => {
@@ -77,7 +77,7 @@ export function initManual() {
 	on(EVENTS.dialogToggled, ({ panel: toggled, visible }) => {
 		if (toggled !== panel) return;
 		syncManualHash(visible);
-		if (visible) panel.querySelector('.ms-body').scrollTop = 0;
+		if (visible) panel.querySelector('.dialog-body').scrollTop = 0;
 	});
 
 	// H for help: the letters name the thing, as R, G and S do, and ? would

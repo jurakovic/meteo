@@ -15,7 +15,7 @@ const DIALOG_MIN_HEIGHT = 120;
 const DIALOG_MARGIN = 8; // kept free of the viewport edge when sizing
 
 function dialogPanels() {
-	return queryAll('.map-settings');
+	return queryAll('.dialog');
 }
 
 function openDialogPanel() {
@@ -120,7 +120,7 @@ function initDialogWindow(panel) {
 		if (e.button !== 0 || !DESKTOP_MQ.matches) return;
 		const handle = e.target.closest('.po-h');
 		// the head is the grip, but a link or a button on it is itself
-		const head = !handle && e.target.closest('.ms-head') && !e.target.closest('a, button, input');
+		const head = !handle && e.target.closest('.dialog-head') && !e.target.closest('a, button, input');
 		if (!handle && !head) return;
 		e.preventDefault();
 		const start = panel.getBoundingClientRect();
@@ -144,7 +144,7 @@ function initDialogWindow(panel) {
 	});
 	// the way back to the dialog the CSS draws, the head's spare gesture
 	panel.addEventListener('dblclick', (e) => {
-		if (!DESKTOP_MQ.matches || !e.target.closest('.ms-head') || e.target.closest('a, button, input')) return;
+		if (!DESKTOP_MQ.matches || !e.target.closest('.dialog-head') || e.target.closest('a, button, input')) return;
 		clearDialog(panel);
 		forgetDialogGeometry(panel);
 	});
@@ -155,25 +155,25 @@ function initDialogWindow(panel) {
 // stand must not take the lock, the gutter or the backdrop away with it
 function syncDialogChrome() {
 	const open = anyDialogOpen();
-	if (open && !document.documentElement.classList.contains('ms-gutter')) {
+	if (open && !document.documentElement.classList.contains('dialog-gutter')) {
 		// the scrollbar the lock takes away, held in its place for as long as a
-		// dialog stands (html.ms-gutter) so nothing centred on the page shifts
+		// dialog stands (html.dialog-gutter) so nothing centred on the page shifts
 		// under it. It can only be measured while it is still there, so it is
 		// taken when the first dialog opens and kept until the last one shuts
 		const scrollbar = window.innerWidth - document.documentElement.clientWidth;
 		if (scrollbar > 0) {
 			setScrollbarGutter(scrollbar);
-			document.documentElement.classList.add('ms-gutter');
+			document.documentElement.classList.add('dialog-gutter');
 		}
 	} else if (!open) {
 		setScrollbarGutter(0);
-		document.documentElement.classList.remove('ms-gutter');
+		document.documentElement.classList.remove('dialog-gutter');
 	}
-	document.body.classList.toggle('ms-open', open);
-	const backdrop = query('.ms-backdrop');
+	document.body.classList.toggle('dialog-open', open);
+	const backdrop = query('.dialog-backdrop');
 	if (backdrop) {
 		backdrop.hidden = !open;
-		if (open) backdrop.classList.remove('ms-spent'); // it paints again for a dialog that is back
+		if (open) backdrop.classList.remove('dialog-spent'); // it paints again for a dialog that is back
 	}
 }
 
@@ -214,18 +214,18 @@ export function closeOpenDialog() {
 // A press outside the dialog shuts it and does nothing else; the backdrop
 // stays until the press's click (INTERNALS.md, Dialogs: The backdrop)
 function initDialogBackdrop() {
-	const backdrop = query('.ms-backdrop');
+	const backdrop = query('.dialog-backdrop');
 	if (!backdrop) return;
 	backdrop.addEventListener('pointerdown', (e) => {
 		if (!anyDialogOpen()) return;
 		e.preventDefault();
 		closeOpenDialog();
 		backdrop.hidden = false;
-		backdrop.classList.add('ms-spent');
+		backdrop.classList.add('dialog-spent');
 		let timer = 0;
 		const done = () => {
 			clearTimeout(timer);
-			backdrop.classList.remove('ms-spent');
+			backdrop.classList.remove('dialog-spent');
 			// a dialog may have been opened again meanwhile (K, ?, the tab), and
 			// then the ground it stands on is not this gesture's to take away
 			backdrop.hidden = !anyDialogOpen();
