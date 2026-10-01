@@ -16,7 +16,7 @@ and the tooling around them: [`scripts/`](./scripts) (the build), [`tests/`](./t
 
 ## Commands
 
-Node 22 or later. Once, after a clone: `npm install`.
+Node 22.13 or later (`engines` in `package.json`): ESLint needs it, and `npm test` passes `node --test` a glob. Once, after a clone: `npm install`, and for the browser suite `npx playwright install chromium` (on Linux `npx playwright install --with-deps chromium`, which adds the system libraries the browser needs).
 
 | Command | What it does |
 |---|---|
@@ -24,7 +24,7 @@ Node 22 or later. Once, after a clone: `npm install`.
 | `npm run lint` | ESLint over the site's scripts, the build and the tests, imports checked against exports |
 | `npm run typecheck` | TypeScript over the site's scripts, reading their JSDoc types (`jsconfig.json`; nothing is emitted) |
 | `npm test` | unit tests (`node --test`) |
-| `npm run test:e2e` | the browser suite (Playwright; `npx playwright install chromium` once) |
+| `npm run test:e2e` | the browser suite (Playwright, on Chromium) |
 | `npm run check` | all of the above, in that order |
 
 Without Node installed, the same runs in a container:

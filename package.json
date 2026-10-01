@@ -3,6 +3,9 @@
   "private": true,
   "description": "Meteo radari — build and test tooling",
   "type": "module",
+  "engines": {
+    "node": ">=22.13"
+  },
   "scripts": {
     "build": "node scripts/build.mjs",
     "lint": "eslint .",
