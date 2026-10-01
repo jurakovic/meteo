@@ -39,6 +39,22 @@ export async function shownMapIds(page) {
 	return page.locator('.map-block:not(.duplicate)').evaluateAll(blocks => blocks.map(b => b.dataset.mapId));
 }
 
+// counts the rows taken out of the map list from the page's first script on,
+// in window.rowsRemoved: none while the list is only ever drawn once (into an
+// empty list in dev, or as parsed when built)
+export async function countRowsRemoved(page) {
+	await page.addInitScript(() => {
+		window.rowsRemoved = 0;
+		new MutationObserver(records => {
+			for (const record of records) {
+				if (record.target instanceof Element && record.target.matches('[data-maps]')) {
+					window.rowsRemoved += record.removedNodes.length;
+				}
+			}
+		}).observe(document, { childList: true, subtree: true });
+	});
+}
+
 export async function storedJson(page, key) {
 	return page.evaluate(k => JSON.parse(localStorage.getItem(k)), key);
 }

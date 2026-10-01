@@ -15,10 +15,19 @@ import { resolveMapIds } from './prefs.js';
 import { renderMapRows } from './render.js';
 
 let mapsRendered = false; // from the first render on, a change is applied in place
+let renderedIds = ''; // the maps the last render drew, joined
+
+// the view's maps less those switched off
+function viewMaps() {
+	return resolveMapIds().map(catalogMap).filter(map => map && isMapEnabled(map.id));
+}
 
 export function initRerender() {
 	on(EVENTS.mapConfigChanged, () => {
-		if (mapsRendered) rerenderMaps();
+		if (!mapsRendered) return;
+		closeMsAdd(); // it can list the map switched
+		// a switch on a map the view does not hold leaves it as drawn
+		if (viewMaps().map(map => map.id).join() !== renderedIds) rerenderMaps();
 	});
 }
 
@@ -31,7 +40,8 @@ export function renderMaps() {
 	withPersistPaused(() => queryAll('.if1.fullscreen').forEach(exitFullscreen));
 	resetSnapColumns(); // their panes go with the list
 	mapsRendered = true;
-	const maps = resolveMapIds().map(catalogMap).filter(map => map && isMapEnabled(map.id));
+	const maps = viewMaps();
+	renderedIds = maps.map(map => map.id).join();
 	renderMapRows(list, maps, WIDGET_RENDER);
 }
 
@@ -40,7 +50,6 @@ export function renderMaps() {
 // config change is rare enough to afford
 function rerenderMaps() {
 	const layout = sanitizeSnapLayout(currentSnapLayout(), resolveMapIds());
-	closeMsAdd();
 	renderMaps();
 	initDynamicContent();
 	applySnapLayout(layout);

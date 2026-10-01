@@ -1,6 +1,6 @@
 // The customize page's settings dialog: presets, the pick and order of maps,
 // saved presets, share links, and the dialog window itself
-import { test, expect, shownMapIds, storedJson, drag, box } from './fixtures.js';
+import { test, expect, shownMapIds, storedJson, drag, box, countRowsRemoved } from './fixtures.js';
 
 const DEFAULT_MAPS = [
 	'neverin-radar-hr', 'neverin-satelit-hr', 'neverin-radar-eu', 'neverin-satelit-eu',
@@ -248,5 +248,18 @@ test.describe('settings dialog with a map switched off remotely', () => {
 		await page.locator('#mapSettings .ms-selected .ms-item[data-map-id="essl"] input').uncheck();
 		await page.locator('#mapSettings .ms-apply').click();
 		expect((await storedJson(page, 'mapPrefs')).maps).toContain('windy');
+	});
+});
+
+test.describe('customize page with a map it does not show switched off remotely', () => {
+	test.use({ mapConfig: { maps: { 'chmi-sinopticka': { enabled: false } } } });
+
+	test('a first visit draws the view once: the config arriving changes none of its maps', async ({ page, paths }) => {
+		await countRowsRemoved(page);
+		await page.goto(paths.customize);
+		await expect.poll(() => page.evaluate(() => localStorage.getItem('mapConfig'))).toContain('chmi-sinopticka');
+		await expect(page.locator('.progress-container')).toBeHidden();
+		expect(await shownMapIds(page)).toEqual(DEFAULT_MAPS);
+		expect(await page.evaluate(() => window.rowsRemoved)).toBe(0);
 	});
 });

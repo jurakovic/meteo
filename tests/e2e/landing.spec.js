@@ -1,6 +1,6 @@
 // The landing page: a fixed list of maps, the slideshows, the interactive
 // maps' gate and buttons, the links and the remote on/off switch
-import { test, expect } from './fixtures.js';
+import { test, expect, countRowsRemoved } from './fixtures.js';
 
 test.describe('landing page', () => {
 	test.beforeEach(async ({ page, paths }) => {
@@ -178,5 +178,17 @@ test.describe('landing page with a map switched off remotely', () => {
 		expect(await page.evaluate(() => localStorage.getItem('mapConfig'))).toContain('windy');
 		await page.reload();
 		await expect(page.locator('.map-block[data-map-id="windy"]')).toHaveCount(0);
+	});
+});
+
+test.describe('landing page with a map it does not show switched off remotely', () => {
+	test.use({ mapConfig: { maps: { 'chmi-sinopticka': { enabled: false } } } });
+
+	test('a first visit draws the list once: the config arriving changes none of its maps', async ({ page, paths }) => {
+		await countRowsRemoved(page);
+		await page.goto(paths.landing);
+		await expect.poll(() => page.evaluate(() => localStorage.getItem('mapConfig'))).toContain('chmi-sinopticka');
+		await expect(page.locator('.progress-container')).toBeHidden();
+		expect(await page.evaluate(() => window.rowsRemoved)).toBe(0);
 	});
 });

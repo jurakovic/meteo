@@ -229,7 +229,7 @@ The code is [`remote-config.js`](./src/_assets/js/remote-config.js), started by 
 - A failed fetch keeps whatever copy there is, so the file out of reach never hides anything it was not told to.
 - `cache: 'no-cache'` makes the browser revalidate, so a flip is not held back by HTTP caching.
 
-Off means hidden, not removed, on both pages. Both leave a switched-off map out of what they draw and draw again on a change (`map-config-changed`): the landing page its list (when the change touches one of its maps), the customize page its view, carrying the arrangement over from the screen.
+Off means hidden, not removed, on both pages. Both leave a switched-off map out of what they draw and draw again on a change (`map-config-changed`) that touches a map they show: the landing page its list, the customize page its view, carrying the arrangement over from the screen. A change to a map neither shows draws nothing, so a first visit, which has no copy yet, is not drawn twice when the file arrives.
 
 On the customize page the tab's `[+]` menu leaves the map out too. The dialog still builds its row but hides it (`.ms-off`, in either section, and left out of the find box's hit count), so the list the dialog reads back off its rows keeps the id where it was. Stored preferences, saved presets and share links therefore still hold a map while it is off, and it comes back in its place once it is on. The one thing a map loses while off is its place in a stored arrangement: the next write reads the screen, where the map is not, so it comes back docked on the page, or down the cascade on a board.
 
