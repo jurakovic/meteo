@@ -16,7 +16,7 @@ export const test = base.extend({
 	page: async ({ page, mapConfig }, use) => {
 		const errors = [];
 		page.on('pageerror', error => errors.push(error.message));
-		await page.route(url => url.hostname !== 'localhostmeteo', route => {
+		await page.route(url => url.hostname !== 'meteo.test', route => {
 			const request = route.request();
 			if (request.url().startsWith(CONFIG_URL)) {
 				return route.fulfill({ json: mapConfig, headers: { 'Access-Control-Allow-Origin': '*' } });

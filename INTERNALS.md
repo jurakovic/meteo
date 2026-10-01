@@ -51,7 +51,7 @@ docker run -d -p 8081:80 --name meteo-docs -v "$(pwd)/docs:/usr/share/nginx/html
 
 Open <http://localhost:8081/meteo/>
 
-`node tests/serve.mjs` serves both at once: `src/` at the root and `docs/` under `/meteo/` (port 8080, or `PORT`).
+`node tests/serve.mjs` serves both at once: `src/` at the root and `docs/` under `/meteo/` (port 8082, or `PORT`). The browser suite starts it on 8082, clear of both nginx containers above, unless something already listens there, which it then uses instead.
 
 ### Build
 
@@ -67,7 +67,7 @@ The inlined blocks are indented by splitting on CRLF, so a fragment with LF endi
 
 ## Tests
 
-The browser suite ([`tests/e2e`](./tests/e2e)) drives both the dev tree and the built site. Every request that leaves the local server is answered by [`fixtures.js`](./tests/e2e/fixtures.js): map images as an SVG of a map's size, frames as an empty page, the worker's `config.json` as a test chooses. So the suite runs offline and the same way every time, and a script error on a page fails the test. Chromium resolves `localhostmeteo` (the origin the worker allows) to the local server by a launch flag, so no hosts entry is needed.
+The browser suite ([`tests/e2e`](./tests/e2e)) drives both the dev tree and the built site. Every request that leaves the local server is answered by [`fixtures.js`](./tests/e2e/fixtures.js): map images as an SVG of a map's size, frames as an empty page, the worker's `config.json` as a test chooses. So the suite runs offline and the same way every time, and a script error on a page fails the test. The pages are served as `meteo.test`, which Chromium resolves to the local server by a launch flag, so no hosts entry is needed. It is a name of its own rather than `localhost`, which would make the page a secure context and change what it can do (the clipboard, for one).
 
 The unit tests ([`tests/unit`](./tests/unit)) run what needs no browser under Node, with a stub for the little DOM the modules touch on import ([`setup.mjs`](./tests/unit/setup.mjs)): the manual's converter, the catalog and presets, preferences, find and share links, storage, what the settings dialog would apply, and the widgets' arithmetic (tiling, magnets, touching, group relations, the walls around a fullscreen map, the layout's sanitizer).
 

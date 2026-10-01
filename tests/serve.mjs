@@ -6,7 +6,7 @@ import { extname, join, normalize, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const root = resolve(fileURLToPath(new URL('..', import.meta.url)));
-const port = Number(process.env.PORT) || 8080;
+const port = Number(process.env.PORT) || 8082;
 const types = {
 	'.html': 'text/html; charset=utf-8',
 	'.js': 'text/javascript; charset=utf-8',
@@ -39,4 +39,4 @@ createServer(async (req, res) => {
 	}
 	res.writeHead(200, { 'Content-Type': types[extname(file)] || 'application/octet-stream', 'Cache-Control': 'no-store' });
 	res.end(await readFile(file));
-}).listen(port, () => console.log(`serving on http://localhostmeteo:${port}`));
+}).listen(port, () => console.log(`serving on http://127.0.0.1:${port}`));

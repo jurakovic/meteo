@@ -24,7 +24,7 @@ MANUAL.md             user manual, Croatian, built into the pages
 ## Working rules
 
 - **Finish with `npm run check`.** A behaviour change also runs `npm run build` and commits the rebuilt `docs/` with the source, as past commits do.
-- **The e2e suite reuses whatever listens on port 8080.** An nginx container serving `src/` there (INTERNALS.md, Run from src) fails every `built` test with 404s. Stop it, or run the suite on a config with another port.
+- **The e2e suite reuses whatever listens on port 8082.** That port is clear of the nginx containers in INTERNALS.md (8080 serves `src/`, 8081 `docs/`); anything else there fails the suite with 404s.
 - **A bug fix comes with a test** that fails without the fix. Prove it by running the test against the unfixed code.
 - **Keep INTERNALS.md true.** When behaviour changes, update its section in the same change. A paragraph that no longer matches the code is a bug. The history of a change belongs in its commit message, not in a doc in the repo.
 

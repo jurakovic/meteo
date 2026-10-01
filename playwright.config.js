@@ -4,8 +4,9 @@
 // every time
 import { defineConfig } from '@playwright/test';
 
-const port = 8080;
-const origin = `http://localhostmeteo:${port}`;
+// clear of the nginx ports in INTERNALS.md (8080 serves src/, 8081 docs/)
+const port = 8082;
+const origin = `http://meteo.test:${port}`;
 
 export default defineConfig({
 	testDir: 'tests/e2e',
@@ -15,8 +16,9 @@ export default defineConfig({
 	use: {
 		viewport: { width: 1400, height: 900 },
 		launchOptions: {
-			// the worker allows this origin; it resolves here without a hosts entry
-			args: [`--host-resolver-rules=MAP localhostmeteo 127.0.0.1`]
+			// a name of its own for the local server, resolved here without a
+			// hosts entry; not localhost, which would make the page a secure context
+			args: [`--host-resolver-rules=MAP meteo.test 127.0.0.1`]
 		}
 	},
 	projects: [
