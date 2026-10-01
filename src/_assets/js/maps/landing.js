@@ -16,11 +16,17 @@ function listedMapIds(list) {
 		.map(block => /** @type {HTMLElement} */ (block).dataset.mapId);
 }
 
+// from the first draw on, a change is applied in place. Before it, the built
+// page can still be parsing its rows (the config is fetched from <head>), and
+// the first draw reads the switches as they are by then
+let drawn = false;
+
 // draws the list, unless it holds those maps already (the built page's rows,
 // while none of them is switched off); whether it drew
 export function renderLanding() {
 	const list = document.querySelector('[data-maps]');
 	if (!list) return false;
+	drawn = true;
 	const maps = DEFAULT_MAPS.map(catalogMap).filter(map => map && isMapEnabled(map.id));
 	const ids = maps.map(map => map.id);
 	if (ids.length && listedMapIds(list).join() === ids.join()) return false;
@@ -30,6 +36,6 @@ export function renderLanding() {
 
 export function initLandingRerender() {
 	on(EVENTS.mapConfigChanged, () => {
-		if (renderLanding()) initDynamicContent();
+		if (drawn && renderLanding()) initDynamicContent();
 	});
 }
