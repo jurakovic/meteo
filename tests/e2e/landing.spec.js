@@ -139,6 +139,35 @@ test.describe('landing page', () => {
 	});
 });
 
+test.describe('landing page as built', () => {
+	test.beforeEach(({ paths }) => {
+		test.skip(paths.landing === '/', 'the dev page draws its maps in the browser');
+	});
+
+	test.describe('without scripts', () => {
+		test.use({ javaScriptEnabled: false });
+
+		test('carries the default maps in its markup', async ({ page, paths }) => {
+			await page.goto(paths.landing);
+			await expect(page.locator('.map-block')).toHaveCount(16);
+			await expect(page.locator('.slideshow[data-slideshow-id="neverin-radar-hr"] .slide.active img')).toBeVisible();
+			await expect(page.locator('iframe#windy')).toBeAttached();
+		});
+	});
+
+	test('keeps the rows the build put in while nothing is switched off', async ({ page, paths }) => {
+		// the first row as parsed, before the page's own script has run
+		await page.addInitScript(() => {
+			document.addEventListener('DOMContentLoaded', () => {
+				window.builtRow = document.querySelector('[data-maps] > .map-entry');
+			});
+		});
+		await page.goto(paths.landing);
+		await expect(page.locator('.progress-container')).toBeHidden();
+		expect(await page.evaluate(() => !!window.builtRow && window.builtRow.isConnected)).toBe(true);
+	});
+});
+
 test.describe('landing page with a map switched off remotely', () => {
 	test.use({ mapConfig: { maps: { windy: { enabled: false }, 'dhmz-radar': { enabled: true } } } });
 

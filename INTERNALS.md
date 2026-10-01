@@ -57,7 +57,7 @@ Open <http://localhost:8081/meteo/>
 
 [`scripts/build.mjs`](./scripts/build.mjs) produces `docs/` from `src/` by processing every `.html` file outside `_components/`:
 
-1. injects the manual ([`scripts/manual.mjs`](./scripts/manual.mjs)) at `<!-- manual -->` and drops the dialog body's dev-only include; the fragment is also written to `_components/manual.c.html` for the dev pages. This runs before the path rewrites, so a path the manual grows later is rewritten with every other
+1. fills the landing page's `<div data-maps>` with its map rows (see [Maps](#maps)), then injects the manual ([`scripts/manual.mjs`](./scripts/manual.mjs)) at `<!-- manual -->` and drops the dialog body's dev-only include; the fragment is also written to `_components/manual.c.html` for the dev pages. Both run before the path rewrites, so a path the rows or the manual grow later is rewritten with every other
 2. minifies the CSS (clean-css), bundles each page's entry module with everything it imports (esbuild), minifies it (terser), and inlines both in place of their `<link>`/`<script type="module">` tags
 3. injects `_components/*.c.html` (seo, gtag, links) at their placeholders
 4. rewrites dev paths to GitHub Pages paths (`href="/customize/index.html` → `/meteo/customize/`, `href="/"` → `/meteo/"`, image paths, the extras stub's `url=`)
@@ -124,7 +124,9 @@ Both pages draw their maps from one catalog (`MAP_CATALOG`, [`maps/catalog.js`](
 - the landing page ([`src/index.html`](./src/index.html)) draws the default view, `DEFAULT_MAPS` ([`maps/landing.js`](./src/_assets/js/maps/landing.js));
 - the customize page ([`src/customize/index.html`](./src/customize/index.html)) draws the view the user picked ([`maps/view.js`](./src/_assets/js/maps/view.js)), every title bar carrying the widgets' buttons. It passes those in (`WIDGET_RENDER`), so the renderer knows nothing of widgets and the landing page's script carries none of them.
 
-Each map is one `.map-entry` in the list: its `.map-block` (title bar, map, indicators) and the links bar under it. The render runs once the document is parsed, before the wiring (`initDynamicContent`) and, on the customize page, before the remembered arrangement is applied. It runs in the browser rather than at build time because the dev pages are served straight from `src/`: rows made by the build would have to be written back into the source tree. The price is that the landing page shows no maps with scripts off. `src/extras/index.html` is only a redirect stub to the customize page, kept for old bookmarks.
+Each map is one `.map-entry` in the list: its `.map-block` (title bar, map, indicators) and the links bar under it. The render runs once the document is parsed, before the wiring (`initDynamicContent`) and, on the customize page, before the remembered arrangement is applied.
+
+The built landing page carries its rows in the markup, so it shows its maps before its script runs, and with scripts off. The build runs the same renderer under Node, on a [linkedom](https://github.com/WebReflection/linkedom) document, and writes `DEFAULT_MAPS` into the page, every map on, as indented lines. In the browser, `renderLanding()` keeps the rows it finds when they are the maps it would draw, in the same order, and draws the list again when they are not, which is when a map is switched off ([Remote config](#remote-config)). The dev page in `src/` keeps its empty list and draws it in the browser: rows made by the build there would have to be written back into the source tree. The customize page is always drawn in the browser, since its view is the user's. `src/extras/index.html` is only a redirect stub to the customize page, kept for old bookmarks.
 
 ### Map descriptors
 
@@ -227,7 +229,7 @@ The code is [`remote-config.js`](./src/_assets/js/remote-config.js), started by 
 - A failed fetch keeps whatever copy there is, so the file out of reach never hides anything it was not told to.
 - `cache: 'no-cache'` makes the browser revalidate, so a flip is not held back by HTTP caching.
 
-Off means hidden, not removed, on both pages. Both leave a switched-off map out of what they draw and draw again on a change (`map-config-changed`): the landing page its list, the customize page its view, carrying the arrangement over from the screen.
+Off means hidden, not removed, on both pages. Both leave a switched-off map out of what they draw and draw again on a change (`map-config-changed`): the landing page its list (when the change touches one of its maps), the customize page its view, carrying the arrangement over from the screen.
 
 On the customize page the tab's `[+]` menu leaves the map out too. The dialog still builds its row but hides it (`.ms-off`, in either section, and left out of the find box's hit count), so the list the dialog reads back off its rows keeps the id where it was. Stored preferences, saved presets and share links therefore still hold a map while it is off, and it comes back in its place once it is on. The one thing a map loses while off is its place in a stored arrangement: the next write reads the screen, where the map is not, so it comes back docked on the page, or down the cascade on a board.
 
