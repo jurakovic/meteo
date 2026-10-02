@@ -1,4 +1,6 @@
 
+Generirano uz pomoć AI-ja.
+
 2026-09-23 (#42)
 	dodane kopije prozora karte ([D]), pa se ista karta može prikazati dvaput, npr. u dvije veličine ili na dvije različite slike.
 	dodani šavovi: povlačenjem zajedničkog ruba dvaju susjednih prozora mijenjaju se oba odjednom.

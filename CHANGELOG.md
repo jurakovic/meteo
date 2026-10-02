@@ -1,3 +1,4 @@
+Generated with the AI.
 
 2026-09-23 (#42)
 	added copies of a map window ([D]), so the same map can be shown twice, e.g. at two sizes or on two different slides.

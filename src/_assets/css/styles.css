@@ -2177,6 +2177,13 @@ body.fs-lock {
 		margin: 4px 0;
 	}
 
+	/* the note above the days (how the list was made), kept quiet */
+	.changelog-dialog .changelog-intro {
+		margin: 8px 0 0;
+		color: var(--c-muted);
+		font-style: italic;
+	}
+
 /* stands in for the maps when the view resolves to none ("Ništa") */
 .maps-empty {
 	padding: 20px 0;

@@ -1,8 +1,8 @@
 // CHANGELOG.hr.md, the Croatian translation of CHANGELOG.md, to the HTML the
 // changelog dialog is built from. Both files share a format of their own, not
-// Markdown: a date line, with the pull request in
-// brackets when there was one, then its entries, each indented by a tab. Any
-// other line throws, naming it, as the manual's converter does.
+// Markdown: an optional intro, then days, each a date line (with the pull
+// request in brackets when there was one) and its entries, each indented by
+// a tab. Any other line throws, naming it, as the manual's converter does.
 
 import { escapeText } from './manual.mjs';
 
@@ -20,6 +20,7 @@ export function convertChangelog(text) {
 	const lines = text.replace(/^\uFEFF/, '').split(/\r?\n/);
 	const html = [];
 	let open = false; // a day's list, still taking its entries
+	let dated = false; // past the first date, where the intro ends
 
 	const close = () => {
 		if (open) html.push('</ul>');
@@ -35,7 +36,12 @@ export function convertChangelog(text) {
 		if (day) {
 			close();
 			html.push(`<h2>${day[1]}</h2>`, '<ul>');
-			open = true;
+			open = dated = true;
+			return;
+		}
+		// the intro, a line to a paragraph, said once above every day
+		if (!dated && /^\S/.test(line)) {
+			html.push(`<p class="changelog-intro">${escapeText(line.trim())}</p>`);
 			return;
 		}
 		const item = line.match(/^\t(\S.*)$/);
@@ -47,7 +53,7 @@ export function convertChangelog(text) {
 	});
 	close();
 
-	if (!html.length) throw new Error('changelog: no entries found');
+	if (!dated) throw new Error('changelog: no entries found');
 	// a date with nothing under it is a mistake as much as a stray line
 	html.forEach((tag, i) => {
 		if (tag === '<ul>' && html[i + 1] === '</ul>') throw new Error(`changelog: ${html[i - 1]} has no entries`);

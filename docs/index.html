@@ -221,11 +221,12 @@
 		var(--c-control);border-bottom:1px solid var(--c-control)}.doc-dialog .manual-toc ul{margin:0;padding:0;list-style:none}
 		.doc-dialog .manual-toc li{margin:2px 0}.doc-dialog .manual-toc .toc-3{padding-left:16px}.doc-dialog .manual-toc a{text-decoration:none}
 		.doc-dialog .manual-toc a:hover{text-decoration:underline}.changelog-dialog .dialog-body h2{margin:16px 0 4px;font-size:14px}
-		.changelog-dialog .dialog-body h2:first-child{margin-top:8px}.changelog-dialog .dialog-body ul{margin:4px 0}.maps-empty{padding:20px 0;
-		font-size:13px;font-style:italic;opacity:.6}.slideshow{position:relative;display:flex;justify-content:center}.slide{display:none}
-		.slide.active{display:block;width:100%}.slide>.placeholder{width:100%}.slide>.placeholder>img{margin-inline:auto}.next,.prev{cursor:pointer;
-		position:absolute;align-content:center;top:0;bottom:0;width:15%;padding:16px;color:transparent;opacity:.7;font-weight:700;font-size:36px;
-		transition:color .6s ease,background-image .6s ease;user-select:none}.prev{left:0;text-align:left}.prev:hover{background-image:
+		.changelog-dialog .dialog-body h2:first-child{margin-top:8px}.changelog-dialog .dialog-body ul{margin:4px 0}
+		.changelog-dialog .changelog-intro{margin:8px 0 0;color:var(--c-muted);font-style:italic}.maps-empty{padding:20px 0;font-size:13px;
+		font-style:italic;opacity:.6}.slideshow{position:relative;display:flex;justify-content:center}.slide{display:none}.slide.active{display:
+		block;width:100%}.slide>.placeholder{width:100%}.slide>.placeholder>img{margin-inline:auto}.next,.prev{cursor:pointer;position:absolute;
+		align-content:center;top:0;bottom:0;width:15%;padding:16px;color:transparent;opacity:.7;font-weight:700;font-size:36px;transition:color .6s
+		ease,background-image .6s ease;user-select:none}.prev{left:0;text-align:left}.prev:hover{background-image:
 		linear-gradient(to left,transparent,rgba(0,0,0,.6));color:#fff;text-decoration:none}.prev.shorter{top:23px}.next{right:0;text-align:right}
 		.next:hover{background-image:linear-gradient(to right,transparent,rgba(0,0,0,.6));color:#fff;text-decoration:none}.next.shorter{top:23px}
 		.fade{animation-name:fade;animation-duration:1s}@keyframes fade{from{opacity:.6}to{opacity:1}}@media (max-width:800px){.next,.prev{padding:
@@ -1510,12 +1511,13 @@
 			<a class="dialog-close" title="Zatvori (Esc)">Zatvori</a>
 		</div>
 		<div class="dialog-body">
-						<h2>2026-09-23</h2>
+						<p class="changelog-intro">Generirano uz pomoć AI-ja.</p>
+			<h2>2026-09-23</h2>
 			<ul>
 			<li>dodane kopije prozora karte (<code>[D]</code>), pa se ista karta može prikazati dvaput, npr. u dvije veličine ili na dvije različite slike.</li>
 			<li>dodani šavovi: povlačenjem zajedničkog ruba dvaju susjednih prozora mijenjaju se oba odjednom.</li>
 			<li>dodano slaganje na nadzornoj ploči (<code>[A]</code>): sve karte poslože se u pravilnu mrežu, što veće ekran dopušta.</li>
-			<li>dodana pločica „Karte” na vrhu ekrana, koja otvara dijalog karata kad njegov gumb nije dostupan i dodaje kartu na nadzornu ploču bez otvaranja dijaloga (<code>[+]</code>).</li>
+			<li>dodana pločica "Karte" na vrhu ekrana, koja otvara dijalog karata kad njegov gumb nije dostupan i dodaje kartu na nadzornu ploču bez otvaranja dijaloga (<code>[+]</code>).</li>
 			<li>dodano automatsko osvježavanje svih karata svakih 5, 10, 15, 30 ili 60 minuta, s odbrojavanjem na pločici.</li>
 			<li>dodano traženje u odabiru karata (više riječi, radi i bez kvačica).</li>
 			</ul>
@@ -1534,7 +1536,7 @@
 			<h2>2026-08-17</h2>
 			<ul>
 			<li>dodani vlastiti predlošci: trenutni odabir sprema se pod imenom, a zatim se može ažurirati, preimenovati, podijeliti ili obrisati.</li>
-			<li>gotovi predlošci mogu se sakriti iz reda predložaka; „Zadano” preimenovano u „Osnovno”.</li>
+			<li>gotovi predlošci mogu se sakriti iz reda predložaka; "Zadano" preimenovano u "Osnovno".</li>
 			</ul>
 			<h2>2026-07-06</h2>
 			<ul>
@@ -1547,13 +1549,13 @@
 			</ul>
 			<h2>2026-06-26</h2>
 			<ul>
-			<li>dodana prognoza nevremena ASTORP i poveznica na ESWD.</li>
+			<li>dodana prognoza nevremena ASTORP i ESWD link.</li>
 			</ul>
 			<h2>2026-06-24</h2>
 			<ul>
-			<li>dodan red brzih poveznica (Windy, Zoom Earth, meteoblue, Rain Viewer, Ventusky, Vrijeme&amp;Radar, Sat24, I'm Weather, Időkép) ispod svake karte, s koordinatama za njezino područje.</li>
-			<li>dodan prekidač „Linkovi” koji prikazuje ili skriva poveznice ispod karata (pamti se u pregledniku).</li>
-			<li>dodani izvori poveznica Ventusky i Rain Viewer, „Weather&amp;Radar” preimenovan u „Vrijeme&amp;Radar”, model na Wetterzentrale promijenjen s ICON na ECMWF, popravljene neispravne poveznice.</li>
+			<li>dodan red brzih linkova (Windy, Zoom Earth, meteoblue, Rain Viewer, Ventusky, Vrijeme&amp;Radar, Sat24, I'm Weather, Időkép) ispod svake karte, s koordinatama za njezino područje.</li>
+			<li>dodan prekidač "Linkovi" koji prikazuje ili skriva linkove ispod karata (pamti se u pregledniku).</li>
+			<li>dodani Ventusky i Rain Viewer linkovi, "Weather&amp;Radar" preimenovan u "Vrijeme&amp;Radar", model na Wetterzentrale promijenjen s ICON na ECMWF, ispravljeni neispravni linkovi.</li>
 			</ul>
 			<h2>2026-06-22</h2>
 			<ul>
@@ -1571,16 +1573,12 @@
 			<h2>2026-03-26</h2>
 			<ul>
 			<li>dodan prekidač <code>[HR]</code>/<code>[EU]</code> na svim interaktivnim kartama (Windy, Blitzortung, Ventusky, Rain Viewer, Weather&amp;Radar) za prikaz Hrvatske ili Europe, s odvojenim zumiranjem za računalo i mobitel.</li>
-			<li>popravljeno prerano skrivanje trake napretka na mobitelu, prije nego što su se slike učitale.</li>
-			</ul>
-			<h2>2026-02-23</h2>
-			<ul>
-			<li>sakrivene bijele margine na kartama ČHMÚ.</li>
+			<li>ispravljeno prerano skrivanje trake napretka na mobitelu, prije nego što su se slike učitale.</li>
 			</ul>
 			<h2>2026-02-11</h2>
 			<ul>
 			<li>meteoblue meteogram skraćen sa 7 na 5 dana.</li>
-			<li>popravljena veličina satelitske slike s meteociela.</li>
+			<li>ispravljena veličina satelitske slike s meteociela.</li>
 			</ul>
 			<h2>2026-02-04</h2>
 			<ul>
@@ -1588,33 +1586,33 @@
 			</ul>
 			<h2>2026-01-10</h2>
 			<ul>
-			<li>popravljena sinoptička karta ČHMÚ, a karte ČHMÚ premještene na početnu stranicu.</li>
+			<li>ispravljena sinoptička karta ČHMÚ, a karte ČHMÚ premještene na početnu stranicu.</li>
 			<li>Neverinove slike Europe sada prikazuju cijelu Europu.</li>
 			<li>ažurirane slike s meteociela.</li>
 			</ul>
 			<h2>2025-11-15</h2>
 			<ul>
-			<li>ažurirani meteoblue meteogrami (meteoblue je počeo tražiti registraciju za widgete).</li>
+			<li>ažurirani meteoblue meteogrami.</li>
 			</ul>
 			<h2>2025-07-27</h2>
 			<ul>
-			<li>popravljeno dohvaćanje prognoze nevremena ESSL.</li>
-			<li>dodana slika prognoze ESTOFEX.</li>
+			<li>ispravljeno dohvaćanje ESSL prognoze nevremena.</li>
+			<li>dodan ESTOFEX.</li>
 			</ul>
 			<h2>2025-07-07</h2>
 			<ul>
 			<li>traka napretka učitavanja slika premještena na vrh.</li>
-			<li>dodan Rain Alarm u poveznice.</li>
+			<li>dodan Rain Alarm u Linkove.</li>
 			</ul>
 			<h2>2025-06-13</h2>
 			<ul>
 			<li>promijenjen redoslijed karata na stranici Više (Ventusky na vrhu).</li>
 			<li>tema RainViewera promijenjena iz tamne u svijetlu.</li>
-			<li>dodane poveznice na Zoom Earth.</li>
+			<li>dodani Zoom Earth linkovi.</li>
 			</ul>
 			<h2>2025-06-10</h2>
 			<ul>
-			<li>dodane ugrađene karte Weather&amp;Radar, Rain Viewer i Ventusky na stranicu Više.</li>
+			<li>dodanei Weather&amp;Radar, Rain Viewer i Ventusky na stranicu Više.</li>
 			<li>dodan gumb za izlaz iz interaktivnog načina, koji vraća kartu na početni položaj i zumiranje.</li>
 			<li>meteo.si premješten na stranicu Više.</li>
 			</ul>
@@ -1625,26 +1623,27 @@
 			<h2>2025-05-30</h2>
 			<ul>
 			<li>slojevi preko karata Windy i Blitzortung prekrivaju cijelu kartu, s uputom da se uklanjaju dvostrukim klikom ili dodirom.</li>
-			<li>dodan vrijeme.net (Facebook) u poveznice.</li>
+			<li>dodan vrijeme.net (Facebook) u Linkove.</li>
 			</ul>
 			<h2>2025-05-21</h2>
 			<ul>
-			<li>dodana karta munja blitzortung.org.</li>
-			<li>povećana karta Windy i spriječeno slučajno pomicanje karte.</li>
-			<li>dodane slike temperature za Europu s meteociel.fr i poveznica na EUMETView.</li>
+			<li>dodana blitzortung.org karta munja.</li>
+			<li>povećan Windy i spriječeno slučajno pomicanje karte.</li>
+			<li>dodane temperature za Europu s meteociel.fr.</li>
+			<li>dodan EUMETView link.</li>
 			<li>istramet premješten na stranicu Više.</li>
 			</ul>
 			<h2>2025-05-11</h2>
 			<ul>
-			<li>dodano listanje nizova slika prelaskom prsta.</li>
+			<li>dodano listanje "slideshow" prikaza prelaskom prsta ("swipe").</li>
 			</ul>
 			<h2>2025-05-08</h2>
 			<ul>
-			<li>dodani pokazatelji položaja u nizu slika.</li>
+			<li>dodani indikatori pozicije u "slideshow" prikazu.</li>
 			</ul>
 			<h2>2025-03-22</h2>
 			<ul>
-			<li>popis poveznica može se proširiti i skupiti.</li>
+			<li>Linkovi se mogu proširiti i skupiti.</li>
 			</ul>
 			<h2>2025-02-28</h2>
 			<ul>
@@ -1652,40 +1651,37 @@
 			</ul>
 			<h2>2024-12-31</h2>
 			<ul>
-			<li>dodane poveznice za kvalitetu zraka i nebo.com.hr.</li>
-			<li>uključen radar DHMZ-a Bilogora.</li>
+			<li>dodani linkovi za kvalitetu zraka i nebo.com.hr.</li>
+			<li>uključen DHMZ Bilogora radar.</li>
 			</ul>
 			<h2>2024-10-14</h2>
 			<ul>
-			<li>popravljeno zapinjanje trake napretka kad se slike učitaju iz predmemorije.</li>
+			<li>ispravljeno zapinjanje trake napretka kad se slike učitaju iz predmemorije.</li>
 			</ul>
 			<h2>2024-10-11</h2>
 			<ul>
 			<li>dodana traka napretka učitavanja slika.</li>
-			<li>dodan SWPC u poveznice.</li>
+			<li>dodan SWPC u Linkove.</li>
 			</ul>
 			<h2>2024-09-28</h2>
 			<ul>
-			<li>meteoblue prognoza prikazuje se kao niz slika.</li>
-			<li>neke slike premještene i sakrivene, poveznice ažurirane i presložene.</li>
+			<li>meteoblue prognoza kao "slideshow".</li>
+			<li>neke slike premještene.</li>
+			<li>ažurirani i presloženi linkovi.</li>
 			</ul>
 			<h2>2024-09-11</h2>
 			<ul>
-			<li>dodana mogućnost prikaza više slika na istom mjestu, kao niza slika.</li>
+			<li>dodana mogućnost prikaza više slika na istom mjestu, kao "slideshow".</li>
 			<li>dodana meteoblue prognoza.</li>
 			</ul>
 			<h2>2024-09-07</h2>
 			<ul>
 			<li>dodana stranica Više i gumbi za kretanje po stranicama.</li>
-			<li>dodane i presložene slike, dodane poveznice na Facebook stranice.</li>
+			<li>dodane i presložene slike, dodani linkovi na Facebook stranice.</li>
 			</ul>
 			<h2>2024-09-06</h2>
 			<ul>
-			<li>poveznice premještene na dno, u novom rasporedu.</li>
-			</ul>
-			<h2>2024-08-25</h2>
-			<ul>
-			<li>dodano podnožje stranice.</li>
+			<li>Linkovi premješteni na dno, u novom prikazu.</li>
 			</ul>
 			<h2>2024-05-20</h2>
 			<ul>
@@ -1693,11 +1689,11 @@
 			</ul>
 			<h2>2024-05-13</h2>
 			<ul>
-			<li>dodane poveznice za svemirsko vrijeme.</li>
+			<li>dodani "SpaceWeather" linkovi.</li>
 			</ul>
 			<h2>2024-02-17</h2>
 			<ul>
-			<li>dodan radar Puntijarka i ponovno uključen radar DHMZ-a Uljenje.</li>
+			<li>dodan radar Puntijarka.</li>
 			</ul>
 			<h2>2024-01-23</h2>
 			<ul>
@@ -1713,15 +1709,15 @@
 			</ul>
 			<h2>2024-01-14</h2>
 			<ul>
-			<li>dodan odabrani popis poveznica o vremenu.</li>
+			<li>dodani Linkovi.</li>
 			</ul>
 			<h2>2024-01-11</h2>
 			<ul>
-			<li>dodan I'm Weather i popravljen sat24.</li>
+			<li>dodan I'm Weather i ispravljen sat24.</li>
 			</ul>
 			<h2>2023-07-23</h2>
 			<ul>
-			<li>dodani preostali radari DHMZ-a.</li>
+			<li>dodani preostali DHMZ radari.</li>
 			</ul>
 			<h2>2023-07-20</h2>
 			<ul>
@@ -1729,27 +1725,27 @@
 			</ul>
 			<h2>2023-06-10</h2>
 			<ul>
-			<li>radar DHMZ-a prikazuje se kao animirani gif.</li>
+			<li>radar DHMZ-a prikazan kao animirani gif.</li>
 			</ul>
 			<h2>2022-04-16</h2>
 			<ul>
-			<li>sat24 prikazuje se kao animirani gif (infracrveni i vidljivi).</li>
+			<li>sat24 prikazan kao animirani gif (infracrveni i vidljivi).</li>
 			</ul>
 			<h2>2022-04-10</h2>
 			<ul>
-			<li>popravljena animacija s meteo.hr, dodan mjerač vremena.</li>
+			<li>ispravljena meteo.hr animacija.</li>
 			</ul>
 			<h2>2021-07-21</h2>
 			<ul>
-			<li>povećana karta Windy.</li>
+			<li>povećan Windy.</li>
 			</ul>
 			<h2>2021-07-18</h2>
 			<ul>
-			<li>stranica prilagođena svim veličinama ekrana.</li>
+			<li>dodan responzivan dizajn.</li>
 			</ul>
 			<h2>2021-07-17</h2>
 			<ul>
-			<li>prvo izdanje.</li>
+			<li>inicijalna verzija.</li>
 			</ul>
 		</div>
 	</div>
