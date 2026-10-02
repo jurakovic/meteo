@@ -1,4 +1,4 @@
-// MANUAL.md to the HTML the manual dialog is built from. A fixed subset —
+// MANUAL.hr.md to the HTML the manual dialog is built from. A fixed subset —
 // ## and ### with slug ids, paragraphs, - lists, tables, blockquotes, **bold**,
 // *italic*, `code`, [text](#anchor) and <kbd> — and a throw on anything
 // outside it: the manual is the only input, so a line it does not recognise

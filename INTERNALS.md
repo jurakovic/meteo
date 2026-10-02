@@ -586,9 +586,11 @@ Details worth keeping in mind when touching the drag and scroll code:
 
 ## The manual
 
-[`MANUAL.md`](./MANUAL.md) is the user-facing document: what the site does and how to work it, in Croatian, which is what the site speaks. It sits at the root beside `README.md` and this file (*what it is*, *how to use it*, *how it works*), and cannot live in `docs/`, the conventional place, because `docs/` is the build output and the build deletes it on every run. The file name is English like the rest of the repo, leaving room for a `MANUAL.en.md` beside it.
+The manual is the user-facing document: what the site does and how to work it. It is written twice, as the changelog is: [`MANUAL.hr.md`](./MANUAL.hr.md) in Croatian, which is what the site speaks and the one the site shows, and [`MANUAL.md`](./MANUAL.md), its English version, for whoever reads the repository. A change goes into both; a unit test holds them to the same outline, section for section and level for level. The English one quotes the labels in Croatian, as the screen shows them, with a translation beside them.
 
-It shares no prose with this file on purpose: this one explains mechanism to someone reading the code; that one answers *how do I keep two radars side by side while I scroll?* Every UI label it quotes is the label the code renders, so a label that changes is one search from the line that quotes it.
+Both sit at the root beside `README.md` and this file (*what it is*, *how to use it*, *how it works*), and cannot live in `docs/`, the conventional place, because `docs/` is the build output and the build deletes it on every run.
+
+The manual shares no prose with this file on purpose: this one explains mechanism to someone reading the code; that one answers *how do I keep two radars side by side while I scroll?* Every UI label it quotes is the label the code renders, so a label that changes is one search from the line that quotes it.
 
 ## Documents on the site
 
@@ -596,7 +598,7 @@ Two documents are shown on the site, the manual and the changelog (what changed 
 
 | | Manual | Changelog |
 |---|---|---|
-| source, converter | `MANUAL.md`, [`scripts/manual.mjs`](./scripts/manual.mjs) | `CHANGELOG.hr.md`, [`scripts/changelog.mjs`](./scripts/changelog.mjs) |
+| source, converter | `MANUAL.hr.md`, [`scripts/manual.mjs`](./scripts/manual.mjs) | `CHANGELOG.hr.md`, [`scripts/changelog.mjs`](./scripts/changelog.mjs) |
 | dialog, storage key | `#manualDialog`, `manualPanel` | `#changelogDialog`, `changelogPanel` |
 | placeholder, dev fragment | `<!-- manual -->`, `manual.c.html` | `<!-- changelog -->`, `changelog.c.html` |
 | reached by | the `?` button, the top footer's *Upute*, `H`, `#upute` | the top footer's *Povijest promjena*, `C`, `#promjene` |

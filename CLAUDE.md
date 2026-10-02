@@ -18,7 +18,8 @@ scripts/              build.mjs, manual.mjs
 tests/e2e/            Playwright, offline through fixtures.js
 tests/unit/           node --test, DOM stub in setup.mjs
 INTERNALS.md          how it works (the one place for that)
-MANUAL.md             user manual, Croatian, built into the pages
+MANUAL.hr.md          user manual, Croatian, built into the pages
+MANUAL.md             its English version, for the repository
 ```
 
 ## Working rules

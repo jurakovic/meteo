@@ -1,292 +1,294 @@
-# Upute
+# Manual
 
-**Meteo radari** na jednom mjestu prikazuje radarske i satelitske karte, munje, prognoze nevremena i sinoptičke karte iz više izvora, bez otvaranja desetak stranica.
+**Meteo radari** brings radar and satellite maps, lightning, storm forecasts and synoptic charts from many sources together in one place, without opening a dozen sites.
 
-Stranica ima dva dijela:
+The site speaks Croatian, so the labels quoted here are the ones on the screen, with a translation where it helps. The Croatian version of this manual is [`MANUAL.hr.md`](./MANUAL.hr.md), and it is the one shown on the site.
 
-- **Početna** — stalan popis karata. Ništa se ne podešava, uvijek je isto i odmah se otvori.
-- **Prilagodi** — isti prikaz, ali sami birate koje se karte vide i kojim redoslijedom, a na računalu i kako su razmještene po ekranu. Do nje se dolazi gumbom *Prilagodi* na početnoj stranici.
+The site has two parts:
 
-Poglavlje [Karte na stranici](#karte-na-stranici) vrijedi za oba dijela, a sve ostalo samo za *Prilagodi*.
+- **Početna** (home) — a fixed list of maps. Nothing to set up; it is always the same and opens at once.
+- **Prilagodi** (customize) — the same view, but you choose which maps are shown and in what order, and on a computer also how they are laid out on the screen. It is reached with the *Prilagodi* button on the home page.
 
-Izdvojeni prozori ("widgeti"), bočni stupci i nadzorna ploča ("dashboard") rade samo na računalu, odnosno na ekranu širem od 800 px s mišem. Na dodirnim ekranima stranica ostaje obična, okomita lista karata — vidi [Na mobitelu](#na-mobitelu).
+The chapter [Maps on the page](#maps-on-the-page) applies to both parts, everything else to *Prilagodi* only.
 
-## Karte na stranici
+Pop-out windows ("widgets"), side columns and the dashboard work on a computer only, that is on a screen wider than 800 px with a mouse. On touch screens the page stays a plain, vertical list of maps — see [On a phone](#on-a-phone).
 
-Svaka karta ima naslovnu traku s imenom izvora. Ime je ujedno i link na izvornu stranicu.
+## Maps on the page
 
-**Karte s više slika** ("slideshow", npr. *Neverin | Radar | Hrvatska*) imaju strelice `❮` i `❯` na rubovima i indikatore pozicije ispod slike, koji pokazuju na kojoj ste slici. Na dodirnom ekranu slike se mijenjaju i prelaskom prsta ("swipe").
+Every map has a title bar with the name of its source. The name is also a link to the source's own page.
 
-**Interaktivne karte** (Windy, Blitzortung, meteoblue i slične) u početku ne primaju miš — preko njih stoji prozirni sloj s natpisom *Dvostruki klik za pristup interaktivnoj karti*. Bez njega bi se karta pomicala dok se stranica lista. Dvostrukim klikom sloj nestaje i kartom se dalje radi normalno.
+**Maps with several images** ("slideshow", e.g. *Neverin | Radar | Hrvatska*) have `❮` and `❯` arrows at the edges and position indicators below the image, showing which image you are on. On a touch screen the images also change with a swipe.
 
-Gumbi u traci interaktivne karte:
+**Interactive maps** (Windy, Blitzortung, meteoblue and the like) do not take the mouse at first — a transparent layer lies over them, saying *Dvostruki klik za pristup interaktivnoj karti* (double click to use the interactive map). Without it the map would move while the page scrolls. A double click removes the layer and the map then works as usual.
 
-| Gumb | Značenje |
+Buttons in an interactive map's bar:
+
+| Button | Meaning |
 |---|---|
-| `[HR]` / `[EU]` | prebacuje između prikaza Hrvatske i Europe |
-| `[X]` | pojavi se kad se sloj ukloni; vraća sloj, a zatim postaje `[R]` |
-| `[R]` | vraća kartu na početni položaj i zumiranje |
-| `[ ]` | otvara kartu preko cijelog zaslona; tada postaje `[-]`, koji je zatvara |
+| `[HR]` / `[EU]` | switches between a view of Croatia and of Europe |
+| `[X]` | appears once the layer is removed; brings the layer back, then becomes `[R]` |
+| `[R]` | puts the map back to its starting position and zoom |
+| `[ ]` | opens the map over the whole screen; it then becomes `[-]`, which closes it |
 
-**Cijeli zaslon.** Iz cijelog zaslona izlazi se gumbom `[-]` ili tipkom <kbd>Esc</kbd>. Za ponašanje u bočnom stupcu i na ploči vidi [Bočni stupci](#bočni-stupci) i [Nadzorna ploča](#nadzorna-ploča).
+**Fullscreen.** Fullscreen is left with the `[-]` button or the <kbd>Esc</kbd> key. For how it behaves in a side column and on the dashboard, see [Side columns](#side-columns) and [Dashboard](#dashboard).
 
-**Linkovi.** Gumb *Linkovi* vodi na popis dodatnih izvora na dnu stranice. Kvadratić pokraj njega uključuje prikaz linkova ispod svake karte.
+**Linkovi** (links). The *Linkovi* button leads to a list of further sources at the bottom of the page. The checkbox beside it shows links under every map.
 
-**Upute.** Ovaj tekst otvaraju gumb `?`, link *Upute* u podnožju i tipka <kbd>H</kbd>. Otvara se u prozoru preko stranice, pa se upute mogu čitati uz karte. Zatvara se natpisom *Zatvori* ili tipkom <kbd>Esc</kbd>. Ikona stranice lijevo od naslova vodi na početnu stranicu, kao i u dijalogu *Karte*. Link koji završava s `#upute` otvara upute odmah pri učitavanju stranice.
+**Upute** (manual). This text is opened by the `?` button, the *Upute* link in the footer and the <kbd>H</kbd> key. It opens in a window over the page, so it can be read beside the maps. It is closed with *Zatvori* (close) or the <kbd>Esc</kbd> key. The site's icon left of the title leads to the home page, as in the *Karte* dialog. A link ending in `#upute` opens the manual as soon as the page loads.
 
-**Povijest promjena.** Link *Povijest promjena* u podnožju i tipka <kbd>C</kbd> otvaraju popis promjena na stranici, po datumima. Otvara se u prozoru preko stranice, kao i upute, a link koji završava s `#promjene` otvara ga odmah pri učitavanju stranice.
+**Povijest promjena** (changelog). The *Povijest promjena* link in the footer and the <kbd>C</kbd> key open the list of changes to the site, by date. It opens in a window over the page, as the manual does, and a link ending in `#promjene` opens it as soon as the page loads.
 
-## Dijalog Karte
+## The Karte dialog
 
-Gumb **Karte** (ili tipka <kbd>K</kbd>) otvara dijalog u kojem se bira što se prikazuje. Kad gumb na stranici nije dostupan, dijalog se otvara s [pločice Karte](#pločica-karte) na vrhu ekrana.
+The **Karte** (maps) button, or the <kbd>K</kbd> key, opens the dialog where you choose what is shown. When the button on the page is out of reach, the dialog opens from the [Karte tab](#the-karte-tab) at the top of the screen.
 
-Dok je dijalog otvoren, stranica iza njega je malo zatamnjena i ne reagira. Klik izvan dijaloga samo ga zatvara — taj klik ne ide dalje, pa neće usput otvoriti link ni pomaknuti prozor.
+While the dialog is open, the page behind it is slightly dimmed and does not respond. A click outside the dialog only closes it — that click goes no further, so it will not open a link or move a window on the way.
 
-**Ništa se ne primjenjuje dok ne pritisnete Primijeni** ili tipku <kbd>Enter</kbd>. Zatvaranje dijaloga bez toga — natpisom *Zatvori*, tipkom <kbd>Esc</kbd> ili klikom izvan njega — odbacuje sve promjene. Iznimka su prekidači mreže i automatsko osvježavanje, koji djeluju odmah.
+**Nothing is applied until you press Primijeni** (apply) or the <kbd>Enter</kbd> key. Closing the dialog without it — with *Zatvori*, the <kbd>Esc</kbd> key or a click outside — drops every change. The exceptions are the grid switches and auto-refresh, which take effect at once.
 
-Na računalu se dijalog pomiče povlačenjem zaglavlja, a veličina mu se mijenja povlačenjem rubova ili uglova. Dvoklik na zaglavlje vraća ga na početno mjesto i veličinu. Na mobitelu zauzima cijeli ekran.
+On a computer the dialog is moved by dragging its header and resized by dragging its edges or corners. A double click on the header puts it back where it started, at its starting size. On a phone it fills the screen.
 
-Ikona stranice u zaglavlju, lijevo od naslova, vodi na početnu stranicu (s <kbd>Ctrl</kbd> ili srednjim klikom u novoj kartici) — i s [nadzorne ploče](#nadzorna-ploča), na kojoj stranice nema.
+The site's icon in the header, left of the title, leads to the home page (in a new tab with <kbd>Ctrl</kbd> or a middle click) — also from the [dashboard](#dashboard), where there is no page.
 
-Dijalog je, odozgo prema dolje:
+The dialog is, from top to bottom:
 
-- red **predložaka**,
-- red **Nadzorna ploča** s prekidačima mreže i gumbom *Posloži* (samo na računalu),
-- red **Osvježavaj svakih**,
-- redak **Izdvojene karte** s linkom *Vrati sve* — samo kad je neka karta izdvojena u prozor,
-- **odabrane karte**, a ispod njih *Primijeni* i *Podijeli*,
-- **sve dostupne karte**, s poretkom i okvirom za traženje,
-- **Zadani predlošci** i **Moji predlošci**.
+- the row of **presets**,
+- the **Nadzorna ploča** (dashboard) row, with the grid switches and the *Posloži* (arrange) button (computer only),
+- the **Osvježavaj svakih** (refresh every) row,
+- the **Izdvojene karte** (popped-out maps) line with the *Vrati sve* (dock all) link — only while some map is popped out into a window,
+- the **selected maps**, with *Primijeni* and *Podijeli* (share) below them,
+- **all available maps**, with sorting and a search box,
+- **Zadani predlošci** (default presets) and **Moji predlošci** (my presets).
 
-### Odabir karata
+### Choosing maps
 
-Dijalog ima dva popisa:
+The dialog has two lists:
 
-- **Odabrane karte** su redoslijed prikaza. Karte se premještaju povlačenjem za znak `≡`.
-- **Dostupne karte** su sve ostale. Kvadratić pokraj karte dodaje je na kraj odabranih.
+- **Selected maps** are the display order. Maps are moved by dragging the `≡` handle.
+- **Available maps** are all the others. The checkbox beside a map adds it to the end of the selected ones.
 
-Ispred svakog imena stoji znak vrste karte: 📡 radar, 🛰️ satelit, ⚡ munje, 🌡️ temperatura, ⛈️ nevrijeme, 🗺️ sinoptika, 📷 kamera, 📈 prognoza.
+Before every name stands the sign of its kind: 📡 radar, 🛰️ satellite, ⚡ lightning, 🌡️ temperature, ⛈️ storm, 🗺️ synoptic, 📷 camera, 📈 forecast.
 
-Dostupne karte mogu se poredati po *Zadano*, *Naziv* ili *Vrsta*; ponovni klik na isti poredak okreće smjer. To služi samo za traženje i ne mijenja redoslijed prikaza.
+Available maps can be sorted by *Zadano* (default), *Naziv* (name) or *Vrsta* (kind); clicking the same sort again reverses it. It is only for finding maps and does not change the display order.
 
-**Traženje.** Upisani pojam traži se i u imenu i u vrsti karte, pa *munje* izdvoji sve munje, a *neverin* sve karte tog izvora. Svaka dodatna riječ sužava popis — *neverin radar* nađe oba Neverinova radara, *neverin radar hrvatska* samo jedan. Kvačice nisu potrebne: *chmu* nalazi *ČHMÚ*, *sinopticka* nalazi *Sinoptička*.
+**Search.** The term is looked for in both the name and the kind of a map, so *munje* (lightning) picks out every lightning map, and *neverin* every map from that source. Each further word narrows the list — *neverin radar* finds both Neverin radars, *neverin radar hrvatska* only one. Diacritics are not needed: *chmu* finds *ČHMÚ*, *sinopticka* finds *Sinoptička*.
 
-Traženje filtrira samo dostupne karte; odabrane ostaju cijele, jer se po njima povlači. Pojam ostaje upisan i nakon odabira karte ili predloška. Briše se znakom `×` ili tipkom <kbd>Esc</kbd>; <kbd>Esc</kbd> u praznom okviru zatvara dijalog.
+Search filters only the available maps; the selected ones stay whole, since they are what you drag. The term stays after a map or a preset is picked. It is cleared with `×` or the <kbd>Esc</kbd> key; <kbd>Esc</kbd> in an empty box closes the dialog.
 
-> Ako na stranici piše *Nema odabranih karata*, popis je prazan — otvorite *Karte* i odaberite barem jednu.
+> If the page says *Nema odabranih karata* (no maps selected), the list is empty — open *Karte* and pick at least one.
 
-### Predlošci
+### Presets
 
-Na vrhu dijaloga je red predložaka:
+At the top of the dialog is the row of presets:
 
-| Predložak | Sadržaj |
+| Preset | Contents |
 |---|---|
-| *Osnovno* | zadani skup, isti kao na početnoj stranici |
-| *Više* | dodatne karte kojih nema u osnovnom skupu |
-| *Radari* | samo radari |
-| *Sateliti* | samo sateliti |
-| *Nevrijeme* | prognoze nevremena i munje |
-| *Sve* | sve karte |
-| *Ništa* | prazan popis, za slaganje od nule |
+| *Osnovno* | the basic set, the same as on the home page |
+| *Više* | further maps not in the basic set |
+| *Radari* | radars only |
+| *Sateliti* | satellites only |
+| *Nevrijeme* | storm forecasts and lightning |
+| *Sve* | every map |
+| *Ništa* | an empty list, to build from scratch |
 
-Iza njih slijede vaši spremljeni predlošci, a na kraju **Prilagođeno**.
+Your saved presets follow them, and **Prilagođeno** (custom) comes last.
 
-Klik na predložak učita njegov popis. Čim se popis promijeni — dodana karta, drugi redoslijed — odabir skoči na *Prilagođeno*, a predložak iz kojeg je popis potekao dobije točkicu. Klik na njega vraća njegov popis i odbacuje izmjene.
+A click on a preset loads its list. As soon as the list changes — a map added, a different order — the choice jumps to *Prilagođeno*, and the preset the list came from gets a dot. A click on it brings its list back and drops the edits.
 
-Skok na *Prilagođeno* ujedno upozorava da izmijenjeni popis više nije taj predložak: poveznica za dijeljenje tada nosi popis karata, a ne ime predloška.
+The jump to *Prilagođeno* also warns that the edited list is no longer that preset: a share link then carries the list of maps, not the preset's name.
 
-Predložak označen plavim rubom spremljen je kao [nadzorna ploča](#nadzorna-ploča).
+A preset with a blue border was saved as a [dashboard](#dashboard).
 
-### Moji predlošci
+### My presets
 
-Na dnu dijaloga, pod **Moji predlošci**:
+At the bottom of the dialog, under **Moji predlošci**:
 
-- **Dodaj** otvara polje za ime; **Spremi** (ili <kbd>Enter</kbd>) sprema trenutni popis pod tim imenom, a na računalu i razmještaj prozora.
-- **Ažuriraj** se pojavi uz predložak iz kojeg je popis potekao čim ga izmijenite, i prepisuje ga trenutnim stanjem.
-- **Preimenuj** mijenja ime, a **Obriši** briše predložak. Karte na ekranu pritom ostaju kakve jesu.
-- **Podijeli** kopira poveznicu na taj predložak.
+- **Dodaj** (add) opens a field for a name; **Spremi** (save), or <kbd>Enter</kbd>, saves the current list under that name, and on a computer the window layout too.
+- **Ažuriraj** (update) appears beside the preset the list came from as soon as you edit it, and overwrites it with what is on screen.
+- **Preimenuj** (rename) changes the name, and **Obriši** (delete) deletes the preset. The maps on screen stay as they are.
+- **Podijeli** copies a link to that preset.
 
-Pod **Zadani predlošci** oni se mogu sakriti iz reda na vrhu (*Sakrij*, *Sakrij sve*) i vratiti (*Prikaži*, *Prikaži sve*). *Osnovno* se ne može sakriti.
+Under **Zadani predlošci** the default presets can be hidden from the row at the top (*Sakrij*, *Sakrij sve*) and brought back (*Prikaži*, *Prikaži sve*). *Osnovno* cannot be hidden.
 
-### Dijeljenje
+### Sharing
 
-**Podijeli** kopira poveznicu u međuspremnik, a natpis nakratko postane *Kopirano!*. Poveznica nosi cijeli prikaz — popis karata, redoslijed i razmještaj — pa tko je otvori vidi isto što i vi.
+**Podijeli** copies a link to the clipboard, and the label briefly reads *Kopirano!* (copied). The link carries the whole view — the list of maps, the order and the layout — so whoever opens it sees what you see.
 
-Gumb *Podijeli* ispod odabranih karata dijeli ono što je trenutno u dijalogu, a poveznica u redu spremljenog predloška dijeli taj predložak. Kad netko otvori poveznicu vlastitog predloška, dijalog mu nudi da ga spremi pod istim imenom.
+The *Podijeli* button below the selected maps shares what is in the dialog right now, and the link in a saved preset's row shares that preset. When someone opens the link to a preset of yours, the dialog offers to save it under the same name.
 
-Otvorena poveznica ne dira spremljene postavke onoga tko ju je otvorio sve dok ne pritisne *Primijeni*.
+An opened link leaves the saved settings of whoever opened it alone until they press *Primijeni*.
 
-### Automatsko osvježavanje
+### Auto-refresh
 
-Slike zastare na stranici koja je dugo otvorena. Red **Osvježavaj svakih** ima kvadratić i razmak od 5, 10, 15, 30 ili 60 minuta. Isključeno je dok se ne uključi, a početni razmak je 5 minuta. Djeluje odmah, bez *Primijeni*.
+Images go stale on a page left open for long. The **Osvježavaj svakih** row has a checkbox and an interval of 5, 10, 15, 30 or 60 minutes. It is off until switched on, and the interval starts at 5 minutes. It takes effect at once, without *Primijeni*.
 
-Osvježavaju se slike, nizovi slika, videa i jednostavne karte. Interaktivne karte se preskaču: one same dohvaćaju najnovije podatke, a ponovno učitavanje samo bi im poništilo pomak i zumiranje.
+Images, slideshows, videos and simple maps are refreshed. Interactive maps are skipped: they fetch the latest data themselves, and a reload would only lose their pan and zoom.
 
-Vrijeme do sljedećeg osvježavanja piše u tom redu i na [pločici Karte](#pločica-karte). Odbrojavanje kreće ispočetka pri svakom osvježavanju svih karata — automatskom, ručnom (`[R]` na pločici ili tipka <kbd>R</kbd>) i pri ponovnom učitavanju stranice. `[R]` na pojedinoj karti osvježi samo nju i ne dira odbrojavanje, osim ako je to jedina karta koja se osvježava.
+The time to the next refresh is shown in that row and on the [Karte tab](#the-karte-tab). The countdown starts over on every refresh of all maps — automatic, by hand (`[R]` on the tab or the <kbd>R</kbd> key) and on a page reload. `[R]` on a single map refreshes only that map and leaves the countdown alone, unless it is the only map being refreshed.
 
-## Prozori
+## Windows
 
-*Samo na računalu.*
+*Computer only.*
 
-Svaka naslovna traka ima gumb `[^]` koji kartu izdvaja iz stranice u prozor ("widget") koji pluta iznad nje. Prozor ostaje na mjestu dok se stranica lista, pa se nekoliko karata može gledati istovremeno. Na mjestu karte u stranici ostaje traka *Karta je izdvojena u prozor* s linkom **Vrati**. Sve prozore odjednom vraća *Vrati sve* u dijalogu.
+Every title bar has a `[^]` button that pops the map out of the page into a window ("widget") floating above it. The window stays in place while the page scrolls, so several maps can be watched at once. Where the map was, the page shows a bar, *Karta je izdvojena u prozor* (the map is popped out into a window), with a **Vrati** (dock) link. *Vrati sve* in the dialog docks every window at once.
 
-Gumbi u traci prozora:
+Buttons in a window's bar:
 
-| Gumb | Značenje |
+| Button | Meaning |
 |---|---|
-| `[D]` | duplicira kartu u novi prozor (ima ga i karta u stranici) |
-| `[R]` | ponovno učitava kartu (interaktivne karte ga nemaju) |
-| `[+]` / `[-]` | spaja prozor sa susjednim u grupu, odnosno vadi ga iz nje |
-| `[=]` | vraća kartu u stranicu; na ploči je `[x]` i miče kartu s popisa |
+| `[D]` | duplicates the map into a new window (the map in the page has it too) |
+| `[R]` | reloads the map (interactive maps do not have it) |
+| `[+]` / `[-]` | joins the window to its neighbour in a group, or takes it out of one |
+| `[=]` | puts the map back in the page; on the dashboard it is `[x]` and removes the map from the list |
 
-### Pomicanje i veličina
+### Moving and size
 
-- **Pomicanje** — povlačenjem naslovne trake ili strelicama (vidi [Tipke i geste](#tipke-i-geste)).
-- **Veličina** — povlačenjem bilo kojeg ruba ili ugla.
-- **Klik na prozor** podiže ga iznad ostalih. Ako je interaktivna karta djelomično prekrivena drugim prozorom, prvi klik je podiže, a tek sljedeći ide karti.
+- **Moving** — by dragging the title bar, or with the arrow keys (see [Keys and gestures](#keys-and-gestures)).
+- **Size** — by dragging any edge or corner.
+- **A click on a window** raises it above the others. If an interactive map is partly covered by another window, the first click raises it and only the next one goes to the map.
 
-Prozori se međusobno privlače: rub koji se približi rubu drugog prozora sam sjedne na njega, pa se prozori lako slažu jedan uz drugi.
+Windows attract each other: an edge brought near another window's edge settles onto it, so windows line up easily side by side.
 
-**Omjer.** Prozor sa slikom ili videom u početku drži omjer karte — kad mu se mijenja širina, visina je prati. Čim se rub povuče, prozor se oslobodi omjera: širina i visina idu svaka za svojim, a karta se uklopi unutar okvira, s neoštrom kopijom slike kao podlogom.
+**Aspect.** A window with an image or a video keeps the map's aspect at first — when its width changes, its height follows. As soon as an edge is dragged, the window lets the aspect go: width and height each go their own way, and the map fits inside the frame, on a blurred copy of the image as its ground.
 
-- Držite li <kbd>Shift</kbd> dok povlačite rub, prozor zadržava omjer. Vrijedi i usred povlačenja — što je tipka u trenutku puštanja, to prozor ostaje.
-- **Dvoklik na naslovnu traku** vraća omjer tako da se prozor stisne oko karte kakva jest: praznina sa strane ili odozgo nestane, a karta ostane iste veličine i na istom mjestu.
+- Hold <kbd>Shift</kbd> while dragging an edge and the window keeps its aspect. It counts mid-drag too — what the key is when you let go is what the window keeps.
+- **A double click on the title bar** takes the aspect back by shrinking the window around the map as it is: the gap at the sides or at the top goes, and the map stays the same size in the same place.
 
-Karta uvećana preko svoje izvorne veličine postaje mekša, kao i svaka uvećana slika.
+A map enlarged past its own size turns softer, as any enlarged image does.
 
-### Šavovi
+### Seams
 
-Kad dva prozora stoje jedan uz drugi i dodiruju se cijelom dužinom ruba — jednako visoki jedan pored drugog, ili jednako široki jedan ispod drugog — taj zajednički rub je **šav**. Povlačenjem šava mijenjaju se oba prozora: koliko jedan dobije, toliko drugi ustupi, a ostatak razmještaja se ne miče. Svejedno je za koji se od dva prozora rub uhvati.
+When two windows stand side by side and touch along the whole length of an edge — equally tall next to each other, or equally wide one above the other — that shared edge is a **seam**. Dragging a seam resizes both windows: what one gains the other gives up, and the rest of the layout does not move. Either window's edge will do.
 
-- Šav se, kao i obični rub, privlači rubovima ostalih prozora, a uz uključeno *Poravnaj uz mrežu* sjedne na mrežu kad se pusti.
-- Držite li <kbd>Ctrl</kbd> dok hvatate šav, pomiče se rub samo jednog prozora — onoga s čije je strane šava pokazivač.
-- Šav postoji samo na stranicama, ne u uglovima. Rub koji dva prozora dijele samo djelomično nije šav i mijenja samo svoj prozor.
-- Oba prozora se pritom oslobode omjera, jer se inače šav ne bi mogao pomicati.
+- A seam, like any edge, is attracted to the edges of the other windows, and with *Poravnaj uz mrežu* (snap to grid) on it settles onto the grid when let go.
+- Hold <kbd>Ctrl</kbd> when you grab a seam and only one window's edge moves — the one on whose side of the seam the pointer is.
+- A seam exists on the sides only, not at the corners. An edge two windows share only in part is no seam and resizes only its own window.
+- Both windows let their aspect go, since otherwise the seam could not move.
 
-### Grupe
+### Groups
 
-Dva prozora koja se dodiruju mogu se spojiti u grupu gumbom `[+]`; samo dodirivanje nije dovoljno. Grupa se pomiče i mijenja veličinu kao cjelina, a članovi ostaju spojeni. Unutarnji rubovi grupe su šavovi, a vanjski rub mijenja veličinu cijele grupe. `[-]` vadi prozor iz grupe.
+Two touching windows can be joined in a group with the `[+]` button; touching alone is not enough. A group moves and resizes as a whole, and its members stay joined. The group's inside edges are seams, and its outside edge resizes the whole group. `[-]` takes a window out of the group.
 
-### Dupliciranje
+### Duplicating
 
-Gumb `[D]` (ili tipka <kbd>D</kbd>, za prozor na vrhu) otvara još jedan prozor s istom kartom — npr. ista sinoptička karta u dvije veličine, ili isti niz slika zaustavljen na dvije različite slike. Kopija se otvori malo pomaknuta i iste veličine kao prozor iz kojeg je nastala. Svaka kopija ima svoje strelice i indikatore pozicije.
+The `[D]` button (or the <kbd>D</kbd> key, for the window on top) opens another window with the same map — e.g. the same synoptic chart at two sizes, or the same slideshow stopped at two different images. The copy opens slightly offset, at the size of the window it came from. Every copy has its own arrows and position indicators.
 
-Kopija je samo prozor: u stranici i dalje postoji jedan red po karti. Nijedan prozor nije „izvorni” — `[=]` (na ploči `[x]`) na bilo kojem prozoru dok ih ima još s istom kartom samo njega makne, a ostali ostaju gdje jesu. Tek zadnji vraća kartu u stranicu (na ploči je miče s popisa). Kopije su dio razmještaja, pa se spremaju u predložak i putuju u poveznici. Karta maknuta s popisa odnese sa sobom i svoje kopije.
+A copy is only a window: the page still has one row per map. No window is "the original" — `[=]` (on the dashboard `[x]`) on any window while others with the same map remain removes only that one, and the rest stay where they are. Only the last one puts the map back in the page (on the dashboard, removes it from the list). Copies are part of the layout, so they are saved in a preset and travel in a link. A map removed from the list takes its copies with it.
 
-### Bočni stupci
+### Side columns
 
-Prozor povučen do lijevog ili desnog ruba ekrana uskoči u stupac uz taj rub. U stupcu karte stoje jedna ispod druge, a stranica se preslaže u preostalu širinu.
+A window dragged to the left or right edge of the screen snaps into a column along that edge. In a column the maps stand one under the other, and the page rearranges itself into the width that is left.
 
-- **Širina stupca** mijenja se povlačenjem njegovog unutarnjeg ruba. Kad se dva stupca dodiruju, zajednički rub premješta širinu s jednog na drugi.
-- **Visina karte** mijenja se povlačenjem njenog gornjeg ili donjeg ruba. Širinu daje stupac, pa se karta pritom oslobodi omjera; s <kbd>Shift</kbd> zadržava omjer, a dvoklik na naslovnu traku ga vraća.
-- **Karta izlazi iz stupca** povlačenjem naslovne trake u stranu.
-- **Dvoklik na rub stupca** sakriva stranicu, pa stupci preuzmu cijelu širinu. Ponovni dvoklik vraća prijašnje širine. Dok je stranica sakrivena, dijalog se otvara s [pločice Karte](#pločica-karte).
-- **Cijeli zaslon** u stupcu popuni samo taj stupac, pa stranica pokraj njega ostaje u upotrebi.
+- **A column's width** is changed by dragging its inner edge. Where two columns touch, the shared edge moves width from one to the other.
+- **A map's height** is changed by dragging its top or bottom edge. The column gives the width, so the map lets its aspect go; with <kbd>Shift</kbd> it keeps it, and a double click on the title bar takes it back.
+- **A map leaves the column** when its title bar is dragged sideways.
+- **A double click on a column's edge** hides the page, so the columns take the whole width. Another double click brings the earlier widths back. While the page is hidden, the dialog opens from the [Karte tab](#the-karte-tab).
+- **Fullscreen** in a column fills only that column, so the page beside it stays usable.
 
-## Nadzorna ploča
+## Dashboard
 
-*Samo na računalu.*
+*Computer only.*
 
-Nadzorna ploča ("dashboard") sakriva stranicu i svaku kartu s popisa pretvara u prozor. Ostaju samo karte na tamnoj podlozi — prikaz za ekran koji je stalno uključen i gleda se izdaleka.
+The dashboard (*Nadzorna ploča*) hides the page and turns every map on the list into a window. Only the maps remain, on a dark ground — a view for a screen that is always on and watched from a distance.
 
-Uključuje se gumbom **Nadzorna ploča** u dijalogu i primjenjuje, zajedno s popisom, pritiskom na *Primijeni*. Isključuje se na isti način. Predložak spremljen dok je ploča uključena otvara se kao ploča, pa se može imati više različitih ploča.
+It is switched on with the **Nadzorna ploča** button in the dialog and applied, together with the list, by pressing *Primijeni*. It is switched off the same way. A preset saved while the dashboard is on opens as a dashboard, so you can keep several different dashboards.
 
-Na ploči:
+On the dashboard:
 
-- **Posloži** (u dijalogu, `[A]` na pločici ili tipka <kbd>A</kbd>) razmjesti sve karte u pravilnu mrežu, jednakih veličina i bez razmaka. Broj stupaca i redova bira se tako da karte budu što veće, s obzirom na njihov oblik i oblik ekrana — četiri karte daju 2x2, šest 3x2, deset 4x3. Karte se pritom oslobode omjera; dvoklik na naslovnu traku vraća ga pojedinoj karti. Isto se dogodi i pri prvom ulasku na ploču.
-- `[x]` u traci prozora ili srednji klik na traku **miče kartu s popisa** — na ploči nema stranice u koju bi se vratila.
-- **Dodavanje karte** bez otvaranja dijaloga: `[+]` na [pločici Karte](#pločica-karte) otvara abecedni popis karata kojih još nema na ploči. Upisani pojam sužava popis kao u dijalogu, strelice biraju, a <kbd>Enter</kbd> ili klik dodaje kartu. <kbd>Esc</kbd> ili klik izvan popisa ga zatvara.
-- Karta dodana u popis pojavi se na ploči uz gornji lijevi kut, stepenasto ispod ostalih novih.
-- Bočnih stupaca nema; prozor doveden do ruba ekrana ostaje prozor.
-- **Cijeli zaslon** zauzme cijeli ekran, osim strane koju neki prozor zatvara cijelom visinom ili širinom. Prozor uz cijeli lijevi rub ostavi kartu na desnoj strani; prozor u kutu ne zatvara ništa, pa karta ide preko cijelog ekrana, a on ostaje iznad nje.
+- **Posloži** (in the dialog, `[A]` on the tab or the <kbd>A</kbd> key) arranges every map in an even grid, of equal sizes and with no gaps. The number of columns and rows is chosen so the maps are as large as possible, given their shape and the screen's — four maps make 2x2, six 3x2, ten 4x3. The maps let their aspect go; a double click on a title bar takes it back for that map. The same happens on first entering the dashboard.
+- `[x]` in a window's bar, or a middle click on the bar, **removes the map from the list** — the dashboard has no page to put it back in.
+- **Adding a map** without opening the dialog: `[+]` on the [Karte tab](#the-karte-tab) opens an alphabetical list of the maps not yet on the dashboard. A typed term narrows the list as in the dialog, the arrow keys choose, and <kbd>Enter</kbd> or a click adds the map. <kbd>Esc</kbd> or a click outside the list closes it.
+- A map added to the list appears on the dashboard by the top left corner, stepped below the other new ones.
+- There are no side columns; a window brought to the edge of the screen stays a window.
+- **Fullscreen** takes the whole screen, except a side some window closes off along its whole height or width. A window along the whole left edge leaves the map the right side; a window in a corner closes nothing off, so the map goes over the whole screen and the window stays above it.
 
-### Mreža
+### Grid
 
-Na ploči se karte mogu slagati po mreži od kvadratića. Dva prekidača, u dijalogu i na pločici, djeluju odmah, bez *Primijeni*:
+On the dashboard, maps can be laid out on a grid of squares. Two switches, in the dialog and on the tab, take effect at once, without *Primijeni*:
 
-| Prekidač | Pločica | Tipka | Značenje |
+| Switch | Tab | Key | Meaning |
 |---|---|---|---|
-| *Prikaži mrežu* | `[G]` | <kbd>G</kbd> | crta mrežu po podlozi |
-| *Poravnaj uz mrežu* | `[S]` | <kbd>S</kbd> | prozor pušten iz ruke sjeda na mrežu |
+| *Prikaži mrežu* (show grid) | `[G]` | <kbd>G</kbd> | draws the grid on the ground |
+| *Poravnaj uz mrežu* (snap to grid) | `[S]` | <kbd>S</kbd> | a window let go settles onto the grid |
 
-Poravnavanje djeluje tek kad se prozor pusti, pa je povlačenje slobodno. Svaki rub ide na svoju najbližu crtu, pa se prozor po potrebi malo razvuče ili stisne. Strelice pomiču prozor za točno jedan kvadratić, pa poravnani prozor ostaje poravnan.
+Snapping takes effect only when a window is let go, so dragging is free. Each edge goes to its own nearest line, so the window stretches or shrinks a little if needed. The arrow keys move a window by exactly one square, so a snapped window stays snapped.
 
-## Pločica Karte
+## The Karte tab
 
-Kad gumb *Karte* na stranici nije dostupan, na vrhu ekrana visi narančasta pločica **Karte**; klik na nju otvara dijalog. Pojavljuje se:
+When the *Karte* button on the page is out of reach, an orange **Karte** tab hangs at the top of the screen; a click on it opens the dialog. It appears:
 
-- na [nadzornoj ploči](#nadzorna-ploča),
-- dok su [bočni stupci](#bočni-stupci) sakrili stranicu,
-- dok je uključeno [automatsko osvježavanje](#automatsko-osvježavanje) — tada nosi odbrojavanje i `[R]`, koji odmah osvježava sve karte.
+- on the [dashboard](#dashboard),
+- while the [side columns](#side-columns) have hidden the page,
+- while [auto-refresh](#auto-refresh) is on — it then carries the countdown and `[R]`, which refreshes every map at once.
 
-Na ploči uvijek nosi `[+]` (dodaje kartu na ploču) i `[R]`, uz njih i `[A]`, `[G]` i `[S]`.
+On the dashboard it always carries `[+]` (adds a map to the dashboard) and `[R]`, along with `[A]`, `[G]` and `[S]`.
 
-Pločica je blijeda dok ne zatreba — pune boje postaje pod mišem i dok je dijalog otvoren. Povlači se lijevo-desno, a za rubove se razvlači, najviše do polovice širine ekrana.
+The tab is faint until needed — it takes on full colour under the mouse and while the dialog is open. It is dragged left and right, and stretched by its edges, up to half the width of the screen.
 
-## Tipke i geste
+## Keys and gestures
 
-Tipke ne rade dok je kursor u polju za upis.
+Keys do not work while the cursor is in a text field.
 
-| Tipka | Radnja |
+| Key | Action |
 |---|---|
-| <kbd>K</kbd> | otvara i zatvara dijalog *Karte* |
-| <kbd>Enter</kbd> | u dijalogu *Karte*: primjenjuje promjene |
-| <kbd>H</kbd> | otvara i zatvara *Upute* |
-| <kbd>C</kbd> | otvara i zatvara *Povijest promjena* |
-| <kbd>Esc</kbd> | zatvara dijalog; ako nijedan nije otvoren, izlazi iz cijelog zaslona |
-| <kbd>R</kbd> | ponovno učitava sve karte |
-| <kbd>D</kbd> | duplicira prozor na vrhu |
-| <kbd>A</kbd> | na ploči: slaže karte u mrežu |
-| <kbd>G</kbd> | na ploči: prikazuje ili skriva mrežu |
-| <kbd>S</kbd> | na ploči: uključuje ili isključuje poravnavanje uz mrežu |
-| strelice | pomiču prozor na vrhu za jedan kvadratić mreže |
-| <kbd>Shift</kbd> + strelice | isto, za jedan piksel |
+| <kbd>K</kbd> | opens and closes the *Karte* dialog |
+| <kbd>Enter</kbd> | in the *Karte* dialog: applies the changes |
+| <kbd>H</kbd> | opens and closes the manual (*Upute*) |
+| <kbd>C</kbd> | opens and closes the changelog (*Povijest promjena*) |
+| <kbd>Esc</kbd> | closes the dialog; if none is open, leaves fullscreen |
+| <kbd>R</kbd> | reloads every map |
+| <kbd>D</kbd> | duplicates the window on top |
+| <kbd>A</kbd> | on the dashboard: arranges the maps in a grid |
+| <kbd>G</kbd> | on the dashboard: shows or hides the grid |
+| <kbd>S</kbd> | on the dashboard: switches snapping to the grid on or off |
+| arrow keys | move the window on top by one grid square |
+| <kbd>Shift</kbd> + arrow keys | the same, by one pixel |
 
-Tipke <kbd>R</kbd>, <kbd>D</kbd>, <kbd>A</kbd>, <kbd>G</kbd>, <kbd>S</kbd> i strelice rade samo na računalu. Strelice pomiču prozor koji je posljednji podignut; ako se pomaknuo krivi, kliknite na onaj koji želite i ponovite. Dok je dijalog otvoren, strelice listaju dijalog i ne pomiču prozore.
+The <kbd>R</kbd>, <kbd>D</kbd>, <kbd>A</kbd>, <kbd>G</kbd>, <kbd>S</kbd> and arrow keys work on a computer only. The arrow keys move the window raised last; if the wrong one moved, click the one you want and try again. While the dialog is open, the arrow keys scroll the dialog and do not move windows.
 
-> **Tipke ne rade dok je fokus u interaktivnoj karti.** Kad kliknete u Windy ili Blitzortung, tipke prima ta karta, a ne stranica. Kliknite na naslovnu traku ili bilo gdje po stranici i tipke ponovno rade.
+> **Keys do not work while the focus is in an interactive map.** When you click into Windy or Blitzortung, the keys go to that map, not to the page. Click the title bar or anywhere on the page and the keys work again.
 
-Mišem, na naslovnoj traci prozora:
+With the mouse, on a window's title bar:
 
-| Gesta | Radnja |
+| Gesture | Action |
 |---|---|
-| povlačenje | pomiče prozor |
-| dvoklik | interaktivna karta: cijeli zaslon; slika: vraća omjer |
-| srednji klik | vraća kartu u stranicu; na ploči je miče s popisa |
+| drag | moves the window |
+| double click | interactive map: fullscreen; image: takes the aspect back |
+| middle click | puts the map back in the page; on the dashboard removes it from the list |
 
-Mišem, na rubovima:
+With the mouse, on the edges:
 
-| Gesta | Radnja |
+| Gesture | Action |
 |---|---|
-| povlačenje ruba ili ugla | mijenja veličinu prozora |
-| <kbd>Shift</kbd> + povlačenje | isto, uz zadržan omjer |
-| povlačenje šava | pomiče zajednički rub dvaju prozora |
-| <kbd>Ctrl</kbd> + povlačenje šava | pomiče rub samo jednog prozora |
-| dvoklik na rub stupca | sakriva ili vraća stranicu |
+| dragging an edge or corner | resizes the window |
+| <kbd>Shift</kbd> + drag | the same, keeping the aspect |
+| dragging a seam | moves the shared edge of two windows |
+| <kbd>Ctrl</kbd> + dragging a seam | moves the edge of one window only |
+| double click on a column's edge | hides or brings back the page |
 
-## Što se pamti
+## What is remembered
 
-Sve se sprema samo u ovom pregledniku. Ništa se ne šalje nikamo i ništa ne prelazi na drugi uređaj, osim poveznicom koju sami podijelite. Brisanjem podataka preglednika briše se i ovo.
+Everything is saved in this browser only. Nothing is sent anywhere and nothing moves to another device, except through a link you share yourself. Clearing the browser's data clears this too.
 
-**Prikaz** — popis karata, redoslijed, razmještaj prozora i nadzorna ploča. Sprema se pritiskom na *Primijeni* i vraća pri sljedećem otvaranju stranice. Samo prikaz ide u predložak i u poveznicu za dijeljenje. Razmještaj se mijenja i sprema i bez *Primijeni*, čim pomaknete prozor.
+**The view** — the list of maps, the order, the window layout and the dashboard. It is saved by pressing *Primijeni* and comes back the next time the page opens. Only the view goes into a preset and into a share link. The layout is changed and saved without *Primijeni* too, as soon as you move a window.
 
-**Postavke preglednika** — položaj i veličina dijaloga i uputa, položaj i širina pločice, prekidači mreže i automatsko osvježavanje. One se tiču ovog ekrana, a ne prikaza, pa ne putuju ni u predlošku ni u poveznici.
+**Browser settings** — the position and size of the dialog and the manual, the position and width of the tab, the grid switches and auto-refresh. They concern this screen, not the view, so they travel neither in a preset nor in a link.
 
-**Podijeljena poveznica** — nosi prikaz u adresi. Dok je otvorena, prikazuje se ono što ona nosi, a vaše spremljene postavke ostaju netaknute dok ne pritisnete *Primijeni*.
+**A shared link** — carries the view in its address. While it is open, what it carries is shown, and your saved settings stay untouched until you press *Primijeni*.
 
-## Na mobitelu
+## On a phone
 
-Na dodirnim ekranima stranica je obična okomita lista karata. Nema izdvojenih prozora, bočnih stupaca ni nadzorne ploče.
+On touch screens the page is a plain vertical list of maps. There are no pop-out windows, side columns or dashboard.
 
-Radi:
+What works:
 
-- odabir karata i redoslijed prikaza,
-- predlošci, spremanje i dijeljenje,
-- automatsko osvježavanje,
-- listanje karata s više slika prelaskom prsta,
-- dvostruki dodir za pristup interaktivnoj karti,
-- cijeli zaslon.
+- choosing maps and the display order,
+- presets, saving and sharing,
+- auto-refresh,
+- swiping through maps with several images,
+- a double tap to use an interactive map,
+- fullscreen.
 
-Dijalog *Karte* na mobitelu zauzima cijeli ekran i zatvara se natpisom *Zatvori* u zaglavlju.
+On a phone the *Karte* dialog fills the screen and is closed with *Zatvori* in its header.
 
-Razmještaj prozora složen na računalu ne gubi se kad stranicu otvorite na mobitelu — samo se ne prikazuje, a vraća se čim je ponovno otvorite na računalu.
+A window layout made on a computer is not lost when the page is opened on a phone — it is only not shown, and comes back as soon as the page is opened on the computer again.

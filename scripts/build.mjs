@@ -160,7 +160,7 @@ function processHtml(html, parts) {
 
 async function build() {
 	const component = (name) => readText(join(src, '_components', `${name}.c.html`));
-	const manualHtml = convertManual(await readText(join(root, 'MANUAL.md'))).join(CRLF);
+	const manualHtml = convertManual(await readText(join(root, 'MANUAL.hr.md'))).join(CRLF);
 	// the dev pages fetch the documents from here (git-ignored: build output)
 	await writeFile(join(src, '_components/manual.c.html'), manualHtml);
 	const changelogHtml = convertChangelog(await readText(join(root, 'CHANGELOG.hr.md'))).join(CRLF);
