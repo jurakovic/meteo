@@ -1,13 +1,11 @@
 
 2026-09-23 (#42)
-	added the user manual (Upute) to both pages, opened with the ? button or the H key.
 	added copies of a map window ([D]), so the same map can be shown twice, e.g. at two sizes or on two different slides.
 	added seams: dragging the shared edge of two adjacent windows resizes both at once.
 	added auto-arrange on the dashboard ([A]), tiling all maps into an even grid as large as the screen allows.
 	added a "Karte" tab at the top of the screen, which opens the map dialog when its button is out of reach and adds a map to the dashboard without opening the dialog ([+]).
 	added auto-refresh of all maps every 5, 10, 15, 30 or 60 minutes, with a countdown on the tab.
 	added search to the map picker (multiple words, works without diacritics).
-	added remotely switching off a map whose source is down, without a site update.
 
 2026-09-14 (#41)
 	added pop-out map windows on desktop: a map can float above the page, be moved and resized, snap to other windows, be grouped with a neighbour, or dock in a column at the screen edge.
@@ -19,13 +17,9 @@
 2026-08-29 (#40)
 	replaced the ČHMÚ synoptic chart on the main page with DWD synoptic charts (analysis and forecasts); ČHMÚ remains available on the customize page.
 
-2026-08-20
-	updated Neverin radar image sources.
-
 2026-08-17 (#39)
 	added saved presets: save the current selection under a name, then update, rename, share or delete it.
 	built-in presets can be hidden from the preset row; renamed "Zadano" to "Osnovno".
-	edited presets are marked, and clicking the original preset discards the edits.
 
 2026-07-06 (#38)
 	added the customize page (beta), replacing the extras page: choose which maps to show and in what order, start from a preset (Zadano, Više, Radari, Sateliti, Nevrijeme, Sve, Ništa), and share the view with a link.
