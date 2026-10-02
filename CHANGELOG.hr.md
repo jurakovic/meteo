@@ -2,74 +2,66 @@
 Generirano uz pomoć AI-ja.
 
 2026-09-23 (#42)
-	dodane kopije prozora karte ([D]), pa se ista karta može prikazati dvaput, npr. u dvije veličine ili na dvije različite slike.
+	dodano traženje u odabiru karata.
 	dodani šavovi: povlačenjem zajedničkog ruba dvaju susjednih prozora mijenjaju se oba odjednom.
-	dodano slaganje na nadzornoj ploči ([A]): sve karte poslože se u pravilnu mrežu, što veće ekran dopušta.
-	dodana pločica "Karte" na vrhu ekrana, koja otvara dijalog karata kad njegov gumb nije dostupan i dodaje kartu na nadzornu ploču bez otvaranja dijaloga ([+]).
-	dodano automatsko osvježavanje svih karata svakih 5, 10, 15, 30 ili 60 minuta, s odbrojavanjem na pločici.
-	dodano traženje u odabiru karata (više riječi, radi i bez kvačica).
+	dodana dupliciranje prozora karte ([D]), pa se ista karta može prikazati više puta, npr. u dvije veličine ili na dvije različite slike.
+	dodano automatsko slaganje na nadzornoj ploči ([A]): sve karte poslože se u pravilnu mrežu.
+	dodano automatsko osvježavanje svih karata svakih 5, 10, 15, 30 ili 60 minuta.
 
 2026-09-14 (#41)
-	dodani izdvojeni prozori karata na računalu: karta može plutati iznad stranice, pomicati se i mijenjati veličinu, privlačiti se uz druge prozore, spojiti se u grupu sa susjednim ili sjesti u stupac uz rub ekrana.
-	dodana nadzorna ploča koja prikazuje samo odabrane karte, kao prozore na tamnoj podlozi, uz mrežu za poravnavanje; predložak spremljen kao ploča otvara se kao ploča.
-	razmještaj prozora sprema se u predloške i prenosi poveznicom za dijeljenje.
+	dodani izdvojeni prozori karata na računalu ("widgeti"): karta može plutati iznad stranice, pomicati se i mijenjati veličinu, privlačiti se uz druge prozore, spojiti se u grupu sa susjednim ili sjesti u stupac uz rub ekrana.
+	dodana način rada kao nadzorna ploča ("dashboard").
 	dodani tipkovnički prečaci.
-	dijalog karata može se pomicati i mijenjati mu se veličina.
 
 2026-08-29 (#40)
 	sinoptička karta ČHMÚ na početnoj stranici zamijenjena sinoptičkim kartama DWD-a (analiza i prognoze); ČHMÚ je i dalje dostupan na stranici Prilagodi.
 
 2026-08-17 (#39)
 	dodani vlastiti predlošci: trenutni odabir sprema se pod imenom, a zatim se može ažurirati, preimenovati, podijeliti ili obrisati.
-	gotovi predlošci mogu se sakriti iz reda predložaka; "Zadano" preimenovano u "Osnovno".
+	zadani predlošci mogu se sakriti iz reda predložaka; "Zadano" preimenovano u "Osnovno".
 
 2026-07-06 (#38)
 	dodana stranica Prilagodi (beta) umjesto stranice Više: bira se koje se karte prikazuju i kojim redoslijedom, kreće se od predloška (Zadano, Više, Radari, Sateliti, Nevrijeme, Sve, Ništa), a prikaz se dijeli poveznicom.
 
 2026-06-28 (#37)
 	dodan gumb za cijeli zaslon na interaktivnim kartama.
-	ažurirani izvori Neverinovih satelitskih slika.
 
 2026-06-26 (#36)
-	dodana prognoza nevremena ASTORP i ESWD link.
+	dodana ASTORP prognoza nevremena i ESWD link.
 
 2026-06-24 (#35)
-	dodan red brzih linkova (Windy, Zoom Earth, meteoblue, Rain Viewer, Ventusky, Vrijeme&Radar, Sat24, I'm Weather, Időkép) ispod svake karte, s koordinatama za njezino područje.
+	dodan red brzih linkova ispod svake karte.
 	dodan prekidač "Linkovi" koji prikazuje ili skriva linkove ispod karata (pamti se u pregledniku).
-	dodani Ventusky i Rain Viewer linkovi, "Weather&Radar" preimenovan u "Vrijeme&Radar", model na Wetterzentrale promijenjen s ICON na ECMWF, ispravljeni neispravni linkovi.
+	ažurirani linkovi, ispravljeni neispravni.
 
 2026-06-22
 	geste s više prstiju više ne mijenjaju slike ni slojeve preko karata.
 	prilagođen omjer interaktivnih karata na računalu.
 
 2026-06-02 (#34)
-	razdvojene prognoze nevremena ESSL i ESTOFEX, dodano više slika prognoze.
+	razdvojene ESSL i ESTOFEX prognoze nevremena, dodano više slika prognoze.
 
 2026-05-09 (#33)
 	vraćeni meteoblue widgeti s meteogramom.
 
 2026-03-26 (#32)
-	dodan prekidač [HR]/[EU] na svim interaktivnim kartama (Windy, Blitzortung, Ventusky, Rain Viewer, Weather&Radar) za prikaz Hrvatske ili Europe, s odvojenim zumiranjem za računalo i mobitel.
-	ispravljeno prerano skrivanje trake napretka na mobitelu, prije nego što su se slike učitale.
+	dodan prekidač [HR]/[EU] na svim interaktivnim kartama (npr. Windy, Blitzortung, itd.) za prikaz Hrvatske ili Europe.
 
 2026-02-11 (#31)
-	meteoblue meteogram skraćen sa 7 na 5 dana.
-	ispravljena veličina satelitske slike s meteociela.
+	manje dorade i ispravci.
 
 2026-02-04 (#30)
 	meteoblue widgeti s meteogramom zamijenjeni slikom iz njihova API-ja (Zagreb).
 
 2026-01-10 (#29)
-	ispravljena sinoptička karta ČHMÚ, a karte ČHMÚ premještene na početnu stranicu.
-	Neverinove slike Europe sada prikazuju cijelu Europu.
-	ažurirane slike s meteociela.
+	ažuriranje ČHMÚ, Neverin i meteociel slika.
 
 2025-11-15 (#28)
 	ažurirani meteoblue meteogrami.
 
 2025-07-27 (#27)
 	ispravljeno dohvaćanje ESSL prognoze nevremena.
-	dodan ESTOFEX.
+	dodana ESTOFEX prognoza nevremena.
 
 2025-07-07 (#26)
 	traka napretka učitavanja slika premještena na vrh.
@@ -81,15 +73,15 @@ Generirano uz pomoć AI-ja.
 	dodani Zoom Earth linkovi.
 
 2025-06-10 (#24)
-	dodanei Weather&Radar, Rain Viewer i Ventusky na stranicu Više.
-	dodan gumb za izlaz iz interaktivnog načina, koji vraća kartu na početni položaj i zumiranje.
+	dodani Weather&Radar, Rain Viewer i Ventusky na stranicu Više.
+	dodani gumbi za izlaz iz interaktivnog načina i za resetiranje karte na početni položaj i zumiranje.
 	meteo.si premješten na stranicu Više.
 
 2025-06-05 (#23)
-	dodana prognoza nevremena ESSL.
+	dodana ESSL prognoza nevremena.
 
 2025-05-30 (#22)
-	slojevi preko karata Windy i Blitzortung prekrivaju cijelu kartu, s uputom da se uklanjaju dvostrukim klikom ili dodirom.
+	dodana uputa da se slojevi preko Windy i Blitzortung karata uklanjaju dvostrukim klikom ili dodirom.
 	dodan vrijeme.net (Facebook) u Linkove.
 
 2025-05-21 (#21)
@@ -109,7 +101,7 @@ Generirano uz pomoć AI-ja.
 	Linkovi se mogu proširiti i skupiti.
 
 2025-02-28 (#17)
-	dodana podloga koja se vidi dok se slike učitavaju.
+	dodana tamnija pozadina za slučaj da se slika ne učita.
 
 2024-12-31 (#16)
 	dodani linkovi za kvalitetu zraka i nebo.com.hr.
@@ -132,11 +124,11 @@ Generirano uz pomoć AI-ja.
 	dodana meteoblue prognoza.
 
 2024-09-07 (#10)
-	dodana stranica Više i gumbi za kretanje po stranicama.
+	dodana stranica Više i gumbi za navigaciju po stranicama.
 	dodane i presložene slike, dodani linkovi na Facebook stranice.
 
 2024-09-06 (#9)
-	Linkovi premješteni na dno, u novom prikazu.
+	Linkovi premješteni na dno, s novim rasporedom.
 
 2024-05-20
 	dodan ESTOFEX.
