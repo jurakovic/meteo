@@ -1,41 +1,38 @@
+
 Generated with the AI.
 
 2026-09-23 (#42)
-	added copies of a map window ([D]), so the same map can be shown twice, e.g. at two sizes or on two different slides.
+	added search to the map picker.
 	added seams: dragging the shared edge of two adjacent windows resizes both at once.
-	added auto-arrange on the dashboard ([A]), tiling all maps into an even grid as large as the screen allows.
-	added a "Karte" tab at the top of the screen, which opens the map dialog when its button is out of reach and adds a map to the dashboard without opening the dialog ([+]).
-	added auto-refresh of all maps every 5, 10, 15, 30 or 60 minutes, with a countdown on the tab.
-	added search to the map picker (multiple words, works without diacritics).
+	added duplicating a map window ([D]), so the same map can be shown more than once, e.g. at two sizes or on two different slides.
+	added auto-arrange on the dashboard ([A]): all maps are tiled into an even grid.
+	added auto-refresh of all maps every 5, 10, 15, 30 or 60 minutes.
 
 2026-09-14 (#41)
-	added pop-out map windows on desktop: a map can float above the page, be moved and resized, snap to other windows, be grouped with a neighbour, or dock in a column at the screen edge.
-	added a dashboard mode that shows only the selected maps, as windows on a dark background, with an optional snap grid; a preset saved as a dashboard opens as one.
-	the window layout is saved with presets and carried in share links.
+	added pop-out map windows on desktop ("widgets"): a map can float above the page, be moved and resized, snap to other windows, be grouped with a neighbour, or dock in a column at the screen edge.
+	added a dashboard mode.
 	added keyboard shortcuts.
-	made the map dialog movable and resizable.
 
 2026-08-29 (#40)
 	replaced the ČHMÚ synoptic chart on the main page with DWD synoptic charts (analysis and forecasts); ČHMÚ remains available on the customize page.
 
 2026-08-17 (#39)
 	added saved presets: save the current selection under a name, then update, rename, share or delete it.
-	built-in presets can be hidden from the preset row; renamed "Zadano" to "Osnovno".
+	default presets can be hidden from the preset row; renamed "Zadano" to "Osnovno".
 
 2026-07-06 (#38)
 	added the customize page (beta), replacing the extras page: choose which maps to show and in what order, start from a preset (Zadano, Više, Radari, Sateliti, Nevrijeme, Sve, Ništa), and share the view with a link.
 
 2026-06-28 (#37)
 	added a fullscreen toggle to the interactive maps.
-	updated Neverin satellite image sources.
 
 2026-06-26 (#36)
 	added the ASTORP storm forecast and an ESWD link.
 
 2026-06-24 (#35)
-	added a row of inline quick links (Windy, Zoom Earth, meteoblue, Rain Viewer, Ventusky, Vrijeme&Radar, Sat24, I'm Weather, Időkép) under each map, with region-specific coordinates.
-	added a "Linkovi" toggle to show/hide the inline link rows (remembered via localStorage).
-	added Ventusky and Rain Viewer link sources, renamed "Weather&Radar" to "Vrijeme&Radar", switched Wetterzentrale model from ICON to ECMWF, fixed broken links.
+	added a row of quick links under each map.
+	added a "Linkovi" toggle to show or hide the links under the maps (remembered in the browser).
+	updated links, fixed broken ones.
 
 2026-06-22
 	prevented multi-touch gestures from triggering slide/overlay actions.
@@ -48,27 +45,23 @@ Generated with the AI.
 	reverted to meteoblue meteogram widgets.
 
 2026-03-26 (#32)
-	added an [HR]/[EU] toggle to all interactive maps (Windy, Blitzortung, Ventusky, Rain Viewer, Weather&Radar) to switch between Croatia- and Europe-centered views, with separate desktop and mobile zoom levels.
-	fixed the progress bar hiding prematurely on mobile before lazy images finished loading.
+	added an [HR]/[EU] toggle to all interactive maps (e.g. Windy, Blitzortung, etc.) to switch between Croatia and Europe views.
 
 2026-02-11 (#31)
-	changed meteoblue meteogram from 7-day to 5-day.
-	fixed meteociel satellite slide size.
+	minor improvements and fixes.
 
 2026-02-04 (#30)
 	replaced meteoblue meteogram widgets with the image API (Zagreb).
 
 2026-01-10 (#29)
-	fixed the chmu synoptic map and moved chmu maps to the main page.
-	changed neverin europe images to a whole-Europe view.
-	updated meteociel images.
+	updated ČHMÚ, Neverin and meteociel images.
 
 2025-11-15 (#28)
 	updated meteoblue meteograms.
 
 2025-07-27 (#27)
 	fixed ESSL storm forecast lookup.
-	added ESTOFEX forecast slide.
+	added the ESTOFEX storm forecast.
 
 2025-07-07 (#26)
 	moved the image load progress bar to the top.
@@ -80,21 +73,21 @@ Generated with the AI.
 	added Zoom Earth links.
 
 2025-06-10 (#24)
-	added embedded Weather&Radar, Rain Viewer and Ventusky maps on the extras page.
-	added a button to exit interactive mode and reset a map to its default position and zoom.
+	added Weather&Radar, Rain Viewer and Ventusky to the extras page.
+	added buttons to exit interactive mode and to reset a map to its default position and zoom.
 	moved meteo.si to the extras page.
 
 2025-06-05 (#23)
-	added ESSL storm forecast.
+	added the ESSL storm forecast.
 
 2025-05-30 (#22)
-	made the Windy and Blitzortung overlays full size, with a hint to double click/tap to remove them.
+	added a hint that the overlays on the Windy and Blitzortung maps are removed with a double click or tap.
 	added vrijeme.net (Facebook) to links.
 
 2025-05-21 (#21)
 	added the blitzortung.org lightning map.
-	enlarged the Windy map and prevented accidental map drag.
-	added meteociel.fr EU temperature slides.
+	enlarged Windy and prevented accidental map drag.
+	added EU temperatures from meteociel.fr.
 	added a EUMETView link.
 	moved istramet to the extras page.
 
@@ -108,18 +101,18 @@ Generated with the AI.
 	made the links section expandable/collapsible.
 
 2025-02-28 (#17)
-	added a placeholder background while images load.
+	added a darker background in case an image does not load.
 
 2024-12-31 (#16)
 	added air quality links and nebo.com.hr.
-	enabled the dhmz bilogora radar.
+	enabled the DHMZ Bilogora radar.
 
 2024-10-14 (#15)
 	fixed the progress bar getting stuck when images loaded from cache.
 
 2024-10-11 (#14)
 	added an image load progress bar.
-	added SWPC home to links.
+	added SWPC to links.
 
 2024-09-28 (#13)
 	changed meteoblue forecast to a slideshow.
@@ -141,10 +134,10 @@ Generated with the AI.
 	added ESTOFEX.
 
 2024-05-13
-	added space weather links.
+	added "SpaceWeather" links.
 
 2024-02-17
-	added Puntijarka radar and re-enabled dhmz uljenje.
+	added Puntijarka radar.
 
 2024-01-23 (#4)
 	added Weather&Radar.
@@ -156,7 +149,7 @@ Generated with the AI.
 	added EUMETNET.
 
 2024-01-14 (#1)
-	added a curated weather links section.
+	added the links section.
 
 2024-01-11
 	added I'm Weather and fixed sat24.
@@ -174,10 +167,10 @@ Generated with the AI.
 	changed sat24 to animated gifs (infrared and visual).
 
 2022-04-10
-	fixed meteo.hr animation, added a timer.
+	fixed meteo.hr animation.
 
 2021-07-21
-	enlarged the Windy map.
+	enlarged Windy.
 
 2021-07-18
 	added responsive design.
