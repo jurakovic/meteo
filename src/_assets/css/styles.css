@@ -2410,6 +2410,23 @@ body.fs-lock {
 	padding: 8px;
 }
 
+/* on a phone the links stand one to a line, flush left, which a thumb finds
+   more easily than a centred run; the separators go with the run */
+@media (max-width: 800px) {
+	.footer-top {
+		text-align: left;
+	}
+
+		.footer-top a {
+			display: block;
+			padding: 4px 0;
+		}
+
+		.footer-top .sep {
+			display: none;
+		}
+}
+
 footer {
 	background: var(--c-control);
 	color: white;
