@@ -1,14 +1,14 @@
 // CHANGELOG.hr.md, the Croatian translation of CHANGELOG.md, to the HTML the
-// changelog dialog is built from. Both files share a format of their own, not
-// Markdown: an optional intro, then days, each a date line (with the pull
-// request in brackets when there was one) and its entries, each indented by
-// a tab. Any other line throws, naming it, as the manual's converter does.
+// changelog dialog is built from. Both files are one fixed shape of Markdown:
+// an optional intro, then days, each a ## date heading (with the pull request
+// in brackets when there was one) and its entries as a - list right under it.
+// Any other line throws, naming it, as the manual's converter does.
 
 import { escapeText } from './manual.mjs';
 
 // the pull request is read past and left out: it is for whoever reads the
 // file in the repository
-const DAY = /^(\d{4}-\d{2}-\d{2})(?: \(#\d+\))?$/;
+const DAY = /^## (\d{4}-\d{2}-\d{2})(?: \(#\d+\))?$/;
 
 // the glyphs of the buttons an entry names ([D], [+], [HR]), set as the
 // manual sets them
@@ -40,11 +40,12 @@ export function convertChangelog(text) {
 			return;
 		}
 		// the intro, a line to a paragraph, said once above every day
-		if (!dated && /^\S/.test(line)) {
+		if (!dated && /^[^\s#-]/.test(line)) {
 			html.push(`<p class="changelog-intro">${escapeText(line.trim())}</p>`);
 			return;
 		}
-		const item = line.match(/^\t(\S.*)$/);
+		// a blank line ends a day's list, so an entry after one has no date
+		const item = line.match(/^- (\S.*)$/);
 		if (item && open) {
 			html.push(`<li>${entry(item[1].trimEnd())}</li>`);
 			return;
