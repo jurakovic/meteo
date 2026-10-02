@@ -9,7 +9,7 @@ import { setDialogVisible, toggleDialog } from './dialog.js';
 
 const MANUAL_HASH = 'upute';
 
-// off (features.js), the ? button and the footer's Upute are hidden and H and
+// off (features.js), the ? button and the top footer's Upute are hidden and H and
 // #upute are left alone. The class goes on before the first paint, as
 // board-boot does, so nothing flashes up and away
 export function applyManualSwitch() {

@@ -720,7 +720,7 @@ body.fs-lock {
 	}
 
 		html.board-boot .container,
-		html.board-boot footer {
+		html.board-boot .page-foot {
 			visibility: hidden;
 		}
 
@@ -729,7 +729,7 @@ body.fs-lock {
 	}
 
 	body.dashboard .container,
-	body.dashboard footer {
+	body.dashboard .page-foot {
 		visibility: hidden;
 	}
 
@@ -924,7 +924,7 @@ body.fs-lock {
 }
 
 	/* in centered contexts the tag goes out of flow so it renders right after
-	   the text without shifting its centering; the footer occurrence sits
+	   the text without shifting its centering; the top footer's occurrence sits
 	   mid-sentence and must stay in flow (vertical-align is ignored on
 	   absolutely positioned elements, hence the translate) */
 	.btn .beta,
@@ -2349,14 +2349,26 @@ body.fs-lock {
 		}
 }
 
-footer {
+/* the page's own links over the footer; held to the bottom of a short page
+   as one block, since two sticky siblings would both stick to the same edge */
+.page-foot {
 	position: sticky;
 	top: 100%;
+	margin-top: 8px;
+}
+
+.footer-top {
+	background: var(--c-chip);
+	color: white;
+	text-align: center;
+	padding: 8px;
+}
+
+footer {
 	background: var(--c-control);
 	color: white;
 	text-align: center;
 	padding: 8px;
-	margin-top: 8px;
 }
 
 .progress-container {

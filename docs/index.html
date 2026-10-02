@@ -88,8 +88,8 @@
 		.map-block.popout.snapped .po-h-ne,.map-block.popout.snapped .po-h-nw,.map-block.popout.snapped .po-h-se,.map-block.popout.snapped .po-h-sw,
 		.map-block.popout.snapped .po-h-w{display:none}body.dashboard .if1.fullscreen,body.dashboard .radartitle.fullscreen,
 		body.snap-full .if1.fullscreen,body.snap-full .radartitle.fullscreen{left:0;right:0}html.board-boot{overflow:hidden}
-		html.board-boot .container,html.board-boot footer{visibility:hidden}body.dashboard{overflow:hidden}body.dashboard .container,
-		body.dashboard footer{visibility:hidden}body.dashboard .map-block.popout:not(.fs-host){visibility:visible}.po-shadows,.po-shadows-under{
+		html.board-boot .container,html.board-boot .page-foot{visibility:hidden}body.dashboard{overflow:hidden}body.dashboard .container,
+		body.dashboard .page-foot{visibility:hidden}body.dashboard .map-block.popout:not(.fs-host){visibility:visible}.po-shadows,.po-shadows-under{
 		position:fixed;inset:0;pointer-events:none}.po-shadows{z-index:var(--z-shadows)}.po-shadows-under{z-index:var(--z-shadows-under)}.po-shadow{
 		position:absolute;box-shadow:0 6px 24px rgba(0,0,0,.6)}.po-grid{position:fixed;inset:0;z-index:var(--z-grid);pointer-events:none;
 		background-image:repeating-linear-gradient(to right,rgba(255,255,255,.08) 0 1px,transparent 1px var(--grid-cell)),
@@ -235,10 +235,10 @@
 		.expandable:hover{background-color:var(--c-control-hover)}.expandable .arrow{position:absolute;right:10px;top:2px;font-size:14px}.links{
 		font-size:14px;display:grid;grid-template-columns:25% 45% 30%;gap:0;max-height:0;overflow:hidden;transition:max-height .3s ease-out}
 		.links .item{padding:5px;margin:0 2px}.links .item:not(:last-child){border-right:1px solid #fff}.links p{margin-top:0;text-align:left}
-		@media (max-width:800px){.links{grid-template-columns:1fr}.links .item{margin:5px 0;border-right:none!important}}footer{position:sticky;top:
-		100%;background:var(--c-control);color:#fff;text-align:center;padding:8px;margin-top:8px}.progress-container{position:fixed;left:0;top:0;
-		width:100%;height:3px;z-index:var(--z-progress);background-color:#5c5c5c80}.progress-bar{width:0;height:100%;background-color:
-		var(--c-accent);transition:width .3s ease-in-out}
+		@media (max-width:800px){.links{grid-template-columns:1fr}.links .item{margin:5px 0;border-right:none!important}}.page-foot{position:sticky;
+		top:100%;margin-top:8px}.footer-top{background:var(--c-chip);color:#fff;text-align:center;padding:8px}footer{background:var(--c-control);
+		color:#fff;text-align:center;padding:8px}.progress-container{position:fixed;left:0;top:0;width:100%;height:3px;z-index:var(--z-progress);
+		background-color:#5c5c5c80}.progress-bar{width:0;height:100%;background-color:var(--c-accent);transition:width .3s ease-in-out}
 	</style>
 	<script>
 		(()=>{var e="dialog-toggled",t="map-config-changed",r="map-fullscreen";function a(e,t){document.dispatchEvent(new CustomEvent(e,{detail:t}))
@@ -1495,15 +1495,18 @@
 			<p>Razmještaj prozora složen na računalu ne gubi se kad stranicu otvorite na mobitelu — samo se ne prikazuje, a vraća se čim je ponovno otvorite na računalu.</p>
 		</div>
 	</div>
-	<footer>
-		<a data-action="top">Povratak na vrh</a>
-		·
-		<span class="manual-link"><a data-action="manual">Upute</a> ·</span>
-		<a href="/meteo/customize/">Prilagodi <span class="beta">beta</span></a>
-		|
-		<a href="https://jurakovic.github.io">Projekti</a>
-		·
-		<a href="https://github.com/jurakovic/meteo">GitHub</a>
-	</footer>
+	<div class="page-foot">
+		<nav class="footer-top">
+			<a data-action="top">Povratak na vrh</a>
+			·
+			<span class="manual-link"><a data-action="manual">Upute</a> ·</span>
+			<a href="/meteo/customize/">Prilagodi <span class="beta">beta</span></a>
+		</nav>
+		<footer>
+			<a href="https://jurakovic.github.io">Projekti</a>
+			·
+			<a href="https://github.com/jurakovic/meteo">GitHub</a>
+		</footer>
+	</div>
 </body>
 </html>
