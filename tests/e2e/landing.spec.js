@@ -1,7 +1,5 @@
 // The landing page: a fixed list of maps, the slideshows, the interactive
 // maps' gate and buttons, the links and the remote on/off switch
-import { createServer } from 'node:http';
-import { readFile } from 'node:fs/promises';
 import { test, expect, countRowsRemoved } from './fixtures.js';
 
 test.describe('landing page', () => {
@@ -138,65 +136,6 @@ test.describe('landing page', () => {
 		await page.keyboard.press('Escape');
 		await expect(fs).toHaveText('[ ]');
 		await expect(page.locator('body')).not.toHaveClass(/fs-lock/);
-	});
-});
-
-test.describe('landing page as built', () => {
-	test.beforeEach(({ paths }) => {
-		test.skip(paths.landing === '/', 'the dev page draws its maps in the browser');
-	});
-
-	test.describe('without scripts', () => {
-		test.use({ javaScriptEnabled: false });
-
-		test('carries the default maps in its markup', async ({ page, paths }) => {
-			await page.goto(paths.landing);
-			await expect(page.locator('.map-block')).toHaveCount(16);
-			await expect(page.locator('.slideshow[data-slideshow-id="neverin-radar-hr"] .slide.active img')).toBeVisible();
-			await expect(page.locator('iframe#windy')).toBeAttached();
-		});
-	});
-
-	test('keeps the rows the build put in while nothing is switched off', async ({ page, paths }) => {
-		// the first row as parsed, before the page's own script has run
-		await page.addInitScript(() => {
-			document.addEventListener('DOMContentLoaded', () => {
-				window.builtRow = document.querySelector('[data-maps] > .map-entry');
-			});
-		});
-		await page.goto(paths.landing);
-		await expect(page.locator('.progress-container')).toBeHidden();
-		expect(await page.evaluate(() => !!window.builtRow && window.builtRow.isConnected)).toBe(true);
-	});
-
-	test.describe('with the config arriving while the list is still being parsed', () => {
-		test.use({ mapConfig: { maps: { 'chmi-sinopticka': { enabled: false } } } });
-
-		// the built page sent in two parts, a pause between them inside the map
-		// list, as a large page comes over the network: the config fetched from
-		// <head> lands while only some of the rows are in
-		let server;
-		test.beforeAll(async () => {
-			const html = await readFile(new URL('../../docs/index.html', import.meta.url), 'utf8');
-			const cut = html.indexOf('<div class="map-entry">', html.indexOf('<div class="map-entry">') + 1);
-			server = createServer((req, res) => {
-				if (req.url !== '/meteo/') return res.writeHead(404).end();
-				res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8' });
-				res.write(html.slice(0, cut));
-				setTimeout(() => res.end(html.slice(cut)), 1000);
-			});
-			await new Promise(done => server.listen(0, '127.0.0.1', done));
-		});
-		test.afterAll(() => new Promise(done => server.close(done)));
-
-		test('the list is drawn once, from the whole of the markup', async ({ page }) => {
-			await countRowsRemoved(page);
-			await page.goto(`http://meteo.test:${server.address().port}/meteo/`);
-			await expect.poll(() => page.evaluate(() => localStorage.getItem('mapConfig'))).toContain('chmi-sinopticka');
-			await expect(page.locator('.progress-container')).toBeHidden();
-			await expect(page.locator('.map-block')).toHaveCount(16);
-			expect(await page.evaluate(() => window.rowsRemoved)).toBe(0);
-		});
 	});
 });
 

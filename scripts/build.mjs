@@ -7,9 +7,8 @@
 //   npm run build
 import { cp, mkdir, readdir, readFile, rm, writeFile } from 'node:fs/promises';
 import { dirname, join, relative, resolve } from 'node:path';
-import { fileURLToPath, pathToFileURL } from 'node:url';
+import { fileURLToPath } from 'node:url';
 import { build as esbuild } from 'esbuild';
-import { parseHTML } from 'linkedom';
 import { minify } from 'terser';
 import CleanCSS from 'clean-css';
 import { convertManual } from './manual.mjs';
@@ -62,56 +61,6 @@ async function minifyCss(name) {
 	const result = new CleanCSS({ format: { wrapAt: 140 } }).minify(css);
 	if (result.errors.length) throw new Error(result.errors.join('\n'));
 	return toCrlf(result.styles);
-}
-
-const VOID_ELEMENTS = new Set(['img', 'input', 'br', 'source']);
-
-function escapeText(text) {
-	return text.replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('>', '&gt;');
-}
-
-// linkedom lists attributes last set first, so they are reversed back to the
-// order the renderer sets them in
-function openTag(node) {
-	const attrs = [...node.attributes].reverse()
-		.map(attr => ` ${attr.name}="${attr.value.replaceAll('&', '&amp;').replaceAll('"', '&quot;')}"`);
-	return `<${node.localName}${attrs.join('')}>`;
-}
-
-function serialize(node) {
-	if (node.nodeType === 3) return escapeText(node.textContent);
-	if (node.nodeType !== 1) return '';
-	if (VOID_ELEMENTS.has(node.localName)) return openTag(node);
-	return `${openTag(node)}${[...node.childNodes].map(serialize).join('')}</${node.localName}>`;
-}
-
-// an element as indented lines: one holding only elements opens and closes on
-// lines of its own around them, one with any text in it is a single line
-function formatElement(node, depth) {
-	const pad = '\t'.repeat(depth);
-	const children = [...node.childNodes];
-	if (!children.length || children.some(child => child.nodeType !== 1) || VOID_ELEMENTS.has(node.localName)) {
-		return [pad + serialize(node)];
-	}
-	return [
-		pad + openTag(node),
-		...children.flatMap(child => formatElement(child, depth + 1)),
-		`${pad}</${node.localName}>`
-	];
-}
-
-// the landing page's map rows, drawn by the page's own renderer under linkedom,
-// so the built page shows its maps before (and without) its script
-async function landingRows() {
-	const { document } = parseHTML('<!DOCTYPE html><html><body></body></html>');
-	globalThis.document = document;
-	const module = (path) => import(pathToFileURL(join(src, '_assets/js', path)).href);
-	const { catalogMap, DEFAULT_MAPS } = await module('maps/catalog.js');
-	const { renderMapRows } = await module('maps/render.js');
-	const list = document.createElement('div');
-	renderMapRows(list, DEFAULT_MAPS.map(catalogMap).filter(Boolean));
-	delete globalThis.document;
-	return [...list.children].flatMap(entry => formatElement(entry, 4)).join(CRLF);
 }
 
 async function htmlFiles(dir) {
@@ -169,8 +118,6 @@ async function build() {
 		links: indent(await component('links'), 6),
 		manual: indent(manualHtml, 3)
 	};
-	const landing = join(src, 'index.html');
-	const rows = `<div class="maps-list" data-maps>${CRLF}${await landingRows()}${CRLF}\t\t\t</div>`;
 
 	await rm(out, { recursive: true, force: true });
 	await mkdir(out, { recursive: true });
@@ -179,10 +126,7 @@ async function build() {
 	for (const file of await htmlFiles(src)) {
 		const target = join(out, relative(src, file));
 		await mkdir(dirname(target), { recursive: true });
-		let html = await readText(file);
-		// before processHtml, so the rows' paths are rewritten with the page's
-		if (file === landing) html = html.replace('<div class="maps-list" data-maps></div>', () => rows);
-		await writeFile(target, processHtml(html, parts));
+		await writeFile(target, processHtml(await readText(file), parts));
 		console.log(`built ${relative(root, target)}`);
 	}
 }

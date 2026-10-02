@@ -1,8 +1,7 @@
 // The landing page's maps: the default view, always the same, drawn from the
-// catalog the way the customize page draws it, without the widgets. The built
-// page carries the rows already (INTERNALS.md, Maps). A map switched off
-// remotely (remote-config.js) is left out, and the list is drawn again when
-// that changes.
+// catalog the way the customize page draws it, without the widgets. A map
+// switched off remotely (remote-config.js) is left out, and the list is drawn
+// again when that changes.
 import { EVENTS, on } from '../lib/events.js';
 import { initDynamicContent } from '../page/content.js';
 import { isMapEnabled } from '../remote-config.js';
@@ -17,12 +16,12 @@ function listedMapIds(list) {
 }
 
 // from the first draw on, a change is applied in place. Before it, the built
-// page can still be parsing its rows (the config is fetched from <head>), and
-// the first draw reads the switches as they are by then
+// page can still be parsing (the config is fetched from <head>), and the
+// first draw reads the switches as they are by then
 let drawn = false;
 
-// draws the list, unless it holds those maps already (the built page's rows,
-// while none of them is switched off); whether it drew
+// draws the list, unless it holds those maps already (a switch on a map it
+// does not show); whether it drew
 export function renderLanding() {
 	const list = document.querySelector('[data-maps]');
 	if (!list) return false;
