@@ -13,3 +13,6 @@ end_of_line = lf
 
 [*.c.html]
 insert_final_newline = false
+
+[*.sh]
+end_of_line = lf

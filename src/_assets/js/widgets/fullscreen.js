@@ -1,0 +1,126 @@
+// An interactive map's fullscreen when its widget is on the board or in a
+// column: the room it fills, and the widget's place in the stacking order.
+// See INTERNALS.md, Fullscreen.
+
+import { cssNumber, query, queryAll } from '../lib/dom.js';
+import { EVENTS, on } from '../lib/events.js';
+import { viewportHeight, viewportWidth } from '../lib/geometry.js';
+import { DESKTOP_MQ } from '../lib/media.js';
+import { instMapId } from '../maps/render.js';
+import { mapTypeOf } from '../maps/types.js';
+import { isDashboard } from './board.js';
+import { layoutSnapColumns } from './columns.js';
+import { POPOUT_MARGIN } from './constants.js';
+import { floatingBlocks, raisePopout } from './core.js';
+import { arrangementChanged } from './layout.js';
+
+export function freeRectAround(rect, blockers, bounds) {
+	// the spans, laid end to end, reach from one side of the rectangle to the
+	// other. A gap no wider than POPOUT_MARGIN is no gap: it is the grid's cell,
+	// so widgets stacked on the grid wall as the eye reads them, and it is the
+	// slack a wall wants anyway — a widget a few pixels off one still shuts the
+	// region behind it as far as the eye is concerned.
+	const covers = (spans, from, to) => {
+		let at = from;
+		spans.sort((a, b) => a[0] - b[0]).forEach(([lo, hi]) => {
+			if (lo <= at + POPOUT_MARGIN) at = Math.max(at, hi);
+		});
+		return at >= to - POPOUT_MARGIN;
+	};
+	// the nearest line to the host's left that the widgets beyond it cover from
+	// `from` to `to`; the other three sides are this one under a mirror or a
+	// transpose, so there is one of these and not four
+	const leftWall = (host, walls, from, to, fallback) => {
+		const beyond = walls.filter(b => b.right <= host.left + 1);
+		const lines = [...new Set(beyond.map(b => b.right))].sort((a, b) => b - a); // nearest first
+		for (const line of lines) {
+			const across = beyond.filter(b => b.left < line - 0.5 && b.right >= line - 0.5);
+			if (covers(across.map(b => [b.top, b.bottom]), from, to)) return line;
+		}
+		return fallback;
+	};
+	const mirror = (r) => ({ left: -r.right, right: -r.left, top: r.top, bottom: r.bottom });
+	const flip = (r) => ({ left: r.top, right: r.bottom, top: r.left, bottom: r.right });
+	const both = (r) => mirror(flip(r));
+	const mirrored = blockers.map(mirror), flipped = blockers.map(flip), bothed = blockers.map(both);
+	let out = { ...bounds };
+	for (let pass = 0; pass < 4; pass++) {
+		const next = {
+			left: leftWall(rect, blockers, out.top, out.bottom, bounds.left),
+			right: -leftWall(mirror(rect), mirrored, out.top, out.bottom, -bounds.right),
+			top: leftWall(flip(rect), flipped, out.left, out.right, bounds.top),
+			bottom: -leftWall(both(rect), bothed, out.left, out.right, -bounds.bottom)
+		};
+		if (next.left === out.left && next.right === out.right && next.top === out.top && next.bottom === out.bottom) break;
+		out = next;
+	}
+	return out;
+}
+
+export function fitBoardFullscreen() {
+	const props = ['--fs-left', '--fs-right', '--fs-top', '--fs-bottom'];
+	const blocks = floatingBlocks();
+	const board = isDashboard();
+	blocks.forEach(block => {
+		if (!board || !block.classList.contains('fs-host')) {
+			props.forEach(p => block.style.removeProperty(p));
+			return;
+		}
+		const width = viewportWidth(), height = viewportHeight();
+		// the widget's box is still there to read under its own fullscreen: the
+		// bar and the map have gone position: fixed, but every map with a [ ] is
+		// an interactive one, and an interactive map's widget is always free
+		// (isFreePopout) and so carries an inline height of its own
+		const rect = block.getBoundingClientRect();
+		const blockers = blocks
+			.filter(b => b !== block && !b.classList.contains('fs-host'))
+			.map(b => b.getBoundingClientRect());
+		const free = freeRectAround(
+			{ left: rect.left, right: rect.right, top: rect.top, bottom: rect.bottom },
+			blockers, { left: 0, top: 0, right: width, bottom: height });
+		block.style.setProperty('--fs-left', `${Math.round(free.left)}px`);
+		block.style.setProperty('--fs-right', `${Math.round(width - free.right)}px`);
+		block.style.setProperty('--fs-top', `${Math.round(free.top)}px`);
+		block.style.setProperty('--fs-bottom', `${Math.round(height - free.bottom)}px`);
+	});
+}
+
+// only an interactive map has a fullscreen to be stored
+/** @param {string} inst */
+export function hasFullscreen(inst) {
+	const type = mapTypeOf(instMapId(inst));
+	return !!type && type.fullscreen;
+}
+
+// a map put fullscreen as stored: through its own button, so page/iframe.js does
+// everything a click does (the gate, the [R], the scroll lock, the event)
+/** @param {HTMLElement} block */
+export function restoreFullscreen(block) {
+	const btn = query('.fs-btn', block);
+	if (btn && !block.querySelector('.if1.fullscreen')) btn.click();
+}
+
+export function initWidgetFullscreen() {
+	// a fullscreen map fills its container (CSS off --snap-l/--snap-r and the
+	// pane's side class); page/iframe.js says when one is toggled, so the column can
+	// hide its dividers under it — and, when the page's scroll lock takes the
+	// scrollbar, the viewport the columns are laid out in has changed width
+	on(EVENTS.mapFullscreen, () => {
+		// the host marked, lowered under every other widget while it hosts, and
+		// raised again after (INTERNALS.md, Fullscreen)
+		queryAll('.map-block.popout').forEach(block => {
+			const hosting = !!block.querySelector('.if1.fullscreen');
+			const wasHosting = block.classList.contains('fs-host');
+			block.classList.toggle('fs-host', hosting);
+			// under every other widget, over the columns' ground (styles.css puts
+			// the page's fullscreen map in the same layer)
+			if (hosting) block.style.zIndex = String(cssNumber('--z-fullscreen-host', 4500));
+			else if (wasHosting) raisePopout(block);
+		});
+		fitBoardFullscreen(); // on the board there is no column to fit it, and no page either
+		layoutSnapColumns();
+		// a widget's fullscreen is part of the arrangement (the fullscreen flag on
+		// its entry); on a phone there is no arrangement on screen to write
+		if (DESKTOP_MQ.matches) arrangementChanged();
+	});
+}

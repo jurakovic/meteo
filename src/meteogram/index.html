@@ -22,10 +22,19 @@
 			ri: 'https://www.meteoblue.com/en/weather/widget/meteogram/rijeka_croatia_3191648?geoloc=fixed&temperature_units=CELSIUS&windspeed_units=KILOMETER_PER_HOUR&precipitation_units=MILLIMETER&forecast_days=5&layout=dark&autowidth=auto&user_key=d6c944dcfa23c1de&embed_key=1282d33882a5a004&sig=f2cbfa2f8517b953dc2a8c09d2231508b8d7adbe601908f27211a4d5a7ec2939',
 			os: 'https://www.meteoblue.com/en/weather/widget/meteogram/osijek_croatia_3193935?geoloc=fixed&temperature_units=CELSIUS&windspeed_units=KILOMETER_PER_HOUR&precipitation_units=MILLIMETER&forecast_days=5&layout=dark&autowidth=auto&user_key=d6c944dcfa23c1de&embed_key=7c879c5cb848418b&sig=ea517f4abb90779a070d260235fff493cbf7e1270e4f3f76f4915569ab09d867',
 		};
-		const city = new URLSearchParams(location.search).get('city');
-		const src = CITIES[city];
+		const src = CITIES[new URLSearchParams(location.search).get('city')];
 		if (src) {
-			document.write('<iframe src="' + src + '" frameborder="0" scrolling="NO" allowtransparency="true" sandbox="allow-same-origin allow-scripts allow-popups allow-popups-to-escape-sandbox" style="width:100%;height:650px;border:0;overflow:hidden;"></iframe><div><!-- DO NOT REMOVE THIS LINK --><a href="https://www.meteoblue.com/en/weather/week/index" target="_blank" rel="noopener">meteoblue</a></div>');
+			const frame = document.createElement('iframe');
+			frame.src = src;
+			frame.setAttribute('frameborder', '0');
+			frame.setAttribute('scrolling', 'no');
+			frame.setAttribute('allowtransparency', 'true');
+			frame.setAttribute('sandbox', 'allow-same-origin allow-scripts allow-popups allow-popups-to-escape-sandbox');
+			frame.style.cssText = 'width:100%;height:650px;border:0;overflow:hidden;';
+			// meteoblue's terms ask for this link to stay beside the widget
+			const credit = document.createElement('div');
+			credit.innerHTML = '<a href="https://www.meteoblue.com/en/weather/week/index" target="_blank" rel="noopener">meteoblue</a>';
+			document.body.append(frame, credit);
 		}
 	</script>
 </body>
