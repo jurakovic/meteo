@@ -50,9 +50,6 @@
 	added an [HR]/[EU] toggle to all interactive maps (Windy, Blitzortung, Ventusky, Rain Viewer, Weather&Radar) to switch between Croatia- and Europe-centered views, with separate desktop and mobile zoom levels.
 	fixed the progress bar hiding prematurely on mobile before lazy images finished loading.
 
-2026-02-23
-	hide chmu map white margins.
-
 2026-02-11 (#31)
 	changed meteoblue meteogram from 7-day to 5-day.
 	fixed meteociel satellite slide size.
@@ -66,7 +63,7 @@
 	updated meteociel images.
 
 2025-11-15 (#28)
-	updated meteoblue meteograms (meteoblue began requiring registration for widgets).
+	updated meteoblue meteograms.
 
 2025-07-27 (#27)
 	fixed ESSL storm forecast lookup.
@@ -96,7 +93,8 @@
 2025-05-21 (#21)
 	added the blitzortung.org lightning map.
 	enlarged the Windy map and prevented accidental map drag.
-	added meteociel.fr EU temperature slides and a EUMETView link.
+	added meteociel.fr EU temperature slides.
+	added a EUMETView link.
 	moved istramet to the extras page.
 
 2025-05-11 (#20)
@@ -124,7 +122,8 @@
 
 2024-09-28 (#13)
 	changed meteoblue forecast to a slideshow.
-	reordered and hid some images, updated and reordered links.
+	some images reordered.
+	updated and reordered links.
 
 2024-09-11 (#12)
 	added the ability to show multiple images in place as a "slideshow".
@@ -136,9 +135,6 @@
 
 2024-09-06 (#9)
 	moved links to the bottom with a new layout.
-
-2024-08-25 (#8)
-	added a page footer.
 
 2024-05-20
 	added ESTOFEX.

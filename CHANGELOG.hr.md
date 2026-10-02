@@ -1,8 +1,9 @@
+
 2026-09-23 (#42)
 	dodane kopije prozora karte ([D]), pa se ista karta može prikazati dvaput, npr. u dvije veličine ili na dvije različite slike.
 	dodani šavovi: povlačenjem zajedničkog ruba dvaju susjednih prozora mijenjaju se oba odjednom.
 	dodano slaganje na nadzornoj ploči ([A]): sve karte poslože se u pravilnu mrežu, što veće ekran dopušta.
-	dodana pločica „Karte” na vrhu ekrana, koja otvara dijalog karata kad njegov gumb nije dostupan i dodaje kartu na nadzornu ploču bez otvaranja dijaloga ([+]).
+	dodana pločica "Karte" na vrhu ekrana, koja otvara dijalog karata kad njegov gumb nije dostupan i dodaje kartu na nadzornu ploču bez otvaranja dijaloga ([+]).
 	dodano automatsko osvježavanje svih karata svakih 5, 10, 15, 30 ili 60 minuta, s odbrojavanjem na pločici.
 	dodano traženje u odabiru karata (više riječi, radi i bez kvačica).
 
@@ -18,7 +19,7 @@
 
 2026-08-17 (#39)
 	dodani vlastiti predlošci: trenutni odabir sprema se pod imenom, a zatim se može ažurirati, preimenovati, podijeliti ili obrisati.
-	gotovi predlošci mogu se sakriti iz reda predložaka; „Zadano” preimenovano u „Osnovno”.
+	gotovi predlošci mogu se sakriti iz reda predložaka; "Zadano" preimenovano u "Osnovno".
 
 2026-07-06 (#38)
 	dodana stranica Prilagodi (beta) umjesto stranice Više: bira se koje se karte prikazuju i kojim redoslijedom, kreće se od predloška (Zadano, Više, Radari, Sateliti, Nevrijeme, Sve, Ništa), a prikaz se dijeli poveznicom.
@@ -28,12 +29,12 @@
 	ažurirani izvori Neverinovih satelitskih slika.
 
 2026-06-26 (#36)
-	dodana prognoza nevremena ASTORP i poveznica na ESWD.
+	dodana prognoza nevremena ASTORP i ESWD link.
 
 2026-06-24 (#35)
-	dodan red brzih poveznica (Windy, Zoom Earth, meteoblue, Rain Viewer, Ventusky, Vrijeme&Radar, Sat24, I'm Weather, Időkép) ispod svake karte, s koordinatama za njezino područje.
-	dodan prekidač „Linkovi” koji prikazuje ili skriva poveznice ispod karata (pamti se u pregledniku).
-	dodani izvori poveznica Ventusky i Rain Viewer, „Weather&Radar” preimenovan u „Vrijeme&Radar”, model na Wetterzentrale promijenjen s ICON na ECMWF, popravljene neispravne poveznice.
+	dodan red brzih linkova (Windy, Zoom Earth, meteoblue, Rain Viewer, Ventusky, Vrijeme&Radar, Sat24, I'm Weather, Időkép) ispod svake karte, s koordinatama za njezino područje.
+	dodan prekidač "Linkovi" koji prikazuje ili skriva linkove ispod karata (pamti se u pregledniku).
+	dodani Ventusky i Rain Viewer linkovi, "Weather&Radar" preimenovan u "Vrijeme&Radar", model na Wetterzentrale promijenjen s ICON na ECMWF, ispravljeni neispravni linkovi.
 
 2026-06-22
 	geste s više prstiju više ne mijenjaju slike ni slojeve preko karata.
@@ -47,41 +48,38 @@
 
 2026-03-26 (#32)
 	dodan prekidač [HR]/[EU] na svim interaktivnim kartama (Windy, Blitzortung, Ventusky, Rain Viewer, Weather&Radar) za prikaz Hrvatske ili Europe, s odvojenim zumiranjem za računalo i mobitel.
-	popravljeno prerano skrivanje trake napretka na mobitelu, prije nego što su se slike učitale.
-
-2026-02-23
-	sakrivene bijele margine na kartama ČHMÚ.
+	ispravljeno prerano skrivanje trake napretka na mobitelu, prije nego što su se slike učitale.
 
 2026-02-11 (#31)
 	meteoblue meteogram skraćen sa 7 na 5 dana.
-	popravljena veličina satelitske slike s meteociela.
+	ispravljena veličina satelitske slike s meteociela.
 
 2026-02-04 (#30)
 	meteoblue widgeti s meteogramom zamijenjeni slikom iz njihova API-ja (Zagreb).
 
 2026-01-10 (#29)
-	popravljena sinoptička karta ČHMÚ, a karte ČHMÚ premještene na početnu stranicu.
+	ispravljena sinoptička karta ČHMÚ, a karte ČHMÚ premještene na početnu stranicu.
 	Neverinove slike Europe sada prikazuju cijelu Europu.
 	ažurirane slike s meteociela.
 
 2025-11-15 (#28)
-	ažurirani meteoblue meteogrami (meteoblue je počeo tražiti registraciju za widgete).
+	ažurirani meteoblue meteogrami.
 
 2025-07-27 (#27)
-	popravljeno dohvaćanje prognoze nevremena ESSL.
-	dodana slika prognoze ESTOFEX.
+	ispravljeno dohvaćanje ESSL prognoze nevremena.
+	dodan ESTOFEX.
 
 2025-07-07 (#26)
 	traka napretka učitavanja slika premještena na vrh.
-	dodan Rain Alarm u poveznice.
+	dodan Rain Alarm u Linkove.
 
 2025-06-13 (#25)
 	promijenjen redoslijed karata na stranici Više (Ventusky na vrhu).
 	tema RainViewera promijenjena iz tamne u svijetlu.
-	dodane poveznice na Zoom Earth.
+	dodani Zoom Earth linkovi.
 
 2025-06-10 (#24)
-	dodane ugrađene karte Weather&Radar, Rain Viewer i Ventusky na stranicu Više.
+	dodanei Weather&Radar, Rain Viewer i Ventusky na stranicu Više.
 	dodan gumb za izlaz iz interaktivnog načina, koji vraća kartu na početni položaj i zumiranje.
 	meteo.si premješten na stranicu Više.
 
@@ -90,63 +88,62 @@
 
 2025-05-30 (#22)
 	slojevi preko karata Windy i Blitzortung prekrivaju cijelu kartu, s uputom da se uklanjaju dvostrukim klikom ili dodirom.
-	dodan vrijeme.net (Facebook) u poveznice.
+	dodan vrijeme.net (Facebook) u Linkove.
 
 2025-05-21 (#21)
-	dodana karta munja blitzortung.org.
-	povećana karta Windy i spriječeno slučajno pomicanje karte.
-	dodane slike temperature za Europu s meteociel.fr i poveznica na EUMETView.
+	dodana blitzortung.org karta munja.
+	povećan Windy i spriječeno slučajno pomicanje karte.
+	dodane temperature za Europu s meteociel.fr.
+	dodan EUMETView link.
 	istramet premješten na stranicu Više.
 
 2025-05-11 (#20)
-	dodano listanje nizova slika prelaskom prsta.
+	dodano listanje "slideshow" prikaza prelaskom prsta ("swipe").
 
 2025-05-08 (#19)
-	dodani pokazatelji položaja u nizu slika.
+	dodani indikatori pozicije u "slideshow" prikazu.
 
 2025-03-22 (#18)
-	popis poveznica može se proširiti i skupiti.
+	Linkovi se mogu proširiti i skupiti.
 
 2025-02-28 (#17)
 	dodana podloga koja se vidi dok se slike učitavaju.
 
 2024-12-31 (#16)
-	dodane poveznice za kvalitetu zraka i nebo.com.hr.
-	uključen radar DHMZ-a Bilogora.
+	dodani linkovi za kvalitetu zraka i nebo.com.hr.
+	uključen DHMZ Bilogora radar.
 
 2024-10-14 (#15)
-	popravljeno zapinjanje trake napretka kad se slike učitaju iz predmemorije.
+	ispravljeno zapinjanje trake napretka kad se slike učitaju iz predmemorije.
 
 2024-10-11 (#14)
 	dodana traka napretka učitavanja slika.
-	dodan SWPC u poveznice.
+	dodan SWPC u Linkove.
 
 2024-09-28 (#13)
-	meteoblue prognoza prikazuje se kao niz slika.
-	neke slike premještene i sakrivene, poveznice ažurirane i presložene.
+	meteoblue prognoza kao "slideshow".
+	neke slike premještene.
+	ažurirani i presloženi linkovi.
 
 2024-09-11 (#12)
-	dodana mogućnost prikaza više slika na istom mjestu, kao niza slika.
+	dodana mogućnost prikaza više slika na istom mjestu, kao "slideshow".
 	dodana meteoblue prognoza.
 
 2024-09-07 (#10)
 	dodana stranica Više i gumbi za kretanje po stranicama.
-	dodane i presložene slike, dodane poveznice na Facebook stranice.
+	dodane i presložene slike, dodani linkovi na Facebook stranice.
 
 2024-09-06 (#9)
-	poveznice premještene na dno, u novom rasporedu.
-
-2024-08-25 (#8)
-	dodano podnožje stranice.
+	Linkovi premješteni na dno, u novom prikazu.
 
 2024-05-20
 	dodan ESTOFEX.
 
 2024-05-13
-	dodane poveznice za svemirsko vrijeme.
+	dodani "SpaceWeather" linkovi.
 
 2024-02-17
-	dodan radar Puntijarka i ponovno uključen radar DHMZ-a Uljenje.
+	dodan radar Puntijarka.
 
 2024-01-23 (#4)
 	dodan Weather&Radar.
@@ -158,31 +155,31 @@
 	dodan EUMETNET.
 
 2024-01-14 (#1)
-	dodan odabrani popis poveznica o vremenu.
+	dodani Linkovi.
 
 2024-01-11
-	dodan I'm Weather i popravljen sat24.
+	dodan I'm Weather i ispravljen sat24.
 
 2023-07-23
-	dodani preostali radari DHMZ-a.
+	dodani preostali DHMZ radari.
 
 2023-07-20
 	dodani RainViewer i radar Időkép za Jadran.
 
 2023-06-10
-	radar DHMZ-a prikazuje se kao animirani gif.
+	radar DHMZ-a prikazan kao animirani gif.
 
 2022-04-16
-	sat24 prikazuje se kao animirani gif (infracrveni i vidljivi).
+	sat24 prikazan kao animirani gif (infracrveni i vidljivi).
 
 2022-04-10
-	popravljena animacija s meteo.hr, dodan mjerač vremena.
+	ispravljena meteo.hr animacija.
 
 2021-07-21
-	povećana karta Windy.
+	povećan Windy.
 
 2021-07-18
-	stranica prilagođena svim veličinama ekrana.
+	dodan responzivan dizajn.
 
 2021-07-17
-	prvo izdanje.
+	inicijalna verzija.
