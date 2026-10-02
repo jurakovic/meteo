@@ -7,7 +7,7 @@ export const FEATURES = {
 	// the #upute address. Off, the class no-manual goes on the page before the
 	// first paint, so nothing flashes up and away
 	manual: false,
-	// the changelog (CHANGELOG.md): the top footer's Povijest promjena, the C
+	// the changelog (CHANGELOG.hr.md): the top footer's Povijest promjena, the C
 	// key and the #promjene address, switched off the same way
 	changelog: true
 };

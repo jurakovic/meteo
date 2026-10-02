@@ -592,11 +592,11 @@ It shares no prose with this file on purpose: this one explains mechanism to som
 
 ## Documents on the site
 
-Two documents are shown on the site, the manual and the changelog ([`CHANGELOG.md`](./CHANGELOG.md): what changed for a visitor, by date, in English), the same way ([`page/documents.js`](./src/_assets/js/page/documents.js)), each behind its switch in `features.js`.
+Two documents are shown on the site, the manual and the changelog (what changed for a visitor, by date), the same way ([`page/documents.js`](./src/_assets/js/page/documents.js)), each behind its switch in `features.js`.
 
 | | Manual | Changelog |
 |---|---|---|
-| source, converter | `MANUAL.md`, [`scripts/manual.mjs`](./scripts/manual.mjs) | `CHANGELOG.md`, [`scripts/changelog.mjs`](./scripts/changelog.mjs) |
+| source, converter | `MANUAL.md`, [`scripts/manual.mjs`](./scripts/manual.mjs) | `CHANGELOG.hr.md`, [`scripts/changelog.mjs`](./scripts/changelog.mjs) |
 | dialog, storage key | `#manualDialog`, `manualPanel` | `#changelogDialog`, `changelogPanel` |
 | placeholder, dev fragment | `<!-- manual -->`, `manual.c.html` | `<!-- changelog -->`, `changelog.c.html` |
 | reached by | the `?` button, the top footer's *Upute*, `H`, `#upute` | the top footer's *Povijest promjena*, `C`, `#promjene` |
@@ -620,7 +620,9 @@ Rendering it client-side from the raw `.md` was considered and rejected: it need
 
 ### The changelog's converter
 
-`CHANGELOG.md` is not Markdown but a format of its own, kept because it is quick to write by hand: a date line (`2026-09-23`, with ` (#42)` when a pull request carried the change), then its entries, each indented by one tab, and a blank line before the next date. The converter turns a day into an `<h2>` of its date alone (the pull request is for whoever reads the file in the repository) and a list, escapes the entries, and sets the button glyphs they name (`[D]`, `[+]`) as code, as the manual does. Like the manual's, it throws on any line outside the format, naming it: an entry before any date or after a blank line, a date with nothing under it, an indent that is not a tab.
+The changelog is written twice: [`CHANGELOG.md`](./CHANGELOG.md) in English, for whoever reads the repository, and [`CHANGELOG.hr.md`](./CHANGELOG.hr.md), its Croatian translation, which is the one the site shows. A change goes into both. A unit test holds them together: the same days, with the same number of entries under each.
+
+Both are not Markdown but a format of their own, kept because it is quick to write by hand: a date line (`2026-09-23`, with ` (#42)` when a pull request carried the change), then its entries, each indented by one tab, and a blank line before the next date. The converter turns a day into an `<h2>` of its date alone (the pull request is for whoever reads the file in the repository) and a list, escapes the entries, and sets the button glyphs they name (`[D]`, `[+]`) as code, as the manual does. Like the manual's, it throws on any line outside the format, naming it: an entry before any date or after a blank line, a date with nothing under it, an indent that is not a tab.
 
 ### In the build
 

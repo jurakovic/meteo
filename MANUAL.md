@@ -34,7 +34,7 @@ Gumbi u traci interaktivne karte:
 
 **Upute.** Ovaj tekst otvaraju gumb `?`, poveznica *Upute* u podnožju i tipka <kbd>H</kbd>. Otvara se u prozoru preko stranice, pa se upute mogu čitati uz karte. Zatvara se natpisom *Zatvori* ili tipkom <kbd>Esc</kbd>. Ikona stranice lijevo od naslova vodi na početnu stranicu, kao i u dijalogu *Karte*. Poveznica koja završava s `#upute` otvara upute odmah pri učitavanju stranice.
 
-**Povijest promjena.** Poveznica *Povijest promjena* u podnožju i tipka <kbd>C</kbd> otvaraju popis promjena na stranici, po datumima i na engleskom. Otvara se u prozoru preko stranice, kao i upute, a poveznica koja završava s `#promjene` otvara ga odmah pri učitavanju stranice.
+**Povijest promjena.** Poveznica *Povijest promjena* u podnožju i tipka <kbd>C</kbd> otvaraju popis promjena na stranici, po datumima. Otvara se u prozoru preko stranice, kao i upute, a poveznica koja završava s `#promjene` otvara ga odmah pri učitavanju stranice.
 
 ## Dijalog Karte
 

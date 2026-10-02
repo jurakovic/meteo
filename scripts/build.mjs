@@ -163,7 +163,7 @@ async function build() {
 	const manualHtml = convertManual(await readText(join(root, 'MANUAL.md'))).join(CRLF);
 	// the dev pages fetch the documents from here (git-ignored: build output)
 	await writeFile(join(src, '_components/manual.c.html'), manualHtml);
-	const changelogHtml = convertChangelog(await readText(join(root, 'CHANGELOG.md'))).join(CRLF);
+	const changelogHtml = convertChangelog(await readText(join(root, 'CHANGELOG.hr.md'))).join(CRLF);
 	await writeFile(join(src, '_components/changelog.c.html'), changelogHtml);
 
 	const parts = {

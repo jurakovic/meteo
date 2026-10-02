@@ -1,5 +1,6 @@
-// CHANGELOG.md to the HTML the changelog dialog is built from. The file is not
-// Markdown but a format of its own: a date line, with the pull request in
+// CHANGELOG.hr.md, the Croatian translation of CHANGELOG.md, to the HTML the
+// changelog dialog is built from. Both files share a format of their own, not
+// Markdown: a date line, with the pull request in
 // brackets when there was one, then its entries, each indented by a tab. Any
 // other line throws, naming it, as the manual's converter does.
 

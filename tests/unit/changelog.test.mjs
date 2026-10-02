@@ -36,7 +36,17 @@ test('lines outside the format throw, naming the line', () => {
 	}
 });
 
-test('CHANGELOG.md itself converts', async () => {
-	const text = await readFile(new URL('../../CHANGELOG.md', import.meta.url), 'utf8');
-	assert.ok(convertChangelog(text).length > 0);
+const changelog = (name) => readFile(new URL(`../../${name}`, import.meta.url), 'utf8');
+
+// a day's line and how many entries it has
+const days = (text) => convertChangelog(text).reduce((list, line) => {
+	if (line.startsWith('<h2>')) list.push([line, 0]);
+	else if (line.startsWith('<li>')) list[list.length - 1][1]++;
+	return list;
+}, []);
+
+test('CHANGELOG.md and its translation both convert, day for day and entry for entry', async () => {
+	const english = days(await changelog('CHANGELOG.md'));
+	assert.ok(english.length > 0);
+	assert.deepEqual(days(await changelog('CHANGELOG.hr.md')), english);
 });
