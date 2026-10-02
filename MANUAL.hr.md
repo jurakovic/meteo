@@ -1,5 +1,5 @@
 
-> Generirano uz pomoć AI-ja.
+> Generirano korištenjem AI-ja.
 
 # Upute
 

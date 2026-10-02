@@ -1,5 +1,5 @@
 
-Generated with the AI.
+AI-generated content.
 
 2026-09-23 (#42)
 	added search to the map picker.

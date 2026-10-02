@@ -1,5 +1,5 @@
 
-> Generated with the AI.
+> AI-generated content.
 
 # Manual
 

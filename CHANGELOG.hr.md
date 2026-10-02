@@ -1,5 +1,5 @@
 
-Generirano uz pomoć AI-ja.
+Generirano korištenjem AI-ja.
 
 2026-09-23 (#42)
 	dodano traženje u odabiru karata.
