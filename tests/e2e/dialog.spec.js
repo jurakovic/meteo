@@ -41,13 +41,15 @@ test.describe('settings dialog', () => {
 	test('K and the Karte button open it, Escape and Zatvori close it', async ({ page }) => {
 		const panel = page.locator('#mapSettings');
 		await openDialog(page);
-		await expect(page.locator('.buttons .ms-toggle .arrow')).toHaveText('▲');
 		await expect(page.locator('body')).toHaveClass(/dialog-open/);
 		await page.keyboard.press('Escape');
 		await expect(panel).toBeHidden();
-		await expect(page.locator('.buttons .ms-toggle .arrow')).toHaveText('▼');
+		// the button's arrow is a mark, not a state: the dialog stands over the
+		// page and nothing unfolds under it, so it reads the same shut as open
+		await expect(page.locator('.buttons .ms-toggle .arrow')).toHaveText('▲');
 		await page.locator('.buttons .ms-toggle').click();
 		await expect(panel).toBeVisible();
+		await expect(page.locator('.buttons .ms-toggle .arrow')).toHaveText('▲');
 		await panel.locator('.dialog-head a', { hasText: 'Zatvori' }).click();
 		await expect(panel).toBeHidden();
 		await expect(page.locator('body')).not.toHaveClass(/dialog-open/);

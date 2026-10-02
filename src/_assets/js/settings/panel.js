@@ -20,10 +20,7 @@ import { createLayoutLine, createModeRow, createRefreshRow } from './panel-rows.
 import { layoutForPrefs, readPanelPrefs, readSharePrefs, selectedLayout } from './panel-view.js';
 
 // opening and shutting — the lock, the gutter, the backdrop, the stored
-// geometry — is the chrome every dialog shares (page/dialog.js). The arrow on
-// the page's Karte button is not set here but off the dialog-toggled event,
-// so a shut this function never made (the backdrop, Escape, a document
-// opening over it) moves it just the same
+// geometry — is the chrome every dialog shares (page/dialog.js)
 export function toggleMapSettings() {
 	const element = document.getElementById('mapSettings');
 	if (!element) return;
@@ -66,13 +63,6 @@ export function initMapSettings() {
 				&& !(e.target.matches && e.target.matches('select')) && !!element.querySelector('.ms-apply');
 		},
 		run: () => query('#mapSettings .ms-apply').click()
-	});
-
-	// the page's Karte button wears the picker's state as an arrow
-	on(EVENTS.dialogToggled, ({ panel, visible }) => {
-		if (panel.id !== 'mapSettings') return;
-		const arrow = document.querySelector('.buttons button.btn .arrow');
-		if (arrow) arrow.textContent = visible ? '▲' : '▼';
 	});
 }
 

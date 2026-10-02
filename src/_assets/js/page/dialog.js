@@ -179,8 +179,7 @@ function syncDialogChrome() {
 
 // every change of state is announced, the one made room for as much as the one
 // asked for: a dialog shut to let another stand is still shut, and what hangs
-// off that — the Karte button's arrow, a document's hash — has no other way of
-// hearing about it
+// off that — a document's hash — has no other way of hearing about it
 function notifyDialog(panel, visible) {
 	emit(EVENTS.dialogToggled, { panel, visible });
 }

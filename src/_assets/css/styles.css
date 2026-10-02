@@ -962,7 +962,9 @@ body.fs-lock {
 		display: none;
 	}
 
-	/* same expand affordance as the .expandable "Linkovi" button */
+	/* the Karte button's mark, placed as the .expandable "Linkovi" arrow is;
+	   it stays as it is, since the dialog stands over the page rather than
+	   unfolding under the button */
 	.buttons button.btn {
 		position: relative;
 	}

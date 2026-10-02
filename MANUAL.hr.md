@@ -12,7 +12,7 @@ Stranica ima dva dijela:
 
 Poglavlje [Karte na stranici](#karte-na-stranici) vrijedi za oba dijela, a sve ostalo samo za *Prilagodi*.
 
-Izdvojeni prozori ("widgeti"), bočni stupci i nadzorna ploča ("dashboard") rade samo na računalu, odnosno na ekranu širem od 800 px s mišem. Na ekranima na dodir stranica ostaje obična, okomita lista karata — vidi [Na mobitelu](#na-mobitelu).
+Izdvojeni prozori ("widgeti"), bočni stupci i nadzorna ploča ("dashboard") rade samo na računalu, odnosno na ekranu širem od 800 px s mišem. Na dodirnim ekranima stranica ostaje obična, okomita lista karata — vidi [Na mobitelu](#na-mobitelu).
 
 ## Karte na stranici
 
