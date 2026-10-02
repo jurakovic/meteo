@@ -9,13 +9,13 @@ Stranica ima dva dijela:
 
 Poglavlje [Karte na stranici](#karte-na-stranici) vrijedi za oba dijela, a sve ostalo samo za *Prilagodi*.
 
-Izdvojeni prozori, bočni stupci i nadzorna ploča rade samo na računalu, odnosno na ekranu širem od 800 px s mišem. Na dodirnim ekranima stranica ostaje obična, okomita lista karata — vidi [Na mobitelu](#na-mobitelu).
+Izdvojeni prozori ("widgeti"), bočni stupci i nadzorna ploča ("dashboard") rade samo na računalu, odnosno na ekranu širem od 800 px s mišem. Na dodirnim ekranima stranica ostaje obična, okomita lista karata — vidi [Na mobitelu](#na-mobitelu).
 
 ## Karte na stranici
 
-Svaka karta ima naslovnu traku s imenom izvora. Ime je ujedno i poveznica na izvornu stranicu.
+Svaka karta ima naslovnu traku s imenom izvora. Ime je ujedno i link na izvornu stranicu.
 
-**Karte s više slika** (npr. *Neverin | Radar | Hrvatska*) imaju strelice `❮` i `❯` na rubovima i niz kvadratića ispod slike koji pokazuje na kojoj ste slici. Na dodirnom ekranu slike se mijenjaju i prelaskom prsta.
+**Karte s više slika** ("slideshow", npr. *Neverin | Radar | Hrvatska*) imaju strelice `❮` i `❯` na rubovima i indikatore pozicije ispod slike, koji pokazuju na kojoj ste slici. Na dodirnom ekranu slike se mijenjaju i prelaskom prsta ("swipe").
 
 **Interaktivne karte** (Windy, Blitzortung, meteoblue i slične) u početku ne primaju miš — preko njih stoji prozirni sloj s natpisom *Dvostruki klik za pristup interaktivnoj karti*. Bez njega bi se karta pomicala dok se stranica lista. Dvostrukim klikom sloj nestaje i kartom se dalje radi normalno.
 
@@ -32,15 +32,15 @@ Gumbi u traci interaktivne karte:
 
 **Linkovi.** Gumb *Linkovi* vodi na popis dodatnih izvora na dnu stranice. Kvadratić pokraj njega uključuje prikaz linkova ispod svake karte.
 
-**Upute.** Ovaj tekst otvaraju gumb `?`, poveznica *Upute* u podnožju i tipka <kbd>H</kbd>. Otvara se u prozoru preko stranice, pa se upute mogu čitati uz karte. Zatvara se natpisom *Zatvori* ili tipkom <kbd>Esc</kbd>. Ikona stranice lijevo od naslova vodi na početnu stranicu, kao i u dijalogu *Karte*. Poveznica koja završava s `#upute` otvara upute odmah pri učitavanju stranice.
+**Upute.** Ovaj tekst otvaraju gumb `?`, link *Upute* u podnožju i tipka <kbd>H</kbd>. Otvara se u prozoru preko stranice, pa se upute mogu čitati uz karte. Zatvara se natpisom *Zatvori* ili tipkom <kbd>Esc</kbd>. Ikona stranice lijevo od naslova vodi na početnu stranicu, kao i u dijalogu *Karte*. Link koji završava s `#upute` otvara upute odmah pri učitavanju stranice.
 
-**Povijest promjena.** Poveznica *Povijest promjena* u podnožju i tipka <kbd>C</kbd> otvaraju popis promjena na stranici, po datumima. Otvara se u prozoru preko stranice, kao i upute, a poveznica koja završava s `#promjene` otvara ga odmah pri učitavanju stranice.
+**Povijest promjena.** Link *Povijest promjena* u podnožju i tipka <kbd>C</kbd> otvaraju popis promjena na stranici, po datumima. Otvara se u prozoru preko stranice, kao i upute, a link koji završava s `#promjene` otvara ga odmah pri učitavanju stranice.
 
 ## Dijalog Karte
 
 Gumb **Karte** (ili tipka <kbd>K</kbd>) otvara dijalog u kojem se bira što se prikazuje. Kad gumb na stranici nije dostupan, dijalog se otvara s [pločice Karte](#pločica-karte) na vrhu ekrana.
 
-Dok je dijalog otvoren, stranica iza njega je malo zatamnjena i ne reagira. Klik izvan dijaloga samo ga zatvara — taj klik ne ide dalje, pa neće usput otvoriti poveznicu ni pomaknuti prozor.
+Dok je dijalog otvoren, stranica iza njega je malo zatamnjena i ne reagira. Klik izvan dijaloga samo ga zatvara — taj klik ne ide dalje, pa neće usput otvoriti link ni pomaknuti prozor.
 
 **Ništa se ne primjenjuje dok ne pritisnete Primijeni** ili tipku <kbd>Enter</kbd>. Zatvaranje dijaloga bez toga — natpisom *Zatvori*, tipkom <kbd>Esc</kbd> ili klikom izvan njega — odbacuje sve promjene. Iznimka su prekidači mreže i automatsko osvježavanje, koji djeluju odmah.
 
@@ -53,7 +53,7 @@ Dijalog je, odozgo prema dolje:
 - red **predložaka**,
 - red **Nadzorna ploča** s prekidačima mreže i gumbom *Posloži* (samo na računalu),
 - red **Osvježavaj svakih**,
-- redak **Izdvojene karte** s poveznicom *Vrati sve* — samo kad je neka karta izdvojena u prozor,
+- redak **Izdvojene karte** s linkom *Vrati sve* — samo kad je neka karta izdvojena u prozor,
 - **odabrane karte**, a ispod njih *Primijeni* i *Podijeli*,
 - **sve dostupne karte**, s poretkom i okvirom za traženje,
 - **Zadani predlošci** i **Moji predlošci**.
@@ -106,7 +106,7 @@ Na dnu dijaloga, pod **Moji predlošci**:
 - **Preimenuj** mijenja ime, a **Obriši** briše predložak. Karte na ekranu pritom ostaju kakve jesu.
 - **Podijeli** kopira poveznicu na taj predložak.
 
-Pod **Zadani predlošci** gotovi predlošci mogu se sakriti iz reda na vrhu (*Sakrij*, *Sakrij sve*) i vratiti (*Prikaži*, *Prikaži sve*). *Osnovno* se ne može sakriti.
+Pod **Zadani predlošci** oni se mogu sakriti iz reda na vrhu (*Sakrij*, *Sakrij sve*) i vratiti (*Prikaži*, *Prikaži sve*). *Osnovno* se ne može sakriti.
 
 ### Dijeljenje
 
@@ -128,13 +128,13 @@ Vrijeme do sljedećeg osvježavanja piše u tom redu i na [pločici Karte](#plo�
 
 *Samo na računalu.*
 
-Svaka naslovna traka ima gumb `[^]` koji kartu izdvaja iz stranice u prozor koji pluta iznad nje. Prozor ostaje na mjestu dok se stranica lista, pa se nekoliko karata može gledati istovremeno. Na mjestu karte u stranici ostaje traka *Karta je izdvojena u prozor* s poveznicom **Vrati**. Sve prozore odjednom vraća *Vrati sve* u dijalogu.
+Svaka naslovna traka ima gumb `[^]` koji kartu izdvaja iz stranice u prozor ("widget") koji pluta iznad nje. Prozor ostaje na mjestu dok se stranica lista, pa se nekoliko karata može gledati istovremeno. Na mjestu karte u stranici ostaje traka *Karta je izdvojena u prozor* s linkom **Vrati**. Sve prozore odjednom vraća *Vrati sve* u dijalogu.
 
 Gumbi u traci prozora:
 
 | Gumb | Značenje |
 |---|---|
-| `[D]` | otvara kopiju karte u novom prozoru (ima ga i karta u stranici) |
+| `[D]` | duplicira kartu u novi prozor (ima ga i karta u stranici) |
 | `[R]` | ponovno učitava kartu (interaktivne karte ga nemaju) |
 | `[+]` / `[-]` | spaja prozor sa susjednim u grupu, odnosno vadi ga iz nje |
 | `[=]` | vraća kartu u stranicu; na ploči je `[x]` i miče kartu s popisa |
@@ -167,9 +167,9 @@ Kad dva prozora stoje jedan uz drugi i dodiruju se cijelom dužinom ruba — jed
 
 Dva prozora koja se dodiruju mogu se spojiti u grupu gumbom `[+]`; samo dodirivanje nije dovoljno. Grupa se pomiče i mijenja veličinu kao cjelina, a članovi ostaju spojeni. Unutarnji rubovi grupe su šavovi, a vanjski rub mijenja veličinu cijele grupe. `[-]` vadi prozor iz grupe.
 
-### Kopije
+### Dupliciranje
 
-Gumb `[D]` (ili tipka <kbd>D</kbd>, za prozor na vrhu) otvara još jedan prozor s istom kartom — npr. ista sinoptička karta u dvije veličine, ili isti niz slika zaustavljen na dvije različite slike. Kopija se otvori malo pomaknuta i iste veličine kao prozor iz kojeg je nastala. Svaka kopija ima svoje strelice i kvadratiće.
+Gumb `[D]` (ili tipka <kbd>D</kbd>, za prozor na vrhu) otvara još jedan prozor s istom kartom — npr. ista sinoptička karta u dvije veličine, ili isti niz slika zaustavljen na dvije različite slike. Kopija se otvori malo pomaknuta i iste veličine kao prozor iz kojeg je nastala. Svaka kopija ima svoje strelice i indikatore pozicije.
 
 Kopija je samo prozor: u stranici i dalje postoji jedan red po karti. Nijedan prozor nije „izvorni” — `[=]` (na ploči `[x]`) na bilo kojem prozoru dok ih ima još s istom kartom samo njega makne, a ostali ostaju gdje jesu. Tek zadnji vraća kartu u stranicu (na ploči je miče s popisa). Kopije su dio razmještaja, pa se spremaju u predložak i putuju u poveznici. Karta maknuta s popisa odnese sa sobom i svoje kopije.
 
@@ -187,7 +187,7 @@ Prozor povučen do lijevog ili desnog ruba ekrana uskoči u stupac uz taj rub. U
 
 *Samo na računalu.*
 
-Nadzorna ploča sakriva stranicu i svaku kartu s popisa pretvara u prozor. Ostaju samo karte na tamnoj podlozi — prikaz za ekran koji je stalno uključen i gleda se izdaleka.
+Nadzorna ploča ("dashboard") sakriva stranicu i svaku kartu s popisa pretvara u prozor. Ostaju samo karte na tamnoj podlozi — prikaz za ekran koji je stalno uključen i gleda se izdaleka.
 
 Uključuje se gumbom **Nadzorna ploča** u dijalogu i primjenjuje, zajedno s popisom, pritiskom na *Primijeni*. Isključuje se na isti način. Predložak spremljen dok je ploča uključena otvara se kao ploča, pa se može imati više različitih ploča.
 
@@ -235,7 +235,7 @@ Tipke ne rade dok je kursor u polju za upis.
 | <kbd>C</kbd> | otvara i zatvara *Povijest promjena* |
 | <kbd>Esc</kbd> | zatvara dijalog; ako nijedan nije otvoren, izlazi iz cijelog zaslona |
 | <kbd>R</kbd> | ponovno učitava sve karte |
-| <kbd>D</kbd> | kopira prozor na vrhu |
+| <kbd>D</kbd> | duplicira prozor na vrhu |
 | <kbd>A</kbd> | na ploči: slaže karte u mrežu |
 | <kbd>G</kbd> | na ploči: prikazuje ili skriva mrežu |
 | <kbd>S</kbd> | na ploči: uključuje ili isključuje poravnavanje uz mrežu |
