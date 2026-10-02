@@ -858,7 +858,7 @@
 		!gr||gr.menu.contains(t.target)||gr.anchor.contains(t.target)||vr()}var yr=!1,kr="";function xr(){return Jo().map(V).filter(t=>t&&hr(t.id))}
 		function Er(){const e=document.querySelector("[data-maps]");if(!e)return;vo(()=>r(".if1.fullscreen").forEach(se)),Jn(),yr=!0;const n=xr()
 		;kr=n.map(t=>t.id).join(),function(e,n,o={}){e.replaceChildren(),n.length?n.forEach(t=>it(e,t,o)):e.appendChild(t("div",{class:"map-entry"
-		},[t("div",{class:"maps-empty",text:'Nema odabranih karata. Odaberite ih pod "Karte".'})]))}(e,n,cn)}var Lr={manual:!1,changelog:!0},zr=[{
+		},[t("div",{class:"maps-empty",text:'Nema odabranih karata. Odaberite ih pod "Karte".'})]))}(e,n,cn)}var Lr={manual:!0,changelog:!0},zr=[{
 		feature:"manual",dialogId:"manualDialog",hash:"upute",keys:["h","H"]},{feature:"changelog",dialogId:"changelogDialog",hash:"promjene",
 		keys:["c","C"]}];function Mr(t){try{return decodeURIComponent(t.slice(1))}catch{return t.slice(1)}}
 		function Sr({feature:t,dialogId:e,hash:n,keys:o}){const r=document.getElementById(e);if(!r||!Lr[t])return

@@ -535,7 +535,7 @@
 		document.documentElement.classList.remove("dialog-gutter"));document.body.classList.toggle("dialog-open",e);const t=l(".dialog-backdrop")
 		;t&&(t.hidden=!e,e&&t.classList.remove("dialog-spent"))}(),t&&He(e),_e(e,t)}function Ce(){const e=Ee();return e&&De(e,!1),!!e}
 		var We=new Map,Ve=[];function Ie(e,{run:t,keys:a=[],keyWhen:r=()=>!0,keepDefault:n=!1,capture:o=!1}){const i={id:e,run:t,keys:a,keyWhen:r,
-		keepDefault:n,capture:o};We.set(e,i),a.length&&Ve.push(i)}var Fe={manual:!1,changelog:!0},Te=[{feature:"manual",dialogId:"manualDialog",
+		keepDefault:n,capture:o};We.set(e,i),a.length&&Ve.push(i)}var Fe={manual:!0,changelog:!0},Te=[{feature:"manual",dialogId:"manualDialog",
 		hash:"upute",keys:["h","H"]},{feature:"changelog",dialogId:"changelogDialog",hash:"promjene",keys:["c","C"]}];function Be(e){try{
 		return decodeURIComponent(e.slice(1))}catch{return e.slice(1)}}function Oe({feature:t,dialogId:a,hash:r,keys:o}){
 		const i=document.getElementById(a);if(!i||!Fe[t])return;const s=i.querySelector(".dialog-close")

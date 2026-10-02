@@ -1,5 +1,5 @@
-// The changelog on both pages: the top footer's link, the C key and the
-// #promjene address, in a dialog of the shared chrome
+// The documents on both pages, the changelog and the manual: their links,
+// keys and addresses, in dialogs of the shared chrome
 import { test, expect } from './fixtures.js';
 
 for (const which of ['landing', 'customize']) {
@@ -50,4 +50,54 @@ test('the picker opening over it shuts it and takes its address away', async ({ 
 	await expect(page.locator('#mapSettings')).toBeVisible();
 	await expect(page.locator('#changelogDialog')).toBeHidden();
 	await expect(page).not.toHaveURL(/#/);
+});
+
+// the manual, the same way, with the ? button besides
+for (const which of ['landing', 'customize']) {
+	test.describe(`manual on the ${which} page`, () => {
+		test.beforeEach(async ({ page, paths }) => {
+			await page.goto(paths[which]);
+		});
+
+		test('the ? button opens it, with the manual built in, and Escape closes it', async ({ page }) => {
+			const dialog = page.locator('#manualDialog');
+			await expect(page.locator('html')).not.toHaveClass(/no-manual/);
+			await page.locator('.help-btn').click();
+			await expect(dialog).toBeVisible();
+			await expect(dialog.locator('.dialog-title')).toHaveText('Upute');
+			await expect(dialog.locator('.manual-toc li').first()).toBeVisible();
+			await expect(page).toHaveURL(/#upute$/);
+			await page.keyboard.press('Escape');
+			await expect(dialog).toBeHidden();
+			await expect(page).not.toHaveURL(/#/);
+		});
+
+		test('H and the footer link open it', async ({ page }) => {
+			const dialog = page.locator('#manualDialog');
+			await page.keyboard.press('h');
+			await expect(dialog).toBeVisible();
+			await page.keyboard.press('h');
+			await expect(dialog).toBeHidden();
+			await page.locator('.footer-top [data-action="manual"]').click();
+			await expect(dialog).toBeVisible();
+		});
+	});
+}
+
+test('a heading link in the manual scrolls the manual, not the page', async ({ page, paths }) => {
+	await page.goto(`${paths.landing}#upute`);
+	const body = page.locator('#manualDialog .dialog-body');
+	await expect(body).toBeVisible();
+	await page.locator('#manualDialog .manual-toc a[href="#na-mobitelu"]').click();
+	await expect.poll(() => body.evaluate(el => el.scrollTop)).toBeGreaterThan(0);
+	await expect(page).toHaveURL(/#upute$/);
+});
+
+test('the changelog opening over the manual takes its address over', async ({ page, paths }) => {
+	await page.goto(`${paths.landing}#upute`);
+	await expect(page.locator('#manualDialog')).toBeVisible();
+	await page.keyboard.press('c');
+	await expect(page.locator('#changelogDialog')).toBeVisible();
+	await expect(page.locator('#manualDialog')).toBeHidden();
+	await expect(page).toHaveURL(/#promjene$/);
 });
