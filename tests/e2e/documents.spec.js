@@ -52,17 +52,19 @@ test('the picker opening over it shuts it and takes its address away', async ({ 
 	await expect(page).not.toHaveURL(/#/);
 });
 
-// the manual, the same way, with the ? button besides
+// the manual, the same way
 for (const which of ['landing', 'customize']) {
 	test.describe(`manual on the ${which} page`, () => {
 		test.beforeEach(async ({ page, paths }) => {
 			await page.goto(paths[which]);
 		});
 
-		test('the ? button opens it, with the manual built in, and Escape closes it', async ({ page }) => {
+		test('the footer link opens it, with the manual built in, and Escape closes it', async ({ page }) => {
 			const dialog = page.locator('#manualDialog');
 			await expect(page.locator('html')).not.toHaveClass(/no-manual/);
-			await page.locator('.help-btn').click();
+			// the footer is its one control: the buttons above the maps carry none
+			await expect(page.locator('.maps-head [data-action="manual"]')).toHaveCount(0);
+			await page.locator('.footer-top [data-action="manual"]').click();
 			await expect(dialog).toBeVisible();
 			await expect(dialog.locator('.dialog-title')).toHaveText('Upute');
 			await expect(dialog.locator('.manual-toc li').first()).toBeVisible();
@@ -72,14 +74,12 @@ for (const which of ['landing', 'customize']) {
 			await expect(page).not.toHaveURL(/#/);
 		});
 
-		test('H and the footer link open it', async ({ page }) => {
+		test('H toggles it', async ({ page }) => {
 			const dialog = page.locator('#manualDialog');
 			await page.keyboard.press('h');
 			await expect(dialog).toBeVisible();
 			await page.keyboard.press('h');
 			await expect(dialog).toBeHidden();
-			await page.locator('.footer-top [data-action="manual"]').click();
-			await expect(dialog).toBeVisible();
 		});
 	});
 }

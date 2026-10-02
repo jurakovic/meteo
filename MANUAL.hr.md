@@ -35,7 +35,7 @@ Gumbi u traci interaktivne karte:
 
 **Linkovi.** Gumb *Linkovi* vodi na popis dodatnih izvora na dnu stranice. Kvadratić pokraj njega uključuje prikaz linkova ispod svake karte.
 
-**Upute.** Ovaj tekst otvaraju gumb `?`, link *Upute* u podnožju i tipka <kbd>H</kbd>. Otvara se u prozoru preko stranice, pa se upute mogu čitati uz karte. Zatvara se natpisom *Zatvori* ili tipkom <kbd>Esc</kbd>. Ikona stranice lijevo od naslova vodi na početnu stranicu, kao i u dijalogu *Karte*. Link koji završava s `#upute` otvara upute odmah pri učitavanju stranice.
+**Upute.** Ovaj tekst otvaraju link *Upute* u podnožju i tipka <kbd>H</kbd>. Otvara se u prozoru preko stranice, pa se upute mogu čitati uz karte. Zatvara se natpisom *Zatvori* ili tipkom <kbd>Esc</kbd>. Ikona stranice lijevo od naslova vodi na početnu stranicu, kao i u dijalogu *Karte*. Link koji završava s `#upute` otvara upute odmah pri učitavanju stranice.
 
 **Povijest promjena.** Link *Povijest promjena* u podnožju i tipka <kbd>C</kbd> otvaraju popis promjena na stranici, po datumima. Otvara se u prozoru preko stranice, kao i upute, a link koji završava s `#promjene` otvara ga odmah pri učitavanju stranice.
 
