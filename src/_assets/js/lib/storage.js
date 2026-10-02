@@ -11,7 +11,7 @@ export const STORAGE_KEYS = {
 	tab: 'msTab', // where the tab was dragged, how wide (settings/tab.js)
 	linksBottom: 'showLinksBottom' // the links under each map (page/links.js)
 	// and a dialog's place and size under the key its element names in
-	// data-dialog-key: msPanel, manualPanel (page/dialog.js)
+	// data-dialog-key: msPanel, manualPanel, changelogPanel (page/dialog.js)
 };
 
 // what could not be written, kept for the rest of the session: storage

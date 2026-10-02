@@ -115,57 +115,57 @@
 		font-size:13px}.buttons a,.buttons a:hover{text-decoration:none}.buttons.three{grid-template-columns:repeat(3,1fr)}.buttons.with-help{
 		grid-template-columns:1fr 1fr 32px}.buttons.three.with-help{grid-template-columns:repeat(3,1fr) 32px}.buttons .help-btn{font-size:15px;
 		line-height:1}html.no-manual .help-btn,html.no-manual .manual-link{display:none}html.no-manual .buttons.with-help{grid-template-columns:
-		49.5% 49.5%}html.no-manual .buttons.three.with-help{grid-template-columns:repeat(3,1fr)}.buttons button.btn{position:relative}
-		.buttons button.btn .arrow{position:absolute;right:10px;top:2px;font-size:14px}.buttons .btn{margin-top:10px;margin-bottom:5px;font-size:
-		13px;font-family:inherit;color:#fff;background-color:var(--c-control);align-content:center;cursor:pointer;width:100%;height:24px;border:none
-		;outline:0}.buttons .btn:hover{background-color:var(--c-control-hover)}.links-btn{position:relative}.links-btn .links-toggle{position:
-		absolute;right:8px;top:22px;transform:translateY(-50%);margin:0;cursor:pointer}.links-btn .links-toggle::before{content:'';position:absolute
-		;top:50%;left:50%;transform:translate(-50%,-50%);width:28px;height:28px}.dialog-backdrop{position:fixed;inset:0;z-index:var(--z-backdrop);
-		background-color:rgba(10,16,28,.45)}.dialog-backdrop.dialog-spent{background-color:transparent}.dialog{position:fixed;z-index:
-		var(--z-dialog);top:24px;left:0;right:0;margin:0 auto;width:750px;height:750px;max-width:calc(100% - 32px);max-height:calc(100vh - 48px);
-		display:flex;flex-direction:column;box-sizing:border-box;border:1px solid var(--c-control-hover);box-shadow:0 16px 48px rgba(0,0,0,.75),0
-		2px 8px rgba(0,0,0,.5);background-color:var(--c-surface);text-align:left;font-size:13px;color:#fff}.dialog[hidden]{display:none}
-		@media (max-width:800px){.dialog{top:0;max-width:100%;height:auto;max-height:100vh;max-height:100dvh;border:none}}
-		@media (min-width:801px) and (hover:hover) and (pointer:fine){.dialog .po-h{position:absolute;z-index:1}.dialog .dialog-head{cursor:move}}
-		body.dialog-open{overflow:hidden}html.dialog-gutter{scrollbar-gutter:stable}.dialog .dialog-head{display:flex;justify-content:space-between;
-		align-items:center;padding:7px 10px;background-color:#2c3b56;border-bottom:1px solid var(--c-line)}.dialog .dialog-head .dialog-title{
-		font-weight:700}.dialog .dialog-head a{cursor:pointer;color:#8fb4ff}.dialog .dialog-head .dialog-head-left{display:flex;align-items:center;
-		gap:8px}.dialog .dialog-head .dialog-home{display:flex}.dialog .dialog-head .dialog-home img{display:block;width:16px;height:16px;
-		border-radius:50%}@media (max-width:800px){.dialog .dialog-head{padding:0}.dialog .dialog-head .dialog-title{padding:11px 10px}
-		.dialog .dialog-head a{padding:11px 14px}.dialog .dialog-head .dialog-head-left{gap:0}.dialog .dialog-head .dialog-home{padding:11px 4px
-		11px 10px}.dialog .dialog-head .dialog-home+.dialog-title{padding-left:4px}}.dialog .dialog-body{min-height:0;overflow-y:auto;
-		overscroll-behavior:contain;padding:10px}@media (min-width:801px) and (hover:hover) and (pointer:fine){.dialog .dialog-body,.ms-add-list{
-		scrollbar-gutter:stable}.dialog .dialog-body::-webkit-scrollbar,.ms-add-list::-webkit-scrollbar{width:12px}
-		.dialog .dialog-body::-webkit-scrollbar-track,.ms-add-list::-webkit-scrollbar-track{background-color:var(--c-surface-deep)}
-		.dialog .dialog-body::-webkit-scrollbar-thumb,.ms-add-list::-webkit-scrollbar-thumb{background-color:var(--c-control);border:3px solid
-		var(--c-surface-deep);border-radius:6px}.dialog .dialog-body::-webkit-scrollbar-thumb:hover,.ms-add-list::-webkit-scrollbar-thumb:hover{
-		background-color:var(--c-control-hover)}@supports not selector(::-webkit-scrollbar){.dialog .dialog-body,.ms-add-list{scrollbar-width:thin;
-		scrollbar-color:var(--c-control) var(--c-surface-deep)}}}.dialog label{cursor:pointer}.ms-tab{display:none;position:fixed;z-index:
-		var(--z-dialog);top:0;left:50%;transform:translateX(-50%);padding:3px 12px;border:none;border-radius:0 0 6px 6px;font-family:inherit;
-		font-size:13px;color:#fff;background-color:var(--c-accent);box-shadow:0 2px 8px rgba(0,0,0,.4);cursor:pointer;opacity:.55;transition:opacity
-		 .15s ease;box-sizing:border-box;align-items:center;gap:10px;white-space:nowrap;overflow:hidden;touch-action:none;user-select:none}
-		.ms-tab:hover{background-color:#ffa726}.ms-tab:hover,body.dialog-open .ms-tab,body.ms-add-open .ms-tab{opacity:1}.ms-tab-name{flex:1 1 auto;
-		min-width:0;overflow:hidden;text-overflow:ellipsis;text-align:center}.ms-tab:not(.ms-tab-sized) .ms-tab-name{padding:0 24px}.ms-tab-cluster{
-		flex:0 0 auto;display:none;gap:8px}body.dashboard .ms-tab-cluster,body.refresh-on .ms-tab-cluster{display:inline-flex}
-		.ms-tab-cluster .ms-tab-board{display:none}body.dashboard .ms-tab-cluster .ms-tab-board{display:inline}.ms-tab-count{min-width:4ch;
-		text-align:right;font-variant-numeric:tabular-nums}body:not(.refresh-on) .ms-tab-count{display:none}.ms-tab-cluster::before{content:'|';
-		opacity:.55}.ms-tab-cluster a{text-decoration:none;cursor:pointer}.ms-tab-cluster a.ms-tab-off{opacity:.55}.ms-add{position:fixed;z-index:
-		var(--z-menu);display:flex;flex-direction:column;width:300px;max-width:calc(100vw - 16px);box-sizing:border-box;padding:6px;border:1px solid
-		 var(--c-control-hover);box-shadow:0 8px 24px rgba(0,0,0,.6),0 2px 8px rgba(0,0,0,.4);background-color:var(--c-surface);text-align:left;
-		font-size:13px;color:#fff}.ms-add-input{flex:0 0 auto;margin-bottom:6px;padding:4px 6px;border:1px solid var(--c-control);border-radius:3px;
-		background-color:var(--c-field);color:inherit;font-family:inherit;font-size:inherit}.ms-add-input:focus{outline:0;border-color:
-		var(--c-accent)}.ms-add-list{flex:1 1 auto;min-height:0;overflow-y:auto}.ms-add-item{padding:3px 4px;border-radius:3px;white-space:nowrap;
-		overflow:hidden;text-overflow:ellipsis;cursor:pointer;user-select:none}.ms-add-item.active{background-color:var(--c-row-hover)}
-		.ms-add-item .ms-glyph{margin:0 6px 0 0}.ms-add-empty{padding:3px 4px;font-style:italic;opacity:.6}body.dashboard .ms-tab,
-		body.refresh-on .ms-tab,body.snap-full .ms-tab{display:flex}.dialog .ms-presets{display:flex;flex-wrap:wrap;gap:6px;padding-bottom:8px;
-		margin-bottom:8px;border-bottom:1px solid var(--c-control)}.dialog .ms-presets label{position:relative;flex:1 1 auto}
-		.dialog .ms-presets .ms-fill{flex:1000 1 0;height:0}.dialog .ms-presets input{position:absolute;margin:0;opacity:0}.dialog .ms-chip{display:
-		block;position:relative;text-align:center;padding:3px 10px;background-color:var(--c-chip);border:1px solid var(--c-control);user-select:none
-		}.dialog .ms-chip.ms-user::after{content:'';position:absolute;top:0;right:0;border-top:7px solid var(--c-mark);border-left:7px solid
-		transparent}.dialog .ms-chip.ms-board,.dialog .ms-manage-name.ms-board{border-left:3px solid var(--c-board)}.dialog .ms-manage-name.ms-board
-		{padding-left:6px}.dialog .ms-chip.ms-origin::before{content:'';position:absolute;left:4px;top:50%;width:4px;height:4px;margin-top:-2px;
-		border-radius:50%;background-color:var(--c-mark)}.dialog .ms-presets label:hover .ms-chip{background-color:var(--c-row-hover)}
-		.dialog .ms-presets input:checked+.ms-chip{color:var(--c-accent);background-color:var(--c-control)}
+		49.5% 49.5%}html.no-manual .buttons.three.with-help{grid-template-columns:repeat(3,1fr)}html.no-changelog .changelog-link{display:none}
+		.buttons button.btn{position:relative}.buttons button.btn .arrow{position:absolute;right:10px;top:2px;font-size:14px}.buttons .btn{
+		margin-top:10px;margin-bottom:5px;font-size:13px;font-family:inherit;color:#fff;background-color:var(--c-control);align-content:center;
+		cursor:pointer;width:100%;height:24px;border:none;outline:0}.buttons .btn:hover{background-color:var(--c-control-hover)}.links-btn{position:
+		relative}.links-btn .links-toggle{position:absolute;right:8px;top:22px;transform:translateY(-50%);margin:0;cursor:pointer}
+		.links-btn .links-toggle::before{content:'';position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:28px;height:28px}
+		.dialog-backdrop{position:fixed;inset:0;z-index:var(--z-backdrop);background-color:rgba(10,16,28,.45)}.dialog-backdrop.dialog-spent{
+		background-color:transparent}.dialog{position:fixed;z-index:var(--z-dialog);top:24px;left:0;right:0;margin:0 auto;width:750px;height:750px;
+		max-width:calc(100% - 32px);max-height:calc(100vh - 48px);display:flex;flex-direction:column;box-sizing:border-box;border:1px solid
+		var(--c-control-hover);box-shadow:0 16px 48px rgba(0,0,0,.75),0 2px 8px rgba(0,0,0,.5);background-color:var(--c-surface);text-align:left;
+		font-size:13px;color:#fff}.dialog[hidden]{display:none}@media (max-width:800px){.dialog{top:0;max-width:100%;height:auto;max-height:100vh;
+		max-height:100dvh;border:none}}@media (min-width:801px) and (hover:hover) and (pointer:fine){.dialog .po-h{position:absolute;z-index:1}
+		.dialog .dialog-head{cursor:move}}body.dialog-open{overflow:hidden}html.dialog-gutter{scrollbar-gutter:stable}.dialog .dialog-head{display:
+		flex;justify-content:space-between;align-items:center;padding:7px 10px;background-color:#2c3b56;border-bottom:1px solid var(--c-line)}
+		.dialog .dialog-head .dialog-title{font-weight:700}.dialog .dialog-head a{cursor:pointer;color:#8fb4ff}
+		.dialog .dialog-head .dialog-head-left{display:flex;align-items:center;gap:8px}.dialog .dialog-head .dialog-home{display:flex}
+		.dialog .dialog-head .dialog-home img{display:block;width:16px;height:16px;border-radius:50%}@media (max-width:800px){.dialog .dialog-head{
+		padding:0}.dialog .dialog-head .dialog-title{padding:11px 10px}.dialog .dialog-head a{padding:11px 14px}
+		.dialog .dialog-head .dialog-head-left{gap:0}.dialog .dialog-head .dialog-home{padding:11px 4px 11px 10px}
+		.dialog .dialog-head .dialog-home+.dialog-title{padding-left:4px}}.dialog .dialog-body{min-height:0;overflow-y:auto;overscroll-behavior:
+		contain;padding:10px}@media (min-width:801px) and (hover:hover) and (pointer:fine){.dialog .dialog-body,.ms-add-list{scrollbar-gutter:stable
+		}.dialog .dialog-body::-webkit-scrollbar,.ms-add-list::-webkit-scrollbar{width:12px}.dialog .dialog-body::-webkit-scrollbar-track,
+		.ms-add-list::-webkit-scrollbar-track{background-color:var(--c-surface-deep)}.dialog .dialog-body::-webkit-scrollbar-thumb,
+		.ms-add-list::-webkit-scrollbar-thumb{background-color:var(--c-control);border:3px solid var(--c-surface-deep);border-radius:6px}
+		.dialog .dialog-body::-webkit-scrollbar-thumb:hover,.ms-add-list::-webkit-scrollbar-thumb:hover{background-color:var(--c-control-hover)}
+		@supports not selector(::-webkit-scrollbar){.dialog .dialog-body,.ms-add-list{scrollbar-width:thin;scrollbar-color:var(--c-control)
+		var(--c-surface-deep)}}}.dialog label{cursor:pointer}.ms-tab{display:none;position:fixed;z-index:var(--z-dialog);top:0;left:50%;transform:
+		translateX(-50%);padding:3px 12px;border:none;border-radius:0 0 6px 6px;font-family:inherit;font-size:13px;color:#fff;background-color:
+		var(--c-accent);box-shadow:0 2px 8px rgba(0,0,0,.4);cursor:pointer;opacity:.55;transition:opacity .15s ease;box-sizing:border-box;
+		align-items:center;gap:10px;white-space:nowrap;overflow:hidden;touch-action:none;user-select:none}.ms-tab:hover{background-color:#ffa726}
+		.ms-tab:hover,body.dialog-open .ms-tab,body.ms-add-open .ms-tab{opacity:1}.ms-tab-name{flex:1 1 auto;min-width:0;overflow:hidden;
+		text-overflow:ellipsis;text-align:center}.ms-tab:not(.ms-tab-sized) .ms-tab-name{padding:0 24px}.ms-tab-cluster{flex:0 0 auto;display:none;
+		gap:8px}body.dashboard .ms-tab-cluster,body.refresh-on .ms-tab-cluster{display:inline-flex}.ms-tab-cluster .ms-tab-board{display:none}
+		body.dashboard .ms-tab-cluster .ms-tab-board{display:inline}.ms-tab-count{min-width:4ch;text-align:right;font-variant-numeric:tabular-nums}
+		body:not(.refresh-on) .ms-tab-count{display:none}.ms-tab-cluster::before{content:'|';opacity:.55}.ms-tab-cluster a{text-decoration:none;
+		cursor:pointer}.ms-tab-cluster a.ms-tab-off{opacity:.55}.ms-add{position:fixed;z-index:var(--z-menu);display:flex;flex-direction:column;
+		width:300px;max-width:calc(100vw - 16px);box-sizing:border-box;padding:6px;border:1px solid var(--c-control-hover);box-shadow:0 8px 24px
+		rgba(0,0,0,.6),0 2px 8px rgba(0,0,0,.4);background-color:var(--c-surface);text-align:left;font-size:13px;color:#fff}.ms-add-input{flex:0 0
+		auto;margin-bottom:6px;padding:4px 6px;border:1px solid var(--c-control);border-radius:3px;background-color:var(--c-field);color:inherit;
+		font-family:inherit;font-size:inherit}.ms-add-input:focus{outline:0;border-color:var(--c-accent)}.ms-add-list{flex:1 1 auto;min-height:0;
+		overflow-y:auto}.ms-add-item{padding:3px 4px;border-radius:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;cursor:pointer;
+		user-select:none}.ms-add-item.active{background-color:var(--c-row-hover)}.ms-add-item .ms-glyph{margin:0 6px 0 0}.ms-add-empty{padding:3px
+		4px;font-style:italic;opacity:.6}body.dashboard .ms-tab,body.refresh-on .ms-tab,body.snap-full .ms-tab{display:flex}.dialog .ms-presets{
+		display:flex;flex-wrap:wrap;gap:6px;padding-bottom:8px;margin-bottom:8px;border-bottom:1px solid var(--c-control)}.dialog .ms-presets label{
+		position:relative;flex:1 1 auto}.dialog .ms-presets .ms-fill{flex:1000 1 0;height:0}.dialog .ms-presets input{position:absolute;margin:0;
+		opacity:0}.dialog .ms-chip{display:block;position:relative;text-align:center;padding:3px 10px;background-color:var(--c-chip);border:1px
+		solid var(--c-control);user-select:none}.dialog .ms-chip.ms-user::after{content:'';position:absolute;top:0;right:0;border-top:7px solid
+		var(--c-mark);border-left:7px solid transparent}.dialog .ms-chip.ms-board,.dialog .ms-manage-name.ms-board{border-left:3px solid
+		var(--c-board)}.dialog .ms-manage-name.ms-board{padding-left:6px}.dialog .ms-chip.ms-origin::before{content:'';position:absolute;left:4px;
+		top:50%;width:4px;height:4px;margin-top:-2px;border-radius:50%;background-color:var(--c-mark)}.dialog .ms-presets label:hover .ms-chip{
+		background-color:var(--c-row-hover)}.dialog .ms-presets input:checked+.ms-chip{color:var(--c-accent);background-color:var(--c-control)}
 		.dialog .ms-presets input:focus-visible+.ms-chip{outline:1px solid white;outline-offset:1px}.dialog .ms-item{display:flex;justify-content:
 		space-between;align-items:center;padding:2px 0}.dialog .ms-glyph{margin:0 6px 0 4px}.dialog .ms-list:empty::before{display:block;padding:2px
 		 0;font-style:italic;opacity:.6}.dialog .ms-selected:empty::before{content:"Nema odabranih karata"}.dialog .ms-available:empty::before{
@@ -208,29 +208,31 @@
 		font-size:13px;font-family:inherit;color:#fff;background-color:var(--c-control);cursor:pointer;height:24px;padding:0 24px;border:none;
 		outline:0}.dialog .btn:hover{background-color:var(--c-control-hover)}.dialog .ms-actions{display:flex;align-items:center;gap:16px;padding:
 		10px 0 8px}.dialog .ms-actions a{cursor:pointer;user-select:none;text-decoration:none}.dialog .ms-actions+.ms-sort{margin-top:0}
-		.manual-dialog .dialog-body{padding:4px 14px 16px;line-height:1.5}.manual-dialog .dialog-body h2,.manual-dialog .dialog-body h3{margin:22px
-		0 8px;font-weight:400;color:var(--c-accent)}.manual-dialog .dialog-body h2{font-size:16px;padding-bottom:4px;border-bottom:1px solid
-		var(--c-control)}.manual-dialog .dialog-body h3{font-size:14px}.manual-dialog .dialog-body p,.manual-dialog .dialog-body ul{margin:8px 0}
-		.manual-dialog .dialog-body ul{padding-left:20px}.manual-dialog .dialog-body li{margin:3px 0}.manual-dialog .dialog-body code,
-		.manual-dialog .dialog-body kbd{padding:0 4px;border-radius:3px;background-color:var(--c-field);font-family:inherit;white-space:nowrap}
-		.manual-dialog .dialog-body kbd{border:1px solid var(--c-control-hover)}.manual-dialog .dialog-body a{color:var(--c-accent)}
-		.manual-dialog .dialog-body blockquote{margin:12px 0;padding:2px 12px;border-left:3px solid var(--c-control)}
-		.manual-dialog .dialog-body table{display:block;width:100%;max-width:875px;overflow-x:auto;margin:10px 0;border-collapse:collapse}
-		.manual-dialog .dialog-body td,.manual-dialog .dialog-body th{padding:4px 10px 4px 0;border-bottom:1px solid var(--c-chip);text-align:left;
-		vertical-align:top}.manual-dialog .dialog-body th{font-weight:400;opacity:.7}.manual-dialog .manual-toc{margin:10px 0 18px;padding:8px 0;
-		border-top:1px solid var(--c-control);border-bottom:1px solid var(--c-control)}.manual-dialog .manual-toc ul{margin:0;padding:0;list-style:
-		none}.manual-dialog .manual-toc li{margin:2px 0}.manual-dialog .manual-toc .toc-3{padding-left:16px}.manual-dialog .manual-toc a{
-		text-decoration:none}.manual-dialog .manual-toc a:hover{text-decoration:underline}.maps-empty{padding:20px 0;font-size:13px;font-style:
-		italic;opacity:.6}.slideshow{position:relative;display:flex;justify-content:center}.slide{display:none}.slide.active{display:block;width:
-		100%}.slide>.placeholder{width:100%}.slide>.placeholder>img{margin-inline:auto}.next,.prev{cursor:pointer;position:absolute;align-content:
-		center;top:0;bottom:0;width:15%;padding:16px;color:transparent;opacity:.7;font-weight:700;font-size:36px;transition:color .6s ease,
-		background-image .6s ease;user-select:none}.prev{left:0;text-align:left}.prev:hover{background-image:
-		linear-gradient(to left,transparent,rgba(0,0,0,.6));color:#fff;text-decoration:none}.prev.shorter{top:23px}.next{right:0;text-align:right}
-		.next:hover{background-image:linear-gradient(to right,transparent,rgba(0,0,0,.6));color:#fff;text-decoration:none}.next.shorter{top:23px}
-		.fade{animation-name:fade;animation-duration:1s}@keyframes fade{from{opacity:.6}to{opacity:1}}@media (max-width:800px){.next,.prev{padding:
-		12px;font-size:20px}.next.shorter,.prev.shorter{top:23px}}.indicators-container{display:grid;grid-template-columns:repeat(3,1fr);gap:4px;
-		width:100%}.indicator{height:3px;background-color:#4e5264;transition:background-color .3s}.indicator.active{background-color:var(--c-accent)
-		}@media (max-width:800px){.indicator{height:2px}}.expandable{position:relative;justify-content:center;margin-top:10px;margin-bottom:4px;
+		.doc-dialog .dialog-body{padding:4px 14px 16px;line-height:1.5}.doc-dialog .dialog-body h2,.doc-dialog .dialog-body h3{margin:22px 0 8px;
+		font-weight:400;color:var(--c-accent);text-align:left}.doc-dialog .dialog-body h2{font-size:16px;padding-bottom:4px;border-bottom:1px solid
+		var(--c-control)}.doc-dialog .dialog-body h3{font-size:14px}.doc-dialog .dialog-body p,.doc-dialog .dialog-body ul{margin:8px 0}
+		.doc-dialog .dialog-body ul{padding-left:20px}.doc-dialog .dialog-body li{margin:3px 0}.doc-dialog .dialog-body code,
+		.doc-dialog .dialog-body kbd{padding:0 4px;border-radius:3px;background-color:var(--c-field);font-family:inherit;white-space:nowrap}
+		.doc-dialog .dialog-body kbd{border:1px solid var(--c-control-hover)}.doc-dialog .dialog-body a{color:var(--c-accent)}
+		.doc-dialog .dialog-body blockquote{margin:12px 0;padding:2px 12px;border-left:3px solid var(--c-control)}.doc-dialog .dialog-body table{
+		display:block;width:100%;max-width:875px;overflow-x:auto;margin:10px 0;border-collapse:collapse}.doc-dialog .dialog-body td,
+		.doc-dialog .dialog-body th{padding:4px 10px 4px 0;border-bottom:1px solid var(--c-chip);text-align:left;vertical-align:top}
+		.doc-dialog .dialog-body th{font-weight:400;opacity:.7}.doc-dialog .manual-toc{margin:10px 0 18px;padding:8px 0;border-top:1px solid
+		var(--c-control);border-bottom:1px solid var(--c-control)}.doc-dialog .manual-toc ul{margin:0;padding:0;list-style:none}
+		.doc-dialog .manual-toc li{margin:2px 0}.doc-dialog .manual-toc .toc-3{padding-left:16px}.doc-dialog .manual-toc a{text-decoration:none}
+		.doc-dialog .manual-toc a:hover{text-decoration:underline}.changelog-dialog .dialog-body h2{margin:16px 0 4px;font-size:14px}
+		.changelog-dialog .dialog-body h2:first-child{margin-top:8px}.changelog-dialog .dialog-body h2 a{margin-left:6px;color:var(--c-muted)}
+		.changelog-dialog .dialog-body ul{margin:4px 0}.maps-empty{padding:20px 0;font-size:13px;font-style:italic;opacity:.6}.slideshow{position:
+		relative;display:flex;justify-content:center}.slide{display:none}.slide.active{display:block;width:100%}.slide>.placeholder{width:100%}
+		.slide>.placeholder>img{margin-inline:auto}.next,.prev{cursor:pointer;position:absolute;align-content:center;top:0;bottom:0;width:15%;
+		padding:16px;color:transparent;opacity:.7;font-weight:700;font-size:36px;transition:color .6s ease,background-image .6s ease;user-select:
+		none}.prev{left:0;text-align:left}.prev:hover{background-image:linear-gradient(to left,transparent,rgba(0,0,0,.6));color:#fff;
+		text-decoration:none}.prev.shorter{top:23px}.next{right:0;text-align:right}.next:hover{background-image:
+		linear-gradient(to right,transparent,rgba(0,0,0,.6));color:#fff;text-decoration:none}.next.shorter{top:23px}.fade{animation-name:fade;
+		animation-duration:1s}@keyframes fade{from{opacity:.6}to{opacity:1}}@media (max-width:800px){.next,.prev{padding:12px;font-size:20px}
+		.next.shorter,.prev.shorter{top:23px}}.indicators-container{display:grid;grid-template-columns:repeat(3,1fr);gap:4px;width:100%}.indicator{
+		height:3px;background-color:#4e5264;transition:background-color .3s}.indicator.active{background-color:var(--c-accent)}
+		@media (max-width:800px){.indicator{height:2px}}.expandable{position:relative;justify-content:center;margin-top:10px;margin-bottom:4px;
 		font-family:inherit;color:#fff;background-color:var(--c-control);cursor:pointer;width:100%;height:24px;border:none;outline:0}
 		.expandable:hover{background-color:var(--c-control-hover)}.expandable .arrow{position:absolute;right:10px;top:2px;font-size:14px}.links{
 		font-size:14px;display:grid;grid-template-columns:25% 45% 30%;gap:0;max-height:0;overflow:hidden;transition:max-height .3s ease-out}
@@ -255,8 +257,8 @@
 		var w="mapPrefs",v="mapUserPresets",b="mapHiddenPresets",y="mapConfig",k="mapGrid",x="mapRefresh",E="msTab",L="showLinksBottom",z=new Map
 		;function M(t){try{return JSON.parse(z.has(t)?z.get(t):localStorage.getItem(t))}catch{return null}}function S(t,e){const n=JSON.stringify(e)
 		;try{localStorage.setItem(t,n),z.delete(t)}catch{z.set(t,n)}}function C(t,e,n){return Math.min(Math.max(t,e),Math.max(e,n))}function A(t){
-		return Math.round(1e4*t)/1e4}function j(t){return Math.round(1e3*t)/1e3}var R=0;function $(t){R=t}function P(){
-		return document.documentElement.clientWidth-R}function I(){return document.documentElement.clientHeight}var H=[{text:"Windy",
+		return Math.round(1e4*t)/1e4}function j(t){return Math.round(1e3*t)/1e3}var R=0;function $(t){R=t}function I(){
+		return document.documentElement.clientWidth-R}function P(){return document.documentElement.clientHeight}var H=[{text:"Windy",
 		href:"https://www.windy.com/-Weather-radar-radar?radar,44.5,16.5,7"},{text:"Zoom Earth",
 		href:"https://zoom.earth/maps/radar/#view=44.5,16.5,7z"},{text:"meteoblue",
 		href:"https://www.meteoblue.com/en/weather/maps/croatia_croatia_3202326#map=radar~radarMapEU~none~none~none&coords=6/44.5/16.5"},{
@@ -465,32 +467,32 @@
 		const e=t&&Z(t.dataset.mapId);e&&e.reload&&(lt(`reloadMap: ${t.dataset.mapId}`),e.reload(t))}function At(){
 		return r(".map-block").filter(t=>{const e=Z(t.dataset.mapId);return!!e&&!!e.reload})}function jt(){At().forEach(Ct),zt()}
 		var Rt=["n","ne","e","se","s","sw","w","nw"];function $t(t,e,n,o){let r=e.width,a=e.height;return t.includes("e")&&(r=e.width+n),
-		t.includes("w")&&(r=e.width-n),t.includes("s")&&(a=e.height+o),t.includes("n")&&(a=e.height-o),{w:r,h:a}}function Pt(t,e,n,o){
+		t.includes("w")&&(r=e.width-n),t.includes("s")&&(a=e.height+o),t.includes("n")&&(a=e.height-o),{w:r,h:a}}function It(t,e,n,o){
 		const r=t.clientX,a=t.clientY;let i=0,s=0,l=t;const c=t=>{l=t,i=t.clientX-r,s=t.clientY-a,e(i,s,t),o&&o()},d=t=>{
 		"Shift"!==t.key||t.repeat||(e(i,s,{clientX:l.clientX,clientY:l.clientY,shiftKey:"keydown"===t.type}),o&&o())},u=()=>{
 		document.removeEventListener("pointermove",c),document.removeEventListener("pointerup",u),document.removeEventListener("pointercancel",u),
 		document.removeEventListener("keydown",d),document.removeEventListener("keyup",d),document.body.classList.remove("po-dragging"),n&&n()}
 		;document.body.classList.add("po-dragging"),document.addEventListener("pointermove",c),document.addEventListener("pointerup",u),
-		document.addEventListener("pointercancel",u),document.addEventListener("keydown",d),document.addEventListener("keyup",d)}var It=120
+		document.addEventListener("pointercancel",u),document.addEventListener("keydown",d),document.addEventListener("keyup",d)}var Pt=120
 		;function Ht(){return r(".dialog")}function Bt(){return Ht().find(t=>!t.hidden)||null}function Dt(){return!!Bt()}function Wt(t){
 		return t.getAttribute("data-dialog-key")}function Nt(t){const e=Wt(t);e&&function(t){z.delete(t);try{localStorage.removeItem(t)}catch{}}(e)}
-		function _t(){return Math.max(360,P()-16)}function Tt(){return Math.max(It,I()-16)}function Ot(t,e,n,o,r){o=C(o,360,_t()),
+		function _t(){return Math.max(360,I()-16)}function Tt(){return Math.max(Pt,P()-16)}function Ot(t,e,n,o,r){o=C(o,360,_t()),
 		t.style.width=`${Math.round(o)}px`,t.style.maxWidth="none",t.style.right="auto",t.style.margin="0",null===r?(t.style.height="",
-		t.style.maxHeight=`${Math.round(Math.max(It,I()-Math.max(0,n)-8))}px`):(t.style.maxHeight="none",
-		t.style.height=`${Math.round(C(r,It,Tt()))}px`),t.style.left=`${Math.round(C(e,0,Math.max(0,P()-t.offsetWidth)))}px`,
-		t.style.top=`${Math.round(C(n,0,Math.max(0,I()-t.offsetHeight)))}px`}function qt(t){
+		t.style.maxHeight=`${Math.round(Math.max(Pt,P()-Math.max(0,n)-8))}px`):(t.style.maxHeight="none",
+		t.style.height=`${Math.round(C(r,Pt,Tt()))}px`),t.style.left=`${Math.round(C(e,0,Math.max(0,I()-t.offsetWidth)))}px`,
+		t.style.top=`${Math.round(C(n,0,Math.max(0,P()-t.offsetHeight)))}px`}function qt(t){
 		["left","top","width","height","maxWidth","maxHeight","right","margin"].forEach(e=>t.style[e]="")}function Ft(t){if(!t||t.hidden)return
 		;const e=f.matches?function(t){const e=Wt(t);if(!e)return null;const n=M(e)
 		;return n&&"object"==typeof n&&Number.isFinite(n.left)&&Number.isFinite(n.top)&&n.width>0?{left:n.left,top:n.top,width:n.width,
-		height:n.height>0?n.height:null}:null}(t):null;e?Ot(t,e.left*P(),e.top*I(),e.width,e.height):qt(t)}function Vt(t){
+		height:n.height>0?n.height:null}:null}(t):null;e?Ot(t,e.left*I(),e.top*P(),e.width,e.height):qt(t)}function Vt(t){
 		t.querySelectorAll(":scope > .po-h").forEach(t=>t.remove()),Rt.forEach(e=>{const n=document.createElement("div")
 		;n.className=`po-h po-h-${e}`,n.dataset.dir=e,t.appendChild(n)})}function Ut(t){t.addEventListener("pointerdown",e=>{
 		if(0!==e.button||!f.matches)return
 		;const n=e.target.closest(".po-h"),o=!n&&e.target.closest(".dialog-head")&&!e.target.closest("a, button, input");if(!n&&!o)return
-		;e.preventDefault();const r=t.getBoundingClientRect(),a=n?n.dataset.dir:null,i=t.style.height?r.height:null;let s=!1;Pt(e,(e,n)=>{
-		if(!s&&!e&&!n)return;if(s=!0,!a)return void Ot(t,r.left+e,r.top+n,r.width,i);let{w:o,h:l}=$t(a,r,e,n);o=C(o,360,_t()),l=C(l,It,Tt()),
+		;e.preventDefault();const r=t.getBoundingClientRect(),a=n?n.dataset.dir:null,i=t.style.height?r.height:null;let s=!1;It(e,(e,n)=>{
+		if(!s&&!e&&!n)return;if(s=!0,!a)return void Ot(t,r.left+e,r.top+n,r.width,i);let{w:o,h:l}=$t(a,r,e,n);o=C(o,360,_t()),l=C(l,Pt,Tt()),
 		Ot(t,a.includes("w")?r.right-o:r.left,a.includes("n")?r.bottom-l:r.top,o,l)},()=>{s&&function(t){const e=Wt(t);if(!e)return
-		;const n=t.getBoundingClientRect(),o={left:A(n.left/P()),top:A(n.top/I()),width:Math.round(n.width)}
+		;const n=t.getBoundingClientRect(),o={left:A(n.left/I()),top:A(n.top/P()),width:Math.round(n.width)}
 		;t.style.height&&(o.height=Math.round(n.height)),S(e,o)}(t)})}),t.addEventListener("dblclick",e=>{
 		f.matches&&e.target.closest(".dialog-head")&&!e.target.closest("a, button, input")&&(qt(t),Nt(t))})}function Zt(t,e){p(i,{panel:t,visible:e
 		})}function Xt(t,e){e&&Ht().forEach(e=>{e===t||e.hidden||(e.hidden=!0,Zt(e,!1))}),t.hidden=!e,function(){const t=Dt()
@@ -543,7 +545,7 @@
 		;return o?`${t} (${1===o.length?o.toUpperCase():"Escape"===o?"Esc":o})`:t}function ve(){
 		const t=["--fs-left","--fs-right","--fs-top","--fs-bottom"],e=An(),n=no();e.forEach(o=>{
 		if(!n||!o.classList.contains("fs-host"))return void t.forEach(t=>o.style.removeProperty(t))
-		;const r=P(),a=I(),i=o.getBoundingClientRect(),s=e.filter(t=>t!==o&&!t.classList.contains("fs-host")).map(t=>t.getBoundingClientRect()),l=function(t,e,n){
+		;const r=I(),a=P(),i=o.getBoundingClientRect(),s=e.filter(t=>t!==o&&!t.classList.contains("fs-host")).map(t=>t.getBoundingClientRect()),l=function(t,e,n){
 		const o=(t,e,n)=>{let o=e;return t.sort((t,e)=>t[0]-e[0]).forEach(([t,e])=>{t<=o+mt&&(o=Math.max(o,e))}),o>=n-mt},r=(t,e,n,r,a)=>{
 		const i=e.filter(e=>e.right<=t.left+1),s=[...new Set(i.map(t=>t.right))].sort((t,e)=>e-t);for(const t of s){
 		const e=i.filter(e=>e.left<t-.5&&e.right>=t-.5);if(o(e.map(t=>[t.top,t.bottom]),n,r))return t}return a},a=t=>({left:-t.right,right:-t.left,
@@ -567,19 +569,19 @@
 		;const r=o.getBoundingClientRect(),i=!n||r.left<n.right&&r.right>n.left&&r.top<n.bottom&&r.bottom>n.top,s=a(i);let l=ke.get(o)
 		;l&&l.parentElement===s||(l&&l.remove(),l=t("div",{class:"po-shadow"}),ke.set(o,l),s.appendChild(l)),
 		l.style.cssText=`left: ${r.left}px; top: ${r.top}px; width: ${r.width}px; height: ${r.height}px;`,e.add(l)}),
-		r(".po-shadows, .po-shadows-under").forEach(t=>[...t.children].forEach(t=>{e.has(t)||t.remove()}))}function Ee(t,e,n){Pt(t,e,n,xe)}
+		r(".po-shadows, .po-shadows-under").forEach(t=>[...t.children].forEach(t=>{e.has(t)||t.remove()}))}function Ee(t,e,n){It(t,e,n,xe)}
 		function Le(){const e=t("a",{class:"dup-btn",text:"[D]",title:we("Udvostruči kartu","duplicate")})
-		;return e.addEventListener("click",()=>Pe(e.closest(".map-block"))),e}function ze(t){return!!t&&t.classList.contains("duplicate")}
+		;return e.addEventListener("click",()=>Ie(e.closest(".map-block"))),e}function ze(t){return!!t&&t.classList.contains("duplicate")}
 		function Me(t){return r(`.map-block[data-map-id="${CSS.escape(t)}"]`)}function Se(t){return Me(t.dataset.mapId).filter(e=>e!==t)}
 		function Ce(t){return Me(t).find(t=>!ze(t))||null}function Ae(t){return a(`.map-block[data-inst="${CSS.escape(t)}"]`)}function je(t){
 		for(let e=1;;e++){const n=Q(t,e);if(!Ae(n))return n}}function Re(t){t.querySelectorAll("img.lazy").forEach(t=>{
 		t.src=t.getAttribute("data-src"),t.classList.remove("lazy")}),t.querySelectorAll("iframe[data-zoom-hr-desktop]").forEach(t=>Gt(t)),he(),
 		ce(),de()}function $e(e,n){const o=V(e),r=Ce(e);if(!o||!r)return null;const a=t("div",{class:"map-block duplicate","data-map-id":e,
-		"data-inst":n},at(o,n,cn));return r.after(a),Re(a),a}function Pe(t){if(!t||!f.matches)return null;const e=t.dataset.mapId,n=je(e)
+		"data-inst":n},at(o,n,cn));return r.after(a),Re(a),a}function Ie(t){if(!t||!f.matches)return null;const e=t.dataset.mapId,n=je(e)
 		;lt(`duplicateMap: ${e} -> ${n}`);const o=$e(e,n);if(!o)return null;Je(o);const r=t.classList.contains("popout");if(r){
 		const e=t.getBoundingClientRect();t.classList.contains("free")&&!o.classList.contains("free")&&Ge(o),
-		o.style.width=`${Math.round(C(e.width,ht,Ln()))}px`,o.classList.contains("free")&&(o.style.height=`${Math.round(C(e.height,pt,I()))}px`)}
-		const a=r?t.getBoundingClientRect():o.getBoundingClientRect();return zn(o,a.left+32,a.top+32),Mn(o),nn(o),bn(),xe(),Lo(),o}function Ie(t){
+		o.style.width=`${Math.round(C(e.width,ht,Ln()))}px`,o.classList.contains("free")&&(o.style.height=`${Math.round(C(e.height,pt,P()))}px`)}
+		const a=r?t.getBoundingClientRect():o.getBoundingClientRect();return zn(o,a.left+32,a.top+32),Mn(o),nn(o),bn(),xe(),Lo(),o}function Pe(t){
 		const e=J(t);if(1===G(t))return Ce(e);const n=Ae(t);return n&&ze(n)?n:$e(e,je(e))}function He(t){if(lt(`removeShowing: ${t.dataset.inst}`),
 		!ze(t)){const e=Se(t)[0];e&&(e.classList.remove("duplicate"),function(t,e){const n=an.get(t);if(!n)return;ln(e,n),an.delete(t)}(t,e))}
 		const e=a(".if1.fullscreen",t);e&&se(e),hn(t)&&vn(t),Yn(t),function(t){const e=ke.get(t);e&&e.remove(),ke.delete(t)}(t),t.remove(),bn(),
@@ -589,17 +591,17 @@
 		document.body.appendChild(e)),e.style.setProperty("--grid-cell","16px")):e&&e.remove()}function Oe(t){const e=[]
 		;for(let n=0;n<t;n+=16)e.push(n);return e[e.length-1]!==t&&e.push(t),e}function qe(t,e){let n=0
 		;for(let o=1;o<t.length;o++)Math.abs(t[o]-e)<Math.abs(t[n]-e)&&(n=o);return n}function Fe(t){De&&no()&&f.matches&&t.forEach(t=>{
-		t.classList.contains("fs-host")||function(t){const e=Oe(P()),n=Oe(I()),o=t.getBoundingClientRect()
+		t.classList.contains("fs-host")||function(t){const e=Oe(I()),n=Oe(P()),o=t.getBoundingClientRect()
 		;let r=qe(e,o.left),a=qe(e,o.right),i=qe(n,o.top),s=qe(n,o.bottom);for(a<=r&&(a=Math.min(r+1,e.length-1)),
 		s<=i&&(s=Math.min(i+1,n.length-1));e[a]-e[r]<ht&&(a<e.length-1||r>0);)a<e.length-1?a++:r--
 		;for(;n[s]-n[i]<pt&&(s<n.length-1||i>0);)s<n.length-1?s++:i--;t.classList.contains("free")||Ge(t),t.style.width=e[a]-e[r]+"px",
 		t.style.height=n[s]-n[i]+"px",zn(t,e[r],n[i]),en(t),nn(t)}(t)})}function Ve(t,e,n){const o=fn(t),r=Nn(t);r?function(t,e,n,o,r){const a=e=>{
-		e||t.classList.contains("free")||(Ge(t),_n(t).height=t.offsetHeight/I())};a(n.shiftKey)
+		e||t.classList.contains("free")||(Ge(t),_n(t).height=t.offsetHeight/P())};a(n.shiftKey)
 		;const i=t.getBoundingClientRect(),s=yn(r.filter(e=>e!==t)),l=s.filter(t=>t.top<i.top),c=s.filter(t=>t.top>i.top),d=Math.min(i.top,...l.map(t=>t.top)),u=Math.max(i.bottom,...c.map(t=>t.bottom))
 		;Ee(n,(n,s,c)=>{if(a(c.shiftKey),!t.classList.contains("free"))return;let{h:h}=$t(e,i,n,s);const p=Vn(o,r);if(e.includes("s")){
 		const t=$n(i.top+h,p);null!==t&&(h=t-i.top)}if(e.includes("n")){const t=$n(i.bottom-h,p);null!==t&&(h=i.bottom-t)}
-		h=C(h,pt,i.height+(e.includes("n")?d:I()-u));const m=_n(t);m.height=h/I(),m.top=(e.includes("n")?i.bottom-h:i.top)/I(),
-		e.includes("n")&&l.forEach(t=>{_n(t.block).top=(t.top-(h-i.height))/I()}),Gn()},()=>{Fe([t]),Lo()})}(t,e,n,r,o):o.length>1?function(t,e,n){
+		h=C(h,pt,i.height+(e.includes("n")?d:P()-u));const m=_n(t);m.height=h/P(),m.top=(e.includes("n")?i.bottom-h:i.top)/P(),
+		e.includes("n")&&l.forEach(t=>{_n(t.block).top=(t.top-(h-i.height))/P()}),Gn()},()=>{Fe([t]),Lo()})}(t,e,n,r,o):o.length>1?function(t,e,n){
 		const o=yn(t).map(t=>({...t,width:t.right-t.left,height:t.bottom-t.top,free:t.block.classList.contains("free")})),r=kn(o)
 		;r.right=r.left+r.width,r.bottom=r.top+r.height;const a=function(t){const e=(t,e)=>Math.abs(t-e)<=1,n=[];return t.forEach(o=>t.forEach(t=>{
 		if(o===t)return
@@ -607,7 +609,7 @@
 		;i&&(e(t.left,o.left)&&n.push({from:o,to:t,kind:"alignLeft"}),e(t.right,o.right)&&n.push({from:o,to:t,kind:"alignRight"}),n.push({from:o,
 		to:t,kind:e(t.top,o.bottom)?"below":"above"})),s&&(e(t.top,o.top)&&n.push({from:o,to:t,kind:"alignTop"}),e(t.bottom,o.bottom)&&n.push({
 		from:o,to:t,kind:"alignBottom"}),n.push({from:o,to:t,kind:e(t.left,o.right)?"right":"left"}))})),n
-		}(o),i=[...o].sort((t,e)=>t.top-e.top||t.left-e.left),s=Rn(t[0],t),l=e.includes("w")?r.right:r.left,c=e.includes("n")?r.bottom:r.top,d=Math.max(ht/Math.min(...o.map(t=>t.width)),...o.filter(t=>t.free).map(t=>pt/t.height)),u=Math.min(Ln()/Math.max(...o.map(t=>t.width)),(e.includes("w")?r.right:P()-r.left)/r.width,(e.includes("n")?r.bottom:I()-r.top)/r.height)
+		}(o),i=[...o].sort((t,e)=>t.top-e.top||t.left-e.left),s=Rn(t[0],t),l=e.includes("w")?r.right:r.left,c=e.includes("n")?r.bottom:r.top,d=Math.max(ht/Math.min(...o.map(t=>t.width)),...o.filter(t=>t.free).map(t=>pt/t.height)),u=Math.min(Ln()/Math.max(...o.map(t=>t.width)),(e.includes("w")?r.right:I()-r.left)/r.width,(e.includes("n")?r.bottom:P()-r.top)/r.height)
 		;Ee(n,(n,h)=>{const p=$t(e,r,n,h),{w:m,h:f}=Ue(s,e,r,p.w,p.h)
 		;let g="n"===e||"s"===e?f/r.height:2===e.length?Math.max(m/r.width,f/r.height):m/r.width;g=C(g,d,Math.max(d,u)),o.forEach(t=>{
 		t.block.style.width=`${Math.round(t.width*g)}px`,t.free&&(t.block.style.height=`${Math.round(t.height*g)}px`)});const w=[];i.forEach(t=>{
@@ -617,7 +619,7 @@
 		}),t.block.style.left=`${Math.round(e)}px`,t.block.style.top=`${Math.round(n)}px`,w.push(t)}),t.forEach(nn)},()=>{Fe(t),Lo()})
 		}(o,e,n):function(t,e,n){let o;const r=e=>{if(e||t.classList.contains("free")){if(e&&t.classList.contains("letterbox")){tn(t)
 		;const e=t.getBoundingClientRect();o=e.width/e.height}}else Ge(t)};r(n.shiftKey);const a=t.getBoundingClientRect();o=a.width/a.height
-		;const i={width:Math.min(Ln(),e.includes("w")?a.right:P()-a.left),height:e.includes("n")?a.bottom:I()-a.top},s=Rn(t);Ee(n,(n,l,c)=>{
+		;const i={width:Math.min(Ln(),e.includes("w")?a.right:I()-a.left),height:e.includes("n")?a.bottom:P()-a.top},s=Rn(t);Ee(n,(n,l,c)=>{
 		r(c.shiftKey);const d=$t(e,a,n,l);let{w:u,h:h}=Ue(s,e,a,d.w,d.h);t.classList.contains("free")?(u=C(u,ht,i.width),h=C(h,pt,i.height),
 		t.style.height=`${Math.round(h)}px`):u=function(t,e,n,o,r,a,i,s){
 		"n"===e||"s"===e?o=Ze(t,r,r*a,a,s.width):2===e.length&&(o=Math.max(o,Ze(t,r,r*a,a,s.width)))
@@ -682,9 +684,9 @@
 		const e=t.getBoundingClientRect();return{block:t,left:e.left,top:e.top,right:e.right,bottom:e.bottom}})}function kn(t){
 		const e=Math.min(...t.map(t=>t.left)),n=Math.min(...t.map(t=>t.top));return{left:e,top:n,width:Math.max(...t.map(t=>t.right))-e,
 		height:Math.max(...t.map(t=>t.bottom))-n}}function xn(t,e,n,o){
-		const r=Math.min(Math.max(0,e.left+n),Math.max(0,P()-e.width)),a=Math.min(Math.max(0,e.top+o),Math.max(0,I()-e.height));n=r-e.left,
+		const r=Math.min(Math.max(0,e.left+n),Math.max(0,I()-e.width)),a=Math.min(Math.max(0,e.top+o),Math.max(0,P()-e.height));n=r-e.left,
 		o=a-e.top,t.forEach(t=>{t.block.style.left=`${j(t.left+n)}px`,t.block.style.top=`${j(t.top+o)}px`})}var En=0;function Ln(){
-		return no()?P():Math.min(875,P()-mt)}function zn(t,e,n){const o=Math.max(0,P()-t.offsetWidth),r=Math.max(0,I()-Math.max(t.offsetHeight,ft))
+		return no()?I():Math.min(875,I()-mt)}function zn(t,e,n){const o=Math.max(0,I()-t.offsetWidth),r=Math.max(0,P()-Math.max(t.offsetHeight,ft))
 		;t.style.left=`${j(Math.min(Math.max(0,e),o))}px`,t.style.top=`${j(Math.min(Math.max(0,n),r))}px`}function Mn(t){const e=fn(t),n={
 		base:o("--z-widgets",5e3),top:o("--z-widgets-top",7999)};En<n.base&&(En=n.base),En+e.length>n.top&&(En=n.base,
 		Cn().filter(t=>!t.classList.contains("fs-host")).sort((t,e)=>(Number(t.style.zIndex)||0)-(Number(e.style.zIndex)||0)).forEach(t=>t.style.zIndex=String(++En))),
@@ -693,60 +695,60 @@
 		return r(".map-block.popout:not(.snapped)")}function jn(t,e){let n=t.getBoundingClientRect();const o={x:e.clientX-n.left,y:e.clientY-n.top
 		},r=fn(t);let a=yn(r),i=kn(a),s=Nn(t);const l=Rn(t,r);let c=null;Ee(e,(e,d,u)=>{const h=Math.hypot(e,d)>=4;if(s){
 		if(Math.abs(e)<40)return void(h&&function(t,e,n,o){const r=Un(t,n.top+o,n.height,e.map(t=>t.block));o=r-n.top,e.forEach(t=>{
-		_n(t.block).top=(t.top+o)/I()}),Gn()}(s,a,i,d));r.forEach(Yn),s=null,n=t.getBoundingClientRect(),o.x=Math.min(o.x,t.offsetWidth-ft),
+		_n(t.block).top=(t.top+o)/P()}),Gn()}(s,a,i,d));r.forEach(Yn),s=null,n=t.getBoundingClientRect(),o.x=Math.min(o.x,t.offsetWidth-ft),
 		o.y=C(u.clientY-n.top,0,ft),a=yn(r),i=kn(a)}let p=i.left+u.clientX-o.x-n.left,m=i.top+u.clientY-o.y-n.top;const f=h?(g=p,w=p+i.width,
-		no()?null:g<=5?"left":w>=P()-5?"right":null):null;var g,w;c=f?{side:f,slot:Zn(r,f,m)}:null,h&&!c&&({left:p,top:m}=function(t,e,n,o,r){
+		no()?null:g<=5?"left":w>=I()-5?"right":null):null;var g,w;c=f?{side:f,slot:Zn(r,f,m)}:null,h&&!c&&({left:p,top:m}=function(t,e,n,o,r){
 		const a=e+o,i=n+r,s=(t,e)=>{const n=$n(t,e.map(t=>t[0]));return null===n?null:e.find(t=>t[0]===n)
 		},l=t.filter(t=>n<t.bottom&&i>t.top),c=t.filter(t=>e<t.right&&a>t.left)
 		;let d=s(e,l.flatMap(t=>[[t.right,t],[t.left-o,t]])),u=s(n,c.flatMap(t=>[[t.bottom,t],[t.top-r,t]]))
 		;d&&!u&&(u=s(n,[[d[1].top,d[1]],[d[1].bottom-r,d[1]]]));u&&!d&&(d=s(e,[[u[1].left,u[1]],[u[1].right-o,u[1]]]));return{left:d?d[0]:e,
-		top:u?u[0]:n}}(l,p,m,i.width,i.height)),xn(a,i,p-i.left,m-i.top),Xn(c?c.slot:null)},()=>{var t;(Xn(null),c)?function(t,e,n){const o=Pn[e]
-		;o.panes.length||(o.width=n.width/P());let r=n.top;t.forEach(t=>{lt(`snapPane: ${t.dataset.mapId} → ${e}`),Yn(t),Kn(o,t,r/I()),Gn(),
+		top:u?u[0]:n}}(l,p,m,i.width,i.height)),xn(a,i,p-i.left,m-i.top),Xn(c?c.slot:null)},()=>{var t;(Xn(null),c)?function(t,e,n){const o=In[e]
+		;o.panes.length||(o.width=n.width/I());let r=n.top;t.forEach(t=>{lt(`snapPane: ${t.dataset.mapId} → ${e}`),Yn(t),Kn(o,t,r/P()),Gn(),
 		r=t.getBoundingClientRect().bottom}),Lo()}((t=r,[...t].sort((t,e)=>{const n=t.getBoundingClientRect(),o=e.getBoundingClientRect()
 		;return n.top-o.top||n.left-o.left})),c.side,c.slot):(Fe(r),Lo())})}function Rn(t,e=[]){
 		return An().filter(n=>n!==t&&!e.includes(n)&&!n.classList.contains("fs-host")).map(t=>t.getBoundingClientRect())}function $n(t,e){let n=null
-		;return e.forEach(e=>{Math.abs(e-t)<=12&&(null===n||Math.abs(e-t)<Math.abs(n-t))&&(n=e)}),n}var Pn={left:{side:"left",width:null,panes:[],
-		node:null,ui:null},right:{side:"right",width:null,panes:[],node:null,ui:null}};function In(t){return Pn[t]}function Hn(t,e){Pn[t].width=e}
+		;return e.forEach(e=>{Math.abs(e-t)<=12&&(null===n||Math.abs(e-t)<Math.abs(n-t))&&(n=e)}),n}var In={left:{side:"left",width:null,panes:[],
+		node:null,ui:null},right:{side:"right",width:null,panes:[],node:null,ui:null}};function Pn(t){return In[t]}function Hn(t,e){In[t].width=e}
 		var Bn=null,Dn=null;function Wn(t){return t.classList.contains("snapped")}function Nn(t){
-		return Object.values(Pn).find(e=>e.panes.some(e=>e.block===t))||null}function _n(t){const e=Nn(t);return e?e.panes.find(e=>e.block===t):null
-		}function Tn(t){return"left"===t.side?Pn.right:Pn.left}function On(t){return t.panes.length?t.width:0}function qn(t){
-		return Math.round(On(t)*P())}function Fn(){return On(Pn.left)+On(Pn.right)>=.999}function Vn(t,e=[]){const n=[0,I()]
+		return Object.values(In).find(e=>e.panes.some(e=>e.block===t))||null}function _n(t){const e=Nn(t);return e?e.panes.find(e=>e.block===t):null
+		}function Tn(t){return"left"===t.side?In.right:In.left}function On(t){return t.panes.length?t.width:0}function qn(t){
+		return Math.round(On(t)*I())}function Fn(){return On(In.left)+On(In.right)>=.999}function Vn(t,e=[]){const n=[0,P()]
 		;return t.panes.forEach(t=>{if(e.includes(t.block)||t.block.classList.contains("fs-host"))return;const o=t.block.getBoundingClientRect()
 		;n.push(o.top,o.bottom)}),n}function Un(t,e,n,o=[]){const r=Vn(t,o),a=$n(e,r.concat(r.map(t=>t-n)))
-		;return C(null===a?e:a,0,Math.max(0,I()-n))}function Zn(t,e,n){
-		const o=Pn[e],r=Math.max(...t.map(t=>t.offsetWidth)),a=o.panes.length?qn(o):C(r,wt,P()-qn(Tn(o))),i=t.reduce((t,e)=>t+(e.classList.contains("free")?e.offsetHeight:Math.round(e.offsetHeight*a/e.offsetWidth)),0)
-		;return{left:"left"===e?0:P()-a,top:Math.round(Un(o,n,i,t)),width:a,height:i}}function Xn(e){Bn||(Bn=t("div",{class:"snap-preview",hidden:!0
+		;return C(null===a?e:a,0,Math.max(0,P()-n))}function Zn(t,e,n){
+		const o=In[e],r=Math.max(...t.map(t=>t.offsetWidth)),a=o.panes.length?qn(o):C(r,wt,I()-qn(Tn(o))),i=t.reduce((t,e)=>t+(e.classList.contains("free")?e.offsetHeight:Math.round(e.offsetHeight*a/e.offsetWidth)),0)
+		;return{left:"left"===e?0:I()-a,top:Math.round(Un(o,n,i,t)),width:a,height:i}}function Xn(e){Bn||(Bn=t("div",{class:"snap-preview",hidden:!0
 		}),document.body.appendChild(Bn)),Bn.hidden=!e,e&&Object.assign(Bn.style,{left:`${e.left}px`,top:`${e.top}px`,width:`${e.width}px`,
 		height:`${e.height}px`})}function Kn(e,n,o,r){e.node||(e.node=t("div",{class:`snap-col snap-${e.side}`}),e.ui=t("div",{
 		class:`snap-ui snap-${e.side}`},[t("div",{class:"snap-edge","data-side":e.side})]),document.body.append(e.node,e.ui));const a={block:n,top:o
-		};n.classList.contains("free")&&(a.height=r||n.offsetHeight/I()),e.panes.push(a),n.classList.add("snapped",`snapped-${e.side}`)}
+		};n.classList.contains("free")&&(a.height=r||n.offsetHeight/P()),e.panes.push(a),n.classList.add("snapped",`snapped-${e.side}`)}
 		function Yn(t){const e=Nn(t);e&&(lt(`unsnapPane: ${t.dataset.mapId}`),e.panes=e.panes.filter(e=>e.block!==t),
 		t.classList.remove("snapped",`snapped-${e.side}`),e.panes.length||Qn(e),Gn())}function Qn(t){t.node&&t.node.remove(),t.ui&&t.ui.remove(),
-		t.node=t.ui=t.width=null,t.panes=[]}function Jn(){Object.values(Pn).forEach(Qn),Dn=null,oo(!1),Gn()}function Gn(){
-		document.body.classList.toggle("snap-full",Fn());const t=document.documentElement.style;t.setProperty("--snap-l",`${qn(Pn.left)}px`),
-		t.setProperty("--snap-r",`${qn(Pn.right)}px`);const e=Fn()&&Pn.left.panes.length&&Pn.right.panes.length;Object.values(Pn).forEach(t=>{
-		!function(t,e){const n=qn(t);if(!n)return;const o="left"===t.side?0:P()-n;[t.node,t.ui].forEach(t=>{t.style.left=`${o}px`,
+		t.node=t.ui=t.width=null,t.panes=[]}function Jn(){Object.values(In).forEach(Qn),Dn=null,oo(!1),Gn()}function Gn(){
+		document.body.classList.toggle("snap-full",Fn());const t=document.documentElement.style;t.setProperty("--snap-l",`${qn(In.left)}px`),
+		t.setProperty("--snap-r",`${qn(In.right)}px`);const e=Fn()&&In.left.panes.length&&In.right.panes.length;Object.values(In).forEach(t=>{
+		!function(t,e){const n=qn(t);if(!n)return;const o="left"===t.side?0:I()-n;[t.node,t.ui].forEach(t=>{t.style.left=`${o}px`,
 		t.style.width=`${n}px`});const r=t.ui.querySelector(".snap-edge");r.hidden=e&&"right"===t.side,
 		r.classList.toggle("snap-seam",e&&"left"===t.side),
 		r.title=e?"Širina stupaca · dvoklik vraća stranicu":Fn()?"Širina stupca · dvoklik vraća stranicu":"Širina stupca · dvoklik sakriva stranicu",
 		t.panes.forEach(t=>function(t,e,n){const o=t.block
-		;o.style.width=`${n}px`,void 0!==t.height&&(o.style.height=`${Math.round(C(t.height*I(),pt,I()))}px`)
-		;o.style.left=`${Math.round(e+(n-o.offsetWidth)/2)}px`,o.style.top=`${Math.round(C(t.top*I(),0,Math.max(0,I()-o.offsetHeight)))}px`
+		;o.style.width=`${n}px`,void 0!==t.height&&(o.style.height=`${Math.round(C(t.height*P(),pt,P()))}px`)
+		;o.style.left=`${Math.round(e+(n-o.offsetWidth)/2)}px`,o.style.top=`${Math.round(C(t.top*P(),0,Math.max(0,P()-o.offsetHeight)))}px`
 		}(t,o,n)),function(t){const e=new Map;t.panes.forEach(t=>{const n=hn(t.block);n&&(e.has(n)||e.set(n,[]),e.get(n).push(t))}),e.forEach(t=>{
 		t.sort((t,e)=>t.top-e.top);const e=t.reduce((t,e)=>t+e.block.offsetHeight,0)
-		;let n=C(t[0].block.getBoundingClientRect().top,0,Math.max(0,I()-e));t.forEach(t=>{t.block.style.top=`${Math.round(n)}px`,t.top=n/I(),
+		;let n=C(t[0].block.getBoundingClientRect().top,0,Math.max(0,P()-e));t.forEach(t=>{t.block.style.top=`${Math.round(n)}px`,t.top=n/P(),
 		n+=t.block.offsetHeight})})}(t),function(t){t.panes.forEach(e=>{const n=e.block
 		;if(!n.classList.contains("fs-host"))return n.style.removeProperty("--fs-top"),void n.style.removeProperty("--fs-bottom")
-		;const o=n.getBoundingClientRect();let r=0,a=I();t.panes.forEach(t=>{if(t===e||t.block.classList.contains("fs-host"))return
-		;const n=t.block.getBoundingClientRect();n.top<o.top?r=Math.max(r,n.bottom):a=Math.min(a,n.top)});const i=143;r=C(r,0,I()-i),
-		a=Math.max(a,r+i),n.style.setProperty("--fs-top",`${Math.round(r)}px`),n.style.setProperty("--fs-bottom",`${Math.round(I()-a)}px`)})}(t)
-		}(t,e),t.panes.forEach(t=>nn(t.block))})}function to(t,e){t.classList.contains("snap-seam")?function(t){const{left:e,right:n}=Pn,o=qn(e)
-		;Ee(t,t=>{const r=C(o+t,wt,P()-wt);e.width=r/P(),n.width=1-e.width,Gn()},Lo)}(e):function(t,e){const n=qn(t),o=P()-qn(Tn(t)),r={
-		left:On(Pn.left),right:On(Pn.right)};Ee(e,e=>{let a=C("left"===t.side?n+e:n-e,wt,o);a>=o-24&&(a=o);const i=a/P()
-		;t.width=a===o?1-On(Tn(t)):i,Fn()&&!Dn&&r.left+r.right<.999&&(Dn=r),Fn()||(Dn=null),Gn()},Lo)}(Pn[t.dataset.side],e)}var eo=!1
+		;const o=n.getBoundingClientRect();let r=0,a=P();t.panes.forEach(t=>{if(t===e||t.block.classList.contains("fs-host"))return
+		;const n=t.block.getBoundingClientRect();n.top<o.top?r=Math.max(r,n.bottom):a=Math.min(a,n.top)});const i=143;r=C(r,0,P()-i),
+		a=Math.max(a,r+i),n.style.setProperty("--fs-top",`${Math.round(r)}px`),n.style.setProperty("--fs-bottom",`${Math.round(P()-a)}px`)})}(t)
+		}(t,e),t.panes.forEach(t=>nn(t.block))})}function to(t,e){t.classList.contains("snap-seam")?function(t){const{left:e,right:n}=In,o=qn(e)
+		;Ee(t,t=>{const r=C(o+t,wt,I()-wt);e.width=r/I(),n.width=1-e.width,Gn()},Lo)}(e):function(t,e){const n=qn(t),o=I()-qn(Tn(t)),r={
+		left:On(In.left),right:On(In.right)};Ee(e,e=>{let a=C("left"===t.side?n+e:n-e,wt,o);a>=o-24&&(a=o);const i=a/I()
+		;t.width=a===o?1-On(Tn(t)):i,Fn()&&!Dn&&r.left+r.right<.999&&(Dn=r),Fn()||(Dn=null),Gn()},Lo)}(In[t.dataset.side],e)}var eo=!1
 		;function no(){return eo}function oo(t){eo=t,document.body.classList.toggle("dashboard",t),Te(),
 		r(".map-block.popout .po-btn").forEach(t=>Ye(t,!0))}function ro(){let t=mt,e=0;r(".map-block:not(.popout)").forEach(n=>{Je(n),
-		t>mt&&t+n.offsetHeight>I()&&(t=mt,e++),zn(n,qn(In("left"))+mt+(t-mt)+420*e/2,t),Mn(n),t+=32})}function ao(t){
+		t>mt&&t+n.offsetHeight>P()&&(t=mt,e++),zn(n,qn(Pn("left"))+mt+(t-mt)+420*e/2,t),Mn(n),t+=32})}function ao(t){
 		const e=V(t),n=document.querySelector("[data-maps]");if(!e||!n||!no()||Ce(t))return;lt(`addToDashboard: ${t}`),function(t){
 		Go(Jo().filter(e=>e!==t).concat(t))}(t);n.querySelector(".maps-empty")&&n.replaceChildren()
 		;const o=it(n,e,cn),r=a(".links-bottom",o.parentElement);return r&&r.addEventListener("scroll",()=>dt(r),{passive:!0}),Re(o),ro(),nn(o),
@@ -756,18 +758,18 @@
 		const n=Math.floor(t/e),o=Math.round(t)-n*e;return Array.from({length:e},(t,e)=>n+(e<o?1:0))}function lo(t,e){
 		return t.slice(0,e).reduce((t,e)=>t+e,0)}function co(){if(!no()||!f.matches)return
 		;const t=r(".map-block.popout").filter(t=>!Wn(t)&&!t.classList.contains("fs-host"));if(!t.length)return
-		;lt(`arrangeBoard: ${t.length} widgets`);const e=P(),n=I(),{cols:o,rows:a}=function(t,e,n,o){let r={cols:1,rows:t,score:-1/0}
+		;lt(`arrangeBoard: ${t.length} widgets`);const e=I(),n=P(),{cols:o,rows:a}=function(t,e,n,o){let r={cols:1,rows:t,score:-1/0}
 		;for(let a=1;a<=t;a++){const i=Math.ceil(t/a),s=e/a,l=n/i-ft;if(l<=0)continue;const c=Math.min(s,l*o),d=c*(c/o)*(1-.01*(a*i-t))
 		;d>r.score&&(r={cols:a,rows:i,score:d})}return r}(t.length,e,n,function(t){const e=t.map(io).filter(t=>t>0)
 		;return e.length?e.reduce((t,e)=>t+e,0)/e.length:gt}(t)),i=so(e,o),s=so(n,a);t.forEach((t,e)=>{Ge(t),t.style.width=`${i[e%o]}px`,
 		t.style.height=`${s[Math.floor(e/o)]}px`}),t.forEach((t,e)=>{zn(t,lo(i,e%o),lo(s,Math.floor(e/o))),nn(t)}),bn(),xe(),Lo()}function uo(){
 		const t={},e=function(){const t=new Map,e=new Map,n=r(".map-block");return[...n.filter(t=>!ze(t)),...n.filter(ze)].forEach(n=>{
 		const o=n.dataset.mapId,r=(e.get(o)||0)+1;e.set(o,r),t.set(n,Q(o,r))}),t}(),n=new Map,o=t=>{const e=hn(t)
-		;if(e)return n.has(e)||n.set(e,n.size+1),n.get(e)};["left","right"].map(In).forEach(n=>{n.panes.length&&(t[n.side]={width:A(n.width),
+		;if(e)return n.has(e)||n.set(e,n.size+1),n.get(e)};["left","right"].map(Pn).forEach(n=>{n.panes.length&&(t[n.side]={width:A(n.width),
 		panes:[...n.panes].sort((t,e)=>t.top-e.top).map(t=>{const n={id:e.get(t.block),top:A(t.top)};void 0!==t.height&&(n.height=A(t.height))
 		;const r=o(t.block);return r&&(n.group=r),t.block.classList.contains("fs-host")&&(n.fullscreen=!0),n})})})
 		;const a=An().sort((t,e)=>(Number(t.style.zIndex)||0)-(Number(e.style.zIndex)||0)).map(t=>{const n=t.getBoundingClientRect(),r={id:e.get(t),
-		left:A(n.left/P()),top:A(n.top/I()),width:A(n.width/P())};t.classList.contains("free")&&(r.height=A(n.height/I()));const a=o(t)
+		left:A(n.left/I()),top:A(n.top/P()),width:A(n.width/I())};t.classList.contains("free")&&(r.height=A(n.height/P()));const a=o(t)
 		;return a&&(r.group=a),t.classList.contains("fs-host")&&(r.fullscreen=!0),r});return a.length&&(t.floating=a),no()&&(t.dashboard=!0),
 		Object.keys(t).length?t:null}function ho(t,e){if(!t||"object"!=typeof t)return null;const n={},o=new Set,r=!0===t.dashboard
 		;r||["left","right"].forEach(r=>{const a=function(t,e,n){if(!t||"object"!=typeof t||!Array.isArray(t.panes))return null
@@ -786,13 +788,13 @@
 		;return po(n)&&n>0&&(e.height=A(n)),Number.isInteger(t.group)&&t.group>0&&(e.group=t.group),!0===t.fullscreen&&function(t){const e=Z(J(t))
 		;return!!e&&e.fullscreen}(t.id)&&(e.fullscreen=!0),e}function go(t){if(xo=t,Jn(),oo(!!(t&&t.dashboard&&f.matches)),
 		!t||!f.matches)return bo=f.matches?null:t,void xe();bo=null;const e=vo(()=>function(t){const e=[],n=new Map,o=(t,e)=>{
-		e&&(n.has(e)||n.set(e,mn()),pn(t,n.get(e)))};["left","right"].forEach(n=>{const r=t[n];if(!r)return;const a=In(n)
-		;r.panes.forEach(({id:t,top:n,height:r,group:i,fullscreen:s})=>{const l=Ie(t);l&&!l.classList.contains("popout")&&(Je(l),
-		r&&!l.classList.contains("free")&&Ge(l),Kn(a,l,n,r),o(l,i),s&&e.push(l))}),a.panes.length&&Hn(n,C(r.width*P(),wt,P())/P())})
-		;const r=In("left"),a=In("right");r.panes.length&&a.panes.length&&r.width+a.width>1&&Hn("right",1-r.width);Gn(),
-		(t.floating||[]).forEach(({id:t,left:n,top:r,width:a,height:i,group:s,fullscreen:l})=>{const c=Ie(t)
-		;c&&!c.classList.contains("popout")&&(Je(c),i&&!c.classList.contains("free")&&Ge(c),c.style.width=`${Math.round(C(a*P(),ht,Ln()))}px`,
-		c.classList.contains("free")&&i&&(c.style.height=`${Math.round(C(i*I(),pt,I()))}px`),zn(c,n*P(),r*I()),Mn(c),o(c,s),l&&e.push(c))})
+		e&&(n.has(e)||n.set(e,mn()),pn(t,n.get(e)))};["left","right"].forEach(n=>{const r=t[n];if(!r)return;const a=Pn(n)
+		;r.panes.forEach(({id:t,top:n,height:r,group:i,fullscreen:s})=>{const l=Pe(t);l&&!l.classList.contains("popout")&&(Je(l),
+		r&&!l.classList.contains("free")&&Ge(l),Kn(a,l,n,r),o(l,i),s&&e.push(l))}),a.panes.length&&Hn(n,C(r.width*I(),wt,I())/I())})
+		;const r=Pn("left"),a=Pn("right");r.panes.length&&a.panes.length&&r.width+a.width>1&&Hn("right",1-r.width);Gn(),
+		(t.floating||[]).forEach(({id:t,left:n,top:r,width:a,height:i,group:s,fullscreen:l})=>{const c=Pe(t)
+		;c&&!c.classList.contains("popout")&&(Je(c),i&&!c.classList.contains("free")&&Ge(c),c.style.width=`${Math.round(C(a*I(),ht,Ln()))}px`,
+		c.classList.contains("free")&&i&&(c.style.height=`${Math.round(C(i*P(),pt,P()))}px`),zn(c,n*I(),r*P()),Mn(c),o(c,s),l&&e.push(c))})
 		;const i=no()&&!(t.floating||[]).length;no()&&ro();i&&co();return e.forEach(be),bn(),ye(),i}(t));e&&Lo()}var wo=!1;function vo(t){const e=wo
 		;wo=!0;try{return t()}finally{wo=e}}var bo=null;function yo(){return bo||uo()}function ko(){return bo?!0===bo.dashboard:no()}var xo=null
 		;function Eo(){wo||(xo=yo())}function Lo(){bn(),ye(),wo||(Eo(),function(t){if(nr){t?nr.layout=t:delete nr.layout
@@ -808,10 +810,10 @@
 		maps:q.map(t=>t.id)},{id:"nista",name:"Ništa",maps:[]}];function Mo(t){return"string"==typeof t&&t.startsWith("u:")}function So(t){
 		return!(!t||!t.layout||!0!==t.layout.dashboard)}function Co(t){return t&&Mo(t.id)&&"string"==typeof t.name&&Array.isArray(t.maps)}
 		var Ao=function(){const t=M(v);return Array.isArray(t)?t.filter(Co):[]}();function jo(){return Ao}function Ro(){S(v,Ao)}function $o(){
-		return zo.concat(Ao)}function Po(){let t;do{t="u:"+Date.now().toString(36)+Math.random().toString(36).slice(2,6)}while(Ao.some(e=>e.id===t))
-		;return t}function Io(t){return String(t).trim().replace(/\s+/g," ").slice(0,40)}function Ho(t){
+		return zo.concat(Ao)}function Io(){let t;do{t="u:"+Date.now().toString(36)+Math.random().toString(36).slice(2,6)}while(Ao.some(e=>e.id===t))
+		;return t}function Po(t){return String(t).trim().replace(/\s+/g," ").slice(0,40)}function Ho(t){
 		return Ao.find(e=>e.name.toLowerCase()===t.toLowerCase())}function Bo(t,e,n=null){const o=Ho(t);return o?(o.name=t,o.maps=e,
-		o.layout=n):Ao.push({id:Po(),name:t,maps:e,layout:n}),Ro(),o||Ao[Ao.length-1]}function Do(t){return"zadano"!==t}var Wo=function(){
+		o.layout=n):Ao.push({id:Io(),name:t,maps:e,layout:n}),Ro(),o||Ao[Ao.length-1]}function Do(t){return"zadano"!==t}var Wo=function(){
 		const t=M(b);return Array.isArray(t)?t.filter(t=>Do(t)&&zo.some(e=>e.id===t)):[]}();function No(){return Wo}function _o(){S(b,Wo)}
 		function To(t){return Wo.includes(t)}function Oo(){return zo.filter(t=>Do(t.id))}function qo(){Wo=Oo().map(t=>t.id),_o()}function Fo(){
 		Wo=[],_o()}function Vo(t){const e=JSON.stringify(t).replace(/[\u0080-\uffff]/g,t=>"\\u"+t.charCodeAt(0).toString(16).padStart(4,"0"))
@@ -848,17 +850,26 @@
 		;const e="ArrowDown"===t.key?1:-1;d((c+e+l.length)%l.length)}else"Enter"===t.key?(t.preventDefault(),
 		l[c]&&u(l[c].getAttribute("data-map-id"))):"Escape"===t.key&&(t.preventDefault(),r.value?(r.value="",h()):vr())}),h(),
 		document.body.appendChild(s),gr={menu:s,anchor:e},document.body.classList.add("ms-add-open"),function(){if(!gr)return
-		;const{menu:t,anchor:e}=gr,n=e.closest(".ms-tab"),o=(n||e).getBoundingClientRect().bottom+4,r=t.offsetWidth,a=C(e.getBoundingClientRect().left-8,8,Math.max(8,P()-r-8))
+		;const{menu:t,anchor:e}=gr,n=e.closest(".ms-tab"),o=(n||e).getBoundingClientRect().bottom+4,r=t.offsetWidth,a=C(e.getBoundingClientRect().left-8,8,Math.max(8,I()-r-8))
 		;t.style.left=`${Math.round(a)}px`,
-		t.style.top=`${Math.round(o)}px`,t.style.maxHeight=`${Math.max(120,Math.min(420,Math.round(I()-o-16)))}px`}(),
+		t.style.top=`${Math.round(o)}px`,t.style.maxHeight=`${Math.max(120,Math.min(420,Math.round(P()-o-16)))}px`}(),
 		document.addEventListener("pointerdown",br,!0),r.focus()}(e)}function vr(){gr&&(gr.menu.remove(),gr=null,
 		document.body.classList.remove("ms-add-open"),document.removeEventListener("pointerdown",br,!0))}function br(t){
 		!gr||gr.menu.contains(t.target)||gr.anchor.contains(t.target)||vr()}var yr=!1,kr="";function xr(){return Jo().map(V).filter(t=>t&&hr(t.id))}
 		function Er(){const e=document.querySelector("[data-maps]");if(!e)return;vo(()=>r(".if1.fullscreen").forEach(se)),Jn(),yr=!0;const n=xr()
 		;kr=n.map(t=>t.id).join(),function(e,n,o={}){e.replaceChildren(),n.length?n.forEach(t=>it(e,t,o)):e.appendChild(t("div",{class:"map-entry"
-		},[t("div",{class:"maps-empty",text:'Nema odabranih karata. Odaberite ih pod "Karte".'})]))}(e,n,cn)}var Lr=!1,zr="upute";function Mr(){
-		return document.getElementById("manualDialog")}function Sr(){var t;(t=Mr())&&Xt(t,t.hidden)}function Cr(t){try{
-		return decodeURIComponent(t.slice(1))}catch{return t.slice(1)}}function Ar(e){const n=t("div",{class:"ms-list ms-selected"}),o=t("div",{
+		},[t("div",{class:"maps-empty",text:'Nema odabranih karata. Odaberite ih pod "Karte".'})]))}(e,n,cn)}var Lr={manual:!1,changelog:!0},zr=[{
+		feature:"manual",dialogId:"manualDialog",hash:"upute",keys:["h","H"]},{feature:"changelog",dialogId:"changelogDialog",hash:"promjene",
+		keys:["p","P"]}];function Mr(t){try{return decodeURIComponent(t.slice(1))}catch{return t.slice(1)}}
+		function Sr({feature:t,dialogId:e,hash:n,keys:o}){const r=document.getElementById(e);if(!r||!Lr[t])return
+		;const a=r.querySelector(".dialog-close");a&&a.addEventListener("click",()=>Xt(r,!1)),r.addEventListener("click",t=>{
+		const e=t.target.closest('a[href^="#"]');e&&r.contains(e)&&(t.preventDefault(),function(t,e){
+		const n=t.querySelector(".dialog-body"),o=t.querySelector(`[id="${CSS.escape(e)}"]`)
+		;n&&o&&(n.scrollTop+=o.getBoundingClientRect().top-n.getBoundingClientRect().top)}(r,Mr(e.getAttribute("href"))))}),
+		m(i,({panel:t,visible:e})=>{t===r&&(!function(t,e){const n=new URL(window.location.href);e!==(Mr(n.hash)===t)&&(n.hash=e?t:"",
+		history.replaceState(null,"",e?n.href:n.href.replace(/#$/,"")))}(n,e),e&&(r.querySelector(".dialog-body").scrollTop=0))}),ge(t,{keys:o,
+		run:()=>function(t){t&&Xt(t,t.hidden)}(r)});const s=()=>{const t=Mr(window.location.hash)===n;t!==!r.hidden&&Xt(r,t)}
+		;window.addEventListener("hashchange",s),s()}function Cr(e){const n=t("div",{class:"ms-list ms-selected"}),o=t("div",{
 		class:"ms-list ms-available"});let a="zadano",i=!0;function s(t,e){
 		const n=V(t.getAttribute("data-map-id")),o=V(e.getAttribute("data-map-id")),r=i?1:-1
 		;return"naziv"===a?n.name.localeCompare(o.name,"hr")*r:"vrsta"===a?(n.category.localeCompare(o.category,"hr")||n.name.localeCompare(o.name,"hr"))*r:(q.indexOf(n)-q.indexOf(o))*r
@@ -886,16 +897,16 @@
 		f()):e.close())}),p.addEventListener("click",()=>{h.value="",f(),h.focus()}),{selected:n,available:o,sort:d,find:m,fill(t){
 		n.replaceChildren(),o.replaceChildren(),t.forEach(t=>{const e=V(t);e&&n.appendChild(g(e,!0))}),
 		q.filter(e=>!t.includes(e.id)).forEach(t=>o.appendChild(g(t,!1))),l(),f()},
-		selectedIds:()=>[...n.children].map(t=>t.getAttribute("data-map-id"))}}function jr(t,e){return"custom"===t?{preset:"custom",maps:e}:{
-		preset:t}}function Rr(t,e){if(!e)return t&&t.dashboard?null:t;const n=Object.assign({},t);return n.dashboard=!0,n}function $r(t,e,n=yo()){
-		return ho(Rr("custom"===t.preset?n:(jo().find(e=>e.id===t.preset)||{}).layout,e),tr(t))}function Pr(t,e,n,o){
+		selectedIds:()=>[...n.children].map(t=>t.getAttribute("data-map-id"))}}function Ar(t,e){return"custom"===t?{preset:"custom",maps:e}:{
+		preset:t}}function jr(t,e){if(!e)return t&&t.dashboard?null:t;const n=Object.assign({},t);return n.dashboard=!0,n}function Rr(t,e,n=yo()){
+		return ho(jr("custom"===t.preset?n:(jo().find(e=>e.id===t.preset)||{}).layout,e),tr(t))}function $r(t,e,n,o){
 		return Mo(t.id)&&t.id===e&&(!er(t.maps,n)||(r=t.layout,a=o,!(JSON.stringify(r||null)===JSON.stringify(a||null))));var r,a}function Ir(e){
 		const o=t("div",{class:"ms-manage"});let r=!1;const a=t("input",{type:"text",class:"ms-name",maxlength:String(40),
 		placeholder:"Naziv predloška"}),i=t("button",{type:"button",class:"btn",text:"Spremi"});function s(t){
 		const n=Bo(t,e.selectedMapIds(),e.selectedLayout());a.value="",r=!1,e.editingPresetId=n.id,e.presetsChanged(n.id)}
-		i.addEventListener("click",()=>{const t=Io(a.value);t?s(t):a.focus()}),a.addEventListener("keydown",t=>{"Enter"===t.key?(t.preventDefault(),
+		i.addEventListener("click",()=>{const t=Po(a.value);t?s(t):a.focus()}),a.addEventListener("keydown",t=>{"Enter"===t.key?(t.preventDefault(),
 		i.click()):"Escape"===t.key&&(r=!1,a.value="",w())});let l=null;const c=t("input",{type:"text",class:"ms-name ms-rename",
-		maxlength:String(40)});let d=!1;function u(){if(jo().some(t=>t.id===l)){if(!function(t,e){const n=Ao.find(e=>e.id===t),o=Io(e),r=Ho(o)
+		maxlength:String(40)});let d=!1;function u(){if(jo().some(t=>t.id===l)){if(!function(t,e){const n=Ao.find(e=>e.id===t),o=Po(e),r=Ho(o)
 		;return!(!n||!o||r&&r!==n||(n.name=o,Ro(),0))}(l,c.value))return c.classList.add("invalid"),void c.focus();l=null,
 		e.presetsChanged(e.checkedPresetId())}}function h(){l=null,w()}function p(e){return t("span",{class:"ms-manage-links"
 		},e.map(e=>e||t("span")))}function m(n){const o=To(n.id);let r=null;return Do(n.id)&&(r=t("a",{text:o?"Prikaži":"Sakrij"}),
@@ -903,7 +914,7 @@
 		e.presetsChanged(e.checkedPresetId())})),t("div",{class:"ms-manage-item"+(o?" ms-hidden":"")},[t("span",{class:"ms-manage-name",text:n.name
 		}),p([null,null,r])])}function f(o){if(o.id===l)return function(){const e=t("a",{text:"Potvrdi"}),n=t("a",{text:"Odustani"})
 		;return e.addEventListener("click",u),n.addEventListener("click",h),t("div",{class:"ms-manage-item"},[c,p([null,e,n])])}();const r=t("a",{
-		text:"Preimenuj"}),a=t("a",{text:"Obriši"});let i;Pr(o,e.editingPresetId,e.selectedMapIds(),e.selectedLayout())?(i=t("a",{text:"Ažuriraj"}),
+		text:"Preimenuj"}),a=t("a",{text:"Obriši"});let i;$r(o,e.editingPresetId,e.selectedMapIds(),e.selectedLayout())?(i=t("a",{text:"Ažuriraj"}),
 		i.addEventListener("click",()=>{Bo(o.name,e.selectedMapIds(),e.selectedLayout()),e.presetsChanged(o.id)})):i=function(e){const o=t("a",{
 		text:"Podijeli"});return o.addEventListener("click",()=>{Zo(e(),()=>n(o,"Kopirano!","Podijeli"))}),o}(()=>Uo(o));const s=t("div",{
 		class:"ms-manage-item"},[t("span",{class:"ms-manage-name"+(So(o)?" ms-board":""),text:o.name,title:So(o)?"Nadzorna ploča":void 0
@@ -912,7 +923,7 @@
 		if(!m)return a.textContent="Sigurno?",a.classList.add("active"),void(m=setTimeout(f,3e3));f();const t=e.checkedPresetId()===o.id
 		;e.editingPresetId===o.id&&(e.editingPresetId=null),function(t){const e=Ao.find(e=>e.id===t);e&&Ko().preset===t&&Yo({preset:"custom",
 		maps:e.maps.slice(),layout:Ko().layout}),Ao=Ao.filter(e=>e.id!==t),Ro()}(o.id),e.presetsChanged(t?"custom":e.checkedPresetId())}),s}
-		function g(){const e=t("a",{text:"Spremi"}),n=or();return e.addEventListener("click",()=>{s(function(t){const e=Io(t);let n=e
+		function g(){const e=t("a",{text:"Spremi"}),n=or();return e.addEventListener("click",()=>{s(function(t){const e=Po(t);let n=e
 		;for(let t=2;Ho(n);t++){const o=` (${t})`;n=e.slice(0,40-o.length).trim()+o}return n}(n.name))}),t("div",{class:"ms-shared"},[t("span",{
 		text:`Podijeljen predložak "${n.name}"`}),e])}function w(){o.replaceChildren(),o.appendChild(function(){const n=t("div",{
 		class:"ms-manage-title",text:"Zadani predlošci"}),o=t("span",{class:"ms-manage-title-links"}),r=(n,r)=>{const a=t("a",{text:n})
@@ -925,19 +936,19 @@
 		}()&&o.appendChild(g()),jo().length?jo().forEach(t=>o.appendChild(f(t))):o.appendChild(t("div",{class:"ms-manage-empty",
 		text:"Nema spremljenih predložaka"})),d&&(d=!1,c.focus(),c.select())}return c.addEventListener("keydown",t=>{
 		"Enter"===t.key?(t.preventDefault(),u()):"Escape"===t.key&&h()}),c.addEventListener("input",()=>c.classList.remove("invalid")),{element:o,
-		render:w}}function Hr(){const e=t("div",{class:"ms-refresh"});return{element:e,render(){e.replaceChildren(),e.classList.toggle("ms-on",Et())
+		render:w}}function Pr(){const e=t("div",{class:"ms-refresh"});return{element:e,render(){e.replaceChildren(),e.classList.toggle("ms-on",Et())
 		;const n=t("select",{class:"ms-refresh-every","aria-label":"Razmak osvježavanja"});vt.forEach(e=>{const o=t("option",{value:String(e),
 		text:`${e} min`});e===yt&&(o.selected=!0),n.appendChild(o)});const o=t("input",{type:"checkbox"});o.checked=Et();const r=()=>{
 		return t=o.checked,e=Number(n.value),lt(`setRefreshPrefs: on=${t} minutes=${e}`),bt=!0===t,yt=vt.includes(e)?e:5,S(x,{on:bt,minutes:yt}),
 		document.body.classList.toggle("refresh-on",bt),zt(),void p(u);var t,e};o.addEventListener("change",r),n.addEventListener("change",r)
 		;const a=Et()?Lt():"";e.append(t("label",{},[o,t("span",{text:"Osvježavaj svakih"})]),n,t("span",{class:"ms-refresh-left",
 		text:a?`još ${a}`:""}))},tick(){const t=e.querySelector(".ms-refresh-left"),n=Et()?Lt():"";t&&(t.textContent=n?`još ${n}`:"")}}}
-		function Br(){const e=document.getElementById("mapSettings");e&&(e.hidden&&function(e){e.replaceChildren();const o={element:e,
+		function Hr(){const e=document.getElementById("mapSettings");e&&(e.hidden&&function(e){e.replaceChildren();const o={element:e,
 		editingPresetId:"custom"===ar()?null:ar(),dashboardChecked:ko(),gridChecked:We(),snapChecked:Ne(),selectedMapIds:()=>r.selectedIds(),
-		checkedPresetId:()=>a.checkedId(),selectedLayout:()=>function(t,e,n=yo()){return ho(Rr(n,e),t)}(r.selectedIds(),o.dashboardChecked),
+		checkedPresetId:()=>a.checkedId(),selectedLayout:()=>function(t,e,n=yo()){return ho(jr(n,e),t)}(r.selectedIds(),o.dashboardChecked),
 		listEdited(){a.markCustom(),c.render()},presetChosen(t,e){"custom"!==t.id&&(r.fill(e),o.setDashboardChecked(So(t))),
 		o.editingPresetId="custom"===t.id?null:t.id,a.updateOriginMark(),c.render()},presetsChanged(t){a.render(t),c.render()},
-		setDashboardChecked(t){o.dashboardChecked=t,i.render(),l.render(),c.render()},close(){Xt(e,!1)}},r=Ar(o),a=function(e){const n=t("div",{
+		setDashboardChecked(t){o.dashboardChecked=t,i.render(),l.render(),c.render()},close(){Xt(e,!1)}},r=Cr(o),a=function(e){const n=t("div",{
 		class:"ms-presets"});function o(){n.querySelectorAll(".ms-origin").forEach(t=>t.classList.remove("ms-origin"))
 		;const t=$o().find(t=>t.id===e.editingPresetId);if(!t||er(t.maps,e.selectedMapIds()))return
 		;const o=[...n.querySelectorAll("input")].find(t=>t.value===e.editingPresetId);o&&o.nextElementSibling.classList.add("ms-origin")}return{
@@ -954,35 +965,35 @@
 		;r.addEventListener("click",()=>e.setDashboardChecked(!e.dashboardChecked));const a=t("button",{type:"button",class:"btn ms-arrange",
 		"data-action":"arrange",title:we("Posloži u mrežu","arrange")},[document.createTextNode("Posloži")]);a.disabled=!e.dashboardChecked||!no(),
 		n.append(r,o("Prikaži mrežu",e.gridChecked,t=>{e.gridChecked=t,_e(e.gridChecked,e.snapChecked)}),o("Poravnaj uz mrežu",e.snapChecked,t=>{
-		e.snapChecked=t,_e(e.gridChecked,e.snapChecked)}),a)}}}(o),s=Hr(),l=function(){const e=t("div",{class:"ms-layout"});return{element:e,
+		e.snapChecked=t,_e(e.gridChecked,e.snapChecked)}),a)}}}(o),s=Pr(),l=function(){const e=t("div",{class:"ms-layout"});return{element:e,
 		render(){e.replaceChildren();const n=function(t){const e=[];return t?(t.left&&e.push(`lijevo ${t.left.panes.length}`),
 		t.right&&e.push(`desno ${t.right.panes.length}`),t.floating&&e.push(`u prozoru ${t.floating.length}`),e):e}(yo())
 		;if(e.hidden=no()||!n.length,e.hidden)return;const o=t("a",{text:"Vrati sve"});o.addEventListener("click",rn),e.append(t("span",{
-		text:`Izdvojene karte: ${n.join(", ")}`}),o)}}}(),c=Ir(o);r.fill(Jo()),a.render(ar()),i.render(),s.render(),l.render(),c.render(),Dr={
+		text:`Izdvojene karte: ${n.join(", ")}`}),o)}}}(),c=Ir(o);r.fill(Jo()),a.render(ar()),i.render(),s.render(),l.render(),c.render(),Br={
 		refreshChanged:()=>s.render(),refreshTick:()=>s.tick(),gridChanged(){o.gridChecked=We(),o.snapChecked=Ne(),i.render()},layoutChanged(){
 		i.render(),l.render(),c.render()}};const d=t("button",{type:"button",class:"btn ms-apply",text:"Primijeni",
 		title:we("Primijeni","settings-apply")});d.addEventListener("click",()=>{
-		const t=jr(a.checkedId(),r.selectedIds()),e=$r(t,o.dashboardChecked);e&&(t.layout=e),Yo(t),function(){if(!nr)return;nr=null
+		const t=Ar(a.checkedId(),r.selectedIds()),e=Rr(t,o.dashboardChecked);e&&(t.layout=e),Yo(t),function(){if(!nr)return;nr=null
 		;const t=new URL(window.location.href);t.searchParams.delete("v"),history.replaceState(null,"",t)}(),o.close(),Er(),lr(),go(e)})
 		;const u=t("a",{text:"Podijeli"});u.addEventListener("click",()=>{Zo(function(t,e,n=yo()){
-		const o=$r(t,e,n),r=jo().find(e=>e.id===t.preset),a=r?Uo(r):t;return o?a.layout=o:delete a.layout,a
-		}(jr(a.checkedId(),r.selectedIds()),o.dashboardChecked),()=>n(u,"Kopirano!","Podijeli"))});const h=t("a",{text:"Zatvori",
+		const o=Rr(t,e,n),r=jo().find(e=>e.id===t.preset),a=r?Uo(r):t;return o?a.layout=o:delete a.layout,a
+		}(Ar(a.checkedId(),r.selectedIds()),o.dashboardChecked),()=>n(u,"Kopirano!","Podijeli"))});const h=t("a",{text:"Zatvori",
 		title:we("Zatvori","dialog-close")});h.addEventListener("click",()=>o.close())
 		;const p=document.querySelector('link[rel="icon"][sizes="32x32"]'),m=t("a",{class:"dialog-home",
 		href:new URL("../",window.location.href).href,title:"Početna"},[t("img",{src:p?p.href:void 0,alt:"Početna"})]);e.appendChild(t("div",{
 		class:"dialog-head"},[t("span",{class:"dialog-head-left"},[m,t("span",{class:"dialog-title",text:"Karte"})]),h])),e.appendChild(t("div",{
 		class:"dialog-body"},[a.element,i.element,s.element,l.element,r.selected,t("div",{class:"ms-actions"
-		},[d,u]),r.sort,r.find,r.available,c.element])),Vt(e)}(e),Xt(e,e.hidden))}var Dr=null;function Wr(t){return()=>{
-		const e=document.getElementById("mapSettings");Dr&&e&&!e.hidden&&Dr[t]()}}var Nr=!1;function _r(t,e){const n=function(t){
+		},[d,u]),r.sort,r.find,r.available,c.element])),Vt(e)}(e),Xt(e,e.hidden))}var Br=null;function Dr(t){return()=>{
+		const e=document.getElementById("mapSettings");Br&&e&&!e.hidden&&Br[t]()}}var Wr=!1;function Nr(t,e){const n=function(t){
 		const e=t.style.width,n=t.classList.contains("ms-tab-sized");t.style.width="",t.classList.add("ms-tab-sized")
 		;const o=Math.ceil(t.getBoundingClientRect().width);return t.style.width=e,t.classList.toggle("ms-tab-sized",n),o}(t)
-		;return C(e,n,Math.max(n,P()/2))}function Tr(t,e,n){n=_r(t,n),e=C(e,0,Math.max(0,P()-n)),t.style.width=`${Math.round(n)}px`,
-		t.style.left=`${Math.round(e)}px`,t.style.transform="none",t.classList.add("ms-tab-sized")}function Or(){
+		;return C(e,n,Math.max(n,I()/2))}function _r(t,e,n){n=Nr(t,n),e=C(e,0,Math.max(0,I()-n)),t.style.width=`${Math.round(n)}px`,
+		t.style.left=`${Math.round(e)}px`,t.style.transform="none",t.classList.add("ms-tab-sized")}function Tr(){
 		const t=document.querySelector(".ms-tab"),e=function(){const t=M(E)
-		;return t&&"object"==typeof t&&Number.isFinite(t.left)&&Number.isFinite(t.width)?t:null}();t&&e&&Tr(t,e.left*P(),e.width)}function qr(){
+		;return t&&"object"==typeof t&&Number.isFinite(t.left)&&Number.isFinite(t.width)?t:null}();t&&e&&_r(t,e.left*I(),e.width)}function Or(){
 		const t=document.querySelector(".ms-tab");if(!t)return;const e=t.querySelector('[data-grid="show"]'),n=t.querySelector('[data-grid="snap"]')
-		;e&&e.classList.toggle("ms-tab-off",!We()),n&&n.classList.toggle("ms-tab-off",!Ne()),Fr()}function Fr(){
-		const t=document.querySelector(".ms-tab .ms-tab-count");t&&(t.textContent=Et()?Lt():"")}function Vr(t){
+		;e&&e.classList.toggle("ms-tab-off",!We()),n&&n.classList.toggle("ms-tab-off",!Ne()),qr()}function qr(){
+		const t=document.querySelector(".ms-tab .ms-tab-count");t&&(t.textContent=Et()?Lt():"")}function Fr(t){
 		const e=t.target.closest(".snap-edge");if(e){if(0!==t.button)return;return t.preventDefault(),void to(e,t)}
 		const n=t.target.closest(".map-block.popout");if(!n)return;if(n.classList.contains("fs-host")||Mn(n),0!==t.button)return
 		;const o=t.target.closest(".po-h"),r=t.target.closest(".radartitle")
@@ -998,29 +1009,29 @@
 		;Ee(o,(t,e)=>{let n=r?t:e;const o=$n(p+n,f);null!==o&&(n=o-p),n=C(n,m-u,h-m),r?(s.style.width=`${Math.round(u+n)}px`,
 		l.style.width=`${Math.round(h-n)}px`,l.style.left=`${Math.round(p+n)}px`):(s.style.height=`${Math.round(u+n)}px`,
 		l.style.height=`${Math.round(h-n)}px`,l.style.top=`${Math.round(p+n)}px`),nn(s),nn(l)},()=>{Fe([s,l]),bn(),Lo()})}(t,o,e,n);else Ve(t,e,n)
-		}(n,o.dataset.dir,t):jn(n,t))}function Ur(t){1===t.button&&f.matches&&Yr(t)&&t.preventDefault()}function Zr(t){
-		if(1!==t.button||!f.matches)return;const e=Yr(t);e&&(t.preventDefault(),Qe(e.closest(".map-block")))}function Xr(t){
+		}(n,o.dataset.dir,t):jn(n,t))}function Vr(t){1===t.button&&f.matches&&Kr(t)&&t.preventDefault()}function Ur(t){
+		if(1!==t.button||!f.matches)return;const e=Kr(t);e&&(t.preventDefault(),Qe(e.closest(".map-block")))}function Zr(t){
 		if(!t.target.closest)return;const e=t.target.closest(".snap-edge");e&&function(t){const e=Tn(t)
-		;if(Fn())if(Dn&&Dn.left+Dn.right<.999)[Pn.left,Pn.right].forEach(t=>{t.panes.length&&Dn[t.side]&&(t.width=Dn[t.side])}),Dn=null;else{
-		const t=Math.min(.5,875/P());[Pn.left,Pn.right].forEach(e=>{e.panes.length&&(e.width*=1-t)}),Dn=null}else Dn={left:On(Pn.left),
-		right:On(Pn.right)},t.width=1-On(e);Gn(),Lo()}(In(e.dataset.side));const n=Yr(t);n&&function(t){
+		;if(Fn())if(Dn&&Dn.left+Dn.right<.999)[In.left,In.right].forEach(t=>{t.panes.length&&Dn[t.side]&&(t.width=Dn[t.side])}),Dn=null;else{
+		const t=Math.min(.5,875/I());[In.left,In.right].forEach(e=>{e.panes.length&&(e.width*=1-t)}),Dn=null}else Dn={left:On(In.left),
+		right:On(In.right)},t.width=1-On(e);Gn(),Lo()}(Pn(e.dataset.side));const n=Kr(t);n&&function(t){
 		const e=t.closest(".map-block").querySelector(".fs-btn");e&&e.click()}(n)
 		;const o=t.target.closest(".map-block.popout.letterbox .radartitle:not(.fullscreen)");if(o&&!t.target.closest("a")){
 		const t=o.closest(".map-block");!function(t){const e=t.getBoundingClientRect();if(tn(t),Wn(t))return;const n=Sn(t)
 		;if(n&&(!n.complete||!n.naturalWidth))return;const o=Ln(),r=Xe(t,Math.min(e.width,o));if(r>e.height+.5){
 		const n=e.width/r,a=Ze(t,e.height,e.height*n,n,o);t.style.width=`${Math.round(a)}px`}zn(t,e.left,e.top)}(t);const e=_n(t)
-		;e&&delete e.height,Gn(),nn(t),Lo()}}function Kr(){const t=document.activeElement;if(!t||"IFRAME"!==t.tagName)return
-		;const e=t.closest(".map-block.popout");e&&!e.classList.contains("fs-host")&&Mn(e)}function Yr(t){
-		return!t.target.closest||t.target.closest("a, button, input")?null:t.target.closest(".map-block.popout .radartitle")}var Qr={
-		ArrowLeft:[-1,0],ArrowRight:[1,0],ArrowUp:[0,-1],ArrowDown:[0,1]};function Jr(){
+		;e&&delete e.height,Gn(),nn(t),Lo()}}function Xr(){const t=document.activeElement;if(!t||"IFRAME"!==t.tagName)return
+		;const e=t.closest(".map-block.popout");e&&!e.classList.contains("fs-host")&&Mn(e)}function Kr(t){
+		return!t.target.closest||t.target.closest("a, button, input")?null:t.target.closest(".map-block.popout .radartitle")}var Yr={
+		ArrowLeft:[-1,0],ArrowRight:[1,0],ArrowUp:[0,-1],ArrowDown:[0,1]};function Qr(){
 		return An().filter(t=>!t.classList.contains("fs-host")).reduce((t,e)=>!t||(Number(e.style.zIndex)||0)>=(Number(t.style.zIndex)||0)?e:t,null)
-		}var Gr=0;var ta=0;ur=dr(M(y)),fetch("https://meteo-data.jurakovic.workers.dev/config.json",{cache:"no-cache"
+		}var Jr=0;var Gr=0;ur=dr(M(y)),fetch("https://meteo-data.jurakovic.workers.dev/config.json",{cache:"no-cache"
 		}).then(t=>t.ok?t.json():Promise.reject(t.status)).then(t=>{S(y,t);const e=dr(t);var n,o;o=ur,
-		(n=e).size===o.size&&[...n].every(t=>o.has(t))||(ur=e,p(s))}).catch(()=>{}),Lr||document.documentElement.classList.add("no-manual"),
-		function(){const t=new URLSearchParams(window.location.search).get("v");nr=t?function(t){try{
-		const e=JSON.parse(atob(t.replace(/-/g,"+").replace(/_/g,"/")));if(Xo(e))return e.name&&(e.name=Io(e.name)),e}catch{}return null}(t):null
-		}(),function(){const t=rr().layout;t&&t.dashboard&&f.matches&&document.documentElement.classList.add("board-boot")}(),ge("top",{run:()=>{
-		window.scrollTo({top:0,behavior:"smooth"})}}),ge("links",{run:()=>ct("links")}),ge("links-bottom",{run:t=>function(t){
+		(n=e).size===o.size&&[...n].every(t=>o.has(t))||(ur=e,p(s))}).catch(()=>{}),zr.forEach(({feature:t})=>{
+		Lr[t]||document.documentElement.classList.add(`no-${t}`)}),function(){const t=new URLSearchParams(window.location.search).get("v")
+		;nr=t?function(t){try{const e=JSON.parse(atob(t.replace(/-/g,"+").replace(/_/g,"/")));if(Xo(e))return e.name&&(e.name=Po(e.name)),e}catch{}
+		return null}(t):null}(),function(){const t=rr().layout;t&&t.dashboard&&f.matches&&document.documentElement.classList.add("board-boot")}(),
+		ge("top",{run:()=>{window.scrollTo({top:0,behavior:"smooth"})}}),ge("links",{run:()=>ct("links")}),ge("links-bottom",{run:t=>function(t){
 		document.body.classList.toggle("show-links-bottom",t.checked),S(L,t.checked?1:0),ut()}(t)}),ge("slide",{run:t=>{
 		return e=t.closest(".slideshow"),n=Number(t.dataset.step),void ue(e,parseInt(e.getAttribute("data-current-slide"))+n);var e,n}}),ge("zoom",{
 		run:t=>ae(t.dataset.frame,t)}),ge("fullscreen",{run:t=>function(t,e){lt(`toggleFullscreen: ${t}`)
@@ -1039,20 +1050,20 @@
 		e.capture&&t.stopPropagation(),e.run(null,t))},!0),function(){const t=()=>f.matches,e=()=>f.matches&&!Dt();ge("reload",{keys:["r","R"],
 		keyWhen:t,run:()=>jt()}),ge("grid-show",{keys:["g","G"],keyWhen:t,run:()=>{no()&&_e(!We(),Ne())}}),ge("grid-snap",{keys:["s","S"],keyWhen:t,
 		run:()=>{no()&&_e(We(),!Ne())}}),ge("arrange",{keys:["a","A"],keyWhen:e,run:()=>co()}),ge("duplicate",{keys:["d","D"],keyWhen:e,
-		run:()=>Pe(Jr())}),ge("nudge",{keys:Object.keys(Qr),keyWhen:e,run:(t,e)=>{const[n,o]=Qr[e.key],r=e.shiftKey?1:16;!function(t,e){const n=Jr()
+		run:()=>Ie(Qr())}),ge("nudge",{keys:Object.keys(Yr),keyWhen:e,run:(t,e)=>{const[n,o]=Yr[e.key],r=e.shiftKey?1:16;!function(t,e){const n=Qr()
 		;if(!n)return;const o=fn(n);if(o.length>1){const n=yn(o);xn(n,kn(n),t,e)}else{const o=n.getBoundingClientRect();zn(n,o.left+t,o.top+e)}ye(),
-		Eo(),clearTimeout(Gr),Gr=setTimeout(Lo,300)}(n*r,o*r)}})}(),m(d,Wr("gridChanged")),m(u,Wr("refreshChanged")),m(h,Wr("refreshTick")),
-		m(c,Wr("layoutChanged")),ge("map-settings",{keys:["k","K"],run:()=>Br()}),ge("settings-apply",{keys:["Enter"],capture:!0,keyWhen:t=>{
+		Eo(),clearTimeout(Jr),Jr=setTimeout(Lo,300)}(n*r,o*r)}})}(),m(d,Dr("gridChanged")),m(u,Dr("refreshChanged")),m(h,Dr("refreshTick")),
+		m(c,Dr("layoutChanged")),ge("map-settings",{keys:["k","K"],run:()=>Hr()}),ge("settings-apply",{keys:["Enter"],capture:!0,keyWhen:t=>{
 		const e=document.getElementById("mapSettings")
 		;return!(t.shiftKey||t.isComposing||!e||e.hidden||t.target.matches&&t.target.matches("select")||!e.querySelector(".ms-apply"))},
 		run:()=>a("#mapSettings .ms-apply").click()}),m(i,({panel:t,visible:e})=>{if("mapSettings"!==t.id)return
 		;const n=document.querySelector(".buttons button.btn .arrow");n&&(n.textContent=e?"▲":"▼")}),ge("add-map",{run:t=>wr(t)}),
 		m(i,({visible:t})=>{t&&vr()}),window.addEventListener("resize",()=>vr()),m(s,()=>{yr&&(vr(),xr().map(t=>t.id).join()!==kr&&function(){
-		const t=ho(yo(),Jo());Er(),lr(),go(t)}())}),document.addEventListener("pointerdown",Vr),window.addEventListener("blur",()=>setTimeout(Kr)),
-		document.addEventListener("mousedown",Ur),document.addEventListener("auxclick",Zr),document.addEventListener("dblclick",Xr),m(l,()=>{
+		const t=ho(yo(),Jo());Er(),lr(),go(t)}())}),document.addEventListener("pointerdown",Fr),window.addEventListener("blur",()=>setTimeout(Xr)),
+		document.addEventListener("mousedown",Vr),document.addEventListener("auxclick",Ur),document.addEventListener("dblclick",Zr),m(l,()=>{
 		r(".map-block.popout").forEach(t=>{const e=!!t.querySelector(".if1.fullscreen"),n=t.classList.contains("fs-host")
 		;t.classList.toggle("fs-host",e),e?t.style.zIndex=String(o("--z-fullscreen-host",4500)):n&&Mn(t)}),ve(),Gn(),f.matches&&Lo()}),
-		f.addEventListener("change",t=>{t.matches?go(bo):(bo=xo,vo(rn))}),window.addEventListener("resize",()=>{clearTimeout(ta),ta=setTimeout(()=>{
+		f.addEventListener("change",t=>{t.matches?go(bo):(bo=xo,vo(rn))}),window.addEventListener("resize",()=>{clearTimeout(Gr),Gr=setTimeout(()=>{
 		Gn();const t=new Set;An().forEach(e=>{if(t.has(e))return;const n=fn(e);if(n.forEach(e=>t.add(e)),1===n.length){
 		const t=e.getBoundingClientRect();zn(e,t.left,t.top)}else{const t=yn(n);xn(t,kn(t),0,0)}}),bn(),ye()},200)}),
 		["load","click","pointerup"].forEach(t=>{document.addEventListener(t,t=>{const e=t.target,n=e.closest&&e.closest(".map-block.popout")
@@ -1064,33 +1075,26 @@
 		}),r=n("[R]","reload","Osvježi sve karte"),a=n("[A]","arrange","Posloži u mrežu",{class:"ms-tab-btn ms-tab-board"
 		}),i=n("[G]","grid-show","Prikaži mrežu",{class:"ms-tab-btn ms-tab-board","data-grid":"show"}),s=n("[S]","grid-snap","Poravnaj uz mrežu",{
 		class:"ms-tab-btn ms-tab-board","data-grid":"snap"}),l=t("span",{class:"ms-tab-count",title:"Do sljedećeg osvježavanja"})
-		;e.appendChild(t("span",{class:"ms-tab-cluster"},[o,r,a,i,s,l])),qr()}(e),Or(),e.addEventListener("click",t=>{n(t)||(Nr?Nr=!1:Br())}),
+		;e.appendChild(t("span",{class:"ms-tab-cluster"},[o,r,a,i,s,l])),Or()}(e),Tr(),e.addEventListener("click",t=>{n(t)||(Wr?Wr=!1:Hr())}),
 		e.addEventListener("pointermove",t=>{if(n(t))return void(e.style.cursor="")
 		;const o=e.getBoundingClientRect(),r=t.clientX-o.left<=8||o.right-t.clientX<=8;e.style.cursor=r?"ew-resize":""}),
 		e.addEventListener("pointerdown",t=>{if(0!==t.button||n(t))return;t.preventDefault()
-		;const o=e.getBoundingClientRect(),r=t.clientX-o.left<=8?"w":o.right-t.clientX<=8?"e":"move";Nr=!1,Pt(t,t=>{
-		if(Nr||!(Math.abs(t)<4))if(Nr=!0,"move"===r)Tr(e,o.left+t,o.width);else if("e"===r)Tr(e,o.left,o.width+t);else{const n=_r(e,o.width-t)
-		;Tr(e,o.right-n,n)}},()=>{Nr&&function(t){const e=t.getBoundingClientRect();S(E,{left:A(e.left/P()),width:Math.round(e.width)})}(e)})}),
-		window.addEventListener("resize",Or),m(d,qr),m(h,Fr),m(u,Or)}),e(Er),e(function(){go(ho(rr().layout,Jo()))}),e(function(){
+		;const o=e.getBoundingClientRect(),r=t.clientX-o.left<=8?"w":o.right-t.clientX<=8?"e":"move";Wr=!1,It(t,t=>{
+		if(Wr||!(Math.abs(t)<4))if(Wr=!0,"move"===r)_r(e,o.left+t,o.width);else if("e"===r)_r(e,o.left,o.width+t);else{const n=Nr(e,o.width-t)
+		;_r(e,o.right-n,n)}},()=>{Wr&&function(t){const e=t.getBoundingClientRect();S(E,{left:A(e.left/I()),width:Math.round(e.width)})}(e)})}),
+		window.addEventListener("resize",Tr),m(d,Or),m(h,qr),m(u,Tr)}),e(Er),e(function(){go(ho(rr().layout,Jo()))}),e(function(){
 		document.documentElement.classList.remove("board-boot")}),e(function(){Ht().forEach(t=>{Vt(t),Ut(t)}),function(){
 		const t=a(".dialog-backdrop");t&&t.addEventListener("pointerdown",e=>{if(!Dt())return;e.preventDefault(),Kt(),t.hidden=!1,
 		t.classList.add("dialog-spent");let n=0;const o=()=>{clearTimeout(n),t.classList.remove("dialog-spent"),t.hidden=!Dt(),
 		document.removeEventListener("click",r,!0),document.removeEventListener("pointerup",a),document.removeEventListener("pointercancel",o)
 		},r=t=>{t.stopPropagation(),t.preventDefault(),o()},a=()=>{n=setTimeout(o,400)};document.addEventListener("click",r,!0),
 		document.addEventListener("pointerup",a),document.addEventListener("pointercancel",o)})}(),window.addEventListener("resize",()=>Ft(Bt()))}),
-		e(function(){const t=Mr();if(!t||!Lr)return;const e=t.querySelector(".dialog-close");e&&e.addEventListener("click",()=>Xt(t,!1)),
-		t.addEventListener("click",e=>{const n=e.target.closest('a[href^="#"]');n&&t.contains(n)&&(e.preventDefault(),function(t,e){
-		const n=t.querySelector(".dialog-body"),o=t.querySelector(`[id="${CSS.escape(e)}"]`)
-		;n&&o&&(n.scrollTop+=o.getBoundingClientRect().top-n.getBoundingClientRect().top)}(t,Cr(n.getAttribute("href"))))}),
-		m(i,({panel:e,visible:n})=>{e===t&&(!function(t){const e=new URL(window.location.href);t!==(Cr(e.hash)===zr)&&(e.hash=t?zr:"",
-		history.replaceState(null,"",t?e.href:e.href.replace(/#$/,"")))}(n),n&&(t.querySelector(".dialog-body").scrollTop=0))}),ge("manual",{
-		keys:["h","H"],run:()=>Sr()});const n=()=>{const e=Cr(window.location.hash)===zr;e!==function(){const t=Mr();return!!t&&!t.hidden
-		}()&&Xt(t,e)};window.addEventListener("hashchange",n),n()}),e(function(){!function(){const t=document.querySelector(".links-toggle")
-		;t&&(t.checked=1===M(L),document.body.classList.toggle("show-links-bottom",t.checked))}(),lr(),function(){
-		const t=a(".expandable"),e=a(".links");t.addEventListener("click",()=>{const n=t.querySelector(".arrow")
-		;if(e.style.maxHeight)return e.style.maxHeight="",void(n.textContent="▼");e.style.maxHeight=`${e.scrollHeight}px`,n.textContent="▲",
-		setTimeout(()=>{document.documentElement.style.scrollBehavior="auto",document.body.style.scrollBehavior="auto",ct("links"),setTimeout(()=>{
-		document.documentElement.style.scrollBehavior="smooth",document.body.style.scrollBehavior="smooth"},50)},310)})}()})})();
+		e(function(){zr.forEach(Sr)}),e(function(){!function(){const t=document.querySelector(".links-toggle");t&&(t.checked=1===M(L),
+		document.body.classList.toggle("show-links-bottom",t.checked))}(),lr(),function(){const t=a(".expandable"),e=a(".links")
+		;t.addEventListener("click",()=>{const n=t.querySelector(".arrow");if(e.style.maxHeight)return e.style.maxHeight="",void(n.textContent="▼")
+		;e.style.maxHeight=`${e.scrollHeight}px`,n.textContent="▲",setTimeout(()=>{document.documentElement.style.scrollBehavior="auto",
+		document.body.style.scrollBehavior="auto",ct("links"),setTimeout(()=>{document.documentElement.style.scrollBehavior="smooth",
+		document.body.style.scrollBehavior="smooth"},50)},310)})}()})})();
 	</script>
 	<script async src="https://www.googletagmanager.com/gtag/js?id=G-233EMZJM16"></script>
 	<script>
@@ -1325,7 +1329,7 @@
 	<div class="dialog-backdrop" hidden></div>
 	<div class="dialog" id="mapSettings" data-dialog-key="msPanel" hidden></div>
 
-	<div class="dialog manual-dialog" id="manualDialog" data-dialog-key="manualPanel" hidden>
+	<div class="dialog doc-dialog" id="manualDialog" data-dialog-key="manualPanel" hidden>
 		<div class="dialog-head">
 			<span class="dialog-head-left">
 				<a class="dialog-home" href="/meteo/" title="Početna"><img src="/meteo/img/favicon-32x32.png" alt="Početna"></a>
@@ -1384,6 +1388,7 @@
 			<p><strong>Cijeli zaslon.</strong> Iz cijelog zaslona izlazi se gumbom <code>[-]</code> ili tipkom <kbd>Esc</kbd>. Za ponašanje u bočnom stupcu i na ploči vidi <a href="#bočni-stupci">Bočni stupci</a> i <a href="#nadzorna-ploča">Nadzorna ploča</a>.</p>
 			<p><strong>Linkovi.</strong> Gumb <em>Linkovi</em> vodi na popis dodatnih izvora na dnu stranice. Kvadratić pokraj njega uključuje prikaz linkova ispod svake karte.</p>
 			<p><strong>Upute.</strong> Ovaj tekst otvaraju gumb <code>?</code>, poveznica <em>Upute</em> u podnožju i tipka <kbd>H</kbd>. Otvara se u prozoru preko stranice, pa se upute mogu čitati uz karte. Zatvara se natpisom <em>Zatvori</em> ili tipkom <kbd>Esc</kbd>. Ikona stranice lijevo od naslova vodi na početnu stranicu, kao i u dijalogu <em>Karte</em>. Poveznica koja završava s <code>#upute</code> otvara upute odmah pri učitavanju stranice.</p>
+			<p><strong>Povijest promjena.</strong> Poveznica <em>Povijest promjena</em> u podnožju i tipka <kbd>P</kbd> otvaraju popis promjena na stranici, po datumima i na engleskom. Otvara se u prozoru preko stranice, kao i upute, a poveznica koja završava s <code>#promjene</code> otvara ga odmah pri učitavanju stranice.</p>
 			<h2 id="dijalog-karte">Dijalog Karte</h2>
 			<p>Gumb <strong>Karte</strong> (ili tipka <kbd>K</kbd>) otvara dijalog u kojem se bira što se prikazuje. Kad gumb na stranici nije dostupan, dijalog se otvara s <a href="#pločica-karte">pločice Karte</a> na vrhu ekrana.</p>
 			<p>Dok je dijalog otvoren, stranica iza njega je malo zatamnjena i ne reagira. Klik izvan dijaloga samo ga zatvara — taj klik ne ide dalje, pa neće usput otvoriti poveznicu ni pomaknuti prozor.</p>
@@ -1542,6 +1547,7 @@
 			<tr><td><kbd>K</kbd></td><td>otvara i zatvara dijalog <em>Karte</em></td></tr>
 			<tr><td><kbd>Enter</kbd></td><td>u dijalogu <em>Karte</em>: primjenjuje promjene</td></tr>
 			<tr><td><kbd>H</kbd></td><td>otvara i zatvara <em>Upute</em></td></tr>
+			<tr><td><kbd>P</kbd></td><td>otvara i zatvara <em>Povijest promjena</em></td></tr>
 			<tr><td><kbd>Esc</kbd></td><td>zatvara dijalog; ako nijedan nije otvoren, izlazi iz cijelog zaslona</td></tr>
 			<tr><td><kbd>R</kbd></td><td>ponovno učitava sve karte</td></tr>
 			<tr><td><kbd>D</kbd></td><td>kopira prozor na vrhu</td></tr>
@@ -1598,12 +1604,266 @@
 			<p>Razmještaj prozora složen na računalu ne gubi se kad stranicu otvorite na mobitelu — samo se ne prikazuje, a vraća se čim je ponovno otvorite na računalu.</p>
 		</div>
 	</div>
+
+	<div class="dialog doc-dialog changelog-dialog" id="changelogDialog" data-dialog-key="changelogPanel" hidden>
+		<div class="dialog-head">
+			<span class="dialog-head-left">
+				<a class="dialog-home" href="/meteo/" title="Početna"><img src="/meteo/img/favicon-32x32.png" alt="Početna"></a>
+				<span class="dialog-title">Povijest promjena</span>
+			</span>
+			<a class="dialog-close" title="Zatvori (Esc)">Zatvori</a>
+		</div>
+		<div class="dialog-body">
+						<h2>2026-09-23 <a href="https://github.com/jurakovic/meteo/pull/42" target="_blank" rel="noopener">#42</a></h2>
+			<ul>
+			<li>added copies of a map window (<code>[D]</code>), so the same map can be shown twice, e.g. at two sizes or on two different slides.</li>
+			<li>added seams: dragging the shared edge of two adjacent windows resizes both at once.</li>
+			<li>added auto-arrange on the dashboard (<code>[A]</code>), tiling all maps into an even grid as large as the screen allows.</li>
+			<li>added a "Karte" tab at the top of the screen, which opens the map dialog when its button is out of reach and adds a map to the dashboard without opening the dialog (<code>[+]</code>).</li>
+			<li>added auto-refresh of all maps every 5, 10, 15, 30 or 60 minutes, with a countdown on the tab.</li>
+			<li>added search to the map picker (multiple words, works without diacritics).</li>
+			</ul>
+			<h2>2026-09-14 <a href="https://github.com/jurakovic/meteo/pull/41" target="_blank" rel="noopener">#41</a></h2>
+			<ul>
+			<li>added pop-out map windows on desktop: a map can float above the page, be moved and resized, snap to other windows, be grouped with a neighbour, or dock in a column at the screen edge.</li>
+			<li>added a dashboard mode that shows only the selected maps, as windows on a dark background, with an optional snap grid; a preset saved as a dashboard opens as one.</li>
+			<li>the window layout is saved with presets and carried in share links.</li>
+			<li>added keyboard shortcuts.</li>
+			<li>made the map dialog movable and resizable.</li>
+			</ul>
+			<h2>2026-08-29 <a href="https://github.com/jurakovic/meteo/pull/40" target="_blank" rel="noopener">#40</a></h2>
+			<ul>
+			<li>replaced the ČHMÚ synoptic chart on the main page with DWD synoptic charts (analysis and forecasts); ČHMÚ remains available on the customize page.</li>
+			</ul>
+			<h2>2026-08-17 <a href="https://github.com/jurakovic/meteo/pull/39" target="_blank" rel="noopener">#39</a></h2>
+			<ul>
+			<li>added saved presets: save the current selection under a name, then update, rename, share or delete it.</li>
+			<li>built-in presets can be hidden from the preset row; renamed "Zadano" to "Osnovno".</li>
+			</ul>
+			<h2>2026-07-06 <a href="https://github.com/jurakovic/meteo/pull/38" target="_blank" rel="noopener">#38</a></h2>
+			<ul>
+			<li>added the customize page (beta), replacing the extras page: choose which maps to show and in what order, start from a preset (Zadano, Više, Radari, Sateliti, Nevrijeme, Sve, Ništa), and share the view with a link.</li>
+			</ul>
+			<h2>2026-06-28 <a href="https://github.com/jurakovic/meteo/pull/37" target="_blank" rel="noopener">#37</a></h2>
+			<ul>
+			<li>added a fullscreen toggle to the interactive maps.</li>
+			<li>updated Neverin satellite image sources.</li>
+			</ul>
+			<h2>2026-06-26 <a href="https://github.com/jurakovic/meteo/pull/36" target="_blank" rel="noopener">#36</a></h2>
+			<ul>
+			<li>added the ASTORP storm forecast and an ESWD link.</li>
+			</ul>
+			<h2>2026-06-24 <a href="https://github.com/jurakovic/meteo/pull/35" target="_blank" rel="noopener">#35</a></h2>
+			<ul>
+			<li>added a row of inline quick links (Windy, Zoom Earth, meteoblue, Rain Viewer, Ventusky, Vrijeme&amp;Radar, Sat24, I'm Weather, Időkép) under each map, with region-specific coordinates.</li>
+			<li>added a "Linkovi" toggle to show/hide the inline link rows (remembered via localStorage).</li>
+			<li>added Ventusky and Rain Viewer link sources, renamed "Weather&amp;Radar" to "Vrijeme&amp;Radar", switched Wetterzentrale model from ICON to ECMWF, fixed broken links.</li>
+			</ul>
+			<h2>2026-06-22</h2>
+			<ul>
+			<li>prevented multi-touch gestures from triggering slide/overlay actions.</li>
+			<li>adjusted interactive map aspect ratio on desktop.</li>
+			</ul>
+			<h2>2026-06-02 <a href="https://github.com/jurakovic/meteo/pull/34" target="_blank" rel="noopener">#34</a></h2>
+			<ul>
+			<li>separated ESSL and ESTOFEX storm forecasts and added more forecast images.</li>
+			</ul>
+			<h2>2026-05-09 <a href="https://github.com/jurakovic/meteo/pull/33" target="_blank" rel="noopener">#33</a></h2>
+			<ul>
+			<li>reverted to meteoblue meteogram widgets.</li>
+			</ul>
+			<h2>2026-03-26 <a href="https://github.com/jurakovic/meteo/pull/32" target="_blank" rel="noopener">#32</a></h2>
+			<ul>
+			<li>added an <code>[HR]</code>/<code>[EU]</code> toggle to all interactive maps (Windy, Blitzortung, Ventusky, Rain Viewer, Weather&amp;Radar) to switch between Croatia- and Europe-centered views, with separate desktop and mobile zoom levels.</li>
+			<li>fixed the progress bar hiding prematurely on mobile before lazy images finished loading.</li>
+			</ul>
+			<h2>2026-02-23</h2>
+			<ul>
+			<li>hide chmu map white margins.</li>
+			</ul>
+			<h2>2026-02-11 <a href="https://github.com/jurakovic/meteo/pull/31" target="_blank" rel="noopener">#31</a></h2>
+			<ul>
+			<li>changed meteoblue meteogram from 7-day to 5-day.</li>
+			<li>fixed meteociel satellite slide size.</li>
+			</ul>
+			<h2>2026-02-04 <a href="https://github.com/jurakovic/meteo/pull/30" target="_blank" rel="noopener">#30</a></h2>
+			<ul>
+			<li>replaced meteoblue meteogram widgets with the image API (Zagreb).</li>
+			</ul>
+			<h2>2026-01-10 <a href="https://github.com/jurakovic/meteo/pull/29" target="_blank" rel="noopener">#29</a></h2>
+			<ul>
+			<li>fixed the chmu synoptic map and moved chmu maps to the main page.</li>
+			<li>changed neverin europe images to a whole-Europe view.</li>
+			<li>updated meteociel images.</li>
+			</ul>
+			<h2>2025-11-15 <a href="https://github.com/jurakovic/meteo/pull/28" target="_blank" rel="noopener">#28</a></h2>
+			<ul>
+			<li>updated meteoblue meteograms (meteoblue began requiring registration for widgets).</li>
+			</ul>
+			<h2>2025-07-27 <a href="https://github.com/jurakovic/meteo/pull/27" target="_blank" rel="noopener">#27</a></h2>
+			<ul>
+			<li>fixed ESSL storm forecast lookup.</li>
+			<li>added ESTOFEX forecast slide.</li>
+			</ul>
+			<h2>2025-07-07 <a href="https://github.com/jurakovic/meteo/pull/26" target="_blank" rel="noopener">#26</a></h2>
+			<ul>
+			<li>moved the image load progress bar to the top.</li>
+			<li>added Rain Alarm to links.</li>
+			</ul>
+			<h2>2025-06-13 <a href="https://github.com/jurakovic/meteo/pull/25" target="_blank" rel="noopener">#25</a></h2>
+			<ul>
+			<li>reordered maps on the extras page (Ventusky on top).</li>
+			<li>changed RainViewer theme from dark to light.</li>
+			<li>added Zoom Earth links.</li>
+			</ul>
+			<h2>2025-06-10 <a href="https://github.com/jurakovic/meteo/pull/24" target="_blank" rel="noopener">#24</a></h2>
+			<ul>
+			<li>added embedded Weather&amp;Radar, Rain Viewer and Ventusky maps on the extras page.</li>
+			<li>added a button to exit interactive mode and reset a map to its default position and zoom.</li>
+			<li>moved meteo.si to the extras page.</li>
+			</ul>
+			<h2>2025-06-05 <a href="https://github.com/jurakovic/meteo/pull/23" target="_blank" rel="noopener">#23</a></h2>
+			<ul>
+			<li>added ESSL storm forecast.</li>
+			</ul>
+			<h2>2025-05-30 <a href="https://github.com/jurakovic/meteo/pull/22" target="_blank" rel="noopener">#22</a></h2>
+			<ul>
+			<li>made the Windy and Blitzortung overlays full size, with a hint to double click/tap to remove them.</li>
+			<li>added vrijeme.net (Facebook) to links.</li>
+			</ul>
+			<h2>2025-05-21 <a href="https://github.com/jurakovic/meteo/pull/21" target="_blank" rel="noopener">#21</a></h2>
+			<ul>
+			<li>added the blitzortung.org lightning map.</li>
+			<li>enlarged the Windy map and prevented accidental map drag.</li>
+			<li>added meteociel.fr EU temperature slides and a EUMETView link.</li>
+			<li>moved istramet to the extras page.</li>
+			</ul>
+			<h2>2025-05-11 <a href="https://github.com/jurakovic/meteo/pull/20" target="_blank" rel="noopener">#20</a></h2>
+			<ul>
+			<li>added swipe gestures to slideshows.</li>
+			</ul>
+			<h2>2025-05-08 <a href="https://github.com/jurakovic/meteo/pull/19" target="_blank" rel="noopener">#19</a></h2>
+			<ul>
+			<li>added slideshow position indicators.</li>
+			</ul>
+			<h2>2025-03-22 <a href="https://github.com/jurakovic/meteo/pull/18" target="_blank" rel="noopener">#18</a></h2>
+			<ul>
+			<li>made the links section expandable/collapsible.</li>
+			</ul>
+			<h2>2025-02-28 <a href="https://github.com/jurakovic/meteo/pull/17" target="_blank" rel="noopener">#17</a></h2>
+			<ul>
+			<li>added a placeholder background while images load.</li>
+			</ul>
+			<h2>2024-12-31 <a href="https://github.com/jurakovic/meteo/pull/16" target="_blank" rel="noopener">#16</a></h2>
+			<ul>
+			<li>added air quality links and nebo.com.hr.</li>
+			<li>enabled the dhmz bilogora radar.</li>
+			</ul>
+			<h2>2024-10-14 <a href="https://github.com/jurakovic/meteo/pull/15" target="_blank" rel="noopener">#15</a></h2>
+			<ul>
+			<li>fixed the progress bar getting stuck when images loaded from cache.</li>
+			</ul>
+			<h2>2024-10-11 <a href="https://github.com/jurakovic/meteo/pull/14" target="_blank" rel="noopener">#14</a></h2>
+			<ul>
+			<li>added an image load progress bar.</li>
+			<li>added SWPC home to links.</li>
+			</ul>
+			<h2>2024-09-28 <a href="https://github.com/jurakovic/meteo/pull/13" target="_blank" rel="noopener">#13</a></h2>
+			<ul>
+			<li>changed meteoblue forecast to a slideshow.</li>
+			<li>reordered and hid some images, updated and reordered links.</li>
+			</ul>
+			<h2>2024-09-11 <a href="https://github.com/jurakovic/meteo/pull/12" target="_blank" rel="noopener">#12</a></h2>
+			<ul>
+			<li>added the ability to show multiple images in place as a "slideshow".</li>
+			<li>added meteoblue forecast.</li>
+			</ul>
+			<h2>2024-09-07 <a href="https://github.com/jurakovic/meteo/pull/10" target="_blank" rel="noopener">#10</a></h2>
+			<ul>
+			<li>added the extras page with site navigation buttons.</li>
+			<li>added and rearranged images, added Facebook page links.</li>
+			</ul>
+			<h2>2024-09-06 <a href="https://github.com/jurakovic/meteo/pull/9" target="_blank" rel="noopener">#9</a></h2>
+			<ul>
+			<li>moved links to the bottom with a new layout.</li>
+			</ul>
+			<h2>2024-08-25 <a href="https://github.com/jurakovic/meteo/pull/8" target="_blank" rel="noopener">#8</a></h2>
+			<ul>
+			<li>added a page footer.</li>
+			</ul>
+			<h2>2024-05-20</h2>
+			<ul>
+			<li>added ESTOFEX.</li>
+			</ul>
+			<h2>2024-05-13</h2>
+			<ul>
+			<li>added space weather links.</li>
+			</ul>
+			<h2>2024-02-17</h2>
+			<ul>
+			<li>added Puntijarka radar and re-enabled dhmz uljenje.</li>
+			</ul>
+			<h2>2024-01-23 <a href="https://github.com/jurakovic/meteo/pull/4" target="_blank" rel="noopener">#4</a></h2>
+			<ul>
+			<li>added Weather&amp;Radar.</li>
+			</ul>
+			<h2>2024-01-16 <a href="https://github.com/jurakovic/meteo/pull/3" target="_blank" rel="noopener">#3</a></h2>
+			<ul>
+			<li>added Időkép.</li>
+			</ul>
+			<h2>2024-01-15 <a href="https://github.com/jurakovic/meteo/pull/2" target="_blank" rel="noopener">#2</a></h2>
+			<ul>
+			<li>added EUMETNET.</li>
+			</ul>
+			<h2>2024-01-14 <a href="https://github.com/jurakovic/meteo/pull/1" target="_blank" rel="noopener">#1</a></h2>
+			<ul>
+			<li>added a curated weather links section.</li>
+			</ul>
+			<h2>2024-01-11</h2>
+			<ul>
+			<li>added I'm Weather and fixed sat24.</li>
+			</ul>
+			<h2>2023-07-23</h2>
+			<ul>
+			<li>added the remaining DHMZ radars.</li>
+			</ul>
+			<h2>2023-07-20</h2>
+			<ul>
+			<li>added RainViewer and the Időkép Adria radar.</li>
+			</ul>
+			<h2>2023-06-10</h2>
+			<ul>
+			<li>changed the DHMZ radar to an animated gif.</li>
+			</ul>
+			<h2>2022-04-16</h2>
+			<ul>
+			<li>changed sat24 to animated gifs (infrared and visual).</li>
+			</ul>
+			<h2>2022-04-10</h2>
+			<ul>
+			<li>fixed meteo.hr animation, added a timer.</li>
+			</ul>
+			<h2>2021-07-21</h2>
+			<ul>
+			<li>enlarged the Windy map.</li>
+			</ul>
+			<h2>2021-07-18</h2>
+			<ul>
+			<li>added responsive design.</li>
+			</ul>
+			<h2>2021-07-17</h2>
+			<ul>
+			<li>initial release.</li>
+			</ul>
+		</div>
+	</div>
 	<button type="button" class="ms-tab" title="Karte (K)"><span class="ms-tab-name">Karte</span></button>
 	<div class="page-foot">
 		<nav class="footer-top">
 			<a data-action="top">Povratak na vrh</a>
 			·
 			<span class="manual-link"><a data-action="manual">Upute</a> ·</span>
+			<span class="changelog-link"><a data-action="changelog" title="Povijest promjena (P)">Povijest promjena</a> ·</span>
 			<a href="/meteo/">Početna</a>
 		</nav>
 		<footer>

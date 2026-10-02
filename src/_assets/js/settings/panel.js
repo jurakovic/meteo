@@ -20,9 +20,9 @@ import { createLayoutLine, createModeRow, createRefreshRow } from './panel-rows.
 import { layoutForPrefs, readPanelPrefs, readSharePrefs, selectedLayout } from './panel-view.js';
 
 // opening and shutting — the lock, the gutter, the backdrop, the stored
-// geometry — is the chrome both dialogs share (page/dialog.js). The arrow on
+// geometry — is the chrome every dialog shares (page/dialog.js). The arrow on
 // the page's Karte button is not set here but off the dialog-toggled event,
-// so a shut this function never made (the backdrop, Escape, the manual
+// so a shut this function never made (the backdrop, Escape, a document
 // opening over it) moves it just the same
 export function toggleMapSettings() {
 	const element = document.getElementById('mapSettings');

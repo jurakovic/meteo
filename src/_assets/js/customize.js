@@ -8,7 +8,7 @@ import { initRerender, renderMaps } from './maps/view.js';
 import { initCommands } from './page/commands.js';
 import { initPageContent, initPageResize } from './page/content.js';
 import { initDialogs } from './page/dialog.js';
-import { applyManualSwitch, initManual } from './page/manual.js';
+import { applyDocumentSwitches, initDocuments } from './page/documents.js';
 import { initRemoteConfig } from './remote-config.js';
 import { initAddMenu } from './settings/add-menu.js';
 import { initMapSettings } from './settings/panel.js';
@@ -21,10 +21,10 @@ import { applyStoredSnapLayout, initLayoutBreakpoint } from './widgets/layout.js
 import { initRefresh } from './widgets/refresh.js';
 import { initWidgetResponsiveness } from './widgets/responsive.js';
 
-// before the first paint: the maps switched off, the manual's switch, and the
-// board's cloak, which needs the view (a shared link's or the stored one)
+// before the first paint: the maps switched off, the documents' switches, and
+// the board's cloak, which needs the view (a shared link's or the stored one)
 initRemoteConfig();
-applyManualSwitch();
+applyDocumentSwitches();
 loadSharedMapView();
 cloakBoard();
 
@@ -50,5 +50,5 @@ onReady(renderMaps);
 onReady(applyStoredSnapLayout);
 onReady(uncloakBoard);
 onReady(initDialogs);
-onReady(initManual);
+onReady(initDocuments);
 onReady(initPageContent);

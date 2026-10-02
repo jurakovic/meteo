@@ -981,6 +981,11 @@ body.fs-lock {
 		grid-template-columns: repeat(3, 1fr);
 	}
 
+	/* the changelog switched off (FEATURES.changelog): its one entry goes */
+	html.no-changelog .changelog-link {
+		display: none;
+	}
+
 	/* same expand affordance as the .expandable "Linkovi" button */
 	.buttons button.btn {
 		position: relative;
@@ -2038,46 +2043,48 @@ body.fs-lock {
 			margin-top: 0;
 		}
 
-/* the manual, built into the page from MANUAL.md (md.ps1). It is a document
-   and not a picker, so the body it sits in gets reading measure and the
-   spacing prose wants; everything else about the dialog is the shared chrome */
-.manual-dialog .dialog-body {
+/* the documents, the manual and the changelog, built into the page from
+   their .md files. A document is not a picker, so the body it sits in gets
+   reading measure and the spacing prose wants; everything else about the
+   dialog is the shared chrome */
+.doc-dialog .dialog-body {
 	padding: 4px 14px 16px;
 	line-height: 1.5;
 }
 
-	.manual-dialog .dialog-body h2,
-	.manual-dialog .dialog-body h3 {
+	.doc-dialog .dialog-body h2,
+	.doc-dialog .dialog-body h3 {
 		margin: 22px 0 8px;
 		font-weight: normal;
 		color: var(--c-accent);
+		text-align: left; /* off the page title's centring (h2) */
 	}
 
-	.manual-dialog .dialog-body h2 {
+	.doc-dialog .dialog-body h2 {
 		font-size: 16px;
 		padding-bottom: 4px;
 		border-bottom: 1px solid var(--c-control);
 	}
 
-	.manual-dialog .dialog-body h3 {
+	.doc-dialog .dialog-body h3 {
 		font-size: 14px;
 	}
 
-	.manual-dialog .dialog-body p,
-	.manual-dialog .dialog-body ul {
+	.doc-dialog .dialog-body p,
+	.doc-dialog .dialog-body ul {
 		margin: 8px 0;
 	}
 
-	.manual-dialog .dialog-body ul {
+	.doc-dialog .dialog-body ul {
 		padding-left: 20px;
 	}
 
-	.manual-dialog .dialog-body li {
+	.doc-dialog .dialog-body li {
 		margin: 3px 0;
 	}
 
-	.manual-dialog .dialog-body code,
-	.manual-dialog .dialog-body kbd {
+	.doc-dialog .dialog-body code,
+	.doc-dialog .dialog-body kbd {
 		padding: 0 4px;
 		border-radius: 3px;
 		background-color: var(--c-field);
@@ -2085,16 +2092,16 @@ body.fs-lock {
 		white-space: nowrap;
 	}
 
-	.manual-dialog .dialog-body kbd {
+	.doc-dialog .dialog-body kbd {
 		border: 1px solid var(--c-control-hover);
 	}
 
-	.manual-dialog .dialog-body a {
+	.doc-dialog .dialog-body a {
 		color: var(--c-accent);
 	}
 
 	/* the aside the document sets off from the run of the text */
-	.manual-dialog .dialog-body blockquote {
+	.doc-dialog .dialog-body blockquote {
 		margin: 12px 0;
 		padding: 2px 12px;
 		border-left: 3px solid var(--c-control);
@@ -2102,7 +2109,7 @@ body.fs-lock {
 
 	/* a table can be wider than the dialog once it is pulled narrow, and it is
 	   the table that scrolls then rather than the document under it */
-	.manual-dialog .dialog-body table {
+	.doc-dialog .dialog-body table {
 		display: block;
 		width: 100%;
 		max-width: 875px;
@@ -2111,49 +2118,70 @@ body.fs-lock {
 		border-collapse: collapse;
 	}
 
-		.manual-dialog .dialog-body th,
-		.manual-dialog .dialog-body td {
+		.doc-dialog .dialog-body th,
+		.doc-dialog .dialog-body td {
 			padding: 4px 10px 4px 0;
 			border-bottom: 1px solid var(--c-chip);
 			text-align: left;
 			vertical-align: top;
 		}
 
-		.manual-dialog .dialog-body th {
+		.doc-dialog .dialog-body th {
 			font-weight: normal;
 			opacity: 0.7;
 		}
 
 	/* the contents, made of the document's own headings; the indent is the only
 	   thing that tells a section from a subsection, so it carries the level */
-	.manual-dialog .manual-toc {
+	.doc-dialog .manual-toc {
 		margin: 10px 0 18px;
 		padding: 8px 0;
 		border-top: 1px solid var(--c-control);
 		border-bottom: 1px solid var(--c-control);
 	}
 
-		.manual-dialog .manual-toc ul {
+		.doc-dialog .manual-toc ul {
 			margin: 0;
 			padding: 0;
 			list-style: none;
 		}
 
-		.manual-dialog .manual-toc li {
+		.doc-dialog .manual-toc li {
 			margin: 2px 0;
 		}
 
-		.manual-dialog .manual-toc .toc-3 {
+		.doc-dialog .manual-toc .toc-3 {
 			padding-left: 16px;
 		}
 
-		.manual-dialog .manual-toc a {
+		.doc-dialog .manual-toc a {
 			text-decoration: none;
 		}
 
-			.manual-dialog .manual-toc a:hover {
+			.doc-dialog .manual-toc a:hover {
 				text-decoration: underline;
 			}
+
+/* the changelog is a long run of short days, each a date and a few lines, so
+   the headings are tighter than the manual's sections */
+.changelog-dialog .dialog-body h2 {
+	margin: 16px 0 4px;
+	font-size: 14px;
+}
+
+	.changelog-dialog .dialog-body h2:first-child {
+		margin-top: 8px;
+	}
+
+	/* the pull request beside the date, quieter than the date it qualifies */
+	.changelog-dialog .dialog-body h2 a {
+		margin-left: 6px;
+		color: var(--c-muted);
+	}
+
+	.changelog-dialog .dialog-body ul {
+		margin: 4px 0;
+	}
 
 /* stands in for the maps when the view resolves to none ("Ništa") */
 .maps-empty {

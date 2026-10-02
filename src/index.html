@@ -51,7 +51,7 @@
 	<div class="dialog-backdrop" hidden></div>
 	<!-- the manual, built in from MANUAL.md; the landing page carries it too,
 	     which is why the dialog chrome is the page's (page/dialog.js) -->
-	<div class="dialog manual-dialog" id="manualDialog" data-dialog-key="manualPanel" hidden>
+	<div class="dialog doc-dialog" id="manualDialog" data-dialog-key="manualPanel" hidden>
 		<div class="dialog-head">
 			<span class="dialog-head-left">
 				<a class="dialog-home" href="/" title="Početna"><img src="/_assets/img/favicon-32x32.png" alt="Početna"></a>
@@ -63,11 +63,25 @@
 			<!-- manual -->
 		</div>
 	</div>
+	<!-- the changelog, built in from CHANGELOG.md, in the same window -->
+	<div class="dialog doc-dialog changelog-dialog" id="changelogDialog" data-dialog-key="changelogPanel" hidden>
+		<div class="dialog-head">
+			<span class="dialog-head-left">
+				<a class="dialog-home" href="/" title="Početna"><img src="/_assets/img/favicon-32x32.png" alt="Početna"></a>
+				<span class="dialog-title">Povijest promjena</span>
+			</span>
+			<a class="dialog-close" title="Zatvori (Esc)">Zatvori</a>
+		</div>
+		<div class="dialog-body" data-include-html="/_components/changelog.c.html">
+			<!-- changelog -->
+		</div>
+	</div>
 	<div class="page-foot">
 		<nav class="footer-top">
 			<a data-action="top">Povratak na vrh</a>
 			·
 			<span class="manual-link"><a data-action="manual">Upute</a> ·</span>
+			<span class="changelog-link"><a data-action="changelog" title="Povijest promjena (P)">Povijest promjena</a> ·</span>
 			<a href="/customize/index.html">Prilagodi <span class="beta">beta</span></a>
 		</nav>
 		<footer>
