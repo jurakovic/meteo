@@ -221,18 +221,17 @@
 		var(--c-control);border-bottom:1px solid var(--c-control)}.doc-dialog .manual-toc ul{margin:0;padding:0;list-style:none}
 		.doc-dialog .manual-toc li{margin:2px 0}.doc-dialog .manual-toc .toc-3{padding-left:16px}.doc-dialog .manual-toc a{text-decoration:none}
 		.doc-dialog .manual-toc a:hover{text-decoration:underline}.changelog-dialog .dialog-body h2{margin:16px 0 4px;font-size:14px}
-		.changelog-dialog .dialog-body h2:first-child{margin-top:8px}.changelog-dialog .dialog-body h2 a{margin-left:6px;color:var(--c-muted)}
-		.changelog-dialog .dialog-body ul{margin:4px 0}.maps-empty{padding:20px 0;font-size:13px;font-style:italic;opacity:.6}.slideshow{position:
-		relative;display:flex;justify-content:center}.slide{display:none}.slide.active{display:block;width:100%}.slide>.placeholder{width:100%}
-		.slide>.placeholder>img{margin-inline:auto}.next,.prev{cursor:pointer;position:absolute;align-content:center;top:0;bottom:0;width:15%;
-		padding:16px;color:transparent;opacity:.7;font-weight:700;font-size:36px;transition:color .6s ease,background-image .6s ease;user-select:
-		none}.prev{left:0;text-align:left}.prev:hover{background-image:linear-gradient(to left,transparent,rgba(0,0,0,.6));color:#fff;
-		text-decoration:none}.prev.shorter{top:23px}.next{right:0;text-align:right}.next:hover{background-image:
-		linear-gradient(to right,transparent,rgba(0,0,0,.6));color:#fff;text-decoration:none}.next.shorter{top:23px}.fade{animation-name:fade;
-		animation-duration:1s}@keyframes fade{from{opacity:.6}to{opacity:1}}@media (max-width:800px){.next,.prev{padding:12px;font-size:20px}
-		.next.shorter,.prev.shorter{top:23px}}.indicators-container{display:grid;grid-template-columns:repeat(3,1fr);gap:4px;width:100%}.indicator{
-		height:3px;background-color:#4e5264;transition:background-color .3s}.indicator.active{background-color:var(--c-accent)}
-		@media (max-width:800px){.indicator{height:2px}}.expandable{position:relative;justify-content:center;margin-top:10px;margin-bottom:4px;
+		.changelog-dialog .dialog-body h2:first-child{margin-top:8px}.changelog-dialog .dialog-body ul{margin:4px 0}.maps-empty{padding:20px 0;
+		font-size:13px;font-style:italic;opacity:.6}.slideshow{position:relative;display:flex;justify-content:center}.slide{display:none}
+		.slide.active{display:block;width:100%}.slide>.placeholder{width:100%}.slide>.placeholder>img{margin-inline:auto}.next,.prev{cursor:pointer;
+		position:absolute;align-content:center;top:0;bottom:0;width:15%;padding:16px;color:transparent;opacity:.7;font-weight:700;font-size:36px;
+		transition:color .6s ease,background-image .6s ease;user-select:none}.prev{left:0;text-align:left}.prev:hover{background-image:
+		linear-gradient(to left,transparent,rgba(0,0,0,.6));color:#fff;text-decoration:none}.prev.shorter{top:23px}.next{right:0;text-align:right}
+		.next:hover{background-image:linear-gradient(to right,transparent,rgba(0,0,0,.6));color:#fff;text-decoration:none}.next.shorter{top:23px}
+		.fade{animation-name:fade;animation-duration:1s}@keyframes fade{from{opacity:.6}to{opacity:1}}@media (max-width:800px){.next,.prev{padding:
+		12px;font-size:20px}.next.shorter,.prev.shorter{top:23px}}.indicators-container{display:grid;grid-template-columns:repeat(3,1fr);gap:4px;
+		width:100%}.indicator{height:3px;background-color:#4e5264;transition:background-color .3s}.indicator.active{background-color:var(--c-accent)
+		}@media (max-width:800px){.indicator{height:2px}}.expandable{position:relative;justify-content:center;margin-top:10px;margin-bottom:4px;
 		font-family:inherit;color:#fff;background-color:var(--c-control);cursor:pointer;width:100%;height:24px;border:none;outline:0}
 		.expandable:hover{background-color:var(--c-control-hover)}.expandable .arrow{position:absolute;right:10px;top:2px;font-size:14px}.links{
 		font-size:14px;display:grid;grid-template-columns:25% 45% 30%;gap:0;max-height:0;overflow:hidden;transition:max-height .3s ease-out}
@@ -536,7 +535,7 @@
 		;t&&(t.hidden=!e,e&&t.classList.remove("dialog-spent"))}(),t&&He(e),_e(e,t)}function Ce(){const e=Ee();return e&&De(e,!1),!!e}
 		var We=new Map,Ve=[];function Ie(e,{run:t,keys:a=[],keyWhen:r=()=>!0,keepDefault:n=!1,capture:o=!1}){const i={id:e,run:t,keys:a,keyWhen:r,
 		keepDefault:n,capture:o};We.set(e,i),a.length&&Ve.push(i)}var Fe={manual:!1,changelog:!0},Te=[{feature:"manual",dialogId:"manualDialog",
-		hash:"upute",keys:["h","H"]},{feature:"changelog",dialogId:"changelogDialog",hash:"promjene",keys:["p","P"]}];function Be(e){try{
+		hash:"upute",keys:["h","H"]},{feature:"changelog",dialogId:"changelogDialog",hash:"promjene",keys:["c","C"]}];function Be(e){try{
 		return decodeURIComponent(e.slice(1))}catch{return e.slice(1)}}function Oe({feature:t,dialogId:a,hash:r,keys:o}){
 		const i=document.getElementById(a);if(!i||!Fe[t])return;const s=i.querySelector(".dialog-close")
 		;s&&s.addEventListener("click",()=>De(i,!1)),i.addEventListener("click",e=>{const t=e.target.closest('a[href^="#"]')
@@ -1285,7 +1284,7 @@
 			<p><strong>Cijeli zaslon.</strong> Iz cijelog zaslona izlazi se gumbom <code>[-]</code> ili tipkom <kbd>Esc</kbd>. Za ponašanje u bočnom stupcu i na ploči vidi <a href="#bočni-stupci">Bočni stupci</a> i <a href="#nadzorna-ploča">Nadzorna ploča</a>.</p>
 			<p><strong>Linkovi.</strong> Gumb <em>Linkovi</em> vodi na popis dodatnih izvora na dnu stranice. Kvadratić pokraj njega uključuje prikaz linkova ispod svake karte.</p>
 			<p><strong>Upute.</strong> Ovaj tekst otvaraju gumb <code>?</code>, poveznica <em>Upute</em> u podnožju i tipka <kbd>H</kbd>. Otvara se u prozoru preko stranice, pa se upute mogu čitati uz karte. Zatvara se natpisom <em>Zatvori</em> ili tipkom <kbd>Esc</kbd>. Ikona stranice lijevo od naslova vodi na početnu stranicu, kao i u dijalogu <em>Karte</em>. Poveznica koja završava s <code>#upute</code> otvara upute odmah pri učitavanju stranice.</p>
-			<p><strong>Povijest promjena.</strong> Poveznica <em>Povijest promjena</em> u podnožju i tipka <kbd>P</kbd> otvaraju popis promjena na stranici, po datumima i na engleskom. Otvara se u prozoru preko stranice, kao i upute, a poveznica koja završava s <code>#promjene</code> otvara ga odmah pri učitavanju stranice.</p>
+			<p><strong>Povijest promjena.</strong> Poveznica <em>Povijest promjena</em> u podnožju i tipka <kbd>C</kbd> otvaraju popis promjena na stranici, po datumima i na engleskom. Otvara se u prozoru preko stranice, kao i upute, a poveznica koja završava s <code>#promjene</code> otvara ga odmah pri učitavanju stranice.</p>
 			<h2 id="dijalog-karte">Dijalog Karte</h2>
 			<p>Gumb <strong>Karte</strong> (ili tipka <kbd>K</kbd>) otvara dijalog u kojem se bira što se prikazuje. Kad gumb na stranici nije dostupan, dijalog se otvara s <a href="#pločica-karte">pločice Karte</a> na vrhu ekrana.</p>
 			<p>Dok je dijalog otvoren, stranica iza njega je malo zatamnjena i ne reagira. Klik izvan dijaloga samo ga zatvara — taj klik ne ide dalje, pa neće usput otvoriti poveznicu ni pomaknuti prozor.</p>
@@ -1444,7 +1443,7 @@
 			<tr><td><kbd>K</kbd></td><td>otvara i zatvara dijalog <em>Karte</em></td></tr>
 			<tr><td><kbd>Enter</kbd></td><td>u dijalogu <em>Karte</em>: primjenjuje promjene</td></tr>
 			<tr><td><kbd>H</kbd></td><td>otvara i zatvara <em>Upute</em></td></tr>
-			<tr><td><kbd>P</kbd></td><td>otvara i zatvara <em>Povijest promjena</em></td></tr>
+			<tr><td><kbd>C</kbd></td><td>otvara i zatvara <em>Povijest promjena</em></td></tr>
 			<tr><td><kbd>Esc</kbd></td><td>zatvara dijalog; ako nijedan nije otvoren, izlazi iz cijelog zaslona</td></tr>
 			<tr><td><kbd>R</kbd></td><td>ponovno učitava sve karte</td></tr>
 			<tr><td><kbd>D</kbd></td><td>kopira prozor na vrhu</td></tr>
@@ -1511,7 +1510,7 @@
 			<a class="dialog-close" title="Zatvori (Esc)">Zatvori</a>
 		</div>
 		<div class="dialog-body">
-						<h2>2026-09-23 <a href="https://github.com/jurakovic/meteo/pull/42" target="_blank" rel="noopener">#42</a></h2>
+						<h2>2026-09-23</h2>
 			<ul>
 			<li>added copies of a map window (<code>[D]</code>), so the same map can be shown twice, e.g. at two sizes or on two different slides.</li>
 			<li>added seams: dragging the shared edge of two adjacent windows resizes both at once.</li>
@@ -1520,7 +1519,7 @@
 			<li>added auto-refresh of all maps every 5, 10, 15, 30 or 60 minutes, with a countdown on the tab.</li>
 			<li>added search to the map picker (multiple words, works without diacritics).</li>
 			</ul>
-			<h2>2026-09-14 <a href="https://github.com/jurakovic/meteo/pull/41" target="_blank" rel="noopener">#41</a></h2>
+			<h2>2026-09-14</h2>
 			<ul>
 			<li>added pop-out map windows on desktop: a map can float above the page, be moved and resized, snap to other windows, be grouped with a neighbour, or dock in a column at the screen edge.</li>
 			<li>added a dashboard mode that shows only the selected maps, as windows on a dark background, with an optional snap grid; a preset saved as a dashboard opens as one.</li>
@@ -1528,29 +1527,29 @@
 			<li>added keyboard shortcuts.</li>
 			<li>made the map dialog movable and resizable.</li>
 			</ul>
-			<h2>2026-08-29 <a href="https://github.com/jurakovic/meteo/pull/40" target="_blank" rel="noopener">#40</a></h2>
+			<h2>2026-08-29</h2>
 			<ul>
 			<li>replaced the ČHMÚ synoptic chart on the main page with DWD synoptic charts (analysis and forecasts); ČHMÚ remains available on the customize page.</li>
 			</ul>
-			<h2>2026-08-17 <a href="https://github.com/jurakovic/meteo/pull/39" target="_blank" rel="noopener">#39</a></h2>
+			<h2>2026-08-17</h2>
 			<ul>
 			<li>added saved presets: save the current selection under a name, then update, rename, share or delete it.</li>
 			<li>built-in presets can be hidden from the preset row; renamed "Zadano" to "Osnovno".</li>
 			</ul>
-			<h2>2026-07-06 <a href="https://github.com/jurakovic/meteo/pull/38" target="_blank" rel="noopener">#38</a></h2>
+			<h2>2026-07-06</h2>
 			<ul>
 			<li>added the customize page (beta), replacing the extras page: choose which maps to show and in what order, start from a preset (Zadano, Više, Radari, Sateliti, Nevrijeme, Sve, Ništa), and share the view with a link.</li>
 			</ul>
-			<h2>2026-06-28 <a href="https://github.com/jurakovic/meteo/pull/37" target="_blank" rel="noopener">#37</a></h2>
+			<h2>2026-06-28</h2>
 			<ul>
 			<li>added a fullscreen toggle to the interactive maps.</li>
 			<li>updated Neverin satellite image sources.</li>
 			</ul>
-			<h2>2026-06-26 <a href="https://github.com/jurakovic/meteo/pull/36" target="_blank" rel="noopener">#36</a></h2>
+			<h2>2026-06-26</h2>
 			<ul>
 			<li>added the ASTORP storm forecast and an ESWD link.</li>
 			</ul>
-			<h2>2026-06-24 <a href="https://github.com/jurakovic/meteo/pull/35" target="_blank" rel="noopener">#35</a></h2>
+			<h2>2026-06-24</h2>
 			<ul>
 			<li>added a row of inline quick links (Windy, Zoom Earth, meteoblue, Rain Viewer, Ventusky, Vrijeme&amp;Radar, Sat24, I'm Weather, Időkép) under each map, with region-specific coordinates.</li>
 			<li>added a "Linkovi" toggle to show/hide the inline link rows (remembered via localStorage).</li>
@@ -1561,15 +1560,15 @@
 			<li>prevented multi-touch gestures from triggering slide/overlay actions.</li>
 			<li>adjusted interactive map aspect ratio on desktop.</li>
 			</ul>
-			<h2>2026-06-02 <a href="https://github.com/jurakovic/meteo/pull/34" target="_blank" rel="noopener">#34</a></h2>
+			<h2>2026-06-02</h2>
 			<ul>
 			<li>separated ESSL and ESTOFEX storm forecasts and added more forecast images.</li>
 			</ul>
-			<h2>2026-05-09 <a href="https://github.com/jurakovic/meteo/pull/33" target="_blank" rel="noopener">#33</a></h2>
+			<h2>2026-05-09</h2>
 			<ul>
 			<li>reverted to meteoblue meteogram widgets.</li>
 			</ul>
-			<h2>2026-03-26 <a href="https://github.com/jurakovic/meteo/pull/32" target="_blank" rel="noopener">#32</a></h2>
+			<h2>2026-03-26</h2>
 			<ul>
 			<li>added an <code>[HR]</code>/<code>[EU]</code> toggle to all interactive maps (Windy, Blitzortung, Ventusky, Rain Viewer, Weather&amp;Radar) to switch between Croatia- and Europe-centered views, with separate desktop and mobile zoom levels.</li>
 			<li>fixed the progress bar hiding prematurely on mobile before lazy images finished loading.</li>
@@ -1578,113 +1577,113 @@
 			<ul>
 			<li>hide chmu map white margins.</li>
 			</ul>
-			<h2>2026-02-11 <a href="https://github.com/jurakovic/meteo/pull/31" target="_blank" rel="noopener">#31</a></h2>
+			<h2>2026-02-11</h2>
 			<ul>
 			<li>changed meteoblue meteogram from 7-day to 5-day.</li>
 			<li>fixed meteociel satellite slide size.</li>
 			</ul>
-			<h2>2026-02-04 <a href="https://github.com/jurakovic/meteo/pull/30" target="_blank" rel="noopener">#30</a></h2>
+			<h2>2026-02-04</h2>
 			<ul>
 			<li>replaced meteoblue meteogram widgets with the image API (Zagreb).</li>
 			</ul>
-			<h2>2026-01-10 <a href="https://github.com/jurakovic/meteo/pull/29" target="_blank" rel="noopener">#29</a></h2>
+			<h2>2026-01-10</h2>
 			<ul>
 			<li>fixed the chmu synoptic map and moved chmu maps to the main page.</li>
 			<li>changed neverin europe images to a whole-Europe view.</li>
 			<li>updated meteociel images.</li>
 			</ul>
-			<h2>2025-11-15 <a href="https://github.com/jurakovic/meteo/pull/28" target="_blank" rel="noopener">#28</a></h2>
+			<h2>2025-11-15</h2>
 			<ul>
 			<li>updated meteoblue meteograms (meteoblue began requiring registration for widgets).</li>
 			</ul>
-			<h2>2025-07-27 <a href="https://github.com/jurakovic/meteo/pull/27" target="_blank" rel="noopener">#27</a></h2>
+			<h2>2025-07-27</h2>
 			<ul>
 			<li>fixed ESSL storm forecast lookup.</li>
 			<li>added ESTOFEX forecast slide.</li>
 			</ul>
-			<h2>2025-07-07 <a href="https://github.com/jurakovic/meteo/pull/26" target="_blank" rel="noopener">#26</a></h2>
+			<h2>2025-07-07</h2>
 			<ul>
 			<li>moved the image load progress bar to the top.</li>
 			<li>added Rain Alarm to links.</li>
 			</ul>
-			<h2>2025-06-13 <a href="https://github.com/jurakovic/meteo/pull/25" target="_blank" rel="noopener">#25</a></h2>
+			<h2>2025-06-13</h2>
 			<ul>
 			<li>reordered maps on the extras page (Ventusky on top).</li>
 			<li>changed RainViewer theme from dark to light.</li>
 			<li>added Zoom Earth links.</li>
 			</ul>
-			<h2>2025-06-10 <a href="https://github.com/jurakovic/meteo/pull/24" target="_blank" rel="noopener">#24</a></h2>
+			<h2>2025-06-10</h2>
 			<ul>
 			<li>added embedded Weather&amp;Radar, Rain Viewer and Ventusky maps on the extras page.</li>
 			<li>added a button to exit interactive mode and reset a map to its default position and zoom.</li>
 			<li>moved meteo.si to the extras page.</li>
 			</ul>
-			<h2>2025-06-05 <a href="https://github.com/jurakovic/meteo/pull/23" target="_blank" rel="noopener">#23</a></h2>
+			<h2>2025-06-05</h2>
 			<ul>
 			<li>added ESSL storm forecast.</li>
 			</ul>
-			<h2>2025-05-30 <a href="https://github.com/jurakovic/meteo/pull/22" target="_blank" rel="noopener">#22</a></h2>
+			<h2>2025-05-30</h2>
 			<ul>
 			<li>made the Windy and Blitzortung overlays full size, with a hint to double click/tap to remove them.</li>
 			<li>added vrijeme.net (Facebook) to links.</li>
 			</ul>
-			<h2>2025-05-21 <a href="https://github.com/jurakovic/meteo/pull/21" target="_blank" rel="noopener">#21</a></h2>
+			<h2>2025-05-21</h2>
 			<ul>
 			<li>added the blitzortung.org lightning map.</li>
 			<li>enlarged the Windy map and prevented accidental map drag.</li>
 			<li>added meteociel.fr EU temperature slides and a EUMETView link.</li>
 			<li>moved istramet to the extras page.</li>
 			</ul>
-			<h2>2025-05-11 <a href="https://github.com/jurakovic/meteo/pull/20" target="_blank" rel="noopener">#20</a></h2>
+			<h2>2025-05-11</h2>
 			<ul>
 			<li>added swipe gestures to slideshows.</li>
 			</ul>
-			<h2>2025-05-08 <a href="https://github.com/jurakovic/meteo/pull/19" target="_blank" rel="noopener">#19</a></h2>
+			<h2>2025-05-08</h2>
 			<ul>
 			<li>added slideshow position indicators.</li>
 			</ul>
-			<h2>2025-03-22 <a href="https://github.com/jurakovic/meteo/pull/18" target="_blank" rel="noopener">#18</a></h2>
+			<h2>2025-03-22</h2>
 			<ul>
 			<li>made the links section expandable/collapsible.</li>
 			</ul>
-			<h2>2025-02-28 <a href="https://github.com/jurakovic/meteo/pull/17" target="_blank" rel="noopener">#17</a></h2>
+			<h2>2025-02-28</h2>
 			<ul>
 			<li>added a placeholder background while images load.</li>
 			</ul>
-			<h2>2024-12-31 <a href="https://github.com/jurakovic/meteo/pull/16" target="_blank" rel="noopener">#16</a></h2>
+			<h2>2024-12-31</h2>
 			<ul>
 			<li>added air quality links and nebo.com.hr.</li>
 			<li>enabled the dhmz bilogora radar.</li>
 			</ul>
-			<h2>2024-10-14 <a href="https://github.com/jurakovic/meteo/pull/15" target="_blank" rel="noopener">#15</a></h2>
+			<h2>2024-10-14</h2>
 			<ul>
 			<li>fixed the progress bar getting stuck when images loaded from cache.</li>
 			</ul>
-			<h2>2024-10-11 <a href="https://github.com/jurakovic/meteo/pull/14" target="_blank" rel="noopener">#14</a></h2>
+			<h2>2024-10-11</h2>
 			<ul>
 			<li>added an image load progress bar.</li>
 			<li>added SWPC home to links.</li>
 			</ul>
-			<h2>2024-09-28 <a href="https://github.com/jurakovic/meteo/pull/13" target="_blank" rel="noopener">#13</a></h2>
+			<h2>2024-09-28</h2>
 			<ul>
 			<li>changed meteoblue forecast to a slideshow.</li>
 			<li>reordered and hid some images, updated and reordered links.</li>
 			</ul>
-			<h2>2024-09-11 <a href="https://github.com/jurakovic/meteo/pull/12" target="_blank" rel="noopener">#12</a></h2>
+			<h2>2024-09-11</h2>
 			<ul>
 			<li>added the ability to show multiple images in place as a "slideshow".</li>
 			<li>added meteoblue forecast.</li>
 			</ul>
-			<h2>2024-09-07 <a href="https://github.com/jurakovic/meteo/pull/10" target="_blank" rel="noopener">#10</a></h2>
+			<h2>2024-09-07</h2>
 			<ul>
 			<li>added the extras page with site navigation buttons.</li>
 			<li>added and rearranged images, added Facebook page links.</li>
 			</ul>
-			<h2>2024-09-06 <a href="https://github.com/jurakovic/meteo/pull/9" target="_blank" rel="noopener">#9</a></h2>
+			<h2>2024-09-06</h2>
 			<ul>
 			<li>moved links to the bottom with a new layout.</li>
 			</ul>
-			<h2>2024-08-25 <a href="https://github.com/jurakovic/meteo/pull/8" target="_blank" rel="noopener">#8</a></h2>
+			<h2>2024-08-25</h2>
 			<ul>
 			<li>added a page footer.</li>
 			</ul>
@@ -1700,19 +1699,19 @@
 			<ul>
 			<li>added Puntijarka radar and re-enabled dhmz uljenje.</li>
 			</ul>
-			<h2>2024-01-23 <a href="https://github.com/jurakovic/meteo/pull/4" target="_blank" rel="noopener">#4</a></h2>
+			<h2>2024-01-23</h2>
 			<ul>
 			<li>added Weather&amp;Radar.</li>
 			</ul>
-			<h2>2024-01-16 <a href="https://github.com/jurakovic/meteo/pull/3" target="_blank" rel="noopener">#3</a></h2>
+			<h2>2024-01-16</h2>
 			<ul>
 			<li>added Időkép.</li>
 			</ul>
-			<h2>2024-01-15 <a href="https://github.com/jurakovic/meteo/pull/2" target="_blank" rel="noopener">#2</a></h2>
+			<h2>2024-01-15</h2>
 			<ul>
 			<li>added EUMETNET.</li>
 			</ul>
-			<h2>2024-01-14 <a href="https://github.com/jurakovic/meteo/pull/1" target="_blank" rel="noopener">#1</a></h2>
+			<h2>2024-01-14</h2>
 			<ul>
 			<li>added a curated weather links section.</li>
 			</ul>
@@ -1759,7 +1758,7 @@
 			<a data-action="top">Povratak na vrh</a>
 			·
 			<span class="manual-link"><a data-action="manual">Upute</a> ·</span>
-			<span class="changelog-link"><a data-action="changelog" title="Povijest promjena (P)">Povijest promjena</a> ·</span>
+			<span class="changelog-link"><a data-action="changelog" title="Povijest promjena (C)">Povijest promjena</a> ·</span>
 			<a href="/meteo/customize/">Prilagodi <span class="beta">beta</span></a>
 		</nav>
 		<footer>

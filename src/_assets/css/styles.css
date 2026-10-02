@@ -2173,12 +2173,6 @@ body.fs-lock {
 		margin-top: 8px;
 	}
 
-	/* the pull request beside the date, quieter than the date it qualifies */
-	.changelog-dialog .dialog-body h2 a {
-		margin-left: 6px;
-		color: var(--c-muted);
-	}
-
 	.changelog-dialog .dialog-body ul {
 		margin: 4px 0;
 	}

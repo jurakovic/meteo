@@ -21,8 +21,8 @@ const DOCUMENTS = [
 	// H for help: the letters name the thing, as R, G and S do, and ? would
 	// need Shift on one layout and AltGr on the next
 	{ feature: 'manual', dialogId: 'manualDialog', hash: 'upute', keys: ['h', 'H'] },
-	// P for povijest promjena
-	{ feature: 'changelog', dialogId: 'changelogDialog', hash: 'promjene', keys: ['p', 'P'] }
+	// C for changelog
+	{ feature: 'changelog', dialogId: 'changelogDialog', hash: 'promjene', keys: ['c', 'C'] }
 ];
 
 // a document switched off (features.js) has its entries hidden by the class

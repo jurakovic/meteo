@@ -4,7 +4,7 @@ import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
 import { convertChangelog } from '../../scripts/changelog.mjs';
 
-test('days with and without a pull request, their entries escaped, button glyphs as code', () => {
+test('days with and without a pull request, which is left out, their entries escaped, button glyphs as code', () => {
 	const html = convertChangelog([
 		'',
 		'2026-09-23 (#42)',
@@ -15,7 +15,7 @@ test('days with and without a pull request, their entries escaped, button glyphs
 		'\tupdated sources.'
 	].join('\n'));
 	assert.deepEqual(html, [
-		'<h2>2026-09-23 <a href="https://github.com/jurakovic/meteo/pull/42" target="_blank" rel="noopener">#42</a></h2>',
+		'<h2>2026-09-23</h2>',
 		'<ul>', '<li>added copies (<code>[D]</code>) &amp; seams.</li>', '<li>added the &lt;tab&gt;.</li>', '</ul>',
 		'<h2>2026-08-20</h2>',
 		'<ul>', '<li>updated sources.</li>', '</ul>'

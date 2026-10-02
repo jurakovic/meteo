@@ -5,9 +5,9 @@
 
 import { escapeText } from './manual.mjs';
 
-const REPO = 'https://github.com/jurakovic/meteo';
-
-const DAY = /^(\d{4}-\d{2}-\d{2})(?: \(#(\d+)\))?$/;
+// the pull request is read past and left out: it is for whoever reads the
+// file in the repository
+const DAY = /^(\d{4}-\d{2}-\d{2})(?: \(#\d+\))?$/;
 
 // the glyphs of the buttons an entry names ([D], [+], [HR]), set as the
 // manual sets them
@@ -33,9 +33,7 @@ export function convertChangelog(text) {
 		const day = line.match(DAY);
 		if (day) {
 			close();
-			const [, date, pr] = day;
-			const link = pr ? ` <a href="${REPO}/pull/${pr}" target="_blank" rel="noopener">#${pr}</a>` : '';
-			html.push(`<h2>${date}${link}</h2>`, '<ul>');
+			html.push(`<h2>${day[1]}</h2>`, '<ul>');
 			open = true;
 			return;
 		}

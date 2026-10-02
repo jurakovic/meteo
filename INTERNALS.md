@@ -536,7 +536,7 @@ Keys are for what the buttons cannot do in one gesture, and for backing out of w
 |---|---|---|
 | `K` | the settings dialog (*Karte*) | customize page |
 | `H` | the manual (*help*; not `?`, which takes Shift on one layout and AltGr on another) | both pages |
-| `P` | the changelog (*povijest promjena*) | both pages |
+| `C` | the changelog | both pages |
 | `Enter` | *Primijeni* while the picker is up | the dialog |
 | `Escape` | shuts the dialog, else ends a fullscreen map | both pages |
 | `R` | reloads every map with something to re-fetch | desktop |
@@ -599,7 +599,7 @@ Two documents are shown on the site, the manual and the changelog ([`CHANGELOG.m
 | source, converter | `MANUAL.md`, [`scripts/manual.mjs`](./scripts/manual.mjs) | `CHANGELOG.md`, [`scripts/changelog.mjs`](./scripts/changelog.mjs) |
 | dialog, storage key | `#manualDialog`, `manualPanel` | `#changelogDialog`, `changelogPanel` |
 | placeholder, dev fragment | `<!-- manual -->`, `manual.c.html` | `<!-- changelog -->`, `changelog.c.html` |
-| reached by | the `?` button, the top footer's *Upute*, `H`, `#upute` | the top footer's *Povijest promjena*, `P`, `#promjene` |
+| reached by | the `?` button, the top footer's *Upute*, `H`, `#upute` | the top footer's *Povijest promjena*, `C`, `#promjene` |
 
 The file is the only source, and the build makes HTML of it, each converter taking the text and returning the fragment's lines. The built pages get it inlined at the placeholder; the build also writes it to `src/_components/`, which the dev pages fetch through `include.js` (the `data-include-html` on the dialog's `.dialog-body`, stripped from the built pages). Those files are build output and git-ignored, so a page served from `src/` shows the documents as of the last build.
 
@@ -620,7 +620,7 @@ Rendering it client-side from the raw `.md` was considered and rejected: it need
 
 ### The changelog's converter
 
-`CHANGELOG.md` is not Markdown but a format of its own, kept because it is quick to write by hand: a date line (`2026-09-23`, with ` (#42)` when a pull request carried the change), then its entries, each indented by one tab, and a blank line before the next date. The converter turns a day into an `<h2>` (the pull request a link to it on GitHub) and a list, escapes the entries, and sets the button glyphs they name (`[D]`, `[+]`) as code, as the manual does. Like the manual's, it throws on any line outside the format, naming it: an entry before any date or after a blank line, a date with nothing under it, an indent that is not a tab.
+`CHANGELOG.md` is not Markdown but a format of its own, kept because it is quick to write by hand: a date line (`2026-09-23`, with ` (#42)` when a pull request carried the change), then its entries, each indented by one tab, and a blank line before the next date. The converter turns a day into an `<h2>` of its date alone (the pull request is for whoever reads the file in the repository) and a list, escapes the entries, and sets the button glyphs they name (`[D]`, `[+]`) as code, as the manual does. Like the manual's, it throws on any line outside the format, naming it: an entry before any date or after a blank line, a date with nothing under it, an indent that is not a tab.
 
 ### In the build
 

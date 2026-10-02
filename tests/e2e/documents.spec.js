@@ -1,4 +1,4 @@
-// The changelog on both pages: the top footer's link, the P key and the
+// The changelog on both pages: the top footer's link, the C key and the
 // #promjene address, in a dialog of the shared chrome
 import { test, expect } from './fixtures.js';
 
@@ -21,17 +21,17 @@ for (const which of ['landing', 'customize']) {
 			await expect(page).not.toHaveURL(/#/);
 		});
 
-		test('P toggles it', async ({ page }) => {
+		test('C toggles it', async ({ page }) => {
 			const dialog = page.locator('#changelogDialog');
-			await page.keyboard.press('p');
+			await page.keyboard.press('c');
 			await expect(dialog).toBeVisible();
-			await page.keyboard.press('p');
+			await page.keyboard.press('c');
 			await expect(dialog).toBeHidden();
 		});
 
 		test('Zatvori closes it', async ({ page }) => {
 			const dialog = page.locator('#changelogDialog');
-			await page.keyboard.press('p');
+			await page.keyboard.press('c');
 			await dialog.locator('.dialog-close').click();
 			await expect(dialog).toBeHidden();
 		});
