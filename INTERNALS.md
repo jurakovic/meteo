@@ -611,7 +611,7 @@ A document switched off puts `no-<feature>` on `<html>` before the first paint, 
 
 ### The manual's converter
 
-The manual's converter handles a fixed subset (`##`/`###` with slug ids, paragraphs, `-` lists, tables, blockquotes, `**bold**`, `*italic*`, `` `code` ``, `[text](#anchor)` and `<kbd>`) and throws on anything it does not recognise, naming the line, so the manual cannot silently render wrong. `# ` is recognised and dropped, the dialog's head carrying the title.
+The manual's converter handles a fixed subset (`##`/`###` with slug ids, paragraphs, `-` lists, tables, blockquotes, `**bold**`, `*italic*`, `` `code` ``, `[text](#anchor)` and `<kbd>`) and throws on anything it does not recognise, naming the line, so the manual cannot silently render wrong. `# ` is recognised and dropped, the dialog's head carrying the title. What stands above it is the intro (`.doc-intro`: the note that the manual was written with AI), put above the contents rather than after them, and set as quietly as the changelog's.
 
 - Order is the whole of the inline pass: code spans are lifted out to placeholders first, since the document writes glyphs inside them (`[R]`, `❮`, `×`) that the rest would reach into; bold is matched before italic, or `**` reads as an empty emphasis.
 - `&`, `<` and `>` are escaped throughout and `<kbd>` alone is put back, which makes it an allowlist: anything still reading as a tag afterwards throws. Leftover `*` or `](` after the pass throws too, so unbalanced markup is caught rather than shipped.

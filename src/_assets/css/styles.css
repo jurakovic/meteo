@@ -2131,6 +2131,21 @@ body.fs-lock {
 			opacity: 0.7;
 		}
 
+	/* the note above the contents (how the manual was made), as quiet as the
+	   changelog's: a quote there for GitHub's sake, not set off as one here */
+	.doc-dialog .doc-intro {
+		margin: 8px 0 0;
+		color: var(--c-muted);
+		font-style: italic;
+	}
+
+		.doc-dialog .doc-intro blockquote,
+		.doc-dialog .doc-intro p {
+			margin: 0;
+			padding: 0;
+			border: 0;
+		}
+
 	/* the contents, made of the document's own headings; the indent is the only
 	   thing that tells a section from a subsection, so it carries the level */
 	.doc-dialog .manual-toc {

@@ -44,6 +44,14 @@ test('blocks: the title dropped, headings in the contents, lists, tables, quotes
 	]);
 });
 
+test('what stands above the title is the intro, put above the contents', () => {
+	assert.deepEqual(convertManual('> Uz pomoć AI-ja.\n\n# Upute\n\n## Prvo\n\nTekst.\n'), [
+		'<div class="doc-intro">', '<blockquote><p>Uz pomoć AI-ja.</p></blockquote>', '</div>',
+		'<nav class="manual-toc">', '<ul>', '<li class="toc-2"><a href="#prvo">Prvo</a></li>', '</ul>', '</nav>',
+		'<h2 id="prvo">Prvo</h2>', '<p>Tekst.</p>'
+	]);
+});
+
 test('blocks outside the subset throw, naming the line', () => {
 	for (const [line, message] of [
 		['    code', /indented line \(line 3\)/],

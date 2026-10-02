@@ -1,15 +1,18 @@
+
+> Generirano uz pomoć AI-ja.
+
 # Upute
 
-**Meteo radari** na jednom mjestu prikazuje radarske i satelitske karte, munje, prognoze nevremena i sinoptičke karte iz više izvora, bez otvaranja desetak stranica.
+**Meteo radari** na jednom mjestu prikazuje radarske i satelitske karte, munje, prognoze nevremena i sinoptičke karte iz više izvora, bez otvaranja desetak različitih stranica.
 
 Stranica ima dva dijela:
 
-- **Početna** — stalan popis karata. Ništa se ne podešava, uvijek je isto i odmah se otvori.
-- **Prilagodi** — isti prikaz, ali sami birate koje se karte vide i kojim redoslijedom, a na računalu i kako su razmještene po ekranu. Do nje se dolazi gumbom *Prilagodi* na početnoj stranici.
+- **Početna** — statičan popis karata. Ništa se ne podešava, uvijek je sve isto i odmah se otvori.
+- **Prilagodi** — isti prikaz, ali uz naprednije mogućnosti. Sami birate koje se karte vide i kojim redoslijedom, a na računalu i kako su razmještene po ekranu. Do nje se dolazi gumbom *Prilagodi* na početnoj stranici.
 
 Poglavlje [Karte na stranici](#karte-na-stranici) vrijedi za oba dijela, a sve ostalo samo za *Prilagodi*.
 
-Izdvojeni prozori ("widgeti"), bočni stupci i nadzorna ploča ("dashboard") rade samo na računalu, odnosno na ekranu širem od 800 px s mišem. Na dodirnim ekranima stranica ostaje obična, okomita lista karata — vidi [Na mobitelu](#na-mobitelu).
+Izdvojeni prozori ("widgeti"), bočni stupci i nadzorna ploča ("dashboard") rade samo na računalu, odnosno na ekranu širem od 800 px s mišem. Na ekranima na dodir stranica ostaje obična, okomita lista karata — vidi [Na mobitelu](#na-mobitelu).
 
 ## Karte na stranici
 

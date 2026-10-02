@@ -1,13 +1,16 @@
+
+> Generated with the AI.
+
 # Manual
 
-**Meteo radari** brings radar and satellite maps, lightning, storm forecasts and synoptic charts from many sources together in one place, without opening a dozen sites.
+**Meteo radari** brings radar and satellite maps, lightning, storm forecasts and synoptic charts from many sources together in one place, without opening a dozen different sites.
 
 The site speaks Croatian, so the labels quoted here are the ones on the screen, with a translation where it helps. The Croatian version of this manual is [`MANUAL.hr.md`](./MANUAL.hr.md), and it is the one shown on the site.
 
 The site has two parts:
 
-- **Početna** (home) — a fixed list of maps. Nothing to set up; it is always the same and opens at once.
-- **Prilagodi** (customize) — the same view, but you choose which maps are shown and in what order, and on a computer also how they are laid out on the screen. It is reached with the *Prilagodi* button on the home page.
+- **Početna** (home) — a static list of maps. Nothing to set up; everything is always the same and opens at once.
+- **Prilagodi** (customize) — the same view, but with more advanced options. You choose which maps are shown and in what order, and on a computer also how they are laid out on the screen. It is reached with the *Prilagodi* button on the home page.
 
 The chapter [Maps on the page](#maps-on-the-page) applies to both parts, everything else to *Prilagodi* only.
 

@@ -217,11 +217,12 @@
 		.doc-dialog .dialog-body blockquote{margin:12px 0;padding:2px 12px;border-left:3px solid var(--c-control)}.doc-dialog .dialog-body table{
 		display:block;width:100%;max-width:875px;overflow-x:auto;margin:10px 0;border-collapse:collapse}.doc-dialog .dialog-body td,
 		.doc-dialog .dialog-body th{padding:4px 10px 4px 0;border-bottom:1px solid var(--c-chip);text-align:left;vertical-align:top}
-		.doc-dialog .dialog-body th{font-weight:400;opacity:.7}.doc-dialog .manual-toc{margin:10px 0 18px;padding:8px 0;border-top:1px solid
-		var(--c-control);border-bottom:1px solid var(--c-control)}.doc-dialog .manual-toc ul{margin:0;padding:0;list-style:none}
-		.doc-dialog .manual-toc li{margin:2px 0}.doc-dialog .manual-toc .toc-3{padding-left:16px}.doc-dialog .manual-toc a{text-decoration:none}
-		.doc-dialog .manual-toc a:hover{text-decoration:underline}.changelog-dialog .dialog-body h2{margin:16px 0 4px;font-size:14px}
-		.changelog-dialog .dialog-body h2:first-child{margin-top:8px}.changelog-dialog .dialog-body ul{margin:4px 0}
+		.doc-dialog .dialog-body th{font-weight:400;opacity:.7}.doc-dialog .doc-intro{margin:8px 0 0;color:var(--c-muted);font-style:italic}
+		.doc-dialog .doc-intro blockquote,.doc-dialog .doc-intro p{margin:0;padding:0;border:0}.doc-dialog .manual-toc{margin:10px 0 18px;padding:
+		8px 0;border-top:1px solid var(--c-control);border-bottom:1px solid var(--c-control)}.doc-dialog .manual-toc ul{margin:0;padding:0;
+		list-style:none}.doc-dialog .manual-toc li{margin:2px 0}.doc-dialog .manual-toc .toc-3{padding-left:16px}.doc-dialog .manual-toc a{
+		text-decoration:none}.doc-dialog .manual-toc a:hover{text-decoration:underline}.changelog-dialog .dialog-body h2{margin:16px 0 4px;font-size
+		:14px}.changelog-dialog .dialog-body h2:first-child{margin-top:8px}.changelog-dialog .dialog-body ul{margin:4px 0}
 		.changelog-dialog .changelog-intro{margin:8px 0 0;color:var(--c-muted);font-style:italic}.maps-empty{padding:20px 0;font-size:13px;
 		font-style:italic;opacity:.6}.slideshow{position:relative;display:flex;justify-content:center}.slide{display:none}.slide.active{display:
 		block;width:100%}.slide>.placeholder{width:100%}.slide>.placeholder>img{margin-inline:auto}.next,.prev{cursor:pointer;position:absolute;
@@ -1235,7 +1236,10 @@
 			<a class="dialog-close" title="Zatvori (Esc)">Zatvori</a>
 		</div>
 		<div class="dialog-body">
-						<nav class="manual-toc">
+						<div class="doc-intro">
+			<blockquote><p>Generirano uz pomoć AI-ja.</p></blockquote>
+			</div>
+			<nav class="manual-toc">
 			<ul>
 			<li class="toc-2"><a href="#karte-na-stranici">Karte na stranici</a></li>
 			<li class="toc-2"><a href="#dijalog-karte">Dijalog Karte</a></li>
@@ -1258,14 +1262,14 @@
 			<li class="toc-2"><a href="#na-mobitelu">Na mobitelu</a></li>
 			</ul>
 			</nav>
-			<p><strong>Meteo radari</strong> na jednom mjestu prikazuje radarske i satelitske karte, munje, prognoze nevremena i sinoptičke karte iz više izvora, bez otvaranja desetak stranica.</p>
+			<p><strong>Meteo radari</strong> na jednom mjestu prikazuje radarske i satelitske karte, munje, prognoze nevremena i sinoptičke karte iz više izvora, bez otvaranja desetak različitih stranica.</p>
 			<p>Stranica ima dva dijela:</p>
 			<ul>
-			<li><strong>Početna</strong> — stalan popis karata. Ništa se ne podešava, uvijek je isto i odmah se otvori.</li>
-			<li><strong>Prilagodi</strong> — isti prikaz, ali sami birate koje se karte vide i kojim redoslijedom, a na računalu i kako su razmještene po ekranu. Do nje se dolazi gumbom <em>Prilagodi</em> na početnoj stranici.</li>
+			<li><strong>Početna</strong> — statičan popis karata. Ništa se ne podešava, uvijek je sve isto i odmah se otvori.</li>
+			<li><strong>Prilagodi</strong> — isti prikaz, ali uz naprednije mogućnosti. Sami birate koje se karte vide i kojim redoslijedom, a na računalu i kako su razmještene po ekranu. Do nje se dolazi gumbom <em>Prilagodi</em> na početnoj stranici.</li>
 			</ul>
 			<p>Poglavlje <a href="#karte-na-stranici">Karte na stranici</a> vrijedi za oba dijela, a sve ostalo samo za <em>Prilagodi</em>.</p>
-			<p>Izdvojeni prozori ("widgeti"), bočni stupci i nadzorna ploča ("dashboard") rade samo na računalu, odnosno na ekranu širem od 800 px s mišem. Na dodirnim ekranima stranica ostaje obična, okomita lista karata — vidi <a href="#na-mobitelu">Na mobitelu</a>.</p>
+			<p>Izdvojeni prozori ("widgeti"), bočni stupci i nadzorna ploča ("dashboard") rade samo na računalu, odnosno na ekranu širem od 800 px s mišem. Na ekranima na dodir stranica ostaje obična, okomita lista karata — vidi <a href="#na-mobitelu">Na mobitelu</a>.</p>
 			<h2 id="karte-na-stranici">Karte na stranici</h2>
 			<p>Svaka karta ima naslovnu traku s imenom izvora. Ime je ujedno i link na izvornu stranicu.</p>
 			<p><strong>Karte s više slika</strong> ("slideshow", npr. <em>Neverin | Radar | Hrvatska</em>) imaju strelice <code>❮</code> i <code>❯</code> na rubovima i indikatore pozicije ispod slike, koji pokazuju na kojoj ste slici. Na dodirnom ekranu slike se mijenjaju i prelaskom prsta ("swipe").</p>
