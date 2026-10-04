@@ -720,7 +720,7 @@ body.fs-lock {
 	}
 
 		html.board-boot .container,
-		html.board-boot footer {
+		html.board-boot .page-foot {
 			visibility: hidden;
 		}
 
@@ -729,7 +729,7 @@ body.fs-lock {
 	}
 
 	body.dashboard .container,
-	body.dashboard footer {
+	body.dashboard .page-foot {
 		visibility: hidden;
 	}
 
@@ -924,7 +924,7 @@ body.fs-lock {
 }
 
 	/* in centered contexts the tag goes out of flow so it renders right after
-	   the text without shifting its centering; the footer occurrence sits
+	   the text without shifting its centering; the top footer's occurrence sits
 	   mid-sentence and must stay in flow (vertical-align is ignored on
 	   absolutely positioned elements, hence the translate) */
 	.btn .beta,
@@ -951,37 +951,20 @@ body.fs-lock {
 		grid-template-columns: repeat(3, 1fr);
 	}
 
-	/* the help button is one glyph and takes a column of its own width, so the
-	   named buttons beside it keep their equal shares */
-	.buttons.with-help {
-		grid-template-columns: 1fr 1fr 32px;
-	}
-
-	.buttons.three.with-help {
-		grid-template-columns: repeat(3, 1fr) 32px;
-	}
-
-		.buttons .help-btn {
-			font-size: 15px;
-			line-height: 1;
-		}
-
-	/* the manual switched off (FEATURES.manual in features.js): its entries go,
-	   and the help button's column with them */
-	html.no-manual .help-btn,
+	/* the manual switched off (FEATURES.manual in features.js): its one entry
+	   goes */
 	html.no-manual .manual-link {
 		display: none;
 	}
 
-	html.no-manual .buttons.with-help {
-		grid-template-columns: 49.5% 49.5%;
+	/* the changelog switched off (FEATURES.changelog): its one entry goes */
+	html.no-changelog .changelog-link {
+		display: none;
 	}
 
-	html.no-manual .buttons.three.with-help {
-		grid-template-columns: repeat(3, 1fr);
-	}
-
-	/* same expand affordance as the .expandable "Linkovi" button */
+	/* the Karte button's mark, placed as the .expandable "Linkovi" arrow is;
+	   it stays as it is, since the dialog stands over the page rather than
+	   unfolding under the button */
 	.buttons button.btn {
 		position: relative;
 	}
@@ -1061,14 +1044,14 @@ body.fs-lock {
 .dialog {
 	position: fixed;
 	z-index: var(--z-dialog);
-	top: 24px;
+	top: 64px;
 	left: 0;
 	right: 0;
 	margin: 0 auto;
 	width: 750px;
 	height: 750px;
 	max-width: calc(100% - 32px);
-	max-height: calc(100vh - 48px);
+	max-height: calc(100vh - 88px); /* its top, and 24px kept below it */
 	display: flex; /* the header stays, the body below it scrolls */
 	flex-direction: column;
 	box-sizing: border-box;
@@ -2038,46 +2021,48 @@ body.fs-lock {
 			margin-top: 0;
 		}
 
-/* the manual, built into the page from MANUAL.md (md.ps1). It is a document
-   and not a picker, so the body it sits in gets reading measure and the
-   spacing prose wants; everything else about the dialog is the shared chrome */
-.manual-dialog .dialog-body {
+/* the documents, the manual and the changelog, built into the page from
+   their .md files. A document is not a picker, so the body it sits in gets
+   reading measure and the spacing prose wants; everything else about the
+   dialog is the shared chrome */
+.doc-dialog .dialog-body {
 	padding: 4px 14px 16px;
 	line-height: 1.5;
 }
 
-	.manual-dialog .dialog-body h2,
-	.manual-dialog .dialog-body h3 {
+	.doc-dialog .dialog-body h2,
+	.doc-dialog .dialog-body h3 {
 		margin: 22px 0 8px;
 		font-weight: normal;
 		color: var(--c-accent);
+		text-align: left; /* off the page title's centring (h2) */
 	}
 
-	.manual-dialog .dialog-body h2 {
+	.doc-dialog .dialog-body h2 {
 		font-size: 16px;
 		padding-bottom: 4px;
 		border-bottom: 1px solid var(--c-control);
 	}
 
-	.manual-dialog .dialog-body h3 {
+	.doc-dialog .dialog-body h3 {
 		font-size: 14px;
 	}
 
-	.manual-dialog .dialog-body p,
-	.manual-dialog .dialog-body ul {
+	.doc-dialog .dialog-body p,
+	.doc-dialog .dialog-body ul {
 		margin: 8px 0;
 	}
 
-	.manual-dialog .dialog-body ul {
+	.doc-dialog .dialog-body ul {
 		padding-left: 20px;
 	}
 
-	.manual-dialog .dialog-body li {
+	.doc-dialog .dialog-body li {
 		margin: 3px 0;
 	}
 
-	.manual-dialog .dialog-body code,
-	.manual-dialog .dialog-body kbd {
+	.doc-dialog .dialog-body code,
+	.doc-dialog .dialog-body kbd {
 		padding: 0 4px;
 		border-radius: 3px;
 		background-color: var(--c-field);
@@ -2085,16 +2070,16 @@ body.fs-lock {
 		white-space: nowrap;
 	}
 
-	.manual-dialog .dialog-body kbd {
+	.doc-dialog .dialog-body kbd {
 		border: 1px solid var(--c-control-hover);
 	}
 
-	.manual-dialog .dialog-body a {
+	.doc-dialog .dialog-body a {
 		color: var(--c-accent);
 	}
 
 	/* the aside the document sets off from the run of the text */
-	.manual-dialog .dialog-body blockquote {
+	.doc-dialog .dialog-body blockquote {
 		margin: 12px 0;
 		padding: 2px 12px;
 		border-left: 3px solid var(--c-control);
@@ -2102,7 +2087,7 @@ body.fs-lock {
 
 	/* a table can be wider than the dialog once it is pulled narrow, and it is
 	   the table that scrolls then rather than the document under it */
-	.manual-dialog .dialog-body table {
+	.doc-dialog .dialog-body table {
 		display: block;
 		width: 100%;
 		max-width: 875px;
@@ -2111,49 +2096,88 @@ body.fs-lock {
 		border-collapse: collapse;
 	}
 
-		.manual-dialog .dialog-body th,
-		.manual-dialog .dialog-body td {
+		.doc-dialog .dialog-body th,
+		.doc-dialog .dialog-body td {
 			padding: 4px 10px 4px 0;
 			border-bottom: 1px solid var(--c-chip);
 			text-align: left;
 			vertical-align: top;
 		}
 
-		.manual-dialog .dialog-body th {
+		.doc-dialog .dialog-body th {
 			font-weight: normal;
 			opacity: 0.7;
 		}
 
+	/* the note above the contents (how the manual was made), as quiet as the
+	   changelog's: a quote there for GitHub's sake, not set off as one here */
+	.doc-dialog .doc-intro {
+		margin: 8px 0 0;
+		color: var(--c-muted);
+		font-size: 11px;
+		font-style: italic;
+	}
+
+		.doc-dialog .doc-intro blockquote,
+		.doc-dialog .doc-intro p {
+			margin: 0;
+			padding: 0;
+			border: 0;
+		}
+
 	/* the contents, made of the document's own headings; the indent is the only
 	   thing that tells a section from a subsection, so it carries the level */
-	.manual-dialog .manual-toc {
+	.doc-dialog .manual-toc {
 		margin: 10px 0 18px;
 		padding: 8px 0;
 		border-top: 1px solid var(--c-control);
 		border-bottom: 1px solid var(--c-control);
 	}
 
-		.manual-dialog .manual-toc ul {
+		.doc-dialog .manual-toc ul {
 			margin: 0;
 			padding: 0;
 			list-style: none;
 		}
 
-		.manual-dialog .manual-toc li {
+		.doc-dialog .manual-toc li {
 			margin: 2px 0;
 		}
 
-		.manual-dialog .manual-toc .toc-3 {
+		.doc-dialog .manual-toc .toc-3 {
 			padding-left: 16px;
 		}
 
-		.manual-dialog .manual-toc a {
+		.doc-dialog .manual-toc a {
 			text-decoration: none;
 		}
 
-			.manual-dialog .manual-toc a:hover {
+			.doc-dialog .manual-toc a:hover {
 				text-decoration: underline;
 			}
+
+/* the changelog is a long run of short days, each a date and a few lines, so
+   the headings are tighter than the manual's sections */
+.changelog-dialog .dialog-body h2 {
+	margin: 16px 0 4px;
+	font-size: 14px;
+}
+
+	.changelog-dialog .dialog-body h2:first-child {
+		margin-top: 8px;
+	}
+
+	.changelog-dialog .dialog-body ul {
+		margin: 4px 0;
+	}
+
+	/* the note above the days (how the list was made), kept quiet */
+	.changelog-dialog .changelog-intro {
+		margin: 8px 0 0;
+		color: var(--c-muted);
+		font-size: 11px;
+		font-style: italic;
+	}
 
 /* stands in for the maps when the view resolves to none ("Ništa") */
 .maps-empty {
@@ -2349,14 +2373,55 @@ body.fs-lock {
 		}
 }
 
-footer {
+/* the page's own links over the footer; held to the bottom of a short page
+   as one block, since two sticky siblings would both stick to the same edge */
+.page-foot {
 	position: sticky;
 	top: 100%;
+	margin-top: 8px;
+}
+
+.footer-top {
+	background: var(--c-chip);
+	color: white;
+	text-align: center;
+	padding: 8px;
+}
+
+/* on a phone the links stand in two columns, flush left, filled down before
+   across, which a thumb finds more easily than a centred run; the separators
+   go with the run */
+@media (max-width: 800px) {
+	.footer-top {
+		display: grid;
+		grid-template-rows: auto auto;
+		grid-auto-flow: column;
+		grid-auto-columns: 1fr;
+		text-align: left;
+	}
+
+		/* the documents' wrappers step aside, so their links are cells of the
+		   grid; a document switched off still hides its wrapper (no-manual) */
+		.footer-top .manual-link,
+		.footer-top .changelog-link {
+			display: contents;
+		}
+
+		.footer-top a {
+			display: block;
+			padding: 4px 0;
+		}
+
+		.footer-top .sep {
+			display: none;
+		}
+}
+
+footer {
 	background: var(--c-control);
 	color: white;
 	text-align: center;
 	padding: 8px;
-	margin-top: 8px;
 }
 
 .progress-container {

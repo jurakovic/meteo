@@ -1,4 +1,4 @@
-// MANUAL.md to the HTML the manual dialog is built from. A fixed subset —
+// MANUAL.hr.md to the HTML the manual dialog is built from. A fixed subset —
 // ## and ### with slug ids, paragraphs, - lists, tables, blockquotes, **bold**,
 // *italic*, `code`, [text](#anchor) and <kbd> — and a throw on anything
 // outside it: the manual is the only input, so a line it does not recognise
@@ -65,6 +65,7 @@ export function convertManual(markdown) {
 	const lines = markdown.replace(/^\uFEFF/, '').split(/\r?\n/);
 	const body = [];
 	const toc = [];
+	let intro = 0; // how much of body came before the title
 	let i = 0;
 
 	while (i < lines.length) {
@@ -75,8 +76,9 @@ export function convertManual(markdown) {
 			if (pattern.test(line)) throw new Error(`manual: ${what} (line ${i + 1}): ${line}`);
 		}
 
-		// the document's own title: the dialog's head bar carries it already
-		if (/^# /.test(line)) { i++; continue; }
+		// the document's own title: the dialog's head bar carries it already.
+		// What stands above it is the intro, put above the contents
+		if (/^# /.test(line)) { intro = body.length; i++; continue; }
 
 		const heading = line.match(/^(##|###) +(.*)$/);
 		if (heading) {
@@ -135,5 +137,9 @@ export function convertManual(markdown) {
 	}
 
 	if (!toc.length) throw new Error('manual: no headings found');
-	return ['<nav class="manual-toc">', '<ul>', ...toc, '</ul>', '</nav>', ...body];
+	return [
+		...(intro ? ['<div class="doc-intro">', ...body.slice(0, intro), '</div>'] : []),
+		'<nav class="manual-toc">', '<ul>', ...toc, '</ul>', '</nav>',
+		...body.slice(intro)
+	];
 }

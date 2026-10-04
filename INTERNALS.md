@@ -57,7 +57,7 @@ Open <http://localhost:8081/meteo/>
 
 [`scripts/build.mjs`](./scripts/build.mjs) produces `docs/` from `src/` by processing every `.html` file outside `_components/`:
 
-1. fills the landing page's `<div data-maps>` with its map rows (see [Maps](#maps)), then injects the manual ([`scripts/manual.mjs`](./scripts/manual.mjs)) at `<!-- manual -->` and drops the dialog body's dev-only include; the fragment is also written to `_components/manual.c.html` for the dev pages. Both run before the path rewrites, so a path the rows or the manual grow later is rewritten with every other
+1. fills the landing page's `<div data-maps>` with its map rows (see [Maps](#maps)), then injects the manual and the changelog at their placeholders (`<!-- manual -->`, `<!-- changelog -->`; see [Documents on the site](#documents-on-the-site)) and drops the dialog bodies' dev-only includes; each fragment is also written to `_components/` for the dev pages. Both run before the path rewrites, so a path the rows or the documents grow later is rewritten with every other
 2. minifies the CSS (clean-css), bundles each page's entry module with everything it imports (esbuild), minifies it (terser), and inlines both in place of their `<link>`/`<script type="module">` tags
 3. injects `_components/*.c.html` (seo, gtag, links) at their placeholders
 4. rewrites dev paths to GitHub Pages paths (`href="/customize/index.html` → `/meteo/customize/`, `href="/"` → `/meteo/"`, image paths, the extras stub's `url=`)
@@ -69,7 +69,7 @@ The inlined blocks are indented by splitting on CRLF, so a fragment with LF endi
 
 The browser suite ([`tests/e2e`](./tests/e2e)) drives both the dev tree and the built site. Every request that leaves the local server is answered by [`fixtures.js`](./tests/e2e/fixtures.js): map images as an SVG of a map's size, frames as an empty page, the worker's `config.json` as a test chooses. So the suite runs offline and the same way every time, and a script error on a page fails the test. The pages are served as `meteo.test`, which Chromium resolves to the local server by a launch flag, so no hosts entry is needed. It is a name of its own rather than `localhost`, which would make the page a secure context and change what it can do (the clipboard, for one).
 
-The unit tests ([`tests/unit`](./tests/unit)) run what needs no browser under Node, with a stub for the little DOM the modules touch on import ([`setup.mjs`](./tests/unit/setup.mjs)): the manual's converter, the catalog and presets, preferences, find and share links, storage, what the settings dialog would apply, and the widgets' arithmetic (tiling, magnets, touching, group relations, the walls around a fullscreen map, the layout's sanitizer).
+The unit tests ([`tests/unit`](./tests/unit)) run what needs no browser under Node, with a stub for the little DOM the modules touch on import ([`setup.mjs`](./tests/unit/setup.mjs)): the manual's and the changelog's converters, the catalog and presets, preferences, find and share links, storage, what the settings dialog would apply, and the widgets' arithmetic (tiling, magnets, touching, group relations, the walls around a fullscreen map, the layout's sanitizer).
 
 ## Code map
 
@@ -81,7 +81,7 @@ The scripts are ES modules under [`src/_assets/js`](./src/_assets/js). The dev p
 | `lib/` | helpers that know nothing of maps: `dom` (`el`, `query`/`queryAll`, `onReady`, `isTextField`, `cssNumber`), `geometry` (`clamp`, the viewport), `pointer` (a drag or resize gesture), `media` (the breakpoint), `storage` (every key the site stores; reads and writes that never throw), `events` (every event the page announces), `debug` (`dlog`) |
 | `features.js` | switches for parts built but not offered yet |
 | `remote-config.js` | which maps the worker's `config.json` switches off |
-| `page/` | what both pages have: the slideshows, the interactive maps' gate and fullscreen (`iframe`), the links, the progress bar, the dialog chrome (`dialog`), the manual, and `commands` |
+| `page/` | what both pages have: the slideshows, the interactive maps' gate and fullscreen (`iframe`), the links, the progress bar, the dialog chrome (`dialog`), the documents in a dialog (`documents`: the manual, the changelog), and `commands` |
 | `maps/` | the maps' data and drawing: the `catalog`, the map `types`, the `presets`, the stored or shared view (`prefs`), share links (`share`), `find`, `render`, and each page's view of them (`landing`, `view`) |
 | `settings/` | the settings dialog: `panel` and its sections (`panel-presets`, `panel-rows`, `panel-list`, `panel-manage`, with `panel-view` working out what it would apply), the tab at the top edge (`tab`) and its `[+]` menu (`add-menu`) |
 | `widgets/` | the pop-out widgets (desktop): `constants`, `core`, `popout`, `copies`, `drag`, `resize` (and seams), `groups`, `overlap` (covered frames, shadows), `columns`, `fullscreen`, `board`, `grid`, `arrange`, `keyboard`, `gestures`, `reload`, `refresh`, `layout` (the arrangement as data: read, checked, applied, written), `responsive` |
@@ -235,10 +235,10 @@ On the customize page the tab's `[+]` menu leaves the map out too. The dialog st
 
 ## Dialogs
 
-There are two dialogs, the picker and the manual, and one set of chrome under both ([`page/dialog.js`](./src/_assets/js/page/dialog.js)), since the landing page carries the manual too. A panel is a dialog by carrying `.dialog`, and names its storage key with `data-dialog-key` (`msPanel`, `manualPanel`). Class names follow the split: `dialog-*` is the chrome both dialogs share (`dialog-head`, `dialog-body`, `dialog-backdrop`, `body.dialog-open`…), `ms-*` (*map settings*) the settings dialog's own and its tab's.
+There are three dialogs, the picker, the manual and the changelog, and one set of chrome under all of them ([`page/dialog.js`](./src/_assets/js/page/dialog.js)), since the landing page carries the documents too. A panel is a dialog by carrying `.dialog`, and names its storage key with `data-dialog-key` (`msPanel`, `manualPanel`, `changelogPanel`). Class names follow the split: `dialog-*` is the chrome every dialog shares (`dialog-head`, `dialog-body`, `dialog-backdrop`, `body.dialog-open`…), `ms-*` (*map settings*) the settings dialog's own and its tab's.
 
-- **One at a time.** Opening one shuts the other, so there is a single backdrop, a single scroll lock and a single Escape to reason about.
-- **Announced.** `setDialogVisible()` announces every change on `dialog-toggled`, the dialog shut to make room as much as the one asked for: what hangs off a shut (the *Karte* button's arrow, the manual's hash) has no other way of hearing about it.
+- **One at a time.** Opening one shuts any other, so there is a single backdrop, a single scroll lock and a single Escape to reason about.
+- **Announced.** `setDialogVisible()` announces every change on `dialog-toggled`, the dialog shut to make room as much as the one asked for: what hangs off a shut (a document's hash) has no other way of hearing about it.
 - **Over everything.** A dialog is a fixed panel at body level, over the page, the columns, a fullscreen map and the widgets, so it can be reached from any state of the page. It is not modal in the sense of freezing the arrangement, but the page holds still under it.
 - **Scroll.** `body.dialog-open` locks the page's scroll and hands it to the dialog's `.dialog-body`, the `.dialog-head` above staying put. The body has `overscroll-behavior: contain`, so the wheel stops at its end, and on the desktop a classic scrollbar in a stable gutter (the overlay kind shows an empty track until hovered and lies over the row handles). Below the breakpoint the native overlay scrollbar stands, as on everything else on a touch screen.
 - **Gutter.** The lock drops the page's scrollbar, which would widen the page and shift what is centred in it, so `html.dialog-gutter` keeps the gutter (`scrollbar-gutter: stable`) while a dialog is up, when there was one. `clientWidth` then counts a gutter nothing is drawn in, so `setScrollbarGutter()` has `viewportWidth()` take it off, and the columns are laid out again.
@@ -258,7 +258,7 @@ The `.ms-tab` keeps its own click above the backdrop and shuts the dialog the sa
 **A window, on the desktop.** A dialog is dragged by its head and resized from any side or corner through the widgets' own `.po-h` handles, appended inside the panel so the press that grabs one is a press inside the dialog.
 
 - Until it is resized its height is the content's, capped to what is left below its top; a resize pins an explicit height.
-- Where and how big (`msPanel`, `manualPanel`): left and top as fractions of the viewport, width in px, and height in px once pinned. Applied on open (measurable only once shown) and on a window resize, so it cannot be stranded off screen. A press that never moved stores nothing.
+- Where and how big (`msPanel`, `manualPanel`, `changelogPanel`): left and top as fractions of the viewport, width in px, and height in px once pinned. Applied on open (measurable only once shown) and on a window resize, so it cannot be stranded off screen. A press that never moved stores nothing.
 - A double-click on the head drops the lot and gives the CSS its dialog back.
 - A link or button on the head is itself: *Zatvori*, and at the left end the way home (`.dialog-home`, below).
 
@@ -536,6 +536,7 @@ Keys are for what the buttons cannot do in one gesture, and for backing out of w
 |---|---|---|
 | `K` | the settings dialog (*Karte*) | customize page |
 | `H` | the manual (*help*; not `?`, which takes Shift on one layout and AltGr on another) | both pages |
+| `C` | the changelog | both pages |
 | `Enter` | *Primijeni* while the picker is up | the dialog |
 | `Escape` | shuts the dialog, else ends a fullscreen map | both pages |
 | `R` | reloads every map with something to re-fetch | desktop |
@@ -569,7 +570,7 @@ Both are on the bar only: over a frame the page never sees them, and on an inter
 | `mapGrid` | the board's grid switches | no |
 | `mapRefresh` | auto-refresh | no |
 | `msTab` | where the tab was put | no |
-| `msPanel`, `manualPanel` | where and how big each dialog was put | no |
+| `msPanel`, `manualPanel`, `changelogPanel` | where and how big each dialog was put | no |
 
 Every key is named once, in `STORAGE_KEYS` (`lib/storage.js`), and every read and write goes through `readJson()`/`writeJson()`/`removeKey()`, which never throw. With storage refused or full, a write is kept for the session and read back from there, so the view still works (a private window, a blocked site). Everything read back from storage or `?v=` passes a guard (`isValidPrefs`, `isValidPreset`, the filter on hidden presets, `sanitizeSnapLayout`): an unknown preset id is rejected rather than kept.
 
@@ -585,17 +586,32 @@ Details worth keeping in mind when touching the drag and scroll code:
 
 ## The manual
 
-[`MANUAL.md`](./MANUAL.md) is the user-facing document: what the site does and how to work it, in Croatian, which is what the site speaks. It sits at the root beside `README.md` and this file (*what it is*, *how to use it*, *how it works*), and cannot live in `docs/`, the conventional place, because `docs/` is the build output and the build deletes it on every run. The file name is English like the rest of the repo, leaving room for a `MANUAL.en.md` beside it.
+The manual is the user-facing document: what the site does and how to work it. It is written twice, as the changelog is: [`MANUAL.hr.md`](./MANUAL.hr.md) in Croatian, which is what the site speaks and the one the site shows, and [`MANUAL.md`](./MANUAL.md), its English version, for whoever reads the repository. A change goes into both; a unit test holds them to the same outline, section for section and level for level. The English one quotes the labels in Croatian, as the screen shows them, with a translation beside them.
 
-It shares no prose with this file on purpose: this one explains mechanism to someone reading the code; that one answers *how do I keep two radars side by side while I scroll?* Every UI label it quotes is the label the code renders, so a label that changes is one search from the line that quotes it.
+Both sit at the root beside `README.md` and this file (*what it is*, *how to use it*, *how it works*), and cannot live in `docs/`, the conventional place, because `docs/` is the build output and the build deletes it on every run.
 
-### The manual on the site
+The manual shares no prose with this file on purpose: this one explains mechanism to someone reading the code; that one answers *how do I keep two radars side by side while I scroll?* Every UI label it quotes is the label the code renders, so a label that changes is one search from the line that quotes it.
 
-The Markdown is the only source, and the build makes HTML of it ([`scripts/manual.mjs`](./scripts/manual.mjs), which takes `MANUAL.md` and returns the fragment's lines). The built pages get it inlined at `<!-- manual -->`; the build also writes it to `src/_components/manual.c.html`, which the dev pages fetch through `include.js` (the `data-include-html` on the dialog's `.dialog-body`, stripped from the built pages). That file is build output and git-ignored, so a page served from `src/` shows the manual as of the last build.
+## Documents on the site
 
-It is shown in a dialog rather than on a page of its own, so it can be read beside the maps it describes. Both pages carry it (`#manualDialog`, with the same `.dialog-home` in its head as the settings dialog, written as `href="/"` for the build to rewrite), reached by the `?` button, the footer's *Upute* or `H`. A dialog has no address, so `#upute` stands in: it opens the dialog on arrival, and the dialog writes it and takes it away again through `replaceState` (assigning `location.hash` would stack a history entry per open).
+Two documents are shown on the site, the manual and the changelog (what changed for a visitor, by date), the same way ([`page/documents.js`](./src/_assets/js/page/documents.js)), each behind its switch in `features.js`.
 
-**The converter** handles a fixed subset (`##`/`###` with slug ids, paragraphs, `-` lists, tables, blockquotes, `**bold**`, `*italic*`, `` `code` ``, `[text](#anchor)` and `<kbd>`) and throws on anything it does not recognise, naming the line, so the manual cannot silently render wrong. `# ` is recognised and dropped, the dialog's head carrying the title.
+| | Manual | Changelog |
+|---|---|---|
+| source, converter | `MANUAL.hr.md`, [`scripts/manual.mjs`](./scripts/manual.mjs) | `CHANGELOG.hr.md`, [`scripts/changelog.mjs`](./scripts/changelog.mjs) |
+| dialog, storage key | `#manualDialog`, `manualPanel` | `#changelogDialog`, `changelogPanel` |
+| placeholder, dev fragment | `<!-- manual -->`, `manual.c.html` | `<!-- changelog -->`, `changelog.c.html` |
+| reached by | the top footer's *Upute*, `H`, `#upute` | the top footer's *Povijest promjena*, `C`, `#promjene` |
+
+The file is the only source, and the build makes HTML of it, each converter taking the text and returning the fragment's lines. The built pages get it inlined at the placeholder; the build also writes it to `src/_components/`, which the dev pages fetch through `include.js` (the `data-include-html` on the dialog's `.dialog-body`, stripped from the built pages). Those files are build output and git-ignored, so a page served from `src/` shows the documents as of the last build.
+
+A document is shown in a dialog rather than on a page of its own, so it can be read beside the maps it describes, and reached from the board, where there is no page. Both pages carry both (`.doc-dialog`, with the same `.dialog-home` in the head as the settings dialog, written as `href="/"` for the build to rewrite); the links sit in the top footer (`.footer-top`, above the `<footer>`). A dialog has no address, so a hash stands in: it opens the dialog on arrival or when the address is edited, and the dialog writes it and takes it away again through `replaceState` (assigning `location.hash` would stack a history entry per open). A document shut to make room for another dialog takes its hash with it, off `dialog-toggled`.
+
+A document switched off puts `no-<feature>` on `<html>` before the first paint, which hides its entries, and leaves its key and hash unbound.
+
+### The manual's converter
+
+The manual's converter handles a fixed subset (`##`/`###` with slug ids, paragraphs, `-` lists, tables, blockquotes, `**bold**`, `*italic*`, `` `code` ``, `[text](#anchor)` and `<kbd>`) and throws on anything it does not recognise, naming the line, so the manual cannot silently render wrong. `# ` is recognised and dropped, the dialog's head carrying the title. What stands above it is the intro (`.doc-intro`: the note that the manual was written with AI), put above the contents rather than after them, and set as quietly as the changelog's.
 
 - Order is the whole of the inline pass: code spans are lifted out to placeholders first, since the document writes glyphs inside them (`[R]`, `❮`, `×`) that the rest would reach into; bold is matched before italic, or `**` reads as an empty emphasis.
 - `&`, `<` and `>` are escaped throughout and `<kbd>` alone is put back, which makes it an allowlist: anything still reading as a tag afterwards throws. Leftover `*` or `](` after the pass throws too, so unbalanced markup is caught rather than shipped.
@@ -604,4 +620,12 @@ It is shown in a dialog rather than on a page of its own, so it can be read besi
 
 Rendering it client-side from the raw `.md` was considered and rejected: it needs a Markdown library or a hand-rolled parser in the page, against the no-dependency grain, and leaves the dialog empty without JavaScript.
 
-In the build, the injection comes before the path rewrites, so a `/customize/` link the manual grows later is rewritten like any other; the comment strip comes after it, so the converter emits no comments; and the fragment's lines are joined with CRLF, which the indentation splits on (see *Build*).
+### The changelog's converter
+
+The changelog is written twice: [`CHANGELOG.md`](./CHANGELOG.md) in English, for whoever reads the repository, and [`CHANGELOG.hr.md`](./CHANGELOG.hr.md), its Croatian translation, which is the one the site shows. A change goes into both. A unit test holds them together: the same days, with the same number of entries under each.
+
+Both are one fixed shape of Markdown, so GitHub shows each day as a heading over a list, and quick to write by hand: an intro first, if any (lines above the first date, a paragraph each, `.changelog-intro`: the note that the list was made with AI, written as a `> ` quote for GitHub, as in the manual, the `> ` left off on the site), then a `## ` date heading (`## 2026-09-23`, with ` (#42)` when a pull request carried the change), its entries right under it as a `- ` list, and a blank line before the next date. An entry has no full stop, being a list item rather than a sentence. The converter turns a day into an `<h2>` of its date alone (the pull request is for whoever reads the file in the repository) and a list, escapes the entries, and sets the button glyphs they name (`[D]`, `[+]`) as code, as the manual does. Like the manual's, it throws on any line outside the shape, naming it: an entry before any date or after a blank line, a date with nothing under it, a bullet that is not `- `, an entry indented rather than bulleted (Markdown would run it into the line above).
+
+### In the build
+
+The injection comes before the path rewrites, so a `/customize/` link a document grows later is rewritten like any other; the comment strip comes after it, so the converters emit no comments; and the fragment's lines are joined with CRLF, which the indentation splits on (see *Build*).

@@ -1,5 +1,5 @@
-// The dialogs, the maps picker (settings/panel.js) and the manual, over one
-// set of chrome. See INTERNALS.md, Dialogs.
+// The dialogs, the maps picker (settings/panel.js) and the documents
+// (page/documents.js), over one set of chrome. See INTERNALS.md, Dialogs.
 
 import { query, queryAll } from '../lib/dom.js';
 import { emit, EVENTS } from '../lib/events.js';
@@ -179,8 +179,7 @@ function syncDialogChrome() {
 
 // every change of state is announced, the one made room for as much as the one
 // asked for: a dialog shut to let another stand is still shut, and what hangs
-// off that — the Karte button's arrow, the manual's hash — has no other way of
-// hearing about it
+// off that — a document's hash — has no other way of hearing about it
 function notifyDialog(panel, visible) {
 	emit(EVENTS.dialogToggled, { panel, visible });
 }

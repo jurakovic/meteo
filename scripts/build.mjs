@@ -12,6 +12,7 @@ import { build as esbuild } from 'esbuild';
 import { parseHTML } from 'linkedom';
 import { minify } from 'terser';
 import CleanCSS from 'clean-css';
+import { convertChangelog } from './changelog.mjs';
 import { convertManual } from './manual.mjs';
 
 const root = resolve(fileURLToPath(new URL('..', import.meta.url)));
@@ -129,9 +130,11 @@ async function htmlFiles(dir) {
 
 function processHtml(html, parts) {
 	const replacements = [
-		// the manual first, so a path it grows later is rewritten with the rest
+		// the documents first, so a path they grow later is rewritten with the rest
 		['<div class="dialog-body" data-include-html="/_components/manual.c.html">', '<div class="dialog-body">'],
 		['<!-- manual -->', parts.manual],
+		['<div class="dialog-body" data-include-html="/_components/changelog.c.html">', '<div class="dialog-body">'],
+		['<!-- changelog -->', parts.changelog],
 		['href="/_assets/img', 'href="/meteo/img'],
 		['src="/_assets/img', 'src="/meteo/img'],
 		['href="/customize/index.html', 'href="/meteo/customize/'],
@@ -157,9 +160,11 @@ function processHtml(html, parts) {
 
 async function build() {
 	const component = (name) => readText(join(src, '_components', `${name}.c.html`));
-	const manualHtml = convertManual(await readText(join(root, 'MANUAL.md'))).join(CRLF);
-	// the dev pages fetch the manual from here (git-ignored: it is build output)
+	const manualHtml = convertManual(await readText(join(root, 'MANUAL.hr.md'))).join(CRLF);
+	// the dev pages fetch the documents from here (git-ignored: build output)
 	await writeFile(join(src, '_components/manual.c.html'), manualHtml);
+	const changelogHtml = convertChangelog(await readText(join(root, 'CHANGELOG.hr.md'))).join(CRLF);
+	await writeFile(join(src, '_components/changelog.c.html'), changelogHtml);
 
 	const parts = {
 		css: indent(await minifyCss('styles'), 2),
@@ -167,7 +172,8 @@ async function build() {
 		seo: indent(await component('seo'), 1, 0),
 		gtag: indent(await component('gtag'), 1, 0),
 		links: indent(await component('links'), 6),
-		manual: indent(manualHtml, 3)
+		manual: indent(manualHtml, 3),
+		changelog: indent(changelogHtml, 3)
 	};
 	const landing = join(src, 'index.html');
 	const rows = `<div class="maps-list" data-maps>${CRLF}${await landingRows()}${CRLF}\t\t\t</div>`;

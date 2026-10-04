@@ -18,13 +18,6 @@ test.describe('landing page', () => {
 		await expect(page.locator('.po-btn, .dup-btn, .grp-btn, .rl-btn')).toHaveCount(0);
 	});
 
-	test('the manual is switched off: no ? button, and H does nothing', async ({ page }) => {
-		await expect(page.locator('html')).toHaveClass(/no-manual/);
-		await expect(page.locator('.help-btn')).toBeHidden();
-		await page.keyboard.press('h');
-		await expect(page.locator('#manualDialog')).toBeHidden();
-	});
-
 	test('the progress bar goes once the images are in', async ({ page }) => {
 		await expect(page.locator('.progress-container')).toBeHidden();
 	});

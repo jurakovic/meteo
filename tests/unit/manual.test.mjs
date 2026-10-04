@@ -44,6 +44,14 @@ test('blocks: the title dropped, headings in the contents, lists, tables, quotes
 	]);
 });
 
+test('what stands above the title is the intro, put above the contents', () => {
+	assert.deepEqual(convertManual('> Uz pomoć AI-ja.\n\n# Upute\n\n## Prvo\n\nTekst.\n'), [
+		'<div class="doc-intro">', '<blockquote><p>Uz pomoć AI-ja.</p></blockquote>', '</div>',
+		'<nav class="manual-toc">', '<ul>', '<li class="toc-2"><a href="#prvo">Prvo</a></li>', '</ul>', '</nav>',
+		'<h2 id="prvo">Prvo</h2>', '<p>Tekst.</p>'
+	]);
+});
+
 test('blocks outside the subset throw, naming the line', () => {
 	for (const [line, message] of [
 		['    code', /indented line \(line 3\)/],
@@ -61,9 +69,13 @@ test('blocks outside the subset throw, naming the line', () => {
 	assert.throws(() => convertManual('samo tekst\n'), /no headings/);
 });
 
-test('the real manual converts', async () => {
+test('the real manual and its English version convert, section for section', async () => {
 	const { readFile } = await import('node:fs/promises');
-	const html = convertManual(await readFile(new URL('../../MANUAL.md', import.meta.url), 'utf8'));
-	assert.ok(html.length > 50);
-	assert.ok(html.includes('<h2 id="nadzorna-ploča">Nadzorna ploča</h2>'));
+	const manual = async (name) => convertManual(await readFile(new URL(`../../${name}`, import.meta.url), 'utf8'));
+	// the contents' levels in order: the same outline, whatever its language
+	const outline = (html) => html.filter(line => line.startsWith('<li class="toc-')).map(line => line.slice(15, 16));
+	const croatian = await manual('MANUAL.hr.md');
+	assert.ok(croatian.length > 50);
+	assert.ok(croatian.includes('<h2 id="nadzorna-ploča">Nadzorna ploča</h2>'));
+	assert.deepEqual(outline(await manual('MANUAL.md')), outline(croatian));
 });

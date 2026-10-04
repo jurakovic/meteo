@@ -14,11 +14,14 @@ src/                  the site (served as is in dev)
   _assets/css/styles.css   the one stylesheet
   _components/*.c.html     fragments the build injects
 docs/                 build output, committed, published by GitHub Pages
-scripts/              build.mjs, manual.mjs
+scripts/              build.mjs, manual.mjs, changelog.mjs
 tests/e2e/            Playwright, offline through fixtures.js
 tests/unit/           node --test, DOM stub in setup.mjs
 INTERNALS.md          how it works (the one place for that)
-MANUAL.md             user manual, Croatian, built into the pages
+MANUAL.hr.md          user manual, Croatian, built into the pages
+MANUAL.md             its English version, for the repository
+CHANGELOG.hr.md       changelog, Croatian, built into the pages
+CHANGELOG.md          its English version, for the repository
 ```
 
 ## Working rules
@@ -27,6 +30,7 @@ MANUAL.md             user manual, Croatian, built into the pages
 - **The e2e suite reuses whatever listens on port 8082.** That port is clear of the nginx containers in INTERNALS.md (8080 serves `src/`, 8081 `docs/`); anything else there fails the suite with 404s.
 - **A bug fix comes with a test** that fails without the fix. Prove it by running the test against the unfixed code.
 - **Keep INTERNALS.md true.** When behaviour changes, update its section in the same change. A paragraph that no longer matches the code is a bug. The history of a change belongs in its commit message, not in a doc in the repo.
+- **Manual and changelog come in pairs.** A change to `MANUAL.hr.md` or `CHANGELOG.hr.md` goes into its English twin in the same change, and the other way round. The unit tests hold the pairs to the same outline, not the same words, so the content is on you.
 
 ## Files
 

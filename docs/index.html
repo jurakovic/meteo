@@ -88,8 +88,8 @@
 		.map-block.popout.snapped .po-h-ne,.map-block.popout.snapped .po-h-nw,.map-block.popout.snapped .po-h-se,.map-block.popout.snapped .po-h-sw,
 		.map-block.popout.snapped .po-h-w{display:none}body.dashboard .if1.fullscreen,body.dashboard .radartitle.fullscreen,
 		body.snap-full .if1.fullscreen,body.snap-full .radartitle.fullscreen{left:0;right:0}html.board-boot{overflow:hidden}
-		html.board-boot .container,html.board-boot footer{visibility:hidden}body.dashboard{overflow:hidden}body.dashboard .container,
-		body.dashboard footer{visibility:hidden}body.dashboard .map-block.popout:not(.fs-host){visibility:visible}.po-shadows,.po-shadows-under{
+		html.board-boot .container,html.board-boot .page-foot{visibility:hidden}body.dashboard{overflow:hidden}body.dashboard .container,
+		body.dashboard .page-foot{visibility:hidden}body.dashboard .map-block.popout:not(.fs-host){visibility:visible}.po-shadows,.po-shadows-under{
 		position:fixed;inset:0;pointer-events:none}.po-shadows{z-index:var(--z-shadows)}.po-shadows-under{z-index:var(--z-shadows-under)}.po-shadow{
 		position:absolute;box-shadow:0 6px 24px rgba(0,0,0,.6)}.po-grid{position:fixed;inset:0;z-index:var(--z-grid);pointer-events:none;
 		background-image:repeating-linear-gradient(to right,rgba(255,255,255,.08) 0 1px,transparent 1px var(--grid-cell)),
@@ -112,17 +112,15 @@
 		.links-bottom.can-scroll-right::after{opacity:1}body.show-links-bottom .links-bottom{display:block}@media (max-width:800px){.links-bottom{
 		font-size:12px}}.beta{font-size:9px;color:var(--c-accent);vertical-align:super;text-transform:uppercase;letter-spacing:1px}.btn .beta,
 		h2 .beta{position:absolute;transform:translateY(-40%);margin-left:1px}.buttons{display:grid;grid-template-columns:49.5% 49.5%;gap:1%;
-		font-size:13px}.buttons a,.buttons a:hover{text-decoration:none}.buttons.three{grid-template-columns:repeat(3,1fr)}.buttons.with-help{
-		grid-template-columns:1fr 1fr 32px}.buttons.three.with-help{grid-template-columns:repeat(3,1fr) 32px}.buttons .help-btn{font-size:15px;
-		line-height:1}html.no-manual .help-btn,html.no-manual .manual-link{display:none}html.no-manual .buttons.with-help{grid-template-columns:
-		49.5% 49.5%}html.no-manual .buttons.three.with-help{grid-template-columns:repeat(3,1fr)}.buttons button.btn{position:relative}
+		font-size:13px}.buttons a,.buttons a:hover{text-decoration:none}.buttons.three{grid-template-columns:repeat(3,1fr)}
+		html.no-manual .manual-link{display:none}html.no-changelog .changelog-link{display:none}.buttons button.btn{position:relative}
 		.buttons button.btn .arrow{position:absolute;right:10px;top:2px;font-size:14px}.buttons .btn{margin-top:10px;margin-bottom:5px;font-size:
 		13px;font-family:inherit;color:#fff;background-color:var(--c-control);align-content:center;cursor:pointer;width:100%;height:24px;border:none
 		;outline:0}.buttons .btn:hover{background-color:var(--c-control-hover)}.links-btn{position:relative}.links-btn .links-toggle{position:
 		absolute;right:8px;top:22px;transform:translateY(-50%);margin:0;cursor:pointer}.links-btn .links-toggle::before{content:'';position:absolute
 		;top:50%;left:50%;transform:translate(-50%,-50%);width:28px;height:28px}.dialog-backdrop{position:fixed;inset:0;z-index:var(--z-backdrop);
 		background-color:rgba(10,16,28,.45)}.dialog-backdrop.dialog-spent{background-color:transparent}.dialog{position:fixed;z-index:
-		var(--z-dialog);top:24px;left:0;right:0;margin:0 auto;width:750px;height:750px;max-width:calc(100% - 32px);max-height:calc(100vh - 48px);
+		var(--z-dialog);top:64px;left:0;right:0;margin:0 auto;width:750px;height:750px;max-width:calc(100% - 32px);max-height:calc(100vh - 88px);
 		display:flex;flex-direction:column;box-sizing:border-box;border:1px solid var(--c-control-hover);box-shadow:0 16px 48px rgba(0,0,0,.75),0
 		2px 8px rgba(0,0,0,.5);background-color:var(--c-surface);text-align:left;font-size:13px;color:#fff}.dialog[hidden]{display:none}
 		@media (max-width:800px){.dialog{top:0;max-width:100%;height:auto;max-height:100vh;max-height:100dvh;border:none}}
@@ -208,23 +206,26 @@
 		font-size:13px;font-family:inherit;color:#fff;background-color:var(--c-control);cursor:pointer;height:24px;padding:0 24px;border:none;
 		outline:0}.dialog .btn:hover{background-color:var(--c-control-hover)}.dialog .ms-actions{display:flex;align-items:center;gap:16px;padding:
 		10px 0 8px}.dialog .ms-actions a{cursor:pointer;user-select:none;text-decoration:none}.dialog .ms-actions+.ms-sort{margin-top:0}
-		.manual-dialog .dialog-body{padding:4px 14px 16px;line-height:1.5}.manual-dialog .dialog-body h2,.manual-dialog .dialog-body h3{margin:22px
-		0 8px;font-weight:400;color:var(--c-accent)}.manual-dialog .dialog-body h2{font-size:16px;padding-bottom:4px;border-bottom:1px solid
-		var(--c-control)}.manual-dialog .dialog-body h3{font-size:14px}.manual-dialog .dialog-body p,.manual-dialog .dialog-body ul{margin:8px 0}
-		.manual-dialog .dialog-body ul{padding-left:20px}.manual-dialog .dialog-body li{margin:3px 0}.manual-dialog .dialog-body code,
-		.manual-dialog .dialog-body kbd{padding:0 4px;border-radius:3px;background-color:var(--c-field);font-family:inherit;white-space:nowrap}
-		.manual-dialog .dialog-body kbd{border:1px solid var(--c-control-hover)}.manual-dialog .dialog-body a{color:var(--c-accent)}
-		.manual-dialog .dialog-body blockquote{margin:12px 0;padding:2px 12px;border-left:3px solid var(--c-control)}
-		.manual-dialog .dialog-body table{display:block;width:100%;max-width:875px;overflow-x:auto;margin:10px 0;border-collapse:collapse}
-		.manual-dialog .dialog-body td,.manual-dialog .dialog-body th{padding:4px 10px 4px 0;border-bottom:1px solid var(--c-chip);text-align:left;
-		vertical-align:top}.manual-dialog .dialog-body th{font-weight:400;opacity:.7}.manual-dialog .manual-toc{margin:10px 0 18px;padding:8px 0;
-		border-top:1px solid var(--c-control);border-bottom:1px solid var(--c-control)}.manual-dialog .manual-toc ul{margin:0;padding:0;list-style:
-		none}.manual-dialog .manual-toc li{margin:2px 0}.manual-dialog .manual-toc .toc-3{padding-left:16px}.manual-dialog .manual-toc a{
-		text-decoration:none}.manual-dialog .manual-toc a:hover{text-decoration:underline}.maps-empty{padding:20px 0;font-size:13px;font-style:
-		italic;opacity:.6}.slideshow{position:relative;display:flex;justify-content:center}.slide{display:none}.slide.active{display:block;width:
-		100%}.slide>.placeholder{width:100%}.slide>.placeholder>img{margin-inline:auto}.next,.prev{cursor:pointer;position:absolute;align-content:
-		center;top:0;bottom:0;width:15%;padding:16px;color:transparent;opacity:.7;font-weight:700;font-size:36px;transition:color .6s ease,
-		background-image .6s ease;user-select:none}.prev{left:0;text-align:left}.prev:hover{background-image:
+		.doc-dialog .dialog-body{padding:4px 14px 16px;line-height:1.5}.doc-dialog .dialog-body h2,.doc-dialog .dialog-body h3{margin:22px 0 8px;
+		font-weight:400;color:var(--c-accent);text-align:left}.doc-dialog .dialog-body h2{font-size:16px;padding-bottom:4px;border-bottom:1px solid
+		var(--c-control)}.doc-dialog .dialog-body h3{font-size:14px}.doc-dialog .dialog-body p,.doc-dialog .dialog-body ul{margin:8px 0}
+		.doc-dialog .dialog-body ul{padding-left:20px}.doc-dialog .dialog-body li{margin:3px 0}.doc-dialog .dialog-body code,
+		.doc-dialog .dialog-body kbd{padding:0 4px;border-radius:3px;background-color:var(--c-field);font-family:inherit;white-space:nowrap}
+		.doc-dialog .dialog-body kbd{border:1px solid var(--c-control-hover)}.doc-dialog .dialog-body a{color:var(--c-accent)}
+		.doc-dialog .dialog-body blockquote{margin:12px 0;padding:2px 12px;border-left:3px solid var(--c-control)}.doc-dialog .dialog-body table{
+		display:block;width:100%;max-width:875px;overflow-x:auto;margin:10px 0;border-collapse:collapse}.doc-dialog .dialog-body td,
+		.doc-dialog .dialog-body th{padding:4px 10px 4px 0;border-bottom:1px solid var(--c-chip);text-align:left;vertical-align:top}
+		.doc-dialog .dialog-body th{font-weight:400;opacity:.7}.doc-dialog .doc-intro{margin:8px 0 0;color:var(--c-muted);font-size:11px;font-style:
+		italic}.doc-dialog .doc-intro blockquote,.doc-dialog .doc-intro p{margin:0;padding:0;border:0}.doc-dialog .manual-toc{margin:10px 0 18px;
+		padding:8px 0;border-top:1px solid var(--c-control);border-bottom:1px solid var(--c-control)}.doc-dialog .manual-toc ul{margin:0;padding:0;
+		list-style:none}.doc-dialog .manual-toc li{margin:2px 0}.doc-dialog .manual-toc .toc-3{padding-left:16px}.doc-dialog .manual-toc a{
+		text-decoration:none}.doc-dialog .manual-toc a:hover{text-decoration:underline}.changelog-dialog .dialog-body h2{margin:16px 0 4px;font-size
+		:14px}.changelog-dialog .dialog-body h2:first-child{margin-top:8px}.changelog-dialog .dialog-body ul{margin:4px 0}
+		.changelog-dialog .changelog-intro{margin:8px 0 0;color:var(--c-muted);font-size:11px;font-style:italic}.maps-empty{padding:20px 0;font-size
+		:13px;font-style:italic;opacity:.6}.slideshow{position:relative;display:flex;justify-content:center}.slide{display:none}.slide.active{
+		display:block;width:100%}.slide>.placeholder{width:100%}.slide>.placeholder>img{margin-inline:auto}.next,.prev{cursor:pointer;position:
+		absolute;align-content:center;top:0;bottom:0;width:15%;padding:16px;color:transparent;opacity:.7;font-weight:700;font-size:36px;transition:
+		color .6s ease,background-image .6s ease;user-select:none}.prev{left:0;text-align:left}.prev:hover{background-image:
 		linear-gradient(to left,transparent,rgba(0,0,0,.6));color:#fff;text-decoration:none}.prev.shorter{top:23px}.next{right:0;text-align:right}
 		.next:hover{background-image:linear-gradient(to right,transparent,rgba(0,0,0,.6));color:#fff;text-decoration:none}.next.shorter{top:23px}
 		.fade{animation-name:fade;animation-duration:1s}@keyframes fade{from{opacity:.6}to{opacity:1}}@media (max-width:800px){.next,.prev{padding:
@@ -235,69 +236,72 @@
 		.expandable:hover{background-color:var(--c-control-hover)}.expandable .arrow{position:absolute;right:10px;top:2px;font-size:14px}.links{
 		font-size:14px;display:grid;grid-template-columns:25% 45% 30%;gap:0;max-height:0;overflow:hidden;transition:max-height .3s ease-out}
 		.links .item{padding:5px;margin:0 2px}.links .item:not(:last-child){border-right:1px solid #fff}.links p{margin-top:0;text-align:left}
-		@media (max-width:800px){.links{grid-template-columns:1fr}.links .item{margin:5px 0;border-right:none!important}}footer{position:sticky;top:
-		100%;background:var(--c-control);color:#fff;text-align:center;padding:8px;margin-top:8px}.progress-container{position:fixed;left:0;top:0;
-		width:100%;height:3px;z-index:var(--z-progress);background-color:#5c5c5c80}.progress-bar{width:0;height:100%;background-color:
-		var(--c-accent);transition:width .3s ease-in-out}
+		@media (max-width:800px){.links{grid-template-columns:1fr}.links .item{margin:5px 0;border-right:none!important}}.page-foot{position:sticky;
+		top:100%;margin-top:8px}.footer-top{background:var(--c-chip);color:#fff;text-align:center;padding:8px}@media (max-width:800px){.footer-top{
+		display:grid;grid-template-rows:auto auto;grid-auto-flow:column;grid-auto-columns:1fr;text-align:left}.footer-top .changelog-link,
+		.footer-top .manual-link{display:contents}.footer-top a{display:block;padding:4px 0}.footer-top .sep{display:none}}footer{background:
+		var(--c-control);color:#fff;text-align:center;padding:8px}.progress-container{position:fixed;left:0;top:0;width:100%;height:3px;z-index:
+		var(--z-progress);background-color:#5c5c5c80}.progress-bar{width:0;height:100%;background-color:var(--c-accent);transition:width .3s
+		ease-in-out}
 	</style>
 	<script>
-		(()=>{var e="dialog-toggled",t="map-config-changed",r="map-fullscreen";function a(e,t){document.dispatchEvent(new CustomEvent(e,{detail:t}))
-		}function n(e,t){document.addEventListener(e,e=>t(e.detail))}function o(e,t={},r=[]){const a=document.createElement(e)
-		;for(const[e,r]of Object.entries(t))null!=r&&!1!==r&&("text"===e?a.textContent=String(r):"html"===e?a.innerHTML=String(r):a.setAttribute(e,String(r)))
-		;for(const e of r)e&&a.appendChild(e);return a}function i(e){const t=()=>{try{e()}catch(e){reportError(e)}}
+		(()=>{var e="dialog-toggled",t="map-config-changed",a="map-fullscreen";function r(e,t){document.dispatchEvent(new CustomEvent(e,{detail:t}))
+		}function n(e,t){document.addEventListener(e,e=>t(e.detail))}function o(e,t={},a=[]){const r=document.createElement(e)
+		;for(const[e,a]of Object.entries(t))null!=a&&!1!==a&&("text"===e?r.textContent=String(a):"html"===e?r.innerHTML=String(a):r.setAttribute(e,String(a)))
+		;for(const e of a)e&&r.appendChild(e);return r}function i(e){const t=()=>{try{e()}catch(e){reportError(e)}}
 		;"loading"===document.readyState?document.addEventListener("DOMContentLoaded",t):t()}function s(e,t=document){
 		return[...t.querySelectorAll(e)]}function l(e,t=document){return t.querySelector(e)}
 		var c="1"===new URLSearchParams(window.location.search).get("debug");function d(...e){c&&console.log(...e)}
 		var m=window.matchMedia("(min-width: 801px) and (hover: hover) and (pointer: fine)");function p(){return window.innerWidth<800}var h=0
 		;function u(e=!1){(e||window.innerWidth!==h)&&(h=window.innerWidth,s("iframe[data-zoom-hr-desktop]").forEach(e=>g(e)))}function w(e){
 		return document.getElementById(e)}function g(e){d(`Updating iframe src for ${e.id}`);const t=e.getAttribute("data-zoom-mode")
-		;let r="eu"===t?e.getAttribute("data-src-eu"):e.getAttribute("data-src-hr");if(p()){
-		const a="eu"===t?"data-zoom-eu-desktop":"data-zoom-hr-desktop",n="eu"===t?"data-zoom-eu-mobile":"data-zoom-hr-mobile"
-		;r=r.replace(e.getAttribute(a),e.getAttribute(n))}e.src=r}var f={hidden:"[X]",exit:"[X]",reset:"[R]",fullscreen:"[R]"};function v(e){
-		return document.querySelector(`a[data-frame-id="${e}"]`)}function y(e,t){const r=v(e);r&&(d(`gate ${e}: ${t}`),r.dataset.state=t,
-		r.textContent=f[t],"hidden"===t?r.style.display="none":r.style.removeProperty("display"))}function k(e){
+		;let a="eu"===t?e.getAttribute("data-src-eu"):e.getAttribute("data-src-hr");if(p()){
+		const r="eu"===t?"data-zoom-eu-desktop":"data-zoom-hr-desktop",n="eu"===t?"data-zoom-eu-mobile":"data-zoom-hr-mobile"
+		;a=a.replace(e.getAttribute(r),e.getAttribute(n))}e.src=a}var f={hidden:"[X]",exit:"[X]",reset:"[R]",fullscreen:"[R]"};function v(e){
+		return document.querySelector(`a[data-frame-id="${e}"]`)}function y(e,t){const a=v(e);a&&(d(`gate ${e}: ${t}`),a.dataset.state=t,
+		a.textContent=f[t],"hidden"===t?a.style.display="none":a.style.removeProperty("display"))}function k(e){
 		return document.getElementById(e).parentElement.querySelector(".overlay")}function b(e){k(e).style.display="none",y(e,"exit")}
-		function E(e,t){const r="hr"===t.getAttribute("data-mode")?"eu":"hr",a=w(e);a.setAttribute("data-zoom-mode",r),g(a),
-		t.setAttribute("data-mode",r),t.textContent="hr"===r?"[HR]":"[EU]","reset"===function(e){const t=v(e)
+		function E(e,t){const a="hr"===t.getAttribute("data-mode")?"eu":"hr",r=w(e);r.setAttribute("data-zoom-mode",a),g(r),
+		t.setAttribute("data-mode",a),t.textContent="hr"===a?"[HR]":"[EU]","reset"===function(e){const t=v(e)
 		;return t?t.dataset.state||"hidden":null}(e)&&y(e,"hidden")}var x=new WeakMap;function z(e){e.classList.remove("fullscreen")
 		;const t=e.previousElementSibling;t.classList.remove("fullscreen");const n=t.querySelector(".fs-btn");n&&(n.textContent="[ ]"),
-		s(".if1.fullscreen").some(e=>!e.closest(".map-block.snapped"))||document.body.classList.remove("fs-lock"),a(r);const o=!1===x.get(e)
+		s(".if1.fullscreen").some(e=>!e.closest(".map-block.snapped"))||document.body.classList.remove("fs-lock"),r(a);const o=!1===x.get(e)
 		;x.delete(e);const i=l(".overlay",e);i&&(o?i.style.display="none":i.removeAttribute("style")),
 		y(e.querySelector("iframe").id,o?"exit":"reset")}var A=new WeakMap;function S(){const e=p();s(".hint").forEach(t=>{
 		t.textContent=e?"Dvostruki dodir za pristup interaktivnoj karti":"Dvostruki klik za pristup interaktivnoj karti"})}
 		var L="mapConfig",j="showLinksBottom",R=new Map;function H(e){try{return JSON.parse(R.has(e)?R.get(e):localStorage.getItem(e))}catch{
-		return null}}function M(e,t){const r=JSON.stringify(t);try{localStorage.setItem(e,r),R.delete(e)}catch{R.set(e,r)}}function _(e){
+		return null}}function M(e,t){const a=JSON.stringify(t);try{localStorage.setItem(e,a),R.delete(e)}catch{R.set(e,a)}}function _(e){
 		const t=document.getElementById(e);t&&t.scrollIntoView({behavior:"smooth",block:"start"})}function D(e){
-		const t=e.scrollWidth-e.clientWidth,r=e.scrollLeft;e.classList.toggle("can-scroll-left",r>1),
-		e.classList.toggle("can-scroll-right",t>1&&r<t-1)}function C(){s(".links-bottom").forEach(D)}var W=0,V=0;function F(e,t){
-		const r=e.getAttribute("data-slideshow-id"),a=e.querySelectorAll(".slide"),n=document.querySelectorAll(`.indicators-container[data-slideshow-id="${r}"] .indicator`)
-		;let o=t;o>a.length&&(o=1),o<1&&(o=a.length),e.setAttribute("data-current-slide",o),a.forEach(e=>e.classList.remove("active")),
-		a[o-1].classList.add("active"),n.forEach(e=>e.classList.remove("active")),n[o-1].classList.add("active"),function(e){
+		const t=e.scrollWidth-e.clientWidth,a=e.scrollLeft;e.classList.toggle("can-scroll-left",a>1),
+		e.classList.toggle("can-scroll-right",t>1&&a<t-1)}function C(){s(".links-bottom").forEach(D)}var W=0,V=0;function I(e,t){
+		const a=e.getAttribute("data-slideshow-id"),r=e.querySelectorAll(".slide"),n=document.querySelectorAll(`.indicators-container[data-slideshow-id="${a}"] .indicator`)
+		;let o=t;o>r.length&&(o=1),o<1&&(o=r.length),e.setAttribute("data-current-slide",o),r.forEach(e=>e.classList.remove("active")),
+		r[o-1].classList.add("active"),n.forEach(e=>e.classList.remove("active")),n[o-1].classList.add("active"),function(e){
 		if(!e.hasAttribute("data-dynamic-width"))return
-		;const t=e.getAttribute("data-slideshow-id"),r=l(`.indicators-container[data-slideshow-id='${t}']`),a=l(".slide.active .placeholder",e)
-		;if(!a)return;e.style.maxWidth=a.style.maxWidth,r.style.maxWidth=a.style.maxWidth}(e)}function T(){
+		;const t=e.getAttribute("data-slideshow-id"),a=l(`.indicators-container[data-slideshow-id='${t}']`),r=l(".slide.active .placeholder",e)
+		;if(!r)return;e.style.maxWidth=r.style.maxWidth,a.style.maxWidth=r.style.maxWidth}(e)}function F(){
 		s(".slideshow:not([data-swipe])").forEach(e=>{e.setAttribute("data-swipe",""),e.querySelectorAll("img").forEach(e=>{
-		e.addEventListener("dragstart",e=>e.preventDefault())}),function(e){let t=null,r=null,a=!1;e.addEventListener("touchstart",e=>{a=!1,
-		e.touches.length>1||(t=r={x:e.touches[0].clientX,y:e.touches[0].clientY})}),e.addEventListener("touchmove",e=>{
-		e.touches.length>1||!t?a=!1:(r={x:e.touches[0].clientX,y:e.touches[0].clientY},Math.abs(r.x-t.x)>Math.abs(r.y-t.y)&&(a=!0))}),
-		e.addEventListener("touchend",()=>{a&&I(e,t,r)})}(e),function(e){e.querySelectorAll(".prev, .next").forEach(e=>{let t=!1
+		e.addEventListener("dragstart",e=>e.preventDefault())}),function(e){let t=null,a=null,r=!1;e.addEventListener("touchstart",e=>{r=!1,
+		e.touches.length>1||(t=a={x:e.touches[0].clientX,y:e.touches[0].clientY})}),e.addEventListener("touchmove",e=>{
+		e.touches.length>1||!t?r=!1:(a={x:e.touches[0].clientX,y:e.touches[0].clientY},Math.abs(a.x-t.x)>Math.abs(a.y-t.y)&&(r=!0))}),
+		e.addEventListener("touchend",()=>{r&&T(e,t,a)})}(e),function(e){e.querySelectorAll(".prev, .next").forEach(e=>{let t=!1
 		;e.addEventListener("touchstart",e=>{e.touches.length>1&&(t=!0)}),e.addEventListener("touchend",e=>{t&&e.preventDefault(),
 		0===e.touches.length&&(t=!1)})})}(e),function(e){let t=null;e.addEventListener("mousedown",e=>{t={x:e.clientX,y:e.clientY}}),
-		e.addEventListener("mouseup",r=>{t&&(I(e,t,{x:r.clientX,y:r.clientY}),t=null)}),e.addEventListener("mouseleave",()=>{t=null})}(e)})}
-		function I(e,t,r){Math.abs(r.x-t.x)>Math.abs(r.y-t.y)&&function(e,t,r){const a=r-t;if(Math.abs(a)>50){
-		const t=parseInt(e.getAttribute("data-current-slide"));F(e,t+(a>0?-1:1))}}(e,t.x,r.x)}function B(){s("img.lazy").forEach(e=>{
-		e.src=e.getAttribute("data-src"),e.classList.remove("lazy")}),T(),u(!0),s(".if1 .overlay:not([data-tap])").forEach(e=>{
-		e.setAttribute("data-tap","");const t=e.dataset.frameId;let r=0,a=!1;e.addEventListener("dblclick",()=>b(t)),
-		e.addEventListener("touchstart",e=>{e.touches.length>1&&(a=!0)}),e.addEventListener("touchend",e=>{
-		if(a)return void(0===e.touches.length&&(a=!1,r=0));const n=(new Date).getTime(),o=n-r;o>0&&o<200&&(b(t),e.preventDefault()),r=n})
+		e.addEventListener("mouseup",a=>{t&&(T(e,t,{x:a.clientX,y:a.clientY}),t=null)}),e.addEventListener("mouseleave",()=>{t=null})}(e)})}
+		function T(e,t,a){Math.abs(a.x-t.x)>Math.abs(a.y-t.y)&&function(e,t,a){const r=a-t;if(Math.abs(r)>50){
+		const t=parseInt(e.getAttribute("data-current-slide"));I(e,t+(r>0?-1:1))}}(e,t.x,a.x)}function B(){s("img.lazy").forEach(e=>{
+		e.src=e.getAttribute("data-src"),e.classList.remove("lazy")}),F(),u(!0),s(".if1 .overlay:not([data-tap])").forEach(e=>{
+		e.setAttribute("data-tap","");const t=e.dataset.frameId;let a=0,r=!1;e.addEventListener("dblclick",()=>b(t)),
+		e.addEventListener("touchstart",e=>{e.touches.length>1&&(r=!0)}),e.addEventListener("touchend",e=>{
+		if(r)return void(0===e.touches.length&&(r=!1,a=0));const n=(new Date).getTime(),o=n-a;o>0&&o<200&&(b(t),e.preventDefault()),a=n})
 		;const n=e.querySelector(".hint");let o=0,i=0;e.addEventListener("touchstart",e=>{1===e.touches.length&&(i=e.touches[0].clientX,
 		o=e.touches[0].clientY)}),e.addEventListener("touchend",e=>{if(!n)return
-		;const t=Math.abs(e.changedTouches[0].clientX-i),r=Math.abs(e.changedTouches[0].clientY-o);t<10&&r<10&&(n.style.opacity="0.6",
+		;const t=Math.abs(e.changedTouches[0].clientX-i),a=Math.abs(e.changedTouches[0].clientY-o);t<10&&a<10&&(n.style.opacity="0.6",
 		clearTimeout(A.get(n)),A.set(n,setTimeout(()=>n.style.removeProperty("opacity"),2e3)))})}),S(),s(".links-bottom").forEach(e=>{
 		e.addEventListener("scroll",()=>D(e),{passive:!0})}),C(),function(){
-		const e=document.querySelectorAll("img"),t=l(".progress-bar"),r=l(".progress-container"),a=new Set(e),n=++W;if(clearTimeout(V),
-		t.style.width="0",r.style.removeProperty("display"),0===e.length)return void(r.style.display="none");const o=o=>{
-		W===n&&a.delete(o)&&(t.style.width=(e.length-a.size)/e.length*100+"%",0===a.size&&(V=setTimeout(()=>{r.style.display="none"},500)))}
+		const e=document.querySelectorAll("img"),t=l(".progress-bar"),a=l(".progress-container"),r=new Set(e),n=++W;if(clearTimeout(V),
+		t.style.width="0",a.style.removeProperty("display"),0===e.length)return void(a.style.display="none");const o=o=>{
+		W===n&&r.delete(o)&&(t.style.width=(e.length-r.size)/e.length*100+"%",0===r.size&&(V=setTimeout(()=>{a.style.display="none"},500)))}
 		;e.forEach(e=>{e.addEventListener("load",()=>o(e)),e.addEventListener("error",()=>{d(`Error loading image: ${e.src}`),
 		e.removeAttribute("src"),o(e)}),e.complete&&e.dispatchEvent(new Event("load"))})}()}var O=0;function P(e){
 		const t=e&&e.maps&&"object"==typeof e.maps?e.maps:{};return new Set(Object.keys(t).filter(e=>t[e]&&!1===t[e].enabled))}var Z=new Set
@@ -330,9 +334,9 @@
 		},{text:"Ventusky",href:"https://www.ventusky.com/?p=44.49;16.50;6&l=temperature-2m&w=off"},{text:"Vrijeme&Radar",
 		href:"https://www.vrijemeradar.hr/vremenski-radar/zagreb/18138691?center=44.5,16.5&zoom=7&layer=tr&tz=Europe%2FZagreb"},{text:"Meteoradar",
 		href:"https://www.meteoradar.co.uk/en-gb/country/hr/maps/temperature"},{text:"Meteociel",
-		href:"https://www.meteociel.fr/observations-meteo/temperatures.php?region=it"},{text:"Pljusak",href:"https://pljusak.com/karta.php"}],Q=[{
+		href:"https://www.meteociel.fr/observations-meteo/temperatures.php?region=it"},{text:"Pljusak",href:"https://pljusak.com/karta.php"}],$=[{
 		text:"ESSL",href:"https://weather.essl.org/storm/"},{text:"ASTORP",href:"https://rawinsonde.com/ASTORP/ESTOFEX.html"},{text:"ESTOFEX",
-		href:"https://www.estofex.org"},{text:"ESWD",href:"https://www.eswd.eu"}];function $(e,t){return e.filter(e=>e.text!==t)}function Y(e,t){
+		href:"https://www.estofex.org"},{text:"ESWD",href:"https://www.eswd.eu"}];function Q(e,t){return e.filter(e=>e.text!==t)}function Y(e,t){
 		return{id:`dhmz-${e}`,category:"radar",name:`DHMZ | MRC ${t}`,type:"slideshow",
 		titleHref:`https://meteo.hr/podaci.php?section=podaci_mjerenja&param=radari&el=${e}&acto=anim`,maxWidth:720,aspect:"720 / 751",
 		slides:[`https://vrijeme.hr/anim_${e}.gif`,`https://vrijeme.hr/${e}-stat.png`]}}var K=[{id:"neverin-radar-hr",category:"radar",
@@ -357,13 +361,13 @@
 		srcHr:"https://embed.windy.com/embed2.html?lat=44.5&lon=16.56&zoom=7&level=surface&overlay=radar&menu=&message=true&marker=&calendar=&pressure=&type=map&location=coordinates&detail=&detailLat=45.798&detailLon=15.936&metricWind=m%2Fs&metricTemp=%C2%B0C&radarRange=-1",
 		zoomHrDesktop:"&zoom=7",zoomHrMobile:"&zoom=6",
 		srcEu:"https://embed.windy.com/embed2.html?lat=48.0&lon=10.00&zoom=5&level=surface&overlay=radar&menu=&message=true&marker=&calendar=&pressure=&type=map&location=coordinates&detail=&detailLat=45.798&detailLon=15.936&metricWind=m%2Fs&metricTemp=%C2%B0C&radarRange=-1",
-		zoomEuDesktop:"&zoom=5",zoomEuMobile:"&zoom=3",links:$(U,"Windy")},{id:"dhmz-radar",category:"radar",name:"DHMZ | Radar | Hrvatska",
+		zoomEuDesktop:"&zoom=5",zoomEuMobile:"&zoom=3",links:Q(U,"Windy")},{id:"dhmz-radar",category:"radar",name:"DHMZ | Radar | Hrvatska",
 		type:"slideshow",titleHref:"https://meteo.hr/podaci.php?section=podaci_mjerenja&param=radari&el=kompozit&acto=anim",maxWidth:720,
 		aspect:"720 / 751",slides:["https://vrijeme.hr/anim_kompozit.gif","https://vrijeme.hr/kompozit-stat.png"],links:U},{id:"meteociel-temp",
 		category:"temperatura",name:"Meteociel.fr | Temperatura",type:"slideshow",maxWidth:768,slides:[{title:{text:"Meteociel.fr | Temperatura",
 		href:"https://www.meteociel.fr/observations-meteo/temperatures.php?region=it"},img:"https://www.meteociel.fr/cartes_obs/temp_it.png",
 		aspect:"1"},{title:{text:"Meteociel.fr | Temperatura",href:"https://www.meteociel.fr/observations-meteo/temperatures.php?region=eur2"},
-		img:"https://www.meteociel.com/cartes_obs/temp_eur2.png",aspect:"1"}],links:$(X,"Meteociel")},{id:"blitzortung",category:"munje",
+		img:"https://www.meteociel.com/cartes_obs/temp_eur2.png",aspect:"1"}],links:Q(X,"Meteociel")},{id:"blitzortung",category:"munje",
 		name:"Blitzortung.org | Munje",type:"iframe",frameId:"blitzortung",titleHref:"https://map.blitzortung.org/#6/44.5/16.5",
 		srcHr:"https://map.blitzortung.org/index.php?interactive=1&NavigationControl=1&FullScreenControl=0&Cookies=0&InfoDiv=0&MenuButtonDiv=0&ScaleControl=0&CirclesRangeValue=1&LinksCheckboxChecked=0&LinksRangeValue=0&MapStyle=1&MapStyleRangeValue=3&Advertisment=0#6/44.5/16.5",
 		zoomHrDesktop:"#6/",zoomHrMobile:"#5/",
@@ -373,13 +377,13 @@
 		text:"Neverin",href:"https://www.neverin.hr/munje/"}]},{id:"essl",category:"nevrijeme",name:"ESSL | Prognoza nevremena",type:"slideshow",
 		titleHref:"https://stormforecast.eu",maxWidth:900,aspect:"900 / 600",startSlide:2,
 		slides:["https://meteo-data.jurakovic.workers.dev/essl/img1.png","https://meteo-data.jurakovic.workers.dev/essl/img2.png","https://meteo-data.jurakovic.workers.dev/essl/img3.png"],
-		links:$(Q,"ESSL")},{id:"astorp",category:"nevrijeme",name:"ASTORP | Prognoza nevremena",type:"slideshow",
+		links:Q($,"ESSL")},{id:"astorp",category:"nevrijeme",name:"ASTORP | Prognoza nevremena",type:"slideshow",
 		titleHref:"https://rawinsonde.com/ASTORP/ESTOFEX.html",aspect:"1048 / 850",
 		slides:["https://rawinsonde.com/ASTORP/Results/ESTOFEX_DAY_1.jpg","https://rawinsonde.com/ASTORP/Results/ESTOFEX_DAY_2.jpg","https://rawinsonde.com/ASTORP/Results/ESTOFEX_DAY_3.jpg","https://rawinsonde.com/ASTORP/Results/ESTOFEX_DAY_4.jpg","https://rawinsonde.com/ASTORP/Results/ESTOFEX_DAY_5.jpg","https://rawinsonde.com/ASTORP/Results/ESTOFEX_DAY_6.jpg","https://rawinsonde.com/ASTORP/Results/ESTOFEX_DAY_7.jpg"],
-		links:$(Q,"ASTORP")},{id:"estofex",category:"nevrijeme",name:"ESTOFEX | Prognoza nevremena",type:"slideshow",
+		links:Q($,"ASTORP")},{id:"estofex",category:"nevrijeme",name:"ESTOFEX | Prognoza nevremena",type:"slideshow",
 		titleHref:"https://www.estofex.org",maxWidth:800,aspect:"1",
 		slides:["https://meteo-data.jurakovic.workers.dev/estofex/img1.png","https://meteo-data.jurakovic.workers.dev/estofex/img2.png"],
-		links:$(Q,"ESTOFEX")},{id:"eumetnet",category:"radar",name:"EUMETNET",type:"iframe-basic",
+		links:Q($,"ESTOFEX")},{id:"eumetnet",category:"radar",name:"EUMETNET",type:"iframe-basic",
 		titleHref:"https://www.eumetnet.eu/observations/opera-radar-animation/",src:"https://cdn.fmi.fi/demos/eumetnet-web-site-radar-animator/",
 		links:N},{id:"meteociel-satelit",category:"satelit",name:"Meteociel.fr | Satelit",type:"slideshow",maxWidth:768,slides:[{title:{
 		text:"Meteociel.fr | Satelit",
@@ -415,17 +419,17 @@
 		name:"Ventusky",type:"iframe",frameId:"ventusky",scaled:!0,loading:"eager",
 		titleHref:"https://www.ventusky.com/?p=44.5;16.5;6&l=radar&w=off",srcHr:"https://embed.ventusky.com/?p=44.5;16.5;6&l=radar&w=off",
 		zoomHrDesktop:";6&",zoomHrMobile:";6&",srcEu:"https://embed.ventusky.com/?p=48.0;10.0;4&l=radar&w=off",zoomEuDesktop:";4&",
-		zoomEuMobile:";3&",links:$(U,"Ventusky")},{id:"rainviewer",category:"radar",name:"Rain Viewer",type:"iframe",frameId:"rainViewer",scaled:!0,
+		zoomEuMobile:";3&",links:Q(U,"Ventusky")},{id:"rainviewer",category:"radar",name:"Rain Viewer",type:"iframe",frameId:"rainViewer",scaled:!0,
 		titleHref:"https://www.rainviewer.com/map.html?loc=44.5,16.5,6&oCS=1&c=5&lm=1&layer=radar&sm=1&sn=2&ts=1",
 		srcHr:"https://www.rainviewer.com/map.html?loc=44.8,16.5,6.3&oCS=1&c=5&lm=1&layer=radar&sm=1&sn=2&ts=1",zoomHrDesktop:",6.3&",
 		zoomHrMobile:",5.8&",srcEu:"https://www.rainviewer.com/map.html?loc=48.0,10.0,4.0&oCS=1&c=5&lm=1&layer=radar&sm=1&sn=2&ts=1",
-		zoomEuDesktop:",4.0&",zoomEuMobile:",3.2&",links:$(U,"Rain Viewer")},{id:"weatherandradar",category:"radar",name:"Vrijeme&Radar",
+		zoomEuDesktop:",4.0&",zoomEuMobile:",3.2&",links:Q(U,"Rain Viewer")},{id:"weatherandradar",category:"radar",name:"Vrijeme&Radar",
 		type:"iframe",frameId:"weatherAndRadar",scaled:!0,
 		titleHref:"https://www.vrijemeradar.hr/vremenski-radar/zagreb/18138691?center=44.5,16.5&zoom=7&layer=wr&tz=Europe%2FZagreb",
 		srcHr:"https://radar.wo-cloud.com/pwa/?center=44.5,16.5&zoom=7.2&tz=Europe/Zagreb&tf=HH:mm&tempunit=celsius&windunit=kph&showShareButton=false&lang=en-US&placemarkName=Zagreb&desktop=true&fadeTop=true",
 		zoomHrDesktop:"&zoom=7.2",zoomHrMobile:"&zoom=6.8",
 		srcEu:"https://radar.wo-cloud.com/pwa/?center=48.0,10.0&zoom=5.0&tz=Europe/Zagreb&tf=HH:mm&tempunit=celsius&windunit=kph&showShareButton=false&lang=en-US&placemarkName=Zagreb&desktop=true&fadeTop=true",
-		zoomEuDesktop:"&zoom=5.0",zoomEuMobile:"&zoom=4.0",links:$(U,"Vrijeme&Radar")},{id:"meteo-si",category:"radar",name:"meteo.si",
+		zoomEuDesktop:"&zoom=5.0",zoomEuMobile:"&zoom=4.0",links:Q(U,"Vrijeme&Radar")},{id:"meteo-si",category:"radar",name:"meteo.si",
 		type:"slideshow",titleHref:"https://meteo.arso.gov.si/met/sl/weather/observ/radar/",maxWidth:821,aspect:"821 / 660",
 		slides:["https://meteo.arso.gov.si/uploads/probase/www/observ/radar/si0-rm-anim.gif?nocache","https://meteo.arso.gov.si/uploads/probase/www/observ/radar/si0-rm.gif?nocache"],
 		links:U},{id:"idokep-radar-eu",category:"radar",name:"Időkép | Radar | Europa",type:"image",titleHref:"https://www.idokep.eu/ceu/radar",
@@ -457,123 +461,125 @@
 		},Y("puntijarka","Puntijarka"),Y("bilogora","Bilogora"),Y("gradiste","Gradište"),Y("goli","Goli"),Y("debeljak","Debeljak"),Y("uljenje","Uljenje")],J=new Map(K.map(e=>[e.id,e]))
 		;function G(e){return J.get(e)||null}
 		var ee=["neverin-radar-hr","neverin-satelit-hr","neverin-radar-eu","neverin-satelit-eu","windy","dhmz-radar","meteociel-temp","blitzortung","essl","astorp","estofex","eumetnet","meteociel-satelit","dwd-sinopticka","neverin-kamera","meteoblue-prognoza"],te={
-		slideshow:{build:function(e,t,r={}){const a=e.id+oe(t),n=e.startSlide||1,i=e.slides.some(e=>"string"!=typeof e),s=o("div",{
-		class:i?"slideshow":"slideshow placeholder","data-slideshow-id":a,"data-current-slide":n,"data-dynamic-width":e.dynamicWidth?"":void 0,
-		style:(ie(e)+(i?"":` aspect-ratio: ${e.aspect};`)).trim()||void 0});e.slides.forEach((t,a)=>{
-		const l=a===n-1,c=i?t:null,d=c?c.img:t,m=l||e.eagerSlides?o("img",{src:d}):o("img",{"data-src":d,class:"lazy"}),p=o("div",{
-		class:"slide fade"+(l?" active":"")});if(c){const t=c.maxWidth||e.maxWidth,a={text:c.title.text||e.name,href:c.title.href}
-		;p.appendChild(se(a,{},e.titleHref?null:le(r))),p.appendChild(o("div",{class:"placeholder",
+		slideshow:{build:function(e,t,a={}){const r=e.id+oe(t),n=e.startSlide||1,i=e.slides.some(e=>"string"!=typeof e),s=o("div",{
+		class:i?"slideshow":"slideshow placeholder","data-slideshow-id":r,"data-current-slide":n,"data-dynamic-width":e.dynamicWidth?"":void 0,
+		style:(ie(e)+(i?"":` aspect-ratio: ${e.aspect};`)).trim()||void 0});e.slides.forEach((t,r)=>{
+		const l=r===n-1,c=i?t:null,d=c?c.img:t,m=l||e.eagerSlides?o("img",{src:d}):o("img",{"data-src":d,class:"lazy"}),p=o("div",{
+		class:"slide fade"+(l?" active":"")});if(c){const t=c.maxWidth||e.maxWidth,r={text:c.title.text||e.name,href:c.title.href}
+		;p.appendChild(se(r,{},e.titleHref?null:le(a))),p.appendChild(o("div",{class:"placeholder",
 		style:`${t?`max-width: ${t}px; `:""}aspect-ratio: ${c.aspect};`},[m]))}else p.appendChild(m);s.appendChild(p)});const l=o("a",{
 		class:"prev"+(i?" shorter":""),"data-action":"slide","data-step":"-1",html:"&#10094;"}),c=o("a",{class:"next"+(i?" shorter":""),
 		"data-action":"slide","data-step":"1",html:"&#10095;"});s.appendChild(l),s.appendChild(c);const d=o("div",{class:"indicators-container",
-		"data-slideshow-id":a,style:`${ie(e)} grid-template-columns: repeat(${e.slides.length}, 1fr);`.trim()});return e.slides.forEach((e,t)=>{
-		d.appendChild(o("span",{class:"indicator"+(t===n-1?" active":"")}))}),[e.titleHref?ce(e,r):null,s,d]},freeAspect:!1,fullscreen:!1,reload:re
-		},image:{build:function(e,t,r={}){return[ce(e,r),o("div",{class:"placeholder",style:`${ie(e)} aspect-ratio: ${e.aspect};`.trim()},[o("img",{
-		src:e.img,alt:e.alt})])]},freeAspect:!1,fullscreen:!1,reload:re},video:{build:function(e,t,r={}){const a=o("video",{controls:""
-		},[o("source",{type:"video/mp4",src:e.src})]);a.muted=!0,a.autoplay=!0,a.loop=!0
-		;const n=`${ie(e)}${e.aspect?` aspect-ratio: ${e.aspect};`:""}`.trim();return[ce(e,r),o("div",{class:"placeholder",style:n||void 0
-		},[o("div",{class:"vid1"},[a])])]},freeAspect:!1,fullscreen:!1,reload:function(e){e.querySelectorAll("video").forEach(e=>{
-		e.querySelectorAll("source[src]").forEach(e=>{e.src=ae(e.getAttribute("src"))}),e.load()})}},iframe:{build:function(e,t,r={}){
-		const a=e.frameId+oe(t),n=a[0].toUpperCase()+a.slice(1),i=o("a",{class:"left zoom-btn","data-mode":"hr","data-action":"zoom","data-frame":a,
-		text:"[HR]"}),s=o("a",{class:"fs-btn","data-action":"fullscreen","data-frame":a,text:"[ ]"}),l=o("div",{class:"radartitle"},[i,o("a",{
-		class:"center",href:e.titleHref,target:"_blank",rel:"nofollow",text:e.name}),o("span",{class:"right right-cluster"},[...le(r,!0)||[],o("a",{
-		id:`reset${n}Frame`,"data-frame-id":a,"data-action":"gate",style:"display:none",text:"[X]"}),s])]),c=o("div",{class:"if1 placeholder"
-		},[o("iframe",{id:a,class:e.scaled?"scaled-iframe":void 0,loading:e.loading||"lazy",frameborder:"0","data-src-hr":e.srcHr,
+		"data-slideshow-id":r,style:`${ie(e)} grid-template-columns: repeat(${e.slides.length}, 1fr);`.trim()});return e.slides.forEach((e,t)=>{
+		d.appendChild(o("span",{class:"indicator"+(t===n-1?" active":"")}))}),[e.titleHref?ce(e,a):null,s,d]},freeAspect:!1,fullscreen:!1,reload:ae
+		},image:{build:function(e,t,a={}){return[ce(e,a),o("div",{class:"placeholder",style:`${ie(e)} aspect-ratio: ${e.aspect};`.trim()},[o("img",{
+		src:e.img,alt:e.alt})])]},freeAspect:!1,fullscreen:!1,reload:ae},video:{build:function(e,t,a={}){const r=o("video",{controls:""
+		},[o("source",{type:"video/mp4",src:e.src})]);r.muted=!0,r.autoplay=!0,r.loop=!0
+		;const n=`${ie(e)}${e.aspect?` aspect-ratio: ${e.aspect};`:""}`.trim();return[ce(e,a),o("div",{class:"placeholder",style:n||void 0
+		},[o("div",{class:"vid1"},[r])])]},freeAspect:!1,fullscreen:!1,reload:function(e){e.querySelectorAll("video").forEach(e=>{
+		e.querySelectorAll("source[src]").forEach(e=>{e.src=re(e.getAttribute("src"))}),e.load()})}},iframe:{build:function(e,t,a={}){
+		const r=e.frameId+oe(t),n=r[0].toUpperCase()+r.slice(1),i=o("a",{class:"left zoom-btn","data-mode":"hr","data-action":"zoom","data-frame":r,
+		text:"[HR]"}),s=o("a",{class:"fs-btn","data-action":"fullscreen","data-frame":r,text:"[ ]"}),l=o("div",{class:"radartitle"},[i,o("a",{
+		class:"center",href:e.titleHref,target:"_blank",rel:"nofollow",text:e.name}),o("span",{class:"right right-cluster"},[...le(a,!0)||[],o("a",{
+		id:`reset${n}Frame`,"data-frame-id":r,"data-action":"gate",style:"display:none",text:"[X]"}),s])]),c=o("div",{class:"if1 placeholder"
+		},[o("iframe",{id:r,class:e.scaled?"scaled-iframe":void 0,loading:e.loading||"lazy",frameborder:"0","data-src-hr":e.srcHr,
 		"data-zoom-hr-desktop":e.zoomHrDesktop,"data-zoom-hr-mobile":e.zoomHrMobile,"data-src-eu":e.srcEu,"data-zoom-eu-desktop":e.zoomEuDesktop,
-		"data-zoom-eu-mobile":e.zoomEuMobile}),o("div",{class:"overlay",id:`overlay${n}Frame`,"data-frame-id":a},[o("span",{class:"hint",
+		"data-zoom-eu-mobile":e.zoomEuMobile}),o("div",{class:"overlay",id:`overlay${n}Frame`,"data-frame-id":r},[o("span",{class:"hint",
 		text:"Dvostruki klik za pristup interaktivnoj karti"})])]);return[l,c]},freeAspect:!0,fullscreen:!0,reload:null},"iframe-basic":{
-		build:function(e,t,r={}){return[ce(e,r),o("div",{class:"if2 placeholder"},[o("iframe",{loading:"lazy",src:e.src,frameborder:"0",
+		build:function(e,t,a={}){return[ce(e,a),o("div",{class:"if2 placeholder"},[o("iframe",{loading:"lazy",src:e.src,frameborder:"0",
 		scrolling:"no"})])]},freeAspect:!0,fullscreen:!1,reload:function(e){e.querySelectorAll("iframe[src]").forEach(e=>{
-		e.src=e.getAttribute("src")})}}};function re(e){e.querySelectorAll("img[src]").forEach(e=>{e.src=ae(e.getAttribute("src"))})}function ae(e){
-		const t=e.replace(/([?&])_r=\d+(&|$)/,(e,t,r)=>r?t:"");return`${t}${t.includes("?")?"&":"?"}_r=${Date.now()}`}var ne="#";function oe(e){
+		e.src=e.getAttribute("src")})}}};function ae(e){e.querySelectorAll("img[src]").forEach(e=>{e.src=re(e.getAttribute("src"))})}function re(e){
+		const t=e.replace(/([?&])_r=\d+(&|$)/,(e,t,a)=>a?t:"");return`${t}${t.includes("?")?"&":"?"}_r=${Date.now()}`}var ne="#";function oe(e){
 		const t=function(e){const t=Number(String(e).split(ne)[1]);return t>1?t:1}(e);return t>1?`Copy${t}`:""}function ie(e){
-		return e.maxWidth?`max-width: ${e.maxWidth}px;`:""}function se(e,t={},r=null){return o("div",{class:"radartitle",style:ie(t)||void 0
-		},[o("a",{href:e.href,target:"_blank",rel:"nofollow",text:e.text}),r&&r.length?o("span",{class:"right right-cluster"},r):null])}
+		return e.maxWidth?`max-width: ${e.maxWidth}px;`:""}function se(e,t={},a=null){return o("div",{class:"radartitle",style:ie(t)||void 0
+		},[o("a",{href:e.href,target:"_blank",rel:"nofollow",text:e.text}),a&&a.length?o("span",{class:"right right-cluster"},a):null])}
 		function le(e,t=!1){return e.titleButtons?e.titleButtons(t):null}function ce(e,t){return se({text:e.title||e.name,href:e.titleHref},e,le(t))
-		}function de(e,t,r={}){e.replaceChildren(),t.length?t.forEach(t=>function(e,t,r={}){const a=o("div",{class:"map-block","data-map-id":t.id,
-		"data-inst":t.id},function(e,t=e.id,r={}){const a=te[e.type];return a?a.build(e,t,r):[]}(t,t.id,r)),n=o("div",{class:"map-entry"},[a])
+		}function de(e,t,a={}){e.replaceChildren(),t.length?t.forEach(t=>function(e,t,a={}){const r=o("div",{class:"map-block","data-map-id":t.id,
+		"data-inst":t.id},function(e,t=e.id,a={}){const r=te[e.type];return r?r.build(e,t,a):[]}(t,t.id,a)),n=o("div",{class:"map-entry"},[r])
 		;t.links&&t.links.length&&n.appendChild(function(e){const t=o("div",{class:"links-bottom",style:ie(e)||void 0})
-		;return e.links.forEach((e,r)=>{r>0&&t.appendChild(document.createTextNode(" · ")),t.appendChild(o("a",{href:e.href,target:"_blank",
-		rel:"nofollow",text:e.text}))}),t}(t));return e.appendChild(n),a}(e,t,r)):e.appendChild(o("div",{class:"map-entry"},[o("div",{
+		;return e.links.forEach((e,a)=>{a>0&&t.appendChild(document.createTextNode(" · ")),t.appendChild(o("a",{href:e.href,target:"_blank",
+		rel:"nofollow",text:e.text}))}),t}(t));return e.appendChild(n),r}(e,t,a)):e.appendChild(o("div",{class:"map-entry"},[o("div",{
 		class:"maps-empty",text:'Nema odabranih karata. Odaberite ih pod "Karte".'})]))}var me=!1;function pe(){
 		const e=document.querySelector("[data-maps]");if(!e)return!1;me=!0;const t=ee.map(G).filter(e=>{return e&&(t=e.id,!Z.has(t));var t
-		}),r=t.map(e=>e.id);return(!r.length||function(e){return[...e.querySelectorAll(":scope > .map-entry > .map-block")].map(e=>e.dataset.mapId)
-		}(e).join()!==r.join())&&(de(e,t),!0)}function he(e,t,r){return Math.min(Math.max(e,t),Math.max(t,r))}function ue(e){
+		}),a=t.map(e=>e.id);return(!a.length||function(e){return[...e.querySelectorAll(":scope > .map-entry > .map-block")].map(e=>e.dataset.mapId)
+		}(e).join()!==a.join())&&(de(e,t),!0)}function he(e,t,a){return Math.min(Math.max(e,t),Math.max(t,a))}function ue(e){
 		return Math.round(1e4*e)/1e4}var we=0;function ge(e){we=e}function fe(){return document.documentElement.clientWidth-we}function ve(){
 		return document.documentElement.clientHeight}var ye=["n","ne","e","se","s","sw","w","nw"];var ke=120;function be(){return s(".dialog")}
 		function Ee(){return be().find(e=>!e.hidden)||null}function xe(){return!!Ee()}function ze(e){return e.getAttribute("data-dialog-key")}
 		function Ae(e){const t=ze(e);t&&function(e){R.delete(e);try{localStorage.removeItem(e)}catch{}}(t)}function Se(){
-		return Math.max(360,fe()-16)}function Le(){return Math.max(ke,ve()-16)}function je(e,t,r,a,n){a=he(a,360,Se()),
-		e.style.width=`${Math.round(a)}px`,e.style.maxWidth="none",e.style.right="auto",e.style.margin="0",null===n?(e.style.height="",
-		e.style.maxHeight=`${Math.round(Math.max(ke,ve()-Math.max(0,r)-8))}px`):(e.style.maxHeight="none",
+		return Math.max(360,fe()-16)}function Le(){return Math.max(ke,ve()-16)}function je(e,t,a,r,n){r=he(r,360,Se()),
+		e.style.width=`${Math.round(r)}px`,e.style.maxWidth="none",e.style.right="auto",e.style.margin="0",null===n?(e.style.height="",
+		e.style.maxHeight=`${Math.round(Math.max(ke,ve()-Math.max(0,a)-8))}px`):(e.style.maxHeight="none",
 		e.style.height=`${Math.round(he(n,ke,Le()))}px`),e.style.left=`${Math.round(he(t,0,Math.max(0,fe()-e.offsetWidth)))}px`,
-		e.style.top=`${Math.round(he(r,0,Math.max(0,ve()-e.offsetHeight)))}px`}function Re(e){
+		e.style.top=`${Math.round(he(a,0,Math.max(0,ve()-e.offsetHeight)))}px`}function Re(e){
 		["left","top","width","height","maxWidth","maxHeight","right","margin"].forEach(t=>e.style[t]="")}function He(e){if(!e||e.hidden)return
-		;const t=m.matches?function(e){const t=ze(e);if(!t)return null;const r=H(t)
-		;return r&&"object"==typeof r&&Number.isFinite(r.left)&&Number.isFinite(r.top)&&r.width>0?{left:r.left,top:r.top,width:r.width,
-		height:r.height>0?r.height:null}:null}(e):null;t?je(e,t.left*fe(),t.top*ve(),t.width,t.height):Re(e)}function Me(e){
+		;const t=m.matches?function(e){const t=ze(e);if(!t)return null;const a=H(t)
+		;return a&&"object"==typeof a&&Number.isFinite(a.left)&&Number.isFinite(a.top)&&a.width>0?{left:a.left,top:a.top,width:a.width,
+		height:a.height>0?a.height:null}:null}(e):null;t?je(e,t.left*fe(),t.top*ve(),t.width,t.height):Re(e)}function Me(e){
 		e.addEventListener("pointerdown",t=>{if(0!==t.button||!m.matches)return
-		;const r=t.target.closest(".po-h"),a=!r&&t.target.closest(".dialog-head")&&!t.target.closest("a, button, input");if(!r&&!a)return
-		;t.preventDefault();const n=e.getBoundingClientRect(),o=r?r.dataset.dir:null,i=e.style.height?n.height:null;let s=!1;!function(e,t,r,a){
-		const n=e.clientX,o=e.clientY;let i=0,s=0,l=e;const c=e=>{l=e,i=e.clientX-n,s=e.clientY-o,t(i,s,e),a&&a()},d=e=>{
-		"Shift"!==e.key||e.repeat||(t(i,s,{clientX:l.clientX,clientY:l.clientY,shiftKey:"keydown"===e.type}),a&&a())},m=()=>{
+		;const a=t.target.closest(".po-h"),r=!a&&t.target.closest(".dialog-head")&&!t.target.closest("a, button, input");if(!a&&!r)return
+		;t.preventDefault();const n=e.getBoundingClientRect(),o=a?a.dataset.dir:null,i=e.style.height?n.height:null;let s=!1;!function(e,t,a,r){
+		const n=e.clientX,o=e.clientY;let i=0,s=0,l=e;const c=e=>{l=e,i=e.clientX-n,s=e.clientY-o,t(i,s,e),r&&r()},d=e=>{
+		"Shift"!==e.key||e.repeat||(t(i,s,{clientX:l.clientX,clientY:l.clientY,shiftKey:"keydown"===e.type}),r&&r())},m=()=>{
 		document.removeEventListener("pointermove",c),document.removeEventListener("pointerup",m),document.removeEventListener("pointercancel",m),
-		document.removeEventListener("keydown",d),document.removeEventListener("keyup",d),document.body.classList.remove("po-dragging"),r&&r()}
+		document.removeEventListener("keydown",d),document.removeEventListener("keyup",d),document.body.classList.remove("po-dragging"),a&&a()}
 		;document.body.classList.add("po-dragging"),document.addEventListener("pointermove",c),document.addEventListener("pointerup",m),
-		document.addEventListener("pointercancel",m),document.addEventListener("keydown",d),document.addEventListener("keyup",d)}(t,(t,r)=>{
-		if(!s&&!t&&!r)return;if(s=!0,!o)return void je(e,n.left+t,n.top+r,n.width,i);let{w:a,h:l}=function(e,t,r,a){let n=t.width,o=t.height
-		;return e.includes("e")&&(n=t.width+r),e.includes("w")&&(n=t.width-r),e.includes("s")&&(o=t.height+a),e.includes("n")&&(o=t.height-a),{w:n,
-		h:o}}(o,n,t,r);a=he(a,360,Se()),l=he(l,ke,Le()),je(e,o.includes("w")?n.right-a:n.left,o.includes("n")?n.bottom-l:n.top,a,l)},()=>{
-		s&&function(e){const t=ze(e);if(!t)return;const r=e.getBoundingClientRect(),a={left:ue(r.left/fe()),top:ue(r.top/ve()),
-		width:Math.round(r.width)};e.style.height&&(a.height=Math.round(r.height)),M(t,a)}(e)})}),e.addEventListener("dblclick",t=>{
-		m.matches&&t.target.closest(".dialog-head")&&!t.target.closest("a, button, input")&&(Re(e),Ae(e))})}function _e(t,r){a(e,{panel:t,visible:r
+		document.addEventListener("pointercancel",m),document.addEventListener("keydown",d),document.addEventListener("keyup",d)}(t,(t,a)=>{
+		if(!s&&!t&&!a)return;if(s=!0,!o)return void je(e,n.left+t,n.top+a,n.width,i);let{w:r,h:l}=function(e,t,a,r){let n=t.width,o=t.height
+		;return e.includes("e")&&(n=t.width+a),e.includes("w")&&(n=t.width-a),e.includes("s")&&(o=t.height+r),e.includes("n")&&(o=t.height-r),{w:n,
+		h:o}}(o,n,t,a);r=he(r,360,Se()),l=he(l,ke,Le()),je(e,o.includes("w")?n.right-r:n.left,o.includes("n")?n.bottom-l:n.top,r,l)},()=>{
+		s&&function(e){const t=ze(e);if(!t)return;const a=e.getBoundingClientRect(),r={left:ue(a.left/fe()),top:ue(a.top/ve()),
+		width:Math.round(a.width)};e.style.height&&(r.height=Math.round(a.height)),M(t,r)}(e)})}),e.addEventListener("dblclick",t=>{
+		m.matches&&t.target.closest(".dialog-head")&&!t.target.closest("a, button, input")&&(Re(e),Ae(e))})}function _e(t,a){r(e,{panel:t,visible:a
 		})}function De(e,t){t&&be().forEach(t=>{t===e||t.hidden||(t.hidden=!0,_e(t,!1))}),e.hidden=!t,function(){const e=xe()
 		;if(e&&!document.documentElement.classList.contains("dialog-gutter")){const e=window.innerWidth-document.documentElement.clientWidth
 		;e>0&&(ge(e),document.documentElement.classList.add("dialog-gutter"))}else e||(ge(0),
 		document.documentElement.classList.remove("dialog-gutter"));document.body.classList.toggle("dialog-open",e);const t=l(".dialog-backdrop")
 		;t&&(t.hidden=!e,e&&t.classList.remove("dialog-spent"))}(),t&&He(e),_e(e,t)}function Ce(){const e=Ee();return e&&De(e,!1),!!e}
-		var We=new Map,Ve=[];function Fe(e,{run:t,keys:r=[],keyWhen:a=()=>!0,keepDefault:n=!1,capture:o=!1}){const i={id:e,run:t,keys:r,keyWhen:a,
-		keepDefault:n,capture:o};We.set(e,i),r.length&&Ve.push(i)}var Te=!1,Ie="upute";function Be(){return document.getElementById("manualDialog")}
-		function Oe(){var e;(e=Be())&&De(e,e.hidden)}function Pe(e){try{return decodeURIComponent(e.slice(1))}catch{return e.slice(1)}}Z=P(H(L)),
-		fetch("https://meteo-data.jurakovic.workers.dev/config.json",{cache:"no-cache"}).then(e=>e.ok?e.json():Promise.reject(e.status)).then(e=>{
-		M(L,e);const r=P(e);var n,o;o=Z,(n=r).size===o.size&&[...n].every(e=>o.has(e))||(Z=r,a(t))}).catch(()=>{}),
-		Te||document.documentElement.classList.add("no-manual"),Fe("top",{run:()=>{window.scrollTo({top:0,behavior:"smooth"})}}),Fe("links",{
-		run:()=>_("links")}),Fe("links-bottom",{run:e=>function(e){document.body.classList.toggle("show-links-bottom",e.checked),M(j,e.checked?1:0),
-		C()}(e)}),Fe("slide",{run:e=>{return t=e.closest(".slideshow"),r=Number(e.dataset.step),
-		void F(t,parseInt(t.getAttribute("data-current-slide"))+r);var t,r}}),Fe("zoom",{run:e=>E(e.dataset.frame,e)}),Fe("fullscreen",{
+		var We=new Map,Ve=[];function Ie(e,{run:t,keys:a=[],keyWhen:r=()=>!0,keepDefault:n=!1,capture:o=!1}){const i={id:e,run:t,keys:a,keyWhen:r,
+		keepDefault:n,capture:o};We.set(e,i),a.length&&Ve.push(i)}var Fe={manual:!0,changelog:!0},Te=[{feature:"manual",dialogId:"manualDialog",
+		hash:"upute",keys:["h","H"]},{feature:"changelog",dialogId:"changelogDialog",hash:"promjene",keys:["c","C"]}];function Be(e){try{
+		return decodeURIComponent(e.slice(1))}catch{return e.slice(1)}}function Oe({feature:t,dialogId:a,hash:r,keys:o}){
+		const i=document.getElementById(a);if(!i||!Fe[t])return;const s=i.querySelector(".dialog-close")
+		;s&&s.addEventListener("click",()=>De(i,!1)),i.addEventListener("click",e=>{const t=e.target.closest('a[href^="#"]')
+		;t&&i.contains(t)&&(e.preventDefault(),function(e,t){const a=e.querySelector(".dialog-body"),r=e.querySelector(`[id="${CSS.escape(t)}"]`)
+		;a&&r&&(a.scrollTop+=r.getBoundingClientRect().top-a.getBoundingClientRect().top)}(i,Be(t.getAttribute("href"))))}),
+		n(e,({panel:e,visible:t})=>{e===i&&(!function(e,t){const a=new URL(window.location.href);t!==(Be(a.hash)===e)&&(a.hash=t?e:"",
+		history.replaceState(null,"",t?a.href:a.href.replace(/#$/,"")))}(r,t),t&&(i.querySelector(".dialog-body").scrollTop=0))}),Ie(t,{keys:o,
+		run:()=>function(e){e&&De(e,e.hidden)}(i)});const l=()=>{const e=Be(window.location.hash)===r;e!==!i.hidden&&De(i,e)}
+		;window.addEventListener("hashchange",l),l()}Z=P(H(L)),fetch("https://meteo-data.jurakovic.workers.dev/config.json",{cache:"no-cache"
+		}).then(e=>e.ok?e.json():Promise.reject(e.status)).then(e=>{M(L,e);const a=P(e);var n,o;o=Z,
+		(n=a).size===o.size&&[...n].every(e=>o.has(e))||(Z=a,r(t))}).catch(()=>{}),Te.forEach(({feature:e})=>{
+		Fe[e]||document.documentElement.classList.add(`no-${e}`)}),Ie("top",{run:()=>{window.scrollTo({top:0,behavior:"smooth"})}}),Ie("links",{
+		run:()=>_("links")}),Ie("links-bottom",{run:e=>function(e){document.body.classList.toggle("show-links-bottom",e.checked),M(j,e.checked?1:0),
+		C()}(e)}),Ie("slide",{run:e=>{return t=e.closest(".slideshow"),a=Number(e.dataset.step),
+		void I(t,parseInt(t.getAttribute("data-current-slide"))+a);var t,a}}),Ie("zoom",{run:e=>E(e.dataset.frame,e)}),Ie("fullscreen",{
 		run:e=>function(e,t){d(`toggleFullscreen: ${e}`);const n=document.getElementById(e).parentElement
 		;if(n.classList.contains("fullscreen"))return void z(n);const o=n.querySelector(".overlay");x.set(n,!o||"none"!==o.style.display),
 		n.classList.add("fullscreen"),n.previousElementSibling.classList.add("fullscreen"),
-		n.closest(".map-block.snapped")||document.body.classList.add("fs-lock"),a(r),t.textContent="[-]",o&&(o.style.display="none"),
-		y(e,"fullscreen")}(e.dataset.frame,e)}),Fe("gate",{run:e=>function(e){const t=e.dataset.frameId;switch(e.dataset.state){case"exit":
-		k(t).removeAttribute("style"),y(t,"reset");break;case"reset":g(w(t)),y(t,"hidden");break;case"fullscreen":g(w(t))}}(e)}),Fe("dialog-close",{
-		keys:["Escape"],keyWhen:()=>xe(),keepDefault:!0,run:()=>Ce()}),Fe("fullscreen-exit",{keys:["Escape"],keyWhen:()=>!xe(),keepDefault:!0,
+		n.closest(".map-block.snapped")||document.body.classList.add("fs-lock"),r(a),t.textContent="[-]",o&&(o.style.display="none"),
+		y(e,"fullscreen")}(e.dataset.frame,e)}),Ie("gate",{run:e=>function(e){const t=e.dataset.frameId;switch(e.dataset.state){case"exit":
+		k(t).removeAttribute("style"),y(t,"reset");break;case"reset":g(w(t)),y(t,"hidden");break;case"fullscreen":g(w(t))}}(e)}),Ie("dialog-close",{
+		keys:["Escape"],keyWhen:()=>xe(),keepDefault:!0,run:()=>Ce()}),Ie("fullscreen-exit",{keys:["Escape"],keyWhen:()=>!xe(),keepDefault:!0,
 		run:()=>function(){const e=l(".if1.fullscreen");e&&z(e)}()}),document.addEventListener("click",e=>{
-		const t=e.target,r=t.closest&&t.closest("[data-action]");r&&function(e,t=null,r=null){const a=We.get(e);a&&a.run(t,r)}(r.dataset.action,r,e)
+		const t=e.target,a=t.closest&&t.closest("[data-action]");a&&function(e,t=null,a=null){const r=We.get(e);r&&r.run(t,a)}(a.dataset.action,a,e)
 		}),document.addEventListener("keydown",e=>{if(e.altKey||e.ctrlKey||e.metaKey||function(e){const t=e
 		;return!!t&&"function"==typeof t.matches&&t.matches('input:not([type="radio"]):not([type="checkbox"]), textarea, [contenteditable]')
 		}(e.target))return;const t=Ve.find(t=>t.keys.includes(e.key)&&t.keyWhen(e));t&&(t.keepDefault||e.preventDefault(),
 		t.capture&&e.stopPropagation(),t.run(null,e))},!0),window.addEventListener("resize",()=>{clearTimeout(O),O=setTimeout(()=>{u(),S(),C()},200)
 		}),n(t,()=>{me&&pe()&&B()}),i(pe),i(function(){be().forEach(e=>{!function(e){e.querySelectorAll(":scope > .po-h").forEach(e=>e.remove()),
-		ye.forEach(t=>{const r=document.createElement("div");r.className=`po-h po-h-${t}`,r.dataset.dir=t,e.appendChild(r)})}(e),Me(e)}),function(){
+		ye.forEach(t=>{const a=document.createElement("div");a.className=`po-h po-h-${t}`,a.dataset.dir=t,e.appendChild(a)})}(e),Me(e)}),function(){
 		const e=l(".dialog-backdrop");e&&e.addEventListener("pointerdown",t=>{if(!xe())return;t.preventDefault(),Ce(),e.hidden=!1,
-		e.classList.add("dialog-spent");let r=0;const a=()=>{clearTimeout(r),e.classList.remove("dialog-spent"),e.hidden=!xe(),
-		document.removeEventListener("click",n,!0),document.removeEventListener("pointerup",o),document.removeEventListener("pointercancel",a)
-		},n=e=>{e.stopPropagation(),e.preventDefault(),a()},o=()=>{r=setTimeout(a,400)};document.addEventListener("click",n,!0),
-		document.addEventListener("pointerup",o),document.addEventListener("pointercancel",a)})}(),window.addEventListener("resize",()=>He(Ee()))}),
-		i(function(){const t=Be();if(!t||!Te)return;const r=t.querySelector(".dialog-close");r&&r.addEventListener("click",()=>De(t,!1)),
-		t.addEventListener("click",e=>{const r=e.target.closest('a[href^="#"]');r&&t.contains(r)&&(e.preventDefault(),function(e,t){
-		const r=e.querySelector(".dialog-body"),a=e.querySelector(`[id="${CSS.escape(t)}"]`)
-		;r&&a&&(r.scrollTop+=a.getBoundingClientRect().top-r.getBoundingClientRect().top)}(t,Pe(r.getAttribute("href"))))}),
-		n(e,({panel:e,visible:r})=>{e===t&&(!function(e){const t=new URL(window.location.href);e!==(Pe(t.hash)===Ie)&&(t.hash=e?Ie:"",
-		history.replaceState(null,"",e?t.href:t.href.replace(/#$/,"")))}(r),r&&(t.querySelector(".dialog-body").scrollTop=0))}),Fe("manual",{
-		keys:["h","H"],run:()=>Oe()});const a=()=>{const e=Pe(window.location.hash)===Ie;e!==function(){const e=Be();return!!e&&!e.hidden
-		}()&&De(t,e)};window.addEventListener("hashchange",a),a()}),i(function(){!function(){const e=document.querySelector(".links-toggle")
-		;e&&(e.checked=1===H(j),document.body.classList.toggle("show-links-bottom",e.checked))}(),B(),function(){
-		const e=l(".expandable"),t=l(".links");e.addEventListener("click",()=>{const r=e.querySelector(".arrow")
-		;if(t.style.maxHeight)return t.style.maxHeight="",void(r.textContent="▼");t.style.maxHeight=`${t.scrollHeight}px`,r.textContent="▲",
-		setTimeout(()=>{document.documentElement.style.scrollBehavior="auto",document.body.style.scrollBehavior="auto",_("links"),setTimeout(()=>{
-		document.documentElement.style.scrollBehavior="smooth",document.body.style.scrollBehavior="smooth"},50)},310)})}()})})();
+		e.classList.add("dialog-spent");let a=0;const r=()=>{clearTimeout(a),e.classList.remove("dialog-spent"),e.hidden=!xe(),
+		document.removeEventListener("click",n,!0),document.removeEventListener("pointerup",o),document.removeEventListener("pointercancel",r)
+		},n=e=>{e.stopPropagation(),e.preventDefault(),r()},o=()=>{a=setTimeout(r,400)};document.addEventListener("click",n,!0),
+		document.addEventListener("pointerup",o),document.addEventListener("pointercancel",r)})}(),window.addEventListener("resize",()=>He(Ee()))}),
+		i(function(){Te.forEach(Oe)}),i(function(){!function(){const e=document.querySelector(".links-toggle");e&&(e.checked=1===H(j),
+		document.body.classList.toggle("show-links-bottom",e.checked))}(),B(),function(){const e=l(".expandable"),t=l(".links")
+		;e.addEventListener("click",()=>{const a=e.querySelector(".arrow");if(t.style.maxHeight)return t.style.maxHeight="",void(a.textContent="▼")
+		;t.style.maxHeight=`${t.scrollHeight}px`,a.textContent="▲",setTimeout(()=>{document.documentElement.style.scrollBehavior="auto",
+		document.body.style.scrollBehavior="auto",_("links"),setTimeout(()=>{document.documentElement.style.scrollBehavior="smooth",
+		document.body.style.scrollBehavior="smooth"},50)},310)})}()})})();
 	</script>
 	<script async src="https://www.googletagmanager.com/gtag/js?id=G-233EMZJM16"></script>
 	<script>
@@ -592,13 +598,12 @@
 		<hr>
 		<main class="maps">
 			<div class="maps-head">
-				<div class="buttons with-help">
+				<div class="buttons">
 					<a href="/meteo/customize/"><div class="btn">Prilagodi <span class="beta">beta</span></div></a>
 					<div class="links-btn">
 						<button type="button" class="btn" data-action="links">Linkovi</button>
 						<input type="checkbox" class="links-toggle" data-action="links-bottom" title="Prikaži linkove ispod karata" />
 					</div>
-					<button type="button" class="btn help-btn" data-action="manual" title="Upute (H)">?</button>
 				</div>
 			</div>
 
@@ -1222,7 +1227,7 @@
 	</div>
 	<div class="dialog-backdrop" hidden></div>
 
-	<div class="dialog manual-dialog" id="manualDialog" data-dialog-key="manualPanel" hidden>
+	<div class="dialog doc-dialog" id="manualDialog" data-dialog-key="manualPanel" hidden>
 		<div class="dialog-head">
 			<span class="dialog-head-left">
 				<a class="dialog-home" href="/meteo/" title="Početna"><img src="/meteo/img/favicon-32x32.png" alt="Početna"></a>
@@ -1231,7 +1236,10 @@
 			<a class="dialog-close" title="Zatvori (Esc)">Zatvori</a>
 		</div>
 		<div class="dialog-body">
-						<nav class="manual-toc">
+						<div class="doc-intro">
+			<blockquote><p>Generirano korištenjem AI-ja.</p></blockquote>
+			</div>
+			<nav class="manual-toc">
 			<ul>
 			<li class="toc-2"><a href="#karte-na-stranici">Karte na stranici</a></li>
 			<li class="toc-2"><a href="#dijalog-karte">Dijalog Karte</a></li>
@@ -1244,7 +1252,7 @@
 			<li class="toc-3"><a href="#pomicanje-i-veličina">Pomicanje i veličina</a></li>
 			<li class="toc-3"><a href="#šavovi">Šavovi</a></li>
 			<li class="toc-3"><a href="#grupe">Grupe</a></li>
-			<li class="toc-3"><a href="#kopije">Kopije</a></li>
+			<li class="toc-3"><a href="#dupliciranje">Dupliciranje</a></li>
 			<li class="toc-3"><a href="#bočni-stupci">Bočni stupci</a></li>
 			<li class="toc-2"><a href="#nadzorna-ploča">Nadzorna ploča</a></li>
 			<li class="toc-3"><a href="#mreža">Mreža</a></li>
@@ -1254,18 +1262,18 @@
 			<li class="toc-2"><a href="#na-mobitelu">Na mobitelu</a></li>
 			</ul>
 			</nav>
-			<p><strong>Meteo radari</strong> na jednom mjestu prikazuje radarske i satelitske karte, munje, prognoze nevremena i sinoptičke karte iz više izvora, bez otvaranja desetak stranica.</p>
+			<p><strong>Meteo radari</strong> na jednom mjestu prikazuje radarske i satelitske karte, munje, prognoze nevremena i sinoptičke karte iz više izvora, bez otvaranja desetak različitih stranica.</p>
 			<p>Stranica ima dva dijela:</p>
 			<ul>
-			<li><strong>Početna</strong> — stalan popis karata. Ništa se ne podešava, uvijek je isto i odmah se otvori.</li>
-			<li><strong>Prilagodi</strong> — isti prikaz, ali sami birate koje se karte vide i kojim redoslijedom, a na računalu i kako su razmještene po ekranu. Do nje se dolazi gumbom <em>Prilagodi</em> na početnoj stranici.</li>
+			<li><strong>Početna</strong> — statičan popis karata. Ništa se ne podešava, uvijek je sve isto i odmah se otvori.</li>
+			<li><strong>Prilagodi</strong> — isti prikaz, ali uz naprednije mogućnosti. Sami birate koje se karte vide i kojim redoslijedom, a na računalu i kako su razmještene po ekranu. Do nje se dolazi gumbom <em>Prilagodi</em> na početnoj stranici.</li>
 			</ul>
 			<p>Poglavlje <a href="#karte-na-stranici">Karte na stranici</a> vrijedi za oba dijela, a sve ostalo samo za <em>Prilagodi</em>.</p>
-			<p>Izdvojeni prozori, bočni stupci i nadzorna ploča rade samo na računalu, odnosno na ekranu širem od 800 px s mišem. Na dodirnim ekranima stranica ostaje obična, okomita lista karata — vidi <a href="#na-mobitelu">Na mobitelu</a>.</p>
+			<p>Izdvojeni prozori ("widgeti"), bočni stupci i nadzorna ploča ("dashboard") rade samo na računalu, odnosno na ekranu širem od 800 px s mišem. Na dodirnim ekranima stranica ostaje obična, okomita lista karata — vidi <a href="#na-mobitelu">Na mobitelu</a>.</p>
 			<h2 id="karte-na-stranici">Karte na stranici</h2>
-			<p>Svaka karta ima naslovnu traku s imenom izvora. Ime je ujedno i poveznica na izvornu stranicu.</p>
-			<p><strong>Karte s više slika</strong> (npr. <em>Neverin | Radar | Hrvatska</em>) imaju strelice <code>❮</code> i <code>❯</code> na rubovima i niz kvadratića ispod slike koji pokazuje na kojoj ste slici. Na dodirnom ekranu slike se mijenjaju i prelaskom prsta.</p>
-			<p><strong>Interaktivne karte</strong> (Windy, Blitzortung, meteoblue i slične) u početku ne primaju miš — preko njih stoji prozirni sloj s natpisom <em>Dvostruki klik za pristup interaktivnoj karti</em>. Bez njega bi se karta pomicala dok se stranica lista. Dvostrukim klikom sloj nestaje i kartom se dalje radi normalno.</p>
+			<p>Svaka karta ima naslovnu traku s imenom izvora. Ime je ujedno i link na izvornu stranicu.</p>
+			<p><strong>Karte s više slika</strong> ("slideshow", npr. <em>Neverin | Radar | Hrvatska</em>) imaju strelice <code>❮</code> i <code>❯</code> na rubovima i indikatore pozicije ispod slike, koji pokazuju na kojoj ste slici. Na dodirnom ekranu slike se mijenjaju i prelaskom prsta ("swipe").</p>
+			<p><strong>Interaktivne karte</strong> (Windy, Blitzortung, meteoblue i slične) u početku ne reagiraju na miš, da se stranica može listati preko njih — na njima piše <em>Dvostruki klik za pristup interaktivnoj karti</em>. Nakon dvostrukog klika karta radi normalno.</p>
 			<p>Gumbi u traci interaktivne karte:</p>
 			<table>
 			<thead>
@@ -1273,17 +1281,18 @@
 			</thead>
 			<tbody>
 			<tr><td><code>[HR]</code> / <code>[EU]</code></td><td>prebacuje između prikaza Hrvatske i Europe</td></tr>
-			<tr><td><code>[X]</code></td><td>pojavi se kad se sloj ukloni; vraća sloj, a zatim postaje <code>[R]</code></td></tr>
+			<tr><td><code>[X]</code></td><td>pojavi se kad je karta u upotrebi; ponovno je zaključava, a zatim postaje <code>[R]</code></td></tr>
 			<tr><td><code>[R]</code></td><td>vraća kartu na početni položaj i zumiranje</td></tr>
 			<tr><td><code>[ ]</code></td><td>otvara kartu preko cijelog zaslona; tada postaje <code>[-]</code>, koji je zatvara</td></tr>
 			</tbody>
 			</table>
 			<p><strong>Cijeli zaslon.</strong> Iz cijelog zaslona izlazi se gumbom <code>[-]</code> ili tipkom <kbd>Esc</kbd>. Za ponašanje u bočnom stupcu i na ploči vidi <a href="#bočni-stupci">Bočni stupci</a> i <a href="#nadzorna-ploča">Nadzorna ploča</a>.</p>
 			<p><strong>Linkovi.</strong> Gumb <em>Linkovi</em> vodi na popis dodatnih izvora na dnu stranice. Kvadratić pokraj njega uključuje prikaz linkova ispod svake karte.</p>
-			<p><strong>Upute.</strong> Ovaj tekst otvaraju gumb <code>?</code>, poveznica <em>Upute</em> u podnožju i tipka <kbd>H</kbd>. Otvara se u prozoru preko stranice, pa se upute mogu čitati uz karte. Zatvara se natpisom <em>Zatvori</em> ili tipkom <kbd>Esc</kbd>. Ikona stranice lijevo od naslova vodi na početnu stranicu, kao i u dijalogu <em>Karte</em>. Poveznica koja završava s <code>#upute</code> otvara upute odmah pri učitavanju stranice.</p>
+			<p><strong>Upute.</strong> Ovaj tekst otvaraju link <em>Upute</em> u podnožju i tipka <kbd>H</kbd>. Otvara se u prozoru preko stranice, pa se upute mogu čitati uz karte. Zatvara se natpisom <em>Zatvori</em> ili tipkom <kbd>Esc</kbd>. Ikona stranice lijevo od naslova vodi na početnu stranicu, kao i u dijalogu <em>Karte</em>. Link koji završava s <code>#upute</code> otvara upute odmah pri učitavanju stranice.</p>
+			<p><strong>Povijest promjena.</strong> Link <em>Povijest promjena</em> u podnožju i tipka <kbd>C</kbd> otvaraju popis promjena na stranici, po datumima. Otvara se u prozoru preko stranice, kao i upute, a link koji završava s <code>#promjene</code> otvara ga odmah pri učitavanju stranice.</p>
 			<h2 id="dijalog-karte">Dijalog Karte</h2>
 			<p>Gumb <strong>Karte</strong> (ili tipka <kbd>K</kbd>) otvara dijalog u kojem se bira što se prikazuje. Kad gumb na stranici nije dostupan, dijalog se otvara s <a href="#pločica-karte">pločice Karte</a> na vrhu ekrana.</p>
-			<p>Dok je dijalog otvoren, stranica iza njega je malo zatamnjena i ne reagira. Klik izvan dijaloga samo ga zatvara — taj klik ne ide dalje, pa neće usput otvoriti poveznicu ni pomaknuti prozor.</p>
+			<p>Dok je dijalog otvoren, stranica iza njega je malo zatamnjena i ne reagira. Klik izvan dijaloga samo ga zatvara — neće usput otvoriti link ni pomaknuti prozor.</p>
 			<p><strong>Ništa se ne primjenjuje dok ne pritisnete Primijeni</strong> ili tipku <kbd>Enter</kbd>. Zatvaranje dijaloga bez toga — natpisom <em>Zatvori</em>, tipkom <kbd>Esc</kbd> ili klikom izvan njega — odbacuje sve promjene. Iznimka su prekidači mreže i automatsko osvježavanje, koji djeluju odmah.</p>
 			<p>Na računalu se dijalog pomiče povlačenjem zaglavlja, a veličina mu se mijenja povlačenjem rubova ili uglova. Dvoklik na zaglavlje vraća ga na početno mjesto i veličinu. Na mobitelu zauzima cijeli ekran.</p>
 			<p>Ikona stranice u zaglavlju, lijevo od naslova, vodi na početnu stranicu (s <kbd>Ctrl</kbd> ili srednjim klikom u novoj kartici) — i s <a href="#nadzorna-ploča">nadzorne ploče</a>, na kojoj stranice nema.</p>
@@ -1292,7 +1301,7 @@
 			<li>red <strong>predložaka</strong>,</li>
 			<li>red <strong>Nadzorna ploča</strong> s prekidačima mreže i gumbom <em>Posloži</em> (samo na računalu),</li>
 			<li>red <strong>Osvježavaj svakih</strong>,</li>
-			<li>redak <strong>Izdvojene karte</strong> s poveznicom <em>Vrati sve</em> — samo kad je neka karta izdvojena u prozor,</li>
+			<li>redak <strong>Izdvojene karte</strong> s linkom <em>Vrati sve</em> — samo kad je neka karta izdvojena u prozor,</li>
 			<li><strong>odabrane karte</strong>, a ispod njih <em>Primijeni</em> i <em>Podijeli</em>,</li>
 			<li><strong>sve dostupne karte</strong>, s poretkom i okvirom za traženje,</li>
 			<li><strong>Zadani predlošci</strong> i <strong>Moji predlošci</strong>.</li>
@@ -1326,7 +1335,7 @@
 			</table>
 			<p>Iza njih slijede vaši spremljeni predlošci, a na kraju <strong>Prilagođeno</strong>.</p>
 			<p>Klik na predložak učita njegov popis. Čim se popis promijeni — dodana karta, drugi redoslijed — odabir skoči na <em>Prilagođeno</em>, a predložak iz kojeg je popis potekao dobije točkicu. Klik na njega vraća njegov popis i odbacuje izmjene.</p>
-			<p>Skok na <em>Prilagođeno</em> ujedno upozorava da izmijenjeni popis više nije taj predložak: poveznica za dijeljenje tada nosi popis karata, a ne ime predloška.</p>
+			<p>Skok na <em>Prilagođeno</em> ujedno upozorava da izmijenjeni popis više nije taj predložak: <em>Podijeli</em> tada dijeli izmijenjeni popis, a ne predložak.</p>
 			<p>Predložak označen plavim rubom spremljen je kao <a href="#nadzorna-ploča">nadzorna ploča</a>.</p>
 			<h3 id="moji-predlošci">Moji predlošci</h3>
 			<p>Na dnu dijaloga, pod <strong>Moji predlošci</strong>:</p>
@@ -1336,7 +1345,7 @@
 			<li><strong>Preimenuj</strong> mijenja ime, a <strong>Obriši</strong> briše predložak. Karte na ekranu pritom ostaju kakve jesu.</li>
 			<li><strong>Podijeli</strong> kopira poveznicu na taj predložak.</li>
 			</ul>
-			<p>Pod <strong>Zadani predlošci</strong> gotovi predlošci mogu se sakriti iz reda na vrhu (<em>Sakrij</em>, <em>Sakrij sve</em>) i vratiti (<em>Prikaži</em>, <em>Prikaži sve</em>). <em>Osnovno</em> se ne može sakriti.</p>
+			<p>Pod <strong>Zadani predlošci</strong> oni se mogu sakriti iz reda na vrhu (<em>Sakrij</em>, <em>Sakrij sve</em>) i vratiti (<em>Prikaži</em>, <em>Prikaži sve</em>). <em>Osnovno</em> se ne može sakriti.</p>
 			<h3 id="dijeljenje">Dijeljenje</h3>
 			<p><strong>Podijeli</strong> kopira poveznicu u međuspremnik, a natpis nakratko postane <em>Kopirano!</em>. Poveznica nosi cijeli prikaz — popis karata, redoslijed i razmještaj — pa tko je otvori vidi isto što i vi.</p>
 			<p>Gumb <em>Podijeli</em> ispod odabranih karata dijeli ono što je trenutno u dijalogu, a poveznica u redu spremljenog predloška dijeli taj predložak. Kad netko otvori poveznicu vlastitog predloška, dijalog mu nudi da ga spremi pod istim imenom.</p>
@@ -1347,14 +1356,14 @@
 			<p>Vrijeme do sljedećeg osvježavanja piše u tom redu i na <a href="#pločica-karte">pločici Karte</a>. Odbrojavanje kreće ispočetka pri svakom osvježavanju svih karata — automatskom, ručnom (<code>[R]</code> na pločici ili tipka <kbd>R</kbd>) i pri ponovnom učitavanju stranice. <code>[R]</code> na pojedinoj karti osvježi samo nju i ne dira odbrojavanje, osim ako je to jedina karta koja se osvježava.</p>
 			<h2 id="prozori">Prozori</h2>
 			<p><em>Samo na računalu.</em></p>
-			<p>Svaka naslovna traka ima gumb <code>[^]</code> koji kartu izdvaja iz stranice u prozor koji pluta iznad nje. Prozor ostaje na mjestu dok se stranica lista, pa se nekoliko karata može gledati istovremeno. Na mjestu karte u stranici ostaje traka <em>Karta je izdvojena u prozor</em> s poveznicom <strong>Vrati</strong>. Sve prozore odjednom vraća <em>Vrati sve</em> u dijalogu.</p>
+			<p>Svaka naslovna traka ima gumb <code>[^]</code> koji kartu izdvaja iz stranice u prozor ("widget") koji pluta iznad nje. Prozor ostaje na mjestu dok se stranica lista, pa se nekoliko karata može gledati istovremeno. Na mjestu karte u stranici ostaje traka <em>Karta je izdvojena u prozor</em> s linkom <strong>Vrati</strong>. Sve prozore odjednom vraća <em>Vrati sve</em> u dijalogu.</p>
 			<p>Gumbi u traci prozora:</p>
 			<table>
 			<thead>
 			<tr><th>Gumb</th><th>Značenje</th></tr>
 			</thead>
 			<tbody>
-			<tr><td><code>[D]</code></td><td>otvara kopiju karte u novom prozoru (ima ga i karta u stranici)</td></tr>
+			<tr><td><code>[D]</code></td><td>duplicira kartu u novi prozor (ima ga i karta u stranici)</td></tr>
 			<tr><td><code>[R]</code></td><td>ponovno učitava kartu (interaktivne karte ga nemaju)</td></tr>
 			<tr><td><code>[+]</code> / <code>[-]</code></td><td>spaja prozor sa susjednim u grupu, odnosno vadi ga iz nje</td></tr>
 			<tr><td><code>[=]</code></td><td>vraća kartu u stranicu; na ploči je <code>[x]</code> i miče kartu s popisa</td></tr>
@@ -1379,15 +1388,15 @@
 			<li>Šav se, kao i obični rub, privlači rubovima ostalih prozora, a uz uključeno <em>Poravnaj uz mrežu</em> sjedne na mrežu kad se pusti.</li>
 			<li>Držite li <kbd>Ctrl</kbd> dok hvatate šav, pomiče se rub samo jednog prozora — onoga s čije je strane šava pokazivač.</li>
 			<li>Šav postoji samo na stranicama, ne u uglovima. Rub koji dva prozora dijele samo djelomično nije šav i mijenja samo svoj prozor.</li>
-			<li>Oba prozora se pritom oslobode omjera, jer se inače šav ne bi mogao pomicati.</li>
+			<li>Povlačenjem šava oba prozora gube omjer.</li>
 			</ul>
 			<h3 id="grupe">Grupe</h3>
 			<p>Dva prozora koja se dodiruju mogu se spojiti u grupu gumbom <code>[+]</code>; samo dodirivanje nije dovoljno. Grupa se pomiče i mijenja veličinu kao cjelina, a članovi ostaju spojeni. Unutarnji rubovi grupe su šavovi, a vanjski rub mijenja veličinu cijele grupe. <code>[-]</code> vadi prozor iz grupe.</p>
-			<h3 id="kopije">Kopije</h3>
-			<p>Gumb <code>[D]</code> (ili tipka <kbd>D</kbd>, za prozor na vrhu) otvara još jedan prozor s istom kartom — npr. ista sinoptička karta u dvije veličine, ili isti niz slika zaustavljen na dvije različite slike. Kopija se otvori malo pomaknuta i iste veličine kao prozor iz kojeg je nastala. Svaka kopija ima svoje strelice i kvadratiće.</p>
-			<p>Kopija je samo prozor: u stranici i dalje postoji jedan red po karti. Nijedan prozor nije „izvorni” — <code>[=]</code> (na ploči <code>[x]</code>) na bilo kojem prozoru dok ih ima još s istom kartom samo njega makne, a ostali ostaju gdje jesu. Tek zadnji vraća kartu u stranicu (na ploči je miče s popisa). Kopije su dio razmještaja, pa se spremaju u predložak i putuju u poveznici. Karta maknuta s popisa odnese sa sobom i svoje kopije.</p>
+			<h3 id="dupliciranje">Dupliciranje</h3>
+			<p>Gumb <code>[D]</code> (ili tipka <kbd>D</kbd>, za prozor na vrhu) otvara još jedan prozor s istom kartom — npr. ista sinoptička karta u dvije veličine, ili isti niz slika zaustavljen na dvije različite slike. Kopija se otvori malo pomaknuta i iste veličine kao prozor iz kojeg je nastala. Svaka kopija ima svoje strelice i indikatore pozicije.</p>
+			<p>Sve kopije su ravnopravne: <code>[=]</code> (na ploči <code>[x]</code>) zatvara samo taj prozor, a karta se vraća u stranicu (na ploči miče s popisa) tek sa zadnjim. Kopije se spremaju u predložak i putuju u poveznici, a karta maknuta s popisa odnese i svoje kopije.</p>
 			<h3 id="bočni-stupci">Bočni stupci</h3>
-			<p>Prozor povučen do lijevog ili desnog ruba ekrana uskoči u stupac uz taj rub. U stupcu karte stoje jedna ispod druge, a stranica se preslaže u preostalu širinu.</p>
+			<p>Prozor povučen do lijevog ili desnog ruba ekrana uskoči u stupac uz taj rub. U stupcu karte stoje jedna ispod druge, a stranica zauzme preostalu širinu.</p>
 			<ul>
 			<li><strong>Širina stupca</strong> mijenja se povlačenjem njegovog unutarnjeg ruba. Kad se dva stupca dodiruju, zajednički rub premješta širinu s jednog na drugi.</li>
 			<li><strong>Visina karte</strong> mijenja se povlačenjem njenog gornjeg ili donjeg ruba. Širinu daje stupac, pa se karta pritom oslobodi omjera; s <kbd>Shift</kbd> zadržava omjer, a dvoklik na naslovnu traku ga vraća.</li>
@@ -1397,16 +1406,16 @@
 			</ul>
 			<h2 id="nadzorna-ploča">Nadzorna ploča</h2>
 			<p><em>Samo na računalu.</em></p>
-			<p>Nadzorna ploča sakriva stranicu i svaku kartu s popisa pretvara u prozor. Ostaju samo karte na tamnoj podlozi — prikaz za ekran koji je stalno uključen i gleda se izdaleka.</p>
+			<p>Nadzorna ploča ("dashboard") je način prikaza u kojem su sve odabrane karte vidljive odjednom, bez listanja — kao prozori na tamnoj podlozi, bez stranice oko njih. Prozore možete razmjestiti i promijeniti im veličinu po želji, a uz <a href="#automatsko-osvježavanje">automatsko osvježavanje</a> ploča na jednom ekranu daje pregled vremenske situacije gotovo u stvarnom vremenu.</p>
 			<p>Uključuje se gumbom <strong>Nadzorna ploča</strong> u dijalogu i primjenjuje, zajedno s popisom, pritiskom na <em>Primijeni</em>. Isključuje se na isti način. Predložak spremljen dok je ploča uključena otvara se kao ploča, pa se može imati više različitih ploča.</p>
 			<p>Na ploči:</p>
 			<ul>
-			<li><strong>Posloži</strong> (u dijalogu, <code>[A]</code> na pločici ili tipka <kbd>A</kbd>) razmjesti sve karte u pravilnu mrežu, jednakih veličina i bez razmaka. Broj stupaca i redova bira se tako da karte budu što veće, s obzirom na njihov oblik i oblik ekrana — četiri karte daju 2x2, šest 3x2, deset 4x3. Karte se pritom oslobode omjera; dvoklik na naslovnu traku vraća ga pojedinoj karti. Isto se dogodi i pri prvom ulasku na ploču.</li>
-			<li><code>[x]</code> u traci prozora ili srednji klik na traku <strong>miče kartu s popisa</strong> — na ploči nema stranice u koju bi se vratila.</li>
+			<li><strong>Posloži</strong> (u dijalogu, <code>[A]</code> na pločici ili tipka <kbd>A</kbd>) razmjesti sve karte u pravilnu mrežu, jednakih veličina i bez razmaka. Karte budu što veće — četiri karte daju 2x2, šest 3x2, deset 4x3. Karte se pritom oslobode omjera; dvoklik na naslovnu traku vraća ga pojedinoj karti. Isto se dogodi i pri prvom ulasku na ploču.</li>
+			<li><code>[x]</code> u traci prozora ili srednji klik na traku <strong>miče kartu s popisa</strong>.</li>
 			<li><strong>Dodavanje karte</strong> bez otvaranja dijaloga: <code>[+]</code> na <a href="#pločica-karte">pločici Karte</a> otvara abecedni popis karata kojih još nema na ploči. Upisani pojam sužava popis kao u dijalogu, strelice biraju, a <kbd>Enter</kbd> ili klik dodaje kartu. <kbd>Esc</kbd> ili klik izvan popisa ga zatvara.</li>
 			<li>Karta dodana u popis pojavi se na ploči uz gornji lijevi kut, stepenasto ispod ostalih novih.</li>
 			<li>Bočnih stupaca nema; prozor doveden do ruba ekrana ostaje prozor.</li>
-			<li><strong>Cijeli zaslon</strong> zauzme cijeli ekran, osim strane koju neki prozor zatvara cijelom visinom ili širinom. Prozor uz cijeli lijevi rub ostavi kartu na desnoj strani; prozor u kutu ne zatvara ništa, pa karta ide preko cijelog ekrana, a on ostaje iznad nje.</li>
+			<li><strong>Cijeli zaslon</strong> zauzme cijeli ekran osim strane uz koju neki prozor stoji cijelom visinom ili širinom; ostali prozori ostaju iznad karte.</li>
 			</ul>
 			<h3 id="mreža">Mreža</h3>
 			<p>Na ploči se karte mogu slagati po mreži od kvadratića. Dva prekidača, u dijalogu i na pločici, djeluju odmah, bez <em>Primijeni</em>:</p>
@@ -1439,9 +1448,10 @@
 			<tr><td><kbd>K</kbd></td><td>otvara i zatvara dijalog <em>Karte</em></td></tr>
 			<tr><td><kbd>Enter</kbd></td><td>u dijalogu <em>Karte</em>: primjenjuje promjene</td></tr>
 			<tr><td><kbd>H</kbd></td><td>otvara i zatvara <em>Upute</em></td></tr>
+			<tr><td><kbd>C</kbd></td><td>otvara i zatvara <em>Povijest promjena</em></td></tr>
 			<tr><td><kbd>Esc</kbd></td><td>zatvara dijalog; ako nijedan nije otvoren, izlazi iz cijelog zaslona</td></tr>
 			<tr><td><kbd>R</kbd></td><td>ponovno učitava sve karte</td></tr>
-			<tr><td><kbd>D</kbd></td><td>kopira prozor na vrhu</td></tr>
+			<tr><td><kbd>D</kbd></td><td>duplicira prozor na vrhu</td></tr>
 			<tr><td><kbd>A</kbd></td><td>na ploči: slaže karte u mrežu</td></tr>
 			<tr><td><kbd>G</kbd></td><td>na ploči: prikazuje ili skriva mrežu</td></tr>
 			<tr><td><kbd>S</kbd></td><td>na ploči: uključuje ili isključuje poravnavanje uz mrežu</td></tr>
@@ -1479,7 +1489,7 @@
 			<p>Sve se sprema samo u ovom pregledniku. Ništa se ne šalje nikamo i ništa ne prelazi na drugi uređaj, osim poveznicom koju sami podijelite. Brisanjem podataka preglednika briše se i ovo.</p>
 			<p><strong>Prikaz</strong> — popis karata, redoslijed, razmještaj prozora i nadzorna ploča. Sprema se pritiskom na <em>Primijeni</em> i vraća pri sljedećem otvaranju stranice. Samo prikaz ide u predložak i u poveznicu za dijeljenje. Razmještaj se mijenja i sprema i bez <em>Primijeni</em>, čim pomaknete prozor.</p>
 			<p><strong>Postavke preglednika</strong> — položaj i veličina dijaloga i uputa, položaj i širina pločice, prekidači mreže i automatsko osvježavanje. One se tiču ovog ekrana, a ne prikaza, pa ne putuju ni u predlošku ni u poveznici.</p>
-			<p><strong>Podijeljena poveznica</strong> — nosi prikaz u adresi. Dok je otvorena, prikazuje se ono što ona nosi, a vaše spremljene postavke ostaju netaknute dok ne pritisnete <em>Primijeni</em>.</p>
+			<p><strong>Podijeljena poveznica</strong> — prikazuje ono što je u njoj, a vaše spremljene postavke ostaju netaknute dok ne pritisnete <em>Primijeni</em>.</p>
 			<h2 id="na-mobitelu">Na mobitelu</h2>
 			<p>Na dodirnim ekranima stranica je obična okomita lista karata. Nema izdvojenih prozora, bočnih stupaca ni nadzorne ploče.</p>
 			<p>Radi:</p>
@@ -1495,15 +1505,265 @@
 			<p>Razmještaj prozora složen na računalu ne gubi se kad stranicu otvorite na mobitelu — samo se ne prikazuje, a vraća se čim je ponovno otvorite na računalu.</p>
 		</div>
 	</div>
-	<footer>
-		<a data-action="top">Povratak na vrh</a>
-		·
-		<span class="manual-link"><a data-action="manual">Upute</a> ·</span>
-		<a href="/meteo/customize/">Prilagodi <span class="beta">beta</span></a>
-		|
-		<a href="https://jurakovic.github.io">Projekti</a>
-		·
-		<a href="https://github.com/jurakovic/meteo">GitHub</a>
-	</footer>
+
+	<div class="dialog doc-dialog changelog-dialog" id="changelogDialog" data-dialog-key="changelogPanel" hidden>
+		<div class="dialog-head">
+			<span class="dialog-head-left">
+				<a class="dialog-home" href="/meteo/" title="Početna"><img src="/meteo/img/favicon-32x32.png" alt="Početna"></a>
+				<span class="dialog-title">Povijest promjena</span>
+			</span>
+			<a class="dialog-close" title="Zatvori (Esc)">Zatvori</a>
+		</div>
+		<div class="dialog-body">
+						<p class="changelog-intro">Generirano korištenjem AI-ja.</p>
+			<h2>2026-10-05</h2>
+			<ul>
+			<li>dodana "Povijest promjena", otvara se iz podnožja ili tipkom C</li>
+			<li>dodane "Upute", otvaraju se iz podnožja ili tipkom H</li>
+			<li>dodan red linkova iznad podnožja: povratak na vrh, "Prilagodi"/"Početna", upute i povijest promjena</li>
+			</ul>
+			<h2>2026-09-23</h2>
+			<ul>
+			<li>dodano traženje u odabiru karata</li>
+			<li>dodani šavovi: povlačenjem zajedničkog ruba dvaju susjednih prozora mijenjaju se oba odjednom</li>
+			<li>dodano dupliciranje prozora karte (<code>[D]</code>), pa se ista karta može prikazati više puta, npr. u dvije veličine ili na dvije različite slike</li>
+			<li>dodano automatsko slaganje na nadzornoj ploči (<code>[A]</code>): sve karte poslože se u pravilnu mrežu</li>
+			<li>dodano automatsko osvježavanje svih karata svakih 5, 10, 15, 30 ili 60 minuta</li>
+			</ul>
+			<h2>2026-09-14</h2>
+			<ul>
+			<li>dodani izdvojeni prozori karata na računalu ("widgeti"): karta može plutati iznad stranice, pomicati se i mijenjati veličinu, privlačiti se uz druge prozore, spojiti se u grupu sa susjednim ili sjesti u stupac uz rub ekrana</li>
+			<li>dodan način rada kao nadzorna ploča ("dashboard")</li>
+			<li>dodani tipkovnički prečaci</li>
+			</ul>
+			<h2>2026-08-29</h2>
+			<ul>
+			<li>sinoptička karta ČHMÚ na početnoj stranici zamijenjena sinoptičkim kartama DWD-a (analiza i prognoze); ČHMÚ je i dalje dostupan na stranici Prilagodi</li>
+			</ul>
+			<h2>2026-08-17</h2>
+			<ul>
+			<li>dodani vlastiti predlošci: trenutni odabir sprema se pod imenom, a zatim se može ažurirati, preimenovati, podijeliti ili obrisati</li>
+			<li>zadani predlošci mogu se sakriti iz reda predložaka; "Zadano" preimenovano u "Osnovno"</li>
+			</ul>
+			<h2>2026-07-06</h2>
+			<ul>
+			<li>dodana stranica Prilagodi (beta) umjesto stranice Više: bira se koje se karte prikazuju i kojim redoslijedom, kreće se od predloška (Zadano, Više, Radari, Sateliti, Nevrijeme, Sve, Ništa), a prikaz se dijeli poveznicom</li>
+			</ul>
+			<h2>2026-06-28</h2>
+			<ul>
+			<li>dodan gumb za cijeli zaslon na interaktivnim kartama</li>
+			</ul>
+			<h2>2026-06-26</h2>
+			<ul>
+			<li>dodana ASTORP prognoza nevremena i ESWD link</li>
+			</ul>
+			<h2>2026-06-24</h2>
+			<ul>
+			<li>dodan red brzih linkova ispod svake karte</li>
+			<li>dodan prekidač "Linkovi" koji prikazuje ili skriva linkove ispod karata (pamti se u pregledniku)</li>
+			<li>ažurirani linkovi, ispravljeni neispravni</li>
+			</ul>
+			<h2>2026-06-22</h2>
+			<ul>
+			<li>geste s više prstiju više ne mijenjaju slike ni slojeve preko karata</li>
+			<li>prilagođen omjer interaktivnih karata na računalu</li>
+			</ul>
+			<h2>2026-06-02</h2>
+			<ul>
+			<li>razdvojene ESSL i ESTOFEX prognoze nevremena, dodano više slika prognoze</li>
+			</ul>
+			<h2>2026-05-09</h2>
+			<ul>
+			<li>vraćeni meteoblue widgeti s meteogramom</li>
+			</ul>
+			<h2>2026-03-26</h2>
+			<ul>
+			<li>dodan prekidač <code>[HR]</code>/<code>[EU]</code> na svim interaktivnim kartama (npr. Windy, Blitzortung, itd.) za prikaz Hrvatske ili Europe</li>
+			</ul>
+			<h2>2026-02-11</h2>
+			<ul>
+			<li>manje dorade i ispravci</li>
+			</ul>
+			<h2>2026-02-04</h2>
+			<ul>
+			<li>meteoblue widgeti s meteogramom zamijenjeni slikom iz njihova API-ja (Zagreb)</li>
+			</ul>
+			<h2>2026-01-10</h2>
+			<ul>
+			<li>ažuriranje ČHMÚ, Neverin i meteociel slika</li>
+			</ul>
+			<h2>2025-11-15</h2>
+			<ul>
+			<li>ažurirani meteoblue meteogrami</li>
+			</ul>
+			<h2>2025-07-27</h2>
+			<ul>
+			<li>ispravljeno dohvaćanje ESSL prognoze nevremena</li>
+			<li>dodana ESTOFEX prognoza nevremena</li>
+			</ul>
+			<h2>2025-07-07</h2>
+			<ul>
+			<li>traka napretka učitavanja slika premještena na vrh</li>
+			<li>dodan Rain Alarm u Linkove</li>
+			</ul>
+			<h2>2025-06-13</h2>
+			<ul>
+			<li>promijenjen redoslijed karata na stranici Više (Ventusky na vrhu)</li>
+			<li>tema RainViewera promijenjena iz tamne u svijetlu</li>
+			<li>dodani Zoom Earth linkovi</li>
+			</ul>
+			<h2>2025-06-10</h2>
+			<ul>
+			<li>dodani Weather&amp;Radar, Rain Viewer i Ventusky na stranicu Više</li>
+			<li>dodani gumbi za izlaz iz interaktivnog načina i za resetiranje karte na početni položaj i zumiranje</li>
+			<li>meteo.si premješten na stranicu Više</li>
+			</ul>
+			<h2>2025-06-05</h2>
+			<ul>
+			<li>dodana ESSL prognoza nevremena</li>
+			</ul>
+			<h2>2025-05-30</h2>
+			<ul>
+			<li>dodana uputa da se slojevi preko Windy i Blitzortung karata uklanjaju dvostrukim klikom ili dodirom</li>
+			<li>dodan vrijeme.net (Facebook) u Linkove</li>
+			</ul>
+			<h2>2025-05-21</h2>
+			<ul>
+			<li>dodana blitzortung.org karta munja</li>
+			<li>povećan Windy i spriječeno slučajno pomicanje karte</li>
+			<li>dodane temperature za Europu s meteociel.fr</li>
+			<li>dodan EUMETView link</li>
+			<li>istramet premješten na stranicu Više</li>
+			</ul>
+			<h2>2025-05-11</h2>
+			<ul>
+			<li>dodano listanje "slideshow" prikaza prelaskom prsta ("swipe")</li>
+			</ul>
+			<h2>2025-05-08</h2>
+			<ul>
+			<li>dodani indikatori pozicije u "slideshow" prikazu</li>
+			</ul>
+			<h2>2025-03-22</h2>
+			<ul>
+			<li>Linkovi se mogu proširiti i skupiti</li>
+			</ul>
+			<h2>2025-02-28</h2>
+			<ul>
+			<li>dodana tamnija pozadina za slučaj da se slika ne učita</li>
+			</ul>
+			<h2>2024-12-31</h2>
+			<ul>
+			<li>dodani linkovi za kvalitetu zraka i nebo.com.hr</li>
+			<li>uključen DHMZ Bilogora radar</li>
+			</ul>
+			<h2>2024-10-14</h2>
+			<ul>
+			<li>ispravljeno zapinjanje trake napretka kad se slike učitaju iz predmemorije</li>
+			</ul>
+			<h2>2024-10-11</h2>
+			<ul>
+			<li>dodana traka napretka učitavanja slika</li>
+			<li>dodan SWPC u Linkove</li>
+			</ul>
+			<h2>2024-09-28</h2>
+			<ul>
+			<li>meteoblue prognoza kao "slideshow"</li>
+			<li>neke slike premještene</li>
+			<li>ažurirani i presloženi linkovi</li>
+			</ul>
+			<h2>2024-09-11</h2>
+			<ul>
+			<li>dodana mogućnost prikaza više slika na istom mjestu, kao "slideshow"</li>
+			<li>dodana meteoblue prognoza</li>
+			</ul>
+			<h2>2024-09-07</h2>
+			<ul>
+			<li>dodana stranica Više i gumbi za navigaciju po stranicama</li>
+			<li>dodane i presložene slike, dodani linkovi na Facebook stranice</li>
+			</ul>
+			<h2>2024-09-06</h2>
+			<ul>
+			<li>Linkovi premješteni na dno, s novim rasporedom</li>
+			</ul>
+			<h2>2024-05-20</h2>
+			<ul>
+			<li>dodan ESTOFEX</li>
+			</ul>
+			<h2>2024-05-13</h2>
+			<ul>
+			<li>dodani "SpaceWeather" linkovi</li>
+			</ul>
+			<h2>2024-02-17</h2>
+			<ul>
+			<li>dodan radar Puntijarka</li>
+			</ul>
+			<h2>2024-01-23</h2>
+			<ul>
+			<li>dodan Weather&amp;Radar</li>
+			</ul>
+			<h2>2024-01-16</h2>
+			<ul>
+			<li>dodan Időkép</li>
+			</ul>
+			<h2>2024-01-15</h2>
+			<ul>
+			<li>dodan EUMETNET</li>
+			</ul>
+			<h2>2024-01-14</h2>
+			<ul>
+			<li>dodani Linkovi</li>
+			</ul>
+			<h2>2024-01-11</h2>
+			<ul>
+			<li>dodan I'm Weather i ispravljen sat24</li>
+			</ul>
+			<h2>2023-07-23</h2>
+			<ul>
+			<li>dodani preostali DHMZ radari</li>
+			</ul>
+			<h2>2023-07-20</h2>
+			<ul>
+			<li>dodani RainViewer i radar Időkép za Jadran</li>
+			</ul>
+			<h2>2023-06-10</h2>
+			<ul>
+			<li>radar DHMZ-a prikazan kao animirani gif</li>
+			</ul>
+			<h2>2022-04-16</h2>
+			<ul>
+			<li>sat24 prikazan kao animirani gif (infracrveni i vidljivi)</li>
+			</ul>
+			<h2>2022-04-10</h2>
+			<ul>
+			<li>ispravljena meteo.hr animacija</li>
+			</ul>
+			<h2>2021-07-21</h2>
+			<ul>
+			<li>povećan Windy</li>
+			</ul>
+			<h2>2021-07-18</h2>
+			<ul>
+			<li>dodan responzivan dizajn</li>
+			</ul>
+			<h2>2021-07-17</h2>
+			<ul>
+			<li>inicijalna verzija</li>
+			</ul>
+		</div>
+	</div>
+	<div class="page-foot">
+		<nav class="footer-top">
+			<a data-action="top">Povratak na vrh</a>
+			<span class="sep">·</span>
+			<a href="/meteo/customize/">Prilagodi <span class="beta">beta</span></a>
+			<span class="manual-link"><span class="sep">·</span> <a data-action="manual">Upute</a></span>
+			<span class="changelog-link"><span class="sep">·</span> <a data-action="changelog" title="Povijest promjena (C)">Povijest promjena</a></span>
+		</nav>
+		<footer>
+			<a href="https://jurakovic.github.io">Projekti</a>
+			·
+			<a href="https://github.com/jurakovic/meteo">GitHub</a>
+		</footer>
+	</div>
 </body>
 </html>
