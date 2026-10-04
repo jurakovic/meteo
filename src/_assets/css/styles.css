@@ -1044,14 +1044,14 @@ body.fs-lock {
 .dialog {
 	position: fixed;
 	z-index: var(--z-dialog);
-	top: 24px;
+	top: 64px;
 	left: 0;
 	right: 0;
 	margin: 0 auto;
 	width: 750px;
 	height: 750px;
 	max-width: calc(100% - 32px);
-	max-height: calc(100vh - 48px);
+	max-height: calc(100vh - 88px); /* its top, and 24px kept below it */
 	display: flex; /* the header stays, the body below it scrolls */
 	flex-direction: column;
 	box-sizing: border-box;
