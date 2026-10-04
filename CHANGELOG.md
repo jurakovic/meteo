@@ -1,7 +1,7 @@
 
-AI-generated content.
+> AI-generated content.
 
-## 2026-10-04 (#44)
+## 2026-10-05 (#44)
 - added the changelog ("Povijest promjena"), opened from the footer or with the C key
 - added the manual ("Upute"), opened from the footer or with the H key
 - added a row of links above the footer: back to top, "Prilagodi"/"Početna", the manual and the changelog

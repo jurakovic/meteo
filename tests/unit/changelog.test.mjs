@@ -22,9 +22,10 @@ test('days with and without a pull request, which is left out, their entries esc
 	]);
 });
 
-test('lines above the first date are the intro, a paragraph each, escaped', () => {
-	assert.deepEqual(convertChangelog('Made with AI & care.\n\n## 2026-08-20\n- updated sources'), [
+test('lines above the first date are the intro, a paragraph each, escaped, a quote\'s > left out', () => {
+	assert.deepEqual(convertChangelog('Made with AI & care.\n> Quoted.\n\n## 2026-08-20\n- updated sources'), [
 		'<p class="changelog-intro">Made with AI &amp; care.</p>',
+		'<p class="changelog-intro">Quoted.</p>',
 		'<h2>2026-08-20</h2>', '<ul>', '<li>updated sources</li>', '</ul>'
 	]);
 });

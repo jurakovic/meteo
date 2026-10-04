@@ -39,9 +39,10 @@ export function convertChangelog(text) {
 			open = dated = true;
 			return;
 		}
-		// the intro, a line to a paragraph, said once above every day
+		// the intro, a line to a paragraph, said once above every day; a > is
+		// the quote GitHub sets it in, as the manual's, and not part of the text
 		if (!dated && /^[^\s#-]/.test(line)) {
-			html.push(`<p class="changelog-intro">${escapeText(line.trim())}</p>`);
+			html.push(`<p class="changelog-intro">${escapeText(line.replace(/^> /, '').trim())}</p>`);
 			return;
 		}
 		// a blank line ends a day's list, so an entry after one has no date

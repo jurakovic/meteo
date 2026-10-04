@@ -1,7 +1,7 @@
 
-Generirano korištenjem AI-ja.
+> Generirano korištenjem AI-ja.
 
-## 2026-10-04 (#44)
+## 2026-10-05 (#44)
 - dodana "Povijest promjena", otvara se iz podnožja ili tipkom C
 - dodane "Upute", otvaraju se iz podnožja ili tipkom H
 - dodan red linkova iznad podnožja: povratak na vrh, "Prilagodi"/"Početna", upute i povijest promjena
@@ -15,7 +15,7 @@ Generirano korištenjem AI-ja.
 
 ## 2026-09-14 (#41)
 - dodani izdvojeni prozori karata na računalu ("widgeti"): karta može plutati iznad stranice, pomicati se i mijenjati veličinu, privlačiti se uz druge prozore, spojiti se u grupu sa susjednim ili sjesti u stupac uz rub ekrana
-- dodana način rada kao nadzorna ploča ("dashboard")
+- dodan način rada kao nadzorna ploča ("dashboard")
 - dodani tipkovnički prečaci
 
 ## 2026-08-29 (#40)
