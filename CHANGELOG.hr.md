@@ -1,6 +1,11 @@
 
 Generirano korištenjem AI-ja.
 
+## 2026-10-04 (#44)
+- dodana "Povijest promjena", otvara se iz podnožja ili tipkom C
+- dodane "Upute", otvaraju se iz podnožja ili tipkom H
+- dodan red linkova iznad podnožja: povratak na vrh, "Prilagodi"/"Početna", upute i povijest promjena
+
 ## 2026-09-23 (#42)
 - dodano traženje u odabiru karata
 - dodani šavovi: povlačenjem zajedničkog ruba dvaju susjednih prozora mijenjaju se oba odjednom

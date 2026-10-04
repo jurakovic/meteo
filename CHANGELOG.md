@@ -1,6 +1,11 @@
 
 AI-generated content.
 
+## 2026-10-04 (#44)
+- added the changelog ("Povijest promjena"), opened from the footer or with the C key
+- added the manual ("Upute"), opened from the footer or with the H key
+- added a row of links above the footer: back to top, "Prilagodi"/"Početna", the manual and the changelog
+
 ## 2026-09-23 (#42)
 - added search to the map picker
 - added seams: dragging the shared edge of two adjacent windows resizes both at once
