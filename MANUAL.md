@@ -22,14 +22,14 @@ Every map has a title bar with the name of its source. The name is also a link t
 
 **Maps with several images** ("slideshow", e.g. *Neverin | Radar | Hrvatska*) have `❮` and `❯` arrows at the edges and position indicators below the image, showing which image you are on. On a touch screen the images also change with a swipe.
 
-**Interactive maps** (Windy, Blitzortung, meteoblue and the like) do not take the mouse at first — a transparent layer lies over them, saying *Dvostruki klik za pristup interaktivnoj karti* (double click to use the interactive map). Without it the map would move while the page scrolls. A double click removes the layer and the map then works as usual.
+**Interactive maps** (Windy, Blitzortung, meteoblue and the like) do not react to the mouse at first, so the page can be scrolled past them — they read *Dvostruki klik za pristup interaktivnoj karti* (double click to use the interactive map). After a double click the map works as usual.
 
 Buttons in an interactive map's bar:
 
 | Button | Meaning |
 |---|---|
 | `[HR]` / `[EU]` | switches between a view of Croatia and of Europe |
-| `[X]` | appears once the layer is removed; brings the layer back, then becomes `[R]` |
+| `[X]` | appears once the map is in use; locks it again, then becomes `[R]` |
 | `[R]` | puts the map back to its starting position and zoom |
 | `[ ]` | opens the map over the whole screen; it then becomes `[-]`, which closes it |
 
@@ -45,7 +45,7 @@ Buttons in an interactive map's bar:
 
 The **Karte** (maps) button, or the <kbd>K</kbd> key, opens the dialog where you choose what is shown. When the button on the page is out of reach, the dialog opens from the [Karte tab](#the-karte-tab) at the top of the screen.
 
-While the dialog is open, the page behind it is slightly dimmed and does not respond. A click outside the dialog only closes it — that click goes no further, so it will not open a link or move a window on the way.
+While the dialog is open, the page behind it is slightly dimmed and does not respond. A click outside the dialog only closes it — it will not open a link or move a window on the way.
 
 **Nothing is applied until you press Primijeni** (apply) or the <kbd>Enter</kbd> key. Closing the dialog without it — with *Zatvori*, the <kbd>Esc</kbd> key or a click outside — drops every change. The exceptions are the grid switches and auto-refresh, which take effect at once.
 
@@ -98,7 +98,7 @@ Your saved presets follow them, and **Prilagođeno** (custom) comes last.
 
 A click on a preset loads its list. As soon as the list changes — a map added, a different order — the choice jumps to *Prilagođeno*, and the preset the list came from gets a dot. A click on it brings its list back and drops the edits.
 
-The jump to *Prilagođeno* also warns that the edited list is no longer that preset: a share link then carries the list of maps, not the preset's name.
+The jump to *Prilagođeno* also warns that the edited list is no longer that preset: *Podijeli* then shares the edited list, not the preset.
 
 A preset with a blue border was saved as a [dashboard](#dashboard).
 
@@ -166,7 +166,7 @@ When two windows stand side by side and touch along the whole length of an edge 
 - A seam, like any edge, is attracted to the edges of the other windows, and with *Poravnaj uz mrežu* (snap to grid) on it settles onto the grid when let go.
 - Hold <kbd>Ctrl</kbd> when you grab a seam and only one window's edge moves — the one on whose side of the seam the pointer is.
 - A seam exists on the sides only, not at the corners. An edge two windows share only in part is no seam and resizes only its own window.
-- Both windows let their aspect go, since otherwise the seam could not move.
+- Dragging a seam frees both windows' aspect.
 
 ### Groups
 
@@ -176,11 +176,11 @@ Two touching windows can be joined in a group with the `[+]` button; touching al
 
 The `[D]` button (or the <kbd>D</kbd> key, for the window on top) opens another window with the same map — e.g. the same synoptic chart at two sizes, or the same slideshow stopped at two different images. The copy opens slightly offset, at the size of the window it came from. Every copy has its own arrows and position indicators.
 
-A copy is only a window: the page still has one row per map. No window is "the original" — `[=]` (on the dashboard `[x]`) on any window while others with the same map remain removes only that one, and the rest stay where they are. Only the last one puts the map back in the page (on the dashboard, removes it from the list). Copies are part of the layout, so they are saved in a preset and travel in a link. A map removed from the list takes its copies with it.
+All copies are equal: `[=]` (on the dashboard `[x]`) closes only that window, and the map goes back to the page (on the dashboard, off the list) only with the last one. Copies are saved in a preset and travel in a link, and a map removed from the list takes its copies with it.
 
 ### Side columns
 
-A window dragged to the left or right edge of the screen snaps into a column along that edge. In a column the maps stand one under the other, and the page rearranges itself into the width that is left.
+A window dragged to the left or right edge of the screen snaps into a column along that edge. In a column the maps stand one under the other, and the page takes the width that is left.
 
 - **A column's width** is changed by dragging its inner edge. Where two columns touch, the shared edge moves width from one to the other.
 - **A map's height** is changed by dragging its top or bottom edge. The column gives the width, so the map lets its aspect go; with <kbd>Shift</kbd> it keeps it, and a double click on the title bar takes it back.
@@ -192,18 +192,18 @@ A window dragged to the left or right edge of the screen snaps into a column alo
 
 *Computer only.*
 
-The dashboard (*Nadzorna ploča*) hides the page and turns every map on the list into a window. Only the maps remain, on a dark ground — a view for a screen that is always on and watched from a distance.
+The dashboard (*Nadzorna ploča*) is a view mode in which all the selected maps are visible at once, with no scrolling — as windows on a dark ground, with no page around them. You arrange and resize the windows as you like, and with [auto-refresh](#auto-refresh) the dashboard gives a near real-time overview of the weather on a single screen.
 
 It is switched on with the **Nadzorna ploča** button in the dialog and applied, together with the list, by pressing *Primijeni*. It is switched off the same way. A preset saved while the dashboard is on opens as a dashboard, so you can keep several different dashboards.
 
 On the dashboard:
 
-- **Posloži** (in the dialog, `[A]` on the tab or the <kbd>A</kbd> key) arranges every map in an even grid, of equal sizes and with no gaps. The number of columns and rows is chosen so the maps are as large as possible, given their shape and the screen's — four maps make 2x2, six 3x2, ten 4x3. The maps let their aspect go; a double click on a title bar takes it back for that map. The same happens on first entering the dashboard.
-- `[x]` in a window's bar, or a middle click on the bar, **removes the map from the list** — the dashboard has no page to put it back in.
+- **Posloži** (in the dialog, `[A]` on the tab or the <kbd>A</kbd> key) arranges every map in an even grid, of equal sizes and with no gaps. The maps come out as large as possible — four maps make 2x2, six 3x2, ten 4x3. The maps let their aspect go; a double click on a title bar takes it back for that map. The same happens on first entering the dashboard.
+- `[x]` in a window's bar, or a middle click on the bar, **removes the map from the list**.
 - **Adding a map** without opening the dialog: `[+]` on the [Karte tab](#the-karte-tab) opens an alphabetical list of the maps not yet on the dashboard. A typed term narrows the list as in the dialog, the arrow keys choose, and <kbd>Enter</kbd> or a click adds the map. <kbd>Esc</kbd> or a click outside the list closes it.
 - A map added to the list appears on the dashboard by the top left corner, stepped below the other new ones.
 - There are no side columns; a window brought to the edge of the screen stays a window.
-- **Fullscreen** takes the whole screen, except a side some window closes off along its whole height or width. A window along the whole left edge leaves the map the right side; a window in a corner closes nothing off, so the map goes over the whole screen and the window stays above it.
+- **Fullscreen** takes the whole screen except a side along which some window stands its whole height or width; the other windows stay above the map.
 
 ### Grid
 
@@ -277,7 +277,7 @@ Everything is saved in this browser only. Nothing is sent anywhere and nothing m
 
 **Browser settings** — the position and size of the dialog and the manual, the position and width of the tab, the grid switches and auto-refresh. They concern this screen, not the view, so they travel neither in a preset nor in a link.
 
-**A shared link** — carries the view in its address. While it is open, what it carries is shown, and your saved settings stay untouched until you press *Primijeni*.
+**A shared link** — shows what it holds, and your saved settings stay untouched until you press *Primijeni*.
 
 ## On a phone
 

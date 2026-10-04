@@ -20,14 +20,14 @@ Svaka karta ima naslovnu traku s imenom izvora. Ime je ujedno i link na izvornu 
 
 **Karte s više slika** ("slideshow", npr. *Neverin | Radar | Hrvatska*) imaju strelice `❮` i `❯` na rubovima i indikatore pozicije ispod slike, koji pokazuju na kojoj ste slici. Na dodirnom ekranu slike se mijenjaju i prelaskom prsta ("swipe").
 
-**Interaktivne karte** (Windy, Blitzortung, meteoblue i slične) u početku ne primaju miš — preko njih stoji prozirni sloj s natpisom *Dvostruki klik za pristup interaktivnoj karti*. Bez njega bi se karta pomicala dok se stranica lista. Dvostrukim klikom sloj nestaje i kartom se dalje radi normalno.
+**Interaktivne karte** (Windy, Blitzortung, meteoblue i slične) u početku ne reagiraju na miš, da se stranica može listati preko njih — na njima piše *Dvostruki klik za pristup interaktivnoj karti*. Nakon dvostrukog klika karta radi normalno.
 
 Gumbi u traci interaktivne karte:
 
 | Gumb | Značenje |
 |---|---|
 | `[HR]` / `[EU]` | prebacuje između prikaza Hrvatske i Europe |
-| `[X]` | pojavi se kad se sloj ukloni; vraća sloj, a zatim postaje `[R]` |
+| `[X]` | pojavi se kad je karta u upotrebi; ponovno je zaključava, a zatim postaje `[R]` |
 | `[R]` | vraća kartu na početni položaj i zumiranje |
 | `[ ]` | otvara kartu preko cijelog zaslona; tada postaje `[-]`, koji je zatvara |
 
@@ -43,7 +43,7 @@ Gumbi u traci interaktivne karte:
 
 Gumb **Karte** (ili tipka <kbd>K</kbd>) otvara dijalog u kojem se bira što se prikazuje. Kad gumb na stranici nije dostupan, dijalog se otvara s [pločice Karte](#pločica-karte) na vrhu ekrana.
 
-Dok je dijalog otvoren, stranica iza njega je malo zatamnjena i ne reagira. Klik izvan dijaloga samo ga zatvara — taj klik ne ide dalje, pa neće usput otvoriti link ni pomaknuti prozor.
+Dok je dijalog otvoren, stranica iza njega je malo zatamnjena i ne reagira. Klik izvan dijaloga samo ga zatvara — neće usput otvoriti link ni pomaknuti prozor.
 
 **Ništa se ne primjenjuje dok ne pritisnete Primijeni** ili tipku <kbd>Enter</kbd>. Zatvaranje dijaloga bez toga — natpisom *Zatvori*, tipkom <kbd>Esc</kbd> ili klikom izvan njega — odbacuje sve promjene. Iznimka su prekidači mreže i automatsko osvježavanje, koji djeluju odmah.
 
@@ -96,7 +96,7 @@ Iza njih slijede vaši spremljeni predlošci, a na kraju **Prilagođeno**.
 
 Klik na predložak učita njegov popis. Čim se popis promijeni — dodana karta, drugi redoslijed — odabir skoči na *Prilagođeno*, a predložak iz kojeg je popis potekao dobije točkicu. Klik na njega vraća njegov popis i odbacuje izmjene.
 
-Skok na *Prilagođeno* ujedno upozorava da izmijenjeni popis više nije taj predložak: poveznica za dijeljenje tada nosi popis karata, a ne ime predloška.
+Skok na *Prilagođeno* ujedno upozorava da izmijenjeni popis više nije taj predložak: *Podijeli* tada dijeli izmijenjeni popis, a ne predložak.
 
 Predložak označen plavim rubom spremljen je kao [nadzorna ploča](#nadzorna-ploča).
 
@@ -164,7 +164,7 @@ Kad dva prozora stoje jedan uz drugi i dodiruju se cijelom dužinom ruba — jed
 - Šav se, kao i obični rub, privlači rubovima ostalih prozora, a uz uključeno *Poravnaj uz mrežu* sjedne na mrežu kad se pusti.
 - Držite li <kbd>Ctrl</kbd> dok hvatate šav, pomiče se rub samo jednog prozora — onoga s čije je strane šava pokazivač.
 - Šav postoji samo na stranicama, ne u uglovima. Rub koji dva prozora dijele samo djelomično nije šav i mijenja samo svoj prozor.
-- Oba prozora se pritom oslobode omjera, jer se inače šav ne bi mogao pomicati.
+- Povlačenjem šava oba prozora gube omjer.
 
 ### Grupe
 
@@ -174,11 +174,11 @@ Dva prozora koja se dodiruju mogu se spojiti u grupu gumbom `[+]`; samo dodiriva
 
 Gumb `[D]` (ili tipka <kbd>D</kbd>, za prozor na vrhu) otvara još jedan prozor s istom kartom — npr. ista sinoptička karta u dvije veličine, ili isti niz slika zaustavljen na dvije različite slike. Kopija se otvori malo pomaknuta i iste veličine kao prozor iz kojeg je nastala. Svaka kopija ima svoje strelice i indikatore pozicije.
 
-Kopija je samo prozor: u stranici i dalje postoji jedan red po karti. Nijedan prozor nije „izvorni” — `[=]` (na ploči `[x]`) na bilo kojem prozoru dok ih ima još s istom kartom samo njega makne, a ostali ostaju gdje jesu. Tek zadnji vraća kartu u stranicu (na ploči je miče s popisa). Kopije su dio razmještaja, pa se spremaju u predložak i putuju u poveznici. Karta maknuta s popisa odnese sa sobom i svoje kopije.
+Sve kopije su ravnopravne: `[=]` (na ploči `[x]`) zatvara samo taj prozor, a karta se vraća u stranicu (na ploči miče s popisa) tek sa zadnjim. Kopije se spremaju u predložak i putuju u poveznici, a karta maknuta s popisa odnese i svoje kopije.
 
 ### Bočni stupci
 
-Prozor povučen do lijevog ili desnog ruba ekrana uskoči u stupac uz taj rub. U stupcu karte stoje jedna ispod druge, a stranica se preslaže u preostalu širinu.
+Prozor povučen do lijevog ili desnog ruba ekrana uskoči u stupac uz taj rub. U stupcu karte stoje jedna ispod druge, a stranica zauzme preostalu širinu.
 
 - **Širina stupca** mijenja se povlačenjem njegovog unutarnjeg ruba. Kad se dva stupca dodiruju, zajednički rub premješta širinu s jednog na drugi.
 - **Visina karte** mijenja se povlačenjem njenog gornjeg ili donjeg ruba. Širinu daje stupac, pa se karta pritom oslobodi omjera; s <kbd>Shift</kbd> zadržava omjer, a dvoklik na naslovnu traku ga vraća.
@@ -190,18 +190,18 @@ Prozor povučen do lijevog ili desnog ruba ekrana uskoči u stupac uz taj rub. U
 
 *Samo na računalu.*
 
-Nadzorna ploča ("dashboard") sakriva stranicu i svaku kartu s popisa pretvara u prozor. Ostaju samo karte na tamnoj podlozi — prikaz za ekran koji je stalno uključen i gleda se izdaleka.
+Nadzorna ploča ("dashboard") je način prikaza u kojem su sve odabrane karte vidljive odjednom, bez listanja — kao prozori na tamnoj podlozi, bez stranice oko njih. Prozore možete razmjestiti i promijeniti im veličinu po želji, a uz [automatsko osvježavanje](#automatsko-osvježavanje) ploča na jednom ekranu daje pregled vremenske situacije gotovo u stvarnom vremenu.
 
 Uključuje se gumbom **Nadzorna ploča** u dijalogu i primjenjuje, zajedno s popisom, pritiskom na *Primijeni*. Isključuje se na isti način. Predložak spremljen dok je ploča uključena otvara se kao ploča, pa se može imati više različitih ploča.
 
 Na ploči:
 
-- **Posloži** (u dijalogu, `[A]` na pločici ili tipka <kbd>A</kbd>) razmjesti sve karte u pravilnu mrežu, jednakih veličina i bez razmaka. Broj stupaca i redova bira se tako da karte budu što veće, s obzirom na njihov oblik i oblik ekrana — četiri karte daju 2x2, šest 3x2, deset 4x3. Karte se pritom oslobode omjera; dvoklik na naslovnu traku vraća ga pojedinoj karti. Isto se dogodi i pri prvom ulasku na ploču.
-- `[x]` u traci prozora ili srednji klik na traku **miče kartu s popisa** — na ploči nema stranice u koju bi se vratila.
+- **Posloži** (u dijalogu, `[A]` na pločici ili tipka <kbd>A</kbd>) razmjesti sve karte u pravilnu mrežu, jednakih veličina i bez razmaka. Karte budu što veće — četiri karte daju 2x2, šest 3x2, deset 4x3. Karte se pritom oslobode omjera; dvoklik na naslovnu traku vraća ga pojedinoj karti. Isto se dogodi i pri prvom ulasku na ploču.
+- `[x]` u traci prozora ili srednji klik na traku **miče kartu s popisa**.
 - **Dodavanje karte** bez otvaranja dijaloga: `[+]` na [pločici Karte](#pločica-karte) otvara abecedni popis karata kojih još nema na ploči. Upisani pojam sužava popis kao u dijalogu, strelice biraju, a <kbd>Enter</kbd> ili klik dodaje kartu. <kbd>Esc</kbd> ili klik izvan popisa ga zatvara.
 - Karta dodana u popis pojavi se na ploči uz gornji lijevi kut, stepenasto ispod ostalih novih.
 - Bočnih stupaca nema; prozor doveden do ruba ekrana ostaje prozor.
-- **Cijeli zaslon** zauzme cijeli ekran, osim strane koju neki prozor zatvara cijelom visinom ili širinom. Prozor uz cijeli lijevi rub ostavi kartu na desnoj strani; prozor u kutu ne zatvara ništa, pa karta ide preko cijelog ekrana, a on ostaje iznad nje.
+- **Cijeli zaslon** zauzme cijeli ekran osim strane uz koju neki prozor stoji cijelom visinom ili širinom; ostali prozori ostaju iznad karte.
 
 ### Mreža
 
@@ -275,7 +275,7 @@ Sve se sprema samo u ovom pregledniku. Ništa se ne šalje nikamo i ništa ne pr
 
 **Postavke preglednika** — položaj i veličina dijaloga i uputa, položaj i širina pločice, prekidači mreže i automatsko osvježavanje. One se tiču ovog ekrana, a ne prikaza, pa ne putuju ni u predlošku ni u poveznici.
 
-**Podijeljena poveznica** — nosi prikaz u adresi. Dok je otvorena, prikazuje se ono što ona nosi, a vaše spremljene postavke ostaju netaknute dok ne pritisnete *Primijeni*.
+**Podijeljena poveznica** — prikazuje ono što je u njoj, a vaše spremljene postavke ostaju netaknute dok ne pritisnete *Primijeni*.
 
 ## Na mobitelu
 
