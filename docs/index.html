@@ -238,9 +238,11 @@
 		.links .item{padding:5px;margin:0 2px}.links .item:not(:last-child){border-right:1px solid #fff}.links p{margin-top:0;text-align:left}
 		@media (max-width:800px){.links{grid-template-columns:1fr}.links .item{margin:5px 0;border-right:none!important}}.page-foot{position:sticky;
 		top:100%;margin-top:8px}.footer-top{background:var(--c-chip);color:#fff;text-align:center;padding:8px}@media (max-width:800px){.footer-top{
-		text-align:left}.footer-top a{display:block;padding:4px 0}.footer-top .sep{display:none}}footer{background:var(--c-control);color:#fff;
-		text-align:center;padding:8px}.progress-container{position:fixed;left:0;top:0;width:100%;height:3px;z-index:var(--z-progress);
-		background-color:#5c5c5c80}.progress-bar{width:0;height:100%;background-color:var(--c-accent);transition:width .3s ease-in-out}
+		display:grid;grid-template-rows:auto auto;grid-auto-flow:column;grid-auto-columns:1fr;text-align:left}.footer-top .changelog-link,
+		.footer-top .manual-link{display:contents}.footer-top a{display:block;padding:4px 0}.footer-top .sep{display:none}}footer{background:
+		var(--c-control);color:#fff;text-align:center;padding:8px}.progress-container{position:fixed;left:0;top:0;width:100%;height:3px;z-index:
+		var(--z-progress);background-color:#5c5c5c80}.progress-bar{width:0;height:100%;background-color:var(--c-accent);transition:width .3s
+		ease-in-out}
 	</style>
 	<script>
 		(()=>{var e="dialog-toggled",t="map-config-changed",a="map-fullscreen";function r(e,t){document.dispatchEvent(new CustomEvent(e,{detail:t}))
@@ -1747,9 +1749,9 @@
 		<nav class="footer-top">
 			<a data-action="top">Povratak na vrh</a>
 			<span class="sep">·</span>
-			<span class="manual-link"><a data-action="manual">Upute</a> <span class="sep">·</span></span>
-			<span class="changelog-link"><a data-action="changelog" title="Povijest promjena (C)">Povijest promjena</a> <span class="sep">·</span></span>
 			<a href="/meteo/customize/">Prilagodi <span class="beta">beta</span></a>
+			<span class="manual-link"><span class="sep">·</span> <a data-action="manual">Upute</a></span>
+			<span class="changelog-link"><span class="sep">·</span> <a data-action="changelog" title="Povijest promjena (C)">Povijest promjena</a></span>
 		</nav>
 		<footer>
 			<a href="https://jurakovic.github.io">Projekti</a>

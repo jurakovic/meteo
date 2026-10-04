@@ -2388,12 +2388,24 @@ body.fs-lock {
 	padding: 8px;
 }
 
-/* on a phone the links stand one to a line, flush left, which a thumb finds
-   more easily than a centred run; the separators go with the run */
+/* on a phone the links stand in two columns, flush left, filled down before
+   across, which a thumb finds more easily than a centred run; the separators
+   go with the run */
 @media (max-width: 800px) {
 	.footer-top {
+		display: grid;
+		grid-template-rows: auto auto;
+		grid-auto-flow: column;
+		grid-auto-columns: 1fr;
 		text-align: left;
 	}
+
+		/* the documents' wrappers step aside, so their links are cells of the
+		   grid; a document switched off still hides its wrapper (no-manual) */
+		.footer-top .manual-link,
+		.footer-top .changelog-link {
+			display: contents;
+		}
 
 		.footer-top a {
 			display: block;
