@@ -69,7 +69,7 @@ The inlined blocks are indented by splitting on CRLF, so a fragment with LF endi
 
 The browser suite ([`tests/e2e`](./tests/e2e)) drives both the dev tree and the built site. Every request that leaves the local server is answered by [`fixtures.js`](./tests/e2e/fixtures.js): map images as an SVG of a map's size, frames as an empty page, the worker's `config.json` as a test chooses. So the suite runs offline and the same way every time, and a script error on a page fails the test. The pages are served as `meteo.test`, which Chromium resolves to the local server by a launch flag, so no hosts entry is needed. It is a name of its own rather than `localhost`, which would make the page a secure context and change what it can do (the clipboard, for one).
 
-The unit tests ([`tests/unit`](./tests/unit)) run what needs no browser under Node, with a stub for the little DOM the modules touch on import ([`setup.mjs`](./tests/unit/setup.mjs)): the manual's and the changelog's converters, the catalog and presets, preferences, find and share links, storage, what the settings dialog would apply, and the widgets' arithmetic (tiling, magnets, touching, group relations, the walls around a fullscreen map, the layout's sanitizer).
+The unit tests ([`tests/unit`](./tests/unit)) run what needs no browser under Node, with a stub for the little DOM the modules touch on import ([`setup.mjs`](./tests/unit/setup.mjs)): the manual's and the changelog's converters, the catalog and presets, preferences, find and share links, storage, what the settings dialog would apply, the widgets' arithmetic (tiling, magnets, touching, group relations, the walls around a fullscreen map, the layout's sanitizer), and what telemetry counts and sends.
 
 ## Code map
 
@@ -81,6 +81,7 @@ The scripts are ES modules under [`src/_assets/js`](./src/_assets/js). The dev p
 | `lib/` | helpers that know nothing of maps: `dom` (`el`, `query`/`queryAll`, `onReady`, `isTextField`, `cssNumber`), `geometry` (`clamp`, the viewport), `pointer` (a drag or resize gesture), `media` (the breakpoint), `storage` (every key the site stores; reads and writes that never throw), `events` (every event the page announces), `debug` (`dlog`) |
 | `features.js` | switches for parts built but not offered yet |
 | `remote-config.js` | which maps the worker's `config.json` switches off |
+| `telemetry.js` | usage counts and script errors, sent to the worker |
 | `page/` | what both pages have: the slideshows, the interactive maps' gate and fullscreen (`iframe`), the links, the progress bar, the dialog chrome (`dialog`), the documents in a dialog (`documents`: the manual, the changelog), and `commands` |
 | `maps/` | the maps' data and drawing: the `catalog`, the map `types`, the `presets`, the stored or shared view (`prefs`), share links (`share`), `find`, `render`, and each page's view of them (`landing`, `view`) |
 | `settings/` | the settings dialog: `panel` and its sections (`panel-presets`, `panel-rows`, `panel-list`, `panel-manage`, with `panel-view` working out what it would apply), the tab at the top edge (`tab`) and its `[+]` menu (`add-menu`) |
@@ -108,6 +109,7 @@ The scripts are ES modules under [`src/_assets/js`](./src/_assets/js). The dev p
 | `SnapLayout`, `ColumnLayout`, `PaneEntry`, `FloatingEntry` | `widgets/layout.js` | the arrangement, as data |
 | `SnapColumn`, `Pane` | `widgets/columns.js` | a snap column on screen |
 | `RenderOptions` | `maps/render.js` | what the customize page passes the renderer |
+| `TelemetryReport`, `TelemetryEvent` | `telemetry.js` | what one report sends the worker |
 
 `query()` and `queryAll()` (`lib/dom.js`) return HTML elements, so what they find has its `style` and `dataset` without a cast; `el()` returns the element type of its tag.
 
@@ -232,6 +234,18 @@ The code is [`remote-config.js`](./src/_assets/js/remote-config.js), started by 
 Off means hidden, not removed, on both pages. Both leave a switched-off map out of what they draw and draw again on a change (`map-config-changed`) that touches a map they show: the landing page its list, the customize page its view, carrying the arrangement over from the screen. A change to a map neither shows draws nothing, so a first visit, which has no copy yet, is not drawn twice when the file arrives.
 
 On the customize page the tab's `[+]` menu leaves the map out too. The dialog still builds its row but hides it (`.ms-off`, in either section, and left out of the find box's hit count), so the list the dialog reads back off its rows keeps the id where it was. Stored preferences, saved presets and share links therefore still hold a map while it is off, and it comes back in its place once it is on. The one thing a map loses while off is its place in a stored arrangement: the next write reads the screen, where the map is not, so it comes back docked on the page, or down the cascade on a board.
+
+## Telemetry
+
+What visitors use, and the script errors they hit, are counted in the page and sent to the worker at `TELEMETRY_URL` (`/t` on the same worker as `config.json`). The code is [`telemetry.js`](./src/_assets/js/telemetry.js), started first by both entries so it sees an error in any step after it.
+
+- Only on the live site (`jurakovic.github.io`). Dev, the nginx containers and the browser suite's `meteo.test` count and send nothing.
+- What is counted: a `view` per load, a `command` with its id each time a control or a key runs one (both paths in `page/commands.js`), and an `error` per uncaught error or rejected promise, as its message and `line:col`, at most five a load. In the build the script is inlined, so `line:col` points into the page's minified script in `docs/`.
+- Counts are added up in the page, `{ name, value } → n`, and sent as one report, `{ page, events: [{ name, value, n }] }`, when the page is hidden (`visibilitychange`), the last moment a mobile browser reliably gives it. A page hidden and shown again sends what was counted since.
+- It goes by `navigator.sendBeacon` as a string, so as `text/plain`, which needs no CORS preflight; the reply is never read.
+- No cookie, nothing in storage, no id: a report says what was done on a page, not by whom. The worker adds the country Cloudflare reads off the request and keeps nothing else of it.
+
+Where the reports go and how they are read is in the worker's repository ([meteo-data](https://github.com/jurakovic/meteo-data), `INTERNALS.md`).
 
 ## Dialogs
 

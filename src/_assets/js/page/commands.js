@@ -3,6 +3,7 @@
 // Keyboard and the title bar's gestures.
 
 import { isTextField } from '../lib/dom.js';
+import { track } from '../telemetry.js';
 import { anyDialogOpen, closeOpenDialog } from './dialog.js';
 import { exitAnyFullscreen, pressGateButton, switchIframeZoom, toggleFullscreen } from './iframe.js';
 import { scrollToElement, scrollToTop, toggleLinksBottom } from './links.js';
@@ -32,7 +33,9 @@ export function withKey(label, id) {
 
 function runCommand(id, control = null, event = null) {
 	const command = commands.get(id);
-	if (command) command.run(control, event);
+	if (!command) return;
+	track('command', id);
+	command.run(control, event);
 }
 
 // the commands every page has
@@ -64,6 +67,7 @@ export function initCommands() {
 		if (!command) return;
 		if (!command.keepDefault) e.preventDefault();
 		if (command.capture) e.stopPropagation();
+		track('command', command.id);
 		command.run(null, e);
 	}, true);
 }

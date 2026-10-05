@@ -305,7 +305,7 @@
 		;e.forEach(e=>{e.addEventListener("load",()=>o(e)),e.addEventListener("error",()=>{d(`Error loading image: ${e.src}`),
 		e.removeAttribute("src"),o(e)}),e.complete&&e.dispatchEvent(new Event("load"))})}()}var O=0;function P(e){
 		const t=e&&e.maps&&"object"==typeof e.maps?e.maps:{};return new Set(Object.keys(t).filter(e=>t[e]&&!1===t[e].enabled))}var Z=new Set
-		;var U=[{text:"Windy",href:"https://www.windy.com/-Weather-radar-radar?radar,44.5,16.5,7"},{text:"Zoom Earth",
+		;var N=[{text:"Windy",href:"https://www.windy.com/-Weather-radar-radar?radar,44.5,16.5,7"},{text:"Zoom Earth",
 		href:"https://zoom.earth/maps/radar/#view=44.5,16.5,7z"},{text:"meteoblue",
 		href:"https://www.meteoblue.com/en/weather/maps/croatia_croatia_3202326#map=radar~radarMapEU~none~none~none&coords=6/44.5/16.5"},{
 		text:"Rain Viewer",href:"https://www.rainviewer.com/map.html?loc=44.5,16.5,6&oCS=1&c=5&lm=1&layer=radar&sm=1&sn=2&ts=1"},{text:"Ventusky",
@@ -313,7 +313,7 @@
 		href:"https://www.vrijemeradar.hr/vremenski-radar/zagreb/18138691?center=44.5,16.5&zoom=7&layer=wr&tz=Europe%2FZagreb"},{text:"Sat24",
 		href:"https://www.sat24.com/en-gb/country/hr/hd#selectedLayer=euRadarSat"},{text:"I'm Weather",
 		href:"https://imweather.com/?model=nowcast&run=&member=&element=radsat&level=&lat=44.5000&lng=16.5000&z=6"},{text:"Időkép",
-		href:"https://www.idokep.eu/adria"}],N=[{text:"Windy",href:"https://www.windy.com/-Weather-radar-radar?radar,47.5,17.5,5"},{
+		href:"https://www.idokep.eu/adria"}],U=[{text:"Windy",href:"https://www.windy.com/-Weather-radar-radar?radar,47.5,17.5,5"},{
 		text:"Zoom Earth",href:"https://zoom.earth/maps/radar/#view=47.5,17.5,5z"},{text:"meteoblue",
 		href:"https://www.meteoblue.com/en/weather/maps/croatia_croatia_3202326#map=radar~radarMapEU~none~none~none&coords=4/47.5/17.5"},{
 		text:"Rain Viewer",href:"https://www.rainviewer.com/map.html?loc=47.5,17.5,4&oCS=1&c=5&lm=1&layer=radar&sm=1&sn=2&ts=1"},{text:"Ventusky",
@@ -342,7 +342,7 @@
 		slides:[`https://vrijeme.hr/anim_${e}.gif`,`https://vrijeme.hr/${e}-stat.png`]}}var K=[{id:"neverin-radar-hr",category:"radar",
 		name:"Neverin | Radar | Hrvatska",type:"slideshow",titleHref:"https://www.neverin.hr/radar/",aspect:"880 / 640",startSlide:2,
 		slides:["https://maps.neverin.hr/radar/latest/hr/latest.webp","https://maps.neverin.hr/radar/latest/hr/anim.webp","https://maps.neverin.hr/radar/latest/hr/anim_6h.webp"],
-		links:U},{id:"neverin-satelit-hr",category:"satelit",name:"Neverin | Satelit | Hrvatska",type:"slideshow",
+		links:N},{id:"neverin-satelit-hr",category:"satelit",name:"Neverin | Satelit | Hrvatska",type:"slideshow",
 		titleHref:"https://www.neverin.hr/satelit/",aspect:"880 / 640",startSlide:2,
 		slides:["https://maps.neverin.hr/satellite/rgb_geocolour/latest/hr/latest.webp","https://maps.neverin.hr/satellite/rgb_geocolour/latest/hr/anim.webp","https://maps.neverin.hr/satellite/rgb_geocolour/latest/hr/anim_6h.webp"],
 		links:[{text:"Windy",href:"https://www.windy.com/-Satellite-satellite?satellite,44.5,16.5,7"},{text:"Zoom Earth",
@@ -353,7 +353,7 @@
 		href:"https://imweather.com/?model=nowcast&element=satellite&run=&member=&level=&lat=44.5000&lng=16.5000&z=6"}]},{id:"neverin-radar-eu",
 		category:"radar",name:"Neverin | Radar | Europa",type:"slideshow",titleHref:"https://www.neverin.hr/radar/",aspect:"880 / 640",startSlide:2,
 		slides:["https://maps.neverin.hr/radar/latest/eu2/latest.webp","https://maps.neverin.hr/radar/latest/eu2/anim.webp","https://maps.neverin.hr/radar/latest/eu2/anim_6h.webp"],
-		links:N},{id:"neverin-satelit-eu",category:"satelit",name:"Neverin | Satelit | Europa",type:"slideshow",
+		links:U},{id:"neverin-satelit-eu",category:"satelit",name:"Neverin | Satelit | Europa",type:"slideshow",
 		titleHref:"https://www.neverin.hr/satelit/",aspect:"880 / 640",startSlide:2,
 		slides:["https://maps.neverin.hr/satellite/rgb_geocolour/latest/eu2/latest.webp","https://maps.neverin.hr/satellite/rgb_geocolour/latest/eu2/anim.webp","https://maps.neverin.hr/satellite/rgb_geocolour/latest/eu2/anim_6h.webp"],
 		links:q},{id:"windy",category:"radar",name:"Windy",type:"iframe",frameId:"windy",
@@ -361,9 +361,9 @@
 		srcHr:"https://embed.windy.com/embed2.html?lat=44.5&lon=16.56&zoom=7&level=surface&overlay=radar&menu=&message=true&marker=&calendar=&pressure=&type=map&location=coordinates&detail=&detailLat=45.798&detailLon=15.936&metricWind=m%2Fs&metricTemp=%C2%B0C&radarRange=-1",
 		zoomHrDesktop:"&zoom=7",zoomHrMobile:"&zoom=6",
 		srcEu:"https://embed.windy.com/embed2.html?lat=48.0&lon=10.00&zoom=5&level=surface&overlay=radar&menu=&message=true&marker=&calendar=&pressure=&type=map&location=coordinates&detail=&detailLat=45.798&detailLon=15.936&metricWind=m%2Fs&metricTemp=%C2%B0C&radarRange=-1",
-		zoomEuDesktop:"&zoom=5",zoomEuMobile:"&zoom=3",links:Q(U,"Windy")},{id:"dhmz-radar",category:"radar",name:"DHMZ | Radar | Hrvatska",
+		zoomEuDesktop:"&zoom=5",zoomEuMobile:"&zoom=3",links:Q(N,"Windy")},{id:"dhmz-radar",category:"radar",name:"DHMZ | Radar | Hrvatska",
 		type:"slideshow",titleHref:"https://meteo.hr/podaci.php?section=podaci_mjerenja&param=radari&el=kompozit&acto=anim",maxWidth:720,
-		aspect:"720 / 751",slides:["https://vrijeme.hr/anim_kompozit.gif","https://vrijeme.hr/kompozit-stat.png"],links:U},{id:"meteociel-temp",
+		aspect:"720 / 751",slides:["https://vrijeme.hr/anim_kompozit.gif","https://vrijeme.hr/kompozit-stat.png"],links:N},{id:"meteociel-temp",
 		category:"temperatura",name:"Meteociel.fr | Temperatura",type:"slideshow",maxWidth:768,slides:[{title:{text:"Meteociel.fr | Temperatura",
 		href:"https://www.meteociel.fr/observations-meteo/temperatures.php?region=it"},img:"https://www.meteociel.fr/cartes_obs/temp_it.png",
 		aspect:"1"},{title:{text:"Meteociel.fr | Temperatura",href:"https://www.meteociel.fr/observations-meteo/temperatures.php?region=eur2"},
@@ -385,7 +385,7 @@
 		slides:["https://meteo-data.jurakovic.workers.dev/estofex/img1.png","https://meteo-data.jurakovic.workers.dev/estofex/img2.png"],
 		links:Q($,"ESTOFEX")},{id:"eumetnet",category:"radar",name:"EUMETNET",type:"iframe-basic",
 		titleHref:"https://www.eumetnet.eu/observations/opera-radar-animation/",src:"https://cdn.fmi.fi/demos/eumetnet-web-site-radar-animator/",
-		links:N},{id:"meteociel-satelit",category:"satelit",name:"Meteociel.fr | Satelit",type:"slideshow",maxWidth:768,slides:[{title:{
+		links:U},{id:"meteociel-satelit",category:"satelit",name:"Meteociel.fr | Satelit",type:"slideshow",maxWidth:768,slides:[{title:{
 		text:"Meteociel.fr | Satelit",
 		href:"https://www.meteociel.fr/observations-meteo/satellite.php?mode=animation-infrarouge-noir-et-blanc-hd-mtg"},
 		img:"https://modeles20.meteociel.fr/satellite/animsatirmtgeu.gif",aspect:"1"},{title:{text:"Meteociel.fr | Satelit",
@@ -419,21 +419,21 @@
 		name:"Ventusky",type:"iframe",frameId:"ventusky",scaled:!0,loading:"eager",
 		titleHref:"https://www.ventusky.com/?p=44.5;16.5;6&l=radar&w=off",srcHr:"https://embed.ventusky.com/?p=44.5;16.5;6&l=radar&w=off",
 		zoomHrDesktop:";6&",zoomHrMobile:";6&",srcEu:"https://embed.ventusky.com/?p=48.0;10.0;4&l=radar&w=off",zoomEuDesktop:";4&",
-		zoomEuMobile:";3&",links:Q(U,"Ventusky")},{id:"rainviewer",category:"radar",name:"Rain Viewer",type:"iframe",frameId:"rainViewer",scaled:!0,
+		zoomEuMobile:";3&",links:Q(N,"Ventusky")},{id:"rainviewer",category:"radar",name:"Rain Viewer",type:"iframe",frameId:"rainViewer",scaled:!0,
 		titleHref:"https://www.rainviewer.com/map.html?loc=44.5,16.5,6&oCS=1&c=5&lm=1&layer=radar&sm=1&sn=2&ts=1",
 		srcHr:"https://www.rainviewer.com/map.html?loc=44.8,16.5,6.3&oCS=1&c=5&lm=1&layer=radar&sm=1&sn=2&ts=1",zoomHrDesktop:",6.3&",
 		zoomHrMobile:",5.8&",srcEu:"https://www.rainviewer.com/map.html?loc=48.0,10.0,4.0&oCS=1&c=5&lm=1&layer=radar&sm=1&sn=2&ts=1",
-		zoomEuDesktop:",4.0&",zoomEuMobile:",3.2&",links:Q(U,"Rain Viewer")},{id:"weatherandradar",category:"radar",name:"Vrijeme&Radar",
+		zoomEuDesktop:",4.0&",zoomEuMobile:",3.2&",links:Q(N,"Rain Viewer")},{id:"weatherandradar",category:"radar",name:"Vrijeme&Radar",
 		type:"iframe",frameId:"weatherAndRadar",scaled:!0,
 		titleHref:"https://www.vrijemeradar.hr/vremenski-radar/zagreb/18138691?center=44.5,16.5&zoom=7&layer=wr&tz=Europe%2FZagreb",
 		srcHr:"https://radar.wo-cloud.com/pwa/?center=44.5,16.5&zoom=7.2&tz=Europe/Zagreb&tf=HH:mm&tempunit=celsius&windunit=kph&showShareButton=false&lang=en-US&placemarkName=Zagreb&desktop=true&fadeTop=true",
 		zoomHrDesktop:"&zoom=7.2",zoomHrMobile:"&zoom=6.8",
 		srcEu:"https://radar.wo-cloud.com/pwa/?center=48.0,10.0&zoom=5.0&tz=Europe/Zagreb&tf=HH:mm&tempunit=celsius&windunit=kph&showShareButton=false&lang=en-US&placemarkName=Zagreb&desktop=true&fadeTop=true",
-		zoomEuDesktop:"&zoom=5.0",zoomEuMobile:"&zoom=4.0",links:Q(U,"Vrijeme&Radar")},{id:"meteo-si",category:"radar",name:"meteo.si",
+		zoomEuDesktop:"&zoom=5.0",zoomEuMobile:"&zoom=4.0",links:Q(N,"Vrijeme&Radar")},{id:"meteo-si",category:"radar",name:"meteo.si",
 		type:"slideshow",titleHref:"https://meteo.arso.gov.si/met/sl/weather/observ/radar/",maxWidth:821,aspect:"821 / 660",
 		slides:["https://meteo.arso.gov.si/uploads/probase/www/observ/radar/si0-rm-anim.gif?nocache","https://meteo.arso.gov.si/uploads/probase/www/observ/radar/si0-rm.gif?nocache"],
-		links:U},{id:"idokep-radar-eu",category:"radar",name:"Időkép | Radar | Europa",type:"image",titleHref:"https://www.idokep.eu/ceu/radar",
-		maxWidth:840,aspect:"840 / 600",img:"https://www.idokep.eu/terkep/eu/radar.gif",links:N},{id:"idokep-satelit-eu",category:"satelit",
+		links:N},{id:"idokep-radar-eu",category:"radar",name:"Időkép | Radar | Europa",type:"image",titleHref:"https://www.idokep.eu/ceu/radar",
+		maxWidth:840,aspect:"840 / 600",img:"https://www.idokep.eu/terkep/eu/radar.gif",links:U},{id:"idokep-satelit-eu",category:"satelit",
 		name:"Időkép | Satelit | Europa",type:"video",titleHref:"https://www.idokep.hu/muhold",aspect:"1070 / 713",
 		src:"https://www.idokep.hu/radar/sat-eu.mp4",
 		backdrop:"data:image/jpeg;base64,/9j/4AAQSkZJRgABAQEAYABgAAD/2wBDAA0JCgsKCA0LCwsPDg0QFCEVFBISFCgdHhghMCoyMS8qLi00O0tANDhHOS0uQllCR05QVFVUMz9dY1xSYktTVFH/2wBDAQ4PDxQRFCcVFSdRNi42UVFRUVFRUVFRUVFRUVFRUVFRUVFRUVFRUVFRUVFRUVFRUVFRUVFRUVFRUVFRUVFRUVH/wAARCAArAEADASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9oADAMBAAIRAxEAPwBljPoksUEElnNNdFRuYRLgnufvdK1reHR5XKx20qjH3hEMfh81YmgR5hN2UB3MU4OSOK1rGdCGcrsEJHU85JNXzsjkibEIW0t1nk3FBjaAvzGp7u5huNPcSBDGM5IGQR7VkSXQkkhQuqgEuRuwcHnHuKgF5vJjlHlgJ/eyAST+uRUFjNbjhbSVSMboUP8ADjPI/n7e9YOl28+oRbLaGMeXkZZif0rbNkZ1MKTERFAH2nkMMFSD6g/yrQKC0sv3hKqgyzJwSPSjS2orFXTLF7ZZleMFnxuJIC4A6AVoLd2rMqNPGHz3HANZV1qiJuS3XCkgeY3zHp1rLjSaU7IkaRc8HZ+tZuaWhSRV0W6EeiSNISI97HjqRxwPrUltes7mWVwkbHJwOnpisC4l8pIrWNiNo+cH19DVmOOXcipISdu45rUR201zYGEec3y/dG3r0/Q1C1zYXLAxoc/x5XPGMAn1rmLaKdHk8wjBxgZ708aolm22OT94xIIAHyjuTn0qG3eyH0OzsonhgcRwMDuwD656tz29qpalLK141oD5keBuI4JA5wfSoLPWbSzELSSs8jJnezZVR6ZPrVa5v2/tQ3iL8zHofpUTmkkNK5v6Bp0ElqbmVY8lioHbGayNX1O5tr7bGvlhSOCOn+NWYdZj1CGC3s7SaKJZA87qQAvqc+9ZOqyreahIwY5VtrAnPAPGPanJ8sdCoW5veOKy4fIBJ6k1q6c4Vg0gPTj2rIikdhtLEgDIrd0hQ7fMM4Ga1ZmS3juUaKMOZDxkf41nrYXIlZhGgJQrhm4GeDXTQxo0XIzzViOCJraQlBkZqG3ayNVFPVmXpvhjV9T0hpo5VdWUKkbgLjBI4/AfrVe6uHs1jinLpPG4SdMcAAY9OM9fwre0+WWyvES3ldEjj+RdxIXLjOAa5Lxa7ya1PI7Es+/cc9cdKHFMjU1k1ZZLfyIJ08pRghDkE56mmzyzJE1xNOSsQycsTxXJaZzqNuhJ2tIoYZ6810Ws3Ev9nLFlSjNkgoDnr3xUOF3ZmkZaXP/Z",
@@ -502,20 +502,23 @@
 		class:"maps-empty",text:'Nema odabranih karata. Odaberite ih pod "Karte".'})]))}var me=!1;function pe(){
 		const e=document.querySelector("[data-maps]");if(!e)return!1;me=!0;const t=ee.map(G).filter(e=>{return e&&(t=e.id,!Z.has(t));var t
 		}),a=t.map(e=>e.id);return(!a.length||function(e){return[...e.querySelectorAll(":scope > .map-entry > .map-block")].map(e=>e.dataset.mapId)
-		}(e).join()!==a.join())&&(de(e,t),!0)}function he(e,t,a){return Math.min(Math.max(e,t),Math.max(t,a))}function ue(e){
-		return Math.round(1e4*e)/1e4}var we=0;function ge(e){we=e}function fe(){return document.documentElement.clientWidth-we}function ve(){
-		return document.documentElement.clientHeight}var ye=["n","ne","e","se","s","sw","w","nw"];var ke=120;function be(){return s(".dialog")}
-		function Ee(){return be().find(e=>!e.hidden)||null}function xe(){return!!Ee()}function ze(e){return e.getAttribute("data-dialog-key")}
-		function Ae(e){const t=ze(e);t&&function(e){R.delete(e);try{localStorage.removeItem(e)}catch{}}(t)}function Se(){
-		return Math.max(360,fe()-16)}function Le(){return Math.max(ke,ve()-16)}function je(e,t,a,r,n){r=he(r,360,Se()),
-		e.style.width=`${Math.round(r)}px`,e.style.maxWidth="none",e.style.right="auto",e.style.margin="0",null===n?(e.style.height="",
-		e.style.maxHeight=`${Math.round(Math.max(ke,ve()-Math.max(0,a)-8))}px`):(e.style.maxHeight="none",
-		e.style.height=`${Math.round(he(n,ke,Le()))}px`),e.style.left=`${Math.round(he(t,0,Math.max(0,fe()-e.offsetWidth)))}px`,
-		e.style.top=`${Math.round(he(a,0,Math.max(0,ve()-e.offsetHeight)))}px`}function Re(e){
-		["left","top","width","height","maxWidth","maxHeight","right","margin"].forEach(t=>e.style[t]="")}function He(e){if(!e||e.hidden)return
-		;const t=m.matches?function(e){const t=ze(e);if(!t)return null;const a=H(t)
+		}(e).join()!==a.join())&&(de(e,t),!0)}var he=new Map,ue=0,we="";function ge(e,t=""){if(!we)return;const a=JSON.stringify([e,String(t)])
+		;he.set(a,(he.get(a)||0)+1)}function fe(e,t){ue>=5||(ue++,ge("error",`${String(e).slice(0,160)} @ ${t}`))}function ve(){const e=function(){
+		if(!he.size)return null;const e=[...he].map(([e,t])=>{const[a,r]=JSON.parse(e);return{name:a,value:r,n:t}});return he.clear(),{page:we,
+		events:e}}();e&&navigator.sendBeacon("https://meteo-data.jurakovic.workers.dev/t",JSON.stringify(e))}function ye(e,t,a){
+		return Math.min(Math.max(e,t),Math.max(t,a))}function ke(e){return Math.round(1e4*e)/1e4}var be=0;function Ee(e){be=e}function xe(){
+		return document.documentElement.clientWidth-be}function ze(){return document.documentElement.clientHeight}
+		var Ae=["n","ne","e","se","s","sw","w","nw"];var Se=120;function Le(){return s(".dialog")}function je(){return Le().find(e=>!e.hidden)||null
+		}function Re(){return!!je()}function He(e){return e.getAttribute("data-dialog-key")}function Me(e){const t=He(e);t&&function(e){R.delete(e)
+		;try{localStorage.removeItem(e)}catch{}}(t)}function _e(){return Math.max(360,xe()-16)}function De(){return Math.max(Se,ze()-16)}
+		function Ce(e,t,a,r,n){r=ye(r,360,_e()),e.style.width=`${Math.round(r)}px`,e.style.maxWidth="none",e.style.right="auto",e.style.margin="0",
+		null===n?(e.style.height="",e.style.maxHeight=`${Math.round(Math.max(Se,ze()-Math.max(0,a)-8))}px`):(e.style.maxHeight="none",
+		e.style.height=`${Math.round(ye(n,Se,De()))}px`),e.style.left=`${Math.round(ye(t,0,Math.max(0,xe()-e.offsetWidth)))}px`,
+		e.style.top=`${Math.round(ye(a,0,Math.max(0,ze()-e.offsetHeight)))}px`}function We(e){
+		["left","top","width","height","maxWidth","maxHeight","right","margin"].forEach(t=>e.style[t]="")}function Ve(e){if(!e||e.hidden)return
+		;const t=m.matches?function(e){const t=He(e);if(!t)return null;const a=H(t)
 		;return a&&"object"==typeof a&&Number.isFinite(a.left)&&Number.isFinite(a.top)&&a.width>0?{left:a.left,top:a.top,width:a.width,
-		height:a.height>0?a.height:null}:null}(e):null;t?je(e,t.left*fe(),t.top*ve(),t.width,t.height):Re(e)}function Me(e){
+		height:a.height>0?a.height:null}:null}(e):null;t?Ce(e,t.left*xe(),t.top*ze(),t.width,t.height):We(e)}function Ie(e){
 		e.addEventListener("pointerdown",t=>{if(0!==t.button||!m.matches)return
 		;const a=t.target.closest(".po-h"),r=!a&&t.target.closest(".dialog-head")&&!t.target.closest("a, button, input");if(!a&&!r)return
 		;t.preventDefault();const n=e.getBoundingClientRect(),o=a?a.dataset.dir:null,i=e.style.height?n.height:null;let s=!1;!function(e,t,a,r){
@@ -525,56 +528,61 @@
 		document.removeEventListener("keydown",d),document.removeEventListener("keyup",d),document.body.classList.remove("po-dragging"),a&&a()}
 		;document.body.classList.add("po-dragging"),document.addEventListener("pointermove",c),document.addEventListener("pointerup",m),
 		document.addEventListener("pointercancel",m),document.addEventListener("keydown",d),document.addEventListener("keyup",d)}(t,(t,a)=>{
-		if(!s&&!t&&!a)return;if(s=!0,!o)return void je(e,n.left+t,n.top+a,n.width,i);let{w:r,h:l}=function(e,t,a,r){let n=t.width,o=t.height
+		if(!s&&!t&&!a)return;if(s=!0,!o)return void Ce(e,n.left+t,n.top+a,n.width,i);let{w:r,h:l}=function(e,t,a,r){let n=t.width,o=t.height
 		;return e.includes("e")&&(n=t.width+a),e.includes("w")&&(n=t.width-a),e.includes("s")&&(o=t.height+r),e.includes("n")&&(o=t.height-r),{w:n,
-		h:o}}(o,n,t,a);r=he(r,360,Se()),l=he(l,ke,Le()),je(e,o.includes("w")?n.right-r:n.left,o.includes("n")?n.bottom-l:n.top,r,l)},()=>{
-		s&&function(e){const t=ze(e);if(!t)return;const a=e.getBoundingClientRect(),r={left:ue(a.left/fe()),top:ue(a.top/ve()),
+		h:o}}(o,n,t,a);r=ye(r,360,_e()),l=ye(l,Se,De()),Ce(e,o.includes("w")?n.right-r:n.left,o.includes("n")?n.bottom-l:n.top,r,l)},()=>{
+		s&&function(e){const t=He(e);if(!t)return;const a=e.getBoundingClientRect(),r={left:ke(a.left/xe()),top:ke(a.top/ze()),
 		width:Math.round(a.width)};e.style.height&&(r.height=Math.round(a.height)),M(t,r)}(e)})}),e.addEventListener("dblclick",t=>{
-		m.matches&&t.target.closest(".dialog-head")&&!t.target.closest("a, button, input")&&(Re(e),Ae(e))})}function _e(t,a){r(e,{panel:t,visible:a
-		})}function De(e,t){t&&be().forEach(t=>{t===e||t.hidden||(t.hidden=!0,_e(t,!1))}),e.hidden=!t,function(){const e=xe()
+		m.matches&&t.target.closest(".dialog-head")&&!t.target.closest("a, button, input")&&(We(e),Me(e))})}function Fe(t,a){r(e,{panel:t,visible:a
+		})}function Te(e,t){t&&Le().forEach(t=>{t===e||t.hidden||(t.hidden=!0,Fe(t,!1))}),e.hidden=!t,function(){const e=Re()
 		;if(e&&!document.documentElement.classList.contains("dialog-gutter")){const e=window.innerWidth-document.documentElement.clientWidth
-		;e>0&&(ge(e),document.documentElement.classList.add("dialog-gutter"))}else e||(ge(0),
+		;e>0&&(Ee(e),document.documentElement.classList.add("dialog-gutter"))}else e||(Ee(0),
 		document.documentElement.classList.remove("dialog-gutter"));document.body.classList.toggle("dialog-open",e);const t=l(".dialog-backdrop")
-		;t&&(t.hidden=!e,e&&t.classList.remove("dialog-spent"))}(),t&&He(e),_e(e,t)}function Ce(){const e=Ee();return e&&De(e,!1),!!e}
-		var We=new Map,Ve=[];function Ie(e,{run:t,keys:a=[],keyWhen:r=()=>!0,keepDefault:n=!1,capture:o=!1}){const i={id:e,run:t,keys:a,keyWhen:r,
-		keepDefault:n,capture:o};We.set(e,i),a.length&&Ve.push(i)}var Fe={manual:!0,changelog:!0},Te=[{feature:"manual",dialogId:"manualDialog",
-		hash:"upute",keys:["h","H"]},{feature:"changelog",dialogId:"changelogDialog",hash:"promjene",keys:["c","C"]}];function Be(e){try{
-		return decodeURIComponent(e.slice(1))}catch{return e.slice(1)}}function Oe({feature:t,dialogId:a,hash:r,keys:o}){
-		const i=document.getElementById(a);if(!i||!Fe[t])return;const s=i.querySelector(".dialog-close")
-		;s&&s.addEventListener("click",()=>De(i,!1)),i.addEventListener("click",e=>{const t=e.target.closest('a[href^="#"]')
+		;t&&(t.hidden=!e,e&&t.classList.remove("dialog-spent"))}(),t&&Ve(e),Fe(e,t)}function Be(){const e=je();return e&&Te(e,!1),!!e}
+		var Oe=new Map,Pe=[];function Ze(e,{run:t,keys:a=[],keyWhen:r=()=>!0,keepDefault:n=!1,capture:o=!1}){const i={id:e,run:t,keys:a,keyWhen:r,
+		keepDefault:n,capture:o};Oe.set(e,i),a.length&&Pe.push(i)}var Ne,Ue={manual:!0,changelog:!0},qe=[{feature:"manual",dialogId:"manualDialog",
+		hash:"upute",keys:["h","H"]},{feature:"changelog",dialogId:"changelogDialog",hash:"promjene",keys:["c","C"]}];function Xe(e){try{
+		return decodeURIComponent(e.slice(1))}catch{return e.slice(1)}}function $e({feature:t,dialogId:a,hash:r,keys:o}){
+		const i=document.getElementById(a);if(!i||!Ue[t])return;const s=i.querySelector(".dialog-close")
+		;s&&s.addEventListener("click",()=>Te(i,!1)),i.addEventListener("click",e=>{const t=e.target.closest('a[href^="#"]')
 		;t&&i.contains(t)&&(e.preventDefault(),function(e,t){const a=e.querySelector(".dialog-body"),r=e.querySelector(`[id="${CSS.escape(t)}"]`)
-		;a&&r&&(a.scrollTop+=r.getBoundingClientRect().top-a.getBoundingClientRect().top)}(i,Be(t.getAttribute("href"))))}),
-		n(e,({panel:e,visible:t})=>{e===i&&(!function(e,t){const a=new URL(window.location.href);t!==(Be(a.hash)===e)&&(a.hash=t?e:"",
-		history.replaceState(null,"",t?a.href:a.href.replace(/#$/,"")))}(r,t),t&&(i.querySelector(".dialog-body").scrollTop=0))}),Ie(t,{keys:o,
-		run:()=>function(e){e&&De(e,e.hidden)}(i)});const l=()=>{const e=Be(window.location.hash)===r;e!==!i.hidden&&De(i,e)}
-		;window.addEventListener("hashchange",l),l()}Z=P(H(L)),fetch("https://meteo-data.jurakovic.workers.dev/config.json",{cache:"no-cache"
-		}).then(e=>e.ok?e.json():Promise.reject(e.status)).then(e=>{M(L,e);const a=P(e);var n,o;o=Z,
-		(n=a).size===o.size&&[...n].every(e=>o.has(e))||(Z=a,r(t))}).catch(()=>{}),Te.forEach(({feature:e})=>{
-		Fe[e]||document.documentElement.classList.add(`no-${e}`)}),Ie("top",{run:()=>{window.scrollTo({top:0,behavior:"smooth"})}}),Ie("links",{
-		run:()=>_("links")}),Ie("links-bottom",{run:e=>function(e){document.body.classList.toggle("show-links-bottom",e.checked),M(j,e.checked?1:0),
-		C()}(e)}),Ie("slide",{run:e=>{return t=e.closest(".slideshow"),a=Number(e.dataset.step),
-		void I(t,parseInt(t.getAttribute("data-current-slide"))+a);var t,a}}),Ie("zoom",{run:e=>E(e.dataset.frame,e)}),Ie("fullscreen",{
+		;a&&r&&(a.scrollTop+=r.getBoundingClientRect().top-a.getBoundingClientRect().top)}(i,Xe(t.getAttribute("href"))))}),
+		n(e,({panel:e,visible:t})=>{e===i&&(!function(e,t){const a=new URL(window.location.href);t!==(Xe(a.hash)===e)&&(a.hash=t?e:"",
+		history.replaceState(null,"",t?a.href:a.href.replace(/#$/,"")))}(r,t),t&&(i.querySelector(".dialog-body").scrollTop=0))}),Ze(t,{keys:o,
+		run:()=>function(e){e&&Te(e,e.hidden)}(i)});const l=()=>{const e=Xe(window.location.hash)===r;e!==!i.hidden&&Te(i,e)}
+		;window.addEventListener("hashchange",l),l()}
+		Ne="landing","jurakovic.github.io"===window.location.hostname&&"function"==typeof navigator.sendBeacon&&(we=Ne,ge("view"),
+		window.addEventListener("error",e=>fe(e.message,`${e.lineno}:${e.colno}`)),
+		window.addEventListener("unhandledrejection",e=>fe(e.reason&&e.reason.message||e.reason,"promise")),
+		document.addEventListener("visibilitychange",()=>{"hidden"===document.visibilityState&&ve()})),Z=P(H(L)),
+		fetch("https://meteo-data.jurakovic.workers.dev/config.json",{cache:"no-cache"}).then(e=>e.ok?e.json():Promise.reject(e.status)).then(e=>{
+		M(L,e);const a=P(e);var n,o;o=Z,(n=a).size===o.size&&[...n].every(e=>o.has(e))||(Z=a,r(t))}).catch(()=>{}),qe.forEach(({feature:e})=>{
+		Ue[e]||document.documentElement.classList.add(`no-${e}`)}),Ze("top",{run:()=>{window.scrollTo({top:0,behavior:"smooth"})}}),Ze("links",{
+		run:()=>_("links")}),Ze("links-bottom",{run:e=>function(e){document.body.classList.toggle("show-links-bottom",e.checked),M(j,e.checked?1:0),
+		C()}(e)}),Ze("slide",{run:e=>{return t=e.closest(".slideshow"),a=Number(e.dataset.step),
+		void I(t,parseInt(t.getAttribute("data-current-slide"))+a);var t,a}}),Ze("zoom",{run:e=>E(e.dataset.frame,e)}),Ze("fullscreen",{
 		run:e=>function(e,t){d(`toggleFullscreen: ${e}`);const n=document.getElementById(e).parentElement
 		;if(n.classList.contains("fullscreen"))return void z(n);const o=n.querySelector(".overlay");x.set(n,!o||"none"!==o.style.display),
 		n.classList.add("fullscreen"),n.previousElementSibling.classList.add("fullscreen"),
 		n.closest(".map-block.snapped")||document.body.classList.add("fs-lock"),r(a),t.textContent="[-]",o&&(o.style.display="none"),
-		y(e,"fullscreen")}(e.dataset.frame,e)}),Ie("gate",{run:e=>function(e){const t=e.dataset.frameId;switch(e.dataset.state){case"exit":
-		k(t).removeAttribute("style"),y(t,"reset");break;case"reset":g(w(t)),y(t,"hidden");break;case"fullscreen":g(w(t))}}(e)}),Ie("dialog-close",{
-		keys:["Escape"],keyWhen:()=>xe(),keepDefault:!0,run:()=>Ce()}),Ie("fullscreen-exit",{keys:["Escape"],keyWhen:()=>!xe(),keepDefault:!0,
+		y(e,"fullscreen")}(e.dataset.frame,e)}),Ze("gate",{run:e=>function(e){const t=e.dataset.frameId;switch(e.dataset.state){case"exit":
+		k(t).removeAttribute("style"),y(t,"reset");break;case"reset":g(w(t)),y(t,"hidden");break;case"fullscreen":g(w(t))}}(e)}),Ze("dialog-close",{
+		keys:["Escape"],keyWhen:()=>Re(),keepDefault:!0,run:()=>Be()}),Ze("fullscreen-exit",{keys:["Escape"],keyWhen:()=>!Re(),keepDefault:!0,
 		run:()=>function(){const e=l(".if1.fullscreen");e&&z(e)}()}),document.addEventListener("click",e=>{
-		const t=e.target,a=t.closest&&t.closest("[data-action]");a&&function(e,t=null,a=null){const r=We.get(e);r&&r.run(t,a)}(a.dataset.action,a,e)
-		}),document.addEventListener("keydown",e=>{if(e.altKey||e.ctrlKey||e.metaKey||function(e){const t=e
+		const t=e.target,a=t.closest&&t.closest("[data-action]");a&&function(e,t=null,a=null){const r=Oe.get(e);r&&(ge("command",e),r.run(t,a))
+		}(a.dataset.action,a,e)}),document.addEventListener("keydown",e=>{if(e.altKey||e.ctrlKey||e.metaKey||function(e){const t=e
 		;return!!t&&"function"==typeof t.matches&&t.matches('input:not([type="radio"]):not([type="checkbox"]), textarea, [contenteditable]')
-		}(e.target))return;const t=Ve.find(t=>t.keys.includes(e.key)&&t.keyWhen(e));t&&(t.keepDefault||e.preventDefault(),
-		t.capture&&e.stopPropagation(),t.run(null,e))},!0),window.addEventListener("resize",()=>{clearTimeout(O),O=setTimeout(()=>{u(),S(),C()},200)
-		}),n(t,()=>{me&&pe()&&B()}),i(pe),i(function(){be().forEach(e=>{!function(e){e.querySelectorAll(":scope > .po-h").forEach(e=>e.remove()),
-		ye.forEach(t=>{const a=document.createElement("div");a.className=`po-h po-h-${t}`,a.dataset.dir=t,e.appendChild(a)})}(e),Me(e)}),function(){
-		const e=l(".dialog-backdrop");e&&e.addEventListener("pointerdown",t=>{if(!xe())return;t.preventDefault(),Ce(),e.hidden=!1,
-		e.classList.add("dialog-spent");let a=0;const r=()=>{clearTimeout(a),e.classList.remove("dialog-spent"),e.hidden=!xe(),
-		document.removeEventListener("click",n,!0),document.removeEventListener("pointerup",o),document.removeEventListener("pointercancel",r)
-		},n=e=>{e.stopPropagation(),e.preventDefault(),r()},o=()=>{a=setTimeout(r,400)};document.addEventListener("click",n,!0),
-		document.addEventListener("pointerup",o),document.addEventListener("pointercancel",r)})}(),window.addEventListener("resize",()=>He(Ee()))}),
-		i(function(){Te.forEach(Oe)}),i(function(){!function(){const e=document.querySelector(".links-toggle");e&&(e.checked=1===H(j),
+		}(e.target))return;const t=Pe.find(t=>t.keys.includes(e.key)&&t.keyWhen(e));t&&(t.keepDefault||e.preventDefault(),
+		t.capture&&e.stopPropagation(),ge("command",t.id),t.run(null,e))},!0),window.addEventListener("resize",()=>{clearTimeout(O),
+		O=setTimeout(()=>{u(),S(),C()},200)}),n(t,()=>{me&&pe()&&B()}),i(pe),i(function(){Le().forEach(e=>{!function(e){
+		e.querySelectorAll(":scope > .po-h").forEach(e=>e.remove()),Ae.forEach(t=>{const a=document.createElement("div")
+		;a.className=`po-h po-h-${t}`,a.dataset.dir=t,e.appendChild(a)})}(e),Ie(e)}),function(){const e=l(".dialog-backdrop")
+		;e&&e.addEventListener("pointerdown",t=>{if(!Re())return;t.preventDefault(),Be(),e.hidden=!1,e.classList.add("dialog-spent");let a=0
+		;const r=()=>{clearTimeout(a),e.classList.remove("dialog-spent"),e.hidden=!Re(),document.removeEventListener("click",n,!0),
+		document.removeEventListener("pointerup",o),document.removeEventListener("pointercancel",r)},n=e=>{e.stopPropagation(),e.preventDefault(),
+		r()},o=()=>{a=setTimeout(r,400)};document.addEventListener("click",n,!0),document.addEventListener("pointerup",o),
+		document.addEventListener("pointercancel",r)})}(),window.addEventListener("resize",()=>Ve(je()))}),i(function(){qe.forEach($e)}),
+		i(function(){!function(){const e=document.querySelector(".links-toggle");e&&(e.checked=1===H(j),
 		document.body.classList.toggle("show-links-bottom",e.checked))}(),B(),function(){const e=l(".expandable"),t=l(".links")
 		;e.addEventListener("click",()=>{const a=e.querySelector(".arrow");if(t.style.maxHeight)return t.style.maxHeight="",void(a.textContent="▼")
 		;t.style.maxHeight=`${t.scrollHeight}px`,a.textContent="▲",setTimeout(()=>{document.documentElement.style.scrollBehavior="auto",

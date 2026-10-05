@@ -1,0 +1,63 @@
+// Telemetry: nothing off the live site; on it, counts sent once the page is hidden
+import './setup.mjs';
+import { test } from 'node:test';
+import assert from 'node:assert/strict';
+import { initTelemetry, takeReport, track } from '../../src/_assets/js/telemetry.js';
+
+const sent = [];
+const listeners = { window: new Map(), document: new Map() };
+Object.defineProperty(globalThis, 'navigator', {
+	configurable: true,
+	value: { sendBeacon: (url, body) => { sent.push({ url, body: JSON.parse(body) }); return true; } }
+});
+globalThis.window.addEventListener = (type, handler) => listeners.window.set(type, handler);
+globalThis.document = /** @type {any} */ ({
+	visibilityState: 'visible',
+	addEventListener: (type, handler) => listeners.document.set(type, handler)
+});
+
+function hide() {
+	globalThis.document.visibilityState = 'hidden';
+	listeners.document.get('visibilitychange')();
+	globalThis.document.visibilityState = 'visible';
+}
+
+test('off the live site nothing is counted or listened for', () => {
+	globalThis.window.location.hostname = 'meteo.test';
+	initTelemetry('landing');
+	track('command', 'zoom');
+	assert.equal(takeReport(), null);
+	assert.equal(listeners.document.size + listeners.window.size, 0);
+});
+
+test('on the live site a hidden page sends the counts since the last report', () => {
+	globalThis.window.location.hostname = 'jurakovic.github.io';
+	initTelemetry('customize');
+	track('command', 'zoom');
+	track('command', 'zoom');
+	track('command', 'slide');
+	hide();
+	assert.equal(sent.length, 1);
+	assert.equal(sent[0].url, 'https://meteo-data.jurakovic.workers.dev/t');
+	assert.deepEqual(sent[0].body, {
+		page: 'customize',
+		events: [
+			{ name: 'view', value: '', n: 1 },
+			{ name: 'command', value: 'zoom', n: 2 },
+			{ name: 'command', value: 'slide', n: 1 }
+		]
+	});
+
+	hide(); // nothing counted since: nothing sent
+	assert.equal(sent.length, 1);
+	track('command', 'top');
+	hide();
+	assert.deepEqual(sent[1].body.events, [{ name: 'command', value: 'top', n: 1 }]);
+});
+
+test('errors are reported with where they were thrown, at most five', () => {
+	const onError = listeners.window.get('error');
+	for (let i = 0; i < 8; i++) onError({ message: 'boom', lineno: 3, colno: 14 });
+	listeners.window.get('unhandledrejection')({ reason: new Error('late') });
+	assert.deepEqual(takeReport().events, [{ name: 'error', value: 'boom @ 3:14', n: 5 }]);
+});
