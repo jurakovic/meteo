@@ -2,7 +2,7 @@
 // board's mode and grid, auto-refresh, saved presets and share links.
 // Nothing is applied until Primijeni, except the grid and refresh switches.
 
-import { el, flashLabel, query } from '../lib/dom.js';
+import { el, flashLabel } from '../lib/dom.js';
 import { EVENTS, on } from '../lib/events.js';
 import { activePresetId, clearSharedMapView, resolveMapIds, saveMapPrefs } from '../maps/prefs.js';
 import { isBoardPreset } from '../maps/presets.js';
@@ -11,6 +11,8 @@ import { copyMapViewLink } from '../maps/share.js';
 import { registerCommand, withKey } from '../page/commands.js';
 import { initDynamicContent } from '../page/content.js';
 import { buildDialogHandles, setDialogVisible } from '../page/dialog.js';
+import { track } from '../telemetry.js';
+import { isDashboard } from '../widgets/board.js';
 import { isGridShown, isGridSnapped } from '../widgets/grid.js';
 import { applySnapLayout, isDashboardView } from '../widgets/layout.js';
 import { createMapList } from './panel-list.js';
@@ -50,10 +52,10 @@ export function initMapSettings() {
 	// chrome's, since it shuts whichever dialog is up
 	registerCommand('map-settings', { keys: ['k', 'K'], run: () => toggleMapSettings() });
 
-	// Enter is Primijeni wherever the focus is in the picker, even on a button
-	// (which would otherwise take it as a click: Nadzorna ploča then Enter would
-	// untick the mode; Space still presses). Text fields and the interval list
-	// keep their own Enter
+	// Primijeni, the button's and the key's. Enter is Primijeni wherever the
+	// focus is in the picker, even on a button (which would otherwise take it
+	// as a click: Nadzorna ploča then Enter would untick the mode; Space still
+	// presses). Text fields and the interval list keep their own Enter
 	registerCommand('settings-apply', {
 		keys: ['Enter'],
 		capture: true,
@@ -62,7 +64,7 @@ export function initMapSettings() {
 			return !e.shiftKey && !e.isComposing && !!element && !element.hidden
 				&& !(e.target.matches && e.target.matches('select')) && !!element.querySelector('.ms-apply');
 		},
-		run: () => query('#mapSettings .ms-apply').click()
+		run: () => (openPanel ? openPanel.apply() : false)
 	});
 }
 
@@ -179,21 +181,26 @@ function buildMapSettings(element) {
 			mode.render();
 			layoutLine.render();
 			manage.render();
+		},
+
+		// Primijeni (the settings-apply command)
+		apply() {
+			const prefs = readPanelPrefs(presets.checkedId(), list.selectedIds());
+			const layout = layoutForPrefs(prefs, panel.dashboardChecked);
+			if (layout) prefs.layout = layout;
+			const wasDashboard = isDashboard();
+			saveMapPrefs(prefs);
+			clearSharedMapView(); // the saved preferences take over from the shared link
+			panel.close();
+			renderMaps();
+			initDynamicContent();
+			applySnapLayout(layout); // the render dropped the panes; these are the ones to come back
+			// read off the page, not the tick: a phone never goes onto the board
+			if (isDashboard() !== wasDashboard) track('dashboard', isDashboard() ? 'on' : 'off');
 		}
 	};
 
-	const applyBtn = el('button', { type: 'button', class: 'btn ms-apply', text: 'Primijeni', title: withKey('Primijeni', 'settings-apply') });
-	applyBtn.addEventListener('click', () => {
-		const prefs = readPanelPrefs(presets.checkedId(), list.selectedIds());
-		const layout = layoutForPrefs(prefs, panel.dashboardChecked);
-		if (layout) prefs.layout = layout;
-		saveMapPrefs(prefs);
-		clearSharedMapView(); // the saved preferences take over from the shared link
-		panel.close();
-		renderMaps();
-		initDynamicContent();
-		applySnapLayout(layout); // the render dropped the panes; these are the ones to come back
-	});
+	const applyBtn = el('button', { type: 'button', class: 'btn ms-apply', 'data-action': 'settings-apply', text: 'Primijeni', title: withKey('Primijeni', 'settings-apply') });
 
 	// a link, like the per-preset Podijeli it does the same job as; the filled
 	// button is kept for Primijeni, the one action that changes the page

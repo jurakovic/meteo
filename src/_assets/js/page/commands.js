@@ -16,7 +16,8 @@ const bound = []; // the commands keys run, in the order they were registered
 // clicked, or null from a key. keys: e.key values that run it; keyWhen(event):
 // whether a key may run it now (the first bound command whose keyWhen holds
 // takes the key). keepDefault: the key's own default action still happens;
-// capture: the key is kept from every listener after this one
+// capture: the key is kept from every listener after this one. A run that
+// returns false did nothing, and is not counted (telemetry.js)
 export function registerCommand(id, { run, keys = [], keyWhen = () => true, keepDefault = false, capture = false }) {
 	const command = { id, run, keys, keyWhen, keepDefault, capture };
 	commands.set(id, command);
@@ -31,11 +32,8 @@ export function withKey(label, id) {
 	return `${label} (${key.length === 1 ? key.toUpperCase() : key === 'Escape' ? 'Esc' : key})`;
 }
 
-function runCommand(id, control = null, event = null) {
-	const command = commands.get(id);
-	if (!command) return;
-	track('command', id);
-	command.run(control, event);
+function runCommand(command, control = null, event = null) {
+	if (command.run(control, event) !== false) track('command', command.id);
 }
 
 // the commands every page has
@@ -50,14 +48,15 @@ export function initCommands() {
 	// Escape: the dialog owns it while one is open; under it Escape ends a
 	// fullscreen map — a class, not the browser's own fullscreen, so nothing
 	// else takes Escape off it — and under that it does nothing: backing out
-	// is not a reason to take an arrangement apart
+	// is not a reason to take an arrangement apart (nor counted as anything)
 	registerCommand('dialog-close', { keys: ['Escape'], keyWhen: () => anyDialogOpen(), keepDefault: true, run: () => closeOpenDialog() });
 	registerCommand('fullscreen-exit', { keys: ['Escape'], keyWhen: () => !anyDialogOpen(), keepDefault: true, run: () => exitAnyFullscreen() });
 
 	document.addEventListener('click', (e) => {
 		const target = /** @type {Element} */ (e.target);
 		const control = target.closest && /** @type {HTMLElement | null} */ (target.closest('[data-action]'));
-		if (control) runCommand(control.dataset.action, control, e);
+		const command = control && commands.get(control.dataset.action);
+		if (command) runCommand(command, control, e);
 	});
 	// captured, ahead of every listener on the page, so a command that keeps
 	// its key (Enter on the dialog) keeps it from the focused control too
@@ -67,7 +66,6 @@ export function initCommands() {
 		if (!command) return;
 		if (!command.keepDefault) e.preventDefault();
 		if (command.capture) e.stopPropagation();
-		track('command', command.id);
-		command.run(null, e);
+		runCommand(command, null, e);
 	}, true);
 }
