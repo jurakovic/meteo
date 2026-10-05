@@ -1,4 +1,5 @@
-// Telemetry: nothing off the live site; on it, counts sent once the page is hidden
+// Telemetry: nothing off the live site without ?debug=1; on it, counts sent
+// once the page is hidden
 import './setup.mjs';
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
@@ -60,4 +61,30 @@ test('errors are reported with where they were thrown, at most five', () => {
 	for (let i = 0; i < 8; i++) onError({ message: 'boom', lineno: 3, colno: 14 });
 	listeners.window.get('unhandledrejection')({ reason: new Error('late') });
 	assert.deepEqual(takeReport().events, [{ name: 'error', value: 'boom @ 3:14', n: 5 }]);
+});
+
+test('with ?debug=1 off the live site the report is logged, not sent', async () => {
+	// a module instance of its own, so the live one above does not carry over
+	const fresh = await import('../../src/_assets/js/telemetry.js?debug');
+	globalThis.window.location.hostname = 'localhost';
+	globalThis.window.location.search = '?debug=1';
+	const logged = [];
+	const log = console.log;
+	console.log = (...args) => logged.push(args);
+	listeners.document.clear();
+	try {
+		fresh.initTelemetry('landing');
+		fresh.track('command', 'zoom');
+		const before = sent.length;
+		hide();
+		assert.equal(sent.length, before);
+		const report = logged.find(args => args[0] === 'telemetry: not sent (not the live site)');
+		assert.deepEqual(report[1], {
+			page: 'landing',
+			events: [{ name: 'view', value: '', n: 1 }, { name: 'command', value: 'zoom', n: 1 }]
+		});
+	} finally {
+		console.log = log;
+		globalThis.window.location.search = '';
+	}
 });

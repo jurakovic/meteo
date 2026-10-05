@@ -1,6 +1,8 @@
 // Usage counts and script errors, sent to the worker when the page is hidden:
 // no cookies, nothing stored, no id. See INTERNALS.md, Telemetry.
 
+import { dlog, isDebugEnabled } from './lib/debug.js';
+
 const TELEMETRY_URL = 'https://meteo-data.jurakovic.workers.dev/t';
 // dev, the nginx containers and the e2e suite's meteo.test send nothing
 const LIVE_HOST = 'jurakovic.github.io';
@@ -13,14 +15,16 @@ const MAX_ERRORS = 5;
 /** @type {Map<string, number>} [name, value] as JSON → times since the last report */
 const counts = new Map();
 let errors = 0;
-let page = ''; // empty until initTelemetry, and off the live site
+let page = ''; // empty until initTelemetry, and off the live site without ?debug=1
+let sending = false; // the live site only; ?debug=1 elsewhere counts and logs
 
-// counted only once initTelemetry has run on the live site
+// counted only once initTelemetry has run on the live site, or with ?debug=1
 /** @param {string} name @param {string} [value] */
 export function track(name, value = '') {
 	if (!page) return;
 	const key = JSON.stringify([name, String(value)]);
 	counts.set(key, (counts.get(key) || 0) + 1);
+	dlog('telemetry:', name, value);
 }
 
 /** @param {unknown} message @param {string} where */
@@ -44,14 +48,20 @@ export function takeReport() {
 
 function sendReport() {
 	const report = takeReport();
+	if (!report) return;
+	dlog(sending ? 'telemetry: sent' : 'telemetry: not sent (not the live site)', report);
 	// a string goes as text/plain, a type that needs no CORS preflight
-	if (report) navigator.sendBeacon(TELEMETRY_URL, JSON.stringify(report));
+	if (sending) navigator.sendBeacon(TELEMETRY_URL, JSON.stringify(report));
 }
 
 /** @param {'landing' | 'customize'} name */
 export function initTelemetry(name) {
-	if (window.location.hostname !== LIVE_HOST || typeof navigator.sendBeacon !== 'function') return;
+	const live = window.location.hostname === LIVE_HOST && typeof navigator.sendBeacon === 'function';
+	if (!live && !isDebugEnabled()) return;
+	sending = live;
 	page = name;
+	dlog(`telemetry: counting on ${name}; a report is logged when the page is hidden`
+		+ (live ? `, and sent to ${TELEMETRY_URL}` : ', not sent off the live site'));
 	track('view');
 	// the build inlines the script, so line:col point into the page's
 	// minified script in docs/, not into a module

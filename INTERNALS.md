@@ -240,6 +240,7 @@ On the customize page the tab's `[+]` menu leaves the map out too. The dialog st
 What visitors use, and the script errors they hit, are counted in the page and sent to the worker at `TELEMETRY_URL` (`/t` on the same worker as `config.json`). The code is [`telemetry.js`](./src/_assets/js/telemetry.js), started first by both entries so it sees an error in any step after it.
 
 - Only on the live site (`jurakovic.github.io`). Dev, the nginx containers and the browser suite's `meteo.test` count and send nothing.
+- `?debug=1` counts on any host and logs to the console: each event as it is counted, and each report when the page is hidden. Off the live site the report is logged instead of sent, so local testing never reaches the worker. On the live site it is logged and sent.
 - What is counted: a `view` per load, a `command` with its id each time a control or a key runs one (both paths in `page/commands.js`), and an `error` per uncaught error or rejected promise, as its message and `line:col`, at most five a load. In the build the script is inlined, so `line:col` points into the page's minified script in `docs/`.
 - Counts are added up in the page, `{ name, value } → n`, and sent as one report, `{ page, events: [{ name, value, n }] }`, when the page is hidden (`visibilitychange`), the last moment a mobile browser reliably gives it. A page hidden and shown again sends what was counted since.
 - It goes by `navigator.sendBeacon` as a string, so as `text/plain`, which needs no CORS preflight; the reply is never read.
@@ -588,7 +589,7 @@ Both are on the bar only: over a frame the page never sees them, and on an inter
 
 Every key is named once, in `STORAGE_KEYS` (`lib/storage.js`), and every read and write goes through `readJson()`/`writeJson()`/`removeKey()`, which never throw. With storage refused or full, a write is kept for the session and read back from there, so the view still works (a private window, a blocked site). Everything read back from storage or `?v=` passes a guard (`isValidPrefs`, `isValidPreset`, the filter on hidden presets, `sanitizeSnapLayout`): an unknown preset id is rejected rather than kept.
 
-`?debug=1` on any page turns on console logging (`dlog()`, `lib/debug.js`).
+`?debug=1` on any page turns on console logging (`dlog()`, `lib/debug.js`), telemetry's included (see [Telemetry](#telemetry)).
 
 ## Touch notes
 
