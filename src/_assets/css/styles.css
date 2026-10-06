@@ -915,7 +915,9 @@ body.fs-lock {
 	}
 }
 
-.beta {
+/* "novo" on what is new: the customize page's way in, its Karte, the board,
+   the manual and the changelog */
+.new-tag {
 	font-size: 9px;
 	color: var(--c-accent);
 	vertical-align: super;
@@ -923,12 +925,11 @@ body.fs-lock {
 	letter-spacing: 1px;
 }
 
-	/* in centered contexts the tag goes out of flow so it renders right after
-	   the text without shifting its centering; the top footer's occurrence sits
-	   mid-sentence and must stay in flow (vertical-align is ignored on
+	/* on a button the tag goes out of flow so it renders right after the
+	   text without shifting its centering; the top footer's links are a run
+	   of text and keep theirs in flow (vertical-align is ignored on
 	   absolutely positioned elements, hence the translate) */
-	.btn .beta,
-	h2 .beta {
+	.btn .new-tag {
 		position: absolute;
 		transform: translateY(-40%);
 		margin-left: 1px;
@@ -1725,7 +1726,7 @@ body.fs-lock {
 			   in a fixed cell, so the tag has no centering to shift and is better
 			   left in flow: out of flow it hangs past the button's right edge and
 			   all but closes the gap before the grid switches */
-			.dialog .ms-mode .btn .beta {
+			.dialog .ms-mode .btn .new-tag {
 				position: static;
 				transform: none;
 			}

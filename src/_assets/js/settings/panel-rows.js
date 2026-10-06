@@ -35,7 +35,7 @@ export function createModeRow(panel) {
 			modeDiv.classList.toggle('ms-on', panel.dashboardChecked);
 			const btn = el('button', { type: 'button', class: 'btn', 'data-track': 'board-mode', 'aria-pressed': String(panel.dashboardChecked) }, [
 				document.createTextNode('Nadzorna ploča '),
-				el('span', { class: 'beta', text: 'beta' })
+				el('span', { class: 'new-tag', text: 'novo' })
 			]);
 			btn.addEventListener('click', () => panel.setDashboardChecked(!panel.dashboardChecked));
 			// Posloži arranges the board that is up, so it needs both a board and
