@@ -174,7 +174,7 @@ Dva prozora koja se dodiruju mogu se spojiti u grupu gumbom `[+]`; samo dodiriva
 
 Gumb `[D]` (ili tipka <kbd>D</kbd>, za prozor na vrhu) otvara još jedan prozor s istom kartom — npr. ista sinoptička karta u dvije veličine, ili isti niz slika zaustavljen na dvije različite slike. Kopija se otvori malo pomaknuta i iste veličine kao prozor iz kojeg je nastala. Svaka kopija ima svoje strelice i indikatore pozicije.
 
-Sve kopije su ravnopravne: `[=]` (na ploči `[x]`) zatvara samo taj prozor, a karta se vraća u stranicu (na ploči miče s popisa) tek sa zadnjim. Kopije se spremaju u predložak i putuju u poveznici, a karta maknuta s popisa odnese i svoje kopije.
+Sve kopije su ravnopravne: `[=]` vraća u stranicu baš taj prozor, a ostali ostaju gdje jesu; kopija karte koja je već u stranici samo se zatvori. Na ploči `[x]` zatvara samo taj prozor, a karta se miče s popisa tek sa zadnjim. Kopije se spremaju u predložak i putuju u poveznici, a karta maknuta s popisa odnese i svoje kopije.
 
 ### Bočni stupci
 

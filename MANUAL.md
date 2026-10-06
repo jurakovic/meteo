@@ -176,7 +176,7 @@ Two touching windows can be joined in a group with the `[+]` button; touching al
 
 The `[D]` button (or the <kbd>D</kbd> key, for the window on top) opens another window with the same map — e.g. the same synoptic chart at two sizes, or the same slideshow stopped at two different images. The copy opens slightly offset, at the size of the window it came from. Every copy has its own arrows and position indicators.
 
-All copies are equal: `[=]` (on the dashboard `[x]`) closes only that window, and the map goes back to the page (on the dashboard, off the list) only with the last one. Copies are saved in a preset and travel in a link, and a map removed from the list takes its copies with it.
+All copies are equal: `[=]` puts that very window back in the page, and the others stay where they are; a copy of a map already in the page just closes. On the dashboard `[x]` closes only that window, and the map leaves the list only with the last one. Copies are saved in a preset and travel in a link, and a map removed from the list takes its copies with it.
 
 ### Side columns
 

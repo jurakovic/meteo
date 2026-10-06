@@ -431,9 +431,9 @@ In a column a group is a *stack*: every layout of the column (`settleSnapStacks(
 
 No showing is the original, as far as anyone at the screen can tell. The entry's one place to dock into belongs to whichever showing holds it (the one not marked `.duplicate`):
 
-- `[=]` (`[x]` on the board) on a showing while others of its map are out takes it away (`removeShowing()`);
-- if that one held the place, the next showing inherits it: the class goes, the `.map-gap` passes over, and the gap's *Vrati* docks whichever showing holds it by then. Nothing moves in the DOM: every other showing is a fixed widget, so the heir docks into the gap from wherever it sits;
-- only a map's last showing docks, or on the board leaves the list. `dockMap()` still takes a copy away, for *Vrati sve* and the breakpoint, which dock everything.
+- `[=]` on the page docks the showing it is pressed on, and the others stay out where they float. Pressed on a copy while the holder is out, the two change roles first (`takePagePlace()`): the class and the `.map-gap` pass to the copy, which `dockMap()` then puts in the gap, and the holder floats on as a copy. Nothing moves in the DOM: the copy sits beside the holder already, and every other showing is a fixed widget. A copy of a map the page already shows has nowhere to go, and is taken away (`removeShowing()`);
+- `[x]` on the board takes the showing it is pressed on away while others of its map are out, and only a map's last showing leaves the list. If the one taken held the place, the next showing inherits it: the class goes, and the `.map-gap` passes over, so the gap's *Vrati* docks whichever showing holds it by then;
+- `dockMap()` still takes a copy away, for *Vrati sve* and the breakpoint, which dock everything.
 
 A copy is built from the catalog rather than cloned from the DOM, so its parts have names of their own (`buildMapContent(map, inst)`, `instSuffix()`): two renderings sharing one `data-slideshow-id` would have the arrows drive whichever came first while both sets of indicators lit up (which is also why `prefsMapIds()` drops a map listed twice).
 

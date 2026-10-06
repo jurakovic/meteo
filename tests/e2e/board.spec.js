@@ -169,6 +169,20 @@ test.describe('dashboard', () => {
 		await expect(block(page, 'idokep-satelit-eu#2')).toHaveClass(/popout/);
 	});
 
+	test('[x] on a map with a copy takes that showing alone, and the copy keeps the map on the board', async ({ page }) => {
+		await enterBoard(page, 'Sateliti');
+		const b = await box(block(page, 'idokep-satelit-eu').locator(':scope > .radartitle'));
+		await page.mouse.click(b.x + 8, b.cy);
+		await page.keyboard.press('d');
+		const showings = page.locator('.map-block[data-map-id="idokep-satelit-eu"]');
+		await expect(showings).toHaveCount(2);
+		// the copy lies over the original's buttons; a middle click on the bar is its [x]
+		await page.mouse.click(b.x + 8, b.cy, { button: 'middle' });
+		await expect(showings).toHaveCount(1);
+		await expect(showings).not.toHaveClass(/duplicate/); // it holds the map's place now
+		await expect(showings).toHaveClass(/popout/);
+	});
+
 	test('leaving the board docks everything', async ({ page }) => {
 		await enterBoard(page, 'Sateliti');
 		await page.locator('.ms-tab').click({ position: { x: 20, y: 8 } });
