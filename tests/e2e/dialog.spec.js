@@ -117,6 +117,23 @@ test.describe('settings dialog', () => {
 		await expect(page.locator('#mapSettings .ms-sort a.active')).toHaveText('Naziv ▲');
 	});
 
+	test('the sort picked last is the one the dialog opens with, after a reload too', async ({ page }) => {
+		const names = () => page.locator('#mapSettings .ms-available .ms-item label').evaluateAll(labels => labels.map(l => l.lastChild.textContent));
+		await openDialog(page);
+		const naziv = page.locator('#mapSettings .ms-sort a', { hasText: 'Naziv' });
+		await naziv.click();
+		await naziv.click(); // descending
+		const descending = await names();
+		await page.keyboard.press('Escape');
+		await openDialog(page);
+		await expect(page.locator('#mapSettings .ms-sort a.active')).toHaveText('Naziv ▼');
+		expect(await names()).toEqual(descending);
+		await page.reload();
+		await openDialog(page);
+		await expect(page.locator('#mapSettings .ms-sort a.active')).toHaveText('Naziv ▼');
+		expect(await names()).toEqual(descending);
+	});
+
 	test('closing without Primijeni drops the edits', async ({ page }) => {
 		await openDialog(page);
 		await chip(page, 'Sateliti').click();

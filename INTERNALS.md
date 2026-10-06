@@ -309,7 +309,7 @@ The `.ms-tab` keeps its own click above the backdrop and shuts the dialog the sa
 `#mapSettings`, opened by the page's *Karte* button, the tab, or `K`. Shut by *Zatvori*, the button, the tab, Escape, `K`, or a press outside. Escape stands down in a text field: the name and rename editors have an Escape of their own.
 
 - **The way home.** At the head's left end, before the title, `.dialog-home` leads to the landing page, which the board and a hidden page take out of sight. Its image is the site's favicon, taken off the page's own `<link rel="icon">` so the build's rewritten path comes with it, and it is a real link resolved as `../` off the page's address (`/meteo/` in the build), so Ctrl and the middle button open it beside the page.
-- **Two lists of the same rows.** `.ms-selected` is the render order, reordered by dragging a row's `≡` handle; `.ms-available` below it is a finding surface, sortable by name or category without touching the order, which is why it alone has the sort links and the find box. Ticking a map appends it to the order; unticking returns it to the shelf.
+- **Two lists of the same rows.** `.ms-selected` is the render order, reordered by dragging a row's `≡` handle; `.ms-available` below it is a finding surface, sortable by name or category without touching the order, which is why it alone has the sort links and the find box. The sort picked last is kept per browser (`msSort`), being how this user looks rather than part of the view, so it travels in neither a preset nor a link. Ticking a map appends it to the order; unticking returns it to the shelf.
 - **Rows above the lists.** The preset bar (`panel-presets`); the board's mode row with its grid switches and *Posloži*, the auto-refresh row, and the layout line (`panel-rows`; see *Remembered and shared layouts* and *The board*).
 - **Enter** is *Primijeni* wherever the focus is in the picker. It is taken in the capture phase and kept from the focused element, since a button just pressed (the mode row's) would otherwise take it as a second click and undo itself. Text fields and the interval `<select>` keep their own.
 
@@ -610,6 +610,7 @@ Both are on the bar only: over a frame the page never sees them, and on an inter
 | `mapGrid` | the board's grid switches | no |
 | `mapRefresh` | auto-refresh | no |
 | `msTab` | where the tab was put | no |
+| `msSort` | how the dialog's available maps are sorted | no |
 | `msPanel`, `manualPanel`, `changelogPanel` | where and how big each dialog was put | no |
 
 Every key is named once, in `STORAGE_KEYS` (`lib/storage.js`), and every read and write goes through `readJson()`/`writeJson()`/`removeKey()`, which never throw. With storage refused or full, a write is kept for the session and read back from there, so the view still works (a private window, a blocked site). Everything read back from storage or `?v=` passes a guard (`isValidPrefs`, `isValidPreset`, the filter on hidden presets, `sanitizeSnapLayout`): an unknown preset id is rejected rather than kept.

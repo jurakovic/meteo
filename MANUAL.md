@@ -72,7 +72,7 @@ The dialog has two lists:
 
 Before every name stands the sign of its kind: 📡 radar, 🛰️ satellite, ⚡ lightning, 🌡️ temperature, ⛈️ storm, 🗺️ synoptic, 📷 camera, 📈 forecast.
 
-Available maps can be sorted by *Zadano* (default), *Naziv* (name) or *Vrsta* (kind); clicking the same sort again reverses it. It is only for finding maps and does not change the display order.
+Available maps can be sorted by *Zadano* (default), *Naziv* (name) or *Vrsta* (kind); clicking the same sort again reverses it. The browser remembers the sort you picked. It is only for finding maps and does not change the display order.
 
 **Search.** The term is looked for in both the name and the kind of a map, so *munje* (lightning) picks out every lightning map, and *neverin* every map from that source. Each further word narrows the list — *neverin radar* finds both Neverin radars, *neverin radar hrvatska* only one. Diacritics are not needed: *chmu* finds *ČHMÚ*, *sinopticka* finds *Sinoptička*.
 

@@ -70,7 +70,7 @@ Dijalog ima dva popisa:
 
 Ispred svakog imena stoji znak vrste karte: 📡 radar, 🛰️ satelit, ⚡ munje, 🌡️ temperatura, ⛈️ nevrijeme, 🗺️ sinoptika, 📷 kamera, 📈 prognoza.
 
-Dostupne karte mogu se poredati po *Zadano*, *Naziv* ili *Vrsta*; ponovni klik na isti poredak okreće smjer. To služi samo za traženje i ne mijenja redoslijed prikaza.
+Dostupne karte mogu se poredati po *Zadano*, *Naziv* ili *Vrsta*; ponovni klik na isti poredak okreće smjer. Odabrani poredak pamti se u pregledniku. To služi samo za traženje i ne mijenja redoslijed prikaza.
 
 **Traženje.** Upisani pojam traži se i u imenu i u vrsti karte, pa *munje* izdvoji sve munje, a *neverin* sve karte tog izvora. Svaka dodatna riječ sužava popis — *neverin radar* nađe oba Neverinova radara, *neverin radar hrvatska* samo jedan. Kvačice nisu potrebne: *chmu* nalazi *ČHMÚ*, *sinopticka* nalazi *Sinoptička*.
 
