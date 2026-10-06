@@ -100,7 +100,8 @@ const STORM_LINKS = [
 	{ text: 'ESSL', href: 'https://weather.essl.org/storm/' },
 	{ text: 'ASTORP', href: 'https://rawinsonde.com/ASTORP/ESTOFEX.html' },
 	{ text: 'ESTOFEX', href: 'https://www.estofex.org' },
-	{ text: 'ESWD', href: 'https://www.eswd.eu' }
+	{ text: 'ESWD', href: 'https://www.eswd.eu' },
+	{ text: 'Meteoalarm', href: 'https://meteoalarm.org/en/live/region/HR' }
 ];
 
 // a map's own site is already linked from its title bar, so drop it from the
