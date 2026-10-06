@@ -35,7 +35,7 @@ Buttons in an interactive map's bar:
 
 **Fullscreen.** Fullscreen is left with the `[-]` button or the <kbd>Esc</kbd> key. For how it behaves in a side column and on the dashboard, see [Side columns](#side-columns) and [Dashboard](#dashboard).
 
-**Linkovi** (links). The *Linkovi* button leads to a list of further sources at the bottom of the page. The checkbox beside it shows links under every map.
+**Linkovi** (links). The *Linkovi* button leads to a list of further sources at the bottom of the page. The checkbox beside it shows links under every map. The <kbd>L</kbd> key opens the same list in a window over the page, so it can be reached from the dashboard too.
 
 **Upute** (manual). This text is opened by the *Upute* link in the footer and the <kbd>H</kbd> key. It opens in a window over the page, so it can be read beside the maps. It is closed with *Zatvori* (close) or the <kbd>Esc</kbd> key. The site's icon left of the title leads to the home page, as in the *Karte* dialog. A link ending in `#upute` opens the manual as soon as the page loads.
 
@@ -238,6 +238,7 @@ Keys do not work while the cursor is in a text field.
 | <kbd>Enter</kbd> | in the *Karte* dialog: applies the changes |
 | <kbd>H</kbd> | opens and closes the manual (*Upute*) |
 | <kbd>C</kbd> | opens and closes the changelog (*Povijest promjena*) |
+| <kbd>L</kbd> | opens and closes the links (*Linkovi*) |
 | <kbd>Esc</kbd> | closes the dialog; if none is open, leaves fullscreen |
 | <kbd>R</kbd> | reloads every map |
 | <kbd>D</kbd> | duplicates the window on top |

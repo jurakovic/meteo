@@ -7,6 +7,7 @@ import { initCommands } from './page/commands.js';
 import { initPageContent, initPageResize } from './page/content.js';
 import { initDialogs } from './page/dialog.js';
 import { applyDocumentSwitches, initDocuments } from './page/documents.js';
+import { initLinksDialog } from './page/links.js';
 import { initRemoteConfig } from './remote-config.js';
 import { initTelemetry } from './telemetry.js';
 
@@ -23,4 +24,5 @@ initLandingRerender();
 onReady(renderLanding);
 onReady(initDialogs);
 onReady(initDocuments);
+onReady(initLinksDialog);
 onReady(initPageContent);

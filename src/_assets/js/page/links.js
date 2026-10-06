@@ -1,8 +1,11 @@
-// The links: the list at the foot of the page (Linkovi), the row under each
-// map and its switch, and the scrolling to either.
+// The links: the list at the foot of the page (Linkovi) and its dialog, the
+// row under each map and its switch, and the scrolling to either.
+// See INTERNALS.md, The links dialog.
 
 import { query, queryAll } from '../lib/dom.js';
 import { readJson, STORAGE_KEYS, writeJson } from '../lib/storage.js';
+import { registerCommand } from './commands.js';
+import { setDialogVisible, toggleDialog } from './dialog.js';
 
 export function scrollToTop() {
 	window.scrollTo({
@@ -47,6 +50,34 @@ export function addExpandableClickEventListener() {
 				document.body.style.scrollBehavior = 'smooth';
 			}, 50);
 		}, 310); // the list's transition, and a frame
+	});
+}
+
+// the foot's list in a dialog (L): a copy of it, taken on every open, so the
+// markup is the foot's alone and the dialog never shows other links. On the
+// dev page the foot is fetched (include.js), and a copy taken before it lands
+// would be empty, which is why it is not taken once at start
+function fillLinksDialog(panel) {
+	const source = query('.maps-foot .links');
+	const body = panel.querySelector('.dialog-body');
+	if (!source || !body) return;
+	const copy = /** @type {HTMLElement} */ (source.cloneNode(true));
+	copy.removeAttribute('style'); // the foot's folded max-height
+	copy.removeAttribute('data-include-html');
+	body.replaceChildren(copy);
+}
+
+export function initLinksDialog() {
+	const panel = document.getElementById('linksDialog');
+	if (!panel) return;
+	const close = panel.querySelector('.dialog-close');
+	if (close) close.addEventListener('click', () => setDialogVisible(panel, false));
+	registerCommand('links-dialog', {
+		keys: ['l', 'L'],
+		run: () => {
+			if (panel.hidden) fillLinksDialog(panel);
+			toggleDialog(panel);
+		}
 	});
 }
 

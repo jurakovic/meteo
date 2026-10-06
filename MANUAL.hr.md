@@ -33,7 +33,7 @@ Gumbi u traci interaktivne karte:
 
 **Cijeli zaslon.** Iz cijelog zaslona izlazi se gumbom `[-]` ili tipkom <kbd>Esc</kbd>. Za ponašanje u bočnom stupcu i na ploči vidi [Bočni stupci](#bočni-stupci) i [Nadzorna ploča](#nadzorna-ploča).
 
-**Linkovi.** Gumb *Linkovi* vodi na popis dodatnih izvora na dnu stranice. Kvadratić pokraj njega uključuje prikaz linkova ispod svake karte.
+**Linkovi.** Gumb *Linkovi* vodi na popis dodatnih izvora na dnu stranice. Kvadratić pokraj njega uključuje prikaz linkova ispod svake karte. Tipka <kbd>L</kbd> otvara isti popis u prozoru preko stranice, pa je dostupan i s nadzorne ploče.
 
 **Upute.** Ovaj tekst otvaraju link *Upute* u podnožju i tipka <kbd>H</kbd>. Otvara se u prozoru preko stranice, pa se upute mogu čitati uz karte. Zatvara se natpisom *Zatvori* ili tipkom <kbd>Esc</kbd>. Ikona stranice lijevo od naslova vodi na početnu stranicu, kao i u dijalogu *Karte*. Link koji završava s `#upute` otvara upute odmah pri učitavanju stranice.
 
@@ -236,6 +236,7 @@ Tipke ne rade dok je kursor u polju za upis.
 | <kbd>Enter</kbd> | u dijalogu *Karte*: primjenjuje promjene |
 | <kbd>H</kbd> | otvara i zatvara *Upute* |
 | <kbd>C</kbd> | otvara i zatvara *Povijest promjena* |
+| <kbd>L</kbd> | otvara i zatvara *Linkovi* |
 | <kbd>Esc</kbd> | zatvara dijalog; ako nijedan nije otvoren, izlazi iz cijelog zaslona |
 | <kbd>R</kbd> | ponovno učitava sve karte |
 | <kbd>D</kbd> | duplicira prozor na vrhu |

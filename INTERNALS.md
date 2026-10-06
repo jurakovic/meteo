@@ -275,7 +275,7 @@ Where the reports go and how they are read is in the worker's repository ([meteo
 
 ## Dialogs
 
-There are three dialogs, the picker, the manual and the changelog, and one set of chrome under all of them ([`page/dialog.js`](./src/_assets/js/page/dialog.js)), since the landing page carries the documents too. A panel is a dialog by carrying `.dialog`, and names its storage key with `data-dialog-key` (`msPanel`, `manualPanel`, `changelogPanel`). Class names follow the split: `dialog-*` is the chrome every dialog shares (`dialog-head`, `dialog-body`, `dialog-backdrop`, `body.dialog-open`…), `ms-*` (*map settings*) the settings dialog's own and its tab's.
+There are four dialogs, the picker, the manual, the changelog and the links, and one set of chrome under all of them ([`page/dialog.js`](./src/_assets/js/page/dialog.js)), since the landing page carries the documents and the links too. A panel is a dialog by carrying `.dialog`, and names its storage key with `data-dialog-key` (`msPanel`, `manualPanel`, `changelogPanel`, `linksPanel`). Class names follow the split: `dialog-*` is the chrome every dialog shares (`dialog-head`, `dialog-body`, `dialog-backdrop`, `body.dialog-open`…), `ms-*` (*map settings*) the settings dialog's own and its tab's.
 
 - **One at a time.** Opening one shuts any other, so there is a single backdrop, a single scroll lock and a single Escape to reason about.
 - **Announced.** `setDialogVisible()` announces every change on `dialog-toggled`, the dialog shut to make room as much as the one asked for: what hangs off a shut (a document's hash) has no other way of hearing about it.
@@ -298,7 +298,7 @@ The `.ms-tab` keeps its own click above the backdrop and shuts the dialog the sa
 **A window, on the desktop.** A dialog is dragged by its head and resized from any side or corner through the widgets' own `.po-h` handles, appended inside the panel so the press that grabs one is a press inside the dialog.
 
 - Until it is resized its height is the content's, capped to what is left below its top; a resize pins an explicit height.
-- Where and how big (`msPanel`, `manualPanel`, `changelogPanel`): left and top as fractions of the viewport, width in px, and height in px once pinned. Applied on open (measurable only once shown) and on a window resize, so it cannot be stranded off screen. A press that never moved stores nothing.
+- Where and how big (`msPanel`, `manualPanel`, `changelogPanel`, `linksPanel`): left and top as fractions of the viewport, width in px, and height in px once pinned. Applied on open (measurable only once shown) and on a window resize, so it cannot be stranded off screen. A press that never moved stores nothing.
 - A double-click on the head drops the lot and gives the CSS its dialog back.
 - A link or button on the head is itself: *Zatvori*, and at the left end the way home (`.dialog-home`, below).
 
@@ -319,6 +319,10 @@ The `.ms-tab` keeps its own click above the backdrop and shuts the dialog the sa
 - The order above is not filtered: a row dropped between two visible neighbours would land somewhere else entirely once the term was cleared.
 - The term stands through a preset picked and a row returned, and is applied again wherever rows arrive.
 - `:empty` cannot speak for a list whose rows are all merely hidden, so `.ms-no-hits` carries that message.
+
+### The links dialog
+
+`#linksDialog`, on both pages, opened and shut by `L` (the `links-dialog` command) and by nothing on the page: the *Linkovi* button still scrolls to the foldable list at the foot, which the dialog is for reaching where the foot is not, the board above all. Its body is a copy of the foot's `.links`, taken on every open (`initLinksDialog()`, `page/links.js`), so the list is written once, in `links.c.html`, and the dev page, where the foot arrives by a fetch, never copies it empty for good. In the dialog the list is unfolded and laid out in as many columns as the dialog's own width holds (`auto-fill`), since the dialog is moved and resized apart from the viewport the foot's three columns follow.
 
 ### The tab
 
@@ -577,6 +581,7 @@ Keys are for what the buttons cannot do in one gesture, and for backing out of w
 | `K` | the settings dialog (*Karte*) | customize page |
 | `H` | the manual (*help*; not `?`, which takes Shift on one layout and AltGr on another) | both pages |
 | `C` | the changelog | both pages |
+| `L` | the links dialog | both pages |
 | `Enter` | *Primijeni* while the picker is up | the dialog |
 | `Escape` | shuts the dialog, else ends a fullscreen map | both pages |
 | `R` | reloads every map with something to re-fetch | desktop |
@@ -611,7 +616,7 @@ Both are on the bar only: over a frame the page never sees them, and on an inter
 | `mapRefresh` | auto-refresh | no |
 | `msTab` | where the tab was put | no |
 | `msSort` | how the dialog's available maps are sorted | no |
-| `msPanel`, `manualPanel`, `changelogPanel` | where and how big each dialog was put | no |
+| `msPanel`, `manualPanel`, `changelogPanel`, `linksPanel` | where and how big each dialog was put | no |
 
 Every key is named once, in `STORAGE_KEYS` (`lib/storage.js`), and every read and write goes through `readJson()`/`writeJson()`/`removeKey()`, which never throw. With storage refused or full, a write is kept for the session and read back from there, so the view still works (a private window, a blocked site). Everything read back from storage or `?v=` passes a guard (`isValidPrefs`, `isValidPreset`, the filter on hidden presets, `sanitizeSnapLayout`): an unknown preset id is rejected rather than kept.
 

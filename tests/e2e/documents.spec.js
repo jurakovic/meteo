@@ -1,6 +1,31 @@
 // The documents on both pages, the changelog and the manual: their links,
-// keys and addresses, in dialogs of the shared chrome
+// keys and addresses, in dialogs of the shared chrome; and the links dialog
 import { test, expect } from './fixtures.js';
+
+for (const which of ['landing', 'customize']) {
+	test(`L opens the foot's links in a dialog on the ${which} page, unfolded, and shuts it`, async ({ page, paths }) => {
+		await page.goto(paths[which]);
+		const foot = page.locator('.maps-foot .links a');
+		await expect(foot.first()).toBeAttached(); // included in dev, inlined when built
+		const dialog = page.locator('#linksDialog');
+		await page.keyboard.press('l');
+		await expect(dialog).toBeVisible();
+		await expect(dialog.locator('.dialog-title')).toHaveText('Linkovi');
+		expect(await dialog.locator('.dialog-body a').count()).toBe(await foot.count());
+		await expect(dialog.locator('.dialog-body a', { hasText: 'Meteoalarm' })).toBeVisible(); // the foot's list stays folded
+		await page.keyboard.press('l');
+		await expect(dialog).toBeHidden();
+		await page.keyboard.press('l');
+		await dialog.locator('.dialog-close').click();
+		await expect(dialog).toBeHidden();
+		await page.keyboard.press('l');
+		await page.keyboard.press('Escape');
+		await expect(dialog).toBeHidden();
+		// the Linkovi button still scrolls to the foot, not to the dialog
+		await page.locator('[data-action="links"]').click();
+		await expect(dialog).toBeHidden();
+	});
+}
 
 for (const which of ['landing', 'customize']) {
 	test.describe(`changelog on the ${which} page`, () => {

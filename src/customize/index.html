@@ -80,7 +80,20 @@
 			<!-- changelog -->
 		</div>
 	</div>
-	<button type="button" class="ms-tab" data-action="ms-tab" title="Karte (K)"><span class="ms-tab-name">Karte</span></button>
+	<!-- the links at the foot of the page, in a window of their own: L opens it
+	     from wherever the foot is out of reach, the board too; filled on open from
+	     the foot's own list (page/links.js) -->
+	<div class="dialog links-dialog" id="linksDialog" data-dialog-key="linksPanel" hidden>
+		<div class="dialog-head">
+			<span class="dialog-head-left">
+				<a class="dialog-home" href="/" title="Početna"><img src="/_assets/img/favicon-32x32.png" alt="Početna"></a>
+				<span class="dialog-title">Linkovi</span>
+			</span>
+			<a class="dialog-close" data-track="dialog-close" title="Zatvori (Esc)">Zatvori</a>
+		</div>
+		<div class="dialog-body"></div>
+	</div>
+	<button type="button" class="ms-tab"data-action="ms-tab" title="Karte (K)"><span class="ms-tab-name">Karte</span></button>
 	<div class="page-foot">
 		<nav class="footer-top">
 			<a data-action="top">Povratak na vrh</a>

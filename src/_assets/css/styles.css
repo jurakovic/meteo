@@ -2373,6 +2373,22 @@ body.fs-lock {
 		}
 }
 
+/* the same list in its dialog (page/links.js): unfolded, and in as many
+   columns as the dialog's own width holds, since it is moved and resized
+   apart from the viewport the foot's three columns follow. A column wraps
+   under another rather than beside it, so the rule between them goes */
+.links-dialog .links {
+	max-height: none;
+	grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+	gap: 0 16px;
+	padding: 6px 10px 10px;
+}
+
+	.links-dialog .links .item {
+		margin: 0;
+		border-right: none;
+	}
+
 /* the page's own links over the footer; held to the bottom of a short page
    as one block, since two sticky siblings would both stick to the same edge */
 .page-foot {
