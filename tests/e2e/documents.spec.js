@@ -46,6 +46,17 @@ for (const which of ['landing', 'customize']) {
 			await expect(page).not.toHaveURL(/#/);
 		});
 
+		test('the footer link is the newest day\'s date', async ({ page }) => {
+			const link = page.locator('.footer-top [data-action="changelog"]');
+			const date = link.locator('time.updated');
+			await expect(date).toHaveText(/^\d{4}-\d{2}-\d{2}$/);
+			const day = await date.textContent();
+			await link.click();
+			const dialog = page.locator('#changelogDialog');
+			await expect(dialog).toBeVisible();
+			await expect(dialog.locator('.dialog-body h2').first()).toHaveText(day);
+		});
+
 		test('C toggles it', async ({ page }) => {
 			const dialog = page.locator('#changelogDialog');
 			await page.keyboard.press('c');

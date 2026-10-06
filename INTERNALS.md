@@ -57,7 +57,7 @@ Open <http://localhost:8081/meteo/>
 
 [`scripts/build.mjs`](./scripts/build.mjs) produces `docs/` from `src/` by processing every `.html` file outside `_components/`:
 
-1. fills the landing page's `<div data-maps>` with its map rows (see [Maps](#maps)), then injects the manual and the changelog at their placeholders (`<!-- manual -->`, `<!-- changelog -->`; see [Documents on the site](#documents-on-the-site)) and drops the dialog bodies' dev-only includes; each fragment is also written to `_components/` for the dev pages. Both run before the path rewrites, so a path the rows or the documents grow later is rewritten with every other
+1. fills the landing page's `<div data-maps>` with its map rows (see [Maps](#maps)), then injects the manual and the changelog at their placeholders (`<!-- manual -->`, `<!-- changelog -->`; see [Documents on the site](#documents-on-the-site)) and the changelog's newest date into the top footer's `<time class="updated">`, dropping the dev-only includes; each fragment is also written to `_components/` for the dev pages. Both run before the path rewrites, so a path the rows or the documents grow later is rewritten with every other
 2. minifies the CSS (clean-css), bundles each page's entry module with everything it imports (esbuild), minifies it (terser), and inlines both in place of their `<link>`/`<script type="module">` tags
 3. injects `_components/*.c.html` (seo, gtag, links) at their placeholders
 4. rewrites dev paths to GitHub Pages paths (`href="/customize/index.html` → `/meteo/customize/`, `href="/"` → `/meteo/"`, image paths, the extras stub's `url=`)
@@ -647,9 +647,11 @@ Two documents are shown on the site, the manual and the changelog (what changed 
 | source, converter | `MANUAL.hr.md`, [`scripts/manual.mjs`](./scripts/manual.mjs) | `CHANGELOG.hr.md`, [`scripts/changelog.mjs`](./scripts/changelog.mjs) |
 | dialog, storage key | `#manualDialog`, `manualPanel` | `#changelogDialog`, `changelogPanel` |
 | placeholder, dev fragment | `<!-- manual -->`, `manual.c.html` | `<!-- changelog -->`, `changelog.c.html` |
-| reached by | the top footer's *Upute*, `H`, `#upute` | the top footer's *Povijest promjena*, `C`, `#promjene` |
+| reached by | the top footer's *Upute*, `H`, `#upute` | the top footer's date, `C`, `#promjene` |
 
 The file is the only source, and the build makes HTML of it, each converter taking the text and returning the fragment's lines. The built pages get it inlined at the placeholder; the build also writes it to `src/_components/`, which the dev pages fetch through `include.js` (the `data-include-html` on the dialog's `.dialog-body`, stripped from the built pages). Those files are build output and git-ignored, so a page served from `src/` shows the documents as of the last build.
+
+**The footer's date.** The top footer's link to the changelog is not a name but the changelog's newest day (`2026-10-05`, in `<time class="updated">`), so it says when the site last changed and opens the list that says what. It is read from `CHANGELOG.hr.md` by `newestDay()` (`scripts/changelog.mjs`) at build time, the same way and with the same kind of dev fragment (`updated.c.html`) as the documents, so it can never say other than the list it opens: a day added to the changelog is the date the pages show from the next build. Its title still names the changelog, *Povijest promjena (C)*.
 
 A document is shown in a dialog rather than on a page of its own, so it can be read beside the maps it describes, and reached from the board, where there is no page. Both pages carry both (`.doc-dialog`, with the same `.dialog-home` in the head as the settings dialog, written as `href="/"` for the build to rewrite); the links sit in the top footer (`.footer-top`, above the `<footer>`). A dialog has no address, so a hash stands in: it opens the dialog on arrival or when the address is edited, and the dialog writes it and takes it away again through `replaceState` (assigning `location.hash` would stack a history entry per open). A document shut to make room for another dialog takes its hash with it, off `dialog-toggled`.
 

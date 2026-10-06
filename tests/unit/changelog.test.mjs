@@ -2,7 +2,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
-import { convertChangelog } from '../../scripts/changelog.mjs';
+import { convertChangelog, newestDay } from '../../scripts/changelog.mjs';
 
 test('days with and without a pull request, which is left out, their entries escaped, button glyphs as code', () => {
 	const html = convertChangelog([
@@ -46,6 +46,11 @@ test('lines outside the format throw, naming the line', () => {
 	]) {
 		assert.throws(() => convertChangelog(text), message, text);
 	}
+});
+
+test('the top footer\'s date is the newest day, its pull request left out', () => {
+	assert.equal(newestDay('> Intro.\r\n\r\n## 2026-10-05 (#44)\r\n- one\r\n\r\n## 2026-09-23\r\n- two'), '2026-10-05');
+	assert.equal(newestDay('> Only an intro.'), null);
 });
 
 const changelog = (name) => readFile(new URL(`../../${name}`, import.meta.url), 'utf8');
