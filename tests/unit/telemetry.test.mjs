@@ -17,6 +17,10 @@ globalThis.document = /** @type {any} */ ({
 	addEventListener: (type, handler) => listeners.document.set(type, handler)
 });
 
+// held, not run: a real one would keep the test process alive
+const intervals = [];
+globalThis.setInterval = /** @type {any} */ ((handler, ms) => intervals.push({ handler, ms }));
+
 function hide() {
 	globalThis.document.visibilityState = 'hidden';
 	listeners.document.get('visibilitychange')();
@@ -54,6 +58,19 @@ test('on the live site a hidden page sends the counts since the last report', ()
 	track('command', 'top');
 	hide();
 	assert.deepEqual(sent[1].body.events, [{ name: 'command', value: 'top', n: 1 }]);
+});
+
+test('a page in view sends every three minutes, and nothing when nothing was counted', () => {
+	assert.equal(intervals.length, 1);
+	const { handler, ms } = intervals[0];
+	assert.equal(ms, 3 * 60 * 1000);
+	const before = sent.length;
+	track('click', 'popout');
+	handler();
+	assert.equal(sent.length, before + 1);
+	assert.deepEqual(sent.at(-1).body.events, [{ name: 'click', value: 'popout', n: 1 }]);
+	handler();
+	assert.equal(sent.length, before + 1);
 });
 
 test('errors are reported with where they were thrown, at most five', () => {
@@ -94,6 +111,7 @@ test('with ?debug=1 off the live site the report is logged, not sent', async () 
 			page: 'landing',
 			events: [{ name: 'view', value: '', n: 1 }, { name: 'command', value: 'zoom', n: 1 }]
 		});
+		assert.equal(intervals.at(-1).ms, 10 * 1000);
 	} finally {
 		console.log = log;
 		globalThis.window.location.search = '';

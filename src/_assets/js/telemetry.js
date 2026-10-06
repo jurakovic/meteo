@@ -1,5 +1,5 @@
-// Usage counts and script errors, sent to the worker when the page is hidden:
-// no cookies, nothing stored, no id. See INTERNALS.md, Telemetry.
+// Usage counts and script errors, sent to the worker every few minutes and
+// when the page is hidden: no cookies, nothing stored, no id. See INTERNALS.md, Telemetry.
 
 import { dlog, isDebugEnabled } from './lib/debug.js';
 
@@ -8,6 +8,10 @@ const TELEMETRY_URL = 'https://meteo-data.jurakovic.workers.dev/t';
 const LIVE_HOST = 'jurakovic.github.io';
 // a loop throwing on every frame is a few reports, not thousands
 const MAX_ERRORS = 5;
+// a page that stays in view (a board on a second screen) reports as it goes;
+// ?debug=1 sooner, so a test sees its report without waiting
+const SEND_EVERY_MS = 3 * 60 * 1000;
+const DEBUG_SEND_EVERY_MS = 10 * 1000;
 
 /** @typedef {{ name: string, value: string, n: number }} TelemetryEvent */
 /** @typedef {{ page: string, events: TelemetryEvent[] }} TelemetryReport */
@@ -94,7 +98,7 @@ export function initTelemetry(name) {
 	if (!live && !isDebugEnabled()) return;
 	sending = live;
 	page = name;
-	dlog(`telemetry: counting on ${name}; a report is logged when the page is hidden`
+	dlog(`telemetry: counting on ${name}; a report is logged every 10 s and when the page is hidden`
 		+ (live ? `, and sent to ${TELEMETRY_URL}` : ', not sent off the live site'));
 	track('view');
 	// the build inlines the script, so line:col point into the page's
@@ -111,4 +115,6 @@ export function initTelemetry(name) {
 	document.addEventListener('visibilitychange', () => {
 		if (document.visibilityState === 'hidden') sendReport();
 	});
+	// nothing counted since the last report, nothing sent
+	setInterval(sendReport, isDebugEnabled() ? DEBUG_SEND_EVERY_MS : SEND_EVERY_MS);
 }

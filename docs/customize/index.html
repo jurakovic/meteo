@@ -1045,13 +1045,14 @@
 		return Nn().filter(t=>!t.classList.contains("fs-host")).reduce((t,e)=>!t||(Number(e.style.zIndex)||0)>=(Number(t.style.zIndex)||0)?e:t,null)
 		}var lr=0;var cr=0;!function(t){const e="jurakovic.github.io"===window.location.hostname&&"function"==typeof navigator.sendBeacon
 		;(e||C())&&(P=e,
-		I=t,A(`telemetry: counting on ${t}; a report is logged when the page is hidden`+(e?`, and sent to ${j}`:", not sent off the live site")),
+		I=t,A(`telemetry: counting on ${t}; a report is logged every 10 s and when the page is hidden`+(e?`, and sent to ${j}`:", not sent off the live site")),
 		B("view"),window.addEventListener("error",t=>H(t.message,`${t.lineno}:${t.colno}`)),
 		window.addEventListener("unhandledrejection",t=>H(t.reason&&t.reason.message||t.reason,"promise")),
 		window.addEventListener("click",t=>D(t),!0),window.addEventListener("auxclick",t=>{1===t.button&&D(t,!0)},!0),
-		document.addEventListener("visibilitychange",()=>{"hidden"===document.visibilityState&&W()}))}("customize"),ka=ya(M(y)),
-		fetch("https://meteo-data.jurakovic.workers.dev/config.json",{cache:"no-cache"}).then(t=>t.ok?t.json():Promise.reject(t.status)).then(t=>{
-		S(y,t);const e=ya(t);var n,o;o=ka,(n=e).size===o.size&&[...n].every(t=>o.has(t))||(ka=e,p(s))}).catch(()=>{}),Ba.forEach(({feature:t})=>{
+		document.addEventListener("visibilitychange",()=>{"hidden"===document.visibilityState&&W()}),setInterval(W,C()?1e4:18e4))}("customize"),
+		ka=ya(M(y)),fetch("https://meteo-data.jurakovic.workers.dev/config.json",{cache:"no-cache"
+		}).then(t=>t.ok?t.json():Promise.reject(t.status)).then(t=>{S(y,t);const e=ya(t);var n,o;o=ka,
+		(n=e).size===o.size&&[...n].every(t=>o.has(t))||(ka=e,p(s))}).catch(()=>{}),Ba.forEach(({feature:t})=>{
 		Pa[t]||document.documentElement.classList.add(`no-${t}`)}),function(){const t=new URLSearchParams(window.location.search).get("v")
 		;if(ha=t?function(t){try{const e=JSON.parse(atob(t.replace(/-/g,"+").replace(/_/g,"/")));if(aa(e))return e.name&&(e.name=Fo(e.name)),e
 		}catch{}return null}(t):null,!t)return;const e=!!(ha&&ha.layout&&ha.layout.dashboard);B("shared-link",ha?e?"board":"list":"invalid")}(),

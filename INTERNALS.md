@@ -240,7 +240,7 @@ On the customize page the tab's `[+]` menu leaves the map out too. The dialog st
 What visitors use, and the script errors they hit, are counted in the page and sent to the worker at `TELEMETRY_URL` (`/t` on the same worker as `config.json`). The code is [`telemetry.js`](./src/_assets/js/telemetry.js), started first by both entries so it sees an error in any step after it.
 
 - Only on the live site (`jurakovic.github.io`). Dev, the nginx containers and the browser suite's `meteo.test` count and send nothing.
-- `?debug=1` counts on any host and logs to the console: each event as it is counted, and each report when the page is hidden. Off the live site the report is logged instead of sent, so local testing never reaches the worker. On the live site it is logged and sent.
+- `?debug=1` counts on any host and logs to the console: each event as it is counted, and each report as it goes, which is every 10 seconds rather than 3 minutes, so a test sees its report without waiting. Off the live site the report is logged instead of sent, so local testing never reaches the worker. On the live site it is logged and sent.
 - What is counted:
   - a `view` per load
   - a `command` with its id each time a control or a key runs one (both paths in `page/commands.js`). A command whose `run` returns `false` did nothing and isn't counted: Escape with no map in fullscreen (`fullscreen-exit`). Primijeni is the `settings-apply` command whether it is clicked or Enter runs it, so it counts once either way.
@@ -248,7 +248,11 @@ What visitors use, and the script errors they hit, are counted in the page and s
   - `shared-link` when the customize page opens with `?v=`: `list`, `board`, or `invalid` for one that doesn't decode. Never which maps, which are the sharer's choice.
   - a `link` or a `click` for every press on anything clickable that isn't a command (below)
   - an `error` per uncaught error or rejected promise, as its message and `line:col`, at most five a load. In the build the script is inlined, so `line:col` points into the page's minified script in `docs/`.
-- Counts are added up in the page, `{ name, value } → n`, and sent as one report, `{ page, events: [{ name, value, n }] }`, when the page is hidden (`visibilitychange`), the last moment a mobile browser reliably gives it. A page hidden and shown again sends what was counted since. Errors go first in a report: the worker keeps only a report's first 60 events.
+- Counts are added up in the page, `{ name, value } → n`, and sent as a report, `{ page, events: [{ name, value, n }] }`, of what was counted since the last one:
+  - when the page is hidden (`visibilitychange`): another tab in front (one an outbound link opened, too), the window minimised or fully covered, the tab closed or left, the screen or phone locked. It is the last moment a mobile browser reliably gives the page.
+  - every 3 minutes, for a page that stays in view, a board on a second screen say, which would otherwise report only when closed, and lose it all to a crash, a power cut or sleep
+  - never when nothing was counted, so an idle page sends nothing. A count split over several reports is a D1 row written for each.
+- Errors go first in a report: the worker keeps only a report's first 60 events.
 - It goes by `navigator.sendBeacon` as a string, so as `text/plain`, which needs no CORS preflight; the reply is never read.
 - No cookie, nothing in storage, no id: a report says what was done on a page, not by whom. The worker adds the country Cloudflare reads off the request and keeps nothing else of it.
 
