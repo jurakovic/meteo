@@ -272,9 +272,9 @@
 		t.textContent=e?"Dvostruki dodir za pristup interaktivnoj karti":"Dvostruki klik za pristup interaktivnoj karti"})}
 		var j="mapConfig",R="showLinksBottom",H=new Map;function M(e){try{return JSON.parse(H.has(e)?H.get(e):localStorage.getItem(e))}catch{
 		return null}}function _(e,t){const r=JSON.stringify(t);try{localStorage.setItem(e,r),H.delete(e)}catch{H.set(e,r)}}function D(e){
-		const t=document.getElementById(e);t&&t.scrollIntoView({behavior:"smooth",block:"start"})}function C(e){
+		const t=document.getElementById(e);t&&t.scrollIntoView({behavior:"smooth",block:"start"})}function W(e){
 		const t=e.scrollWidth-e.clientWidth,r=e.scrollLeft;e.classList.toggle("can-scroll-left",r>1),
-		e.classList.toggle("can-scroll-right",t>1&&r<t-1)}function W(){l(".links-bottom").forEach(C)}var I=0,V=0;function F(e,t){
+		e.classList.toggle("can-scroll-right",t>1&&r<t-1)}function C(){l(".links-bottom").forEach(W)}var I=0,V=0;function F(e,t){
 		const r=e.getAttribute("data-slideshow-id"),a=e.querySelectorAll(".slide"),n=document.querySelectorAll(`.indicators-container[data-slideshow-id="${r}"] .indicator`)
 		;let o=t;o>a.length&&(o=1),o<1&&(o=a.length),e.setAttribute("data-current-slide",o),a.forEach(e=>e.classList.remove("active")),
 		a[o-1].classList.add("active"),n.forEach(e=>e.classList.remove("active")),n[o-1].classList.add("active"),function(e){
@@ -299,12 +299,12 @@
 		o=e.touches[0].clientY)}),e.addEventListener("touchend",e=>{if(!n)return
 		;const t=Math.abs(e.changedTouches[0].clientX-i),r=Math.abs(e.changedTouches[0].clientY-o);t<10&&r<10&&(n.style.opacity="0.6",
 		clearTimeout(S.get(n)),S.set(n,setTimeout(()=>n.style.removeProperty("opacity"),2e3)))})}),L(),l(".links-bottom").forEach(e=>{
-		e.addEventListener("scroll",()=>C(e),{passive:!0})}),W(),function(){
+		e.addEventListener("scroll",()=>W(e),{passive:!0})}),C(),function(){
 		const e=document.querySelectorAll("img"),t=c(".progress-bar"),r=c(".progress-container"),a=new Set(e),n=++I;if(clearTimeout(V),
 		t.style.width="0",r.style.removeProperty("display"),0===e.length)return void(r.style.display="none");const o=o=>{
 		I===n&&a.delete(o)&&(t.style.width=(e.length-a.size)/e.length*100+"%",0===a.size&&(V=setTimeout(()=>{r.style.display="none"},500)))}
 		;e.forEach(e=>{e.addEventListener("load",()=>o(e)),e.addEventListener("error",()=>{m(`Error loading image: ${e.src}`),
-		e.removeAttribute("src"),o(e)}),e.complete&&e.dispatchEvent(new Event("load"))})}()}var P=0;function N(e){
+		e.removeAttribute("src"),o(e)}),e.complete&&e.dispatchEvent(new Event("load"))})}()}var N=0;function P(e){
 		const t=e&&e.maps&&"object"==typeof e.maps?e.maps:{};return new Set(Object.keys(t).filter(e=>t[e]&&!1===t[e].enabled))}function Z(){
 		return M(j)}var U=new Set;var q={telemetry:!1};function $(e){const t=e&&e.features&&"object"==typeof e.features?e.features:{}
 		;return Object.fromEntries(Object.keys(q).map(e=>{const r=t[e]&&t[e].enabled;return[e,"boolean"==typeof r?r:q[e]]}))}var X=null
@@ -340,11 +340,13 @@
 		href:"https://www.meteociel.fr/observations-meteo/temperatures.php?region=it"},{text:"Pljusak",href:"https://pljusak.com/karta.php"}],ee=[{
 		text:"ESSL",href:"https://weather.essl.org/storm/"},{text:"ASTORP",href:"https://rawinsonde.com/ASTORP/ESTOFEX.html"},{text:"ESTOFEX",
 		href:"https://www.estofex.org"},{text:"ESWD",href:"https://www.eswd.eu"},{text:"Meteoalarm",href:"https://meteoalarm.org/en/live/region/HR"
-		}];function te(e,t){return e.filter(e=>e.text!==t)}function re(e,t){return{id:`dhmz-${e}`,category:"radar",name:`DHMZ | MRC ${t}`,
-		type:"slideshow",titleHref:`https://meteo.hr/podaci.php?section=podaci_mjerenja&param=radari&el=${e}&acto=anim`,maxWidth:720,
-		aspect:"720 / 751",slides:[`https://vrijeme.hr/anim_${e}.gif`,`https://vrijeme.hr/${e}-stat.png`]}}var ae=[{id:"neverin-radar-hr",
-		category:"radar",name:"Neverin | Radar | Hrvatska",type:"slideshow",titleHref:"https://www.neverin.hr/radar/",aspect:"880 / 640",
-		startSlide:2,
+		}],te=[{text:"ČHMÚ",href:"https://intranet.chmi.cz/aktualni-situace/aktualni-stav-pocasi/evropa/synopticka-situace"},{text:"DHMZ",
+		href:"https://meteo.hr/prognoze.php?section=prognoze_model&param=web_fronte_sutra12"},{text:"DWD",
+		href:"https://www.dwd.de/EN/ourservices/hobbymet_wcharts_europe/hobbyeuropecharts.html"}];function re(e,t){return e.filter(e=>e.text!==t)}
+		function ae(e,t){return{id:`dhmz-${e}`,category:"radar",name:`DHMZ | MRC ${t}`,type:"slideshow",
+		titleHref:`https://meteo.hr/podaci.php?section=podaci_mjerenja&param=radari&el=${e}&acto=anim`,maxWidth:720,aspect:"720 / 751",
+		slides:[`https://vrijeme.hr/anim_${e}.gif`,`https://vrijeme.hr/${e}-stat.png`]}}var ne=[{id:"neverin-radar-hr",category:"radar",
+		name:"Neverin | Radar | Hrvatska",type:"slideshow",titleHref:"https://www.neverin.hr/radar/",aspect:"880 / 640",startSlide:2,
 		slides:["https://maps.neverin.hr/radar/latest/hr/latest.webp","https://maps.neverin.hr/radar/latest/hr/anim.webp","https://maps.neverin.hr/radar/latest/hr/anim_6h.webp"],
 		links:Y},{id:"neverin-satelit-hr",category:"satelit",name:"Neverin | Satelit | Hrvatska",type:"slideshow",
 		titleHref:"https://www.neverin.hr/satelit/",aspect:"880 / 640",startSlide:2,
@@ -365,13 +367,13 @@
 		srcHr:"https://embed.windy.com/embed2.html?lat=44.5&lon=16.56&zoom=7&level=surface&overlay=radar&menu=&message=true&marker=&calendar=&pressure=&type=map&location=coordinates&detail=&detailLat=45.798&detailLon=15.936&metricWind=m%2Fs&metricTemp=%C2%B0C&radarRange=-1",
 		zoomHrDesktop:"&zoom=7",zoomHrMobile:"&zoom=6",
 		srcEu:"https://embed.windy.com/embed2.html?lat=48.0&lon=10.00&zoom=5&level=surface&overlay=radar&menu=&message=true&marker=&calendar=&pressure=&type=map&location=coordinates&detail=&detailLat=45.798&detailLon=15.936&metricWind=m%2Fs&metricTemp=%C2%B0C&radarRange=-1",
-		zoomEuDesktop:"&zoom=5",zoomEuMobile:"&zoom=3",links:te(Y,"Windy")},{id:"dhmz-radar",category:"radar",name:"DHMZ | Radar | Hrvatska",
+		zoomEuDesktop:"&zoom=5",zoomEuMobile:"&zoom=3",links:re(Y,"Windy")},{id:"dhmz-radar",category:"radar",name:"DHMZ | Radar | Hrvatska",
 		type:"slideshow",titleHref:"https://meteo.hr/podaci.php?section=podaci_mjerenja&param=radari&el=kompozit&acto=anim",maxWidth:720,
 		aspect:"720 / 751",slides:["https://vrijeme.hr/anim_kompozit.gif","https://vrijeme.hr/kompozit-stat.png"],links:Y},{id:"meteociel-temp",
 		category:"temperatura",name:"Meteociel.fr | Temperatura",type:"slideshow",maxWidth:768,slides:[{title:{text:"Meteociel.fr | Temperatura",
 		href:"https://www.meteociel.fr/observations-meteo/temperatures.php?region=it"},img:"https://www.meteociel.fr/cartes_obs/temp_it.png",
 		aspect:"1"},{title:{text:"Meteociel.fr | Temperatura",href:"https://www.meteociel.fr/observations-meteo/temperatures.php?region=eur2"},
-		img:"https://www.meteociel.com/cartes_obs/temp_eur2.png",aspect:"1"}],links:te(G,"Meteociel")},{id:"blitzortung",category:"munje",
+		img:"https://www.meteociel.com/cartes_obs/temp_eur2.png",aspect:"1"}],links:re(G,"Meteociel")},{id:"blitzortung",category:"munje",
 		name:"Blitzortung.org | Munje",type:"iframe",frameId:"blitzortung",titleHref:"https://map.blitzortung.org/#6/44.5/16.5",
 		srcHr:"https://map.blitzortung.org/index.php?interactive=1&NavigationControl=1&FullScreenControl=0&Cookies=0&InfoDiv=0&MenuButtonDiv=0&ScaleControl=0&CirclesRangeValue=1&LinksCheckboxChecked=0&LinksRangeValue=0&MapStyle=1&MapStyleRangeValue=3&Advertisment=0#6/44.5/16.5",
 		zoomHrDesktop:"#6/",zoomHrMobile:"#5/",
@@ -381,13 +383,13 @@
 		text:"Neverin",href:"https://www.neverin.hr/munje/"}]},{id:"essl",category:"nevrijeme",name:"ESSL | Prognoza nevremena",type:"slideshow",
 		titleHref:"https://stormforecast.eu",maxWidth:900,aspect:"900 / 600",startSlide:2,
 		slides:["https://meteo-data.jurakovic.workers.dev/essl/img1.png","https://meteo-data.jurakovic.workers.dev/essl/img2.png","https://meteo-data.jurakovic.workers.dev/essl/img3.png"],
-		links:te(ee,"ESSL")},{id:"astorp",category:"nevrijeme",name:"ASTORP | Prognoza nevremena",type:"slideshow",
+		links:re(ee,"ESSL")},{id:"astorp",category:"nevrijeme",name:"ASTORP | Prognoza nevremena",type:"slideshow",
 		titleHref:"https://rawinsonde.com/ASTORP/ESTOFEX.html",aspect:"1048 / 850",
 		slides:["https://rawinsonde.com/ASTORP/Results/ESTOFEX_DAY_1.jpg","https://rawinsonde.com/ASTORP/Results/ESTOFEX_DAY_2.jpg","https://rawinsonde.com/ASTORP/Results/ESTOFEX_DAY_3.jpg","https://rawinsonde.com/ASTORP/Results/ESTOFEX_DAY_4.jpg","https://rawinsonde.com/ASTORP/Results/ESTOFEX_DAY_5.jpg","https://rawinsonde.com/ASTORP/Results/ESTOFEX_DAY_6.jpg","https://rawinsonde.com/ASTORP/Results/ESTOFEX_DAY_7.jpg"],
-		links:te(ee,"ASTORP")},{id:"estofex",category:"nevrijeme",name:"ESTOFEX | Prognoza nevremena",type:"slideshow",
+		links:re(ee,"ASTORP")},{id:"estofex",category:"nevrijeme",name:"ESTOFEX | Prognoza nevremena",type:"slideshow",
 		titleHref:"https://www.estofex.org",maxWidth:800,aspect:"1",
 		slides:["https://meteo-data.jurakovic.workers.dev/estofex/img1.png","https://meteo-data.jurakovic.workers.dev/estofex/img2.png"],
-		links:te(ee,"ESTOFEX")},{id:"eumetnet",category:"radar",name:"EUMETNET",type:"iframe-basic",
+		links:re(ee,"ESTOFEX")},{id:"eumetnet",category:"radar",name:"EUMETNET",type:"iframe-basic",
 		titleHref:"https://www.eumetnet.eu/observations/opera-radar-animation/",src:"https://cdn.fmi.fi/demos/eumetnet-web-site-radar-animator/",
 		links:K},{id:"meteociel-satelit",category:"satelit",name:"Meteociel.fr | Satelit",type:"slideshow",maxWidth:768,slides:[{title:{
 		text:"Meteociel.fr | Satelit",
@@ -403,9 +405,8 @@
 		href:"https://intranet.chmi.cz/predpovedi/predpovedi-pocasi/evropa/synopticka-situace"},
 		img:"https://intranet.chmi.cz/files/portal/docs/meteo/om/evropa/preba/preba60.gif",aspect:"760 / 435"},{title:{
 		href:"https://intranet.chmi.cz/predpovedi/predpovedi-pocasi/evropa/synopticka-situace"},
-		img:"https://intranet.chmi.cz/files/portal/docs/meteo/om/evropa/preba/preba84.gif",aspect:"760 / 435"}],links:[{text:"DHMZ",
-		href:"https://meteo.hr/prognoze.php?section=prognoze_model&param=web_fronte_sutra12"}]},{id:"neverin-kamera",category:"kamera",
-		name:"Neverin | Kamera | Zagreb",title:"Neverin | Kamera | Zagreb-Remetinečki rotor",type:"image",
+		img:"https://intranet.chmi.cz/files/portal/docs/meteo/om/evropa/preba/preba84.gif",aspect:"760 / 435"}],links:re(te,"ČHMÚ")},{
+		id:"neverin-kamera",category:"kamera",name:"Neverin | Kamera | Zagreb",title:"Neverin | Kamera | Zagreb-Remetinečki rotor",type:"image",
 		titleHref:"https://www.neverin.hr/kamere/",aspect:"1280 / 720",img:"https://webcams.neverin.hr/7332072588/latest.jpg"},{
 		id:"meteoblue-prognoza",category:"prognoza",name:"meteoblue | Prognoza",type:"slideshow",eagerSlides:!0,slides:[{title:{
 		text:"meteoblue | Prognoza | Zagreb",href:"https://www.meteoblue.com/en/weather/week/zagreb_croatia_3186886"},
@@ -423,17 +424,17 @@
 		name:"Ventusky",type:"iframe",frameId:"ventusky",scaled:!0,loading:"eager",
 		titleHref:"https://www.ventusky.com/?p=44.5;16.5;6&l=radar&w=off",srcHr:"https://embed.ventusky.com/?p=44.5;16.5;6&l=radar&w=off",
 		zoomHrDesktop:";6&",zoomHrMobile:";6&",srcEu:"https://embed.ventusky.com/?p=48.0;10.0;4&l=radar&w=off",zoomEuDesktop:";4&",
-		zoomEuMobile:";3&",links:te(Y,"Ventusky")},{id:"rainviewer",category:"radar",name:"Rain Viewer",type:"iframe",frameId:"rainViewer",
+		zoomEuMobile:";3&",links:re(Y,"Ventusky")},{id:"rainviewer",category:"radar",name:"Rain Viewer",type:"iframe",frameId:"rainViewer",
 		scaled:!0,titleHref:"https://www.rainviewer.com/map.html?loc=44.5,16.5,6&oCS=1&c=5&lm=1&layer=radar&sm=1&sn=2&ts=1",
 		srcHr:"https://www.rainviewer.com/map.html?loc=44.8,16.5,6.3&oCS=1&c=5&lm=1&layer=radar&sm=1&sn=2&ts=1",zoomHrDesktop:",6.3&",
 		zoomHrMobile:",5.8&",srcEu:"https://www.rainviewer.com/map.html?loc=48.0,10.0,4.0&oCS=1&c=5&lm=1&layer=radar&sm=1&sn=2&ts=1",
-		zoomEuDesktop:",4.0&",zoomEuMobile:",3.2&",links:te(Y,"Rain Viewer")},{id:"weatherandradar",category:"radar",name:"Vrijeme&Radar",
+		zoomEuDesktop:",4.0&",zoomEuMobile:",3.2&",links:re(Y,"Rain Viewer")},{id:"weatherandradar",category:"radar",name:"Vrijeme&Radar",
 		type:"iframe",frameId:"weatherAndRadar",scaled:!0,
 		titleHref:"https://www.vrijemeradar.hr/vremenski-radar/zagreb/18138691?center=44.5,16.5&zoom=7&layer=wr&tz=Europe%2FZagreb",
 		srcHr:"https://radar.wo-cloud.com/pwa/?center=44.5,16.5&zoom=7.2&tz=Europe/Zagreb&tf=HH:mm&tempunit=celsius&windunit=kph&showShareButton=false&lang=en-US&placemarkName=Zagreb&desktop=true&fadeTop=true",
 		zoomHrDesktop:"&zoom=7.2",zoomHrMobile:"&zoom=6.8",
 		srcEu:"https://radar.wo-cloud.com/pwa/?center=48.0,10.0&zoom=5.0&tz=Europe/Zagreb&tf=HH:mm&tempunit=celsius&windunit=kph&showShareButton=false&lang=en-US&placemarkName=Zagreb&desktop=true&fadeTop=true",
-		zoomEuDesktop:"&zoom=5.0",zoomEuMobile:"&zoom=4.0",links:te(Y,"Vrijeme&Radar")},{id:"meteo-si",category:"radar",name:"meteo.si",
+		zoomEuDesktop:"&zoom=5.0",zoomEuMobile:"&zoom=4.0",links:re(Y,"Vrijeme&Radar")},{id:"meteo-si",category:"radar",name:"meteo.si",
 		type:"slideshow",titleHref:"https://meteo.arso.gov.si/met/sl/weather/observ/radar/",maxWidth:821,aspect:"821 / 660",
 		slides:["https://meteo.arso.gov.si/uploads/probase/www/observ/radar/si0-rm-anim.gif?nocache","https://meteo.arso.gov.si/uploads/probase/www/observ/radar/si0-rm.gif?nocache"],
 		links:Y},{id:"idokep-radar-eu",category:"radar",name:"Időkép | Radar | Europa",type:"image",titleHref:"https://www.idokep.eu/ceu/radar",
@@ -455,82 +456,80 @@
 		img:"https://www.wetterzentrale.de/en/create_gif.php?model=ECM&member=OP&var=5&map=IT&run=06&speed=250&times=0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47",
 		alt:"Wetterzentrale Temperatura",links:G},{id:"dhmz-sinopticka",category:"sinoptika",name:"DHMZ | Sinoptička karta",type:"image",
 		titleHref:"https://meteo.hr/prognoze.php?section=prognoze_model&param=web_fronte_sutra12",maxWidth:720,aspect:"1",
-		img:"https://prognoza.hr/web_fronte_sutra12.jpg",links:[{text:"ČHMÚ",
-		href:"https://intranet.chmi.cz/aktualni-situace/aktualni-stav-pocasi/evropa/synopticka-situace"}]},{id:"dwd-sinopticka",
-		category:"sinoptika",name:"DWD | Sinoptička karta",type:"slideshow",
-		titleHref:"https://www.dwd.de/EN/ourservices/hobbymet_wcharts_europe/hobbyeuropecharts.html",maxWidth:800,aspect:"800 / 653",
+		img:"https://prognoza.hr/web_fronte_sutra12.jpg",links:re(te,"DHMZ")},{id:"dwd-sinopticka",category:"sinoptika",
+		name:"DWD | Sinoptička karta",type:"slideshow",titleHref:"https://www.dwd.de/EN/ourservices/hobbymet_wcharts_europe/hobbyeuropecharts.html",
+		maxWidth:800,aspect:"800 / 653",
 		slides:["https://www.dwd.de/DWD/wetter/wv_spez/hobbymet/wetterkarten/ico_tkboden_na_v36.png","https://www.dwd.de/DWD/wetter/wv_spez/hobbymet/wetterkarten/ico_tkboden_na_036.png","https://www.dwd.de/DWD/wetter/wv_spez/hobbymet/wetterkarten/ico_tkboden_na_048.png","https://www.dwd.de/DWD/wetter/wv_spez/hobbymet/wetterkarten/ico_tkboden_na_060.png","https://www.dwd.de/DWD/wetter/wv_spez/hobbymet/wetterkarten/ico_tkboden_na_084.png","https://www.dwd.de/DWD/wetter/wv_spez/hobbymet/wetterkarten/ico_tkboden_na_108.png"],
-		links:[{text:"ČHMÚ",href:"https://intranet.chmi.cz/aktualni-situace/aktualni-stav-pocasi/evropa/synopticka-situace"},{text:"DHMZ",
-		href:"https://meteo.hr/prognoze.php?section=prognoze_model&param=web_fronte_sutra12"}]
-		},re("puntijarka","Puntijarka"),re("bilogora","Bilogora"),re("gradiste","Gradište"),re("goli","Goli"),re("debeljak","Debeljak"),re("uljenje","Uljenje")],ne=new Map(ae.map(e=>[e.id,e]))
-		;function oe(e){return ne.get(e)||null}
-		var ie=["neverin-radar-hr","neverin-satelit-hr","neverin-radar-eu","neverin-satelit-eu","windy","dhmz-radar","meteociel-temp","blitzortung","essl","astorp","estofex","eumetnet","meteociel-satelit","dwd-sinopticka","neverin-kamera","meteoblue-prognoza"],se={
-		slideshow:{build:function(e,t,r={}){const a=e.id+me(t),n=e.startSlide||1,o=e.slides.some(e=>"string"!=typeof e),s=i("div",{
+		links:re(te,"DWD")
+		},ae("puntijarka","Puntijarka"),ae("bilogora","Bilogora"),ae("gradiste","Gradište"),ae("goli","Goli"),ae("debeljak","Debeljak"),ae("uljenje","Uljenje")],oe=new Map(ne.map(e=>[e.id,e]))
+		;function ie(e){return oe.get(e)||null}
+		var se=["neverin-radar-hr","neverin-satelit-hr","neverin-radar-eu","neverin-satelit-eu","windy","dhmz-radar","meteociel-temp","blitzortung","essl","astorp","estofex","eumetnet","meteociel-satelit","dwd-sinopticka","neverin-kamera","meteoblue-prognoza"],le={
+		slideshow:{build:function(e,t,r={}){const a=e.id+he(t),n=e.startSlide||1,o=e.slides.some(e=>"string"!=typeof e),s=i("div",{
 		class:o?"slideshow":"slideshow placeholder","data-slideshow-id":a,"data-current-slide":n,"data-dynamic-width":e.dynamicWidth?"":void 0,
-		style:(he(e)+(o?"":` aspect-ratio: ${e.aspect};`)).trim()||void 0});e.slides.forEach((t,a)=>{
+		style:(pe(e)+(o?"":` aspect-ratio: ${e.aspect};`)).trim()||void 0});e.slides.forEach((t,a)=>{
 		const l=a===n-1,c=o?t:null,d=c?c.img:t,m=l||e.eagerSlides?i("img",{src:d}):i("img",{"data-src":d,class:"lazy"}),h=i("div",{
 		class:"slide fade"+(l?" active":"")});if(c){const t=c.maxWidth||e.maxWidth,a={text:c.title.text||e.name,href:c.title.href}
-		;h.appendChild(pe(a,{},e.titleHref?null:ue(r))),h.appendChild(i("div",{class:"placeholder",
+		;h.appendChild(ue(a,{},e.titleHref?null:we(r))),h.appendChild(i("div",{class:"placeholder",
 		style:`${t?`max-width: ${t}px; `:""}aspect-ratio: ${c.aspect};`},[m]))}else h.appendChild(m);s.appendChild(h)});const l=i("a",{
 		class:"prev"+(o?" shorter":""),"data-action":"slide","data-step":"-1",html:"&#10094;"}),c=i("a",{class:"next"+(o?" shorter":""),
 		"data-action":"slide","data-step":"1",html:"&#10095;"});s.appendChild(l),s.appendChild(c);const d=i("div",{class:"indicators-container",
-		"data-slideshow-id":a,style:`${he(e)} grid-template-columns: repeat(${e.slides.length}, 1fr);`.trim()});return e.slides.forEach((e,t)=>{
-		d.appendChild(i("span",{class:"indicator"+(t===n-1?" active":"")}))}),[e.titleHref?we(e,r):null,s,d]},freeAspect:!1,fullscreen:!1,reload:le
-		},image:{build:function(e,t,r={}){return[we(e,r),i("div",{class:"placeholder",style:`${he(e)} aspect-ratio: ${e.aspect};`.trim()},[i("img",{
-		src:e.img,alt:e.alt})])]},freeAspect:!1,fullscreen:!1,reload:le},video:{build:function(e,t,r={}){const a=i("video",{controls:""
+		"data-slideshow-id":a,style:`${pe(e)} grid-template-columns: repeat(${e.slides.length}, 1fr);`.trim()});return e.slides.forEach((e,t)=>{
+		d.appendChild(i("span",{class:"indicator"+(t===n-1?" active":"")}))}),[e.titleHref?ge(e,r):null,s,d]},freeAspect:!1,fullscreen:!1,reload:ce
+		},image:{build:function(e,t,r={}){return[ge(e,r),i("div",{class:"placeholder",style:`${pe(e)} aspect-ratio: ${e.aspect};`.trim()},[i("img",{
+		src:e.img,alt:e.alt})])]},freeAspect:!1,fullscreen:!1,reload:ce},video:{build:function(e,t,r={}){const a=i("video",{controls:""
 		},[i("source",{type:"video/mp4",src:e.src})]);a.muted=!0,a.autoplay=!0,a.loop=!0
-		;const n=`${he(e)}${e.aspect?` aspect-ratio: ${e.aspect};`:""}`.trim();return[we(e,r),i("div",{class:"placeholder",style:n||void 0
+		;const n=`${pe(e)}${e.aspect?` aspect-ratio: ${e.aspect};`:""}`.trim();return[ge(e,r),i("div",{class:"placeholder",style:n||void 0
 		},[i("div",{class:"vid1"},[a])])]},freeAspect:!1,fullscreen:!1,reload:function(e){e.querySelectorAll("video").forEach(e=>{
-		e.querySelectorAll("source[src]").forEach(e=>{e.src=ce(e.getAttribute("src"))}),e.load()})}},iframe:{build:function(e,t,r={}){
-		const a=e.frameId+me(t),n=a[0].toUpperCase()+a.slice(1),o=i("a",{class:"left zoom-btn","data-mode":"hr","data-action":"zoom","data-frame":a,
+		e.querySelectorAll("source[src]").forEach(e=>{e.src=de(e.getAttribute("src"))}),e.load()})}},iframe:{build:function(e,t,r={}){
+		const a=e.frameId+he(t),n=a[0].toUpperCase()+a.slice(1),o=i("a",{class:"left zoom-btn","data-mode":"hr","data-action":"zoom","data-frame":a,
 		text:"[HR]"}),s=i("a",{class:"fs-btn","data-action":"fullscreen","data-frame":a,text:"[ ]"}),l=i("div",{class:"radartitle"},[o,i("a",{
-		class:"center",href:e.titleHref,target:"_blank",rel:"nofollow",text:e.name}),i("span",{class:"right right-cluster"},[...ue(r,!0)||[],i("a",{
+		class:"center",href:e.titleHref,target:"_blank",rel:"nofollow",text:e.name}),i("span",{class:"right right-cluster"},[...we(r,!0)||[],i("a",{
 		id:`reset${n}Frame`,"data-frame-id":a,"data-action":"gate",style:"display:none",text:"[X]"}),s])]),c=i("div",{class:"if1 placeholder"
 		},[i("iframe",{id:a,class:e.scaled?"scaled-iframe":void 0,loading:e.loading||"lazy",frameborder:"0","data-src-hr":e.srcHr,
 		"data-zoom-hr-desktop":e.zoomHrDesktop,"data-zoom-hr-mobile":e.zoomHrMobile,"data-src-eu":e.srcEu,"data-zoom-eu-desktop":e.zoomEuDesktop,
 		"data-zoom-eu-mobile":e.zoomEuMobile}),i("div",{class:"overlay",id:`overlay${n}Frame`,"data-frame-id":a},[i("span",{class:"hint",
 		text:"Dvostruki klik za pristup interaktivnoj karti"})])]);return[l,c]},freeAspect:!0,fullscreen:!0,reload:null},"iframe-basic":{
-		build:function(e,t,r={}){return[we(e,r),i("div",{class:"if2 placeholder"},[i("iframe",{loading:"lazy",src:e.src,frameborder:"0",
+		build:function(e,t,r={}){return[ge(e,r),i("div",{class:"if2 placeholder"},[i("iframe",{loading:"lazy",src:e.src,frameborder:"0",
 		scrolling:"no"})])]},freeAspect:!0,fullscreen:!1,reload:function(e){e.querySelectorAll("iframe[src]").forEach(e=>{
-		e.src=e.getAttribute("src")})}}};function le(e){e.querySelectorAll("img[src]").forEach(e=>{e.src=ce(e.getAttribute("src"))})}function ce(e){
-		const t=e.replace(/([?&])_r=\d+(&|$)/,(e,t,r)=>r?t:"");return`${t}${t.includes("?")?"&":"?"}_r=${Date.now()}`}var de="#";function me(e){
-		const t=function(e){const t=Number(String(e).split(de)[1]);return t>1?t:1}(e);return t>1?`Copy${t}`:""}function he(e){
-		return e.maxWidth?`max-width: ${e.maxWidth}px;`:""}function pe(e,t={},r=null){return i("div",{class:"radartitle",style:he(t)||void 0
+		e.src=e.getAttribute("src")})}}};function ce(e){e.querySelectorAll("img[src]").forEach(e=>{e.src=de(e.getAttribute("src"))})}function de(e){
+		const t=e.replace(/([?&])_r=\d+(&|$)/,(e,t,r)=>r?t:"");return`${t}${t.includes("?")?"&":"?"}_r=${Date.now()}`}var me="#";function he(e){
+		const t=function(e){const t=Number(String(e).split(me)[1]);return t>1?t:1}(e);return t>1?`Copy${t}`:""}function pe(e){
+		return e.maxWidth?`max-width: ${e.maxWidth}px;`:""}function ue(e,t={},r=null){return i("div",{class:"radartitle",style:pe(t)||void 0
 		},[i("a",{href:e.href,target:"_blank",rel:"nofollow",text:e.text}),r&&r.length?i("span",{class:"right right-cluster"},r):null])}
-		function ue(e,t=!1){return e.titleButtons?e.titleButtons(t):null}function we(e,t){return pe({text:e.title||e.name,href:e.titleHref},e,ue(t))
-		}function ge(e,t,r={}){e.replaceChildren(),t.length?t.forEach(t=>function(e,t,r={}){const a=i("div",{class:"map-block","data-map-id":t.id,
-		"data-inst":t.id},function(e,t=e.id,r={}){const a=se[e.type];return a?a.build(e,t,r):[]}(t,t.id,r)),n=i("div",{class:"map-entry"},[a])
-		;t.links&&t.links.length&&n.appendChild(function(e){const t=i("div",{class:"links-bottom",style:he(e)||void 0})
+		function we(e,t=!1){return e.titleButtons?e.titleButtons(t):null}function ge(e,t){return ue({text:e.title||e.name,href:e.titleHref},e,we(t))
+		}function fe(e,t,r={}){e.replaceChildren(),t.length?t.forEach(t=>function(e,t,r={}){const a=i("div",{class:"map-block","data-map-id":t.id,
+		"data-inst":t.id},function(e,t=e.id,r={}){const a=le[e.type];return a?a.build(e,t,r):[]}(t,t.id,r)),n=i("div",{class:"map-entry"},[a])
+		;t.links&&t.links.length&&n.appendChild(function(e){const t=i("div",{class:"links-bottom",style:pe(e)||void 0})
 		;return e.links.forEach((e,r)=>{r>0&&t.appendChild(document.createTextNode(" · ")),t.appendChild(i("a",{href:e.href,target:"_blank",
 		rel:"nofollow",text:e.text}))}),t}(t));return e.appendChild(n),a}(e,t,r)):e.appendChild(i("div",{class:"map-entry"},[i("div",{
-		class:"maps-empty",text:'Nema odabranih karata. Odaberite ih pod "Karte".'})]))}var fe=!1;function ve(){
-		const e=document.querySelector("[data-maps]");if(!e)return!1;fe=!0;const t=ie.map(oe).filter(e=>{return e&&(t=e.id,!U.has(t));var t
+		class:"maps-empty",text:'Nema odabranih karata. Odaberite ih pod "Karte".'})]))}var ve=!1;function ye(){
+		const e=document.querySelector("[data-maps]");if(!e)return!1;ve=!0;const t=se.map(ie).filter(e=>{return e&&(t=e.id,!U.has(t));var t
 		}),r=t.map(e=>e.id);return(!r.length||function(e){return[...e.querySelectorAll(":scope > .map-entry > .map-block")].map(e=>e.dataset.mapId)
-		}(e).join()!==r.join())&&(ge(e,t),!0)}var ye="https://meteo-data.jurakovic.workers.dev/t",ke=new Map,be=0,Ee="",xe=!1,ze=!1;function Ae(){
-		return!!Ee&&(Q("telemetry")||d())}function Se(e,t=""){if(!Ae())return;const r=JSON.stringify([e,String(t)]);ke.set(r,(ke.get(r)||0)+1),
-		m("telemetry:",e,t)}function Le(e,t){!Ae()||be>=5||(be++,Se("error",`${String(e).slice(0,160)} @ ${t}`))}function je(e,t=!1){
+		}(e).join()!==r.join())&&(fe(e,t),!0)}var ke="https://meteo-data.jurakovic.workers.dev/t",be=new Map,Ee=0,xe="",ze=!1,Ae=!1;function Se(){
+		return!!xe&&(Q("telemetry")||d())}function Le(e,t=""){if(!Se())return;const r=JSON.stringify([e,String(t)]);be.set(r,(be.get(r)||0)+1),
+		m("telemetry:",e,t)}function je(e,t){!Se()||Ee>=5||(Ee++,Le("error",`${String(e).slice(0,160)} @ ${t}`))}function Re(e,t=!1){
 		const r=e.target instanceof Element?e.target.closest('a, button, summary, [role="button"], input[type="checkbox"], input[type="radio"], [data-track]'):null
 		;if(!r||r.closest("[data-action]"))return;const[a,n]=function(e){const t=e.getAttribute("data-track");if(t)return["click",t]
 		;const r="A"===e.tagName?e.getAttribute("href"):null;if(r){if(r.startsWith("#"))return["link",r];const e=new URL(r,window.location.href)
 		;return["link",e.origin===window.location.origin?e.pathname:e.hostname]}const a=e.classList[0]
-		;return["click",e.tagName.toLowerCase()+(a?`.${a}`:"")]}(r);t&&"link"!==a||Se(a,n)}function Re(){!ze&&Ae()&&(ze=!0,Se("view"))}
-		function He(){const e=function(){if(!ke.size)return null;const e=[...ke].map(([e,t])=>{const[r,a]=JSON.parse(e);return{name:r,value:a,n:t}})
-		;return ke.clear(),e.sort((e,t)=>Number("error"===t.name)-Number("error"===e.name)),{page:Ee,events:e}}();if(!e)return
-		;const t=xe&&Q("telemetry");m(t?"telemetry: sent":`telemetry: not sent (${xe?"switched off":"not the live site"})`,e),
-		t&&navigator.sendBeacon(ye,JSON.stringify(e))}function Me(e,t,r){return Math.min(Math.max(e,t),Math.max(t,r))}function _e(e){
-		return Math.round(1e4*e)/1e4}var De=0;function Ce(e){De=e}function We(){return document.documentElement.clientWidth-De}function Ie(){
-		return document.documentElement.clientHeight}var Ve=["n","ne","e","se","s","sw","w","nw"];var Fe=120;function Te(){return l(".dialog")}
-		function Oe(){return Te().find(e=>!e.hidden)||null}function Be(){return!!Oe()}function Pe(e){return e.getAttribute("data-dialog-key")}
-		function Ne(e){const t=Pe(e);t&&function(e){H.delete(e);try{localStorage.removeItem(e)}catch{}}(t)}function Ze(){
-		return Math.max(360,We()-16)}function Ue(){return Math.max(Fe,Ie()-16)}function qe(e,t,r,a,n){a=Me(a,360,Ze()),
+		;return["click",e.tagName.toLowerCase()+(a?`.${a}`:"")]}(r);t&&"link"!==a||Le(a,n)}function He(){!Ae&&Se()&&(Ae=!0,Le("view"))}
+		function Me(){const e=function(){if(!be.size)return null;const e=[...be].map(([e,t])=>{const[r,a]=JSON.parse(e);return{name:r,value:a,n:t}})
+		;return be.clear(),e.sort((e,t)=>Number("error"===t.name)-Number("error"===e.name)),{page:xe,events:e}}();if(!e)return
+		;const t=ze&&Q("telemetry");m(t?"telemetry: sent":`telemetry: not sent (${ze?"switched off":"not the live site"})`,e),
+		t&&navigator.sendBeacon(ke,JSON.stringify(e))}function _e(e,t,r){return Math.min(Math.max(e,t),Math.max(t,r))}function De(e){
+		return Math.round(1e4*e)/1e4}var We=0;function Ce(e){We=e}function Ie(){return document.documentElement.clientWidth-We}function Ve(){
+		return document.documentElement.clientHeight}var Fe=["n","ne","e","se","s","sw","w","nw"];var Te=120;function Oe(){return l(".dialog")}
+		function Be(){return Oe().find(e=>!e.hidden)||null}function Ne(){return!!Be()}function Pe(e){return e.getAttribute("data-dialog-key")}
+		function Ze(e){const t=Pe(e);t&&function(e){H.delete(e);try{localStorage.removeItem(e)}catch{}}(t)}function Ue(){
+		return Math.max(360,Ie()-16)}function qe(){return Math.max(Te,Ve()-16)}function $e(e,t,r,a,n){a=_e(a,360,Ue()),
 		e.style.width=`${Math.round(a)}px`,e.style.maxWidth="none",e.style.right="auto",e.style.margin="0",null===n?(e.style.height="",
-		e.style.maxHeight=`${Math.round(Math.max(Fe,Ie()-Math.max(0,r)-8))}px`):(e.style.maxHeight="none",
-		e.style.height=`${Math.round(Me(n,Fe,Ue()))}px`),e.style.left=`${Math.round(Me(t,0,Math.max(0,We()-e.offsetWidth)))}px`,
-		e.style.top=`${Math.round(Me(r,0,Math.max(0,Ie()-e.offsetHeight)))}px`}function $e(e){
-		["left","top","width","height","maxWidth","maxHeight","right","margin"].forEach(t=>e.style[t]="")}function Xe(e){if(!e||e.hidden)return
+		e.style.maxHeight=`${Math.round(Math.max(Te,Ve()-Math.max(0,r)-8))}px`):(e.style.maxHeight="none",
+		e.style.height=`${Math.round(_e(n,Te,qe()))}px`),e.style.left=`${Math.round(_e(t,0,Math.max(0,Ie()-e.offsetWidth)))}px`,
+		e.style.top=`${Math.round(_e(r,0,Math.max(0,Ve()-e.offsetHeight)))}px`}function Xe(e){
+		["left","top","width","height","maxWidth","maxHeight","right","margin"].forEach(t=>e.style[t]="")}function Qe(e){if(!e||e.hidden)return
 		;const t=h.matches?function(e){const t=Pe(e);if(!t)return null;const r=M(t)
 		;return r&&"object"==typeof r&&Number.isFinite(r.left)&&Number.isFinite(r.top)&&r.width>0?{left:r.left,top:r.top,width:r.width,
-		height:r.height>0?r.height:null}:null}(e):null;t?qe(e,t.left*We(),t.top*Ie(),t.width,t.height):$e(e)}function Qe(e){
+		height:r.height>0?r.height:null}:null}(e):null;t?$e(e,t.left*Ie(),t.top*Ve(),t.width,t.height):Xe(e)}function Ye(e){
 		e.addEventListener("pointerdown",t=>{if(0!==t.button||!h.matches)return
 		;const r=t.target.closest(".po-h"),a=!r&&t.target.closest(".dialog-head")&&!t.target.closest("a, button, input");if(!r&&!a)return
 		;t.preventDefault();const n=e.getBoundingClientRect(),o=r?r.dataset.dir:null,i=e.style.height?n.height:null;let s=!1;!function(e,t,r,a){
@@ -540,64 +539,64 @@
 		document.removeEventListener("keydown",d),document.removeEventListener("keyup",d),document.body.classList.remove("po-dragging"),r&&r()}
 		;document.body.classList.add("po-dragging"),document.addEventListener("pointermove",c),document.addEventListener("pointerup",m),
 		document.addEventListener("pointercancel",m),document.addEventListener("keydown",d),document.addEventListener("keyup",d)}(t,(t,r)=>{
-		if(!s&&!t&&!r)return;if(s=!0,!o)return void qe(e,n.left+t,n.top+r,n.width,i);let{w:a,h:l}=function(e,t,r,a){let n=t.width,o=t.height
+		if(!s&&!t&&!r)return;if(s=!0,!o)return void $e(e,n.left+t,n.top+r,n.width,i);let{w:a,h:l}=function(e,t,r,a){let n=t.width,o=t.height
 		;return e.includes("e")&&(n=t.width+r),e.includes("w")&&(n=t.width-r),e.includes("s")&&(o=t.height+a),e.includes("n")&&(o=t.height-a),{w:n,
-		h:o}}(o,n,t,r);a=Me(a,360,Ze()),l=Me(l,Fe,Ue()),qe(e,o.includes("w")?n.right-a:n.left,o.includes("n")?n.bottom-l:n.top,a,l)},()=>{
-		s&&function(e){const t=Pe(e);if(!t)return;const r=e.getBoundingClientRect(),a={left:_e(r.left/We()),top:_e(r.top/Ie()),
+		h:o}}(o,n,t,r);a=_e(a,360,Ue()),l=_e(l,Te,qe()),$e(e,o.includes("w")?n.right-a:n.left,o.includes("n")?n.bottom-l:n.top,a,l)},()=>{
+		s&&function(e){const t=Pe(e);if(!t)return;const r=e.getBoundingClientRect(),a={left:De(r.left/Ie()),top:De(r.top/Ve()),
 		width:Math.round(r.width)};e.style.height&&(a.height=Math.round(r.height)),_(t,a)}(e)})}),e.addEventListener("dblclick",t=>{
-		h.matches&&t.target.closest(".dialog-head")&&!t.target.closest("a, button, input")&&($e(e),Ne(e))})}function Ye(t,r){n(e,{panel:t,visible:r
-		})}function Ke(e,t){t&&Te().forEach(t=>{t===e||t.hidden||(t.hidden=!0,Ye(t,!1))}),e.hidden=!t,function(){const e=Be()
+		h.matches&&t.target.closest(".dialog-head")&&!t.target.closest("a, button, input")&&(Xe(e),Ze(e))})}function Ke(t,r){n(e,{panel:t,visible:r
+		})}function Je(e,t){t&&Oe().forEach(t=>{t===e||t.hidden||(t.hidden=!0,Ke(t,!1))}),e.hidden=!t,function(){const e=Ne()
 		;if(e&&!document.documentElement.classList.contains("dialog-gutter")){const e=window.innerWidth-document.documentElement.clientWidth
 		;e>0&&(Ce(e),document.documentElement.classList.add("dialog-gutter"))}else e||(Ce(0),
 		document.documentElement.classList.remove("dialog-gutter"));document.body.classList.toggle("dialog-open",e);const t=c(".dialog-backdrop")
-		;t&&(t.hidden=!e,e&&t.classList.remove("dialog-spent"))}(),t&&Xe(e),Ye(e,t)}function Je(){const e=Oe();return e&&Ke(e,!1),!!e}
-		var Ge=new Map,et=[];function tt(e,{run:t,keys:r=[],keyWhen:a=()=>!0,keepDefault:n=!1,capture:o=!1}){const i={id:e,run:t,keys:r,keyWhen:a,
-		keepDefault:n,capture:o};Ge.set(e,i),r.length&&et.push(i)}function rt(e,t=null,r=null){!1!==e.run(t,r)&&Se("command",e.id)}var at,nt={
-		manual:!0,changelog:!0},ot=[{feature:"manual",dialogId:"manualDialog",hash:"upute",keys:["h","H"]},{feature:"changelog",
-		dialogId:"changelogDialog",hash:"promjene",keys:["c","C"]}];function it(e){try{return decodeURIComponent(e.slice(1))}catch{return e.slice(1)
-		}}function st({feature:t,dialogId:r,hash:a,keys:n}){const i=document.getElementById(r);if(!i||!nt[t])return
-		;const s=i.querySelector(".dialog-close");s&&s.addEventListener("click",()=>Ke(i,!1)),i.addEventListener("click",e=>{
+		;t&&(t.hidden=!e,e&&t.classList.remove("dialog-spent"))}(),t&&Qe(e),Ke(e,t)}function Ge(){const e=Be();return e&&Je(e,!1),!!e}
+		var et=new Map,tt=[];function rt(e,{run:t,keys:r=[],keyWhen:a=()=>!0,keepDefault:n=!1,capture:o=!1}){const i={id:e,run:t,keys:r,keyWhen:a,
+		keepDefault:n,capture:o};et.set(e,i),r.length&&tt.push(i)}function at(e,t=null,r=null){!1!==e.run(t,r)&&Le("command",e.id)}var nt,ot={
+		manual:!0,changelog:!0},it=[{feature:"manual",dialogId:"manualDialog",hash:"upute",keys:["h","H"]},{feature:"changelog",
+		dialogId:"changelogDialog",hash:"promjene",keys:["c","C"]}];function st(e){try{return decodeURIComponent(e.slice(1))}catch{return e.slice(1)
+		}}function lt({feature:t,dialogId:r,hash:a,keys:n}){const i=document.getElementById(r);if(!i||!ot[t])return
+		;const s=i.querySelector(".dialog-close");s&&s.addEventListener("click",()=>Je(i,!1)),i.addEventListener("click",e=>{
 		const t=e.target.closest('a[href^="#"]');t&&i.contains(t)&&(e.preventDefault(),function(e,t){
 		const r=e.querySelector(".dialog-body"),a=e.querySelector(`[id="${CSS.escape(t)}"]`)
-		;r&&a&&(r.scrollTop+=a.getBoundingClientRect().top-r.getBoundingClientRect().top)}(i,it(t.getAttribute("href"))))}),
-		o(e,({panel:e,visible:t})=>{e===i&&(!function(e,t){const r=new URL(window.location.href);t!==(it(r.hash)===e)&&(r.hash=t?e:"",
-		history.replaceState(null,"",t?r.href:r.href.replace(/#$/,"")))}(a,t),t&&(i.querySelector(".dialog-body").scrollTop=0))}),tt(t,{keys:n,
-		run:()=>function(e){e&&Ke(e,e.hidden)}(i)});const l=()=>{const e=it(window.location.hash)===a;e!==!i.hidden&&Ke(i,e)}
+		;r&&a&&(r.scrollTop+=a.getBoundingClientRect().top-r.getBoundingClientRect().top)}(i,st(t.getAttribute("href"))))}),
+		o(e,({panel:e,visible:t})=>{e===i&&(!function(e,t){const r=new URL(window.location.href);t!==(st(r.hash)===e)&&(r.hash=t?e:"",
+		history.replaceState(null,"",t?r.href:r.href.replace(/#$/,"")))}(a,t),t&&(i.querySelector(".dialog-body").scrollTop=0))}),rt(t,{keys:n,
+		run:()=>function(e){e&&Je(e,e.hidden)}(i)});const l=()=>{const e=st(window.location.hash)===a;e!==!i.hidden&&Je(i,e)}
 		;window.addEventListener("hashchange",l),l()}
-		at="landing",((xe="jurakovic.github.io"===window.location.hostname&&"function"==typeof navigator.sendBeacon)||d())&&(Ee=at,
-		m(`telemetry: counting on ${at}; a report is logged every 10 s and when the page is hidden`+(xe?Q("telemetry")?`, and sent to ${ye}`:", not sent while switched off":", not sent off the live site")),
-		Re(),o(r,()=>{Q("telemetry")?Re():d()||ke.clear()}),window.addEventListener("error",e=>Le(e.message,`${e.lineno}:${e.colno}`)),
-		window.addEventListener("unhandledrejection",e=>Le(e.reason&&e.reason.message||e.reason,"promise")),
-		window.addEventListener("click",e=>je(e),!0),window.addEventListener("auxclick",e=>{1===e.button&&je(e,!0)},!0),
-		document.addEventListener("visibilitychange",()=>{"hidden"===document.visibilityState&&He()}),setInterval(He,d()?1e4:18e4)),U=N(Z()),
+		nt="landing",((ze="jurakovic.github.io"===window.location.hostname&&"function"==typeof navigator.sendBeacon)||d())&&(xe=nt,
+		m(`telemetry: counting on ${nt}; a report is logged every 10 s and when the page is hidden`+(ze?Q("telemetry")?`, and sent to ${ke}`:", not sent while switched off":", not sent off the live site")),
+		He(),o(r,()=>{Q("telemetry")?He():d()||be.clear()}),window.addEventListener("error",e=>je(e.message,`${e.lineno}:${e.colno}`)),
+		window.addEventListener("unhandledrejection",e=>je(e.reason&&e.reason.message||e.reason,"promise")),
+		window.addEventListener("click",e=>Re(e),!0),window.addEventListener("auxclick",e=>{1===e.button&&Re(e,!0)},!0),
+		document.addEventListener("visibilitychange",()=>{"hidden"===document.visibilityState&&Me()}),setInterval(Me,d()?1e4:18e4)),U=P(Z()),
 		X=$(Z()),fetch("https://meteo-data.jurakovic.workers.dev/config.json",{cache:"no-cache"
 		}).then(e=>e.ok?e.json():Promise.reject(e.status)).then(e=>{_(j,e);const a=$(e),o=Object.keys(a).some(e=>a[e]!==Q(e));X=a,o&&n(r)
-		;const i=N(e);var s,l;l=U,(s=i).size===l.size&&[...s].every(e=>l.has(e))||(U=i,n(t))}).catch(()=>{}),ot.forEach(({feature:e})=>{
-		nt[e]||document.documentElement.classList.add(`no-${e}`)}),tt("top",{run:()=>{window.scrollTo({top:0,behavior:"smooth"})}}),tt("links",{
-		run:()=>D("links")}),tt("links-bottom",{run:e=>function(e){document.body.classList.toggle("show-links-bottom",e.checked),_(R,e.checked?1:0),
-		W()}(e)}),tt("slide",{run:e=>{return t=e.closest(".slideshow"),r=Number(e.dataset.step),
-		void F(t,parseInt(t.getAttribute("data-current-slide"))+r);var t,r}}),tt("zoom",{run:e=>x(e.dataset.frame,e)}),tt("fullscreen",{
+		;const i=P(e);var s,l;l=U,(s=i).size===l.size&&[...s].every(e=>l.has(e))||(U=i,n(t))}).catch(()=>{}),it.forEach(({feature:e})=>{
+		ot[e]||document.documentElement.classList.add(`no-${e}`)}),rt("top",{run:()=>{window.scrollTo({top:0,behavior:"smooth"})}}),rt("links",{
+		run:()=>D("links")}),rt("links-bottom",{run:e=>function(e){document.body.classList.toggle("show-links-bottom",e.checked),_(R,e.checked?1:0),
+		C()}(e)}),rt("slide",{run:e=>{return t=e.closest(".slideshow"),r=Number(e.dataset.step),
+		void F(t,parseInt(t.getAttribute("data-current-slide"))+r);var t,r}}),rt("zoom",{run:e=>x(e.dataset.frame,e)}),rt("fullscreen",{
 		run:e=>function(e,t){m(`toggleFullscreen: ${e}`);const r=document.getElementById(e).parentElement
 		;if(r.classList.contains("fullscreen"))return void A(r);const o=r.querySelector(".overlay");z.set(r,!o||"none"!==o.style.display),
 		r.classList.add("fullscreen"),r.previousElementSibling.classList.add("fullscreen"),
 		r.closest(".map-block.snapped")||document.body.classList.add("fs-lock"),n(a),t.textContent="[-]",o&&(o.style.display="none"),
-		k(e,"fullscreen")}(e.dataset.frame,e)}),tt("gate",{run:e=>function(e){const t=e.dataset.frameId;switch(e.dataset.state){case"exit":
-		b(t).removeAttribute("style"),k(t,"reset");break;case"reset":f(g(t)),k(t,"hidden");break;case"fullscreen":f(g(t))}}(e)}),tt("dialog-close",{
-		keys:["Escape"],keyWhen:()=>Be(),keepDefault:!0,run:()=>Je()}),tt("fullscreen-exit",{keys:["Escape"],keyWhen:()=>!Be(),keepDefault:!0,
+		k(e,"fullscreen")}(e.dataset.frame,e)}),rt("gate",{run:e=>function(e){const t=e.dataset.frameId;switch(e.dataset.state){case"exit":
+		b(t).removeAttribute("style"),k(t,"reset");break;case"reset":f(g(t)),k(t,"hidden");break;case"fullscreen":f(g(t))}}(e)}),rt("dialog-close",{
+		keys:["Escape"],keyWhen:()=>Ne(),keepDefault:!0,run:()=>Ge()}),rt("fullscreen-exit",{keys:["Escape"],keyWhen:()=>!Ne(),keepDefault:!0,
 		run:()=>function(){const e=c(".if1.fullscreen");return!!e&&(A(e),!0)}()}),document.addEventListener("click",e=>{
-		const t=e.target,r=t.closest&&t.closest("[data-action]"),a=r&&Ge.get(r.dataset.action);a&&rt(a,r,e)}),
+		const t=e.target,r=t.closest&&t.closest("[data-action]"),a=r&&et.get(r.dataset.action);a&&at(a,r,e)}),
 		document.addEventListener("keydown",e=>{if(e.altKey||e.ctrlKey||e.metaKey||function(e){const t=e
 		;return!!t&&"function"==typeof t.matches&&t.matches('input:not([type="radio"]):not([type="checkbox"]), textarea, [contenteditable]')
-		}(e.target))return;const t=et.find(t=>t.keys.includes(e.key)&&t.keyWhen(e));t&&(t.keepDefault||e.preventDefault(),
-		t.capture&&e.stopPropagation(),rt(t,null,e))},!0),window.addEventListener("resize",()=>{clearTimeout(P),P=setTimeout(()=>{w(),L(),W()},200)
-		}),o(t,()=>{fe&&ve()&&B()}),s(ve),s(function(){Te().forEach(e=>{!function(e){e.querySelectorAll(":scope > .po-h").forEach(e=>e.remove()),
-		Ve.forEach(t=>{const r=document.createElement("div");r.className=`po-h po-h-${t}`,r.dataset.dir=t,e.appendChild(r)})}(e),Qe(e)}),function(){
-		const e=c(".dialog-backdrop");e&&e.addEventListener("pointerdown",t=>{if(!Be())return;t.preventDefault(),Je(),e.hidden=!1,
-		e.classList.add("dialog-spent");let r=0;const a=()=>{clearTimeout(r),e.classList.remove("dialog-spent"),e.hidden=!Be(),
+		}(e.target))return;const t=tt.find(t=>t.keys.includes(e.key)&&t.keyWhen(e));t&&(t.keepDefault||e.preventDefault(),
+		t.capture&&e.stopPropagation(),at(t,null,e))},!0),window.addEventListener("resize",()=>{clearTimeout(N),N=setTimeout(()=>{w(),L(),C()},200)
+		}),o(t,()=>{ve&&ye()&&B()}),s(ye),s(function(){Oe().forEach(e=>{!function(e){e.querySelectorAll(":scope > .po-h").forEach(e=>e.remove()),
+		Fe.forEach(t=>{const r=document.createElement("div");r.className=`po-h po-h-${t}`,r.dataset.dir=t,e.appendChild(r)})}(e),Ye(e)}),function(){
+		const e=c(".dialog-backdrop");e&&e.addEventListener("pointerdown",t=>{if(!Ne())return;t.preventDefault(),Ge(),e.hidden=!1,
+		e.classList.add("dialog-spent");let r=0;const a=()=>{clearTimeout(r),e.classList.remove("dialog-spent"),e.hidden=!Ne(),
 		document.removeEventListener("click",n,!0),document.removeEventListener("pointerup",o),document.removeEventListener("pointercancel",a)
 		},n=e=>{e.stopPropagation(),e.preventDefault(),a()},o=()=>{r=setTimeout(a,400)};document.addEventListener("click",n,!0),
-		document.addEventListener("pointerup",o),document.addEventListener("pointercancel",a)})}(),window.addEventListener("resize",()=>Xe(Oe()))}),
-		s(function(){ot.forEach(st)}),s(function(){!function(){const e=document.querySelector(".links-toggle");e&&(e.checked=1===M(R),
+		document.addEventListener("pointerup",o),document.addEventListener("pointercancel",a)})}(),window.addEventListener("resize",()=>Qe(Be()))}),
+		s(function(){it.forEach(lt)}),s(function(){!function(){const e=document.querySelector(".links-toggle");e&&(e.checked=1===M(R),
 		document.body.classList.toggle("show-links-bottom",e.checked))}(),B(),function(){const e=c(".expandable"),t=c(".links")
 		;e.addEventListener("click",()=>{const r=e.querySelector(".arrow");if(t.style.maxHeight)return t.style.maxHeight="",void(r.textContent="▼")
 		;t.style.maxHeight=`${t.scrollHeight}px`,r.textContent="▲",setTimeout(()=>{document.documentElement.style.scrollBehavior="auto",
