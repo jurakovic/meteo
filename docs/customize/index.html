@@ -27,12 +27,12 @@
 	<style>
 		:root{--c-page:#212f45;--c-surface:#202c40;--c-surface-deep:#1a2536;--c-field:#1b2735;--c-chip:#2b3a52;--c-control:#485871;--c-control-hover
 		:#5f6f89;--c-row-hover:#3a4a66;--c-line:#3d4d6a;--c-muted:#8a94a8;--c-mark:#93a4bd;--c-title:#2b5797;--c-links:#3a3f4a;--c-accent:#ff9800;
-		--c-board:#4a8de6;--c-board-deep:#22385c;--z-progress:1000;--z-column-ground:3999;--z-grid:4000;--z-shadows-under:4400;--z-fullscreen-host:
-		4500;--z-fullscreen-host-bar:4501;--z-shadows:4900;--z-widgets:5000;--z-widgets-top:7999;--z-column-ui:8000;--z-snap-preview:8500;
-		--z-fullscreen:9999;--z-fullscreen-bar:10000;--z-backdrop:99999;--z-dialog:100000;--z-menu:100001}body{background-color:var(--c-page);
-		font-family:monospace;min-height:100vh;margin:0;padding:0}.container{margin:8px}.maps,a,h2,td{color:#fff}h2{text-align:center}a{
-		text-decoration:none}a:hover{text-decoration:underline}.maps{display:block;width:100%;max-width:875px;margin:0 auto}.maps-head{margin-bottom
-		:12px}.map-entry,.maps-head,.maps-links-head{text-align:center}
+		--c-board:#4a8de6;--c-board-deep:#22385c;--c-board-dim:#32598e;--z-progress:1000;--z-column-ground:3999;--z-grid:4000;--z-shadows-under:4400
+		;--z-fullscreen-host:4500;--z-fullscreen-host-bar:4501;--z-shadows:4900;--z-widgets:5000;--z-widgets-top:7999;--z-column-ui:8000;
+		--z-snap-preview:8500;--z-fullscreen:9999;--z-fullscreen-bar:10000;--z-backdrop:99999;--z-dialog:100000;--z-menu:100001}body{
+		background-color:var(--c-page);font-family:monospace;min-height:100vh;margin:0;padding:0}.container{margin:8px}.maps,a,h2,td{color:#fff}h2{
+		text-align:center}a{text-decoration:none}a:hover{text-decoration:underline}.maps{display:block;width:100%;max-width:875px;margin:0 auto}
+		.maps-head{margin-bottom:12px}.map-entry,.maps-head,.maps-links-head{text-align:center}
 		:where(.map-block:not(.popout)) :is(.radartitle,.slideshow,.placeholder,.indicators-container),:where(.map-entry)>.links-bottom{
 		margin-inline:auto}.map-entry+.map-entry{margin-top:24px}@media (max-width:800px){.map-entry+.map-entry{margin-top:12px}}[data-action]{
 		cursor:pointer}.placeholder{background-color:var(--c-surface)}.radartitle{position:relative;max-width:100%;background-color:var(--c-title);
@@ -177,13 +177,13 @@
 		.dialog .ms-find.ms-find-set .ms-find-clear{display:block}.dialog .ms-find-clear:hover{opacity:1}.dialog .ms-available .ms-item.ms-filtered{
 		display:none}.dialog .ms-item.ms-off{display:none}.dialog .ms-available.ms-no-hits::after{content:"Nema karte za taj pojam";display:block;
 		padding:2px 0;font-style:italic;opacity:.6}.dialog .ms-mode{display:flex;align-items:center;gap:14px;margin:10px 0 4px;padding:8px 10px;
-		background-color:var(--c-surface-deep);border:1px solid var(--c-line);border-left:4px solid var(--c-board)}.dialog .ms-mode.ms-on{
+		background-color:var(--c-surface-deep);border:1px solid var(--c-line);border-left:4px solid var(--c-board-dim)}.dialog .ms-mode.ms-on{
 		background-color:var(--c-board-deep);border-color:var(--c-board)}.dialog .ms-mode .btn{flex:none;padding:0 14px}
 		.dialog .ms-mode .btn .new-tag{position:static;transform:none}.dialog .ms-grid{display:flex;align-items:center;gap:6px;color:var(--c-muted);
 		cursor:pointer;user-select:none}.dialog .ms-mode.ms-on .ms-grid{color:#fff}.dialog .ms-grid.ms-off{opacity:.45;cursor:default}
 		.dialog .ms-mode .ms-arrange{flex:none;margin-left:auto;padding:0 14px}.dialog .ms-mode .ms-arrange:disabled{opacity:.45;cursor:default}
 		.dialog .ms-refresh{display:flex;align-items:center;gap:10px;margin:4px 0;padding:8px 10px;background-color:var(--c-surface-deep);border:1px
-		 solid var(--c-line);border-left:4px solid var(--c-board);color:var(--c-muted)}.dialog .ms-refresh.ms-on{background-color:
+		 solid var(--c-line);border-left:4px solid var(--c-board-dim);color:var(--c-muted)}.dialog .ms-refresh.ms-on{background-color:
 		var(--c-board-deep);border-color:var(--c-board);color:#fff}.dialog .ms-refresh label{display:flex;align-items:center;gap:6px;cursor:pointer;
 		user-select:none}.dialog .ms-refresh-every{padding:2px 4px;border:1px solid var(--c-control);border-radius:3px;background-color:
 		var(--c-field);color:inherit;font-family:inherit;font-size:inherit}.dialog .ms-refresh-left{margin-left:auto;font-variant-numeric:

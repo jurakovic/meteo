@@ -18,6 +18,7 @@
 	--c-accent: #ff9800; /* the site's orange: the tab, what is selected or wrong */
 	--c-board: #4a8de6; /* the board's blue: its rows, groups, the snap preview */
 	--c-board-deep: #22385c; /* a board row that is on */
+	--c-board-dim: #32598e; /* a board row's edge while it is off: the blue halfway into the row */
 
 	--z-progress: 1000; /* the loading bar */
 	--z-column-ground: 3999; /* a snap column's ground, under its panes */
@@ -1710,7 +1711,7 @@ body.fs-lock {
 		padding: 8px 10px;
 		background-color: var(--c-surface-deep);
 		border: 1px solid var(--c-line);
-		border-left: 4px solid var(--c-board);
+		border-left: 4px solid var(--c-board-dim);
 	}
 
 		.dialog .ms-mode.ms-on {
@@ -1778,7 +1779,7 @@ body.fs-lock {
 		padding: 8px 10px;
 		background-color: var(--c-surface-deep);
 		border: 1px solid var(--c-line);
-		border-left: 4px solid var(--c-board);
+		border-left: 4px solid var(--c-board-dim);
 		color: var(--c-muted);
 	}
 
