@@ -1,6 +1,12 @@
 
 > Generirano korištenjem AI-ja.
 
+## 2026-10-07
+- dodani "Linkovi" u prozoru, otvaraju se tipkom L, pa su dostupni i s nadzorne ploče
+- dodan Meteoalarm u linkove ispod prognoza nevremena
+- sinoptičke karte (ČHMÚ, DHMZ, DWD) sada svaka ima link na obje druge
+- ostali manji ispravci i dorade
+
 ## 2026-10-05 (#44)
 - dodana "Povijest promjena", otvara se iz podnožja ili tipkom C
 - dodane "Upute", otvaraju se iz podnožja ili tipkom H

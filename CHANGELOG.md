@@ -1,6 +1,12 @@
 
 > AI-generated content.
 
+## 2026-10-07
+- added the links ("Linkovi") in a window, opened with the L key, so they can be reached from the dashboard too
+- added Meteoalarm to the links under the storm forecasts
+- every synoptic chart (ČHMÚ, DHMZ, DWD) now links to both of the others
+- other minor fixes and improvements
+
 ## 2026-10-05 (#44)
 - added the changelog ("Povijest promjena"), opened from the footer or with the C key
 - added the manual ("Upute"), opened from the footer or with the H key
