@@ -251,12 +251,12 @@
 		;"loading"===document.readyState?document.addEventListener("DOMContentLoaded",e):e()}function n(t,e,n){t.textContent=e,setTimeout(()=>{
 		t.textContent=n},1500)}function o(t,e){
 		const n="function"==typeof getComputedStyle?Number(getComputedStyle(document.documentElement).getPropertyValue(t).trim()):NaN
-		;return Number.isFinite(n)&&n>0?n:e}function a(t,e=document){return[...e.querySelectorAll(t)]}function r(t,e=document){
+		;return Number.isFinite(n)&&n>0?n:e}function r(t,e=document){return[...e.querySelectorAll(t)]}function a(t,e=document){
 		return e.querySelector(t)}
 		var i="dialog-toggled",s="map-config-changed",l="features-changed",c="map-fullscreen",d="layout-changed",u="grid-changed",h="refresh-changed",p="refresh-tick"
 		;function m(t,e){document.dispatchEvent(new CustomEvent(t,{detail:e}))}function f(t,e){document.addEventListener(t,t=>e(t.detail))}
 		var g=window.matchMedia("(min-width: 801px) and (hover: hover) and (pointer: fine)");function w(){return window.innerWidth<800}
-		var v="mapPrefs",b="mapUserPresets",y="mapHiddenPresets",k="mapConfig",x="mapGrid",E="mapRefresh",L="msTab",M="showLinksBottom",z=new Map
+		var b="mapPrefs",v="mapUserPresets",y="mapHiddenPresets",k="mapConfig",x="mapGrid",E="mapRefresh",L="msTab",M="showLinksBottom",z=new Map
 		;function S(t){try{return JSON.parse(z.has(t)?z.get(t):localStorage.getItem(t))}catch{return null}}function C(t,e){const n=JSON.stringify(e)
 		;try{localStorage.setItem(t,n),z.delete(t)}catch{z.set(t,n)}}function A(){
 		return"1"===new URLSearchParams(window.location.search).get("debug")}function j(...t){A()&&console.log(...t)}function R(t){
@@ -268,16 +268,16 @@
 		function U(t,e=""){if(!V())return;const n=JSON.stringify([t,String(e)]);_.set(n,(_.get(n)||0)+1),j("telemetry:",t,e)}function Z(t,e){
 		!V()||T>=5||(T++,U("error",`${String(t).slice(0,160)} @ ${e}`))}function X(t,e=!1){
 		const n=t.target instanceof Element?t.target.closest('a, button, summary, [role="button"], input[type="checkbox"], input[type="radio"], [data-track]'):null
-		;if(!n||n.closest("[data-action]"))return;const[o,a]=function(t){const e=t.getAttribute("data-track");if(e)return["click",e]
+		;if(!n||n.closest("[data-action]"))return;const[o,r]=function(t){const e=t.getAttribute("data-track");if(e)return["click",e]
 		;const n="A"===t.tagName?t.getAttribute("href"):null;if(n){if(n.startsWith("#"))return["link",n];const t=new URL(n,window.location.href)
 		;return["link",t.origin===window.location.origin?t.pathname:t.hostname]}const o=t.classList[0]
-		;return["click",t.tagName.toLowerCase()+(o?`.${o}`:"")]}(n);e&&"link"!==o||U(o,a)}function K(){!F&&V()&&(F=!0,U("view"))}function Y(){
+		;return["click",t.tagName.toLowerCase()+(o?`.${o}`:"")]}(n);e&&"link"!==o||U(o,r)}function K(){!F&&V()&&(F=!0,U("view"))}function Y(){
 		const t=function(){if(!_.size)return null;const t=[..._].map(([t,e])=>{const[n,o]=JSON.parse(t);return{name:n,value:o,n:e}})
 		;return _.clear(),t.sort((t,e)=>Number("error"===e.name)-Number("error"===t.name)),{page:O,events:t}}();if(!t)return
 		;const e=q&&W("telemetry");j(e?"telemetry: sent":`telemetry: not sent (${q?"switched off":"not the live site"})`,t),
 		e&&navigator.sendBeacon(N,JSON.stringify(t))}function Q(t,e,n){return Math.min(Math.max(t,e),Math.max(e,n))}function J(t){
 		return Math.round(1e4*t)/1e4}function G(t){return Math.round(1e3*t)/1e3}var tt=0;function et(t){tt=t}function nt(){
-		return document.documentElement.clientWidth-tt}function ot(){return document.documentElement.clientHeight}var at=[{text:"Windy",
+		return document.documentElement.clientWidth-tt}function ot(){return document.documentElement.clientHeight}var rt=[{text:"Windy",
 		href:"https://www.windy.com/-Weather-radar-radar?radar,44.5,16.5,7"},{text:"Zoom Earth",
 		href:"https://zoom.earth/maps/radar/#view=44.5,16.5,7z"},{text:"meteoblue",
 		href:"https://www.meteoblue.com/en/weather/maps/croatia_croatia_3202326#map=radar~radarMapEU~none~none~none&coords=6/44.5/16.5"},{
@@ -286,7 +286,7 @@
 		href:"https://www.vrijemeradar.hr/vremenski-radar/zagreb/18138691?center=44.5,16.5&zoom=7&layer=wr&tz=Europe%2FZagreb"},{text:"Sat24",
 		href:"https://www.sat24.com/en-gb/country/hr/hd#selectedLayer=euRadarSat"},{text:"I'm Weather",
 		href:"https://imweather.com/?model=nowcast&run=&member=&element=radsat&level=&lat=44.5000&lng=16.5000&z=6"},{text:"Időkép",
-		href:"https://www.idokep.eu/adria"}],rt=[{text:"Windy",href:"https://www.windy.com/-Weather-radar-radar?radar,47.5,17.5,5"},{
+		href:"https://www.idokep.eu/adria"}],at=[{text:"Windy",href:"https://www.windy.com/-Weather-radar-radar?radar,47.5,17.5,5"},{
 		text:"Zoom Earth",href:"https://zoom.earth/maps/radar/#view=47.5,17.5,5z"},{text:"meteoblue",
 		href:"https://www.meteoblue.com/en/weather/maps/croatia_croatia_3202326#map=radar~radarMapEU~none~none~none&coords=4/47.5/17.5"},{
 		text:"Rain Viewer",href:"https://www.rainviewer.com/map.html?loc=47.5,17.5,4&oCS=1&c=5&lm=1&layer=radar&sm=1&sn=2&ts=1"},{text:"Ventusky",
@@ -310,7 +310,7 @@
 		href:"https://www.meteociel.fr/observations-meteo/temperatures.php?region=it"},{text:"Pljusak",href:"https://pljusak.com/karta.php"}],lt=[{
 		text:"ESSL",href:"https://weather.essl.org/storm/"},{text:"ASTORP",href:"https://rawinsonde.com/ASTORP/ESTOFEX.html"},{text:"ESTOFEX",
 		href:"https://www.estofex.org"},{text:"ESWD",href:"https://www.eswd.eu"},{text:"Meteoalarm",href:"https://meteoalarm.org/en/live/region/HR"
-		}],ct=[{text:"ČHMÚ",href:"https://intranet.chmi.cz/aktualni-situace/aktualni-stav-pocasi/evropa/synopticka-situace"},{text:"DHMZ",
+		}],ct=[{text:"ČHMÚ",href:"https://www.chmi.cz/predpoved-pocasi/synopticka-situace"},{text:"DHMZ",
 		href:"https://meteo.hr/prognoze.php?section=prognoze_model&param=web_fronte_sutra12"},{text:"DWD",
 		href:"https://www.dwd.de/EN/ourservices/hobbymet_wcharts_europe/hobbyeuropecharts.html"}];function dt(t,e){return t.filter(t=>t.text!==e)}
 		var ut={radar:"📡",satelit:"🛰️",munje:"⚡",temperatura:"🌡️",nevrijeme:"⛈️",sinoptika:"🗺️",kamera:"📷",prognoza:"📈"};function ht(t,e){
@@ -319,7 +319,7 @@
 		slides:[`https://vrijeme.hr/anim_${t}.gif`,`https://vrijeme.hr/${t}-stat.png`]}}var pt=[{id:"neverin-radar-hr",category:"radar",
 		name:"Neverin | Radar | Hrvatska",type:"slideshow",titleHref:"https://www.neverin.hr/radar/",aspect:"880 / 640",startSlide:2,
 		slides:["https://maps.neverin.hr/radar/latest/hr/latest.webp","https://maps.neverin.hr/radar/latest/hr/anim.webp","https://maps.neverin.hr/radar/latest/hr/anim_6h.webp"],
-		links:at},{id:"neverin-satelit-hr",category:"satelit",name:"Neverin | Satelit | Hrvatska",type:"slideshow",
+		links:rt},{id:"neverin-satelit-hr",category:"satelit",name:"Neverin | Satelit | Hrvatska",type:"slideshow",
 		titleHref:"https://www.neverin.hr/satelit/",aspect:"880 / 640",startSlide:2,
 		slides:["https://maps.neverin.hr/satellite/rgb_geocolour/latest/hr/latest.webp","https://maps.neverin.hr/satellite/rgb_geocolour/latest/hr/anim.webp","https://maps.neverin.hr/satellite/rgb_geocolour/latest/hr/anim_6h.webp"],
 		links:[{text:"Windy",href:"https://www.windy.com/-Satellite-satellite?satellite,44.5,16.5,7"},{text:"Zoom Earth",
@@ -330,7 +330,7 @@
 		href:"https://imweather.com/?model=nowcast&element=satellite&run=&member=&level=&lat=44.5000&lng=16.5000&z=6"}]},{id:"neverin-radar-eu",
 		category:"radar",name:"Neverin | Radar | Europa",type:"slideshow",titleHref:"https://www.neverin.hr/radar/",aspect:"880 / 640",startSlide:2,
 		slides:["https://maps.neverin.hr/radar/latest/eu2/latest.webp","https://maps.neverin.hr/radar/latest/eu2/anim.webp","https://maps.neverin.hr/radar/latest/eu2/anim_6h.webp"],
-		links:rt},{id:"neverin-satelit-eu",category:"satelit",name:"Neverin | Satelit | Europa",type:"slideshow",
+		links:at},{id:"neverin-satelit-eu",category:"satelit",name:"Neverin | Satelit | Europa",type:"slideshow",
 		titleHref:"https://www.neverin.hr/satelit/",aspect:"880 / 640",startSlide:2,
 		slides:["https://maps.neverin.hr/satellite/rgb_geocolour/latest/eu2/latest.webp","https://maps.neverin.hr/satellite/rgb_geocolour/latest/eu2/anim.webp","https://maps.neverin.hr/satellite/rgb_geocolour/latest/eu2/anim_6h.webp"],
 		links:it},{id:"windy",category:"radar",name:"Windy",type:"iframe",frameId:"windy",
@@ -338,9 +338,9 @@
 		srcHr:"https://embed.windy.com/embed2.html?lat=44.5&lon=16.56&zoom=7&level=surface&overlay=radar&menu=&message=true&marker=&calendar=&pressure=&type=map&location=coordinates&detail=&detailLat=45.798&detailLon=15.936&metricWind=m%2Fs&metricTemp=%C2%B0C&radarRange=-1",
 		zoomHrDesktop:"&zoom=7",zoomHrMobile:"&zoom=6",
 		srcEu:"https://embed.windy.com/embed2.html?lat=48.0&lon=10.00&zoom=5&level=surface&overlay=radar&menu=&message=true&marker=&calendar=&pressure=&type=map&location=coordinates&detail=&detailLat=45.798&detailLon=15.936&metricWind=m%2Fs&metricTemp=%C2%B0C&radarRange=-1",
-		zoomEuDesktop:"&zoom=5",zoomEuMobile:"&zoom=3",links:dt(at,"Windy")},{id:"dhmz-radar",category:"radar",name:"DHMZ | Radar | Hrvatska",
+		zoomEuDesktop:"&zoom=5",zoomEuMobile:"&zoom=3",links:dt(rt,"Windy")},{id:"dhmz-radar",category:"radar",name:"DHMZ | Radar | Hrvatska",
 		type:"slideshow",titleHref:"https://meteo.hr/podaci.php?section=podaci_mjerenja&param=radari&el=kompozit&acto=anim",maxWidth:720,
-		aspect:"720 / 751",slides:["https://vrijeme.hr/anim_kompozit.gif","https://vrijeme.hr/kompozit-stat.png"],links:at},{id:"meteociel-temp",
+		aspect:"720 / 751",slides:["https://vrijeme.hr/anim_kompozit.gif","https://vrijeme.hr/kompozit-stat.png"],links:rt},{id:"meteociel-temp",
 		category:"temperatura",name:"Meteociel.fr | Temperatura",type:"slideshow",maxWidth:768,slides:[{title:{text:"Meteociel.fr | Temperatura",
 		href:"https://www.meteociel.fr/observations-meteo/temperatures.php?region=it"},img:"https://www.meteociel.fr/cartes_obs/temp_it.png",
 		aspect:"1"},{title:{text:"Meteociel.fr | Temperatura",href:"https://www.meteociel.fr/observations-meteo/temperatures.php?region=eur2"},
@@ -362,20 +362,20 @@
 		slides:["https://meteo-data.jurakovic.workers.dev/estofex/img1.png","https://meteo-data.jurakovic.workers.dev/estofex/img2.png"],
 		links:dt(lt,"ESTOFEX")},{id:"eumetnet",category:"radar",name:"EUMETNET",type:"iframe-basic",
 		titleHref:"https://www.eumetnet.eu/observations/opera-radar-animation/",src:"https://cdn.fmi.fi/demos/eumetnet-web-site-radar-animator/",
-		links:rt},{id:"meteociel-satelit",category:"satelit",name:"Meteociel.fr | Satelit",type:"slideshow",maxWidth:768,slides:[{title:{
+		links:at},{id:"meteociel-satelit",category:"satelit",name:"Meteociel.fr | Satelit",type:"slideshow",maxWidth:768,slides:[{title:{
 		text:"Meteociel.fr | Satelit",
 		href:"https://www.meteociel.fr/observations-meteo/satellite.php?mode=animation-infrarouge-noir-et-blanc-hd-mtg"},
 		img:"https://modeles20.meteociel.fr/satellite/animsatirmtgeu.gif",aspect:"1"},{title:{text:"Meteociel.fr | Satelit",
 		href:"https://www.meteociel.fr/observations-meteo/satellite.php?mode=infrarouge-noir-et-blanc-hd-mtg"},
 		img:"https://modeles20.meteociel.fr/satellite/latestsatirmtgeu.png",aspect:"1"}],links:it},{id:"chmi-sinopticka",category:"sinoptika",
 		name:"ČHMÚ | Sinoptička karta",type:"slideshow",maxWidth:760,dynamicWidth:!0,slides:[{title:{
-		href:"https://intranet.chmi.cz/aktualni-situace/aktualni-stav-pocasi/evropa/synopticka-situace"},
+		href:"https://www.chmi.cz/predpoved-pocasi/synopticka-situace"},
 		img:"https://intranet.chmi.cz/files/portal/docs/meteo/om/evropa/analyza.gif",aspect:"760 / 492"},{title:{
-		href:"https://intranet.chmi.cz/predpovedi/predpovedi-pocasi/evropa/synopticka-situace"},
+		href:"https://www.chmi.cz/predpoved-pocasi/synopticka-situace"},
 		img:"https://intranet.chmi.cz/files/portal/docs/meteo/om/evropa/preba/preba36.gif",aspect:"760 / 435"},{title:{
-		href:"https://intranet.chmi.cz/predpovedi/predpovedi-pocasi/evropa/synopticka-situace"},
+		href:"https://www.chmi.cz/predpoved-pocasi/synopticka-situace"},
 		img:"https://intranet.chmi.cz/files/portal/docs/meteo/om/evropa/preba/preba60.gif",aspect:"760 / 435"},{title:{
-		href:"https://intranet.chmi.cz/predpovedi/predpovedi-pocasi/evropa/synopticka-situace"},
+		href:"https://www.chmi.cz/predpoved-pocasi/synopticka-situace"},
 		img:"https://intranet.chmi.cz/files/portal/docs/meteo/om/evropa/preba/preba84.gif",aspect:"760 / 435"}],links:dt(ct,"ČHMÚ")},{
 		id:"neverin-kamera",category:"kamera",name:"Neverin | Kamera | Zagreb",title:"Neverin | Kamera | Zagreb-Remetinečki rotor",type:"image",
 		titleHref:"https://www.neverin.hr/kamere/",aspect:"1280 / 720",img:"https://webcams.neverin.hr/7332072588/latest.jpg"},{
@@ -395,21 +395,21 @@
 		name:"Ventusky",type:"iframe",frameId:"ventusky",scaled:!0,loading:"eager",
 		titleHref:"https://www.ventusky.com/?p=44.5;16.5;6&l=radar&w=off",srcHr:"https://embed.ventusky.com/?p=44.5;16.5;6&l=radar&w=off",
 		zoomHrDesktop:";6&",zoomHrMobile:";6&",srcEu:"https://embed.ventusky.com/?p=48.0;10.0;4&l=radar&w=off",zoomEuDesktop:";4&",
-		zoomEuMobile:";3&",links:dt(at,"Ventusky")},{id:"rainviewer",category:"radar",name:"Rain Viewer",type:"iframe",frameId:"rainViewer",
+		zoomEuMobile:";3&",links:dt(rt,"Ventusky")},{id:"rainviewer",category:"radar",name:"Rain Viewer",type:"iframe",frameId:"rainViewer",
 		scaled:!0,titleHref:"https://www.rainviewer.com/map.html?loc=44.5,16.5,6&oCS=1&c=5&lm=1&layer=radar&sm=1&sn=2&ts=1",
 		srcHr:"https://www.rainviewer.com/map.html?loc=44.8,16.5,6.3&oCS=1&c=5&lm=1&layer=radar&sm=1&sn=2&ts=1",zoomHrDesktop:",6.3&",
 		zoomHrMobile:",5.8&",srcEu:"https://www.rainviewer.com/map.html?loc=48.0,10.0,4.0&oCS=1&c=5&lm=1&layer=radar&sm=1&sn=2&ts=1",
-		zoomEuDesktop:",4.0&",zoomEuMobile:",3.2&",links:dt(at,"Rain Viewer")},{id:"weatherandradar",category:"radar",name:"Vrijeme&Radar",
+		zoomEuDesktop:",4.0&",zoomEuMobile:",3.2&",links:dt(rt,"Rain Viewer")},{id:"weatherandradar",category:"radar",name:"Vrijeme&Radar",
 		type:"iframe",frameId:"weatherAndRadar",scaled:!0,
 		titleHref:"https://www.vrijemeradar.hr/vremenski-radar/zagreb/18138691?center=44.5,16.5&zoom=7&layer=wr&tz=Europe%2FZagreb",
 		srcHr:"https://radar.wo-cloud.com/pwa/?center=44.5,16.5&zoom=7.2&tz=Europe/Zagreb&tf=HH:mm&tempunit=celsius&windunit=kph&showShareButton=false&lang=en-US&placemarkName=Zagreb&desktop=true&fadeTop=true",
 		zoomHrDesktop:"&zoom=7.2",zoomHrMobile:"&zoom=6.8",
 		srcEu:"https://radar.wo-cloud.com/pwa/?center=48.0,10.0&zoom=5.0&tz=Europe/Zagreb&tf=HH:mm&tempunit=celsius&windunit=kph&showShareButton=false&lang=en-US&placemarkName=Zagreb&desktop=true&fadeTop=true",
-		zoomEuDesktop:"&zoom=5.0",zoomEuMobile:"&zoom=4.0",links:dt(at,"Vrijeme&Radar")},{id:"meteo-si",category:"radar",name:"meteo.si",
+		zoomEuDesktop:"&zoom=5.0",zoomEuMobile:"&zoom=4.0",links:dt(rt,"Vrijeme&Radar")},{id:"meteo-si",category:"radar",name:"meteo.si",
 		type:"slideshow",titleHref:"https://meteo.arso.gov.si/met/sl/weather/observ/radar/",maxWidth:821,aspect:"821 / 660",
 		slides:["https://meteo.arso.gov.si/uploads/probase/www/observ/radar/si0-rm-anim.gif?nocache","https://meteo.arso.gov.si/uploads/probase/www/observ/radar/si0-rm.gif?nocache"],
-		links:at},{id:"idokep-radar-eu",category:"radar",name:"Időkép | Radar | Europa",type:"image",titleHref:"https://www.idokep.eu/ceu/radar",
-		maxWidth:840,aspect:"840 / 600",img:"https://www.idokep.eu/terkep/eu/radar.gif",links:rt},{id:"idokep-satelit-eu",category:"satelit",
+		links:rt},{id:"idokep-radar-eu",category:"radar",name:"Időkép | Radar | Europa",type:"image",titleHref:"https://www.idokep.eu/ceu/radar",
+		maxWidth:840,aspect:"840 / 600",img:"https://www.idokep.eu/terkep/eu/radar.gif",links:at},{id:"idokep-satelit-eu",category:"satelit",
 		name:"Időkép | Satelit | Europa",type:"video",titleHref:"https://www.idokep.hu/muhold",aspect:"1070 / 713",
 		src:"https://www.idokep.hu/radar/sat-eu.mp4",
 		backdrop:"data:image/jpeg;base64,/9j/4AAQSkZJRgABAQEAYABgAAD/2wBDAA0JCgsKCA0LCwsPDg0QFCEVFBISFCgdHhghMCoyMS8qLi00O0tANDhHOS0uQllCR05QVFVUMz9dY1xSYktTVFH/2wBDAQ4PDxQRFCcVFSdRNi42UVFRUVFRUVFRUVFRUVFRUVFRUVFRUVFRUVFRUVFRUVFRUVFRUVFRUVFRUVFRUVFRUVH/wAARCAArAEADASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9oADAMBAAIRAxEAPwBljPoksUEElnNNdFRuYRLgnufvdK1reHR5XKx20qjH3hEMfh81YmgR5hN2UB3MU4OSOK1rGdCGcrsEJHU85JNXzsjkibEIW0t1nk3FBjaAvzGp7u5huNPcSBDGM5IGQR7VkSXQkkhQuqgEuRuwcHnHuKgF5vJjlHlgJ/eyAST+uRUFjNbjhbSVSMboUP8ADjPI/n7e9YOl28+oRbLaGMeXkZZif0rbNkZ1MKTERFAH2nkMMFSD6g/yrQKC0sv3hKqgyzJwSPSjS2orFXTLF7ZZleMFnxuJIC4A6AVoLd2rMqNPGHz3HANZV1qiJuS3XCkgeY3zHp1rLjSaU7IkaRc8HZ+tZuaWhSRV0W6EeiSNISI97HjqRxwPrUltes7mWVwkbHJwOnpisC4l8pIrWNiNo+cH19DVmOOXcipISdu45rUR201zYGEec3y/dG3r0/Q1C1zYXLAxoc/x5XPGMAn1rmLaKdHk8wjBxgZ708aolm22OT94xIIAHyjuTn0qG3eyH0OzsonhgcRwMDuwD656tz29qpalLK141oD5keBuI4JA5wfSoLPWbSzELSSs8jJnezZVR6ZPrVa5v2/tQ3iL8zHofpUTmkkNK5v6Bp0ElqbmVY8lioHbGayNX1O5tr7bGvlhSOCOn+NWYdZj1CGC3s7SaKJZA87qQAvqc+9ZOqyreahIwY5VtrAnPAPGPanJ8sdCoW5veOKy4fIBJ6k1q6c4Vg0gPTj2rIikdhtLEgDIrd0hQ7fMM4Ga1ZmS3juUaKMOZDxkf41nrYXIlZhGgJQrhm4GeDXTQxo0XIzzViOCJraQlBkZqG3ayNVFPVmXpvhjV9T0hpo5VdWUKkbgLjBI4/AfrVe6uHs1jinLpPG4SdMcAAY9OM9fwre0+WWyvES3ldEjj+RdxIXLjOAa5Lxa7ya1PI7Es+/cc9cdKHFMjU1k1ZZLfyIJ08pRghDkE56mmzyzJE1xNOSsQycsTxXJaZzqNuhJ2tIoYZ6810Ws3Ev9nLFlSjNkgoDnr3xUOF3ZmkZaXP/Z",
@@ -434,48 +434,48 @@
 		links:dt(ct,"DWD")
 		},ht("puntijarka","Puntijarka"),ht("bilogora","Bilogora"),ht("gradiste","Gradište"),ht("goli","Goli"),ht("debeljak","Debeljak"),ht("uljenje","Uljenje")],mt=new Map(pt.map(t=>[t.id,t]))
 		;function ft(t){return mt.get(t)||null}var gt={slideshow:{build:function(e,n,o={}){
-		const a=e.id+Lt(n),r=e.startSlide||1,i=e.slides.some(t=>"string"!=typeof t),s=t("div",{class:i?"slideshow":"slideshow placeholder",
-		"data-slideshow-id":a,"data-current-slide":r,"data-dynamic-width":e.dynamicWidth?"":void 0,
-		style:(Mt(e)+(i?"":` aspect-ratio: ${e.aspect};`)).trim()||void 0});e.slides.forEach((n,a)=>{
-		const l=a===r-1,c=i?n:null,d=c?c.img:n,u=l||e.eagerSlides?t("img",{src:d}):t("img",{"data-src":d,class:"lazy"}),h=t("div",{
-		class:"slide fade"+(l?" active":"")});if(c){const n=c.maxWidth||e.maxWidth,a={text:c.title.text||e.name,href:c.title.href}
-		;h.appendChild(zt(a,{},e.titleHref?null:St(o))),h.appendChild(t("div",{class:"placeholder",
+		const r=e.id+Lt(n),a=e.startSlide||1,i=e.slides.some(t=>"string"!=typeof t),s=t("div",{class:i?"slideshow":"slideshow placeholder",
+		"data-slideshow-id":r,"data-current-slide":a,"data-dynamic-width":e.dynamicWidth?"":void 0,
+		style:(Mt(e)+(i?"":` aspect-ratio: ${e.aspect};`)).trim()||void 0});e.slides.forEach((n,r)=>{
+		const l=r===a-1,c=i?n:null,d=c?c.img:n,u=l||e.eagerSlides?t("img",{src:d}):t("img",{"data-src":d,class:"lazy"}),h=t("div",{
+		class:"slide fade"+(l?" active":"")});if(c){const n=c.maxWidth||e.maxWidth,r={text:c.title.text||e.name,href:c.title.href}
+		;h.appendChild(zt(r,{},e.titleHref?null:St(o))),h.appendChild(t("div",{class:"placeholder",
 		style:`${n?`max-width: ${n}px; `:""}aspect-ratio: ${c.aspect};`},[u]))}else h.appendChild(u);s.appendChild(h)});const l=t("a",{
 		class:"prev"+(i?" shorter":""),"data-action":"slide","data-step":"-1",html:"&#10094;"}),c=t("a",{class:"next"+(i?" shorter":""),
 		"data-action":"slide","data-step":"1",html:"&#10095;"});s.appendChild(l),s.appendChild(c);const d=t("div",{class:"indicators-container",
-		"data-slideshow-id":a,style:`${Mt(e)} grid-template-columns: repeat(${e.slides.length}, 1fr);`.trim()});return e.slides.forEach((e,n)=>{
-		d.appendChild(t("span",{class:"indicator"+(n===r-1?" active":"")}))}),[e.titleHref?Ct(e,o):null,s,d]},freeAspect:!1,fullscreen:!1,reload:vt
+		"data-slideshow-id":r,style:`${Mt(e)} grid-template-columns: repeat(${e.slides.length}, 1fr);`.trim()});return e.slides.forEach((e,n)=>{
+		d.appendChild(t("span",{class:"indicator"+(n===a-1?" active":"")}))}),[e.titleHref?Ct(e,o):null,s,d]},freeAspect:!1,fullscreen:!1,reload:bt
 		},image:{build:function(e,n,o={}){return[Ct(e,o),t("div",{class:"placeholder",style:`${Mt(e)} aspect-ratio: ${e.aspect};`.trim()},[t("img",{
-		src:e.img,alt:e.alt})])]},freeAspect:!1,fullscreen:!1,reload:vt},video:{build:function(e,n,o={}){const a=t("video",{controls:""
-		},[t("source",{type:"video/mp4",src:e.src})]);a.muted=!0,a.autoplay=!0,a.loop=!0
-		;const r=`${Mt(e)}${e.aspect?` aspect-ratio: ${e.aspect};`:""}`.trim();return[Ct(e,o),t("div",{class:"placeholder",style:r||void 0
-		},[t("div",{class:"vid1"},[a])])]},freeAspect:!1,fullscreen:!1,reload:function(t){t.querySelectorAll("video").forEach(t=>{
-		t.querySelectorAll("source[src]").forEach(t=>{t.src=bt(t.getAttribute("src"))}),t.load()})}},iframe:{build:function(e,n,o={}){
-		const a=e.frameId+Lt(n),r=a[0].toUpperCase()+a.slice(1),i=t("a",{class:"left zoom-btn","data-mode":"hr","data-action":"zoom","data-frame":a,
-		text:"[HR]"}),s=t("a",{class:"fs-btn","data-action":"fullscreen","data-frame":a,text:"[ ]"}),l=t("div",{class:"radartitle"},[i,t("a",{
+		src:e.img,alt:e.alt})])]},freeAspect:!1,fullscreen:!1,reload:bt},video:{build:function(e,n,o={}){const r=t("video",{controls:""
+		},[t("source",{type:"video/mp4",src:e.src})]);r.muted=!0,r.autoplay=!0,r.loop=!0
+		;const a=`${Mt(e)}${e.aspect?` aspect-ratio: ${e.aspect};`:""}`.trim();return[Ct(e,o),t("div",{class:"placeholder",style:a||void 0
+		},[t("div",{class:"vid1"},[r])])]},freeAspect:!1,fullscreen:!1,reload:function(t){t.querySelectorAll("video").forEach(t=>{
+		t.querySelectorAll("source[src]").forEach(t=>{t.src=vt(t.getAttribute("src"))}),t.load()})}},iframe:{build:function(e,n,o={}){
+		const r=e.frameId+Lt(n),a=r[0].toUpperCase()+r.slice(1),i=t("a",{class:"left zoom-btn","data-mode":"hr","data-action":"zoom","data-frame":r,
+		text:"[HR]"}),s=t("a",{class:"fs-btn","data-action":"fullscreen","data-frame":r,text:"[ ]"}),l=t("div",{class:"radartitle"},[i,t("a",{
 		class:"center",href:e.titleHref,target:"_blank",rel:"nofollow",text:e.name}),t("span",{class:"right right-cluster"},[...St(o,!0)||[],t("a",{
-		id:`reset${r}Frame`,"data-frame-id":a,"data-action":"gate",style:"display:none",text:"[X]"}),s])]),c=t("div",{class:"if1 placeholder"
-		},[t("iframe",{id:a,class:e.scaled?"scaled-iframe":void 0,loading:e.loading||"lazy",frameborder:"0","data-src-hr":e.srcHr,
+		id:`reset${a}Frame`,"data-frame-id":r,"data-action":"gate",style:"display:none",text:"[X]"}),s])]),c=t("div",{class:"if1 placeholder"
+		},[t("iframe",{id:r,class:e.scaled?"scaled-iframe":void 0,loading:e.loading||"lazy",frameborder:"0","data-src-hr":e.srcHr,
 		"data-zoom-hr-desktop":e.zoomHrDesktop,"data-zoom-hr-mobile":e.zoomHrMobile,"data-src-eu":e.srcEu,"data-zoom-eu-desktop":e.zoomEuDesktop,
-		"data-zoom-eu-mobile":e.zoomEuMobile}),t("div",{class:"overlay",id:`overlay${r}Frame`,"data-frame-id":a},[t("span",{class:"hint",
+		"data-zoom-eu-mobile":e.zoomEuMobile}),t("div",{class:"overlay",id:`overlay${a}Frame`,"data-frame-id":r},[t("span",{class:"hint",
 		text:"Dvostruki klik za pristup interaktivnoj karti"})])]);return[l,c]},freeAspect:!0,fullscreen:!0,reload:null},"iframe-basic":{
 		build:function(e,n,o={}){return[Ct(e,o),t("div",{class:"if2 placeholder"},[t("iframe",{loading:"lazy",src:e.src,frameborder:"0",
 		scrolling:"no"})])]},freeAspect:!0,fullscreen:!1,reload:function(t){t.querySelectorAll("iframe[src]").forEach(t=>{
-		t.src=t.getAttribute("src")})}}};function wt(t){const e=ft(t);return e&&gt[e.type]||null}function vt(t){
-		t.querySelectorAll("img[src]").forEach(t=>{t.src=bt(t.getAttribute("src"))})}function bt(t){
+		t.src=t.getAttribute("src")})}}};function wt(t){const e=ft(t);return e&&gt[e.type]||null}function bt(t){
+		t.querySelectorAll("img[src]").forEach(t=>{t.src=vt(t.getAttribute("src"))})}function vt(t){
 		const e=t.replace(/([?&])_r=\d+(&|$)/,(t,e,n)=>n?e:"");return`${e}${e.includes("?")?"&":"?"}_r=${Date.now()}`}var yt="#";function kt(t,e){
 		return e>1?`${t}${yt}${e}`:t}function xt(t){return String(t).split(yt)[0]}function Et(t){const e=Number(String(t).split(yt)[1])
 		;return e>1?e:1}function Lt(t){const e=Et(t);return e>1?`Copy${e}`:""}function Mt(t){return t.maxWidth?`max-width: ${t.maxWidth}px;`:""}
 		function zt(e,n={},o=null){return t("div",{class:"radartitle",style:Mt(n)||void 0},[t("a",{href:e.href,target:"_blank",rel:"nofollow",
 		text:e.text}),o&&o.length?t("span",{class:"right right-cluster"},o):null])}function St(t,e=!1){return t.titleButtons?t.titleButtons(e):null}
 		function Ct(t,e){return zt({text:t.title||t.name,href:t.titleHref},t,St(e))}function At(t,e=t.id,n={}){const o=gt[t.type]
-		;return o?o.build(t,e,n):[]}function jt(e,n,o={}){const a=t("div",{class:"map-block","data-map-id":n.id,"data-inst":n.id
-		},At(n,n.id,o)),r=t("div",{class:"map-entry"},[a]);return n.links&&n.links.length&&r.appendChild(function(e){const n=t("div",{
+		;return o?o.build(t,e,n):[]}function jt(e,n,o={}){const r=t("div",{class:"map-block","data-map-id":n.id,"data-inst":n.id
+		},At(n,n.id,o)),a=t("div",{class:"map-entry"},[r]);return n.links&&n.links.length&&a.appendChild(function(e){const n=t("div",{
 		class:"links-bottom",style:Mt(e)||void 0});return e.links.forEach((e,o)=>{o>0&&n.appendChild(document.createTextNode(" · ")),
-		n.appendChild(t("a",{href:e.href,target:"_blank",rel:"nofollow",text:e.text}))}),n}(n)),e.appendChild(r),a}function Rt(t){
+		n.appendChild(t("a",{href:e.href,target:"_blank",rel:"nofollow",text:e.text}))}),n}(n)),e.appendChild(a),r}function Rt(t){
 		const e=document.getElementById(t);e&&e.scrollIntoView({behavior:"smooth",block:"start"})}function $t(t){
 		const e=t.scrollWidth-t.clientWidth,n=t.scrollLeft;t.classList.toggle("can-scroll-left",n>1),
-		t.classList.toggle("can-scroll-right",e>1&&n<e-1)}function It(){a(".links-bottom").forEach($t)}
+		t.classList.toggle("can-scroll-right",e>1&&n<e-1)}function It(){r(".links-bottom").forEach($t)}
 		var Pt=260,Bt=120,Ht=16,Dt=23,Wt=4/3,Nt=Pt,_t=[5,10,15,30,60];var{on:Tt,minutes:Ot}=function(){const t=S(E);return t&&"object"==typeof t?{
 		on:!0===t.on,minutes:_t.includes(t.minutes)?t.minutes:5}:{on:!1,minutes:5}}(),qt=0,Ft=0;function Vt(){return Tt}function Ut(){
 		if(!Tt||!qt)return"";const t=Math.max(0,Math.ceil((qt-Date.now())/1e3));return`${Math.floor(t/60)}:${String(t%60).padStart(2,"0")}`}
@@ -483,21 +483,21 @@
 		Tt&&(Date.now()>=qt?Jt():m(p))}function Kt(){const e=t("a",{class:"rl-btn","data-track":"reload-map",text:"[R]",title:"Ponovno učitaj kartu"
 		});return e.addEventListener("click",()=>{const t=e.closest(".map-block");Yt(t);Qt().filter(e=>e!==t).length||Zt()}),e}function Yt(t){
 		const e=t&&wt(t.dataset.mapId);e&&e.reload&&(j(`reloadMap: ${t.dataset.mapId}`),e.reload(t))}function Qt(){
-		return a(".map-block").filter(t=>{const e=wt(t.dataset.mapId);return!!e&&!!e.reload})}function Jt(){Qt().forEach(Yt),Zt()}
-		var Gt=["n","ne","e","se","s","sw","w","nw"];function te(t,e,n,o){let a=e.width,r=e.height;return t.includes("e")&&(a=e.width+n),
-		t.includes("w")&&(a=e.width-n),t.includes("s")&&(r=e.height+o),t.includes("n")&&(r=e.height-o),{w:a,h:r}}function ee(t,e,n,o){
-		const a=t.clientX,r=t.clientY;let i=0,s=0,l=t;const c=t=>{l=t,i=t.clientX-a,s=t.clientY-r,e(i,s,t),o&&o()},d=t=>{
+		return r(".map-block").filter(t=>{const e=wt(t.dataset.mapId);return!!e&&!!e.reload})}function Jt(){Qt().forEach(Yt),Zt()}
+		var Gt=["n","ne","e","se","s","sw","w","nw"];function te(t,e,n,o){let r=e.width,a=e.height;return t.includes("e")&&(r=e.width+n),
+		t.includes("w")&&(r=e.width-n),t.includes("s")&&(a=e.height+o),t.includes("n")&&(a=e.height-o),{w:r,h:a}}function ee(t,e,n,o){
+		const r=t.clientX,a=t.clientY;let i=0,s=0,l=t;const c=t=>{l=t,i=t.clientX-r,s=t.clientY-a,e(i,s,t),o&&o()},d=t=>{
 		"Shift"!==t.key||t.repeat||(e(i,s,{clientX:l.clientX,clientY:l.clientY,shiftKey:"keydown"===t.type}),o&&o())},u=()=>{
 		document.removeEventListener("pointermove",c),document.removeEventListener("pointerup",u),document.removeEventListener("pointercancel",u),
 		document.removeEventListener("keydown",d),document.removeEventListener("keyup",d),document.body.classList.remove("po-dragging"),n&&n()}
 		;document.body.classList.add("po-dragging"),document.addEventListener("pointermove",c),document.addEventListener("pointerup",u),
 		document.addEventListener("pointercancel",u),document.addEventListener("keydown",d),document.addEventListener("keyup",d)}var ne=120
-		;function oe(){return a(".dialog")}function ae(){return oe().find(t=>!t.hidden)||null}function re(){return!!ae()}function ie(t){
+		;function oe(){return r(".dialog")}function re(){return oe().find(t=>!t.hidden)||null}function ae(){return!!re()}function ie(t){
 		return t.getAttribute("data-dialog-key")}function se(t){const e=ie(t);e&&function(t){z.delete(t);try{localStorage.removeItem(t)}catch{}}(e)}
-		function le(){return Math.max(360,nt()-16)}function ce(){return Math.max(ne,ot()-16)}function de(t,e,n,o,a){o=Q(o,360,le()),
-		t.style.width=`${Math.round(o)}px`,t.style.maxWidth="none",t.style.right="auto",t.style.margin="0",null===a?(t.style.height="",
+		function le(){return Math.max(360,nt()-16)}function ce(){return Math.max(ne,ot()-16)}function de(t,e,n,o,r){o=Q(o,360,le()),
+		t.style.width=`${Math.round(o)}px`,t.style.maxWidth="none",t.style.right="auto",t.style.margin="0",null===r?(t.style.height="",
 		t.style.maxHeight=`${Math.round(Math.max(ne,ot()-Math.max(0,n)-8))}px`):(t.style.maxHeight="none",
-		t.style.height=`${Math.round(Q(a,ne,ce()))}px`),t.style.left=`${Math.round(Q(e,0,Math.max(0,nt()-t.offsetWidth)))}px`,
+		t.style.height=`${Math.round(Q(r,ne,ce()))}px`),t.style.left=`${Math.round(Q(e,0,Math.max(0,nt()-t.offsetWidth)))}px`,
 		t.style.top=`${Math.round(Q(n,0,Math.max(0,ot()-t.offsetHeight)))}px`}function ue(t){
 		["left","top","width","height","maxWidth","maxHeight","right","margin"].forEach(e=>t.style[e]="")}function he(t){if(!t||t.hidden)return
 		;const e=g.matches?function(t){const e=ie(t);if(!e)return null;const n=S(e)
@@ -507,22 +507,22 @@
 		;n.className=`po-h po-h-${e}`,n.dataset.dir=e,t.appendChild(n)})}function me(t){t.addEventListener("pointerdown",e=>{
 		if(0!==e.button||!g.matches)return
 		;const n=e.target.closest(".po-h"),o=!n&&e.target.closest(".dialog-head")&&!e.target.closest("a, button, input");if(!n&&!o)return
-		;e.preventDefault();const a=t.getBoundingClientRect(),r=n?n.dataset.dir:null,i=t.style.height?a.height:null;let s=!1;ee(e,(e,n)=>{
-		if(!s&&!e&&!n)return;if(s=!0,!r)return void de(t,a.left+e,a.top+n,a.width,i);let{w:o,h:l}=te(r,a,e,n);o=Q(o,360,le()),l=Q(l,ne,ce()),
-		de(t,r.includes("w")?a.right-o:a.left,r.includes("n")?a.bottom-l:a.top,o,l)},()=>{s&&function(t){const e=ie(t);if(!e)return
+		;e.preventDefault();const r=t.getBoundingClientRect(),a=n?n.dataset.dir:null,i=t.style.height?r.height:null;let s=!1;ee(e,(e,n)=>{
+		if(!s&&!e&&!n)return;if(s=!0,!a)return void de(t,r.left+e,r.top+n,r.width,i);let{w:o,h:l}=te(a,r,e,n);o=Q(o,360,le()),l=Q(l,ne,ce()),
+		de(t,a.includes("w")?r.right-o:r.left,a.includes("n")?r.bottom-l:r.top,o,l)},()=>{s&&function(t){const e=ie(t);if(!e)return
 		;const n=t.getBoundingClientRect(),o={left:J(n.left/nt()),top:J(n.top/ot()),width:Math.round(n.width)}
 		;t.style.height&&(o.height=Math.round(n.height)),C(e,o)}(t)})}),t.addEventListener("dblclick",e=>{
 		g.matches&&e.target.closest(".dialog-head")&&!e.target.closest("a, button, input")&&(ue(t),se(t))})}function fe(t,e){m(i,{panel:t,visible:e
-		})}function ge(t,e){e&&oe().forEach(e=>{e===t||e.hidden||(e.hidden=!0,fe(e,!1))}),t.hidden=!e,function(){const t=re()
+		})}function ge(t,e){e&&oe().forEach(e=>{e===t||e.hidden||(e.hidden=!0,fe(e,!1))}),t.hidden=!e,function(){const t=ae()
 		;if(t&&!document.documentElement.classList.contains("dialog-gutter")){const t=window.innerWidth-document.documentElement.clientWidth
 		;t>0&&(et(t),document.documentElement.classList.add("dialog-gutter"))}else t||(et(0),
-		document.documentElement.classList.remove("dialog-gutter"));document.body.classList.toggle("dialog-open",t);const e=r(".dialog-backdrop")
-		;e&&(e.hidden=!t,t&&e.classList.remove("dialog-spent"))}(),e&&he(t),fe(t,e)}function we(){const t=ae();return t&&ge(t,!1),!!t}var ve=0
-		;function be(t=!1){(t||window.innerWidth!==ve)&&(ve=window.innerWidth,a("iframe[data-zoom-hr-desktop]").forEach(t=>ke(t)))}function ye(t){
+		document.documentElement.classList.remove("dialog-gutter"));document.body.classList.toggle("dialog-open",t);const e=a(".dialog-backdrop")
+		;e&&(e.hidden=!t,t&&e.classList.remove("dialog-spent"))}(),e&&he(t),fe(t,e)}function we(){const t=re();return t&&ge(t,!1),!!t}var be=0
+		;function ve(t=!1){(t||window.innerWidth!==be)&&(be=window.innerWidth,r("iframe[data-zoom-hr-desktop]").forEach(t=>ke(t)))}function ye(t){
 		return document.getElementById(t)}function ke(t){j(`Updating iframe src for ${t.id}`);const e=t.getAttribute("data-zoom-mode")
 		;let n="eu"===e?t.getAttribute("data-src-eu"):t.getAttribute("data-src-hr");if(w()){
-		const o="eu"===e?"data-zoom-eu-desktop":"data-zoom-hr-desktop",a="eu"===e?"data-zoom-eu-mobile":"data-zoom-hr-mobile"
-		;n=n.replace(t.getAttribute(o),t.getAttribute(a))}t.src=n}var xe={hidden:"[X]",exit:"[X]",reset:"[R]",fullscreen:"[R]"};function Ee(t){
+		const o="eu"===e?"data-zoom-eu-desktop":"data-zoom-hr-desktop",r="eu"===e?"data-zoom-eu-mobile":"data-zoom-hr-mobile"
+		;n=n.replace(t.getAttribute(o),t.getAttribute(r))}t.src=n}var xe={hidden:"[X]",exit:"[X]",reset:"[R]",fullscreen:"[R]"};function Ee(t){
 		return document.querySelector(`a[data-frame-id="${t}"]`)}function Le(t,e){const n=Ee(t);n&&(j(`gate ${t}: ${e}`),n.dataset.state=e,
 		n.textContent=xe[e],"hidden"===e?n.style.display="none":n.style.removeProperty("display"))}function Me(t){
 		return document.getElementById(t).parentElement.querySelector(".overlay")}function ze(t){Me(t).style.display="none",Le(t,"exit")}
@@ -530,25 +530,25 @@
 		e.setAttribute("data-mode",n),e.textContent="hr"===n?"[HR]":"[EU]","reset"===function(t){const e=Ee(t)
 		;return e?e.dataset.state||"hidden":null}(t)&&Le(t,"hidden")}var Ce=new WeakMap;function Ae(t){t.classList.remove("fullscreen")
 		;const e=t.previousElementSibling;e.classList.remove("fullscreen");const n=e.querySelector(".fs-btn");n&&(n.textContent="[ ]"),
-		a(".if1.fullscreen").some(t=>!t.closest(".map-block.snapped"))||document.body.classList.remove("fs-lock"),m(c);const o=!1===Ce.get(t)
-		;Ce.delete(t);const i=r(".overlay",t);i&&(o?i.style.display="none":i.removeAttribute("style")),
-		Le(t.querySelector("iframe").id,o?"exit":"reset")}var je=new WeakMap;function Re(){a(".if1 .overlay:not([data-tap])").forEach(t=>{
+		r(".if1.fullscreen").some(t=>!t.closest(".map-block.snapped"))||document.body.classList.remove("fs-lock"),m(c);const o=!1===Ce.get(t)
+		;Ce.delete(t);const i=a(".overlay",t);i&&(o?i.style.display="none":i.removeAttribute("style")),
+		Le(t.querySelector("iframe").id,o?"exit":"reset")}var je=new WeakMap;function Re(){r(".if1 .overlay:not([data-tap])").forEach(t=>{
 		t.setAttribute("data-tap","");const e=t.dataset.frameId;let n=0,o=!1;t.addEventListener("dblclick",()=>ze(e)),
 		t.addEventListener("touchstart",t=>{t.touches.length>1&&(o=!0)}),t.addEventListener("touchend",t=>{
-		if(o)return void(0===t.touches.length&&(o=!1,n=0));const a=(new Date).getTime(),r=a-n;r>0&&r<200&&(ze(e),t.preventDefault()),n=a})
-		;const a=t.querySelector(".hint");let r=0,i=0;t.addEventListener("touchstart",t=>{1===t.touches.length&&(i=t.touches[0].clientX,
-		r=t.touches[0].clientY)}),t.addEventListener("touchend",t=>{if(!a)return
-		;const e=Math.abs(t.changedTouches[0].clientX-i),n=Math.abs(t.changedTouches[0].clientY-r);e<10&&n<10&&(a.style.opacity="0.6",
-		clearTimeout(je.get(a)),je.set(a,setTimeout(()=>a.style.removeProperty("opacity"),2e3)))})})}function $e(){const t=w()
-		;a(".hint").forEach(e=>{e.textContent=t?"Dvostruki dodir za pristup interaktivnoj karti":"Dvostruki klik za pristup interaktivnoj karti"})}
+		if(o)return void(0===t.touches.length&&(o=!1,n=0));const r=(new Date).getTime(),a=r-n;a>0&&a<200&&(ze(e),t.preventDefault()),n=r})
+		;const r=t.querySelector(".hint");let a=0,i=0;t.addEventListener("touchstart",t=>{1===t.touches.length&&(i=t.touches[0].clientX,
+		a=t.touches[0].clientY)}),t.addEventListener("touchend",t=>{if(!r)return
+		;const e=Math.abs(t.changedTouches[0].clientX-i),n=Math.abs(t.changedTouches[0].clientY-a);e<10&&n<10&&(r.style.opacity="0.6",
+		clearTimeout(je.get(r)),je.set(r,setTimeout(()=>r.style.removeProperty("opacity"),2e3)))})})}function $e(){const t=w()
+		;r(".hint").forEach(e=>{e.textContent=t?"Dvostruki dodir za pristup interaktivnoj karti":"Dvostruki klik za pristup interaktivnoj karti"})}
 		function Ie(t,e){
-		const n=t.getAttribute("data-slideshow-id"),o=t.querySelectorAll(".slide"),a=document.querySelectorAll(`.indicators-container[data-slideshow-id="${n}"] .indicator`)
+		const n=t.getAttribute("data-slideshow-id"),o=t.querySelectorAll(".slide"),r=document.querySelectorAll(`.indicators-container[data-slideshow-id="${n}"] .indicator`)
 		;let i=e;i>o.length&&(i=1),i<1&&(i=o.length),t.setAttribute("data-current-slide",i),o.forEach(t=>t.classList.remove("active")),
-		o[i-1].classList.add("active"),a.forEach(t=>t.classList.remove("active")),a[i-1].classList.add("active"),function(t){
+		o[i-1].classList.add("active"),r.forEach(t=>t.classList.remove("active")),r[i-1].classList.add("active"),function(t){
 		if(!t.hasAttribute("data-dynamic-width"))return
-		;const e=t.getAttribute("data-slideshow-id"),n=r(`.indicators-container[data-slideshow-id='${e}']`),o=r(".slide.active .placeholder",t)
+		;const e=t.getAttribute("data-slideshow-id"),n=a(`.indicators-container[data-slideshow-id='${e}']`),o=a(".slide.active .placeholder",t)
 		;if(!o)return;t.style.maxWidth=o.style.maxWidth,n.style.maxWidth=o.style.maxWidth}(t)}function Pe(){
-		a(".slideshow:not([data-swipe])").forEach(t=>{t.setAttribute("data-swipe",""),t.querySelectorAll("img").forEach(t=>{
+		r(".slideshow:not([data-swipe])").forEach(t=>{t.setAttribute("data-swipe",""),t.querySelectorAll("img").forEach(t=>{
 		t.addEventListener("dragstart",t=>t.preventDefault())}),function(t){let e=null,n=null,o=!1;t.addEventListener("touchstart",t=>{o=!1,
 		t.touches.length>1||(e=n={x:t.touches[0].clientX,y:t.touches[0].clientY})}),t.addEventListener("touchmove",t=>{
 		t.touches.length>1||!e?o=!1:(n={x:t.touches[0].clientX,y:t.touches[0].clientY},Math.abs(n.x-e.x)>Math.abs(n.y-e.y)&&(o=!0))}),
@@ -558,22 +558,22 @@
 		t.addEventListener("mouseup",n=>{e&&(Be(t,e,{x:n.clientX,y:n.clientY}),e=null)}),t.addEventListener("mouseleave",()=>{e=null})}(t)})}
 		function Be(t,e,n){Math.abs(n.x-e.x)>Math.abs(n.y-e.y)&&function(t,e,n){const o=n-e;if(Math.abs(o)>50){
 		const e=parseInt(t.getAttribute("data-current-slide"));Ie(t,e+(o>0?-1:1))}}(t,e.x,n.x)}var He=new Map,De=[]
-		;function We(t,{run:e,keys:n=[],keyWhen:o=()=>!0,keepDefault:a=!1,capture:r=!1}){const i={id:t,run:e,keys:n,keyWhen:o,keepDefault:a,
-		capture:r};He.set(t,i),n.length&&De.push(i)}function Ne(t,e){const n=He.get(e),o=n&&n.keys[0]
+		;function We(t,{run:e,keys:n=[],keyWhen:o=()=>!0,keepDefault:r=!1,capture:a=!1}){const i={id:t,run:e,keys:n,keyWhen:o,keepDefault:r,
+		capture:a};He.set(t,i),n.length&&De.push(i)}function Ne(t,e){const n=He.get(e),o=n&&n.keys[0]
 		;return o?`${t} (${1===o.length?o.toUpperCase():"Escape"===o?"Esc":o})`:t}function _e(t,e=null,n=null){!1!==t.run(e,n)&&U("command",t.id)}
 		function Te(){const t=["--fs-left","--fs-right","--fs-top","--fs-bottom"],e=Jn(),n=zo();e.forEach(o=>{
 		if(!n||!o.classList.contains("fs-host"))return void t.forEach(t=>o.style.removeProperty(t))
-		;const a=nt(),r=ot(),i=o.getBoundingClientRect(),s=e.filter(t=>t!==o&&!t.classList.contains("fs-host")).map(t=>t.getBoundingClientRect()),l=function(t,e,n){
-		const o=(t,e,n)=>{let o=e;return t.sort((t,e)=>t[0]-e[0]).forEach(([t,e])=>{t<=o+Ht&&(o=Math.max(o,e))}),o>=n-Ht},a=(t,e,n,a,r)=>{
+		;const r=nt(),a=ot(),i=o.getBoundingClientRect(),s=e.filter(t=>t!==o&&!t.classList.contains("fs-host")).map(t=>t.getBoundingClientRect()),l=function(t,e,n){
+		const o=(t,e,n)=>{let o=e;return t.sort((t,e)=>t[0]-e[0]).forEach(([t,e])=>{t<=o+Ht&&(o=Math.max(o,e))}),o>=n-Ht},r=(t,e,n,r,a)=>{
 		const i=e.filter(e=>e.right<=t.left+1),s=[...new Set(i.map(t=>t.right))].sort((t,e)=>e-t);for(const t of s){
-		const e=i.filter(e=>e.left<t-.5&&e.right>=t-.5);if(o(e.map(t=>[t.top,t.bottom]),n,a))return t}return r},r=t=>({left:-t.right,right:-t.left,
-		top:t.top,bottom:t.bottom}),i=t=>({left:t.top,right:t.bottom,top:t.left,bottom:t.right}),s=t=>r(i(t)),l=e.map(r),c=e.map(i),d=e.map(s)
-		;let u={...n};for(let o=0;o<4;o++){const o={left:a(t,e,u.top,u.bottom,n.left),right:-a(r(t),l,u.top,u.bottom,-n.right),
-		top:a(i(t),c,u.left,u.right,n.top),bottom:-a(s(t),d,u.left,u.right,-n.bottom)}
+		const e=i.filter(e=>e.left<t-.5&&e.right>=t-.5);if(o(e.map(t=>[t.top,t.bottom]),n,r))return t}return a},a=t=>({left:-t.right,right:-t.left,
+		top:t.top,bottom:t.bottom}),i=t=>({left:t.top,right:t.bottom,top:t.left,bottom:t.right}),s=t=>a(i(t)),l=e.map(a),c=e.map(i),d=e.map(s)
+		;let u={...n};for(let o=0;o<4;o++){const o={left:r(t,e,u.top,u.bottom,n.left),right:-r(a(t),l,u.top,u.bottom,-n.right),
+		top:r(i(t),c,u.left,u.right,n.top),bottom:-r(s(t),d,u.left,u.right,-n.bottom)}
 		;if(o.left===u.left&&o.right===u.right&&o.top===u.top&&o.bottom===u.bottom)break;u=o}return u}({left:i.left,right:i.right,top:i.top,
-		bottom:i.bottom},s,{left:0,top:0,right:a,bottom:r});o.style.setProperty("--fs-left",`${Math.round(l.left)}px`),
-		o.style.setProperty("--fs-right",`${Math.round(a-l.right)}px`),o.style.setProperty("--fs-top",`${Math.round(l.top)}px`),
-		o.style.setProperty("--fs-bottom",`${Math.round(r-l.bottom)}px`)})}function Oe(t){const e=r(".fs-btn",t)
+		bottom:i.bottom},s,{left:0,top:0,right:r,bottom:a});o.style.setProperty("--fs-left",`${Math.round(l.left)}px`),
+		o.style.setProperty("--fs-right",`${Math.round(r-l.right)}px`),o.style.setProperty("--fs-top",`${Math.round(l.top)}px`),
+		o.style.setProperty("--fs-bottom",`${Math.round(a-l.bottom)}px`)})}function Oe(t){const e=a(".fs-btn",t)
 		;e&&!t.querySelector(".if1.fullscreen")&&e.click()}function qe(){!function(){const t=Qn().map(t=>({block:t,rect:t.getBoundingClientRect(),
 		z:Number(t.style.zIndex)||0}));t.forEach(e=>{
 		const n=t.some(t=>t.block!==e.block&&t.z>e.z&&t.rect.left<e.rect.right&&t.rect.right>e.rect.left&&t.rect.top<e.rect.bottom&&t.rect.bottom>e.rect.top)
@@ -581,87 +581,87 @@
 		const e=new Set,n=function(){const t=document.querySelector(".if1.fullscreen");if(!t)return null
 		;const e=document.querySelector(".radartitle.fullscreen"),n=t.getBoundingClientRect();if(!e)return n;const o=e.getBoundingClientRect()
 		;return{left:Math.min(n.left,o.left),right:Math.max(n.right,o.right),top:Math.min(n.top,o.top),bottom:Math.max(n.bottom,o.bottom)}
-		}(),o=new Map,r=e=>o.get(e)||o.set(e,function(e){const n=e?"po-shadows":"po-shadows-under";let o=document.querySelector(`.${n}`)
+		}(),o=new Map,a=e=>o.get(e)||o.set(e,function(e){const n=e?"po-shadows":"po-shadows-under";let o=document.querySelector(`.${n}`)
 		;return o||document.body.appendChild(o=t("div",{class:n})),o}(e)).get(e);Qn().forEach(o=>{if(!function(t){
 		return!so(t)&&!t.classList.contains("fs-host")}(o))return
-		;const a=o.getBoundingClientRect(),i=!n||a.left<n.right&&a.right>n.left&&a.top<n.bottom&&a.bottom>n.top,s=r(i);let l=Fe.get(o)
+		;const r=o.getBoundingClientRect(),i=!n||r.left<n.right&&r.right>n.left&&r.top<n.bottom&&r.bottom>n.top,s=a(i);let l=Fe.get(o)
 		;l&&l.parentElement===s||(l&&l.remove(),l=t("div",{class:"po-shadow"}),Fe.set(o,l),s.appendChild(l)),
-		l.style.cssText=`left: ${a.left}px; top: ${a.top}px; width: ${a.width}px; height: ${a.height}px;`,e.add(l)}),
-		a(".po-shadows, .po-shadows-under").forEach(t=>[...t.children].forEach(t=>{e.has(t)||t.remove()}))}function Ue(t,e,n){ee(t,e,n,Ve)}
+		l.style.cssText=`left: ${r.left}px; top: ${r.top}px; width: ${r.width}px; height: ${r.height}px;`,e.add(l)}),
+		r(".po-shadows, .po-shadows-under").forEach(t=>[...t.children].forEach(t=>{e.has(t)||t.remove()}))}function Ue(t,e,n){ee(t,e,n,Ve)}
 		function Ze(){const e=t("a",{class:"dup-btn","data-track":"duplicate",text:"[D]",title:Ne("Udvostruči kartu","duplicate")})
 		;return e.addEventListener("click",()=>nn(e.closest(".map-block"))),e}function Xe(t){return!!t&&t.classList.contains("duplicate")}
-		function Ke(t){return a(`.map-block[data-map-id="${CSS.escape(t)}"]`)}function Ye(t){return Ke(t.dataset.mapId).filter(e=>e!==t)}
-		function Qe(t){return Ke(t).find(t=>!Xe(t))||null}function Je(t){return r(`.map-block[data-inst="${CSS.escape(t)}"]`)}function Ge(t){
+		function Ke(t){return r(`.map-block[data-map-id="${CSS.escape(t)}"]`)}function Ye(t){return Ke(t.dataset.mapId).filter(e=>e!==t)}
+		function Qe(t){return Ke(t).find(t=>!Xe(t))||null}function Je(t){return a(`.map-block[data-inst="${CSS.escape(t)}"]`)}function Ge(t){
 		for(let e=1;;e++){const n=kt(t,e);if(!Je(n))return n}}function tn(t){t.querySelectorAll("img.lazy").forEach(t=>{
 		t.src=t.getAttribute("data-src"),t.classList.remove("lazy")}),t.querySelectorAll("iframe[data-zoom-hr-desktop]").forEach(t=>ke(t)),Pe(),
-		Re(),$e()}function en(e,n){const o=ft(e),a=Qe(e);if(!o||!a)return null;const r=t("div",{class:"map-block duplicate","data-map-id":e,
-		"data-inst":n},At(o,n,$n));return a.after(r),tn(r),r}function nn(t){if(!t||!g.matches)return null;const e=t.dataset.mapId,n=Ge(e)
-		;j(`duplicateMap: ${e} -> ${n}`);const o=en(e,n);if(!o)return null;xn(o);const a=t.classList.contains("popout");if(a){
+		Re(),$e()}function en(e,n){const o=ft(e),r=Qe(e);if(!o||!r)return null;const a=t("div",{class:"map-block duplicate","data-map-id":e,
+		"data-inst":n},At(o,n,$n));return r.after(a),tn(a),a}function nn(t){if(!t||!g.matches)return null;const e=t.dataset.mapId,n=Ge(e)
+		;j(`duplicateMap: ${e} -> ${n}`);const o=en(e,n);if(!o)return null;xn(o);const r=t.classList.contains("popout");if(r){
 		const e=t.getBoundingClientRect();t.classList.contains("free")&&!o.classList.contains("free")&&En(o),
 		o.style.width=`${Math.round(Q(e.width,Pt,Zn()))}px`,o.classList.contains("free")&&(o.style.height=`${Math.round(Q(e.height,Bt,ot()))}px`)}
-		const r=a?t.getBoundingClientRect():o.getBoundingClientRect();return Xn(o,r.left+32,r.top+32),Kn(o),zn(o),On(),Ve(),Zo(),o}function on(t){
-		const e=xt(t);if(1===Et(t))return Qe(e);const n=Je(t);return n&&Xe(n)?n:en(e,Ge(e))}function an(t){if(j(`removeShowing: ${t.dataset.inst}`),
+		const a=r?t.getBoundingClientRect():o.getBoundingClientRect();return Xn(o,a.left+32,a.top+32),Kn(o),zn(o),On(),Ve(),Zo(),o}function on(t){
+		const e=xt(t);if(1===Et(t))return Qe(e);const n=Je(t);return n&&Xe(n)?n:en(e,Ge(e))}function rn(t){if(j(`removeShowing: ${t.dataset.inst}`),
 		!Xe(t)){const e=Ye(t)[0];e&&(e.classList.remove("duplicate"),function(t,e){const n=An.get(t);if(!n)return;Rn(e,n),An.delete(t)}(t,e))}
-		const e=r(".if1.fullscreen",t);e&&Ae(e),Bn(t)&&Tn(t),yo(t),function(t){const e=Fe.get(t);e&&e.remove(),Fe.delete(t)}(t),t.remove(),On(),
-		Ve(),Zo()}var{show:rn,snap:sn}=function(){const t=S(x);return t&&"object"==typeof t?{show:!0===t.show,snap:!0===t.snap}:{show:!1,snap:!1}}()
-		;function ln(){return rn}function cn(){return sn}function dn(t,e){j(`setGridPrefs: show=${t} snap=${e}`),rn=t,sn=e,C(x,{show:t,snap:e}),
-		un(),m(u)}function un(){const t=rn&&zo()&&g.matches;let e=r(".po-grid");t?(e||(e=document.createElement("div"),e.className="po-grid",
+		const e=a(".if1.fullscreen",t);e&&Ae(e),Bn(t)&&Tn(t),yo(t),function(t){const e=Fe.get(t);e&&e.remove(),Fe.delete(t)}(t),t.remove(),On(),
+		Ve(),Zo()}var{show:an,snap:sn}=function(){const t=S(x);return t&&"object"==typeof t?{show:!0===t.show,snap:!0===t.snap}:{show:!1,snap:!1}}()
+		;function ln(){return an}function cn(){return sn}function dn(t,e){j(`setGridPrefs: show=${t} snap=${e}`),an=t,sn=e,C(x,{show:t,snap:e}),
+		un(),m(u)}function un(){const t=an&&zo()&&g.matches;let e=a(".po-grid");t?(e||(e=document.createElement("div"),e.className="po-grid",
 		document.body.appendChild(e)),e.style.setProperty("--grid-cell","16px")):e&&e.remove()}function hn(t){const e=[]
 		;for(let n=0;n<t;n+=16)e.push(n);return e[e.length-1]!==t&&e.push(t),e}function pn(t,e){let n=0
 		;for(let o=1;o<t.length;o++)Math.abs(t[o]-e)<Math.abs(t[n]-e)&&(n=o);return n}function mn(t){sn&&zo()&&g.matches&&t.forEach(t=>{
 		t.classList.contains("fs-host")||function(t){const e=hn(nt()),n=hn(ot()),o=t.getBoundingClientRect()
-		;let a=pn(e,o.left),r=pn(e,o.right),i=pn(n,o.top),s=pn(n,o.bottom);for(r<=a&&(r=Math.min(a+1,e.length-1)),
-		s<=i&&(s=Math.min(i+1,n.length-1));e[r]-e[a]<Pt&&(r<e.length-1||a>0);)r<e.length-1?r++:a--
-		;for(;n[s]-n[i]<Bt&&(s<n.length-1||i>0);)s<n.length-1?s++:i--;t.classList.contains("free")||En(t),t.style.width=e[r]-e[a]+"px",
-		t.style.height=n[s]-n[i]+"px",Xn(t,e[a],n[i]),Mn(t),zn(t)}(t)})}function fn(t,e,n){const o=Wn(t),a=lo(t);a?function(t,e,n,o,a){const r=e=>{
-		e||t.classList.contains("free")||(En(t),co(t).height=t.offsetHeight/ot())};r(n.shiftKey)
-		;const i=t.getBoundingClientRect(),s=qn(a.filter(e=>e!==t)),l=s.filter(t=>t.top<i.top),c=s.filter(t=>t.top>i.top),d=Math.min(i.top,...l.map(t=>t.top)),u=Math.max(i.bottom,...c.map(t=>t.bottom))
-		;Ue(n,(n,s,c)=>{if(r(c.shiftKey),!t.classList.contains("free"))return;let{h:h}=te(e,i,n,s);const p=fo(o,a);if(e.includes("s")){
+		;let r=pn(e,o.left),a=pn(e,o.right),i=pn(n,o.top),s=pn(n,o.bottom);for(a<=r&&(a=Math.min(r+1,e.length-1)),
+		s<=i&&(s=Math.min(i+1,n.length-1));e[a]-e[r]<Pt&&(a<e.length-1||r>0);)a<e.length-1?a++:r--
+		;for(;n[s]-n[i]<Bt&&(s<n.length-1||i>0);)s<n.length-1?s++:i--;t.classList.contains("free")||En(t),t.style.width=e[a]-e[r]+"px",
+		t.style.height=n[s]-n[i]+"px",Xn(t,e[r],n[i]),Mn(t),zn(t)}(t)})}function fn(t,e,n){const o=Wn(t),r=lo(t);r?function(t,e,n,o,r){const a=e=>{
+		e||t.classList.contains("free")||(En(t),co(t).height=t.offsetHeight/ot())};a(n.shiftKey)
+		;const i=t.getBoundingClientRect(),s=qn(r.filter(e=>e!==t)),l=s.filter(t=>t.top<i.top),c=s.filter(t=>t.top>i.top),d=Math.min(i.top,...l.map(t=>t.top)),u=Math.max(i.bottom,...c.map(t=>t.bottom))
+		;Ue(n,(n,s,c)=>{if(a(c.shiftKey),!t.classList.contains("free"))return;let{h:h}=te(e,i,n,s);const p=fo(o,r);if(e.includes("s")){
 		const t=eo(i.top+h,p);null!==t&&(h=t-i.top)}if(e.includes("n")){const t=eo(i.bottom-h,p);null!==t&&(h=i.bottom-t)}
 		h=Q(h,Bt,i.height+(e.includes("n")?d:ot()-u));const m=co(t);m.height=h/ot(),m.top=(e.includes("n")?i.bottom-h:i.top)/ot(),
-		e.includes("n")&&l.forEach(t=>{co(t.block).top=(t.top-(h-i.height))/ot()}),Eo()},()=>{mn([t]),Zo()})}(t,e,n,a,o):o.length>1?function(t,e,n){
-		const o=qn(t).map(t=>({...t,width:t.right-t.left,height:t.bottom-t.top,free:t.block.classList.contains("free")})),a=Fn(o)
-		;a.right=a.left+a.width,a.bottom=a.top+a.height;const r=function(t){const e=(t,e)=>Math.abs(t-e)<=1,n=[];return t.forEach(o=>t.forEach(t=>{
+		e.includes("n")&&l.forEach(t=>{co(t.block).top=(t.top-(h-i.height))/ot()}),Eo()},()=>{mn([t]),Zo()})}(t,e,n,r,o):o.length>1?function(t,e,n){
+		const o=qn(t).map(t=>({...t,width:t.right-t.left,height:t.bottom-t.top,free:t.block.classList.contains("free")})),r=Fn(o)
+		;r.right=r.left+r.width,r.bottom=r.top+r.height;const a=function(t){const e=(t,e)=>Math.abs(t-e)<=1,n=[];return t.forEach(o=>t.forEach(t=>{
 		if(o===t)return
-		;const a=Math.min(o.right,t.right)-Math.max(o.left,t.left)>0,r=Math.min(o.bottom,t.bottom)-Math.max(o.top,t.top)>0,i=a&&(e(t.top,o.bottom)||e(t.bottom,o.top)),s=r&&(e(t.left,o.right)||e(t.right,o.left))
+		;const r=Math.min(o.right,t.right)-Math.max(o.left,t.left)>0,a=Math.min(o.bottom,t.bottom)-Math.max(o.top,t.top)>0,i=r&&(e(t.top,o.bottom)||e(t.bottom,o.top)),s=a&&(e(t.left,o.right)||e(t.right,o.left))
 		;i&&(e(t.left,o.left)&&n.push({from:o,to:t,kind:"alignLeft"}),e(t.right,o.right)&&n.push({from:o,to:t,kind:"alignRight"}),n.push({from:o,
 		to:t,kind:e(t.top,o.bottom)?"below":"above"})),s&&(e(t.top,o.top)&&n.push({from:o,to:t,kind:"alignTop"}),e(t.bottom,o.bottom)&&n.push({
 		from:o,to:t,kind:"alignBottom"}),n.push({from:o,to:t,kind:e(t.left,o.right)?"right":"left"}))})),n
-		}(o),i=[...o].sort((t,e)=>t.top-e.top||t.left-e.left),s=to(t[0],t),l=e.includes("w")?a.right:a.left,c=e.includes("n")?a.bottom:a.top,d=Math.max(Pt/Math.min(...o.map(t=>t.width)),...o.filter(t=>t.free).map(t=>Bt/t.height)),u=Math.min(Zn()/Math.max(...o.map(t=>t.width)),(e.includes("w")?a.right:nt()-a.left)/a.width,(e.includes("n")?a.bottom:ot()-a.top)/a.height)
-		;Ue(n,(n,h)=>{const p=te(e,a,n,h),{w:m,h:f}=gn(s,e,a,p.w,p.h)
-		;let g="n"===e||"s"===e?f/a.height:2===e.length?Math.max(m/a.width,f/a.height):m/a.width;g=Q(g,d,Math.max(d,u)),o.forEach(t=>{
+		}(o),i=[...o].sort((t,e)=>t.top-e.top||t.left-e.left),s=to(t[0],t),l=e.includes("w")?r.right:r.left,c=e.includes("n")?r.bottom:r.top,d=Math.max(Pt/Math.min(...o.map(t=>t.width)),...o.filter(t=>t.free).map(t=>Bt/t.height)),u=Math.min(Zn()/Math.max(...o.map(t=>t.width)),(e.includes("w")?r.right:nt()-r.left)/r.width,(e.includes("n")?r.bottom:ot()-r.top)/r.height)
+		;Ue(n,(n,h)=>{const p=te(e,r,n,h),{w:m,h:f}=gn(s,e,r,p.w,p.h)
+		;let g="n"===e||"s"===e?f/r.height:2===e.length?Math.max(m/r.width,f/r.height):m/r.width;g=Q(g,d,Math.max(d,u)),o.forEach(t=>{
 		t.block.style.width=`${Math.round(t.width*g)}px`,t.free&&(t.block.style.height=`${Math.round(t.height*g)}px`)});const w=[];i.forEach(t=>{
-		let e=l+(t.left-l)*g,n=c+(t.top-c)*g;const o=t.block.offsetWidth,a=t.block.offsetHeight
-		;r.filter(e=>e.to===t&&w.includes(e.from)).forEach(t=>{const r=t.from.block.getBoundingClientRect()
-		;"below"===t.kind?n=r.bottom:"above"===t.kind?n=r.top-a:"right"===t.kind?e=r.right:"left"===t.kind?e=r.left-o:"alignLeft"===t.kind?e=r.left:"alignRight"===t.kind?e=r.right-o:"alignTop"===t.kind?n=r.top:"alignBottom"===t.kind&&(n=r.bottom-a)
+		let e=l+(t.left-l)*g,n=c+(t.top-c)*g;const o=t.block.offsetWidth,r=t.block.offsetHeight
+		;a.filter(e=>e.to===t&&w.includes(e.from)).forEach(t=>{const a=t.from.block.getBoundingClientRect()
+		;"below"===t.kind?n=a.bottom:"above"===t.kind?n=a.top-r:"right"===t.kind?e=a.right:"left"===t.kind?e=a.left-o:"alignLeft"===t.kind?e=a.left:"alignRight"===t.kind?e=a.right-o:"alignTop"===t.kind?n=a.top:"alignBottom"===t.kind&&(n=a.bottom-r)
 		}),t.block.style.left=`${Math.round(e)}px`,t.block.style.top=`${Math.round(n)}px`,w.push(t)}),t.forEach(zn)},()=>{mn(t),Zo()})
-		}(o,e,n):function(t,e,n){let o;const a=e=>{if(e||t.classList.contains("free")){if(e&&t.classList.contains("letterbox")){Ln(t)
-		;const e=t.getBoundingClientRect();o=e.width/e.height}}else En(t)};a(n.shiftKey);const r=t.getBoundingClientRect();o=r.width/r.height
-		;const i={width:Math.min(Zn(),e.includes("w")?r.right:nt()-r.left),height:e.includes("n")?r.bottom:ot()-r.top},s=to(t);Ue(n,(n,l,c)=>{
-		a(c.shiftKey);const d=te(e,r,n,l);let{w:u,h:h}=gn(s,e,r,d.w,d.h);t.classList.contains("free")?(u=Q(u,Pt,i.width),h=Q(h,Bt,i.height),
-		t.style.height=`${Math.round(h)}px`):u=function(t,e,n,o,a,r,i,s){
-		"n"===e||"s"===e?o=wn(t,a,a*r,r,s.width):2===e.length&&(o=Math.max(o,wn(t,a,a*r,r,s.width)))
-		;(e.includes("e")||e.includes("w"))&&2!==e.length||(o=gn(i,e.includes("w")?"w":"e",n,o,a).w);if(o=Q(o,Pt,s.width),"n"!==e&&"s"!==e){
-		const a=(e.includes("n")?"n":"s")+(e.includes("w")?"w":""),l=vn(t,o),c=gn(i,a,n,o,l).h;Math.abs(c-l)>.5&&(o=wn(t,c,o+(c-l)*r,r,s.width))}
-		vn(t,o)>s.height+.5&&(o=wn(t,s.height,s.height*r,r,s.width));return o}(t,e,r,u,h,o,s,i),t.style.width=`${Math.round(u)}px`,
-		h=t.getBoundingClientRect().height,Xn(t,e.includes("w")?r.right-u:r.left,e.includes("n")?r.bottom-h:r.top),zn(t)},()=>{mn([t]),Zo()})
-		}(t,e,n)}function gn(t,e,n,o,a){
-		const r=e.includes("w")?n.right-o:n.left,i=e.includes("n")?n.bottom-a:n.top,s=t.filter(t=>i<t.bottom&&i+a>t.top),l=t.filter(t=>r<t.right&&r+o>t.left),c=(t,e,n)=>{
+		}(o,e,n):function(t,e,n){let o;const r=e=>{if(e||t.classList.contains("free")){if(e&&t.classList.contains("letterbox")){Ln(t)
+		;const e=t.getBoundingClientRect();o=e.width/e.height}}else En(t)};r(n.shiftKey);const a=t.getBoundingClientRect();o=a.width/a.height
+		;const i={width:Math.min(Zn(),e.includes("w")?a.right:nt()-a.left),height:e.includes("n")?a.bottom:ot()-a.top},s=to(t);Ue(n,(n,l,c)=>{
+		r(c.shiftKey);const d=te(e,a,n,l);let{w:u,h:h}=gn(s,e,a,d.w,d.h);t.classList.contains("free")?(u=Q(u,Pt,i.width),h=Q(h,Bt,i.height),
+		t.style.height=`${Math.round(h)}px`):u=function(t,e,n,o,r,a,i,s){
+		"n"===e||"s"===e?o=wn(t,r,r*a,a,s.width):2===e.length&&(o=Math.max(o,wn(t,r,r*a,a,s.width)))
+		;(e.includes("e")||e.includes("w"))&&2!==e.length||(o=gn(i,e.includes("w")?"w":"e",n,o,r).w);if(o=Q(o,Pt,s.width),"n"!==e&&"s"!==e){
+		const r=(e.includes("n")?"n":"s")+(e.includes("w")?"w":""),l=bn(t,o),c=gn(i,r,n,o,l).h;Math.abs(c-l)>.5&&(o=wn(t,c,o+(c-l)*a,a,s.width))}
+		bn(t,o)>s.height+.5&&(o=wn(t,s.height,s.height*a,a,s.width));return o}(t,e,a,u,h,o,s,i),t.style.width=`${Math.round(u)}px`,
+		h=t.getBoundingClientRect().height,Xn(t,e.includes("w")?a.right-u:a.left,e.includes("n")?a.bottom-h:a.top),zn(t)},()=>{mn([t]),Zo()})
+		}(t,e,n)}function gn(t,e,n,o,r){
+		const a=e.includes("w")?n.right-o:n.left,i=e.includes("n")?n.bottom-r:n.top,s=t.filter(t=>i<t.bottom&&i+r>t.top),l=t.filter(t=>a<t.right&&a+o>t.left),c=(t,e,n)=>{
 		const o=eo(t,e.concat(n));return null===o?t:o};return e.includes("e")&&(o=c(n.left+o,s.map(t=>t.left),l.map(t=>t.right))-n.left),
 		e.includes("w")&&(o=n.right-c(n.right-o,s.map(t=>t.right),l.map(t=>t.left))),
-		e.includes("s")&&(a=c(n.top+a,l.map(t=>t.top),s.map(t=>t.bottom))-n.top),
-		e.includes("n")&&(a=n.bottom-c(n.bottom-a,l.map(t=>t.bottom),s.map(t=>t.top))),{w:o,h:a}}function wn(t,e,n,o,a){for(let r=0;r<3;r++){
-		const r=vn(t,n=Q(n,Pt,a));if(Math.abs(r-e)<.5)break;n+=(e-r)*o}return Q(n,Pt,a)}function vn(t,e){return t.style.width=`${Math.round(e)}px`,
-		t.getBoundingClientRect().height}function bn(){const e=t("a",{class:"po-btn","data-track":"popout"})
+		e.includes("s")&&(r=c(n.top+r,l.map(t=>t.top),s.map(t=>t.bottom))-n.top),
+		e.includes("n")&&(r=n.bottom-c(n.bottom-r,l.map(t=>t.bottom),s.map(t=>t.top))),{w:o,h:r}}function wn(t,e,n,o,r){for(let a=0;a<3;a++){
+		const a=bn(t,n=Q(n,Pt,r));if(Math.abs(a-e)<.5)break;n+=(e-a)*o}return Q(n,Pt,r)}function bn(t,e){return t.style.width=`${Math.round(e)}px`,
+		t.getBoundingClientRect().height}function vn(){const e=t("a",{class:"po-btn","data-track":"popout"})
 		;return e.addEventListener("click",()=>kn(e.closest(".map-block"))),yn(e,!1),e}function yn(t,e){t.textContent=e?zo()?"[x]":"[=]":"[^]",
 		t.title=e?zo()?"Ukloni kartu s ploče":"Vrati kartu na stranicu":"Izdvoji kartu u pomični prozor"}function kn(t){
-		t&&(t.classList.contains("popout")?Ye(t).length?an(t):zo()?function(t){j(`removeFromDashboard: ${t.dataset.mapId}`);const e=t.dataset.mapId
-		;To(()=>Sn(t)),t.closest(".map-entry").remove(),n=e,xa(ka().filter(t=>t!==n)),Zo();var n}(t):Sn(t):g.matches&&xn(t))}function xn(e){
+		t&&(t.classList.contains("popout")?Ye(t).length?rn(t):zo()?function(t){j(`removeFromDashboard: ${t.dataset.mapId}`);const e=t.dataset.mapId
+		;To(()=>Sn(t)),t.closest(".map-entry").remove(),n=e,xr(kr().filter(t=>t!==n)),Zo();var n}(t):Sn(t):g.matches&&xn(t))}function xn(e){
 		j(`popoutMap: ${e.dataset.mapId}`);const n=e.getBoundingClientRect();if(!Xe(e)){const o=t("a",{text:"Vrati","data-track":"dock"
-		}),a=t("div",{class:"map-gap",style:`height: ${n.height}px;`},[t("span",{text:"Karta je izdvojena u prozor ·"}),o])
-		;o.addEventListener("click",()=>Sn(jn.get(a))),Rn(e,a),e.after(a)}e.classList.add("popout"),e.style.width=`${Math.min(420,n.width)}px`,
+		}),r=t("div",{class:"map-gap",style:`height: ${n.height}px;`},[t("span",{text:"Karta je izdvojena u prozor ·"}),o])
+		;o.addEventListener("click",()=>Sn(jn.get(r))),Rn(e,r),e.after(r)}e.classList.add("popout"),e.style.width=`${Math.min(420,n.width)}px`,
 		function(t){const e=wt(t.dataset.mapId);return!!e&&e.freeAspect}(e)&&(e.style.height=`${e.offsetHeight}px`,e.classList.add("free")),
-		Gt.forEach(n=>e.appendChild(t("div",{class:`po-h po-h-${n}`,"data-dir":n}))),Xn(e,n.left,n.top),Kn(e),a(".po-btn",e).forEach(t=>yn(t,!0)),
+		Gt.forEach(n=>e.appendChild(t("div",{class:`po-h po-h-${n}`,"data-dir":n}))),Xn(e,n.left,n.top),Kn(e),r(".po-btn",e).forEach(t=>yn(t,!0)),
 		Zo()}function En(e){e.classList.contains("free")||(j(`unlockAspect: ${e.dataset.mapId}`),e.style.height=`${e.offsetHeight}px`,
 		e.classList.add("free","letterbox"),e.querySelector(".po-backdrop")||e.appendChild(t("div",{class:"po-backdrop"})),Mn(e))}function Ln(t){
 		t.classList.contains("letterbox")&&(j(`lockAspect: ${t.dataset.mapId}`),t.classList.remove("free","letterbox"),
@@ -670,21 +670,21 @@
 		;o&&t.style.setProperty("--po-img",`url("${o}")`)}function zn(t){!function(t){
 		t.querySelectorAll(".radartitle:not(.fullscreen)").forEach(t=>{if(!t.clientWidth)return
 		;const e=[...t.children].find(t=>"A"===t.tagName&&!t.classList.contains("left")&&!t.classList.contains("right"));if(!e)return;const n=e=>{
-		const n=t.querySelector(`:scope > ${e}`);return n?n.offsetWidth+3:0},o=n(".left"),a=n(".right"),r=t.clientWidth-6
-		;e.style.maxWidth=`${Math.max(0,r-o-a-12)}px`,e.style.setProperty("--title-shift",`${Math.round((o-a)/2)}px`)})}(t),function(t){
+		const n=t.querySelector(`:scope > ${e}`);return n?n.offsetWidth+3:0},o=n(".left"),r=n(".right"),a=t.clientWidth-6
+		;e.style.maxWidth=`${Math.max(0,a-o-r-12)}px`,e.style.setProperty("--title-shift",`${Math.round((o-r)/2)}px`)})}(t),function(t){
 		const e=["--lb-l","--lb-r","--lb-t","--lb-b","--lb-w"],n=t.querySelector(".slideshow"),o=Yn(t)
 		;if(!(t.classList.contains("letterbox")&&n&&o&&o.naturalWidth&&o.clientWidth))return void e.forEach(e=>t.style.removeProperty(e))
-		;const a=o.getBoundingClientRect(),r=n.getBoundingClientRect(),i=o.naturalWidth/o.naturalHeight,s=Math.min(a.width,a.height*i),l=Math.min(a.height,a.width/i),c=a.left+(a.width-s)/2,d=a.top+(a.height-l)/2,u=t=>`${Math.round(Math.max(0,t))}px`
-		;t.style.setProperty("--lb-l",u(c-r.left)),t.style.setProperty("--lb-r",u(r.right-(c+s))),t.style.setProperty("--lb-t",u(d-r.top)),
-		t.style.setProperty("--lb-b",u(r.bottom-(d+l))),t.style.setProperty("--lb-w",u(s))}(t)}function Sn(t){if(j(`dockMap: ${t.dataset.mapId}`),
-		Xe(t))return an(t);const e=r(".if1.fullscreen",t)
+		;const r=o.getBoundingClientRect(),a=n.getBoundingClientRect(),i=o.naturalWidth/o.naturalHeight,s=Math.min(r.width,r.height*i),l=Math.min(r.height,r.width/i),c=r.left+(r.width-s)/2,d=r.top+(r.height-l)/2,u=t=>`${Math.round(Math.max(0,t))}px`
+		;t.style.setProperty("--lb-l",u(c-a.left)),t.style.setProperty("--lb-r",u(a.right-(c+s))),t.style.setProperty("--lb-t",u(d-a.top)),
+		t.style.setProperty("--lb-b",u(a.bottom-(d+l))),t.style.setProperty("--lb-w",u(s))}(t)}function Sn(t){if(j(`dockMap: ${t.dataset.mapId}`),
+		Xe(t))return rn(t);const e=a(".if1.fullscreen",t)
 		;e&&Ae(e),Bn(t)&&Tn(t),yo(t),t.classList.remove("popout","free","grouped","letterbox","covered"),
 		["left","top","width","height","z-index","--po-img","--lb-l","--lb-r","--lb-t","--lb-b","--lb-w"].forEach(e=>t.style.removeProperty(e)),
 		t.querySelectorAll(".po-h, .po-backdrop").forEach(t=>t.remove()),function(t){const e=An.get(t);e&&e.remove();An.delete(t)}(t),
-		a(".po-btn",t).forEach(t=>yn(t,!1)),function(t){t.querySelectorAll(".radartitle a").forEach(t=>{t.style.removeProperty("max-width"),
-		t.style.removeProperty("--title-shift")})}(t),Zo()}function Cn(){So(!1),Eo(),To(()=>a(".map-block.popout").forEach(Sn)),Zo(),Ve()}
+		r(".po-btn",t).forEach(t=>yn(t,!1)),function(t){t.querySelectorAll(".radartitle a").forEach(t=>{t.style.removeProperty("max-width"),
+		t.style.removeProperty("--title-shift")})}(t),Zo()}function Cn(){So(!1),Eo(),To(()=>r(".map-block.popout").forEach(Sn)),Zo(),Ve()}
 		var An=new WeakMap,jn=new WeakMap;function Rn(t,e){An.set(t,e),jn.set(e,t)}var $n={titleButtons:function(t){
-		return t?[Ze(),Nn(),bn()]:[Ze(),Kt(),Nn(),bn()]}};var In=0,Pn=new WeakMap;function Bn(t){return Pn.get(t)||null}function Hn(t,e){
+		return t?[Ze(),Nn(),vn()]:[Ze(),Kt(),Nn(),vn()]}};var In=0,Pn=new WeakMap;function Bn(t){return Pn.get(t)||null}function Hn(t,e){
 		e?Pn.set(t,e):Pn.delete(t)}function Dn(){return"g"+ ++In}function Wn(t){const e=Bn(t);return e?Qn().filter(t=>Bn(t)===e):[t]}function Nn(){
 		const e=t("a",{class:"grp-btn","data-track":"group",hidden:""});return e.addEventListener("click",()=>function(t){
 		if(!t||!t.classList.contains("popout"))return;Bn(t)?Tn(t):function(t){j(`joinGroup: ${t.dataset.mapId}`);const e=_n(t);if(!e.length)return
@@ -692,64 +692,64 @@
 		e.forEach(t=>Hn(t,o)),Hn(t,o),On()}(t);Zo()}(e.closest(".map-block"))),e}function _n(t){const e=t.getBoundingClientRect()
 		;return function(t){const e=lo(t);return(e?e.panes.map(t=>t.block):Jn()).filter(e=>e!==t)
 		}(t).filter(t=>!t.classList.contains("fs-host")&&function(t,e){
-		const n=Math.min(t.bottom,e.bottom)-Math.max(t.top,e.top)>0,o=Math.min(t.right,e.right)-Math.max(t.left,e.left)>0,a=(t,e)=>Math.abs(t-e)<=1
-		;return n&&(a(t.right,e.left)||a(t.left,e.right))||o&&(a(t.bottom,e.top)||a(t.top,e.bottom))}(e,t.getBoundingClientRect()))}function Tn(t){
+		const n=Math.min(t.bottom,e.bottom)-Math.max(t.top,e.top)>0,o=Math.min(t.right,e.right)-Math.max(t.left,e.left)>0,r=(t,e)=>Math.abs(t-e)<=1
+		;return n&&(r(t.right,e.left)||r(t.left,e.right))||o&&(r(t.bottom,e.top)||r(t.top,e.bottom))}(e,t.getBoundingClientRect()))}function Tn(t){
 		j(`leaveGroup: ${t.dataset.mapId}`);const e=Bn(t);Hn(t,null);const n=Qn().filter(t=>Bn(t)===e),o=lo(t)?n.filter(e=>co(e).top>co(t).top):[]
 		;if(o.length&&o.length<n.length){const t=Dn();o.forEach(e=>Hn(e,t))}[n.filter(t=>!o.includes(t)),o].forEach(t=>{
 		t.length<2&&t.forEach(t=>Hn(t,null))}),On()}function On(){Qn().forEach(t=>{const e=!!Bn(t);t.classList.toggle("grouped",e)
-		;const n=e||_n(t).length>0;a(".grp-btn",t).forEach(t=>{t.hidden=!n,t.textContent=e?"[-]":"[+]",
+		;const n=e||_n(t).length>0;r(".grp-btn",t).forEach(t=>{t.hidden=!n,t.textContent=e?"[-]":"[+]",
 		t.title=e?"Odvoji prozor od skupine":"Spoji prozor s prozorima koje dodiruje"}),zn(t)})}function qn(t){return t.map(t=>{
 		const e=t.getBoundingClientRect();return{block:t,left:e.left,top:e.top,right:e.right,bottom:e.bottom}})}function Fn(t){
 		const e=Math.min(...t.map(t=>t.left)),n=Math.min(...t.map(t=>t.top));return{left:e,top:n,width:Math.max(...t.map(t=>t.right))-e,
 		height:Math.max(...t.map(t=>t.bottom))-n}}function Vn(t,e,n,o){
-		const a=Math.min(Math.max(0,e.left+n),Math.max(0,nt()-e.width)),r=Math.min(Math.max(0,e.top+o),Math.max(0,ot()-e.height));n=a-e.left,
-		o=r-e.top,t.forEach(t=>{t.block.style.left=`${G(t.left+n)}px`,t.block.style.top=`${G(t.top+o)}px`})}var Un=0;function Zn(){
+		const r=Math.min(Math.max(0,e.left+n),Math.max(0,nt()-e.width)),a=Math.min(Math.max(0,e.top+o),Math.max(0,ot()-e.height));n=r-e.left,
+		o=a-e.top,t.forEach(t=>{t.block.style.left=`${G(t.left+n)}px`,t.block.style.top=`${G(t.top+o)}px`})}var Un=0;function Zn(){
 		return zo()?nt():Math.min(875,nt()-Ht)}function Xn(t,e,n){
-		const o=Math.max(0,nt()-t.offsetWidth),a=Math.max(0,ot()-Math.max(t.offsetHeight,Dt));t.style.left=`${G(Math.min(Math.max(0,e),o))}px`,
-		t.style.top=`${G(Math.min(Math.max(0,n),a))}px`}function Kn(t){const e=Wn(t),n={base:o("--z-widgets",5e3),top:o("--z-widgets-top",7999)}
+		const o=Math.max(0,nt()-t.offsetWidth),r=Math.max(0,ot()-Math.max(t.offsetHeight,Dt));t.style.left=`${G(Math.min(Math.max(0,e),o))}px`,
+		t.style.top=`${G(Math.min(Math.max(0,n),r))}px`}function Kn(t){const e=Wn(t),n={base:o("--z-widgets",5e3),top:o("--z-widgets-top",7999)}
 		;Un<n.base&&(Un=n.base),
 		Un+e.length>n.top&&(Un=n.base,Qn().filter(t=>!t.classList.contains("fs-host")).sort((t,e)=>(Number(t.style.zIndex)||0)-(Number(e.style.zIndex)||0)).forEach(t=>t.style.zIndex=String(++Un))),
 		e.sort((t,e)=>(Number(t.style.zIndex)||0)-(Number(e.style.zIndex)||0)).forEach(t=>t.style.zIndex=String(++Un)),qe()}function Yn(t){
-		return t.querySelector(".slide.active img")||t.querySelector(".placeholder img")}function Qn(){return a(".map-block.popout")}function Jn(){
-		return a(".map-block.popout:not(.snapped)")}function Gn(t,e){let n=t.getBoundingClientRect();const o={x:e.clientX-n.left,y:e.clientY-n.top
-		},a=Wn(t);let r=qn(a),i=Fn(r),s=lo(t);const l=to(t,a);let c=null;Ue(e,(e,d,u)=>{const h=Math.hypot(e,d)>=4;if(s){
-		if(Math.abs(e)<40)return void(h&&function(t,e,n,o){const a=go(t,n.top+o,n.height,e.map(t=>t.block));o=a-n.top,e.forEach(t=>{
-		co(t.block).top=(t.top+o)/ot()}),Eo()}(s,r,i,d));a.forEach(yo),s=null,n=t.getBoundingClientRect(),o.x=Math.min(o.x,t.offsetWidth-Dt),
-		o.y=Q(u.clientY-n.top,0,Dt),r=qn(a),i=Fn(r)}let p=i.left+u.clientX-o.x-n.left,m=i.top+u.clientY-o.y-n.top;const f=h?(g=p,w=p+i.width,
-		zo()?null:g<=5?"left":w>=nt()-5?"right":null):null;var g,w;c=f?{side:f,slot:wo(a,f,m)}:null,h&&!c&&({left:p,top:m}=function(t,e,n,o,a){
-		const r=e+o,i=n+a,s=(t,e)=>{const n=eo(t,e.map(t=>t[0]));return null===n?null:e.find(t=>t[0]===n)
-		},l=t.filter(t=>n<t.bottom&&i>t.top),c=t.filter(t=>e<t.right&&r>t.left)
-		;let d=s(e,l.flatMap(t=>[[t.right,t],[t.left-o,t]])),u=s(n,c.flatMap(t=>[[t.bottom,t],[t.top-a,t]]))
-		;d&&!u&&(u=s(n,[[d[1].top,d[1]],[d[1].bottom-a,d[1]]]));u&&!d&&(d=s(e,[[u[1].left,u[1]],[u[1].right-o,u[1]]]));return{left:d?d[0]:e,
-		top:u?u[0]:n}}(l,p,m,i.width,i.height)),Vn(r,i,p-i.left,m-i.top),vo(c?c.slot:null)},()=>{var t;(vo(null),c)?function(t,e,n){const o=no[e]
-		;o.panes.length||(o.width=n.width/nt());let a=n.top;t.forEach(t=>{j(`snapPane: ${t.dataset.mapId} → ${e}`),yo(t),bo(o,t,a/ot()),Eo(),
-		a=t.getBoundingClientRect().bottom}),Zo()}((t=a,[...t].sort((t,e)=>{const n=t.getBoundingClientRect(),o=e.getBoundingClientRect()
-		;return n.top-o.top||n.left-o.left})),c.side,c.slot):(mn(a),Zo())})}function to(t,e=[]){
+		return t.querySelector(".slide.active img")||t.querySelector(".placeholder img")}function Qn(){return r(".map-block.popout")}function Jn(){
+		return r(".map-block.popout:not(.snapped)")}function Gn(t,e){let n=t.getBoundingClientRect();const o={x:e.clientX-n.left,y:e.clientY-n.top
+		},r=Wn(t);let a=qn(r),i=Fn(a),s=lo(t);const l=to(t,r);let c=null;Ue(e,(e,d,u)=>{const h=Math.hypot(e,d)>=4;if(s){
+		if(Math.abs(e)<40)return void(h&&function(t,e,n,o){const r=go(t,n.top+o,n.height,e.map(t=>t.block));o=r-n.top,e.forEach(t=>{
+		co(t.block).top=(t.top+o)/ot()}),Eo()}(s,a,i,d));r.forEach(yo),s=null,n=t.getBoundingClientRect(),o.x=Math.min(o.x,t.offsetWidth-Dt),
+		o.y=Q(u.clientY-n.top,0,Dt),a=qn(r),i=Fn(a)}let p=i.left+u.clientX-o.x-n.left,m=i.top+u.clientY-o.y-n.top;const f=h?(g=p,w=p+i.width,
+		zo()?null:g<=5?"left":w>=nt()-5?"right":null):null;var g,w;c=f?{side:f,slot:wo(r,f,m)}:null,h&&!c&&({left:p,top:m}=function(t,e,n,o,r){
+		const a=e+o,i=n+r,s=(t,e)=>{const n=eo(t,e.map(t=>t[0]));return null===n?null:e.find(t=>t[0]===n)
+		},l=t.filter(t=>n<t.bottom&&i>t.top),c=t.filter(t=>e<t.right&&a>t.left)
+		;let d=s(e,l.flatMap(t=>[[t.right,t],[t.left-o,t]])),u=s(n,c.flatMap(t=>[[t.bottom,t],[t.top-r,t]]))
+		;d&&!u&&(u=s(n,[[d[1].top,d[1]],[d[1].bottom-r,d[1]]]));u&&!d&&(d=s(e,[[u[1].left,u[1]],[u[1].right-o,u[1]]]));return{left:d?d[0]:e,
+		top:u?u[0]:n}}(l,p,m,i.width,i.height)),Vn(a,i,p-i.left,m-i.top),bo(c?c.slot:null)},()=>{var t;(bo(null),c)?function(t,e,n){const o=no[e]
+		;o.panes.length||(o.width=n.width/nt());let r=n.top;t.forEach(t=>{j(`snapPane: ${t.dataset.mapId} → ${e}`),yo(t),vo(o,t,r/ot()),Eo(),
+		r=t.getBoundingClientRect().bottom}),Zo()}((t=r,[...t].sort((t,e)=>{const n=t.getBoundingClientRect(),o=e.getBoundingClientRect()
+		;return n.top-o.top||n.left-o.left})),c.side,c.slot):(mn(r),Zo())})}function to(t,e=[]){
 		return Jn().filter(n=>n!==t&&!e.includes(n)&&!n.classList.contains("fs-host")).map(t=>t.getBoundingClientRect())}function eo(t,e){let n=null
 		;return e.forEach(e=>{Math.abs(e-t)<=12&&(null===n||Math.abs(e-t)<Math.abs(n-t))&&(n=e)}),n}var no={left:{side:"left",width:null,panes:[],
-		node:null,ui:null},right:{side:"right",width:null,panes:[],node:null,ui:null}};function oo(t){return no[t]}function ao(t,e){no[t].width=e}
-		var ro=null,io=null;function so(t){return t.classList.contains("snapped")}function lo(t){
+		node:null,ui:null},right:{side:"right",width:null,panes:[],node:null,ui:null}};function oo(t){return no[t]}function ro(t,e){no[t].width=e}
+		var ao=null,io=null;function so(t){return t.classList.contains("snapped")}function lo(t){
 		return Object.values(no).find(e=>e.panes.some(e=>e.block===t))||null}function co(t){const e=lo(t);return e?e.panes.find(e=>e.block===t):null
 		}function uo(t){return"left"===t.side?no.right:no.left}function ho(t){return t.panes.length?t.width:0}function po(t){
 		return Math.round(ho(t)*nt())}function mo(){return ho(no.left)+ho(no.right)>=.999}function fo(t,e=[]){const n=[0,ot()]
 		;return t.panes.forEach(t=>{if(e.includes(t.block)||t.block.classList.contains("fs-host"))return;const o=t.block.getBoundingClientRect()
-		;n.push(o.top,o.bottom)}),n}function go(t,e,n,o=[]){const a=fo(t,o),r=eo(e,a.concat(a.map(t=>t-n)))
-		;return Q(null===r?e:r,0,Math.max(0,ot()-n))}function wo(t,e,n){
-		const o=no[e],a=Math.max(...t.map(t=>t.offsetWidth)),r=o.panes.length?po(o):Q(a,Nt,nt()-po(uo(o))),i=t.reduce((t,e)=>t+(e.classList.contains("free")?e.offsetHeight:Math.round(e.offsetHeight*r/e.offsetWidth)),0)
-		;return{left:"left"===e?0:nt()-r,top:Math.round(go(o,n,i,t)),width:r,height:i}}function vo(e){ro||(ro=t("div",{class:"snap-preview",
-		hidden:!0}),document.body.appendChild(ro)),ro.hidden=!e,e&&Object.assign(ro.style,{left:`${e.left}px`,top:`${e.top}px`,width:`${e.width}px`,
-		height:`${e.height}px`})}function bo(e,n,o,a){e.node||(e.node=t("div",{class:`snap-col snap-${e.side}`}),e.ui=t("div",{
-		class:`snap-ui snap-${e.side}`},[t("div",{class:"snap-edge","data-side":e.side})]),document.body.append(e.node,e.ui));const r={block:n,top:o
-		};n.classList.contains("free")&&(r.height=a||n.offsetHeight/ot()),e.panes.push(r),n.classList.add("snapped",`snapped-${e.side}`)}
+		;n.push(o.top,o.bottom)}),n}function go(t,e,n,o=[]){const r=fo(t,o),a=eo(e,r.concat(r.map(t=>t-n)))
+		;return Q(null===a?e:a,0,Math.max(0,ot()-n))}function wo(t,e,n){
+		const o=no[e],r=Math.max(...t.map(t=>t.offsetWidth)),a=o.panes.length?po(o):Q(r,Nt,nt()-po(uo(o))),i=t.reduce((t,e)=>t+(e.classList.contains("free")?e.offsetHeight:Math.round(e.offsetHeight*a/e.offsetWidth)),0)
+		;return{left:"left"===e?0:nt()-a,top:Math.round(go(o,n,i,t)),width:a,height:i}}function bo(e){ao||(ao=t("div",{class:"snap-preview",
+		hidden:!0}),document.body.appendChild(ao)),ao.hidden=!e,e&&Object.assign(ao.style,{left:`${e.left}px`,top:`${e.top}px`,width:`${e.width}px`,
+		height:`${e.height}px`})}function vo(e,n,o,r){e.node||(e.node=t("div",{class:`snap-col snap-${e.side}`}),e.ui=t("div",{
+		class:`snap-ui snap-${e.side}`},[t("div",{class:"snap-edge","data-side":e.side})]),document.body.append(e.node,e.ui));const a={block:n,top:o
+		};n.classList.contains("free")&&(a.height=r||n.offsetHeight/ot()),e.panes.push(a),n.classList.add("snapped",`snapped-${e.side}`)}
 		function yo(t){const e=lo(t);e&&(j(`unsnapPane: ${t.dataset.mapId}`),e.panes=e.panes.filter(e=>e.block!==t),
 		t.classList.remove("snapped",`snapped-${e.side}`),e.panes.length||ko(e),Eo())}function ko(t){t.node&&t.node.remove(),t.ui&&t.ui.remove(),
 		t.node=t.ui=t.width=null,t.panes=[]}function xo(){Object.values(no).forEach(ko),io=null,So(!1),Eo()}function Eo(){
 		document.body.classList.toggle("snap-full",mo());const t=document.documentElement.style;t.setProperty("--snap-l",`${po(no.left)}px`),
 		t.setProperty("--snap-r",`${po(no.right)}px`);const e=mo()&&no.left.panes.length&&no.right.panes.length;Object.values(no).forEach(t=>{
 		!function(t,e){const n=po(t);if(!n)return;const o="left"===t.side?0:nt()-n;[t.node,t.ui].forEach(t=>{t.style.left=`${o}px`,
-		t.style.width=`${n}px`});const a=t.ui.querySelector(".snap-edge");a.hidden=e&&"right"===t.side,
-		a.classList.toggle("snap-seam",e&&"left"===t.side),
-		a.title=e?"Širina stupaca · dvoklik vraća stranicu":mo()?"Širina stupca · dvoklik vraća stranicu":"Širina stupca · dvoklik sakriva stranicu",
+		t.style.width=`${n}px`});const r=t.ui.querySelector(".snap-edge");r.hidden=e&&"right"===t.side,
+		r.classList.toggle("snap-seam",e&&"left"===t.side),
+		r.title=e?"Širina stupaca · dvoklik vraća stranicu":mo()?"Širina stupca · dvoklik vraća stranicu":"Širina stupca · dvoklik sakriva stranicu",
 		t.panes.forEach(t=>function(t,e,n){const o=t.block
 		;o.style.width=`${n}px`,void 0!==t.height&&(o.style.height=`${Math.round(Q(t.height*ot(),Bt,ot()))}px`)
 		;o.style.left=`${Math.round(e+(n-o.offsetWidth)/2)}px`,o.style.top=`${Math.round(Q(t.top*ot(),0,Math.max(0,ot()-o.offsetHeight)))}px`
@@ -758,67 +758,67 @@
 		;let n=Q(t[0].block.getBoundingClientRect().top,0,Math.max(0,ot()-e));t.forEach(t=>{t.block.style.top=`${Math.round(n)}px`,t.top=n/ot(),
 		n+=t.block.offsetHeight})})}(t),function(t){t.panes.forEach(e=>{const n=e.block
 		;if(!n.classList.contains("fs-host"))return n.style.removeProperty("--fs-top"),void n.style.removeProperty("--fs-bottom")
-		;const o=n.getBoundingClientRect();let a=0,r=ot();t.panes.forEach(t=>{if(t===e||t.block.classList.contains("fs-host"))return
-		;const n=t.block.getBoundingClientRect();n.top<o.top?a=Math.max(a,n.bottom):r=Math.min(r,n.top)});const i=143;a=Q(a,0,ot()-i),
-		r=Math.max(r,a+i),n.style.setProperty("--fs-top",`${Math.round(a)}px`),n.style.setProperty("--fs-bottom",`${Math.round(ot()-r)}px`)})}(t)
+		;const o=n.getBoundingClientRect();let r=0,a=ot();t.panes.forEach(t=>{if(t===e||t.block.classList.contains("fs-host"))return
+		;const n=t.block.getBoundingClientRect();n.top<o.top?r=Math.max(r,n.bottom):a=Math.min(a,n.top)});const i=143;r=Q(r,0,ot()-i),
+		a=Math.max(a,r+i),n.style.setProperty("--fs-top",`${Math.round(r)}px`),n.style.setProperty("--fs-bottom",`${Math.round(ot()-a)}px`)})}(t)
 		}(t,e),t.panes.forEach(t=>zn(t.block))})}function Lo(t,e){t.classList.contains("snap-seam")?function(t){const{left:e,right:n}=no,o=po(e)
-		;Ue(t,t=>{const a=Q(o+t,Nt,nt()-Nt);e.width=a/nt(),n.width=1-e.width,Eo()},Zo)}(e):function(t,e){const n=po(t),o=nt()-po(uo(t)),a={
-		left:ho(no.left),right:ho(no.right)};Ue(e,e=>{let r=Q("left"===t.side?n+e:n-e,Nt,o);r>=o-24&&(r=o);const i=r/nt()
-		;t.width=r===o?1-ho(uo(t)):i,mo()&&!io&&a.left+a.right<.999&&(io=a),mo()||(io=null),Eo()},Zo)}(no[t.dataset.side],e)}var Mo=!1
+		;Ue(t,t=>{const r=Q(o+t,Nt,nt()-Nt);e.width=r/nt(),n.width=1-e.width,Eo()},Zo)}(e):function(t,e){const n=po(t),o=nt()-po(uo(t)),r={
+		left:ho(no.left),right:ho(no.right)};Ue(e,e=>{let a=Q("left"===t.side?n+e:n-e,Nt,o);a>=o-24&&(a=o);const i=a/nt()
+		;t.width=a===o?1-ho(uo(t)):i,mo()&&!io&&r.left+r.right<.999&&(io=r),mo()||(io=null),Eo()},Zo)}(no[t.dataset.side],e)}var Mo=!1
 		;function zo(){return Mo}function So(t){Mo=t,document.body.classList.toggle("dashboard",t),un(),
-		a(".map-block.popout .po-btn").forEach(t=>yn(t,!0))}function Co(){let t=Ht,e=0;a(".map-block:not(.popout)").forEach(n=>{xn(n),
+		r(".map-block.popout .po-btn").forEach(t=>yn(t,!0))}function Co(){let t=Ht,e=0;r(".map-block:not(.popout)").forEach(n=>{xn(n),
 		t>Ht&&t+n.offsetHeight>ot()&&(t=Ht,e++),Xn(n,po(oo("left"))+Ht+(t-Ht)+420*e/2,t),Kn(n),t+=32})}function Ao(t){
 		const e=ft(t),n=document.querySelector("[data-maps]");if(!e||!n||!zo()||Qe(t))return;j(`addToDashboard: ${t}`),function(t){
-		xa(ka().filter(e=>e!==t).concat(t))}(t);n.querySelector(".maps-empty")&&n.replaceChildren()
-		;const o=jt(n,e,$n),a=r(".links-bottom",o.parentElement);return a&&a.addEventListener("scroll",()=>$t(a),{passive:!0}),tn(o),Co(),zn(o),
+		xr(kr().filter(e=>e!==t).concat(t))}(t);n.querySelector(".maps-empty")&&n.replaceChildren()
+		;const o=jt(n,e,$n),r=a(".links-bottom",o.parentElement);return r&&r.addEventListener("scroll",()=>$t(r),{passive:!0}),tn(o),Co(),zn(o),
 		On(),Ve(),Zo(),o}function jo(t){const e=Yn(t);if(e&&e.naturalWidth&&e.naturalHeight)return e.naturalWidth/e.naturalHeight
 		;const n=t.querySelector("video");if(n&&n.videoWidth&&n.videoHeight)return n.videoWidth/n.videoHeight
-		;if(t.classList.contains("free"))return 0;const o=t.getBoundingClientRect(),a=o.height-Dt;return a>0?o.width/a:0}function Ro(t,e){
+		;if(t.classList.contains("free"))return 0;const o=t.getBoundingClientRect(),r=o.height-Dt;return r>0?o.width/r:0}function Ro(t,e){
 		const n=Math.floor(t/e),o=Math.round(t)-n*e;return Array.from({length:e},(t,e)=>n+(e<o?1:0))}function $o(t,e){
 		return t.slice(0,e).reduce((t,e)=>t+e,0)}function Io(){if(!zo()||!g.matches)return
-		;const t=a(".map-block.popout").filter(t=>!so(t)&&!t.classList.contains("fs-host"));if(!t.length)return
-		;j(`arrangeBoard: ${t.length} widgets`);const e=nt(),n=ot(),{cols:o,rows:r}=function(t,e,n,o){let a={cols:1,rows:t,score:-1/0}
-		;for(let r=1;r<=t;r++){const i=Math.ceil(t/r),s=e/r,l=n/i-Dt;if(l<=0)continue;const c=Math.min(s,l*o),d=c*(c/o)*(1-.01*(r*i-t))
-		;d>a.score&&(a={cols:r,rows:i,score:d})}return a}(t.length,e,n,function(t){const e=t.map(jo).filter(t=>t>0)
-		;return e.length?e.reduce((t,e)=>t+e,0)/e.length:Wt}(t)),i=Ro(e,o),s=Ro(n,r);t.forEach((t,e)=>{En(t),t.style.width=`${i[e%o]}px`,
+		;const t=r(".map-block.popout").filter(t=>!so(t)&&!t.classList.contains("fs-host"));if(!t.length)return
+		;j(`arrangeBoard: ${t.length} widgets`);const e=nt(),n=ot(),{cols:o,rows:a}=function(t,e,n,o){let r={cols:1,rows:t,score:-1/0}
+		;for(let a=1;a<=t;a++){const i=Math.ceil(t/a),s=e/a,l=n/i-Dt;if(l<=0)continue;const c=Math.min(s,l*o),d=c*(c/o)*(1-.01*(a*i-t))
+		;d>r.score&&(r={cols:a,rows:i,score:d})}return r}(t.length,e,n,function(t){const e=t.map(jo).filter(t=>t>0)
+		;return e.length?e.reduce((t,e)=>t+e,0)/e.length:Wt}(t)),i=Ro(e,o),s=Ro(n,a);t.forEach((t,e)=>{En(t),t.style.width=`${i[e%o]}px`,
 		t.style.height=`${s[Math.floor(e/o)]}px`}),t.forEach((t,e)=>{Xn(t,$o(i,e%o),$o(s,Math.floor(e/o))),zn(t)}),On(),Ve(),Zo()}function Po(){
-		const t={},e=function(){const t=new Map,e=new Map,n=a(".map-block");return[...n.filter(t=>!Xe(t)),...n.filter(Xe)].forEach(n=>{
-		const o=n.dataset.mapId,a=(e.get(o)||0)+1;e.set(o,a),t.set(n,kt(o,a))}),t}(),n=new Map,o=t=>{const e=Bn(t)
+		const t={},e=function(){const t=new Map,e=new Map,n=r(".map-block");return[...n.filter(t=>!Xe(t)),...n.filter(Xe)].forEach(n=>{
+		const o=n.dataset.mapId,r=(e.get(o)||0)+1;e.set(o,r),t.set(n,kt(o,r))}),t}(),n=new Map,o=t=>{const e=Bn(t)
 		;if(e)return n.has(e)||n.set(e,n.size+1),n.get(e)};["left","right"].map(oo).forEach(n=>{n.panes.length&&(t[n.side]={width:J(n.width),
 		panes:[...n.panes].sort((t,e)=>t.top-e.top).map(t=>{const n={id:e.get(t.block),top:J(t.top)};void 0!==t.height&&(n.height=J(t.height))
-		;const a=o(t.block);return a&&(n.group=a),t.block.classList.contains("fs-host")&&(n.fullscreen=!0),n})})})
-		;const r=Jn().sort((t,e)=>(Number(t.style.zIndex)||0)-(Number(e.style.zIndex)||0)).map(t=>{const n=t.getBoundingClientRect(),a={id:e.get(t),
-		left:J(n.left/nt()),top:J(n.top/ot()),width:J(n.width/nt())};t.classList.contains("free")&&(a.height=J(n.height/ot()));const r=o(t)
-		;return r&&(a.group=r),t.classList.contains("fs-host")&&(a.fullscreen=!0),a});return r.length&&(t.floating=r),zo()&&(t.dashboard=!0),
-		Object.keys(t).length?t:null}function Bo(t,e){if(!t||"object"!=typeof t)return null;const n={},o=new Set,a=!0===t.dashboard
-		;a||["left","right"].forEach(a=>{const r=function(t,e,n){if(!t||"object"!=typeof t||!Array.isArray(t.panes))return null
-		;const o=Number(t.width);if(!(o>0&&o<=1))return null;const a=[];let r=0;return t.panes.forEach(t=>{if(!Do(t,e,n))return;const o={id:t.id
-		},i=Number(t.top),s=Number(t.share);if(Ho(i))o.top=J(i);else{if(!(s>0&&s<=1))return;o.top=J(r),o.height=J(s),r+=s}n.add(t.id),
-		a.push(Wo(t,o))}),a.length?{width:J(o),panes:a}:null}(t[a],e,o);r&&(n[a]=r)
+		;const r=o(t.block);return r&&(n.group=r),t.block.classList.contains("fs-host")&&(n.fullscreen=!0),n})})})
+		;const a=Jn().sort((t,e)=>(Number(t.style.zIndex)||0)-(Number(e.style.zIndex)||0)).map(t=>{const n=t.getBoundingClientRect(),r={id:e.get(t),
+		left:J(n.left/nt()),top:J(n.top/ot()),width:J(n.width/nt())};t.classList.contains("free")&&(r.height=J(n.height/ot()));const a=o(t)
+		;return a&&(r.group=a),t.classList.contains("fs-host")&&(r.fullscreen=!0),r});return a.length&&(t.floating=a),zo()&&(t.dashboard=!0),
+		Object.keys(t).length?t:null}function Bo(t,e){if(!t||"object"!=typeof t)return null;const n={},o=new Set,r=!0===t.dashboard
+		;r||["left","right"].forEach(r=>{const a=function(t,e,n){if(!t||"object"!=typeof t||!Array.isArray(t.panes))return null
+		;const o=Number(t.width);if(!(o>0&&o<=1))return null;const r=[];let a=0;return t.panes.forEach(t=>{if(!Do(t,e,n))return;const o={id:t.id
+		},i=Number(t.top),s=Number(t.share);if(Ho(i))o.top=J(i);else{if(!(s>0&&s<=1))return;o.top=J(a),o.height=J(s),a+=s}n.add(t.id),
+		r.push(Wo(t,o))}),r.length?{width:J(o),panes:r}:null}(t[r],e,o);a&&(n[r]=a)
 		}),n.left&&n.right&&n.left.width+n.right.width>1&&(n.right.width=J(1-n.left.width),n.right.width<=0&&delete n.right)
-		;const r=function(t,e,n){
+		;const a=function(t,e,n){
 		return Array.isArray(t)?t.filter(t=>Do(t,e,n)&&Ho(Number(t.left))&&Ho(Number(t.top))&&Ho(Number(t.width))&&Number(t.width)>0).map(t=>{
 		n.add(t.id);return Wo(t,{id:t.id,left:J(Number(t.left)),top:J(Number(t.top)),width:J(Number(t.width))})}):[]}(t.floating,e,o)
-		;return r.length&&(n.floating=r),function(t){const e=new Map;t.forEach(t=>t.forEach(n=>{n.group&&(e.has(n.group)||e.set(n.group,{count:0,
+		;return a.length&&(n.floating=a),function(t){const e=new Map;t.forEach(t=>t.forEach(n=>{n.group&&(e.has(n.group)||e.set(n.group,{count:0,
 		places:new Set}),e.get(n.group).count++,e.get(n.group).places.add(t))})),t.forEach(t=>t.forEach(t=>{const n=e.get(t.group)
 		;n&&(n.count<2||n.places.size>1)&&delete t.group}))}([n.left&&n.left.panes,n.right&&n.right.panes,n.floating].filter(Boolean)),
-		a&&(n.dashboard=!0),Object.keys(n).length?n:null}function Ho(t){return Number.isFinite(t)&&t>=0&&t<=1}function Do(t,e,n){
+		r&&(n.dashboard=!0),Object.keys(n).length?n:null}function Ho(t){return Number.isFinite(t)&&t>=0&&t<=1}function Do(t,e,n){
 		return!!t&&"string"==typeof t.id&&e.includes(xt(t.id))&&!n.has(t.id)}function Wo(t,e){const n=Number(t.height)
 		;return Ho(n)&&n>0&&(e.height=J(n)),Number.isInteger(t.group)&&t.group>0&&(e.group=t.group),!0===t.fullscreen&&function(t){const e=wt(xt(t))
 		;return!!e&&e.fullscreen}(t.id)&&(e.fullscreen=!0),e}function No(t){if(Vo=t,xo(),So(!!(t&&t.dashboard&&g.matches)),
 		!t||!g.matches)return Oo=g.matches?null:t,void Ve();Oo=null;const e=To(()=>function(t){const e=[],n=new Map,o=(t,e)=>{
-		e&&(n.has(e)||n.set(e,Dn()),Hn(t,n.get(e)))};["left","right"].forEach(n=>{const a=t[n];if(!a)return;const r=oo(n)
-		;a.panes.forEach(({id:t,top:n,height:a,group:i,fullscreen:s})=>{const l=on(t);l&&!l.classList.contains("popout")&&(xn(l),
-		a&&!l.classList.contains("free")&&En(l),bo(r,l,n,a),o(l,i),s&&e.push(l))}),r.panes.length&&ao(n,Q(a.width*nt(),Nt,nt())/nt())})
-		;const a=oo("left"),r=oo("right");a.panes.length&&r.panes.length&&a.width+r.width>1&&ao("right",1-a.width);Eo(),
-		(t.floating||[]).forEach(({id:t,left:n,top:a,width:r,height:i,group:s,fullscreen:l})=>{const c=on(t)
-		;c&&!c.classList.contains("popout")&&(xn(c),i&&!c.classList.contains("free")&&En(c),c.style.width=`${Math.round(Q(r*nt(),Pt,Zn()))}px`,
-		c.classList.contains("free")&&i&&(c.style.height=`${Math.round(Q(i*ot(),Bt,ot()))}px`),Xn(c,n*nt(),a*ot()),Kn(c),o(c,s),l&&e.push(c))})
+		e&&(n.has(e)||n.set(e,Dn()),Hn(t,n.get(e)))};["left","right"].forEach(n=>{const r=t[n];if(!r)return;const a=oo(n)
+		;r.panes.forEach(({id:t,top:n,height:r,group:i,fullscreen:s})=>{const l=on(t);l&&!l.classList.contains("popout")&&(xn(l),
+		r&&!l.classList.contains("free")&&En(l),vo(a,l,n,r),o(l,i),s&&e.push(l))}),a.panes.length&&ro(n,Q(r.width*nt(),Nt,nt())/nt())})
+		;const r=oo("left"),a=oo("right");r.panes.length&&a.panes.length&&r.width+a.width>1&&ro("right",1-r.width);Eo(),
+		(t.floating||[]).forEach(({id:t,left:n,top:r,width:a,height:i,group:s,fullscreen:l})=>{const c=on(t)
+		;c&&!c.classList.contains("popout")&&(xn(c),i&&!c.classList.contains("free")&&En(c),c.style.width=`${Math.round(Q(a*nt(),Pt,Zn()))}px`,
+		c.classList.contains("free")&&i&&(c.style.height=`${Math.round(Q(i*ot(),Bt,ot()))}px`),Xn(c,n*nt(),r*ot()),Kn(c),o(c,s),l&&e.push(c))})
 		;const i=zo()&&!(t.floating||[]).length;zo()&&Co();i&&Io();return e.forEach(Oe),On(),qe(),i}(t));e&&Zo()}var _o=!1;function To(t){const e=_o
 		;_o=!0;try{return t()}finally{_o=e}}var Oo=null;function qo(){return Oo||Po()}function Fo(){return Oo?!0===Oo.dashboard:zo()}var Vo=null
-		;function Uo(){_o||(Vo=qo())}function Zo(){On(),qe(),_o||(Uo(),function(t){if(Ma){t?Ma.layout=t:delete Ma.layout
-		;const e=new URL(window.location.href);e.searchParams.set("v",ma(Ma)),history.replaceState(null,"",e)}else{const e=va()
-		;t?e.layout=t:delete e.layout,ba(e)}}(Vo),m(d))}var Xo=[{id:"zadano",name:"Osnovno",
+		;function Uo(){_o||(Vo=qo())}function Zo(){On(),qe(),_o||(Uo(),function(t){if(Mr){t?Mr.layout=t:delete Mr.layout
+		;const e=new URL(window.location.href);e.searchParams.set("v",mr(Mr)),history.replaceState(null,"",e)}else{const e=br()
+		;t?e.layout=t:delete e.layout,vr(e)}}(Vo),m(d))}var Xo=[{id:"zadano",name:"Osnovno",
 		maps:["neverin-radar-hr","neverin-satelit-hr","neverin-radar-eu","neverin-satelit-eu","windy","dhmz-radar","meteociel-temp","blitzortung","essl","astorp","estofex","eumetnet","meteociel-satelit","dwd-sinopticka","neverin-kamera","meteoblue-prognoza"]
 		},{id:"vise",name:"Više",
 		maps:["ventusky","rainviewer","weatherandradar","meteo-si","idokep-radar-eu","idokep-satelit-eu","istramet-munje","blitzortung-karta","wetterzentrale-temp","dhmz-sinopticka","chmi-sinopticka","dhmz-puntijarka","dhmz-bilogora","dhmz-gradiste","dhmz-goli","dhmz-debeljak","dhmz-uljenje"]
@@ -828,84 +828,84 @@
 		name:"Nevrijeme",maps:["essl","astorp","estofex","blitzortung","istramet-munje","blitzortung-karta"]},{id:"sve",name:"Sve",
 		maps:pt.map(t=>t.id)},{id:"nista",name:"Ništa",maps:[]}];function Ko(t){return"string"==typeof t&&t.startsWith("u:")}function Yo(t){
 		return!(!t||!t.layout||!0!==t.layout.dashboard)}function Qo(t){return t&&Ko(t.id)&&"string"==typeof t.name&&Array.isArray(t.maps)}
-		var Jo=function(){const t=S(b);return Array.isArray(t)?t.filter(Qo):[]}();function Go(){return Jo}function ta(){C(b,Jo)}function ea(){
-		return Xo.concat(Jo)}function na(){let t;do{t="u:"+Date.now().toString(36)+Math.random().toString(36).slice(2,6)}while(Jo.some(e=>e.id===t))
-		;return t}function oa(t){return String(t).trim().replace(/\s+/g," ").slice(0,40)}function aa(t){
-		return Jo.find(e=>e.name.toLowerCase()===t.toLowerCase())}function ra(t,e,n=null){const o=aa(t);return o?(o.name=t,o.maps=e,
-		o.layout=n):Jo.push({id:na(),name:t,maps:e,layout:n}),ta(),o||Jo[Jo.length-1]}function ia(t){return"zadano"!==t}var sa=function(){
-		const t=S(y);return Array.isArray(t)?t.filter(t=>ia(t)&&Xo.some(e=>e.id===t)):[]}();function la(){return sa}function ca(){C(y,sa)}
-		function da(t){return sa.includes(t)}function ua(){return Xo.filter(t=>ia(t.id))}function ha(){sa=ua().map(t=>t.id),ca()}function pa(){
-		sa=[],ca()}function ma(t){const e=JSON.stringify(t).replace(/[\u0080-\uffff]/g,t=>"\\u"+t.charCodeAt(0).toString(16).padStart(4,"0"))
-		;return btoa(e).replace(/\+/g,"-").replace(/\//g,"_").replace(/=+$/,"")}function fa(t){const e={preset:"custom",maps:t.maps.slice(),
-		name:t.name};return t.layout&&(e.layout=t.layout),e}function ga(t,e){const n=new URL(window.location.origin+window.location.pathname)
-		;n.searchParams.set("v",ma(t));const o=n.toString(),a=()=>window.prompt("Kopiraj poveznicu:",o)
-		;navigator.clipboard&&navigator.clipboard.writeText?navigator.clipboard.writeText(o).then(e).catch(a):a()}function wa(t){
-		return t&&"string"==typeof t.preset&&("custom"===t.preset||ea().some(e=>e.id===t.preset))}function va(){const t=S(v);return wa(t)?t:{
-		preset:"zadano"}}function ba(t){C(v,t)}function ya(t){const e=ea().find(e=>e.id===t);return e?e.maps:null}function ka(){return Ea(Sa())}
-		function xa(t){const e=Ma||va();e.preset="custom",e.maps=t,Ma||ba(e)}function Ea(t){
-		return"custom"===t.preset&&Array.isArray(t.maps)?[...new Set(t.maps)].filter(t=>mt.has(t)):ya(t.preset)||ya("zadano")}function La(t,e){
-		return t.length===e.length&&t.every((t,n)=>t===e[n])}var Ma=null;function za(){return Ma}function Sa(){return Ma||va()}function Ca(){
-		const t=Sa();return Ma&&"custom"===t.preset?function(t){const e=Go().concat(Xo).find(e=>La(e.maps,t));return e?e.id:null
-		}(ka())||"custom":t.preset}var Aa=0,ja=0;function Ra(){a("img.lazy").forEach(t=>{t.src=t.getAttribute("data-src"),t.classList.remove("lazy")
-		}),Pe(),be(!0),Re(),$e(),a(".links-bottom").forEach(t=>{t.addEventListener("scroll",()=>$t(t),{passive:!0})}),It(),function(){
-		const t=document.querySelectorAll("img"),e=r(".progress-bar"),n=r(".progress-container"),o=new Set(t),a=++Aa;if(clearTimeout(ja),
-		e.style.width="0",n.style.removeProperty("display"),0===t.length)return void(n.style.display="none");const i=r=>{
-		Aa===a&&o.delete(r)&&(e.style.width=(t.length-o.size)/t.length*100+"%",0===o.size&&(ja=setTimeout(()=>{n.style.display="none"},500)))}
+		var Jo=function(){const t=S(v);return Array.isArray(t)?t.filter(Qo):[]}();function Go(){return Jo}function tr(){C(v,Jo)}function er(){
+		return Xo.concat(Jo)}function nr(){let t;do{t="u:"+Date.now().toString(36)+Math.random().toString(36).slice(2,6)}while(Jo.some(e=>e.id===t))
+		;return t}function or(t){return String(t).trim().replace(/\s+/g," ").slice(0,40)}function rr(t){
+		return Jo.find(e=>e.name.toLowerCase()===t.toLowerCase())}function ar(t,e,n=null){const o=rr(t);return o?(o.name=t,o.maps=e,
+		o.layout=n):Jo.push({id:nr(),name:t,maps:e,layout:n}),tr(),o||Jo[Jo.length-1]}function ir(t){return"zadano"!==t}var sr=function(){
+		const t=S(y);return Array.isArray(t)?t.filter(t=>ir(t)&&Xo.some(e=>e.id===t)):[]}();function lr(){return sr}function cr(){C(y,sr)}
+		function dr(t){return sr.includes(t)}function ur(){return Xo.filter(t=>ir(t.id))}function hr(){sr=ur().map(t=>t.id),cr()}function pr(){
+		sr=[],cr()}function mr(t){const e=JSON.stringify(t).replace(/[\u0080-\uffff]/g,t=>"\\u"+t.charCodeAt(0).toString(16).padStart(4,"0"))
+		;return btoa(e).replace(/\+/g,"-").replace(/\//g,"_").replace(/=+$/,"")}function fr(t){const e={preset:"custom",maps:t.maps.slice(),
+		name:t.name};return t.layout&&(e.layout=t.layout),e}function gr(t,e){const n=new URL(window.location.origin+window.location.pathname)
+		;n.searchParams.set("v",mr(t));const o=n.toString(),r=()=>window.prompt("Kopiraj poveznicu:",o)
+		;navigator.clipboard&&navigator.clipboard.writeText?navigator.clipboard.writeText(o).then(e).catch(r):r()}function wr(t){
+		return t&&"string"==typeof t.preset&&("custom"===t.preset||er().some(e=>e.id===t.preset))}function br(){const t=S(b);return wr(t)?t:{
+		preset:"zadano"}}function vr(t){C(b,t)}function yr(t){const e=er().find(e=>e.id===t);return e?e.maps:null}function kr(){return Er(Sr())}
+		function xr(t){const e=Mr||br();e.preset="custom",e.maps=t,Mr||vr(e)}function Er(t){
+		return"custom"===t.preset&&Array.isArray(t.maps)?[...new Set(t.maps)].filter(t=>mt.has(t)):yr(t.preset)||yr("zadano")}function Lr(t,e){
+		return t.length===e.length&&t.every((t,n)=>t===e[n])}var Mr=null;function zr(){return Mr}function Sr(){return Mr||br()}function Cr(){
+		const t=Sr();return Mr&&"custom"===t.preset?function(t){const e=Go().concat(Xo).find(e=>Lr(e.maps,t));return e?e.id:null
+		}(kr())||"custom":t.preset}var Ar=0,jr=0;function Rr(){r("img.lazy").forEach(t=>{t.src=t.getAttribute("data-src"),t.classList.remove("lazy")
+		}),Pe(),ve(!0),Re(),$e(),r(".links-bottom").forEach(t=>{t.addEventListener("scroll",()=>$t(t),{passive:!0})}),It(),function(){
+		const t=document.querySelectorAll("img"),e=a(".progress-bar"),n=a(".progress-container"),o=new Set(t),r=++Ar;if(clearTimeout(jr),
+		e.style.width="0",n.style.removeProperty("display"),0===t.length)return void(n.style.display="none");const i=a=>{
+		Ar===r&&o.delete(a)&&(e.style.width=(t.length-o.size)/t.length*100+"%",0===o.size&&(jr=setTimeout(()=>{n.style.display="none"},500)))}
 		;t.forEach(t=>{t.addEventListener("load",()=>i(t)),t.addEventListener("error",()=>{j(`Error loading image: ${t.src}`),
-		t.removeAttribute("src"),i(t)}),t.complete&&t.dispatchEvent(new Event("load"))})}()}var $a=0;function Ia(t){
-		return t.toLowerCase().normalize("NFD").replace(/\p{Diacritic}/gu,"").replace(/đ/g,"d")}function Pa(t){
-		return Ia(t).split(/\s+/).filter(Boolean)}function Ba(t,e){const n=Ia(`${t.name} ${t.category}`);return e.every(t=>n.includes(t))}
-		var Ha=null;function Da(e){Ha?Wa():function(e){if(!zo())return;Wa()
-		;const n=new Set(ka()),o=pt.filter(t=>P(t.id)&&!n.has(t.id)).sort((t,e)=>t.name.localeCompare(e.name,"hr")),a=t("input",{type:"text",
-		class:"ms-add-input",placeholder:"Traži kartu…",spellcheck:"false",autocomplete:"off"}),r=t("div",{class:"ms-add-list"}),i=t("div",{
-		class:"ms-add-empty",text:o.length?"Nema pogodaka":"Sve su karte na ploči"}),s=t("div",{class:"ms-add"},[a,r,i]);let l=[],c=-1
+		t.removeAttribute("src"),i(t)}),t.complete&&t.dispatchEvent(new Event("load"))})}()}var $r=0;function Ir(t){
+		return t.toLowerCase().normalize("NFD").replace(/\p{Diacritic}/gu,"").replace(/đ/g,"d")}function Pr(t){
+		return Ir(t).split(/\s+/).filter(Boolean)}function Br(t,e){const n=Ir(`${t.name} ${t.category}`);return e.every(t=>n.includes(t))}
+		var Hr=null;function Dr(e){Hr?Wr():function(e){if(!zo())return;Wr()
+		;const n=new Set(kr()),o=pt.filter(t=>P(t.id)&&!n.has(t.id)).sort((t,e)=>t.name.localeCompare(e.name,"hr")),r=t("input",{type:"text",
+		class:"ms-add-input",placeholder:"Traži kartu…",spellcheck:"false",autocomplete:"off"}),a=t("div",{class:"ms-add-list"}),i=t("div",{
+		class:"ms-add-empty",text:o.length?"Nema pogodaka":"Sve su karte na ploči"}),s=t("div",{class:"ms-add"},[r,a,i]);let l=[],c=-1
 		;function d(t){l[c]&&l[c].classList.remove("active"),c=t,l[c]&&(l[c].classList.add("active"),l[c].scrollIntoView({block:"nearest"}))}
-		function u(t){Wa(),Ao(t)}function h(){const e=Pa(a.value);l=o.filter(t=>Ba(t,e)).map(e=>{const n=t("div",{class:"ms-add-item",
+		function u(t){Wr(),Ao(t)}function h(){const e=Pr(r.value);l=o.filter(t=>Br(t,e)).map(e=>{const n=t("div",{class:"ms-add-item",
 		"data-map-id":e.id},[t("span",{class:"ms-glyph",text:ut[e.category]||""}),document.createTextNode(e.name)])
 		;return n.addEventListener("mousedown",t=>t.preventDefault()),n.addEventListener("mousemove",()=>{l[c]!==n&&d(l.indexOf(n))}),
-		n.addEventListener("click",()=>u(e.id)),n}),r.replaceChildren(...l),i.hidden=l.length>0,c=-1,d(l.length?0:-1)}a.addEventListener("input",h),
-		a.addEventListener("keydown",t=>{if("ArrowDown"===t.key||"ArrowUp"===t.key){if(t.preventDefault(),!l.length)return
+		n.addEventListener("click",()=>u(e.id)),n}),a.replaceChildren(...l),i.hidden=l.length>0,c=-1,d(l.length?0:-1)}r.addEventListener("input",h),
+		r.addEventListener("keydown",t=>{if("ArrowDown"===t.key||"ArrowUp"===t.key){if(t.preventDefault(),!l.length)return
 		;const e="ArrowDown"===t.key?1:-1;d((c+e+l.length)%l.length)}else"Enter"===t.key?(t.preventDefault(),
-		l[c]&&u(l[c].getAttribute("data-map-id"))):"Escape"===t.key&&(t.preventDefault(),a.value?(a.value="",h()):Wa())}),h(),
-		document.body.appendChild(s),Ha={menu:s,anchor:e},document.body.classList.add("ms-add-open"),function(){if(!Ha)return
-		;const{menu:t,anchor:e}=Ha,n=e.closest(".ms-tab"),o=(n||e).getBoundingClientRect().bottom+4,a=t.offsetWidth,r=Q(e.getBoundingClientRect().left-8,8,Math.max(8,nt()-a-8))
-		;t.style.left=`${Math.round(r)}px`,
+		l[c]&&u(l[c].getAttribute("data-map-id"))):"Escape"===t.key&&(t.preventDefault(),r.value?(r.value="",h()):Wr())}),h(),
+		document.body.appendChild(s),Hr={menu:s,anchor:e},document.body.classList.add("ms-add-open"),function(){if(!Hr)return
+		;const{menu:t,anchor:e}=Hr,n=e.closest(".ms-tab"),o=(n||e).getBoundingClientRect().bottom+4,r=t.offsetWidth,a=Q(e.getBoundingClientRect().left-8,8,Math.max(8,nt()-r-8))
+		;t.style.left=`${Math.round(a)}px`,
 		t.style.top=`${Math.round(o)}px`,t.style.maxHeight=`${Math.max(120,Math.min(420,Math.round(ot()-o-16)))}px`}(),
-		document.addEventListener("pointerdown",Na,!0),a.focus()}(e)}function Wa(){Ha&&(Ha.menu.remove(),Ha=null,
-		document.body.classList.remove("ms-add-open"),document.removeEventListener("pointerdown",Na,!0))}function Na(t){
-		!Ha||Ha.menu.contains(t.target)||Ha.anchor.contains(t.target)||Wa()}var _a=!1,Ta="";function Oa(){return ka().map(ft).filter(t=>t&&P(t.id))}
-		function qa(){const e=document.querySelector("[data-maps]");if(!e)return;To(()=>a(".if1.fullscreen").forEach(Ae)),xo(),_a=!0;const n=Oa()
-		;Ta=n.map(t=>t.id).join(),function(e,n,o={}){e.replaceChildren(),n.length?n.forEach(t=>jt(e,t,o)):e.appendChild(t("div",{class:"map-entry"
-		},[t("div",{class:"maps-empty",text:'Nema odabranih karata. Odaberite ih pod "Karte".'})]))}(e,n,$n)}var Fa={manual:!0,changelog:!0},Va=[{
+		document.addEventListener("pointerdown",Nr,!0),r.focus()}(e)}function Wr(){Hr&&(Hr.menu.remove(),Hr=null,
+		document.body.classList.remove("ms-add-open"),document.removeEventListener("pointerdown",Nr,!0))}function Nr(t){
+		!Hr||Hr.menu.contains(t.target)||Hr.anchor.contains(t.target)||Wr()}var _r=!1,Tr="";function Or(){return kr().map(ft).filter(t=>t&&P(t.id))}
+		function qr(){const e=document.querySelector("[data-maps]");if(!e)return;To(()=>r(".if1.fullscreen").forEach(Ae)),xo(),_r=!0;const n=Or()
+		;Tr=n.map(t=>t.id).join(),function(e,n,o={}){e.replaceChildren(),n.length?n.forEach(t=>jt(e,t,o)):e.appendChild(t("div",{class:"map-entry"
+		},[t("div",{class:"maps-empty",text:'Nema odabranih karata. Odaberite ih pod "Karte".'})]))}(e,n,$n)}var Fr={manual:!0,changelog:!0},Vr=[{
 		feature:"manual",dialogId:"manualDialog",hash:"upute",keys:["h","H"]},{feature:"changelog",dialogId:"changelogDialog",hash:"promjene",
-		keys:["c","C"]}];function Ua(t){try{return decodeURIComponent(t.slice(1))}catch{return t.slice(1)}}
-		function Za({feature:t,dialogId:e,hash:n,keys:o}){const a=document.getElementById(e);if(!a||!Fa[t])return
-		;const r=a.querySelector(".dialog-close");r&&r.addEventListener("click",()=>ge(a,!1)),a.addEventListener("click",t=>{
-		const e=t.target.closest('a[href^="#"]');e&&a.contains(e)&&(t.preventDefault(),function(t,e){
+		keys:["c","C"]}];function Ur(t){try{return decodeURIComponent(t.slice(1))}catch{return t.slice(1)}}
+		function Zr({feature:t,dialogId:e,hash:n,keys:o}){const r=document.getElementById(e);if(!r||!Fr[t])return
+		;const a=r.querySelector(".dialog-close");a&&a.addEventListener("click",()=>ge(r,!1)),r.addEventListener("click",t=>{
+		const e=t.target.closest('a[href^="#"]');e&&r.contains(e)&&(t.preventDefault(),function(t,e){
 		const n=t.querySelector(".dialog-body"),o=t.querySelector(`[id="${CSS.escape(e)}"]`)
-		;n&&o&&(n.scrollTop+=o.getBoundingClientRect().top-n.getBoundingClientRect().top)}(a,Ua(e.getAttribute("href"))))}),
-		f(i,({panel:t,visible:e})=>{t===a&&(!function(t,e){const n=new URL(window.location.href);e!==(Ua(n.hash)===t)&&(n.hash=e?t:"",
-		history.replaceState(null,"",e?n.href:n.href.replace(/#$/,"")))}(n,e),e&&(a.querySelector(".dialog-body").scrollTop=0))}),We(t,{keys:o,
-		run:()=>function(t){t&&ge(t,t.hidden)}(a)});const s=()=>{const t=Ua(window.location.hash)===n;t!==!a.hidden&&ge(a,t)}
-		;window.addEventListener("hashchange",s),s()}function Xa(e){const n=t("div",{class:"ms-list ms-selected"}),o=t("div",{
-		class:"ms-list ms-available"});let r="zadano",i=!0;function s(t,e){
-		const n=ft(t.getAttribute("data-map-id")),o=ft(e.getAttribute("data-map-id")),a=i?1:-1
-		;return"naziv"===r?n.name.localeCompare(o.name,"hr")*a:"vrsta"===r?(n.category.localeCompare(o.category,"hr")||n.name.localeCompare(o.name,"hr"))*a:(pt.indexOf(n)-pt.indexOf(o))*a
+		;n&&o&&(n.scrollTop+=o.getBoundingClientRect().top-n.getBoundingClientRect().top)}(r,Ur(e.getAttribute("href"))))}),
+		f(i,({panel:t,visible:e})=>{t===r&&(!function(t,e){const n=new URL(window.location.href);e!==(Ur(n.hash)===t)&&(n.hash=e?t:"",
+		history.replaceState(null,"",e?n.href:n.href.replace(/#$/,"")))}(n,e),e&&(r.querySelector(".dialog-body").scrollTop=0))}),We(t,{keys:o,
+		run:()=>function(t){t&&ge(t,t.hidden)}(r)});const s=()=>{const t=Ur(window.location.hash)===n;t!==!r.hidden&&ge(r,t)}
+		;window.addEventListener("hashchange",s),s()}function Xr(e){const n=t("div",{class:"ms-list ms-selected"}),o=t("div",{
+		class:"ms-list ms-available"});let a="zadano",i=!0;function s(t,e){
+		const n=ft(t.getAttribute("data-map-id")),o=ft(e.getAttribute("data-map-id")),r=i?1:-1
+		;return"naziv"===a?n.name.localeCompare(o.name,"hr")*r:"vrsta"===a?(n.category.localeCompare(o.category,"hr")||n.name.localeCompare(o.name,"hr"))*r:(pt.indexOf(n)-pt.indexOf(o))*r
 		}function l(){[...o.children].sort(s).forEach(t=>o.appendChild(t))}const c={},d=t("div",{class:"ms-sort"},[t("span",{text:"Poredaj:"})])
-		;function u(){for(const[t,{link:e,label:n}]of Object.entries(c)){const o=t===r;e.classList.toggle("active",o),
+		;function u(){for(const[t,{link:e,label:n}]of Object.entries(c)){const o=t===a;e.classList.toggle("active",o),
 		e.textContent=o?`${n} ${i?"▲":"▼"}`:n}}[["zadano","Zadano"],["naziv","Naziv"],["vrsta","Vrsta"]].forEach(([e,n])=>{const o=t("a",{text:n,
-		"data-track":`sort-${e}`});o.addEventListener("click",()=>{r===e?i=!i:(r=e,i=!0),u(),l()}),c[e]={link:o,label:n},d.appendChild(o)}),u()
+		"data-track":`sort-${e}`});o.addEventListener("click",()=>{a===e?i=!i:(a=e,i=!0),u(),l()}),c[e]={link:o,label:n},d.appendChild(o)}),u()
 		;const h=t("input",{type:"text",class:"ms-find-input",placeholder:"Traži karte…","aria-label":"Traži karte"}),p=t("a",{
 		class:"ms-find-clear","data-track":"find-clear",text:"×",title:"Očisti (Esc)"}),m=t("div",{class:"ms-find"},[h,p]);function f(){
-		const t=Pa(h.value);let e=0;[...o.children].forEach(n=>{const o=ft(n.getAttribute("data-map-id")),a=!o||Ba(o,t)
-		;n.classList.toggle("ms-filtered",!a),a&&!n.classList.contains("ms-off")&&e++}),m.classList.toggle("ms-find-set",t.length>0),
-		o.classList.toggle("ms-no-hits",t.length>0&&0===e)}function g(r,i){const s=t("input",{type:"checkbox","data-track":"map-check"});s.checked=i
-		;const c=t("span",{class:"ms-handle",text:"≡",title:"Povuci za premještanje"}),d=t("div",{class:P(r.id)?"ms-item":"ms-item ms-off",
-		"data-map-id":r.id},[t("label",{},[s,t("span",{class:"ms-glyph",text:ut[r.category]||""}),document.createTextNode(r.name)]),c])
+		const t=Pr(h.value);let e=0;[...o.children].forEach(n=>{const o=ft(n.getAttribute("data-map-id")),r=!o||Br(o,t)
+		;n.classList.toggle("ms-filtered",!r),r&&!n.classList.contains("ms-off")&&e++}),m.classList.toggle("ms-find-set",t.length>0),
+		o.classList.toggle("ms-no-hits",t.length>0&&0===e)}function g(a,i){const s=t("input",{type:"checkbox","data-track":"map-check"});s.checked=i
+		;const c=t("span",{class:"ms-handle",text:"≡",title:"Povuci za premještanje"}),d=t("div",{class:P(a.id)?"ms-item":"ms-item ms-off",
+		"data-map-id":a.id},[t("label",{},[s,t("span",{class:"ms-glyph",text:ut[a.category]||""}),document.createTextNode(a.name)]),c])
 		;return s.addEventListener("change",()=>{s.checked?n.appendChild(d):(o.appendChild(d),l(),f()),e.listEdited()}),function(t,o){
-		t.addEventListener("pointerdown",r=>{r.preventDefault(),t.hasPointerCapture(r.pointerId)&&t.releasePointerCapture(r.pointerId),
-		o.classList.add("dragging");const i=o.nextElementSibling;let s=r.clientY,l=0,c=null;const d=()=>{
-		const t=a(":scope > *",n).find(t=>t!==o&&s<t.getBoundingClientRect().top+t.offsetHeight/2)
+		t.addEventListener("pointerdown",a=>{a.preventDefault(),t.hasPointerCapture(a.pointerId)&&t.releasePointerCapture(a.pointerId),
+		o.classList.add("dragging");const i=o.nextElementSibling;let s=a.clientY,l=0,c=null;const d=()=>{
+		const t=r(":scope > *",n).find(t=>t!==o&&s<t.getBoundingClientRect().top+t.offsetHeight/2)
 		;t?t.previousElementSibling!==o&&n.insertBefore(o,t):n.lastElementChild!==o&&n.appendChild(o)},u=o.closest(".dialog-body"),h=()=>{
 		0!==l&&(u.scrollBy(0,l),d()),c=requestAnimationFrame(h)},p=t=>{if(0===t.buttons)return void m();s=t.clientY
 		;const e=u.getBoundingClientRect();l=s<e.top+60?-8:s>e.bottom-60?8:0,d()},m=()=>{document.removeEventListener("pointermove",p),
@@ -916,152 +916,152 @@
 		f()):e.close())}),p.addEventListener("click",()=>{h.value="",f(),h.focus()}),{selected:n,available:o,sort:d,find:m,fill(t){
 		n.replaceChildren(),o.replaceChildren(),t.forEach(t=>{const e=ft(t);e&&n.appendChild(g(e,!0))}),
 		pt.filter(e=>!t.includes(e.id)).forEach(t=>o.appendChild(g(t,!1))),l(),f()},
-		selectedIds:()=>[...n.children].map(t=>t.getAttribute("data-map-id"))}}function Ka(t,e){return"custom"===t?{preset:"custom",maps:e}:{
-		preset:t}}function Ya(t,e){if(!e)return t&&t.dashboard?null:t;const n=Object.assign({},t);return n.dashboard=!0,n}function Qa(t,e,n=qo()){
-		return Bo(Ya("custom"===t.preset?n:(Go().find(e=>e.id===t.preset)||{}).layout,e),Ea(t))}function Ja(t,e,n,o){
-		return Ko(t.id)&&t.id===e&&(!La(t.maps,n)||(a=t.layout,r=o,!(JSON.stringify(a||null)===JSON.stringify(r||null))));var a,r}function Ga(e){
-		const o=t("div",{class:"ms-manage"});let a=!1;const r=t("input",{type:"text",class:"ms-name",maxlength:String(40),
+		selectedIds:()=>[...n.children].map(t=>t.getAttribute("data-map-id"))}}function Kr(t,e){return"custom"===t?{preset:"custom",maps:e}:{
+		preset:t}}function Yr(t,e){if(!e)return t&&t.dashboard?null:t;const n=Object.assign({},t);return n.dashboard=!0,n}function Qr(t,e,n=qo()){
+		return Bo(Yr("custom"===t.preset?n:(Go().find(e=>e.id===t.preset)||{}).layout,e),Er(t))}function Jr(t,e,n,o){
+		return Ko(t.id)&&t.id===e&&(!Lr(t.maps,n)||(r=t.layout,a=o,!(JSON.stringify(r||null)===JSON.stringify(a||null))));var r,a}function Gr(e){
+		const o=t("div",{class:"ms-manage"});let r=!1;const a=t("input",{type:"text",class:"ms-name",maxlength:String(40),
 		placeholder:"Naziv predloška"}),i=t("button",{type:"button",class:"btn","data-track":"preset-save",text:"Spremi"});function s(t){
-		const n=ra(t,e.selectedMapIds(),e.selectedLayout());r.value="",a=!1,e.editingPresetId=n.id,e.presetsChanged(n.id)}
-		i.addEventListener("click",()=>{const t=oa(r.value);t?s(t):r.focus()}),r.addEventListener("keydown",t=>{"Enter"===t.key?(t.preventDefault(),
-		i.click()):"Escape"===t.key&&(a=!1,r.value="",w())});let l=null;const c=t("input",{type:"text",class:"ms-name ms-rename",
-		maxlength:String(40)});let d=!1;function u(){if(Go().some(t=>t.id===l)){if(!function(t,e){const n=Jo.find(e=>e.id===t),o=oa(e),a=aa(o)
-		;return!(!n||!o||a&&a!==n||(n.name=o,ta(),0))}(l,c.value))return c.classList.add("invalid"),void c.focus();l=null,
+		const n=ar(t,e.selectedMapIds(),e.selectedLayout());a.value="",r=!1,e.editingPresetId=n.id,e.presetsChanged(n.id)}
+		i.addEventListener("click",()=>{const t=or(a.value);t?s(t):a.focus()}),a.addEventListener("keydown",t=>{"Enter"===t.key?(t.preventDefault(),
+		i.click()):"Escape"===t.key&&(r=!1,a.value="",w())});let l=null;const c=t("input",{type:"text",class:"ms-name ms-rename",
+		maxlength:String(40)});let d=!1;function u(){if(Go().some(t=>t.id===l)){if(!function(t,e){const n=Jo.find(e=>e.id===t),o=or(e),r=rr(o)
+		;return!(!n||!o||r&&r!==n||(n.name=o,tr(),0))}(l,c.value))return c.classList.add("invalid"),void c.focus();l=null,
 		e.presetsChanged(e.checkedPresetId())}}function h(){l=null,w()}function p(e){return t("span",{class:"ms-manage-links"
-		},e.map(e=>e||t("span")))}function m(n){const o=da(n.id);let a=null;return ia(n.id)&&(a=t("a",{text:o?"Prikaži":"Sakrij",
-		"data-track":o?"preset-show":"preset-hide"}),a.addEventListener("click",()=>{!function(t,e){e&&!ia(t)||(sa=sa.filter(e=>e!==t),
-		e&&sa.push(t),ca())}(n.id,!o),e.presetsChanged(e.checkedPresetId())})),t("div",{class:"ms-manage-item"+(o?" ms-hidden":"")},[t("span",{
-		class:"ms-manage-name",text:n.name}),p([null,null,a])])}function f(o){if(o.id===l)return function(){const e=t("a",{text:"Potvrdi",
+		},e.map(e=>e||t("span")))}function m(n){const o=dr(n.id);let r=null;return ir(n.id)&&(r=t("a",{text:o?"Prikaži":"Sakrij",
+		"data-track":o?"preset-show":"preset-hide"}),r.addEventListener("click",()=>{!function(t,e){e&&!ir(t)||(sr=sr.filter(e=>e!==t),
+		e&&sr.push(t),cr())}(n.id,!o),e.presetsChanged(e.checkedPresetId())})),t("div",{class:"ms-manage-item"+(o?" ms-hidden":"")},[t("span",{
+		class:"ms-manage-name",text:n.name}),p([null,null,r])])}function f(o){if(o.id===l)return function(){const e=t("a",{text:"Potvrdi",
 		"data-track":"preset-rename-confirm"}),n=t("a",{text:"Odustani","data-track":"preset-rename-cancel"});return e.addEventListener("click",u),
-		n.addEventListener("click",h),t("div",{class:"ms-manage-item"},[c,p([null,e,n])])}();const a=t("a",{text:"Preimenuj",
-		"data-track":"preset-rename"}),r=t("a",{text:"Obriši","data-track":"preset-delete"});let i
-		;Ja(o,e.editingPresetId,e.selectedMapIds(),e.selectedLayout())?(i=t("a",{text:"Ažuriraj","data-track":"preset-update"}),
-		i.addEventListener("click",()=>{ra(o.name,e.selectedMapIds(),e.selectedLayout()),e.presetsChanged(o.id)})):i=function(e){const o=t("a",{
-		text:"Podijeli","data-track":"preset-share"});return o.addEventListener("click",()=>{ga(e(),()=>n(o,"Kopirano!","Podijeli"))}),o}(()=>fa(o))
+		n.addEventListener("click",h),t("div",{class:"ms-manage-item"},[c,p([null,e,n])])}();const r=t("a",{text:"Preimenuj",
+		"data-track":"preset-rename"}),a=t("a",{text:"Obriši","data-track":"preset-delete"});let i
+		;Jr(o,e.editingPresetId,e.selectedMapIds(),e.selectedLayout())?(i=t("a",{text:"Ažuriraj","data-track":"preset-update"}),
+		i.addEventListener("click",()=>{ar(o.name,e.selectedMapIds(),e.selectedLayout()),e.presetsChanged(o.id)})):i=function(e){const o=t("a",{
+		text:"Podijeli","data-track":"preset-share"});return o.addEventListener("click",()=>{gr(e(),()=>n(o,"Kopirano!","Podijeli"))}),o}(()=>fr(o))
 		;const s=t("div",{class:"ms-manage-item"},[t("span",{class:"ms-manage-name"+(Yo(o)?" ms-board":""),text:o.name,
-		title:Yo(o)?"Nadzorna ploča":void 0}),p([i,a,r])]);a.addEventListener("click",()=>function(t){l=t.id,c.value=t.name,
-		c.classList.remove("invalid"),d=!0,w()}(o));let m=null;const f=()=>{clearTimeout(m),m=null,r.textContent="Obriši",
-		r.classList.remove("active")};return r.addEventListener("click",()=>{if(!m)return r.textContent="Sigurno?",r.classList.add("active"),
+		title:Yo(o)?"Nadzorna ploča":void 0}),p([i,r,a])]);r.addEventListener("click",()=>function(t){l=t.id,c.value=t.name,
+		c.classList.remove("invalid"),d=!0,w()}(o));let m=null;const f=()=>{clearTimeout(m),m=null,a.textContent="Obriši",
+		a.classList.remove("active")};return a.addEventListener("click",()=>{if(!m)return a.textContent="Sigurno?",a.classList.add("active"),
 		void(m=setTimeout(f,3e3));f();const t=e.checkedPresetId()===o.id;e.editingPresetId===o.id&&(e.editingPresetId=null),function(t){
-		const e=Jo.find(e=>e.id===t);e&&va().preset===t&&ba({preset:"custom",maps:e.maps.slice(),layout:va().layout}),Jo=Jo.filter(e=>e.id!==t),ta()
-		}(o.id),e.presetsChanged(t?"custom":e.checkedPresetId())}),s}function g(){const e=t("a",{text:"Spremi","data-track":"shared-save"}),n=za()
-		;return e.addEventListener("click",()=>{s(function(t){const e=oa(t);let n=e;for(let t=2;aa(n);t++){const o=` (${t})`
+		const e=Jo.find(e=>e.id===t);e&&br().preset===t&&vr({preset:"custom",maps:e.maps.slice(),layout:br().layout}),Jo=Jo.filter(e=>e.id!==t),tr()
+		}(o.id),e.presetsChanged(t?"custom":e.checkedPresetId())}),s}function g(){const e=t("a",{text:"Spremi","data-track":"shared-save"}),n=zr()
+		;return e.addEventListener("click",()=>{s(function(t){const e=or(t);let n=e;for(let t=2;rr(n);t++){const o=` (${t})`
 		;n=e.slice(0,40-o.length).trim()+o}return n}(n.name))}),t("div",{class:"ms-shared"},[t("span",{text:`Podijeljen predložak "${n.name}"`}),e])
 		}function w(){o.replaceChildren(),o.appendChild(function(){const n=t("div",{class:"ms-manage-title",text:"Zadani predlošci"}),o=t("span",{
-		class:"ms-manage-title-links"}),a=(n,a,r)=>{const i=t("a",{text:n,"data-track":a});i.addEventListener("click",()=>{r(),
-		e.presetsChanged(e.checkedPresetId())}),o.appendChild(i)};return la().length<ua().length&&a("Sakrij sve","presets-hide-all",ha),
-		la().length&&a("Prikaži sve","presets-show-all",pa),n.appendChild(o),n}()),Xo.forEach(t=>o.appendChild(m(t))),o.appendChild(function(){
-		const e=t("div",{class:"ms-manage-title",text:"Moji predlošci"}),n=t("a",{text:a?"Odustani":"Dodaj",
-		"data-track":a?"preset-add-cancel":"preset-add"});return n.addEventListener("click",()=>{a=!a,a||(r.value=""),w(),a&&r.focus()}),
-		e.appendChild(t("span",{class:"ms-manage-title-links"},[n])),e}()),a&&o.appendChild(t("div",{class:"ms-save"},[r,i]));const n=za()
-		;n&&n.name&&!function(){const t=ka();return Go().some(e=>La(e.maps,t))}()&&o.appendChild(g()),
+		class:"ms-manage-title-links"}),r=(n,r,a)=>{const i=t("a",{text:n,"data-track":r});i.addEventListener("click",()=>{a(),
+		e.presetsChanged(e.checkedPresetId())}),o.appendChild(i)};return lr().length<ur().length&&r("Sakrij sve","presets-hide-all",hr),
+		lr().length&&r("Prikaži sve","presets-show-all",pr),n.appendChild(o),n}()),Xo.forEach(t=>o.appendChild(m(t))),o.appendChild(function(){
+		const e=t("div",{class:"ms-manage-title",text:"Moji predlošci"}),n=t("a",{text:r?"Odustani":"Dodaj",
+		"data-track":r?"preset-add-cancel":"preset-add"});return n.addEventListener("click",()=>{r=!r,r||(a.value=""),w(),r&&a.focus()}),
+		e.appendChild(t("span",{class:"ms-manage-title-links"},[n])),e}()),r&&o.appendChild(t("div",{class:"ms-save"},[a,i]));const n=zr()
+		;n&&n.name&&!function(){const t=kr();return Go().some(e=>Lr(e.maps,t))}()&&o.appendChild(g()),
 		Go().length?Go().forEach(t=>o.appendChild(f(t))):o.appendChild(t("div",{class:"ms-manage-empty",text:"Nema spremljenih predložaka"})),
 		d&&(d=!1,c.focus(),c.select())}return c.addEventListener("keydown",t=>{"Enter"===t.key?(t.preventDefault(),u()):"Escape"===t.key&&h()}),
-		c.addEventListener("input",()=>c.classList.remove("invalid")),{element:o,render:w}}function tr(){const e=t("div",{class:"ms-refresh"})
+		c.addEventListener("input",()=>c.classList.remove("invalid")),{element:o,render:w}}function ta(){const e=t("div",{class:"ms-refresh"})
 		;return{element:e,render(){e.replaceChildren(),e.classList.toggle("ms-on",Vt());const n=t("select",{class:"ms-refresh-every",
 		"aria-label":"Razmak osvježavanja"});_t.forEach(e=>{const o=t("option",{value:String(e),text:`${e} min`});e===Ot&&(o.selected=!0),
-		n.appendChild(o)});const o=t("input",{type:"checkbox","data-track":"refresh"});o.checked=Vt();const a=()=>{return t=o.checked,
+		n.appendChild(o)});const o=t("input",{type:"checkbox","data-track":"refresh"});o.checked=Vt();const r=()=>{return t=o.checked,
 		e=Number(n.value),j(`setRefreshPrefs: on=${t} minutes=${e}`),Tt=!0===t,Ot=_t.includes(e)?e:5,C(E,{on:Tt,minutes:Ot}),
-		document.body.classList.toggle("refresh-on",Tt),Zt(),void m(h);var t,e};o.addEventListener("change",a),n.addEventListener("change",a)
-		;const r=Vt()?Ut():"";e.append(t("label",{},[o,t("span",{text:"Osvježavaj svakih"})]),n,t("span",{class:"ms-refresh-left",
-		text:r?`još ${r}`:""}))},tick(){const t=e.querySelector(".ms-refresh-left"),n=Vt()?Ut():"";t&&(t.textContent=n?`još ${n}`:"")}}}
-		function er(){const e=document.getElementById("mapSettings");e&&(e.hidden&&function(e){e.replaceChildren();const o={element:e,
-		editingPresetId:"custom"===Ca()?null:Ca(),dashboardChecked:Fo(),gridChecked:ln(),snapChecked:cn(),selectedMapIds:()=>a.selectedIds(),
-		checkedPresetId:()=>r.checkedId(),selectedLayout:()=>function(t,e,n=qo()){return Bo(Ya(n,e),t)}(a.selectedIds(),o.dashboardChecked),
-		listEdited(){r.markCustom(),c.render()},presetChosen(t,e){"custom"!==t.id&&(a.fill(e),o.setDashboardChecked(Yo(t))),
-		o.editingPresetId="custom"===t.id?null:t.id,r.updateOriginMark(),c.render()},presetsChanged(t){r.render(t),c.render()},
-		setDashboardChecked(t){o.dashboardChecked=t,i.render(),l.render(),c.render()},close(){ge(e,!1)}},a=Xa(o),r=function(e){const n=t("div",{
+		document.body.classList.toggle("refresh-on",Tt),Zt(),void m(h);var t,e};o.addEventListener("change",r),n.addEventListener("change",r)
+		;const a=Vt()?Ut():"";e.append(t("label",{},[o,t("span",{text:"Osvježavaj svakih"})]),n,t("span",{class:"ms-refresh-left",
+		text:a?`još ${a}`:""}))},tick(){const t=e.querySelector(".ms-refresh-left"),n=Vt()?Ut():"";t&&(t.textContent=n?`još ${n}`:"")}}}
+		function ea(){const e=document.getElementById("mapSettings");e&&(e.hidden&&function(e){e.replaceChildren();const o={element:e,
+		editingPresetId:"custom"===Cr()?null:Cr(),dashboardChecked:Fo(),gridChecked:ln(),snapChecked:cn(),selectedMapIds:()=>r.selectedIds(),
+		checkedPresetId:()=>a.checkedId(),selectedLayout:()=>function(t,e,n=qo()){return Bo(Yr(n,e),t)}(r.selectedIds(),o.dashboardChecked),
+		listEdited(){a.markCustom(),c.render()},presetChosen(t,e){"custom"!==t.id&&(r.fill(e),o.setDashboardChecked(Yo(t))),
+		o.editingPresetId="custom"===t.id?null:t.id,a.updateOriginMark(),c.render()},presetsChanged(t){a.render(t),c.render()},
+		setDashboardChecked(t){o.dashboardChecked=t,i.render(),l.render(),c.render()},close(){ge(e,!1)}},r=Xr(o),a=function(e){const n=t("div",{
 		class:"ms-presets"});function o(){n.querySelectorAll(".ms-origin").forEach(t=>t.classList.remove("ms-origin"))
-		;const t=ea().find(t=>t.id===e.editingPresetId);if(!t||La(t.maps,e.selectedMapIds()))return
+		;const t=er().find(t=>t.id===e.editingPresetId);if(!t||Lr(t.maps,e.selectedMapIds()))return
 		;const o=[...n.querySelectorAll("input")].find(t=>t.value===e.editingPresetId);o&&o.nextElementSibling.classList.add("ms-origin")}return{
-		element:n,render(a){n.replaceChildren();const r=[...ea().filter(t=>!da(t.id)),{id:"custom",name:"Prilagođeno"}]
-		;r.some(t=>t.id===a)||(a="custom"),r.forEach(o=>{const r=t("input",{type:"radio",name:"msPreset",value:o.id,"data-track":"preset-pick"})
-		;r.checked=o.id===a,r.addEventListener("change",()=>e.presetChosen(o,ya(o.id)))
-		;const i="ms-chip"+(Ko(o.id)?" ms-user":"")+(Yo(o)?" ms-board":"");n.appendChild(t("label",{},[r,t("span",{class:i,text:o.name,
+		element:n,render(r){n.replaceChildren();const a=[...er().filter(t=>!dr(t.id)),{id:"custom",name:"Prilagođeno"}]
+		;a.some(t=>t.id===r)||(r="custom"),a.forEach(o=>{const a=t("input",{type:"radio",name:"msPreset",value:o.id,"data-track":"preset-pick"})
+		;a.checked=o.id===r,a.addEventListener("change",()=>e.presetChosen(o,yr(o.id)))
+		;const i="ms-chip"+(Ko(o.id)?" ms-user":"")+(Yo(o)?" ms-board":"");n.appendChild(t("label",{},[a,t("span",{class:i,text:o.name,
 		title:Yo(o)?"Nadzorna ploča":void 0})]))}),n.appendChild(t("span",{class:"ms-fill"})),o()},updateOriginMark:o,markCustom(){
 		n.querySelector('input[name="msPreset"][value="custom"]').checked=!0,o()},checkedId(){
 		const t=n.querySelector('input[name="msPreset"]:checked');return t?t.value:"zadano"}}}(o),i=function(e){const n=t("div",{class:"ms-mode"})
-		;function o(n,o,a,r){const i=t("input",{type:"checkbox","data-track":o});return i.checked=a,i.disabled=!e.dashboardChecked,
-		i.addEventListener("change",()=>r(i.checked)),t("label",{class:"ms-grid"+(e.dashboardChecked?"":" ms-off")},[i,t("span",{text:n})])}return{
-		element:n,render(){n.replaceChildren(),n.hidden=!g.matches,n.classList.toggle("ms-on",e.dashboardChecked);const a=t("button",{type:"button",
+		;function o(n,o,r,a){const i=t("input",{type:"checkbox","data-track":o});return i.checked=r,i.disabled=!e.dashboardChecked,
+		i.addEventListener("change",()=>a(i.checked)),t("label",{class:"ms-grid"+(e.dashboardChecked?"":" ms-off")},[i,t("span",{text:n})])}return{
+		element:n,render(){n.replaceChildren(),n.hidden=!g.matches,n.classList.toggle("ms-on",e.dashboardChecked);const r=t("button",{type:"button",
 		class:"btn","data-track":"board-mode","aria-pressed":String(e.dashboardChecked)},[document.createTextNode("Nadzorna ploča "),t("span",{
-		class:"beta",text:"beta"})]);a.addEventListener("click",()=>e.setDashboardChecked(!e.dashboardChecked));const r=t("button",{type:"button",
+		class:"beta",text:"beta"})]);r.addEventListener("click",()=>e.setDashboardChecked(!e.dashboardChecked));const a=t("button",{type:"button",
 		class:"btn ms-arrange","data-action":"arrange",title:Ne("Posloži u mrežu","arrange")},[document.createTextNode("Posloži")])
-		;r.disabled=!e.dashboardChecked||!zo(),n.append(a,o("Prikaži mrežu","grid-show",e.gridChecked,t=>{e.gridChecked=t,
-		dn(e.gridChecked,e.snapChecked)}),o("Poravnaj uz mrežu","grid-snap",e.snapChecked,t=>{e.snapChecked=t,dn(e.gridChecked,e.snapChecked)}),r)}}
-		}(o),s=tr(),l=function(){const e=t("div",{class:"ms-layout"});return{element:e,render(){e.replaceChildren();const n=function(t){const e=[]
+		;a.disabled=!e.dashboardChecked||!zo(),n.append(r,o("Prikaži mrežu","grid-show",e.gridChecked,t=>{e.gridChecked=t,
+		dn(e.gridChecked,e.snapChecked)}),o("Poravnaj uz mrežu","grid-snap",e.snapChecked,t=>{e.snapChecked=t,dn(e.gridChecked,e.snapChecked)}),a)}}
+		}(o),s=ta(),l=function(){const e=t("div",{class:"ms-layout"});return{element:e,render(){e.replaceChildren();const n=function(t){const e=[]
 		;return t?(t.left&&e.push(`lijevo ${t.left.panes.length}`),t.right&&e.push(`desno ${t.right.panes.length}`),
 		t.floating&&e.push(`u prozoru ${t.floating.length}`),e):e}(qo());if(e.hidden=zo()||!n.length,e.hidden)return;const o=t("a",{
 		text:"Vrati sve","data-track":"dock-all"});o.addEventListener("click",Cn),e.append(t("span",{text:`Izdvojene karte: ${n.join(", ")}`}),o)}}
-		}(),c=Ga(o);a.fill(ka()),r.render(Ca()),i.render(),s.render(),l.render(),c.render(),nr={refreshChanged:()=>s.render(),
+		}(),c=Gr(o);r.fill(kr()),a.render(Cr()),i.render(),s.render(),l.render(),c.render(),na={refreshChanged:()=>s.render(),
 		refreshTick:()=>s.tick(),gridChanged(){o.gridChecked=ln(),o.snapChecked=cn(),i.render()},layoutChanged(){i.render(),l.render(),c.render()},
-		apply(){const t=Ka(r.checkedId(),a.selectedIds()),e=Qa(t,o.dashboardChecked);e&&(t.layout=e);const n=zo();ba(t),function(){if(!Ma)return
-		;Ma=null;const t=new URL(window.location.href);t.searchParams.delete("v"),history.replaceState(null,"",t)}(),o.close(),qa(),Ra(),No(e),
+		apply(){const t=Kr(a.checkedId(),r.selectedIds()),e=Qr(t,o.dashboardChecked);e&&(t.layout=e);const n=zo();vr(t),function(){if(!Mr)return
+		;Mr=null;const t=new URL(window.location.href);t.searchParams.delete("v"),history.replaceState(null,"",t)}(),o.close(),qr(),Rr(),No(e),
 		zo()!==n&&U("dashboard",zo()?"on":"off")}};const d=t("button",{type:"button",class:"btn ms-apply","data-action":"settings-apply",
 		text:"Primijeni",title:Ne("Primijeni","settings-apply")}),u=t("a",{text:"Podijeli","data-track":"share"});u.addEventListener("click",()=>{
-		ga(function(t,e,n=qo()){const o=Qa(t,e,n),a=Go().find(e=>e.id===t.preset),r=a?fa(a):t;return o?r.layout=o:delete r.layout,r
-		}(Ka(r.checkedId(),a.selectedIds()),o.dashboardChecked),()=>n(u,"Kopirano!","Podijeli"))});const h=t("a",{text:"Zatvori",
+		gr(function(t,e,n=qo()){const o=Qr(t,e,n),r=Go().find(e=>e.id===t.preset),a=r?fr(r):t;return o?a.layout=o:delete a.layout,a
+		}(Kr(a.checkedId(),r.selectedIds()),o.dashboardChecked),()=>n(u,"Kopirano!","Podijeli"))});const h=t("a",{text:"Zatvori",
 		"data-track":"dialog-close",title:Ne("Zatvori","dialog-close")});h.addEventListener("click",()=>o.close())
 		;const p=document.querySelector('link[rel="icon"][sizes="32x32"]'),m=t("a",{class:"dialog-home",
 		href:new URL("../",window.location.href).href,title:"Početna"},[t("img",{src:p?p.href:void 0,alt:"Početna"})]);e.appendChild(t("div",{
 		class:"dialog-head"},[t("span",{class:"dialog-head-left"},[m,t("span",{class:"dialog-title",text:"Karte"})]),h])),e.appendChild(t("div",{
-		class:"dialog-body"},[r.element,i.element,s.element,l.element,a.selected,t("div",{class:"ms-actions"
-		},[d,u]),a.sort,a.find,a.available,c.element])),pe(e)}(e),ge(e,e.hidden))}var nr=null;function or(t){return()=>{
-		const e=document.getElementById("mapSettings");nr&&e&&!e.hidden&&nr[t]()}}var ar=!1;function rr(t,e){const n=function(t){
+		class:"dialog-body"},[a.element,i.element,s.element,l.element,r.selected,t("div",{class:"ms-actions"
+		},[d,u]),r.sort,r.find,r.available,c.element])),pe(e)}(e),ge(e,e.hidden))}var na=null;function oa(t){return()=>{
+		const e=document.getElementById("mapSettings");na&&e&&!e.hidden&&na[t]()}}var ra=!1;function aa(t,e){const n=function(t){
 		const e=t.style.width,n=t.classList.contains("ms-tab-sized");t.style.width="",t.classList.add("ms-tab-sized")
 		;const o=Math.ceil(t.getBoundingClientRect().width);return t.style.width=e,t.classList.toggle("ms-tab-sized",n),o}(t)
-		;return Q(e,n,Math.max(n,nt()/2))}function ir(t,e,n){n=rr(t,n),e=Q(e,0,Math.max(0,nt()-n)),t.style.width=`${Math.round(n)}px`,
-		t.style.left=`${Math.round(e)}px`,t.style.transform="none",t.classList.add("ms-tab-sized")}function sr(){
+		;return Q(e,n,Math.max(n,nt()/2))}function ia(t,e,n){n=aa(t,n),e=Q(e,0,Math.max(0,nt()-n)),t.style.width=`${Math.round(n)}px`,
+		t.style.left=`${Math.round(e)}px`,t.style.transform="none",t.classList.add("ms-tab-sized")}function sa(){
 		const t=document.querySelector(".ms-tab"),e=function(){const t=S(L)
-		;return t&&"object"==typeof t&&Number.isFinite(t.left)&&Number.isFinite(t.width)?t:null}();t&&e&&ir(t,e.left*nt(),e.width)}function lr(){
+		;return t&&"object"==typeof t&&Number.isFinite(t.left)&&Number.isFinite(t.width)?t:null}();t&&e&&ia(t,e.left*nt(),e.width)}function la(){
 		const t=document.querySelector(".ms-tab");if(!t)return;const e=t.querySelector('[data-grid="show"]'),n=t.querySelector('[data-grid="snap"]')
-		;e&&e.classList.toggle("ms-tab-off",!ln()),n&&n.classList.toggle("ms-tab-off",!cn()),cr()}function cr(){
-		const t=document.querySelector(".ms-tab .ms-tab-count");t&&(t.textContent=Vt()?Ut():"")}function dr(t){
+		;e&&e.classList.toggle("ms-tab-off",!ln()),n&&n.classList.toggle("ms-tab-off",!cn()),ca()}function ca(){
+		const t=document.querySelector(".ms-tab .ms-tab-count");t&&(t.textContent=Vt()?Ut():"")}function da(t){
 		const e=t.target.closest(".snap-edge");if(e){if(0!==t.button)return;return t.preventDefault(),void Lo(e,t)}
 		const n=t.target.closest(".map-block.popout");if(!n)return;if(n.classList.contains("fs-host")||Kn(n),0!==t.button)return
-		;const o=t.target.closest(".po-h"),a=t.target.closest(".radartitle")
-		;(o||a&&!t.target.closest("a")&&!a.classList.contains("fullscreen"))&&(t.preventDefault(),o?function(t,e,n){const o=function(t,e){
+		;const o=t.target.closest(".po-h"),r=t.target.closest(".radartitle")
+		;(o||r&&!t.target.closest("a")&&!r.classList.contains("fullscreen"))&&(t.preventDefault(),o?function(t,e,n){const o=function(t,e){
 		if(1!==e.length||so(t)||t.classList.contains("fs-host"))return null
-		;const n=t.getBoundingClientRect(),o=(t,e)=>Math.abs(t-e)<=1,a=Jn().filter(a=>{if(a===t||a.classList.contains("fs-host"))return!1
-		;const r=a.getBoundingClientRect()
-		;return"e"===e||"w"===e?("e"===e?o(r.left,n.right):o(r.right,n.left))&&o(r.top,n.top)&&o(r.bottom,n.bottom):("s"===e?o(r.top,n.bottom):o(r.bottom,n.top))&&o(r.left,n.left)&&o(r.right,n.right)
-		});return 1===a.length?a[0]:null}(t,e);if(o)if(n.ctrlKey||n.metaKey){const a=t.getBoundingClientRect(),r={e:"w",w:"e",n:"s",s:"n"}
-		;("e"===e?n.clientX<a.right:"w"===e?n.clientX>=a.left:"s"===e?n.clientY<a.bottom:n.clientY>=a.top)?fn(t,e,n):(Kn(o),fn(o,r[e],n))
-		}else!function(t,e,n,o){j(`resizeSeam: ${t.dataset.mapId} | ${e.dataset.mapId} (${n})`);const a="e"===n||"w"===n;En(t),En(e)
-		;const r=t.getBoundingClientRect(),i=e.getBoundingClientRect(),[s,l]=a?r.left<=i.left?[t,e]:[e,t]:r.top<=i.top?[t,e]:[e,t],c=s.getBoundingClientRect(),d=l.getBoundingClientRect(),u=a?c.width:c.height,h=a?d.width:d.height,p=a?d.left:d.top,m=a?Pt:Bt,f=to(s,[l]).flatMap(t=>a?[t.left,t.right]:[t.top,t.bottom])
-		;Ue(o,(t,e)=>{let n=a?t:e;const o=eo(p+n,f);null!==o&&(n=o-p),n=Q(n,m-u,h-m),a?(s.style.width=`${Math.round(u+n)}px`,
+		;const n=t.getBoundingClientRect(),o=(t,e)=>Math.abs(t-e)<=1,r=Jn().filter(r=>{if(r===t||r.classList.contains("fs-host"))return!1
+		;const a=r.getBoundingClientRect()
+		;return"e"===e||"w"===e?("e"===e?o(a.left,n.right):o(a.right,n.left))&&o(a.top,n.top)&&o(a.bottom,n.bottom):("s"===e?o(a.top,n.bottom):o(a.bottom,n.top))&&o(a.left,n.left)&&o(a.right,n.right)
+		});return 1===r.length?r[0]:null}(t,e);if(o)if(n.ctrlKey||n.metaKey){const r=t.getBoundingClientRect(),a={e:"w",w:"e",n:"s",s:"n"}
+		;("e"===e?n.clientX<r.right:"w"===e?n.clientX>=r.left:"s"===e?n.clientY<r.bottom:n.clientY>=r.top)?fn(t,e,n):(Kn(o),fn(o,a[e],n))
+		}else!function(t,e,n,o){j(`resizeSeam: ${t.dataset.mapId} | ${e.dataset.mapId} (${n})`);const r="e"===n||"w"===n;En(t),En(e)
+		;const a=t.getBoundingClientRect(),i=e.getBoundingClientRect(),[s,l]=r?a.left<=i.left?[t,e]:[e,t]:a.top<=i.top?[t,e]:[e,t],c=s.getBoundingClientRect(),d=l.getBoundingClientRect(),u=r?c.width:c.height,h=r?d.width:d.height,p=r?d.left:d.top,m=r?Pt:Bt,f=to(s,[l]).flatMap(t=>r?[t.left,t.right]:[t.top,t.bottom])
+		;Ue(o,(t,e)=>{let n=r?t:e;const o=eo(p+n,f);null!==o&&(n=o-p),n=Q(n,m-u,h-m),r?(s.style.width=`${Math.round(u+n)}px`,
 		l.style.width=`${Math.round(h-n)}px`,l.style.left=`${Math.round(p+n)}px`):(s.style.height=`${Math.round(u+n)}px`,
 		l.style.height=`${Math.round(h-n)}px`,l.style.top=`${Math.round(p+n)}px`),zn(s),zn(l)},()=>{mn([s,l]),On(),Zo()})}(t,o,e,n);else fn(t,e,n)
-		}(n,o.dataset.dir,t):Gn(n,t))}function ur(t){1===t.button&&g.matches&&fr(t)&&t.preventDefault()}function hr(t){
-		if(1!==t.button||!g.matches)return;const e=fr(t);e&&(t.preventDefault(),kn(e.closest(".map-block")))}function pr(t){
+		}(n,o.dataset.dir,t):Gn(n,t))}function ua(t){1===t.button&&g.matches&&fa(t)&&t.preventDefault()}function ha(t){
+		if(1!==t.button||!g.matches)return;const e=fa(t);e&&(t.preventDefault(),kn(e.closest(".map-block")))}function pa(t){
 		if(!t.target.closest)return;const e=t.target.closest(".snap-edge");e&&function(t){const e=uo(t)
 		;if(mo())if(io&&io.left+io.right<.999)[no.left,no.right].forEach(t=>{t.panes.length&&io[t.side]&&(t.width=io[t.side])}),io=null;else{
 		const t=Math.min(.5,875/nt());[no.left,no.right].forEach(e=>{e.panes.length&&(e.width*=1-t)}),io=null}else io={left:ho(no.left),
-		right:ho(no.right)},t.width=1-ho(e);Eo(),Zo()}(oo(e.dataset.side));const n=fr(t);n&&function(t){
+		right:ho(no.right)},t.width=1-ho(e);Eo(),Zo()}(oo(e.dataset.side));const n=fa(t);n&&function(t){
 		const e=t.closest(".map-block").querySelector(".fs-btn");e&&e.click()}(n)
 		;const o=t.target.closest(".map-block.popout.letterbox .radartitle:not(.fullscreen)");if(o&&!t.target.closest("a")){
 		const t=o.closest(".map-block");!function(t){const e=t.getBoundingClientRect();if(Ln(t),so(t))return;const n=Yn(t)
-		;if(n&&(!n.complete||!n.naturalWidth))return;const o=Zn(),a=vn(t,Math.min(e.width,o));if(a>e.height+.5){
-		const n=e.width/a,r=wn(t,e.height,e.height*n,n,o);t.style.width=`${Math.round(r)}px`}Xn(t,e.left,e.top)}(t);const e=co(t)
-		;e&&delete e.height,Eo(),zn(t),Zo()}}function mr(){const t=document.activeElement;if(!t||"IFRAME"!==t.tagName)return
-		;const e=t.closest(".map-block.popout");e&&!e.classList.contains("fs-host")&&Kn(e)}function fr(t){
-		return!t.target.closest||t.target.closest("a, button, input")?null:t.target.closest(".map-block.popout .radartitle")}var gr={
-		ArrowLeft:[-1,0],ArrowRight:[1,0],ArrowUp:[0,-1],ArrowDown:[0,1]};function wr(){
+		;if(n&&(!n.complete||!n.naturalWidth))return;const o=Zn(),r=bn(t,Math.min(e.width,o));if(r>e.height+.5){
+		const n=e.width/r,a=wn(t,e.height,e.height*n,n,o);t.style.width=`${Math.round(a)}px`}Xn(t,e.left,e.top)}(t);const e=co(t)
+		;e&&delete e.height,Eo(),zn(t),Zo()}}function ma(){const t=document.activeElement;if(!t||"IFRAME"!==t.tagName)return
+		;const e=t.closest(".map-block.popout");e&&!e.classList.contains("fs-host")&&Kn(e)}function fa(t){
+		return!t.target.closest||t.target.closest("a, button, input")?null:t.target.closest(".map-block.popout .radartitle")}var ga={
+		ArrowLeft:[-1,0],ArrowRight:[1,0],ArrowUp:[0,-1],ArrowDown:[0,1]};function wa(){
 		return Jn().filter(t=>!t.classList.contains("fs-host")).reduce((t,e)=>!t||(Number(e.style.zIndex)||0)>=(Number(t.style.zIndex)||0)?e:t,null)
-		}var vr=0;var br,yr=0
-		;br="customize",((q="jurakovic.github.io"===window.location.hostname&&"function"==typeof navigator.sendBeacon)||A())&&(O=br,
-		j(`telemetry: counting on ${br}; a report is logged every 10 s and when the page is hidden`+(q?W("telemetry")?`, and sent to ${N}`:", not sent while switched off":", not sent off the live site")),
+		}var ba=0;var va,ya=0
+		;va="customize",((q="jurakovic.github.io"===window.location.hostname&&"function"==typeof navigator.sendBeacon)||A())&&(O=va,
+		j(`telemetry: counting on ${va}; a report is logged every 10 s and when the page is hidden`+(q?W("telemetry")?`, and sent to ${N}`:", not sent while switched off":", not sent off the live site")),
 		K(),f(l,()=>{W("telemetry")?K():A()||_.clear()}),window.addEventListener("error",t=>Z(t.message,`${t.lineno}:${t.colno}`)),
 		window.addEventListener("unhandledrejection",t=>Z(t.reason&&t.reason.message||t.reason,"promise")),
 		window.addEventListener("click",t=>X(t),!0),window.addEventListener("auxclick",t=>{1===t.button&&X(t,!0)},!0),
 		document.addEventListener("visibilitychange",()=>{"hidden"===document.visibilityState&&Y()}),setInterval(Y,A()?1e4:18e4)),I=R($()),D=H($()),
 		fetch("https://meteo-data.jurakovic.workers.dev/config.json",{cache:"no-cache"}).then(t=>t.ok?t.json():Promise.reject(t.status)).then(t=>{
-		C(k,t);const e=H(t),n=Object.keys(e).some(t=>e[t]!==W(t));D=e,n&&m(l);const o=R(t);var a,r;r=I,
-		(a=o).size===r.size&&[...a].every(t=>r.has(t))||(I=o,m(s))}).catch(()=>{}),Va.forEach(({feature:t})=>{
-		Fa[t]||document.documentElement.classList.add(`no-${t}`)}),function(){const t=new URLSearchParams(window.location.search).get("v")
-		;if(Ma=t?function(t){try{const e=JSON.parse(atob(t.replace(/-/g,"+").replace(/_/g,"/")));if(wa(e))return e.name&&(e.name=oa(e.name)),e
-		}catch{}return null}(t):null,!t)return;const e=!!(Ma&&Ma.layout&&Ma.layout.dashboard);U("shared-link",Ma?e?"board":"list":"invalid")}(),
-		function(){const t=Sa().layout;t&&t.dashboard&&g.matches&&document.documentElement.classList.add("board-boot")}(),We("top",{run:()=>{
+		C(k,t);const e=H(t),n=Object.keys(e).some(t=>e[t]!==W(t));D=e,n&&m(l);const o=R(t);var r,a;a=I,
+		(r=o).size===a.size&&[...r].every(t=>a.has(t))||(I=o,m(s))}).catch(()=>{}),Vr.forEach(({feature:t})=>{
+		Fr[t]||document.documentElement.classList.add(`no-${t}`)}),function(){const t=new URLSearchParams(window.location.search).get("v")
+		;if(Mr=t?function(t){try{const e=JSON.parse(atob(t.replace(/-/g,"+").replace(/_/g,"/")));if(wr(e))return e.name&&(e.name=or(e.name)),e
+		}catch{}return null}(t):null,!t)return;const e=!!(Mr&&Mr.layout&&Mr.layout.dashboard);U("shared-link",Mr?e?"board":"list":"invalid")}(),
+		function(){const t=Sr().layout;t&&t.dashboard&&g.matches&&document.documentElement.classList.add("board-boot")}(),We("top",{run:()=>{
 		window.scrollTo({top:0,behavior:"smooth"})}}),We("links",{run:()=>Rt("links")}),We("links-bottom",{run:t=>function(t){
 		document.body.classList.toggle("show-links-bottom",t.checked),C(M,t.checked?1:0),It()}(t)}),We("slide",{run:t=>{
 		return e=t.closest(".slideshow"),n=Number(t.dataset.step),void Ie(e,parseInt(e.getAttribute("data-current-slide"))+n);var e,n}}),We("zoom",{
@@ -1071,54 +1071,54 @@
 		n.previousElementSibling.classList.add("fullscreen"),n.closest(".map-block.snapped")||document.body.classList.add("fs-lock"),m(c),
 		e.textContent="[-]",o&&(o.style.display="none"),Le(t,"fullscreen")}(t.dataset.frame,t)}),We("gate",{run:t=>function(t){
 		const e=t.dataset.frameId;switch(t.dataset.state){case"exit":Me(e).removeAttribute("style"),Le(e,"reset");break;case"reset":ke(ye(e)),
-		Le(e,"hidden");break;case"fullscreen":ke(ye(e))}}(t)}),We("dialog-close",{keys:["Escape"],keyWhen:()=>re(),keepDefault:!0,run:()=>we()}),
-		We("fullscreen-exit",{keys:["Escape"],keyWhen:()=>!re(),keepDefault:!0,run:()=>function(){const t=r(".if1.fullscreen");return!!t&&(Ae(t),!0)
+		Le(e,"hidden");break;case"fullscreen":ke(ye(e))}}(t)}),We("dialog-close",{keys:["Escape"],keyWhen:()=>ae(),keepDefault:!0,run:()=>we()}),
+		We("fullscreen-exit",{keys:["Escape"],keyWhen:()=>!ae(),keepDefault:!0,run:()=>function(){const t=a(".if1.fullscreen");return!!t&&(Ae(t),!0)
 		}()}),document.addEventListener("click",t=>{const e=t.target,n=e.closest&&e.closest("[data-action]"),o=n&&He.get(n.dataset.action)
 		;o&&_e(o,n,t)}),document.addEventListener("keydown",t=>{if(t.altKey||t.ctrlKey||t.metaKey||function(t){const e=t
 		;return!!e&&"function"==typeof e.matches&&e.matches('input:not([type="radio"]):not([type="checkbox"]), textarea, [contenteditable]')
 		}(t.target))return;const e=De.find(e=>e.keys.includes(t.key)&&e.keyWhen(t));e&&(e.keepDefault||t.preventDefault(),
-		e.capture&&t.stopPropagation(),_e(e,null,t))},!0),function(){const t=()=>g.matches,e=()=>g.matches&&!re();We("reload",{keys:["r","R"],
+		e.capture&&t.stopPropagation(),_e(e,null,t))},!0),function(){const t=()=>g.matches,e=()=>g.matches&&!ae();We("reload",{keys:["r","R"],
 		keyWhen:t,run:()=>Jt()}),We("grid-show",{keys:["g","G"],keyWhen:t,run:()=>{zo()&&dn(!ln(),cn())}}),We("grid-snap",{keys:["s","S"],keyWhen:t,
 		run:()=>{zo()&&dn(ln(),!cn())}}),We("arrange",{keys:["a","A"],keyWhen:e,run:()=>Io()}),We("duplicate",{keys:["d","D"],keyWhen:e,
-		run:()=>nn(wr())}),We("nudge",{keys:Object.keys(gr),keyWhen:e,run:(t,e)=>{const[n,o]=gr[e.key],a=e.shiftKey?1:16;!function(t,e){const n=wr()
+		run:()=>nn(wa())}),We("nudge",{keys:Object.keys(ga),keyWhen:e,run:(t,e)=>{const[n,o]=ga[e.key],r=e.shiftKey?1:16;!function(t,e){const n=wa()
 		;if(!n)return;const o=Wn(n);if(o.length>1){const n=qn(o);Vn(n,Fn(n),t,e)}else{const o=n.getBoundingClientRect();Xn(n,o.left+t,o.top+e)}qe(),
-		Uo(),clearTimeout(vr),vr=setTimeout(Zo,300)}(n*a,o*a)}})}(),f(u,or("gridChanged")),f(h,or("refreshChanged")),f(p,or("refreshTick")),
-		f(d,or("layoutChanged")),We("map-settings",{keys:["k","K"],run:()=>er()}),We("settings-apply",{keys:["Enter"],capture:!0,keyWhen:t=>{
+		Uo(),clearTimeout(ba),ba=setTimeout(Zo,300)}(n*r,o*r)}})}(),f(u,oa("gridChanged")),f(h,oa("refreshChanged")),f(p,oa("refreshTick")),
+		f(d,oa("layoutChanged")),We("map-settings",{keys:["k","K"],run:()=>ea()}),We("settings-apply",{keys:["Enter"],capture:!0,keyWhen:t=>{
 		const e=document.getElementById("mapSettings")
 		;return!(t.shiftKey||t.isComposing||!e||e.hidden||t.target.matches&&t.target.matches("select")||!e.querySelector(".ms-apply"))},
-		run:()=>!!nr&&nr.apply()}),We("add-map",{run:t=>Da(t)}),f(i,({visible:t})=>{t&&Wa()}),window.addEventListener("resize",()=>Wa()),f(s,()=>{
-		_a&&(Wa(),Oa().map(t=>t.id).join()!==Ta&&function(){const t=Bo(qo(),ka());qa(),Ra(),No(t)}())}),document.addEventListener("pointerdown",dr),
-		window.addEventListener("blur",()=>setTimeout(mr)),document.addEventListener("mousedown",ur),document.addEventListener("auxclick",hr),
-		document.addEventListener("dblclick",pr),f(c,()=>{a(".map-block.popout").forEach(t=>{
+		run:()=>!!na&&na.apply()}),We("add-map",{run:t=>Dr(t)}),f(i,({visible:t})=>{t&&Wr()}),window.addEventListener("resize",()=>Wr()),f(s,()=>{
+		_r&&(Wr(),Or().map(t=>t.id).join()!==Tr&&function(){const t=Bo(qo(),kr());qr(),Rr(),No(t)}())}),document.addEventListener("pointerdown",da),
+		window.addEventListener("blur",()=>setTimeout(ma)),document.addEventListener("mousedown",ua),document.addEventListener("auxclick",ha),
+		document.addEventListener("dblclick",pa),f(c,()=>{r(".map-block.popout").forEach(t=>{
 		const e=!!t.querySelector(".if1.fullscreen"),n=t.classList.contains("fs-host");t.classList.toggle("fs-host",e),
 		e?t.style.zIndex=String(o("--z-fullscreen-host",4500)):n&&Kn(t)}),Te(),Eo(),g.matches&&Zo()}),g.addEventListener("change",t=>{
-		t.matches?No(Oo):(Oo=Vo,To(Cn))}),window.addEventListener("resize",()=>{clearTimeout(yr),yr=setTimeout(()=>{Eo();const t=new Set
+		t.matches?No(Oo):(Oo=Vo,To(Cn))}),window.addEventListener("resize",()=>{clearTimeout(ya),ya=setTimeout(()=>{Eo();const t=new Set
 		;Jn().forEach(e=>{if(t.has(e))return;const n=Wn(e);if(n.forEach(e=>t.add(e)),1===n.length){const t=e.getBoundingClientRect()
 		;Xn(e,t.left,t.top)}else{const t=qn(n);Vn(t,Fn(t),0,0)}}),On(),qe()},200)}),["load","click","pointerup"].forEach(t=>{
 		document.addEventListener(t,t=>{const e=t.target,n=e.closest&&e.closest(".map-block.popout");n&&setTimeout(()=>{
-		so(n)&&!n.classList.contains("free")&&Eo(),zn(n),Mn(n),Ve()},0)},!0)}),window.addEventListener("resize",()=>{clearTimeout($a),
-		$a=setTimeout(()=>{be(),$e(),It()},200)}),f(i,()=>Eo()),e(function(){document.body.classList.toggle("refresh-on",Tt),Zt()}),e(function(){
-		const e=r(".ms-tab");if(!e)return;const n=t=>!!t.target.closest(".ms-tab-btn");e.title=Ne("Karte","map-settings"),function(e){
-		const n=(e,n,o,a={})=>t("a",{class:"ms-tab-btn",...a,"data-action":n,text:e,title:Ne(o,n)}),o=n("[+]","add-map","Dodaj kartu na ploču",{
-		class:"ms-tab-btn ms-tab-board ms-tab-add"}),a=n("[R]","reload","Osvježi sve karte"),r=n("[A]","arrange","Posloži u mrežu",{
+		so(n)&&!n.classList.contains("free")&&Eo(),zn(n),Mn(n),Ve()},0)},!0)}),window.addEventListener("resize",()=>{clearTimeout($r),
+		$r=setTimeout(()=>{ve(),$e(),It()},200)}),f(i,()=>Eo()),e(function(){document.body.classList.toggle("refresh-on",Tt),Zt()}),e(function(){
+		const e=a(".ms-tab");if(!e)return;const n=t=>!!t.target.closest(".ms-tab-btn");e.title=Ne("Karte","map-settings"),function(e){
+		const n=(e,n,o,r={})=>t("a",{class:"ms-tab-btn",...r,"data-action":n,text:e,title:Ne(o,n)}),o=n("[+]","add-map","Dodaj kartu na ploču",{
+		class:"ms-tab-btn ms-tab-board ms-tab-add"}),r=n("[R]","reload","Osvježi sve karte"),a=n("[A]","arrange","Posloži u mrežu",{
 		class:"ms-tab-btn ms-tab-board"}),i=n("[G]","grid-show","Prikaži mrežu",{class:"ms-tab-btn ms-tab-board","data-grid":"show"
 		}),s=n("[S]","grid-snap","Poravnaj uz mrežu",{class:"ms-tab-btn ms-tab-board","data-grid":"snap"}),l=t("span",{class:"ms-tab-count",
-		title:"Do sljedećeg osvježavanja"});e.appendChild(t("span",{class:"ms-tab-cluster"},[o,a,r,i,s,l])),lr()}(e),sr(),We("ms-tab",{run:()=>{
-		if(ar)return ar=!1,!1;er()}}),e.addEventListener("pointermove",t=>{if(n(t))return void(e.style.cursor="")
-		;const o=e.getBoundingClientRect(),a=t.clientX-o.left<=8||o.right-t.clientX<=8;e.style.cursor=a?"ew-resize":""}),
+		title:"Do sljedećeg osvježavanja"});e.appendChild(t("span",{class:"ms-tab-cluster"},[o,r,a,i,s,l])),la()}(e),sa(),We("ms-tab",{run:()=>{
+		if(ra)return ra=!1,!1;ea()}}),e.addEventListener("pointermove",t=>{if(n(t))return void(e.style.cursor="")
+		;const o=e.getBoundingClientRect(),r=t.clientX-o.left<=8||o.right-t.clientX<=8;e.style.cursor=r?"ew-resize":""}),
 		e.addEventListener("pointerdown",t=>{if(0!==t.button||n(t))return;t.preventDefault()
-		;const o=e.getBoundingClientRect(),a=t.clientX-o.left<=8?"w":o.right-t.clientX<=8?"e":"move";ar=!1,ee(t,t=>{
-		if(ar||!(Math.abs(t)<4))if(ar=!0,"move"===a)ir(e,o.left+t,o.width);else if("e"===a)ir(e,o.left,o.width+t);else{const n=rr(e,o.width-t)
-		;ir(e,o.right-n,n)}},()=>{ar&&function(t){const e=t.getBoundingClientRect();C(L,{left:J(e.left/nt()),width:Math.round(e.width)})}(e)})}),
-		window.addEventListener("resize",sr),f(u,lr),f(p,cr),f(h,sr)}),e(qa),e(function(){No(Bo(Sa().layout,ka()))}),e(function(){
+		;const o=e.getBoundingClientRect(),r=t.clientX-o.left<=8?"w":o.right-t.clientX<=8?"e":"move";ra=!1,ee(t,t=>{
+		if(ra||!(Math.abs(t)<4))if(ra=!0,"move"===r)ia(e,o.left+t,o.width);else if("e"===r)ia(e,o.left,o.width+t);else{const n=aa(e,o.width-t)
+		;ia(e,o.right-n,n)}},()=>{ra&&function(t){const e=t.getBoundingClientRect();C(L,{left:J(e.left/nt()),width:Math.round(e.width)})}(e)})}),
+		window.addEventListener("resize",sa),f(u,la),f(p,ca),f(h,sa)}),e(qr),e(function(){No(Bo(Sr().layout,kr()))}),e(function(){
 		document.documentElement.classList.remove("board-boot")}),e(function(){oe().forEach(t=>{pe(t),me(t)}),function(){
-		const t=r(".dialog-backdrop");t&&t.addEventListener("pointerdown",e=>{if(!re())return;e.preventDefault(),we(),t.hidden=!1,
-		t.classList.add("dialog-spent");let n=0;const o=()=>{clearTimeout(n),t.classList.remove("dialog-spent"),t.hidden=!re(),
-		document.removeEventListener("click",a,!0),document.removeEventListener("pointerup",r),document.removeEventListener("pointercancel",o)
-		},a=t=>{t.stopPropagation(),t.preventDefault(),o()},r=()=>{n=setTimeout(o,400)};document.addEventListener("click",a,!0),
-		document.addEventListener("pointerup",r),document.addEventListener("pointercancel",o)})}(),window.addEventListener("resize",()=>he(ae()))}),
-		e(function(){Va.forEach(Za)}),e(function(){!function(){const t=document.querySelector(".links-toggle");t&&(t.checked=1===S(M),
-		document.body.classList.toggle("show-links-bottom",t.checked))}(),Ra(),function(){const t=r(".expandable"),e=r(".links")
+		const t=a(".dialog-backdrop");t&&t.addEventListener("pointerdown",e=>{if(!ae())return;e.preventDefault(),we(),t.hidden=!1,
+		t.classList.add("dialog-spent");let n=0;const o=()=>{clearTimeout(n),t.classList.remove("dialog-spent"),t.hidden=!ae(),
+		document.removeEventListener("click",r,!0),document.removeEventListener("pointerup",a),document.removeEventListener("pointercancel",o)
+		},r=t=>{t.stopPropagation(),t.preventDefault(),o()},a=()=>{n=setTimeout(o,400)};document.addEventListener("click",r,!0),
+		document.addEventListener("pointerup",a),document.addEventListener("pointercancel",o)})}(),window.addEventListener("resize",()=>he(re()))}),
+		e(function(){Vr.forEach(Zr)}),e(function(){!function(){const t=document.querySelector(".links-toggle");t&&(t.checked=1===S(M),
+		document.body.classList.toggle("show-links-bottom",t.checked))}(),Rr(),function(){const t=a(".expandable"),e=a(".links")
 		;t.addEventListener("click",()=>{const n=t.querySelector(".arrow");if(e.style.maxHeight)return e.style.maxHeight="",void(n.textContent="▼")
 		;e.style.maxHeight=`${e.scrollHeight}px`,n.textContent="▲",setTimeout(()=>{document.documentElement.style.scrollBehavior="auto",
 		document.body.style.scrollBehavior="auto",Rt("links"),setTimeout(()=>{document.documentElement.style.scrollBehavior="smooth",

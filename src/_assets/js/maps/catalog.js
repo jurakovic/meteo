@@ -105,7 +105,7 @@ const STORM_LINKS = [
 ];
 
 const SYNOP_LINKS = [
-	{ text: 'ČHMÚ', href: 'https://intranet.chmi.cz/aktualni-situace/aktualni-stav-pocasi/evropa/synopticka-situace' },
+	{ text: 'ČHMÚ', href: 'https://www.chmi.cz/predpoved-pocasi/synopticka-situace' },
 	{ text: 'DHMZ', href: 'https://meteo.hr/prognoze.php?section=prognoze_model&param=web_fronte_sutra12' },
 	{ text: 'DWD', href: 'https://www.dwd.de/EN/ourservices/hobbymet_wcharts_europe/hobbyeuropecharts.html' }
 ];
@@ -360,22 +360,22 @@ export const MAP_CATALOG = [
 		dynamicWidth: true,
 		slides: [
 			{
-				title: { href: 'https://intranet.chmi.cz/aktualni-situace/aktualni-stav-pocasi/evropa/synopticka-situace' },
+				title: { href: 'https://www.chmi.cz/predpoved-pocasi/synopticka-situace' },
 				img: 'https://intranet.chmi.cz/files/portal/docs/meteo/om/evropa/analyza.gif',
 				aspect: '760 / 492'
 			},
 			{
-				title: { href: 'https://intranet.chmi.cz/predpovedi/predpovedi-pocasi/evropa/synopticka-situace' },
+				title: { href: 'https://www.chmi.cz/predpoved-pocasi/synopticka-situace' },
 				img: 'https://intranet.chmi.cz/files/portal/docs/meteo/om/evropa/preba/preba36.gif',
 				aspect: '760 / 435'
 			},
 			{
-				title: { href: 'https://intranet.chmi.cz/predpovedi/predpovedi-pocasi/evropa/synopticka-situace' },
+				title: { href: 'https://www.chmi.cz/predpoved-pocasi/synopticka-situace' },
 				img: 'https://intranet.chmi.cz/files/portal/docs/meteo/om/evropa/preba/preba60.gif',
 				aspect: '760 / 435'
 			},
 			{
-				title: { href: 'https://intranet.chmi.cz/predpovedi/predpovedi-pocasi/evropa/synopticka-situace' },
+				title: { href: 'https://www.chmi.cz/predpoved-pocasi/synopticka-situace' },
 				img: 'https://intranet.chmi.cz/files/portal/docs/meteo/om/evropa/preba/preba84.gif',
 				aspect: '760 / 435'
 			}
