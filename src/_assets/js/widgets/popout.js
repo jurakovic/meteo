@@ -21,7 +21,7 @@ import { syncShadows } from './overlap.js';
 import { lockedHeightAt, lockedWidthFor } from './resize.js';
 
 function buildPopoutButton() {
-	const btn = el('a', { class: 'po-btn' });
+	const btn = el('a', { class: 'po-btn', 'data-track': 'popout' });
 	btn.addEventListener('click', () => togglePopout(btn.closest('.map-block')));
 	setPopoutButton(btn, false);
 	return btn;
@@ -52,7 +52,7 @@ export function popoutMap(block) {
 	// a copy holds no place in the page, so it leaves nothing behind in it. The
 	// gap's way back docks whichever showing holds the place by then
 	if (!isDuplicate(block)) {
-		const back = el('a', { text: 'Vrati' });
+		const back = el('a', { text: 'Vrati', 'data-track': 'dock' });
 		const gap = el('div', { class: 'map-gap', style: `height: ${rect.height}px;` }, [
 			el('span', { text: 'Karta je izdvojena u prozor ·' }),
 			back

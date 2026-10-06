@@ -35,7 +35,7 @@ export function createPresetBar(panel) {
 			// its own, so the selection becomes custom rather than silently reverting
 			if (!options.some(preset => preset.id === selectedId)) selectedId = 'custom';
 			options.forEach(preset => {
-				const radio = el('input', { type: 'radio', name: 'msPreset', value: preset.id });
+				const radio = el('input', { type: 'radio', name: 'msPreset', value: preset.id, 'data-track': 'preset-pick' });
 				radio.checked = preset.id === selectedId;
 				radio.addEventListener('change', () => panel.presetChosen(preset, presetMapIds(preset.id)));
 				// a corner mark on the saved ones, so the two kinds stay apart in the

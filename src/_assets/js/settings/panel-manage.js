@@ -22,7 +22,7 @@ export function createPresetManager(panel) {
 		type: 'text', class: 'ms-name', maxlength: String(PRESET_NAME_MAX),
 		placeholder: 'Naziv predloška'
 	});
-	const saveBtn = el('button', { type: 'button', class: 'btn', text: 'Spremi' });
+	const saveBtn = el('button', { type: 'button', class: 'btn', 'data-track': 'preset-save', text: 'Spremi' });
 
 	function saveCurrentAs(name) {
 		const preset = storeUserPreset(name, panel.selectedMapIds(), panel.selectedLayout());
@@ -107,7 +107,7 @@ export function createPresetManager(panel) {
 	// carries unsaved edits to the list. Built-ins share by id, which every
 	// visitor resolves; a saved preset has to carry its contents instead.
 	function buildShareLink(getPrefs) {
-		const link = el('a', { text: 'Podijeli' });
+		const link = el('a', { text: 'Podijeli', 'data-track': 'preset-share' });
 		link.addEventListener('click', () => {
 			copyMapViewLink(getPrefs(), () => flashLabel(link, 'Kopirano!', 'Podijeli'));
 		});
@@ -121,7 +121,7 @@ export function createPresetManager(panel) {
 		// option that was never on offer rather than one that failed to work
 		let toggleLink = null;
 		if (isHideablePreset(preset.id)) {
-			toggleLink = el('a', { text: hidden ? 'Prikaži' : 'Sakrij' });
+			toggleLink = el('a', { text: hidden ? 'Prikaži' : 'Sakrij', 'data-track': hidden ? 'preset-show' : 'preset-hide' });
 			toggleLink.addEventListener('click', () => {
 				setPresetHidden(preset.id, !hidden);
 				// the bar drops a selection that just became invisible
@@ -141,14 +141,14 @@ export function createPresetManager(panel) {
 	function buildManageRow(preset) {
 		if (preset.id === renamingId) return buildRenameRow();
 
-		const renameLink = el('a', { text: 'Preimenuj' });
-		const deleteLink = el('a', { text: 'Obriši' });
+		const renameLink = el('a', { text: 'Preimenuj', 'data-track': 'preset-rename' });
+		const deleteLink = el('a', { text: 'Obriši', 'data-track': 'preset-delete' });
 
 		// Ažuriraj takes Podijeli's slot while the row has edits (INTERNALS.md,
 		// Saved presets)
 		let firstLink;
 		if (hasPendingEdits(preset, panel.editingPresetId, panel.selectedMapIds(), panel.selectedLayout())) {
-			firstLink = el('a', { text: 'Ažuriraj' });
+			firstLink = el('a', { text: 'Ažuriraj', 'data-track': 'preset-update' });
 			firstLink.addEventListener('click', () => {
 				storeUserPreset(preset.name, panel.selectedMapIds(), panel.selectedLayout()); // by name, the one write path
 				panel.presetsChanged(preset.id); // the list is this preset again, so its chip comes back
@@ -194,8 +194,8 @@ export function createPresetManager(panel) {
 	// the name is only committed on "Potvrdi" or Enter — never on leaving the
 	// field, so clicking elsewhere can't rename anything behind your back
 	function buildRenameRow() {
-		const confirmLink = el('a', { text: 'Potvrdi' });
-		const cancelLink = el('a', { text: 'Odustani' });
+		const confirmLink = el('a', { text: 'Potvrdi', 'data-track': 'preset-rename-confirm' });
+		const cancelLink = el('a', { text: 'Odustani', 'data-track': 'preset-rename-cancel' });
 		confirmLink.addEventListener('click', commitRename);
 		cancelLink.addEventListener('click', cancelRename);
 
@@ -215,7 +215,7 @@ export function createPresetManager(panel) {
 	}
 
 	function buildSharedRow() {
-		const saveLink = el('a', { text: 'Spremi' });
+		const saveLink = el('a', { text: 'Spremi', 'data-track': 'shared-save' });
 		const shared = getSharedMapView();
 		saveLink.addEventListener('click', () => {
 			// saves what is on screen, so any tweak the recipient made is kept
@@ -231,8 +231,8 @@ export function createPresetManager(panel) {
 		const heading = el('div', { class: 'ms-manage-title', text: 'Zadani predlošci' });
 		const links = el('span', { class: 'ms-manage-title-links' });
 
-		const addLink = (text, apply) => {
-			const link = el('a', { text: text });
+		const addLink = (text, track, apply) => {
+			const link = el('a', { text: text, 'data-track': track });
 			link.addEventListener('click', () => {
 				apply();
 				panel.presetsChanged(panel.checkedPresetId());
@@ -242,8 +242,8 @@ export function createPresetManager(panel) {
 
 		// each shown only while it would do something — "Sakrij sve" reaches
 		// every preset but the permanent one, so that is the count to stop at
-		if (getHiddenPresets().length < hideablePresets().length) addLink('Sakrij sve', hideAllPresets);
-		if (getHiddenPresets().length) addLink('Prikaži sve', showAllPresets);
+		if (getHiddenPresets().length < hideablePresets().length) addLink('Sakrij sve', 'presets-hide-all', hideAllPresets);
+		if (getHiddenPresets().length) addLink('Prikaži sve', 'presets-show-all', showAllPresets);
 
 		heading.appendChild(links);
 		return heading;
@@ -253,7 +253,7 @@ export function createPresetManager(panel) {
 	// it lives behind "Dodaj" and folds away again once one is saved
 	function buildUserHeading() {
 		const heading = el('div', { class: 'ms-manage-title', text: 'Moji predlošci' });
-		const addLink = el('a', { text: addingPreset ? 'Odustani' : 'Dodaj' });
+		const addLink = el('a', { text: addingPreset ? 'Odustani' : 'Dodaj', 'data-track': addingPreset ? 'preset-add-cancel' : 'preset-add' });
 		addLink.addEventListener('click', () => {
 			addingPreset = !addingPreset;
 			if (!addingPreset) nameInput.value = '';

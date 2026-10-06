@@ -204,13 +204,13 @@ function buildMapSettings(element) {
 
 	// a link, like the per-preset Podijeli it does the same job as; the filled
 	// button is kept for Primijeni, the one action that changes the page
-	const shareLink = el('a', { text: 'Podijeli' });
+	const shareLink = el('a', { text: 'Podijeli', 'data-track': 'share' });
 	shareLink.addEventListener('click', () => {
 		const prefs = readSharePrefs(readPanelPrefs(presets.checkedId(), list.selectedIds()), panel.dashboardChecked);
 		copyMapViewLink(prefs, () => flashLabel(shareLink, 'Kopirano!', 'Podijeli'));
 	});
 
-	const closeLink = el('a', { text: 'Zatvori', title: withKey('Zatvori', 'dialog-close') });
+	const closeLink = el('a', { text: 'Zatvori', 'data-track': 'dialog-close', title: withKey('Zatvori', 'dialog-close') });
 	closeLink.addEventListener('click', () => panel.close());
 
 	// the way home, before the title, since the board and a hidden page take

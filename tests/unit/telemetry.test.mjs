@@ -63,6 +63,17 @@ test('errors are reported with where they were thrown, at most five', () => {
 	assert.deepEqual(takeReport().events, [{ name: 'error', value: 'boom @ 3:14', n: 5 }]);
 });
 
+test('errors go first in a report, ahead of what was counted before them', async () => {
+	// a module instance of its own, with none of its five errors spent
+	const fresh = await import('../../src/_assets/js/telemetry.js?order');
+	globalThis.window.location.hostname = 'jurakovic.github.io';
+	fresh.initTelemetry('customize');
+	fresh.track('click', 'popout');
+	listeners.window.get('error')({ message: 'boom', lineno: 1, colno: 2 });
+	fresh.track('link', 'www.windy.com');
+	assert.deepEqual(fresh.takeReport().events.map(e => e.name), ['error', 'view', 'click', 'link']);
+});
+
 test('with ?debug=1 off the live site the report is logged, not sent', async () => {
 	// a module instance of its own, so the live one above does not carry over
 	const fresh = await import('../../src/_assets/js/telemetry.js?debug');

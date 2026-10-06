@@ -34,7 +34,40 @@ function trackError(message, where) {
 	track('error', `${String(message).slice(0, 160)} @ ${where}`);
 }
 
-// what was counted since the last report, emptied; null when there is nothing
+// what can be clicked: a <a> without href is how the page makes most of its
+// buttons. A label isn't here: its click is passed on to its box, which is
+const CLICKABLE = 'a, button, summary, [role="button"], input[type="checkbox"], input[type="radio"], [data-track]';
+
+// a clicked element as [name, value]: a link by where it goes, anything else
+// by its data-track name, or by tag.class when it has none, which ?debug=1
+// shows as one still to name
+/** @param {Element} target @returns {[string, string]} */
+function clickEvent(target) {
+	const name = target.getAttribute('data-track');
+	if (name) return ['click', name];
+	const href = target.tagName === 'A' ? target.getAttribute('href') : null;
+	if (href) {
+		// a jump within the page, or within a document in its dialog
+		if (href.startsWith('#')) return ['link', href];
+		// never the whole address, which on this site may carry a shared link
+		const url = new URL(href, window.location.href);
+		return ['link', url.origin === window.location.origin ? url.pathname : url.hostname];
+	}
+	const firstClass = target.classList[0];
+	return ['click', target.tagName.toLowerCase() + (firstClass ? `.${firstClass}` : '')];
+}
+
+/** @param {MouseEvent} e @param {boolean} [linksOnly] */
+function trackClick(e, linksOnly = false) {
+	const target = e.target instanceof Element ? e.target.closest(CLICKABLE) : null;
+	// a command counts itself, by its id, whether a click or a key ran it
+	if (!target || target.closest('[data-action]')) return;
+	const [name, value] = clickEvent(target);
+	if (!linksOnly || name === 'link') track(name, value);
+}
+
+// what was counted since the last report, emptied; null when there is nothing.
+// Errors go first: the worker keeps only a report's first events
 /** @returns {TelemetryReport | null} */
 export function takeReport() {
 	if (!counts.size) return null;
@@ -43,6 +76,7 @@ export function takeReport() {
 		return { name, value, n };
 	});
 	counts.clear();
+	events.sort((a, b) => Number(b.name === 'error') - Number(a.name === 'error'));
 	return { page, events };
 }
 
@@ -67,6 +101,11 @@ export function initTelemetry(name) {
 	// minified script in docs/, not into a module
 	window.addEventListener('error', (e) => trackError(e.message, `${e.lineno}:${e.colno}`));
 	window.addEventListener('unhandledrejection', (e) => trackError(e.reason && e.reason.message || e.reason, 'promise'));
+	// captured on window, ahead of every listener on the page, so one that
+	// stops a click can't keep it from being counted
+	window.addEventListener('click', (e) => trackClick(e), true);
+	// a middle click opens a link in a new tab and fires no click
+	window.addEventListener('auxclick', (e) => { if (e.button === 1) trackClick(e, true); }, true);
 	// hidden is the last moment a mobile browser reliably gives the page; a tab
 	// hidden and shown again reports again, with what was counted since
 	document.addEventListener('visibilitychange', () => {

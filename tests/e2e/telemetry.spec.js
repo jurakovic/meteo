@@ -53,6 +53,35 @@ test('Primijeni counts once, by click or Enter, and a mode change as dashboard o
 	]);
 });
 
+test('a press counts as a link by its host, a click by its name, and a command only as itself', async ({ page, paths }) => {
+	const events = counted(page);
+	await page.goto(`${paths.customize}?debug=1`);
+	// links counted but not followed, in this tab or a new one
+	await page.evaluate(() => ['click', 'auxclick'].forEach(type => document.addEventListener(type, e => {
+		if (/** @type {Element} */ (e.target).closest('a[href]')) e.preventDefault();
+	})));
+	const mapId = 'windy';
+	const block = page.locator(`.map-block[data-map-id="${mapId}"]`);
+	const title = block.locator('a.center');
+	const host = new URL(await title.getAttribute('href')).hostname;
+
+	await title.click();
+	await title.click({ button: 'middle' });
+	await block.locator('.zoom-btn').click();
+	await page.keyboard.press('k');
+	// the label passes its click on to the box: one count, not two
+	await page.locator(`#mapSettings .ms-item[data-map-id="${mapId}"] label`).click();
+	await page.locator('#mapSettings [data-track="dialog-close"]').click();
+
+	expect(events.filter(e => /^(link|click|command) /.test(e))).toEqual([
+		`link ${host}`, `link ${host}`,
+		'command zoom',
+		'command map-settings',
+		'click map-check',
+		'click dialog-close'
+	]);
+});
+
 test('a shared link counts as a list, a board or an invalid one', async ({ page, paths }) => {
 	const events = counted(page);
 	const encode = (view) => page.evaluate(v => btoa(JSON.stringify(v)), view);

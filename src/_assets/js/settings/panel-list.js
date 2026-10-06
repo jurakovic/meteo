@@ -34,7 +34,7 @@ export function createMapList(panel) {
 	const sortLinks = {};
 	const sortDiv = el('div', { class: 'ms-sort' }, [el('span', { text: 'Poredaj:' })]);
 	[['zadano', 'Zadano'], ['naziv', 'Naziv'], ['vrsta', 'Vrsta']].forEach(([key, label]) => {
-		const link = el('a', { text: label });
+		const link = el('a', { text: label, 'data-track': `sort-${key}` });
 		link.addEventListener('click', () => {
 			if (sortKey === key) sortAsc = !sortAsc;
 			else { sortKey = key; sortAsc = true; }
@@ -59,7 +59,7 @@ export function createMapList(panel) {
 	// could not be: a row dropped between two neighbours would land somewhere
 	// else entirely once the term was cleared
 	const findInput = el('input', { type: 'text', class: 'ms-find-input', placeholder: 'Traži karte…', 'aria-label': 'Traži karte' });
-	const findClear = el('a', { class: 'ms-find-clear', text: '×', title: 'Očisti (Esc)' });
+	const findClear = el('a', { class: 'ms-find-clear', 'data-track': 'find-clear', text: '×', title: 'Očisti (Esc)' });
 	const findDiv = el('div', { class: 'ms-find' }, [findInput, findClear]);
 
 	// hidden by a class rather than taken out of the list: a row carries its
@@ -164,7 +164,7 @@ export function createMapList(panel) {
 	}
 
 	function buildRow(map, checked) {
-		const checkbox = el('input', { type: 'checkbox' });
+		const checkbox = el('input', { type: 'checkbox', 'data-track': 'map-check' });
 		checkbox.checked = checked;
 		const handle = el('span', { class: 'ms-handle', text: '≡', title: 'Povuci za premještanje' });
 		// a map switched off keeps its row, hidden, so the list read back off the

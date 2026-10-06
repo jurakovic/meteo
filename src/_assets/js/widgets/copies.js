@@ -17,7 +17,7 @@ import { fitWidget, handGapTo, popoutMap, unlockAspect, WIDGET_RENDER } from './
 
 // [D]: another showing of a map. See INTERNALS.md, Copies.
 export function buildDuplicateButton() {
-	const btn = el('a', { class: 'dup-btn', text: '[D]', title: withKey('Udvostruči kartu', 'duplicate') });
+	const btn = el('a', { class: 'dup-btn', 'data-track': 'duplicate', text: '[D]', title: withKey('Udvostruči kartu', 'duplicate') });
 	btn.addEventListener('click', () => duplicateMap(btn.closest('.map-block')));
 	return btn;
 }
