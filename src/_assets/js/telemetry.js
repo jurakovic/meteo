@@ -1,7 +1,10 @@
 // Usage counts and script errors, sent to the worker every few minutes and
-// when the page is hidden: no cookies, nothing stored, no id. See INTERNALS.md, Telemetry.
+// when the page is hidden, while config.json switches it on: no cookies,
+// nothing stored, no id. See INTERNALS.md, Telemetry.
 
 import { dlog, isDebugEnabled } from './lib/debug.js';
+import { EVENTS, on } from './lib/events.js';
+import { isFeatureEnabled } from './remote-config.js';
 
 const TELEMETRY_URL = 'https://meteo-data.jurakovic.workers.dev/t';
 // dev, the nginx containers and the e2e suite's meteo.test send nothing
@@ -20,12 +23,18 @@ const DEBUG_SEND_EVERY_MS = 10 * 1000;
 const counts = new Map();
 let errors = 0;
 let page = ''; // empty until initTelemetry, and off the live site without ?debug=1
-let sending = false; // the live site only; ?debug=1 elsewhere counts and logs
+let live = false; // the only place a report is sent from
+let viewCounted = false;
 
-// counted only once initTelemetry has run on the live site, or with ?debug=1
+// once initTelemetry has run on the live site while the switch is on, or with
+// ?debug=1 anywhere, which counts and logs whatever the switch says
+function counting() {
+	return !!page && (isFeatureEnabled('telemetry') || isDebugEnabled());
+}
+
 /** @param {string} name @param {string} [value] */
 export function track(name, value = '') {
-	if (!page) return;
+	if (!counting()) return;
 	const key = JSON.stringify([name, String(value)]);
 	counts.set(key, (counts.get(key) || 0) + 1);
 	dlog('telemetry:', name, value);
@@ -33,7 +42,7 @@ export function track(name, value = '') {
 
 /** @param {unknown} message @param {string} where */
 function trackError(message, where) {
-	if (errors >= MAX_ERRORS) return;
+	if (!counting() || errors >= MAX_ERRORS) return;
 	errors++;
 	track('error', `${String(message).slice(0, 160)} @ ${where}`);
 }
@@ -84,23 +93,36 @@ export function takeReport() {
 	return { page, events };
 }
 
+// a page switched on after it loaded (the file's fetch landing) is a view from then
+function countView() {
+	if (viewCounted || !counting()) return;
+	viewCounted = true;
+	track('view');
+}
+
 function sendReport() {
 	const report = takeReport();
 	if (!report) return;
-	dlog(sending ? 'telemetry: sent' : 'telemetry: not sent (not the live site)', report);
+	const sending = live && isFeatureEnabled('telemetry');
+	dlog(sending ? 'telemetry: sent' : `telemetry: not sent (${live ? 'switched off' : 'not the live site'})`, report);
 	// a string goes as text/plain, a type that needs no CORS preflight
 	if (sending) navigator.sendBeacon(TELEMETRY_URL, JSON.stringify(report));
 }
 
 /** @param {'landing' | 'customize'} name */
 export function initTelemetry(name) {
-	const live = window.location.hostname === LIVE_HOST && typeof navigator.sendBeacon === 'function';
+	live = window.location.hostname === LIVE_HOST && typeof navigator.sendBeacon === 'function';
 	if (!live && !isDebugEnabled()) return;
-	sending = live;
 	page = name;
 	dlog(`telemetry: counting on ${name}; a report is logged every 10 s and when the page is hidden`
-		+ (live ? `, and sent to ${TELEMETRY_URL}` : ', not sent off the live site'));
-	track('view');
+		+ (!live ? ', not sent off the live site'
+			: isFeatureEnabled('telemetry') ? `, and sent to ${TELEMETRY_URL}` : ', not sent while switched off'));
+	countView();
+	// switched off, what was counted goes unsent; ?debug=1 keeps it to log
+	on(EVENTS.featuresChanged, () => {
+		if (isFeatureEnabled('telemetry')) countView();
+		else if (!isDebugEnabled()) counts.clear();
+	});
 	// the build inlines the script, so line:col point into the page's
 	// minified script in docs/, not into a module
 	window.addEventListener('error', (e) => trackError(e.message, `${e.lineno}:${e.colno}`));

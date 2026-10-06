@@ -1,8 +1,9 @@
-// Telemetry: nothing off the live site without ?debug=1; on it, counts sent
-// once the page is hidden
+// Telemetry: nothing off the live site without ?debug=1; on it, while
+// config.json switches it on, counts sent once the page is hidden
 import './setup.mjs';
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
+import { initRemoteConfig } from '../../src/_assets/js/remote-config.js';
 import { initTelemetry, takeReport, track } from '../../src/_assets/js/telemetry.js';
 
 const sent = [];
@@ -14,8 +15,18 @@ Object.defineProperty(globalThis, 'navigator', {
 globalThis.window.addEventListener = (type, handler) => listeners.window.set(type, handler);
 globalThis.document = /** @type {any} */ ({
 	visibilityState: 'visible',
-	addEventListener: (type, handler) => listeners.document.set(type, handler)
+	addEventListener: (type, handler) => listeners.document.set(type, handler),
+	dispatchEvent: (e) => { const handler = listeners.document.get(e.type); if (handler) handler(e); }
 });
+
+// config.json as the worker serves it; a fetch of it lands a turn later
+let remote = {};
+globalThis.fetch = /** @type {any} */ (async () => ({ ok: true, json: async () => remote }));
+async function switchTelemetry(enabled) {
+	remote = { maps: {}, features: { telemetry: { enabled } } };
+	initRemoteConfig();
+	await new Promise(resolve => setTimeout(resolve, 0));
+}
 
 // held, not run: a real one would keep the test process alive
 const intervals = [];
@@ -35,9 +46,18 @@ test('off the live site nothing is counted or listened for', () => {
 	assert.equal(listeners.document.size + listeners.window.size, 0);
 });
 
-test('on the live site a hidden page sends the counts since the last report', () => {
+test('on the live site nothing is counted while switched off; switched on, the page is a view from then', async () => {
 	globalThis.window.location.hostname = 'jurakovic.github.io';
 	initTelemetry('customize');
+	track('command', 'zoom');
+	assert.equal(takeReport(), null);
+	await switchTelemetry(true);
+	assert.deepEqual(takeReport().events, [{ name: 'view', value: '', n: 1 }]);
+	await switchTelemetry(true); // on and on again: still one view
+	assert.equal(takeReport(), null);
+});
+
+test('on the live site a hidden page sends the counts since the last report', () => {
 	track('command', 'zoom');
 	track('command', 'zoom');
 	track('command', 'slide');
@@ -47,7 +67,6 @@ test('on the live site a hidden page sends the counts since the last report', ()
 	assert.deepEqual(sent[0].body, {
 		page: 'customize',
 		events: [
-			{ name: 'view', value: '', n: 1 },
 			{ name: 'command', value: 'zoom', n: 2 },
 			{ name: 'command', value: 'slide', n: 1 }
 		]
@@ -80,7 +99,18 @@ test('errors are reported with where they were thrown, at most five', () => {
 	assert.deepEqual(takeReport().events, [{ name: 'error', value: 'boom @ 3:14', n: 5 }]);
 });
 
+test('switched off, what was counted goes unsent and nothing more is counted', async () => {
+	const before = sent.length;
+	track('command', 'top');
+	await switchTelemetry(false);
+	track('command', 'top');
+	hide();
+	assert.equal(sent.length, before);
+	assert.equal(takeReport(), null);
+});
+
 test('errors go first in a report, ahead of what was counted before them', async () => {
+	await switchTelemetry(true);
 	// a module instance of its own, with none of its five errors spent
 	const fresh = await import('../../src/_assets/js/telemetry.js?order');
 	globalThis.window.location.hostname = 'jurakovic.github.io';
@@ -100,6 +130,7 @@ test('with ?debug=1 off the live site the report is logged, not sent', async () 
 	const log = console.log;
 	console.log = (...args) => logged.push(args);
 	listeners.document.clear();
+	await switchTelemetry(false); // ?debug=1 counts and logs whatever the switch says
 	try {
 		fresh.initTelemetry('landing');
 		fresh.track('command', 'zoom');

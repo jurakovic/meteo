@@ -8,6 +8,8 @@ export const EVENTS = {
 	dialogToggled: 'dialog-toggled',
 	// the maps switched off remotely changed (remote-config.js)
 	mapConfigChanged: 'map-config-changed',
+	// a feature switched remotely went on or off (remote-config.js)
+	featuresChanged: 'features-changed',
 	// an interactive map went into or out of its fullscreen (page/iframe.js)
 	mapFullscreen: 'map-fullscreen',
 	// the arrangement of the widgets changed and was stored (widgets/layout.js)

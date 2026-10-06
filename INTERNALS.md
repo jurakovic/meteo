@@ -221,7 +221,9 @@ When extending the payload: `btoa()` rejects code points above U+00FF, and the n
 
 ## Remote config
 
-A map whose source is down is switched off without a build: the file at `MAP_CONFIG_URL` names the maps that are off, as `{ "maps": { "<id>": { "enabled": false } } }`. Anything else in it is ignored, and a map the file does not name is on.
+A map whose source is down is switched off without a build: the file at `MAP_CONFIG_URL` names the maps that are off, as `{ "maps": { "<id>": { "enabled": false } } }`. A map the file does not name is on.
+
+The same file switches features, as `{ "features": { "<name>": { "enabled": true } } }` beside `maps`, read with `isFeatureEnabled()`. Each has a default in code (`FEATURE_DEFAULTS`), which a feature keeps while the file does not name it, or not as `true` or `false`, so a first visit and a file that leaves it out get that. The one feature switched this way is `telemetry` (*Telemetry*), off by default. A flip is announced on `features-changed`. Anything else in the file is ignored.
 
 The code is [`remote-config.js`](./src/_assets/js/remote-config.js), started by both entries before anything draws.
 
@@ -240,7 +242,11 @@ On the customize page the tab's `[+]` menu leaves the map out too. The dialog st
 What visitors use, and the script errors they hit, are counted in the page and sent to the worker at `TELEMETRY_URL` (`/t` on the same worker as `config.json`). The code is [`telemetry.js`](./src/_assets/js/telemetry.js), started first by both entries so it sees an error in any step after it.
 
 - Only on the live site (`jurakovic.github.io`). Dev, the nginx containers and the browser suite's `meteo.test` count and send nothing.
-- `?debug=1` counts on any host and logs to the console: each event as it is counted, and each report as it goes, which is every 10 seconds rather than 3 minutes, so a test sees its report without waiting. Off the live site the report is logged instead of sent, so local testing never reaches the worker. On the live site it is logged and sent.
+- Only while switched on in the remote config (`features.telemetry`, *Remote config*), which is off by default and turned on while a storm brings the visitors. Off, nothing at all is counted or sent, errors included.
+  - The switch is the stored copy of the file, as read when the page starts, so a flip reaches a visitor on their next load.
+  - Switched on by the file's fetch landing after the page loaded (the first visit, or the first load after the flip), the page counts its `view` then, and everything after it.
+  - Switched off that way, what was counted goes unsent and nothing more is counted.
+- `?debug=1` counts on any host and logs to the console: each event as it is counted, and each report as it goes, which is every 10 seconds rather than 3 minutes, so a test sees its report without waiting. It counts whatever the switch says. Off the live site the report is logged instead of sent, so local testing never reaches the worker. On the live site it is logged, and sent only while switched on.
 - What is counted:
   - a `view` per load
   - a `command` with its id each time a control or a key runs one (both paths in `page/commands.js`). A command whose `run` returns `false` did nothing and isn't counted: Escape with no map in fullscreen (`fullscreen-exit`). Primijeni is the `settings-apply` command whether it is clicked or Enter runs it, so it counts once either way.
