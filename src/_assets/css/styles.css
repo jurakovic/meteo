@@ -1969,6 +1969,11 @@ body.fs-lock {
 			white-space: nowrap;
 		}
 
+		/* the rename editor's two, under the last two slots of the rows around */
+		.dialog .ms-rename-links {
+			grid-template-columns: 9ch 8ch;
+		}
+
 			.dialog .ms-manage-links a,
 			.dialog .ms-shared a {
 				cursor: pointer;

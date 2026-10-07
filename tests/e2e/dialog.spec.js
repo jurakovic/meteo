@@ -165,7 +165,14 @@ test.describe('settings dialog', () => {
 		expect(await storedJson(page, 'mapPrefs')).toEqual({ preset: saved[0].id });
 
 		await openDialog(page);
-		await manageRow(page, 'Moji sateliti').locator('a', { hasText: 'Preimenuj' }).click();
+		const renameLink = manageRow(page, 'Moji sateliti').locator('a', { hasText: 'Preimenuj' });
+		const renameAt = await box(renameLink);
+		await renameLink.click();
+		// the editor takes the share slot too, up to Potvrdi, which sits where Preimenuj was
+		const input = await box(page.locator('#mapSettings .ms-rename'));
+		const confirm = await box(page.locator('#mapSettings .ms-manage-item a', { hasText: 'Potvrdi' }));
+		expect(Math.round(confirm.x)).toBe(Math.round(renameAt.x));
+		expect(confirm.x - (input.x + input.width)).toBeLessThanOrEqual(10);
 		await page.locator('#mapSettings .ms-rename').fill('Sat');
 		await page.locator('#mapSettings .ms-rename').press('Enter');
 		await expect(chip(page, 'Sat')).toBeVisible();

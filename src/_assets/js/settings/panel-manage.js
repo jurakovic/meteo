@@ -199,10 +199,11 @@ export function createPresetManager(panel) {
 		confirmLink.addEventListener('click', commitRename);
 		cancelLink.addEventListener('click', cancelRename);
 
-		// Potvrdi and Odustani sit under Preimenuj and Obriši, the actions they stand in for
+		// Potvrdi and Odustani sit under Preimenuj and Obriši, the actions they
+		// stand in for; the first slot is left out, so the name takes its room
 		return el('div', { class: 'ms-manage-item' }, [
 			renameInput,
-			buildLinkCells([null, confirmLink, cancelLink])
+			el('span', { class: 'ms-manage-links ms-rename-links' }, [confirmLink, cancelLink])
 		]);
 	}
 
