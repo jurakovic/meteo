@@ -5,7 +5,8 @@
 - dodani "Linkovi" u prozoru, otvaraju se tipkom L, pa su dostupni i s nadzorne ploče
 - dodan Meteoalarm u linkove ispod prognoza nevremena
 - sinoptičke karte (ČHMÚ, DHMZ, DWD) sada svaka ima link na obje druge
-- ostali manji ispravci i dorade
+- link za Povijest promjena prikazuje datum zadnje promjene
+- ostali manji ispravci i poboljšanja
 
 ## 2026-10-05 (#44)
 - dodana "Povijest promjena", otvara se iz podnožja ili tipkom C
@@ -17,7 +18,7 @@
 - dodani šavovi: povlačenjem zajedničkog ruba dvaju susjednih prozora mijenjaju se oba odjednom
 - dodano dupliciranje prozora karte ([D]), pa se ista karta može prikazati više puta, npr. u dvije veličine ili na dvije različite slike
 - dodano automatsko slaganje na nadzornoj ploči ([A]): sve karte poslože se u pravilnu mrežu
-- dodano automatsko osvježavanje svih karata svakih 5, 10, 15, 30 ili 60 minuta
+- dodano automatsko osvježavanje svih karata u određenim intervalima
 
 ## 2026-09-14 (#41)
 - dodani izdvojeni prozori karata na računalu ("widgeti"): karta može plutati iznad stranice, pomicati se i mijenjati veličinu, privlačiti se uz druge prozore, spojiti se u grupu sa susjednim ili sjesti u stupac uz rub ekrana
@@ -32,7 +33,7 @@
 - zadani predlošci mogu se sakriti iz reda predložaka; "Zadano" preimenovano u "Osnovno"
 
 ## 2026-07-06 (#38)
-- dodana stranica Prilagodi (beta) umjesto stranice Više: bira se koje se karte prikazuju i kojim redoslijedom, kreće se od predloška (Zadano, Više, Radari, Sateliti, Nevrijeme, Sve, Ništa), a prikaz se dijeli poveznicom
+- dodana stranica Prilagodi (beta) umjesto stranice Više: bira se koje se karte prikazuju i kojim redoslijedom, kreće se od predloška (Zadano, Više, Radari, Sateliti, Nevrijeme, Sve, Ništa)
 
 ## 2026-06-28 (#37)
 - dodan gumb za cijeli zaslon na interaktivnim kartama
@@ -42,7 +43,7 @@
 
 ## 2026-06-24 (#35)
 - dodan red brzih linkova ispod svake karte
-- dodan prekidač "Linkovi" koji prikazuje ili skriva linkove ispod karata (pamti se u pregledniku)
+- dodan prekidač "Linkovi" koji prikazuje ili skriva linkove ispod karata
 - ažurirani linkovi, ispravljeni neispravni
 
 ## 2026-06-22
@@ -53,7 +54,7 @@
 - razdvojene ESSL i ESTOFEX prognoze nevremena, dodano više slika prognoze
 
 ## 2026-05-09 (#33)
-- vraćeni meteoblue widgeti s meteogramom
+- vraćeni meteoblue meteogram widgeti (umjesto API slika)
 
 ## 2026-03-26 (#32)
 - dodan prekidač [HR]/[EU] na svim interaktivnim kartama (npr. Windy, Blitzortung, itd.) za prikaz Hrvatske ili Europe
@@ -112,7 +113,7 @@
 - Linkovi se mogu proširiti i skupiti
 
 ## 2025-02-28 (#17)
-- dodana tamnija pozadina za slučaj da se slika ne učita
+- dodana tamnija pozadina za slučaj kad se slika ne učita
 
 ## 2024-12-31 (#16)
 - dodani linkovi za kvalitetu zraka i nebo.com.hr
@@ -136,7 +137,8 @@
 
 ## 2024-09-07 (#10)
 - dodana stranica Više i gumbi za navigaciju po stranicama
-- dodane i presložene slike, dodani linkovi na Facebook stranice
+- dodane i presložene slike
+- dodani linkovi na Facebook stranice
 
 ## 2024-09-06 (#9)
 - Linkovi premješteni na dno, s novim rasporedom
@@ -148,7 +150,7 @@
 - dodani "SpaceWeather" linkovi
 
 ## 2024-02-17
-- dodan radar Puntijarka
+- dodan Puntijarka radar
 
 ## 2024-01-23 (#4)
 - dodan Weather&Radar
@@ -169,10 +171,10 @@
 - dodani preostali DHMZ radari
 
 ## 2023-07-20
-- dodani RainViewer i radar Időkép za Jadran
+- dodani RainViewer i Időkép za Jadran
 
 ## 2023-06-10
-- radar DHMZ-a prikazan kao animirani gif
+- DHMZ radar prikazan kao animirani gif
 
 ## 2022-04-16
 - sat24 prikazan kao animirani gif (infracrveni i vidljivi)
