@@ -27,6 +27,11 @@ function frameById(frameId) {
 /** @param {HTMLIFrameElement} iframe */
 export function setIframeSrc(iframe) {
 	dlog(`Updating iframe src for ${iframe.id}`);
+	// a slide's widget frame has one address, and no zoom
+	if (!iframe.hasAttribute('data-src-hr')) {
+		iframe.src = iframe.getAttribute('data-src');
+		return;
+	}
 	const mode = iframe.getAttribute('data-zoom-mode');
 	let url = mode === 'eu'
 		? iframe.getAttribute('data-src-eu')
@@ -167,7 +172,7 @@ const hintTimers = new WeakMap();
 // bound once per overlay: a double click, or a double tap, lets the map
 // through; a single tap shows the hint that says so
 export function hideOverlayOnDoubleTap() {
-	queryAll('.if1 .overlay:not([data-tap])').forEach((/** @type {HTMLElement} */ overlay) => {
+	queryAll('.if1 .overlay:not([data-tap]), .if3 .overlay:not([data-tap])').forEach((/** @type {HTMLElement} */ overlay) => {
 		overlay.setAttribute('data-tap', '');
 		const frameId = overlay.dataset.frameId;
 		let lastTap = 0;

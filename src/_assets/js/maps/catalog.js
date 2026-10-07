@@ -7,8 +7,9 @@
 
 /**
  * A slide with a title bar of its own; a slideshow without titles lists bare
- * image addresses instead.
- * @typedef {{ title: { text?: string, href: string }, img: string, aspect: string, maxWidth?: number }} TitledSlide
+ * image addresses instead. A slide with a `frame` shows that widget page in
+ * place of an image, and has no `img`.
+ * @typedef {{ title: { text?: string, href: string }, img?: string, frame?: string, aspect: string, maxWidth?: number }} TitledSlide
  */
 
 /**
@@ -397,26 +398,25 @@ export const MAP_CATALOG = [
 		category: 'prognoza',
 		name: 'meteoblue | Prognoza',
 		type: 'slideshow',
-		eagerSlides: true,
 		slides: [
 			{
 				title: { text: 'meteoblue | Prognoza | Zagreb', href: 'https://www.meteoblue.com/en/weather/week/zagreb_croatia_3186886' },
-				img: 'https://meteo-data.jurakovic.workers.dev/meteoblue/meteogram/zagreb.png',
+				frame: 'https://www.meteoblue.com/en/weather/widget/meteogram/zagreb_croatia_3186886?geoloc=fixed&temperature_units=CELSIUS&windspeed_units=KILOMETER_PER_HOUR&precipitation_units=MILLIMETER&forecast_days=5&layout=dark&autowidth=auto&user_key=d6c944dcfa23c1de&embed_key=a4c8e80861792d46&sig=b9e5dc2debd7b0ebee1cfa142badc1fc601ae61d0a6b866b54ed49cc7fe3bb16',
 				aspect: '1700 / 1300'
 			},
 			{
 				title: { text: 'meteoblue | Prognoza | Split', href: 'https://www.meteoblue.com/en/weather/week/split_croatia_3190261' },
-				img: 'https://meteo-data.jurakovic.workers.dev/meteoblue/meteogram/split.png',
+				frame: 'https://www.meteoblue.com/en/weather/widget/meteogram/split_croatia_3190261?geoloc=fixed&temperature_units=CELSIUS&windspeed_units=KILOMETER_PER_HOUR&precipitation_units=MILLIMETER&forecast_days=5&layout=dark&autowidth=auto&user_key=d6c944dcfa23c1de&embed_key=8ccaeab9f63d36ea&sig=84e416503549d427b4828b819e65423881bcb37c65a878bbd69e1078c206e252',
 				aspect: '1700 / 1300'
 			},
 			{
 				title: { text: 'meteoblue | Prognoza | Rijeka', href: 'https://www.meteoblue.com/en/weather/week/rijeka_croatia_3191648' },
-				img: 'https://meteo-data.jurakovic.workers.dev/meteoblue/meteogram/rijeka.png',
+				frame: 'https://www.meteoblue.com/en/weather/widget/meteogram/rijeka_croatia_3191648?geoloc=fixed&temperature_units=CELSIUS&windspeed_units=KILOMETER_PER_HOUR&precipitation_units=MILLIMETER&forecast_days=5&layout=dark&autowidth=auto&user_key=d6c944dcfa23c1de&embed_key=9f589d2836e95ef7&sig=beb60bab997ab12c27a10f416692c3d63cfc69ab3256f3845efd149133f5a165',
 				aspect: '1700 / 1300'
 			},
 			{
 				title: { text: 'meteoblue | Prognoza | Osijek', href: 'https://www.meteoblue.com/en/weather/week/osijek_croatia_3193935' },
-				img: 'https://meteo-data.jurakovic.workers.dev/meteoblue/meteogram/osijek.png',
+				frame: 'https://www.meteoblue.com/en/weather/widget/meteogram/osijek_croatia_3193935?geoloc=fixed&temperature_units=CELSIUS&windspeed_units=KILOMETER_PER_HOUR&precipitation_units=MILLIMETER&forecast_days=5&layout=dark&autowidth=auto&user_key=d6c944dcfa23c1de&embed_key=0ee635437c5c5bd7&sig=d67d7c23ac5b46618e806c8009cd5ff3bea5280d801fc3dd2791b77c8a2c8965',
 				aspect: '1700 / 1300'
 			}
 		],

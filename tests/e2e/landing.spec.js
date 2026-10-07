@@ -41,6 +41,33 @@ test.describe('landing page', () => {
 		await expect(slideshow.locator('.slide.active img')).toHaveAttribute('src', /anim_6h/);
 	});
 
+	test('every meteogram widget is laid out at full size, its slide shown or not', async ({ page }) => {
+		const frames = page.locator('.slideshow[data-slideshow-id="meteoblue-prognoza"] iframe');
+		await expect(frames).toHaveCount(4);
+		const sizes = await frames.evaluateAll(list => list.map(f => [f.clientWidth, f.clientHeight, f.getAttribute('src')]));
+		expect(sizes[0][0]).toBeGreaterThan(0);
+		expect(sizes.map(([w, h]) => [w, h])).toEqual(sizes.map(() => [sizes[0][0], sizes[0][1]]));
+		sizes.forEach(([, , src]) => expect(src).toMatch(/meteoblue\.com\/.*widget\/meteogram/));
+	});
+
+	test('a meteogram widget is behind the gate: a double click lets it through, [X] and [R] put it back', async ({ page }) => {
+		const slideshow = page.locator('.slideshow[data-slideshow-id="meteoblue-prognoza"]');
+		await slideshow.locator('.next').click();
+		const slide = slideshow.locator('.slide.active');
+		const overlay = slide.locator('.overlay');
+		const gate = slide.locator('a[data-action="gate"]');
+		await expect(gate).toBeHidden();
+		await overlay.dblclick();
+		await expect(overlay).toBeHidden();
+		await expect(gate).toHaveText('[X]');
+		await gate.click();
+		await expect(overlay).toBeVisible();
+		await expect(gate).toHaveText('[R]');
+		await gate.click();
+		await expect(gate).toBeHidden();
+		await expect(slide.locator('iframe')).toHaveAttribute('src', /split_croatia/);
+	});
+
 	test('a horizontal mouse drag changes the slide', async ({ page }) => {
 		const slideshow = page.locator('.slideshow[data-slideshow-id="neverin-radar-hr"]');
 		await slideshow.scrollIntoViewIfNeeded();

@@ -90,6 +90,18 @@ test('every map in the catalog is of a registered type', async () => {
 	assert.equal(mapTypeOf('nope'), null);
 });
 
+test('a slideshow reload fetches its images afresh and navigates its widget frames again', async () => {
+	const { MAP_TYPES } = await import('../../src/_assets/js/maps/types.js');
+	const node = (src) => ({ src, getAttribute: () => src });
+	const img = node('https://x/a.png');
+	const frame = node('https://x/widget');
+	frame.src = '';
+	const block = { querySelectorAll: (selector) => selector.startsWith('iframe') ? [frame] : [img] };
+	MAP_TYPES.slideshow.reload(block);
+	assert.match(img.src, /^https:\/\/x\/a\.png\?_r=\d+$/);
+	assert.equal(frame.src, 'https://x/widget');
+});
+
 test('a fresh address replaces its own reload parameter and keeps the rest', async () => {
 	const { freshUrl } = await import('../../src/_assets/js/maps/types.js');
 	assert.match(freshUrl('https://x/a.png'), /^https:\/\/x\/a\.png\?_r=\d+$/);
