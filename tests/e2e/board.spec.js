@@ -204,6 +204,19 @@ test.describe('dashboard', () => {
 		expect(await storedJson(page, 'msTab')).toMatchObject({ width: Math.round(after.width) });
 		await expect(page.locator('#mapSettings')).toBeHidden(); // a drag is no click
 	});
+
+	test('the tab stays lit while it is dragged with the pointer off it', async ({ page }) => {
+		await enterBoard(page, 'Sateliti');
+		const tab = page.locator('.ms-tab');
+		const opacity = () => tab.evaluate((t) => getComputedStyle(t).opacity);
+		const b = await box(tab);
+		await page.mouse.move(b.x + 20, b.cy);
+		await page.mouse.down();
+		await page.mouse.move(b.x - 80, b.cy + 300, { steps: 5 }); // below it: it only moves along the top
+		await expect.poll(opacity).toBe('1');
+		await page.mouse.up();
+		await expect.poll(opacity).toBe('0.55');
+	});
 });
 
 test.describe('auto-refresh', () => {

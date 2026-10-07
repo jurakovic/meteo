@@ -1260,7 +1260,8 @@ body.fs-lock {
 	cursor: pointer;
 	/* it hangs over the board the whole time it is shown, and the board is the
 	   maps: faint until it is wanted, so the widgets under it are not read
-	   through a strip of orange, and lit the moment the pointer reaches it or
+	   through a strip of orange, and lit the moment the pointer reaches it, while
+	   it is dragged or pulled (.ms-tab-held, the pointer off it or not) or while
 	   the dialog it opens is up — where it is the button that is pressed in */
 	opacity: 0.55;
 	transition: opacity 0.15s ease;
@@ -1282,6 +1283,7 @@ body.fs-lock {
 	}
 
 	.ms-tab:hover,
+	.ms-tab.ms-tab-held,
 	body.dialog-open .ms-tab,
 	body.ms-add-open .ms-tab {
 		opacity: 1;
