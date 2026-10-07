@@ -8,7 +8,7 @@ import { DESKTOP_MQ } from '../lib/media.js';
 import { pulledSize, RESIZE_HANDLES, trackPointer } from '../lib/pointer.js';
 import { readJson, removeKey, writeJson } from '../lib/storage.js';
 
-const DIALOG_MIN_WIDTH = 360;
+const DIALOG_MIN_WIDTH = 500;
 
 const DIALOG_MIN_HEIGHT = 120;
 

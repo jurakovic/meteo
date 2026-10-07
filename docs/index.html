@@ -292,7 +292,7 @@
 		return document.documentElement.clientHeight}var ne=["n","ne","e","se","s","sw","w","nw"];var oe=120;function ie(){return l(".dialog")}
 		function se(){return ie().find(e=>!e.hidden)||null}function le(){return!!se()}function ce(e){return e.getAttribute("data-dialog-key")}
 		function de(e){const t=ce(e);t&&function(e){H.delete(e);try{localStorage.removeItem(e)}catch{}}(t)}function me(){
-		return Math.max(360,re()-16)}function he(){return Math.max(oe,ae()-16)}function ue(e,t,r,a,n){a=J(a,360,me()),
+		return Math.max(500,re()-16)}function he(){return Math.max(oe,ae()-16)}function ue(e,t,r,a,n){a=J(a,500,me()),
 		e.style.width=`${Math.round(a)}px`,e.style.maxWidth="none",e.style.right="auto",e.style.margin="0",null===n?(e.style.height="",
 		e.style.maxHeight=`${Math.round(Math.max(oe,ae()-Math.max(0,r)-8))}px`):(e.style.maxHeight="none",
 		e.style.height=`${Math.round(J(n,oe,he()))}px`),e.style.left=`${Math.round(J(t,0,Math.max(0,re()-e.offsetWidth)))}px`,
@@ -312,7 +312,7 @@
 		document.addEventListener("pointercancel",m),document.addEventListener("keydown",d),document.addEventListener("keyup",d)}(t,(t,r)=>{
 		if(!s&&!t&&!r)return;if(s=!0,!o)return void ue(e,n.left+t,n.top+r,n.width,i);let{w:a,h:l}=function(e,t,r,a){let n=t.width,o=t.height
 		;return e.includes("e")&&(n=t.width+r),e.includes("w")&&(n=t.width-r),e.includes("s")&&(o=t.height+a),e.includes("n")&&(o=t.height-a),{w:n,
-		h:o}}(o,n,t,r);a=J(a,360,me()),l=J(l,oe,he()),ue(e,o.includes("w")?n.right-a:n.left,o.includes("n")?n.bottom-l:n.top,a,l)},()=>{
+		h:o}}(o,n,t,r);a=J(a,500,me()),l=J(l,oe,he()),ue(e,o.includes("w")?n.right-a:n.left,o.includes("n")?n.bottom-l:n.top,a,l)},()=>{
 		s&&function(e){const t=ce(e);if(!t)return;const r=e.getBoundingClientRect(),a={left:G(r.left/re()),top:G(r.top/ae()),
 		width:Math.round(r.width)};e.style.height&&(a.height=Math.round(r.height)),D(t,a)}(e)})}),e.addEventListener("dblclick",t=>{
 		h.matches&&t.target.closest(".dialog-head")&&!t.target.closest("a, button, input")&&(pe(e),de(e))})}function fe(t,r){n(e,{panel:t,visible:r
