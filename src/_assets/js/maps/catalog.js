@@ -100,7 +100,14 @@ const STORM_LINKS = [
 	{ text: 'ESSL', href: 'https://weather.essl.org/storm/' },
 	{ text: 'ASTORP', href: 'https://rawinsonde.com/ASTORP/ESTOFEX.html' },
 	{ text: 'ESTOFEX', href: 'https://www.estofex.org' },
-	{ text: 'ESWD', href: 'https://www.eswd.eu' }
+	{ text: 'ESWD', href: 'https://www.eswd.eu' },
+	{ text: 'Meteoalarm', href: 'https://meteoalarm.org/en/live/region/HR' }
+];
+
+const SYNOP_LINKS = [
+	{ text: 'ČHMÚ', href: 'https://www.chmi.cz/predpoved-pocasi/synopticka-situace' },
+	{ text: 'DHMZ', href: 'https://meteo.hr/prognoze.php?section=prognoze_model&param=web_fronte_sutra12' },
+	{ text: 'DWD', href: 'https://www.dwd.de/EN/ourservices/hobbymet_wcharts_europe/hobbyeuropecharts.html' }
 ];
 
 // a map's own site is already linked from its title bar, so drop it from the
@@ -353,29 +360,27 @@ export const MAP_CATALOG = [
 		dynamicWidth: true,
 		slides: [
 			{
-				title: { href: 'https://intranet.chmi.cz/aktualni-situace/aktualni-stav-pocasi/evropa/synopticka-situace' },
+				title: { href: 'https://www.chmi.cz/predpoved-pocasi/synopticka-situace' },
 				img: 'https://intranet.chmi.cz/files/portal/docs/meteo/om/evropa/analyza.gif',
 				aspect: '760 / 492'
 			},
 			{
-				title: { href: 'https://intranet.chmi.cz/predpovedi/predpovedi-pocasi/evropa/synopticka-situace' },
+				title: { href: 'https://www.chmi.cz/predpoved-pocasi/synopticka-situace' },
 				img: 'https://intranet.chmi.cz/files/portal/docs/meteo/om/evropa/preba/preba36.gif',
 				aspect: '760 / 435'
 			},
 			{
-				title: { href: 'https://intranet.chmi.cz/predpovedi/predpovedi-pocasi/evropa/synopticka-situace' },
+				title: { href: 'https://www.chmi.cz/predpoved-pocasi/synopticka-situace' },
 				img: 'https://intranet.chmi.cz/files/portal/docs/meteo/om/evropa/preba/preba60.gif',
 				aspect: '760 / 435'
 			},
 			{
-				title: { href: 'https://intranet.chmi.cz/predpovedi/predpovedi-pocasi/evropa/synopticka-situace' },
+				title: { href: 'https://www.chmi.cz/predpoved-pocasi/synopticka-situace' },
 				img: 'https://intranet.chmi.cz/files/portal/docs/meteo/om/evropa/preba/preba84.gif',
 				aspect: '760 / 435'
 			}
 		],
-		links: [
-			{ text: 'DHMZ', href: 'https://meteo.hr/prognoze.php?section=prognoze_model&param=web_fronte_sutra12' }
-		]
+		links: except(SYNOP_LINKS, 'ČHMÚ')
 	},
 	{
 		id: 'neverin-kamera',
@@ -561,9 +566,7 @@ export const MAP_CATALOG = [
 		maxWidth: 720,
 		aspect: '1',
 		img: 'https://prognoza.hr/web_fronte_sutra12.jpg',
-		links: [
-			{ text: 'ČHMÚ', href: 'https://intranet.chmi.cz/aktualni-situace/aktualni-stav-pocasi/evropa/synopticka-situace' }
-		]
+		links: except(SYNOP_LINKS, 'DHMZ')
 	},
 	{
 		id: 'dwd-sinopticka',
@@ -581,10 +584,7 @@ export const MAP_CATALOG = [
 			'https://www.dwd.de/DWD/wetter/wv_spez/hobbymet/wetterkarten/ico_tkboden_na_084.png',
 			'https://www.dwd.de/DWD/wetter/wv_spez/hobbymet/wetterkarten/ico_tkboden_na_108.png'
 		],
-		links: [
-			{ text: 'ČHMÚ', href: 'https://intranet.chmi.cz/aktualni-situace/aktualni-stav-pocasi/evropa/synopticka-situace' },
-			{ text: 'DHMZ', href: 'https://meteo.hr/prognoze.php?section=prognoze_model&param=web_fronte_sutra12' }
-		]
+		links: except(SYNOP_LINKS, 'DWD')
 	},
 	dhmzMrcRadar('puntijarka', 'Puntijarka'),
 	dhmzMrcRadar('bilogora', 'Bilogora'),

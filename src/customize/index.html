@@ -19,7 +19,7 @@
 		<div class="progress-container">
 			<div class="progress-bar"></div>
 		</div>
-		<h2>Meteo radari <span class="beta">beta</span></h2>
+		<h2>Meteo radari</h2>
 		<hr>
 		<main class="maps">
 			<div class="maps-head">
@@ -27,6 +27,7 @@
 					<a href="/"><div class="btn">Početna</div></a>
 					<button type="button" class="btn ms-toggle" data-action="map-settings">
 						<span>Karte</span>
+						<span class="new-tag">novo</span>
 						<span class="arrow">▲</span>
 					</button>
 					<div class="links-btn">
@@ -80,14 +81,27 @@
 			<!-- changelog -->
 		</div>
 	</div>
-	<button type="button" class="ms-tab" data-action="ms-tab" title="Karte (K)"><span class="ms-tab-name">Karte</span></button>
+	<!-- the links at the foot of the page, in a window of their own: L opens it
+	     from wherever the foot is out of reach, the board too; filled on open from
+	     the foot's own list (page/links.js) -->
+	<div class="dialog links-dialog" id="linksDialog" data-dialog-key="linksPanel" hidden>
+		<div class="dialog-head">
+			<span class="dialog-head-left">
+				<a class="dialog-home" href="/" title="Početna"><img src="/_assets/img/favicon-32x32.png" alt="Početna"></a>
+				<span class="dialog-title">Linkovi</span>
+			</span>
+			<a class="dialog-close" data-track="dialog-close" title="Zatvori (Esc)">Zatvori</a>
+		</div>
+		<div class="dialog-body"></div>
+	</div>
+	<button type="button" class="ms-tab"data-action="ms-tab" title="Karte (K)"><span class="ms-tab-name">Karte</span></button>
 	<div class="page-foot">
 		<nav class="footer-top">
 			<a data-action="top">Povratak na vrh</a>
 			<span class="sep">·</span>
 			<a href="/">Početna</a>
-			<span class="manual-link"><span class="sep">·</span> <a data-action="manual">Upute</a></span>
-			<span class="changelog-link"><span class="sep">·</span> <a data-action="changelog" title="Povijest promjena (C)">Povijest promjena</a></span>
+			<span class="manual-link"><span class="sep">·</span> <a data-action="manual">Upute <span class="new-tag">novo</span></a></span>
+			<span class="changelog-link"><span class="sep">·</span> <a data-action="changelog" title="Povijest promjena (C)"><time class="updated" data-include-html="/_components/updated.c.html"></time> <span class="new-tag">novo</span></a></span>
 		</nav>
 		<footer>
 			<a href="https://jurakovic.github.io">Projekti</a>

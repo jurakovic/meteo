@@ -24,7 +24,7 @@
 		<main class="maps">
 			<div class="maps-head">
 				<div class="buttons">
-					<a href="/customize/index.html"><div class="btn">Prilagodi <span class="beta">beta</span></div></a>
+					<a href="/customize/index.html"><div class="btn">Prilagodi <span class="new-tag">novo</span></div></a>
 					<div class="links-btn">
 						<button type="button" class="btn" data-action="links">Linkovi</button>
 						<input type="checkbox" class="links-toggle" data-action="links-bottom" title="Prikaži linkove ispod karata" />
@@ -75,13 +75,25 @@
 			<!-- changelog -->
 		</div>
 	</div>
+	<!-- the links at the foot of the page, in a window of their own: L opens it;
+	     filled on open from the foot's own list (page/links.js) -->
+	<div class="dialog links-dialog" id="linksDialog" data-dialog-key="linksPanel" hidden>
+		<div class="dialog-head">
+			<span class="dialog-head-left">
+				<a class="dialog-home" href="/" title="Početna"><img src="/_assets/img/favicon-32x32.png" alt="Početna"></a>
+				<span class="dialog-title">Linkovi</span>
+			</span>
+			<a class="dialog-close" data-track="dialog-close" title="Zatvori (Esc)">Zatvori</a>
+		</div>
+		<div class="dialog-body"></div>
+	</div>
 	<div class="page-foot">
 		<nav class="footer-top">
 			<a data-action="top">Povratak na vrh</a>
 			<span class="sep">·</span>
-			<a href="/customize/index.html">Prilagodi <span class="beta">beta</span></a>
-			<span class="manual-link"><span class="sep">·</span> <a data-action="manual">Upute</a></span>
-			<span class="changelog-link"><span class="sep">·</span> <a data-action="changelog" title="Povijest promjena (C)">Povijest promjena</a></span>
+			<a href="/customize/index.html">Prilagodi <span class="new-tag">novo</span></a>
+			<span class="manual-link"><span class="sep">·</span> <a data-action="manual">Upute <span class="new-tag">novo</span></a></span>
+			<span class="changelog-link"><span class="sep">·</span> <a data-action="changelog" title="Povijest promjena (C)"><time class="updated" data-include-html="/_components/updated.c.html"></time> <span class="new-tag">novo</span></a></span>
 		</nav>
 		<footer>
 			<a href="https://jurakovic.github.io">Projekti</a>

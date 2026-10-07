@@ -12,7 +12,7 @@ import { build as esbuild } from 'esbuild';
 import { parseHTML } from 'linkedom';
 import { minify } from 'terser';
 import CleanCSS from 'clean-css';
-import { convertChangelog } from './changelog.mjs';
+import { convertChangelog, newestDay } from './changelog.mjs';
 import { convertManual } from './manual.mjs';
 
 const root = resolve(fileURLToPath(new URL('..', import.meta.url)));
@@ -135,6 +135,7 @@ function processHtml(html, parts) {
 		['<!-- manual -->', parts.manual],
 		['<div class="dialog-body" data-include-html="/_components/changelog.c.html">', '<div class="dialog-body">'],
 		['<!-- changelog -->', parts.changelog],
+		['<time class="updated" data-include-html="/_components/updated.c.html"></time>', `<time class="updated" datetime="${parts.updated}">${parts.updated}</time>`],
 		['href="/_assets/img', 'href="/meteo/img'],
 		['src="/_assets/img', 'src="/meteo/img'],
 		['href="/customize/index.html', 'href="/meteo/customize/'],
@@ -163,8 +164,13 @@ async function build() {
 	const manualHtml = convertManual(await readText(join(root, 'MANUAL.hr.md'))).join(CRLF);
 	// the dev pages fetch the documents from here (git-ignored: build output)
 	await writeFile(join(src, '_components/manual.c.html'), manualHtml);
-	const changelogHtml = convertChangelog(await readText(join(root, 'CHANGELOG.hr.md'))).join(CRLF);
+	const changelogText = await readText(join(root, 'CHANGELOG.hr.md'));
+	const changelogHtml = convertChangelog(changelogText).join(CRLF);
 	await writeFile(join(src, '_components/changelog.c.html'), changelogHtml);
+	// and the top footer's link to it, which is the newest day's date
+	const updated = newestDay(changelogText);
+	if (!updated) throw new Error('changelog: no date for the top footer\'s link');
+	await writeFile(join(src, '_components/updated.c.html'), updated);
 
 	const parts = {
 		css: indent(await minifyCss('styles'), 2),
@@ -173,7 +179,8 @@ async function build() {
 		gtag: indent(await component('gtag'), 1, 0),
 		links: indent(await component('links'), 6),
 		manual: indent(manualHtml, 3),
-		changelog: indent(changelogHtml, 3)
+		changelog: indent(changelogHtml, 3),
+		updated
 	};
 	const landing = join(src, 'index.html');
 	const rows = `<div class="maps-list" data-maps>${CRLF}${await landingRows()}${CRLF}\t\t\t</div>`;

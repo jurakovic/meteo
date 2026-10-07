@@ -33,11 +33,11 @@ Gumbi u traci interaktivne karte:
 
 **Cijeli zaslon.** Iz cijelog zaslona izlazi se gumbom `[-]` ili tipkom <kbd>Esc</kbd>. Za ponašanje u bočnom stupcu i na ploči vidi [Bočni stupci](#bočni-stupci) i [Nadzorna ploča](#nadzorna-ploča).
 
-**Linkovi.** Gumb *Linkovi* vodi na popis dodatnih izvora na dnu stranice. Kvadratić pokraj njega uključuje prikaz linkova ispod svake karte.
+**Linkovi.** Gumb *Linkovi* vodi na popis dodatnih izvora na dnu stranice. Kvadratić pokraj njega uključuje prikaz linkova ispod svake karte. Tipka <kbd>L</kbd> otvara isti popis u prozoru preko stranice, pa je dostupan i s nadzorne ploče.
 
-**Upute.** Ovaj tekst otvaraju link *Upute* u podnožju i tipka <kbd>H</kbd>. Otvara se u prozoru preko stranice, pa se upute mogu čitati uz karte. Zatvara se natpisom *Zatvori* ili tipkom <kbd>Esc</kbd>. Ikona stranice lijevo od naslova vodi na početnu stranicu, kao i u dijalogu *Karte*. Link koji završava s `#upute` otvara upute odmah pri učitavanju stranice.
+**Upute.** Ovaj tekst otvaraju link *Upute* u podnožju i tipka <kbd>H</kbd>. Otvara se u prozoru preko stranice, pa se upute mogu čitati uz karte. Zatvara se natpisom *Zatvori* ili tipkom <kbd>Esc</kbd>. Ikona stranice lijevo od naslova vodi na početnu stranicu, kao i u dijalogu *Karte*. Link koji završava s `#manual` otvara upute odmah pri učitavanju stranice.
 
-**Povijest promjena.** Link *Povijest promjena* u podnožju i tipka <kbd>C</kbd> otvaraju popis promjena na stranici, po datumima. Otvara se u prozoru preko stranice, kao i upute, a link koji završava s `#promjene` otvara ga odmah pri učitavanju stranice.
+**Povijest promjena.** Datum zadnje promjene u podnožju (npr. 2026-10-05) i tipka <kbd>C</kbd> otvaraju popis promjena na stranici, po datumima. Otvara se u prozoru preko stranice, kao i upute, a link koji završava s `#changelog` otvara ga odmah pri učitavanju stranice.
 
 ## Dijalog Karte
 
@@ -70,7 +70,7 @@ Dijalog ima dva popisa:
 
 Ispred svakog imena stoji znak vrste karte: 📡 radar, 🛰️ satelit, ⚡ munje, 🌡️ temperatura, ⛈️ nevrijeme, 🗺️ sinoptika, 📷 kamera, 📈 prognoza.
 
-Dostupne karte mogu se poredati po *Zadano*, *Naziv* ili *Vrsta*; ponovni klik na isti poredak okreće smjer. To služi samo za traženje i ne mijenja redoslijed prikaza.
+Dostupne karte mogu se poredati po *Zadano*, *Naziv* ili *Vrsta*; ponovni klik na isti poredak okreće smjer. Odabrani poredak pamti se u pregledniku. To služi samo za traženje i ne mijenja redoslijed prikaza.
 
 **Traženje.** Upisani pojam traži se i u imenu i u vrsti karte, pa *munje* izdvoji sve munje, a *neverin* sve karte tog izvora. Svaka dodatna riječ sužava popis — *neverin radar* nađe oba Neverinova radara, *neverin radar hrvatska* samo jedan. Kvačice nisu potrebne: *chmu* nalazi *ČHMÚ*, *sinopticka* nalazi *Sinoptička*.
 
@@ -174,7 +174,7 @@ Dva prozora koja se dodiruju mogu se spojiti u grupu gumbom `[+]`; samo dodiriva
 
 Gumb `[D]` (ili tipka <kbd>D</kbd>, za prozor na vrhu) otvara još jedan prozor s istom kartom — npr. ista sinoptička karta u dvije veličine, ili isti niz slika zaustavljen na dvije različite slike. Kopija se otvori malo pomaknuta i iste veličine kao prozor iz kojeg je nastala. Svaka kopija ima svoje strelice i indikatore pozicije.
 
-Sve kopije su ravnopravne: `[=]` (na ploči `[x]`) zatvara samo taj prozor, a karta se vraća u stranicu (na ploči miče s popisa) tek sa zadnjim. Kopije se spremaju u predložak i putuju u poveznici, a karta maknuta s popisa odnese i svoje kopije.
+Sve kopije su ravnopravne: `[=]` vraća u stranicu baš taj prozor, a ostali ostaju gdje jesu; kopija karte koja je već u stranici samo se zatvori. Na ploči `[x]` zatvara samo taj prozor, a karta se miče s popisa tek sa zadnjim. Kopije se spremaju u predložak i putuju u poveznici, a karta maknuta s popisa odnese i svoje kopije.
 
 ### Bočni stupci
 
@@ -236,6 +236,7 @@ Tipke ne rade dok je kursor u polju za upis.
 | <kbd>Enter</kbd> | u dijalogu *Karte*: primjenjuje promjene |
 | <kbd>H</kbd> | otvara i zatvara *Upute* |
 | <kbd>C</kbd> | otvara i zatvara *Povijest promjena* |
+| <kbd>L</kbd> | otvara i zatvara *Linkovi* |
 | <kbd>Esc</kbd> | zatvara dijalog; ako nijedan nije otvoren, izlazi iz cijelog zaslona |
 | <kbd>R</kbd> | ponovno učitava sve karte |
 | <kbd>D</kbd> | duplicira prozor na vrhu |

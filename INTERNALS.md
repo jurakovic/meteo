@@ -57,7 +57,7 @@ Open <http://localhost:8081/meteo/>
 
 [`scripts/build.mjs`](./scripts/build.mjs) produces `docs/` from `src/` by processing every `.html` file outside `_components/`:
 
-1. fills the landing page's `<div data-maps>` with its map rows (see [Maps](#maps)), then injects the manual and the changelog at their placeholders (`<!-- manual -->`, `<!-- changelog -->`; see [Documents on the site](#documents-on-the-site)) and drops the dialog bodies' dev-only includes; each fragment is also written to `_components/` for the dev pages. Both run before the path rewrites, so a path the rows or the documents grow later is rewritten with every other
+1. fills the landing page's `<div data-maps>` with its map rows (see [Maps](#maps)), then injects the manual and the changelog at their placeholders (`<!-- manual -->`, `<!-- changelog -->`; see [Documents on the site](#documents-on-the-site)) and the changelog's newest date into the top footer's `<time class="updated">`, dropping the dev-only includes; each fragment is also written to `_components/` for the dev pages. Both run before the path rewrites, so a path the rows or the documents grow later is rewritten with every other
 2. minifies the CSS (clean-css), bundles each page's entry module with everything it imports (esbuild), minifies it (terser), and inlines both in place of their `<link>`/`<script type="module">` tags
 3. injects `_components/*.c.html` (seo, gtag, links) at their placeholders
 4. rewrites dev paths to GitHub Pages paths (`href="/customize/index.html` → `/meteo/customize/`, `href="/"` → `/meteo/"`, image paths, the extras stub's `url=`)
@@ -275,7 +275,7 @@ Where the reports go and how they are read is in the worker's repository ([meteo
 
 ## Dialogs
 
-There are three dialogs, the picker, the manual and the changelog, and one set of chrome under all of them ([`page/dialog.js`](./src/_assets/js/page/dialog.js)), since the landing page carries the documents too. A panel is a dialog by carrying `.dialog`, and names its storage key with `data-dialog-key` (`msPanel`, `manualPanel`, `changelogPanel`). Class names follow the split: `dialog-*` is the chrome every dialog shares (`dialog-head`, `dialog-body`, `dialog-backdrop`, `body.dialog-open`…), `ms-*` (*map settings*) the settings dialog's own and its tab's.
+There are four dialogs, the picker, the manual, the changelog and the links, and one set of chrome under all of them ([`page/dialog.js`](./src/_assets/js/page/dialog.js)), since the landing page carries the documents and the links too. A panel is a dialog by carrying `.dialog`, and names its storage key with `data-dialog-key` (`msPanel`, `manualPanel`, `changelogPanel`, `linksPanel`). Class names follow the split: `dialog-*` is the chrome every dialog shares (`dialog-head`, `dialog-body`, `dialog-backdrop`, `body.dialog-open`…), `ms-*` (*map settings*) the settings dialog's own and its tab's.
 
 - **One at a time.** Opening one shuts any other, so there is a single backdrop, a single scroll lock and a single Escape to reason about.
 - **Announced.** `setDialogVisible()` announces every change on `dialog-toggled`, the dialog shut to make room as much as the one asked for: what hangs off a shut (a document's hash) has no other way of hearing about it.
@@ -298,7 +298,7 @@ The `.ms-tab` keeps its own click above the backdrop and shuts the dialog the sa
 **A window, on the desktop.** A dialog is dragged by its head and resized from any side or corner through the widgets' own `.po-h` handles, appended inside the panel so the press that grabs one is a press inside the dialog.
 
 - Until it is resized its height is the content's, capped to what is left below its top; a resize pins an explicit height.
-- Where and how big (`msPanel`, `manualPanel`, `changelogPanel`): left and top as fractions of the viewport, width in px, and height in px once pinned. Applied on open (measurable only once shown) and on a window resize, so it cannot be stranded off screen. A press that never moved stores nothing.
+- Where and how big (`msPanel`, `manualPanel`, `changelogPanel`, `linksPanel`): left and top as fractions of the viewport, width in px, and height in px once pinned. Applied on open (measurable only once shown) and on a window resize, so it cannot be stranded off screen. A press that never moved stores nothing.
 - A double-click on the head drops the lot and gives the CSS its dialog back.
 - A link or button on the head is itself: *Zatvori*, and at the left end the way home (`.dialog-home`, below).
 
@@ -309,7 +309,7 @@ The `.ms-tab` keeps its own click above the backdrop and shuts the dialog the sa
 `#mapSettings`, opened by the page's *Karte* button, the tab, or `K`. Shut by *Zatvori*, the button, the tab, Escape, `K`, or a press outside. Escape stands down in a text field: the name and rename editors have an Escape of their own.
 
 - **The way home.** At the head's left end, before the title, `.dialog-home` leads to the landing page, which the board and a hidden page take out of sight. Its image is the site's favicon, taken off the page's own `<link rel="icon">` so the build's rewritten path comes with it, and it is a real link resolved as `../` off the page's address (`/meteo/` in the build), so Ctrl and the middle button open it beside the page.
-- **Two lists of the same rows.** `.ms-selected` is the render order, reordered by dragging a row's `≡` handle; `.ms-available` below it is a finding surface, sortable by name or category without touching the order, which is why it alone has the sort links and the find box. Ticking a map appends it to the order; unticking returns it to the shelf.
+- **Two lists of the same rows.** `.ms-selected` is the render order, reordered by dragging a row's `≡` handle; `.ms-available` below it is a finding surface, sortable by name or category without touching the order, which is why it alone has the sort links and the find box. The sort picked last is kept per browser (`msSort`), being how this user looks rather than part of the view, so it travels in neither a preset nor a link. Ticking a map appends it to the order; unticking returns it to the shelf.
 - **Rows above the lists.** The preset bar (`panel-presets`); the board's mode row with its grid switches and *Posloži*, the auto-refresh row, and the layout line (`panel-rows`; see *Remembered and shared layouts* and *The board*).
 - **Enter** is *Primijeni* wherever the focus is in the picker. It is taken in the capture phase and kept from the focused element, since a button just pressed (the mode row's) would otherwise take it as a second click and undo itself. Text fields and the interval `<select>` keep their own.
 
@@ -320,9 +320,13 @@ The `.ms-tab` keeps its own click above the backdrop and shuts the dialog the sa
 - The term stands through a preset picked and a row returned, and is applied again wherever rows arrive.
 - `:empty` cannot speak for a list whose rows are all merely hidden, so `.ms-no-hits` carries that message.
 
+### The links dialog
+
+`#linksDialog`, on both pages, opened and shut by `L` (the `links-dialog` command) and by nothing on the page: the *Linkovi* button still scrolls to the foldable list at the foot, which the dialog is for reaching where the foot is not, the board above all. Its body is a copy of the foot's `.links`, taken on every open (`initLinksDialog()`, `page/links.js`), so the list is written once, in `links.c.html`, and the dev page, where the foot arrives by a fetch, never copies it empty for good. In the dialog the list is unfolded and laid out in as many columns as the dialog's own width holds (`auto-fill`), since the dialog is moved and resized apart from the viewport the foot's three columns follow.
+
 ### The tab
 
-Where the page's *Karte* button is gone (hidden behind full-width columns, `body.snap-full`, or on the board, `body.dashboard`) a fixed `.ms-tab` hangs from the top edge to open the dialog, in the site's orange on white: there it is the only way to the dialog. On the board it hangs over the maps the whole time, so it is faint (`opacity: 0.55`) until the pointer or an open dialog lights it. It is not shown over a fullscreen map (`body.fs-lock`): that map has its own ways out, and a tab over it would be chrome in front of the one view that asked for none.
+Where the page's *Karte* button is gone (hidden behind full-width columns, `body.snap-full`, or on the board, `body.dashboard`) a fixed `.ms-tab` hangs from the top edge to open the dialog, in the site's orange on white: there it is the only way to the dialog. On the board it hangs over the maps the whole time, so it is faint (`opacity: 0.55`) until the pointer or an open dialog lights it. A drag or a pull of it (`.ms-tab-held`) keeps it lit to the release, wherever the pointer has gone. It is not shown over a fullscreen map (`body.fs-lock`): that map has its own ways out, and a tab over it would be chrome in front of the one view that asked for none.
 
 - **Glyphs.** On the board it carries a cluster as a title bar does (`buildMsTabCluster()`): `[+]` adds a map (below), `[R]` reloads every map, `[A]` arranges, `[G]` and `[S]` are the grid switches, each titled with its key. `[G]` and `[S]` are lit or dimmed on `grid-changed`, wherever the switch was flipped. The glyphs are `<a>` without `href`, which a `<button>` may contain, and a press on one (`.ms-tab-btn`) is kept off the tab's own drag, resize and open.
 - **Auto-refresh.** `body.refresh-on` shows the tab off the board as well, carrying `[R]` and the countdown; the board's glyphs stay board-only.
@@ -427,9 +431,9 @@ In a column a group is a *stack*: every layout of the column (`settleSnapStacks(
 
 No showing is the original, as far as anyone at the screen can tell. The entry's one place to dock into belongs to whichever showing holds it (the one not marked `.duplicate`):
 
-- `[=]` (`[x]` on the board) on a showing while others of its map are out takes it away (`removeShowing()`);
-- if that one held the place, the next showing inherits it: the class goes, the `.map-gap` passes over, and the gap's *Vrati* docks whichever showing holds it by then. Nothing moves in the DOM: every other showing is a fixed widget, so the heir docks into the gap from wherever it sits;
-- only a map's last showing docks, or on the board leaves the list. `dockMap()` still takes a copy away, for *Vrati sve* and the breakpoint, which dock everything.
+- `[=]` on the page docks the showing it is pressed on, and the others stay out where they float. Pressed on a copy while the holder is out, the two change roles first (`takePagePlace()`): the class and the `.map-gap` pass to the copy, which `dockMap()` then puts in the gap, and the holder floats on as a copy. Nothing moves in the DOM: the copy sits beside the holder already, and every other showing is a fixed widget. A copy of a map the page already shows has nowhere to go, and is taken away (`removeShowing()`);
+- `[x]` on the board takes the showing it is pressed on away while others of its map are out, and only a map's last showing leaves the list. If the one taken held the place, the next showing inherits it: the class goes, and the `.map-gap` passes over, so the gap's *Vrati* docks whichever showing holds it by then;
+- `dockMap()` still takes a copy away, for *Vrati sve* and the breakpoint, which dock everything.
 
 A copy is built from the catalog rather than cloned from the DOM, so its parts have names of their own (`buildMapContent(map, inst)`, `instSuffix()`): two renderings sharing one `data-slideshow-id` would have the arrows drive whichever came first while both sets of indicators lit up (which is also why `prefsMapIds()` drops a map listed twice).
 
@@ -577,6 +581,7 @@ Keys are for what the buttons cannot do in one gesture, and for backing out of w
 | `K` | the settings dialog (*Karte*) | customize page |
 | `H` | the manual (*help*; not `?`, which takes Shift on one layout and AltGr on another) | both pages |
 | `C` | the changelog | both pages |
+| `L` | the links dialog | both pages |
 | `Enter` | *Primijeni* while the picker is up | the dialog |
 | `Escape` | shuts the dialog, else ends a fullscreen map | both pages |
 | `R` | reloads every map with something to re-fetch | desktop |
@@ -610,7 +615,8 @@ Both are on the bar only: over a frame the page never sees them, and on an inter
 | `mapGrid` | the board's grid switches | no |
 | `mapRefresh` | auto-refresh | no |
 | `msTab` | where the tab was put | no |
-| `msPanel`, `manualPanel`, `changelogPanel` | where and how big each dialog was put | no |
+| `msSort` | how the dialog's available maps are sorted | no |
+| `msPanel`, `manualPanel`, `changelogPanel`, `linksPanel` | where and how big each dialog was put | no |
 
 Every key is named once, in `STORAGE_KEYS` (`lib/storage.js`), and every read and write goes through `readJson()`/`writeJson()`/`removeKey()`, which never throw. With storage refused or full, a write is kept for the session and read back from there, so the view still works (a private window, a blocked site). Everything read back from storage or `?v=` passes a guard (`isValidPrefs`, `isValidPreset`, the filter on hidden presets, `sanitizeSnapLayout`): an unknown preset id is rejected rather than kept.
 
@@ -641,9 +647,11 @@ Two documents are shown on the site, the manual and the changelog (what changed 
 | source, converter | `MANUAL.hr.md`, [`scripts/manual.mjs`](./scripts/manual.mjs) | `CHANGELOG.hr.md`, [`scripts/changelog.mjs`](./scripts/changelog.mjs) |
 | dialog, storage key | `#manualDialog`, `manualPanel` | `#changelogDialog`, `changelogPanel` |
 | placeholder, dev fragment | `<!-- manual -->`, `manual.c.html` | `<!-- changelog -->`, `changelog.c.html` |
-| reached by | the top footer's *Upute*, `H`, `#upute` | the top footer's *Povijest promjena*, `C`, `#promjene` |
+| reached by | the top footer's *Upute*, `H`, `#manual` | the top footer's date, `C`, `#changelog` |
 
 The file is the only source, and the build makes HTML of it, each converter taking the text and returning the fragment's lines. The built pages get it inlined at the placeholder; the build also writes it to `src/_components/`, which the dev pages fetch through `include.js` (the `data-include-html` on the dialog's `.dialog-body`, stripped from the built pages). Those files are build output and git-ignored, so a page served from `src/` shows the documents as of the last build.
+
+**The footer's date.** The top footer's link to the changelog is not a name but the changelog's newest day (`2026-10-05`, in `<time class="updated">`), so it says when the site last changed and opens the list that says what. It is read from `CHANGELOG.hr.md` by `newestDay()` (`scripts/changelog.mjs`) at build time, the same way and with the same kind of dev fragment (`updated.c.html`) as the documents, so it can never say other than the list it opens: a day added to the changelog is the date the pages show from the next build. Its title still names the changelog, *Povijest promjena (C)*.
 
 A document is shown in a dialog rather than on a page of its own, so it can be read beside the maps it describes, and reached from the board, where there is no page. Both pages carry both (`.doc-dialog`, with the same `.dialog-home` in the head as the settings dialog, written as `href="/"` for the build to rewrite); the links sit in the top footer (`.footer-top`, above the `<footer>`). A dialog has no address, so a hash stands in: it opens the dialog on arrival or when the address is edited, and the dialog writes it and takes it away again through `replaceState` (assigning `location.hash` would stack a history entry per open). A document shut to make room for another dialog takes its hash with it, off `dialog-toggled`.
 

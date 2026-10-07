@@ -35,11 +35,11 @@ Buttons in an interactive map's bar:
 
 **Fullscreen.** Fullscreen is left with the `[-]` button or the <kbd>Esc</kbd> key. For how it behaves in a side column and on the dashboard, see [Side columns](#side-columns) and [Dashboard](#dashboard).
 
-**Linkovi** (links). The *Linkovi* button leads to a list of further sources at the bottom of the page. The checkbox beside it shows links under every map.
+**Linkovi** (links). The *Linkovi* button leads to a list of further sources at the bottom of the page. The checkbox beside it shows links under every map. The <kbd>L</kbd> key opens the same list in a window over the page, so it can be reached from the dashboard too.
 
-**Upute** (manual). This text is opened by the *Upute* link in the footer and the <kbd>H</kbd> key. It opens in a window over the page, so it can be read beside the maps. It is closed with *Zatvori* (close) or the <kbd>Esc</kbd> key. The site's icon left of the title leads to the home page, as in the *Karte* dialog. A link ending in `#upute` opens the manual as soon as the page loads.
+**Upute** (manual). This text is opened by the *Upute* link in the footer and the <kbd>H</kbd> key. It opens in a window over the page, so it can be read beside the maps. It is closed with *Zatvori* (close) or the <kbd>Esc</kbd> key. The site's icon left of the title leads to the home page, as in the *Karte* dialog. A link ending in `#manual` opens the manual as soon as the page loads.
 
-**Povijest promjena** (changelog). The *Povijest promjena* link in the footer and the <kbd>C</kbd> key open the list of changes to the site, by date. It opens in a window over the page, as the manual does, and a link ending in `#promjene` opens it as soon as the page loads.
+**Povijest promjena** (changelog). The date of the last change in the footer (e.g. 2026-10-05) and the <kbd>C</kbd> key open the list of changes to the site, by date. It opens in a window over the page, as the manual does, and a link ending in `#changelog` opens it as soon as the page loads.
 
 ## The Karte dialog
 
@@ -72,7 +72,7 @@ The dialog has two lists:
 
 Before every name stands the sign of its kind: 📡 radar, 🛰️ satellite, ⚡ lightning, 🌡️ temperature, ⛈️ storm, 🗺️ synoptic, 📷 camera, 📈 forecast.
 
-Available maps can be sorted by *Zadano* (default), *Naziv* (name) or *Vrsta* (kind); clicking the same sort again reverses it. It is only for finding maps and does not change the display order.
+Available maps can be sorted by *Zadano* (default), *Naziv* (name) or *Vrsta* (kind); clicking the same sort again reverses it. The browser remembers the sort you picked. It is only for finding maps and does not change the display order.
 
 **Search.** The term is looked for in both the name and the kind of a map, so *munje* (lightning) picks out every lightning map, and *neverin* every map from that source. Each further word narrows the list — *neverin radar* finds both Neverin radars, *neverin radar hrvatska* only one. Diacritics are not needed: *chmu* finds *ČHMÚ*, *sinopticka* finds *Sinoptička*.
 
@@ -176,7 +176,7 @@ Two touching windows can be joined in a group with the `[+]` button; touching al
 
 The `[D]` button (or the <kbd>D</kbd> key, for the window on top) opens another window with the same map — e.g. the same synoptic chart at two sizes, or the same slideshow stopped at two different images. The copy opens slightly offset, at the size of the window it came from. Every copy has its own arrows and position indicators.
 
-All copies are equal: `[=]` (on the dashboard `[x]`) closes only that window, and the map goes back to the page (on the dashboard, off the list) only with the last one. Copies are saved in a preset and travel in a link, and a map removed from the list takes its copies with it.
+All copies are equal: `[=]` puts that very window back in the page, and the others stay where they are; a copy of a map already in the page just closes. On the dashboard `[x]` closes only that window, and the map leaves the list only with the last one. Copies are saved in a preset and travel in a link, and a map removed from the list takes its copies with it.
 
 ### Side columns
 
@@ -238,6 +238,7 @@ Keys do not work while the cursor is in a text field.
 | <kbd>Enter</kbd> | in the *Karte* dialog: applies the changes |
 | <kbd>H</kbd> | opens and closes the manual (*Upute*) |
 | <kbd>C</kbd> | opens and closes the changelog (*Povijest promjena*) |
+| <kbd>L</kbd> | opens and closes the links (*Linkovi*) |
 | <kbd>Esc</kbd> | closes the dialog; if none is open, leaves fullscreen |
 | <kbd>R</kbd> | reloads every map |
 | <kbd>D</kbd> | duplicates the window on top |

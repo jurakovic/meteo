@@ -127,7 +127,7 @@ test.describe('pop-out widgets', () => {
 		await expect(page.locator('body')).not.toHaveClass(/snap-full/);
 	});
 
-	test('[D] makes a copy that is part of the arrangement and closes on its own', async ({ page }) => {
+	test('[D] makes a copy that is part of the arrangement, with arrows of its own', async ({ page }) => {
 		await popout(page, 'neverin-radar-hr');
 		await bar(page, 'neverin-radar-hr').locator('.dup-btn').click();
 		const copy = block(page, 'neverin-radar-hr#2');
@@ -141,22 +141,45 @@ test.describe('pop-out widgets', () => {
 		await copy.locator('.next').click();
 		await expect(copy.locator('.slideshow')).toHaveAttribute('data-current-slide', '3');
 		await expect(block(page, 'neverin-radar-hr').locator('.slideshow')).toHaveAttribute('data-current-slide', '2');
-		await copy.locator(':scope > .radartitle .po-btn').click();
-		await expect(copy).toHaveCount(0);
-		await expect(block(page, 'neverin-radar-hr')).toHaveClass(/popout/);
 	});
 
-	test('closing the original while its copy stays hands the copy the page\'s place', async ({ page }) => {
+	test('[=] on the original docks it at once, and its copy stays out where it was', async ({ page }) => {
 		await popout(page, 'neverin-radar-hr');
 		await bar(page, 'neverin-radar-hr').locator('.dup-btn').click();
-		await expect(block(page, 'neverin-radar-hr#2')).toHaveClass(/popout/);
-		await bar(page, 'neverin-radar-hr').locator('.po-btn').click(); // the original goes
-		await expect(page.locator('.map-block[data-map-id="neverin-radar-hr"]')).toHaveCount(1);
-		const heir = page.locator('.map-block[data-map-id="neverin-radar-hr"]');
-		await expect(heir).not.toHaveClass(/duplicate/);
-		await page.locator('.map-gap a', { hasText: 'Vrati' }).click(); // the gap's way back docks the heir
-		await expect(heir).not.toHaveClass(/popout/);
+		const copy = block(page, 'neverin-radar-hr#2');
+		await expect(copy).toHaveClass(/popout/);
+		const before = await box(copy);
+		await bar(page, 'neverin-radar-hr').locator('.po-btn').click();
+		await expect(block(page, 'neverin-radar-hr')).not.toHaveClass(/popout/);
 		await expect(page.locator('.map-gap')).toHaveCount(0);
+		await expect(copy).toHaveClass(/popout/);
+		await expect(copy).toHaveClass(/duplicate/);
+		expect(await box(copy)).toEqual(before);
+		expect((await floating(page)).map(f => f.id)).toEqual(['neverin-radar-hr#2']);
+	});
+
+	test('[=] on the copy docks it into the page\'s place, and the original stays out as the copy', async ({ page }) => {
+		await popout(page, 'neverin-radar-hr');
+		await bar(page, 'neverin-radar-hr').locator('.dup-btn').click();
+		const original = block(page, 'neverin-radar-hr');
+		const copy = block(page, 'neverin-radar-hr#2');
+		const before = await box(original);
+		await bar(page, 'neverin-radar-hr#2').locator('.po-btn').click();
+		await expect(copy).not.toHaveClass(/popout/);
+		await expect(copy).not.toHaveClass(/duplicate/);
+		await expect(page.locator('.map-gap')).toHaveCount(0);
+		await expect(original).toHaveClass(/popout/);
+		await expect(original).toHaveClass(/duplicate/);
+		expect(await box(original)).toEqual(before);
+		// stored as the page would draw it: the docked showing under the plain id
+		expect((await floating(page)).map(f => f.id)).toEqual(['neverin-radar-hr#2']);
+		await page.reload();
+		await expect(block(page, 'neverin-radar-hr')).not.toHaveClass(/popout/);
+		await expect(block(page, 'neverin-radar-hr#2')).toHaveClass(/popout/);
+		// a copy of a map already docked has no place to go back to: it closes
+		await bar(page, 'neverin-radar-hr#2').locator('.po-btn').click();
+		await expect(block(page, 'neverin-radar-hr#2')).toHaveCount(0);
+		await expect(block(page, 'neverin-radar-hr')).not.toHaveClass(/popout/);
 	});
 
 	test('widgets pulled edge to edge by the magnets can be grouped and move together', async ({ page }) => {

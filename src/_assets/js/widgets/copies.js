@@ -125,6 +125,22 @@ export function instanceFor(inst) {
 	return copy && isDuplicate(copy) ? copy : makeDuplicate(mapId, freeInstance(mapId));
 }
 
+// a copy docked while the showing holding the page's place is out: the two
+// change roles, the copy taking the class and the gap, so dockMap() puts it
+// in the gap and the other stays where it floats, a copy now. Nothing moves
+// in the DOM: the copy sits beside the holder already. False when the holder
+// is in the page, which leaves the copy no place to take
+/** @param {HTMLElement} block */
+export function takePagePlace(block) {
+	const holder = pageShowing(block.dataset.mapId);
+	if (!holder || !holder.classList.contains('popout')) return false;
+	dlog(`takePagePlace: ${block.dataset.inst} from ${holder.dataset.inst}`);
+	holder.classList.add('duplicate');
+	block.classList.remove('duplicate');
+	handGapTo(holder, block);
+	return true;
+}
+
 // a showing closed while others of its map stay out; if it held the page's
 // place, the next showing inherits it (INTERNALS.md, Copies)
 /** @param {HTMLElement} block */

@@ -9,6 +9,7 @@ export const STORAGE_KEYS = {
 	grid: 'mapGrid', // the board's grid switches (widgets/grid.js)
 	refresh: 'mapRefresh', // auto-refresh (widgets/refresh.js)
 	tab: 'msTab', // where the tab was dragged, how wide (settings/tab.js)
+	sort: 'msSort', // how the dialog's available maps are sorted (settings/panel-list.js)
 	linksBottom: 'showLinksBottom' // the links under each map (page/links.js)
 	// and a dialog's place and size under the key its element names in
 	// data-dialog-key: msPanel, manualPanel, changelogPanel (page/dialog.js)

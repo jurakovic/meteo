@@ -1,6 +1,13 @@
 
 > AI-generated content.
 
+## 2026-10-07 (#46)
+- added the links ("Linkovi") in a window, opened with the L key, so they can be reached from the dashboard too
+- added Meteoalarm to the links under the storm forecasts
+- every synoptic chart (ČHMÚ, DHMZ, DWD) now links to both of the others
+- the changelog link shows the date of the latest change
+- other minor fixes and improvements
+
 ## 2026-10-05 (#44)
 - added the changelog ("Povijest promjena"), opened from the footer or with the C key
 - added the manual ("Upute"), opened from the footer or with the H key
@@ -11,7 +18,7 @@
 - added seams: dragging the shared edge of two adjacent windows resizes both at once
 - added duplicating a map window ([D]), so the same map can be shown more than once, e.g. at two sizes or on two different slides
 - added auto-arrange on the dashboard ([A]): all maps are tiled into an even grid
-- added auto-refresh of all maps every 5, 10, 15, 30 or 60 minutes
+- added auto-refresh of all maps at set intervals
 
 ## 2026-09-14 (#41)
 - added pop-out map windows on desktop ("widgets"): a map can float above the page, be moved and resized, snap to other windows, be grouped with a neighbour, or dock in a column at the screen edge
@@ -26,7 +33,7 @@
 - default presets can be hidden from the preset row; renamed "Zadano" to "Osnovno"
 
 ## 2026-07-06 (#38)
-- added the customize page (beta), replacing the extras page: choose which maps to show and in what order, start from a preset (Zadano, Više, Radari, Sateliti, Nevrijeme, Sve, Ništa), and share the view with a link
+- added the customize page (beta), replacing the extras page: choose which maps to show and in what order, start from a preset (Zadano, Više, Radari, Sateliti, Nevrijeme, Sve, Ništa)
 
 ## 2026-06-28 (#37)
 - added a fullscreen toggle to the interactive maps
@@ -36,7 +43,7 @@
 
 ## 2026-06-24 (#35)
 - added a row of quick links under each map
-- added a "Linkovi" toggle to show or hide the links under the maps (remembered in the browser)
+- added a "Linkovi" toggle to show or hide the links under the maps
 - updated links, fixed broken ones
 
 ## 2026-06-22
@@ -47,7 +54,7 @@
 - separated ESSL and ESTOFEX storm forecasts and added more forecast images
 
 ## 2026-05-09 (#33)
-- reverted to meteoblue meteogram widgets
+- reverted to meteoblue meteogram widgets (instead of API images)
 
 ## 2026-03-26 (#32)
 - added an [HR]/[EU] toggle to all interactive maps (e.g. Windy, Blitzortung, etc.) to switch between Croatia and Europe views
@@ -130,7 +137,8 @@
 
 ## 2024-09-07 (#10)
 - added the extras page with site navigation buttons
-- added and rearranged images, added Facebook page links
+- added and rearranged images
+- added Facebook page links
 
 ## 2024-09-06 (#9)
 - moved links to the bottom with a new layout
@@ -163,7 +171,7 @@
 - added the remaining DHMZ radars
 
 ## 2023-07-20
-- added RainViewer and the Időkép Adria radar
+- added RainViewer and Időkép for the Adriatic
 
 ## 2023-06-10
 - changed the DHMZ radar to an animated gif

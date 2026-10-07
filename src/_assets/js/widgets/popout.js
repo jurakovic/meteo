@@ -13,7 +13,7 @@ import { exitFullscreen } from '../page/iframe.js';
 import { isDashboard, removeFromDashboard, setDashboard } from './board.js';
 import { isSnapped, layoutSnapColumns, unsnapPane } from './columns.js';
 import { POPOUT_WIDTH, TITLE_GAP } from './constants.js';
-import { isDuplicate, otherShowings, removeShowing } from './copies.js';
+import { isDuplicate, otherShowings, removeShowing, takePagePlace } from './copies.js';
 import { isFreePopout, placePopout, popoutMaxWidth, raisePopout, shownImage } from './core.js';
 import { groupOf, leaveGroup } from './groups.js';
 import { arrangementChanged, withPersistPaused } from './layout.js';
@@ -39,9 +39,14 @@ export function setPopoutButton(btn, popped) {
 export function togglePopout(block) {
 	if (!block) return;
 	if (!block.classList.contains('popout')) { if (DESKTOP_MQ.matches) popoutMap(block); }
-	// only a map's last showing docks or leaves the board; any other goes alone
-	else if (otherShowings(block).length) removeShowing(block);
-	else if (isDashboard()) removeFromDashboard(block);
+	// on the board only a map's last showing leaves it; any other goes alone
+	else if (isDashboard()) {
+		if (otherShowings(block).length) removeShowing(block);
+		else removeFromDashboard(block);
+	}
+	// on the page the one pressed goes back into it and the rest stay out; a
+	// copy of a map the page already shows has no place to go to, and goes
+	else if (isDuplicate(block) && !takePagePlace(block)) removeShowing(block);
 	else dockMap(block);
 }
 

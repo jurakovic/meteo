@@ -3,9 +3,12 @@
 // finding surface sorted and filtered freely.
 
 import { el, queryAll } from '../lib/dom.js';
+import { readJson, STORAGE_KEYS, writeJson } from '../lib/storage.js';
 import { catalogMap, CATEGORY_GLYPHS, MAP_CATALOG } from '../maps/catalog.js';
 import { findTerms, matchesFind } from '../maps/find.js';
 import { isMapEnabled } from '../remote-config.js';
+
+const SORT_KEYS = ['zadano', 'naziv', 'vrsta'];
 
 // the list section of the dialog; panel is the dialog (settings/panel.js),
 // told of every edit (listEdited) and asked to close from the find box
@@ -15,8 +18,12 @@ export function createMapList(panel) {
 	const selectedDiv = el('div', { class: 'ms-list ms-selected' });
 	const availableDiv = el('div', { class: 'ms-list ms-available' });
 
-	let sortKey = 'zadano';
-	let sortAsc = true;
+	// the last sort picked, in this browser; the dialog is built anew on every
+	// open, and the sort is how the user likes to look, not part of the view
+	const stored = readJson(STORAGE_KEYS.sort);
+	const known = stored && SORT_KEYS.includes(stored.key);
+	let sortKey = known ? stored.key : 'zadano';
+	let sortAsc = known ? stored.asc !== false : true;
 
 	function compareRows(a, b) {
 		const ma = catalogMap(a.getAttribute('data-map-id'));
@@ -38,6 +45,7 @@ export function createMapList(panel) {
 		link.addEventListener('click', () => {
 			if (sortKey === key) sortAsc = !sortAsc;
 			else { sortKey = key; sortAsc = true; }
+			writeJson(STORAGE_KEYS.sort, { key: sortKey, asc: sortAsc });
 			updateSortLinks();
 			sortAvailable();
 		});

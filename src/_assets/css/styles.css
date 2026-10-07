@@ -18,6 +18,7 @@
 	--c-accent: #ff9800; /* the site's orange: the tab, what is selected or wrong */
 	--c-board: #4a8de6; /* the board's blue: its rows, groups, the snap preview */
 	--c-board-deep: #22385c; /* a board row that is on */
+	--c-board-dim: #32598e; /* a board row's edge while it is off: the blue halfway into the row */
 
 	--z-progress: 1000; /* the loading bar */
 	--z-column-ground: 3999; /* a snap column's ground, under its panes */
@@ -915,7 +916,9 @@ body.fs-lock {
 	}
 }
 
-.beta {
+/* "novo" on what is new: the customize page's way in, its Karte, the board,
+   the manual and the changelog */
+.new-tag {
 	font-size: 9px;
 	color: var(--c-accent);
 	vertical-align: super;
@@ -923,12 +926,11 @@ body.fs-lock {
 	letter-spacing: 1px;
 }
 
-	/* in centered contexts the tag goes out of flow so it renders right after
-	   the text without shifting its centering; the top footer's occurrence sits
-	   mid-sentence and must stay in flow (vertical-align is ignored on
+	/* on a button the tag goes out of flow so it renders right after the
+	   text without shifting its centering; the top footer's links are a run
+	   of text and keep theirs in flow (vertical-align is ignored on
 	   absolutely positioned elements, hence the translate) */
-	.btn .beta,
-	h2 .beta {
+	.btn .new-tag {
 		position: absolute;
 		transform: translateY(-40%);
 		margin-left: 1px;
@@ -1258,7 +1260,8 @@ body.fs-lock {
 	cursor: pointer;
 	/* it hangs over the board the whole time it is shown, and the board is the
 	   maps: faint until it is wanted, so the widgets under it are not read
-	   through a strip of orange, and lit the moment the pointer reaches it or
+	   through a strip of orange, and lit the moment the pointer reaches it, while
+	   it is dragged or pulled (.ms-tab-held, the pointer off it or not) or while
 	   the dialog it opens is up — where it is the button that is pressed in */
 	opacity: 0.55;
 	transition: opacity 0.15s ease;
@@ -1280,6 +1283,7 @@ body.fs-lock {
 	}
 
 	.ms-tab:hover,
+	.ms-tab.ms-tab-held,
 	body.dialog-open .ms-tab,
 	body.ms-add-open .ms-tab {
 		opacity: 1;
@@ -1709,7 +1713,7 @@ body.fs-lock {
 		padding: 8px 10px;
 		background-color: var(--c-surface-deep);
 		border: 1px solid var(--c-line);
-		border-left: 4px solid var(--c-board);
+		border-left: 4px solid var(--c-board-dim);
 	}
 
 		.dialog .ms-mode.ms-on {
@@ -1725,7 +1729,7 @@ body.fs-lock {
 			   in a fixed cell, so the tag has no centering to shift and is better
 			   left in flow: out of flow it hangs past the button's right edge and
 			   all but closes the gap before the grid switches */
-			.dialog .ms-mode .btn .beta {
+			.dialog .ms-mode .btn .new-tag {
 				position: static;
 				transform: none;
 			}
@@ -1777,7 +1781,7 @@ body.fs-lock {
 		padding: 8px 10px;
 		background-color: var(--c-surface-deep);
 		border: 1px solid var(--c-line);
-		border-left: 4px solid var(--c-board);
+		border-left: 4px solid var(--c-board-dim);
 		color: var(--c-muted);
 	}
 
@@ -1963,6 +1967,11 @@ body.fs-lock {
 			grid-template-columns: 9ch 9ch 8ch;
 			gap: 10px;
 			white-space: nowrap;
+		}
+
+		/* the rename editor's two, under the last two slots of the rows around */
+		.dialog .ms-rename-links {
+			grid-template-columns: 9ch 8ch;
 		}
 
 			.dialog .ms-manage-links a,
@@ -2372,6 +2381,22 @@ body.fs-lock {
 			border-right: none !important;
 		}
 }
+
+/* the same list in its dialog (page/links.js): unfolded, and in as many
+   columns as the dialog's own width holds, since it is moved and resized
+   apart from the viewport the foot's three columns follow. A column wraps
+   under another rather than beside it, so the rule between them goes */
+.links-dialog .links {
+	max-height: none;
+	grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+	gap: 0 16px;
+	padding: 6px 10px 10px;
+}
+
+	.links-dialog .links .item {
+		margin: 0;
+		border-right: none;
+	}
 
 /* the page's own links over the footer; held to the bottom of a short page
    as one block, since two sticky siblings would both stick to the same edge */

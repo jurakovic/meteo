@@ -169,6 +169,20 @@ test.describe('dashboard', () => {
 		await expect(block(page, 'idokep-satelit-eu#2')).toHaveClass(/popout/);
 	});
 
+	test('[x] on a map with a copy takes that showing alone, and the copy keeps the map on the board', async ({ page }) => {
+		await enterBoard(page, 'Sateliti');
+		const b = await box(block(page, 'idokep-satelit-eu').locator(':scope > .radartitle'));
+		await page.mouse.click(b.x + 8, b.cy);
+		await page.keyboard.press('d');
+		const showings = page.locator('.map-block[data-map-id="idokep-satelit-eu"]');
+		await expect(showings).toHaveCount(2);
+		// the copy lies over the original's buttons; a middle click on the bar is its [x]
+		await page.mouse.click(b.x + 8, b.cy, { button: 'middle' });
+		await expect(showings).toHaveCount(1);
+		await expect(showings).not.toHaveClass(/duplicate/); // it holds the map's place now
+		await expect(showings).toHaveClass(/popout/);
+	});
+
 	test('leaving the board docks everything', async ({ page }) => {
 		await enterBoard(page, 'Sateliti');
 		await page.locator('.ms-tab').click({ position: { x: 20, y: 8 } });
@@ -189,6 +203,19 @@ test.describe('dashboard', () => {
 		expect(Math.round(before.x - after.x)).toBe(300);
 		expect(await storedJson(page, 'msTab')).toMatchObject({ width: Math.round(after.width) });
 		await expect(page.locator('#mapSettings')).toBeHidden(); // a drag is no click
+	});
+
+	test('the tab stays lit while it is dragged with the pointer off it', async ({ page }) => {
+		await enterBoard(page, 'Sateliti');
+		const tab = page.locator('.ms-tab');
+		const opacity = () => tab.evaluate((t) => getComputedStyle(t).opacity);
+		const b = await box(tab);
+		await page.mouse.move(b.x + 20, b.cy);
+		await page.mouse.down();
+		await page.mouse.move(b.x - 80, b.cy + 300, { steps: 5 }); // below it: it only moves along the top
+		await expect.poll(opacity).toBe('1');
+		await page.mouse.up();
+		await expect.poll(opacity).toBe('0.55');
 	});
 });
 

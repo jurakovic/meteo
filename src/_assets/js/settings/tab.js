@@ -139,6 +139,7 @@ export function initMsTab() {
 		const rect = tab.getBoundingClientRect();
 		const mode = e.clientX - rect.left <= MS_TAB_EDGE ? 'w' : rect.right - e.clientX <= MS_TAB_EDGE ? 'e' : 'move';
 		msTabMoved = false;
+		tab.classList.add('ms-tab-held'); // lit to the release, the pointer off it or not
 		trackPointer(e, (dx) => {
 			if (!msTabMoved && Math.abs(dx) < SNAP_ARM) return; // a click must not move it
 			msTabMoved = true;
@@ -148,7 +149,10 @@ export function initMsTab() {
 				const width = msTabWidth(tab, rect.width - dx);
 				placeMsTab(tab, rect.right - width, width); // the right side stays
 			}
-		}, () => { if (msTabMoved) saveMsTab(tab); });
+		}, () => {
+			tab.classList.remove('ms-tab-held');
+			if (msTabMoved) saveMsTab(tab);
+		});
 	});
 	window.addEventListener('resize', applyStoredMsTab); // held inside the viewport
 	on(EVENTS.gridChanged, syncMsTab);

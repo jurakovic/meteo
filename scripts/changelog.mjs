@@ -62,3 +62,10 @@ export function convertChangelog(text) {
 	});
 	return html;
 }
+
+// the newest day's date, as its heading writes it (2026-10-05): the top
+// footer's link to the changelog reads it; null on a file with no day
+export function newestDay(text) {
+	const day = text.split(/\r?\n/).map(line => line.match(DAY)).find(Boolean);
+	return day ? day[1] : null;
+}
