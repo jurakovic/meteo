@@ -69,7 +69,7 @@ The inlined blocks are indented by splitting on CRLF, so a fragment with LF endi
 
 The browser suite ([`tests/e2e`](./tests/e2e)) drives both the dev tree and the built site. Every request that leaves the local server is answered by [`fixtures.js`](./tests/e2e/fixtures.js): map images as an SVG of a map's size, frames as an empty page, the worker's `config.json` as a test chooses. So the suite runs offline and the same way every time, and a script error on a page fails the test. The pages are served as `meteo.test`, which Chromium resolves to the local server by a launch flag, so no hosts entry is needed. It is a name of its own rather than `localhost`, which would make the page a secure context and change what it can do (the clipboard, for one).
 
-The unit tests ([`tests/unit`](./tests/unit)) run what needs no browser under Node, with a stub for the little DOM the modules touch on import ([`setup.mjs`](./tests/unit/setup.mjs)): the manual's and the changelog's converters, the catalog and presets, preferences, find and share links, storage, what the settings dialog would apply, and the widgets' arithmetic (tiling, magnets, touching, group relations, the walls around a fullscreen map, the layout's sanitizer).
+The unit tests ([`tests/unit`](./tests/unit)) run what needs no browser under Node, with a stub for the little DOM the modules touch on import ([`setup.mjs`](./tests/unit/setup.mjs)): the manual's and the changelog's converters, the catalog and presets, preferences, find and share links, storage, what the settings dialog would apply, the widgets' arithmetic (tiling, magnets, touching, group relations, the walls around a fullscreen map, the layout's sanitizer), and what telemetry counts and sends.
 
 ## Code map
 
@@ -81,6 +81,7 @@ The scripts are ES modules under [`src/_assets/js`](./src/_assets/js). The dev p
 | `lib/` | helpers that know nothing of maps: `dom` (`el`, `query`/`queryAll`, `onReady`, `isTextField`, `cssNumber`), `geometry` (`clamp`, the viewport), `pointer` (a drag or resize gesture), `media` (the breakpoint), `storage` (every key the site stores; reads and writes that never throw), `events` (every event the page announces), `debug` (`dlog`) |
 | `features.js` | switches for parts built but not offered yet |
 | `remote-config.js` | which maps the worker's `config.json` switches off |
+| `telemetry.js` | usage counts and script errors, sent to the worker |
 | `page/` | what both pages have: the slideshows, the interactive maps' gate and fullscreen (`iframe`), the links, the progress bar, the dialog chrome (`dialog`), the documents in a dialog (`documents`: the manual, the changelog), and `commands` |
 | `maps/` | the maps' data and drawing: the `catalog`, the map `types`, the `presets`, the stored or shared view (`prefs`), share links (`share`), `find`, `render`, and each page's view of them (`landing`, `view`) |
 | `settings/` | the settings dialog: `panel` and its sections (`panel-presets`, `panel-rows`, `panel-list`, `panel-manage`, with `panel-view` working out what it would apply), the tab at the top edge (`tab`) and its `[+]` menu (`add-menu`) |
@@ -91,7 +92,7 @@ The scripts are ES modules under [`src/_assets/js`](./src/_assets/js). The dev p
 - **Imports.** Modules import each other freely, cycles included. A cycle is harmless because no module runs anything when it is imported other than defining constants: every listener and every start-up step is a function an entry calls.
 - **State.** Each piece of state belongs to one module and is read through its functions (`isDashboard()`, `getUserPresets()`, `snapColumn(side)`…), never through a variable another module exports. State kept per element (a widget's group, its gap in the page, a frame's gate before fullscreen) is in `WeakMap`s in the module that owns it, not in properties on the element. There is no central store: one owner per piece of state is all the indirection this page needs.
 - **Events.** A change other parts show is announced on the event bus (`lib/events.js`: `dialog-toggled`, `map-config-changed`, `map-fullscreen`, `layout-changed`, `grid-changed`, `refresh-changed`, `refresh-tick`) rather than pushed into them: the grid does not know the tab or the dialog exist.
-- **Commands.** Every action a control or a key can run is registered by id in `page/commands.js`, with the keys bound to it and when a key may run it (`registerCommand`). The markup's `data-action` controls, the rendered buttons and the tab's glyphs run them through one click listener, the keys through one keydown listener, and a title names its bound key (`withKey`). The text-field and modifier guard is written once, there.
+- **Commands.** Every action a control or a key can run is registered by id in `page/commands.js`, with the keys bound to it and when a key may run it (`registerCommand`). The markup's `data-action` controls, the rendered buttons, the tab and its glyphs run them through one click listener, the keys through one keydown listener, and a title names its bound key (`withKey`). The text-field and modifier guard is written once, there, and so is telemetry's count of commands run.
 - **Map types.** What a kind of map means (how it is drawn, whether its widget keeps an aspect, whether it has a fullscreen, how it is reloaded) is one entry in `MAP_TYPES` (`maps/types.js`); nothing else switches on a type.
 - **The dialog.** The settings dialog is rebuilt on every open. Its sections do not call one another: what one changes that another shows goes through the panel object in `settings/panel.js`, which holds what the dialog is editing (a mediator). It subscribes to the bus once and hands each event to the dialog that is up.
 - **After a gesture.** `arrangementChanged()` (`widgets/layout.js`) works out the groups and the overlaps again, stores the arrangement with the view and announces it.
@@ -108,6 +109,7 @@ The scripts are ES modules under [`src/_assets/js`](./src/_assets/js). The dev p
 | `SnapLayout`, `ColumnLayout`, `PaneEntry`, `FloatingEntry` | `widgets/layout.js` | the arrangement, as data |
 | `SnapColumn`, `Pane` | `widgets/columns.js` | a snap column on screen |
 | `RenderOptions` | `maps/render.js` | what the customize page passes the renderer |
+| `TelemetryReport`, `TelemetryEvent` | `telemetry.js` | what one report sends the worker |
 
 `query()` and `queryAll()` (`lib/dom.js`) return HTML elements, so what they find has its `style` and `dataset` without a cast; `el()` returns the element type of its tag.
 
@@ -219,7 +221,9 @@ When extending the payload: `btoa()` rejects code points above U+00FF, and the n
 
 ## Remote config
 
-A map whose source is down is switched off without a build: the file at `MAP_CONFIG_URL` names the maps that are off, as `{ "maps": { "<id>": { "enabled": false } } }`. Anything else in it is ignored, and a map the file does not name is on.
+A map whose source is down is switched off without a build: the file at `MAP_CONFIG_URL` names the maps that are off, as `{ "maps": { "<id>": { "enabled": false } } }`. A map the file does not name is on.
+
+The same file switches features, as `{ "features": { "<name>": { "enabled": true } } }` beside `maps`, read with `isFeatureEnabled()`. Each has a default in code (`FEATURE_DEFAULTS`), which a feature keeps while the file does not name it, or not as `true` or `false`, so a first visit and a file that leaves it out get that. The one feature switched this way is `telemetry` (*Telemetry*), off by default. A flip is announced on `features-changed`. Anything else in the file is ignored.
 
 The code is [`remote-config.js`](./src/_assets/js/remote-config.js), started by both entries before anything draws.
 
@@ -232,6 +236,42 @@ The code is [`remote-config.js`](./src/_assets/js/remote-config.js), started by 
 Off means hidden, not removed, on both pages. Both leave a switched-off map out of what they draw and draw again on a change (`map-config-changed`) that touches a map they show: the landing page its list, the customize page its view, carrying the arrangement over from the screen. A change to a map neither shows draws nothing, so a first visit, which has no copy yet, is not drawn twice when the file arrives.
 
 On the customize page the tab's `[+]` menu leaves the map out too. The dialog still builds its row but hides it (`.ms-off`, in either section, and left out of the find box's hit count), so the list the dialog reads back off its rows keeps the id where it was. Stored preferences, saved presets and share links therefore still hold a map while it is off, and it comes back in its place once it is on. The one thing a map loses while off is its place in a stored arrangement: the next write reads the screen, where the map is not, so it comes back docked on the page, or down the cascade on a board.
+
+## Telemetry
+
+What visitors use, and the script errors they hit, are counted in the page and sent to the worker at `TELEMETRY_URL` (`/t` on the same worker as `config.json`). The code is [`telemetry.js`](./src/_assets/js/telemetry.js), started first by both entries so it sees an error in any step after it.
+
+- Only on the live site (`jurakovic.github.io`). Dev, the nginx containers and the browser suite's `meteo.test` count and send nothing.
+- Only while switched on in the remote config (`features.telemetry`, *Remote config*), which is off by default and turned on while a storm brings the visitors. Off, nothing at all is counted or sent, errors included.
+  - The switch is the stored copy of the file, as read when the page starts, so a flip reaches a visitor on their next load.
+  - Switched on by the file's fetch landing after the page loaded (the first visit, or the first load after the flip), the page counts its `view` then, and everything after it.
+  - Switched off that way, what was counted goes unsent and nothing more is counted.
+- `?debug=1` counts on any host and logs to the console: each event as it is counted, and each report as it goes, which is every 10 seconds rather than 3 minutes, so a test sees its report without waiting. It counts whatever the switch says. Off the live site the report is logged instead of sent, so local testing never reaches the worker. On the live site it is logged, and sent only while switched on.
+- What is counted:
+  - a `view` per load
+  - a `command` with its id each time a control or a key runs one (both paths in `page/commands.js`). A command whose `run` returns `false` did nothing and isn't counted: Escape with no map in fullscreen (`fullscreen-exit`). Primijeni is the `settings-apply` command whether it is clicked or Enter runs it, so it counts once either way.
+  - `dashboard` with `on` or `off` when Primijeni changes the board mode, read off the page afterwards, so a phone, which never goes onto the board, counts nothing
+  - `shared-link` when the customize page opens with `?v=`: `list`, `board`, or `invalid` for one that doesn't decode. Never which maps, which are the sharer's choice.
+  - a `link` or a `click` for every press on anything clickable that isn't a command (below)
+  - an `error` per uncaught error or rejected promise, as its message and `line:col`, at most five a load. In the build the script is inlined, so `line:col` points into the page's minified script in `docs/`.
+- Counts are added up in the page, `{ name, value } → n`, and sent as a report, `{ page, events: [{ name, value, n }] }`, of what was counted since the last one:
+  - when the page is hidden (`visibilitychange`): another tab in front (one an outbound link opened, too), the window minimised or fully covered, the tab closed or left, the screen or phone locked. It is the last moment a mobile browser reliably gives the page.
+  - every 3 minutes, for a page that stays in view, a board on a second screen say, which would otherwise report only when closed, and lose it all to a crash, a power cut or sleep
+  - never when nothing was counted, so an idle page sends nothing. A count split over several reports is a D1 row written for each.
+- Errors go first in a report: the worker keeps only a report's first 60 events.
+- It goes by `navigator.sendBeacon` as a string, so as `text/plain`, which needs no CORS preflight; the reply is never read.
+- No cookie, nothing in storage, no id: a report says what was done on a page, not by whom. The worker adds the country Cloudflare reads off the request and keeps nothing else of it.
+
+**Clicks.** One listener, captured on `window` ahead of every other on the page so none can stop a click before it is counted, takes every click and middle click (`auxclick`, which opens a link in a new tab). It looks for the nearest clickable element: `a` (with or without `href`, since most of the page's buttons are `<a>`), `button`, `summary`, `[role="button"]`, a checkbox or radio, or anything with `data-track`. A label isn't on the list, because its click is passed on to its box and would count twice. What is found counts as:
+
+- nothing when it is, or is inside, a `[data-action]` control: that is a command, and counts as one when it runs
+- `click` with its `data-track` name when it has one. Every control a handler of its own runs is named this way (`popout`, `duplicate`, `map-check`, `preset-save`, …), from a closed set, so the counts stay a short list. A name never carries what the visitor picked (a map, a preset's name). The dashboard shows each name, and each command id, by what it does, from its own list (meteo-data, `INTERNALS.md`, *Telemetry dashboard*), so a new one needs a line there.
+- `link` with where an `<a href>` goes: the host for another site (`www.windy.com`), the path for this one, the `#hash` for a jump within the page or a document's dialog. Never the full address, which on this site may carry a shared link.
+- otherwise `click` with `tag.class` (`a`, `button.btn`): a control still to be named, which `?debug=1` shows as such.
+
+What no click shows: a press inside a map's frame (another site's page, whose events never reach this one), a drag or a resize (no click), a double click's gesture, and a link opened from the context menu.
+
+Where the reports go and how they are read is in the worker's repository ([meteo-data](https://github.com/jurakovic/meteo-data), `INTERNALS.md`).
 
 ## Dialogs
 
@@ -286,7 +326,7 @@ Where the page's *Karte* button is gone (hidden behind full-width columns, `body
 
 - **Glyphs.** On the board it carries a cluster as a title bar does (`buildMsTabCluster()`): `[+]` adds a map (below), `[R]` reloads every map, `[A]` arranges, `[G]` and `[S]` are the grid switches, each titled with its key. `[G]` and `[S]` are lit or dimmed on `grid-changed`, wherever the switch was flipped. The glyphs are `<a>` without `href`, which a `<button>` may contain, and a press on one (`.ms-tab-btn`) is kept off the tab's own drag, resize and open.
 - **Auto-refresh.** `body.refresh-on` shows the tab off the board as well, carrying `[R]` and the countdown; the board's glyphs stay board-only.
-- **Placing.** The tab is dragged along the top edge and pulled wider or narrower by either side (a press within `MS_TAB_EDGE` of a side resizes, elsewhere it drags; a release that moved is no click). It is no narrower than its name and cluster together (`msTabMinWidth()`, which is also its width until it is pulled) and no wider than half the viewport (`msTabMaxWidth()`); the floor wins over the ceiling on a narrow window. Pulled narrower than its content, the name gives way to an ellipsis.
+- **Placing.** The tab is dragged along the top edge and pulled wider or narrower by either side (a press within `MS_TAB_EDGE` of a side resizes, elsewhere it drags). A press on the tab is the `ms-tab` command, whose `run` returns `false` for the release of a drag: that is no click, and isn't counted.. It is no narrower than its name and cluster together (`msTabMinWidth()`, which is also its width until it is pulled) and no wider than half the viewport (`msTabMaxWidth()`); the floor wins over the ceiling on a narrow window. Pulled narrower than its content, the name gives way to an ellipsis.
 - **Remembered** in this browser only (`msTab`: the left as a fraction of the viewport, the width in px), not in the arrangement, since it is about this screen and not the view. Applied on load and on a window resize.
 - Desktop only: below the breakpoint the tab is not placed at all.
 
@@ -574,7 +614,7 @@ Both are on the bar only: over a frame the page never sees them, and on an inter
 
 Every key is named once, in `STORAGE_KEYS` (`lib/storage.js`), and every read and write goes through `readJson()`/`writeJson()`/`removeKey()`, which never throw. With storage refused or full, a write is kept for the session and read back from there, so the view still works (a private window, a blocked site). Everything read back from storage or `?v=` passes a guard (`isValidPrefs`, `isValidPreset`, the filter on hidden presets, `sanitizeSnapLayout`): an unknown preset id is rejected rather than kept.
 
-`?debug=1` on any page turns on console logging (`dlog()`, `lib/debug.js`).
+`?debug=1` on any page turns on console logging (`dlog()`, `lib/debug.js`), telemetry's included (see [Telemetry](#telemetry)).
 
 ## Touch notes
 

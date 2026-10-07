@@ -4,6 +4,7 @@
 
 import { DESKTOP_MQ } from '../lib/media.js';
 import { readJson, STORAGE_KEYS, writeJson } from '../lib/storage.js';
+import { track } from '../telemetry.js';
 import { arrangementChanged } from '../widgets/layout.js';
 import { CATALOG_BY_ID } from './catalog.js';
 import { allPresets, getUserPresets, MAP_PRESETS } from './presets.js';
@@ -112,6 +113,10 @@ export function getSharedMapView() {
 export function loadSharedMapView() {
 	const value = new URLSearchParams(window.location.search).get('v');
 	sharedMapView = value ? decodeMapView(value) : null;
+	// whether it was a board, not which maps: the list is the sharer's choice
+	if (!value) return;
+	const board = !!(sharedMapView && sharedMapView.layout && sharedMapView.layout.dashboard);
+	track('shared-link', !sharedMapView ? 'invalid' : board ? 'board' : 'list');
 }
 
 /** @returns {MapPrefs} */

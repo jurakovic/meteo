@@ -7,7 +7,7 @@ import { EVENTS, on } from '../lib/events.js';
 import { clamp, roundFraction, viewportWidth } from '../lib/geometry.js';
 import { trackPointer } from '../lib/pointer.js';
 import { readJson, STORAGE_KEYS, writeJson } from '../lib/storage.js';
-import { withKey } from '../page/commands.js';
+import { registerCommand, withKey } from '../page/commands.js';
 import { SNAP_ARM } from '../widgets/constants.js';
 import { isGridShown, isGridSnapped } from '../widgets/grid.js';
 import { isRefreshOn, refreshLabel } from '../widgets/refresh.js';
@@ -118,10 +118,13 @@ export function initMsTab() {
 	tab.title = withKey('Karte', 'map-settings');
 	buildMsTabCluster(tab); // before the first measure: the glyphs are part of the width its name gives it
 	applyStoredMsTab();
-	tab.addEventListener('click', (e) => {
-		if (onGlyph(e)) return; // a glyph is itself, as on a title bar
-		if (msTabMoved) { msTabMoved = false; return; }
-		toggleMapSettings();
+	// a press on the tab is a command of its own (data-action="ms-tab"); a glyph
+	// is itself, as on a title bar, and the release of a drag did nothing
+	registerCommand('ms-tab', {
+		run: () => {
+			if (msTabMoved) { msTabMoved = false; return false; }
+			toggleMapSettings();
+		}
 	});
 	// the cursor says which it will be
 	tab.addEventListener('pointermove', (e) => {

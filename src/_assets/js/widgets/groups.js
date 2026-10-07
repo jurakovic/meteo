@@ -45,7 +45,7 @@ function placeMates(block) {
 }
 
 export function buildGroupButton() {
-	const btn = el('a', { class: 'grp-btn', hidden: '' });
+	const btn = el('a', { class: 'grp-btn', 'data-track': 'group', hidden: '' });
 	btn.addEventListener('click', () => toggleGroup(btn.closest('.map-block')));
 	return btn;
 }

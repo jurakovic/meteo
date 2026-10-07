@@ -13,6 +13,7 @@ import { initRemoteConfig } from './remote-config.js';
 import { initAddMenu } from './settings/add-menu.js';
 import { initMapSettings } from './settings/panel.js';
 import { initMsTab } from './settings/tab.js';
+import { initTelemetry } from './telemetry.js';
 import { layoutSnapColumns } from './widgets/columns.js';
 import { initWidgetFullscreen } from './widgets/fullscreen.js';
 import { initWidgetGestures } from './widgets/gestures.js';
@@ -20,6 +21,9 @@ import { initWidgetKeys } from './widgets/keyboard.js';
 import { applyStoredSnapLayout, initLayoutBreakpoint } from './widgets/layout.js';
 import { initRefresh } from './widgets/refresh.js';
 import { initWidgetResponsiveness } from './widgets/responsive.js';
+
+// first, so it sees an error in any step after it
+initTelemetry('customize');
 
 // before the first paint: the maps switched off, the documents' switches, and
 // the board's cloak, which needs the view (a shared link's or the stored one)

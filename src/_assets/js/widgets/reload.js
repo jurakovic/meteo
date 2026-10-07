@@ -7,7 +7,7 @@ import { mapTypeOf } from '../maps/types.js';
 import { restartRefresh } from './refresh.js';
 
 export function buildReloadButton() {
-	const btn = el('a', { class: 'rl-btn', text: '[R]', title: 'Ponovno učitaj kartu' });
+	const btn = el('a', { class: 'rl-btn', 'data-track': 'reload-map', text: '[R]', title: 'Ponovno učitaj kartu' });
 	btn.addEventListener('click', () => {
 		const block = btn.closest('.map-block');
 		reloadMap(block);

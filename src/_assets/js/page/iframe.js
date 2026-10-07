@@ -232,8 +232,11 @@ export function updateHintText() {
 	});
 }
 
-// whichever interactive map is in fullscreen, out of it (Escape)
+// whichever interactive map is in fullscreen, out of it (Escape); false when
+// none was
 export function exitAnyFullscreen() {
 	const fs = query('.if1.fullscreen');
-	if (fs) exitFullscreen(fs);
+	if (!fs) return false;
+	exitFullscreen(fs);
+	return true;
 }

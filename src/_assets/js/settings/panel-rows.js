@@ -18,8 +18,8 @@ import { layoutParts } from './panel-view.js';
 export function createModeRow(panel) {
 	const modeDiv = el('div', { class: 'ms-mode' });
 
-	function buildGridToggle(label, checked, onChange) {
-		const box = el('input', { type: 'checkbox' });
+	function buildGridToggle(label, track, checked, onChange) {
+		const box = el('input', { type: 'checkbox', 'data-track': track });
 		box.checked = checked;
 		box.disabled = !panel.dashboardChecked;
 		box.addEventListener('change', () => onChange(box.checked));
@@ -33,7 +33,7 @@ export function createModeRow(panel) {
 			modeDiv.replaceChildren();
 			modeDiv.hidden = !DESKTOP_MQ.matches; // the widgets and the board are a desktop thing
 			modeDiv.classList.toggle('ms-on', panel.dashboardChecked);
-			const btn = el('button', { type: 'button', class: 'btn', 'aria-pressed': String(panel.dashboardChecked) }, [
+			const btn = el('button', { type: 'button', class: 'btn', 'data-track': 'board-mode', 'aria-pressed': String(panel.dashboardChecked) }, [
 				document.createTextNode('Nadzorna ploča '),
 				el('span', { class: 'beta', text: 'beta' })
 			]);
@@ -47,8 +47,8 @@ export function createModeRow(panel) {
 			// the grid switches act on the tick, not on Primijeni: they are a way
 			// of working on the board rather than part of the view
 			modeDiv.append(btn,
-				buildGridToggle('Prikaži mrežu', panel.gridChecked, (on) => { panel.gridChecked = on; setGridPrefs(panel.gridChecked, panel.snapChecked); }),
-				buildGridToggle('Poravnaj uz mrežu', panel.snapChecked, (on) => { panel.snapChecked = on; setGridPrefs(panel.gridChecked, panel.snapChecked); }),
+				buildGridToggle('Prikaži mrežu', 'grid-show', panel.gridChecked, (on) => { panel.gridChecked = on; setGridPrefs(panel.gridChecked, panel.snapChecked); }),
+				buildGridToggle('Poravnaj uz mrežu', 'grid-snap', panel.snapChecked, (on) => { panel.snapChecked = on; setGridPrefs(panel.gridChecked, panel.snapChecked); }),
 				tile);
 		}
 	};
@@ -71,7 +71,7 @@ export function createRefreshRow() {
 				if (minutes === refreshEveryMinutes()) option.selected = true;
 				every.appendChild(option);
 			});
-			const box = el('input', { type: 'checkbox' });
+			const box = el('input', { type: 'checkbox', 'data-track': 'refresh' });
 			box.checked = isRefreshOn();
 			// as with the grid, this takes effect on the tick and not on Primijeni:
 			// it is a way of working, so there is nothing to hold back
@@ -112,7 +112,7 @@ export function createLayoutLine() {
 			const parts = layoutParts(currentSnapLayout());
 			layoutDiv.hidden = isDashboard() || !parts.length;
 			if (layoutDiv.hidden) return;
-			const backLink = el('a', { text: 'Vrati sve' });
+			const backLink = el('a', { text: 'Vrati sve', 'data-track': 'dock-all' });
 			backLink.addEventListener('click', dockAllPopouts);
 			layoutDiv.append(el('span', { text: `Izdvojene karte: ${parts.join(', ')}` }), backLink);
 		}
