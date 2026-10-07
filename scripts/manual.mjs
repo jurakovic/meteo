@@ -130,7 +130,7 @@ export function convertManual(markdown) {
 			para.push(lines[i].trim());
 			i++;
 		}
-		// a line that opens like a block (-5, #upute) but is none of them: the
+		// a line that opens like a block (-5, #manual) but is none of them: the
 		// paragraph does not take it either, and the loop would stand on it
 		if (!para.length) throw new Error(`manual: line opens like a block but is none (line ${i + 1}): ${line}`);
 		body.push(`<p>${inline(para.join(' '))}</p>`);

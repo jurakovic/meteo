@@ -647,7 +647,7 @@ Two documents are shown on the site, the manual and the changelog (what changed 
 | source, converter | `MANUAL.hr.md`, [`scripts/manual.mjs`](./scripts/manual.mjs) | `CHANGELOG.hr.md`, [`scripts/changelog.mjs`](./scripts/changelog.mjs) |
 | dialog, storage key | `#manualDialog`, `manualPanel` | `#changelogDialog`, `changelogPanel` |
 | placeholder, dev fragment | `<!-- manual -->`, `manual.c.html` | `<!-- changelog -->`, `changelog.c.html` |
-| reached by | the top footer's *Upute*, `H`, `#upute` | the top footer's date, `C`, `#promjene` |
+| reached by | the top footer's *Upute*, `H`, `#manual` | the top footer's date, `C`, `#changelog` |
 
 The file is the only source, and the build makes HTML of it, each converter taking the text and returning the fragment's lines. The built pages get it inlined at the placeholder; the build also writes it to `src/_components/`, which the dev pages fetch through `include.js` (the `data-include-html` on the dialog's `.dialog-body`, stripped from the built pages). Those files are build output and git-ignored, so a page served from `src/` shows the documents as of the last build.
 

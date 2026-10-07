@@ -40,7 +40,7 @@ for (const which of ['landing', 'customize']) {
 			await expect(dialog.locator('.dialog-title')).toHaveText('Povijest promjena');
 			await expect(dialog.locator('.dialog-body h2').first()).toHaveText(/^\d{4}-\d{2}-\d{2}/);
 			await expect(dialog.locator('.dialog-body li').first()).toBeVisible();
-			await expect(page).toHaveURL(/#promjene$/);
+			await expect(page).toHaveURL(/#changelog$/);
 			await page.keyboard.press('Escape');
 			await expect(dialog).toBeHidden();
 			await expect(page).not.toHaveURL(/#/);
@@ -75,12 +75,12 @@ for (const which of ['landing', 'customize']) {
 }
 
 test('the address opens it on arrival', async ({ page, paths }) => {
-	await page.goto(`${paths.landing}#promjene`);
+	await page.goto(`${paths.landing}#changelog`);
 	await expect(page.locator('#changelogDialog')).toBeVisible();
 });
 
 test('the picker opening over it shuts it and takes its address away', async ({ page, paths }) => {
-	await page.goto(`${paths.customize}#promjene`);
+	await page.goto(`${paths.customize}#changelog`);
 	await expect(page.locator('#changelogDialog')).toBeVisible();
 	await page.keyboard.press('k');
 	await expect(page.locator('#mapSettings')).toBeVisible();
@@ -104,7 +104,7 @@ for (const which of ['landing', 'customize']) {
 			await expect(dialog).toBeVisible();
 			await expect(dialog.locator('.dialog-title')).toHaveText('Upute');
 			await expect(dialog.locator('.manual-toc li').first()).toBeVisible();
-			await expect(page).toHaveURL(/#upute$/);
+			await expect(page).toHaveURL(/#manual$/);
 			await page.keyboard.press('Escape');
 			await expect(dialog).toBeHidden();
 			await expect(page).not.toHaveURL(/#/);
@@ -121,19 +121,19 @@ for (const which of ['landing', 'customize']) {
 }
 
 test('a heading link in the manual scrolls the manual, not the page', async ({ page, paths }) => {
-	await page.goto(`${paths.landing}#upute`);
+	await page.goto(`${paths.landing}#manual`);
 	const body = page.locator('#manualDialog .dialog-body');
 	await expect(body).toBeVisible();
 	await page.locator('#manualDialog .manual-toc a[href="#na-mobitelu"]').click();
 	await expect.poll(() => body.evaluate(el => el.scrollTop)).toBeGreaterThan(0);
-	await expect(page).toHaveURL(/#upute$/);
+	await expect(page).toHaveURL(/#manual$/);
 });
 
 test('the changelog opening over the manual takes its address over', async ({ page, paths }) => {
-	await page.goto(`${paths.landing}#upute`);
+	await page.goto(`${paths.landing}#manual`);
 	await expect(page.locator('#manualDialog')).toBeVisible();
 	await page.keyboard.press('c');
 	await expect(page.locator('#changelogDialog')).toBeVisible();
 	await expect(page.locator('#manualDialog')).toBeHidden();
-	await expect(page).toHaveURL(/#promjene$/);
+	await expect(page).toHaveURL(/#changelog$/);
 });

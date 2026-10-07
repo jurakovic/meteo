@@ -4,10 +4,10 @@
 
 export const FEATURES = {
 	// the manual (MANUAL.hr.md): the top footer's Upute, the H key and the
-	// #upute address. Off, the class no-manual goes on the page before the
+	// #manual address. Off, the class no-manual goes on the page before the
 	// first paint, so nothing flashes up and away
 	manual: true,
 	// the changelog (CHANGELOG.hr.md): the top footer's date link, the C
-	// key and the #promjene address, switched off the same way
+	// key and the #changelog address, switched off the same way
 	changelog: true
 };

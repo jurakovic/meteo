@@ -554,8 +554,8 @@
 		class:"maps-empty",text:'Nema odabranih karata. Odaberite ih pod "Karte".'})]))}var at=!1;function nt(){
 		const e=document.querySelector("[data-maps]");if(!e)return!1;at=!0;const t=qe.map(Ue).filter(e=>{return e&&(t=e.id,!W.has(t));var t
 		}),r=t.map(e=>e.id);return(!r.length||function(e){return[...e.querySelectorAll(":scope > .map-entry > .map-block")].map(e=>e.dataset.mapId)
-		}(e).join()!==r.join())&&(rt(e,t),!0)}var ot,it={manual:!0,changelog:!0},st=[{feature:"manual",dialogId:"manualDialog",hash:"upute",
-		keys:["h","H"]},{feature:"changelog",dialogId:"changelogDialog",hash:"promjene",keys:["c","C"]}];function lt(e){try{
+		}(e).join()!==r.join())&&(rt(e,t),!0)}var ot,it={manual:!0,changelog:!0},st=[{feature:"manual",dialogId:"manualDialog",hash:"manual",
+		keys:["h","H"]},{feature:"changelog",dialogId:"changelogDialog",hash:"changelog",keys:["c","C"]}];function lt(e){try{
 		return decodeURIComponent(e.slice(1))}catch{return e.slice(1)}}function ct({feature:t,dialogId:r,hash:a,keys:n}){
 		const i=document.getElementById(r);if(!i||!it[t])return;const s=i.querySelector(".dialog-close")
 		;s&&s.addEventListener("click",()=>ve(i,!1)),i.addEventListener("click",e=>{const t=e.target.closest('a[href^="#"]')
@@ -1315,8 +1315,8 @@
 			</table>
 			<p><strong>Cijeli zaslon.</strong> Iz cijelog zaslona izlazi se gumbom <code>[-]</code> ili tipkom <kbd>Esc</kbd>. Za ponašanje u bočnom stupcu i na ploči vidi <a href="#bočni-stupci">Bočni stupci</a> i <a href="#nadzorna-ploča">Nadzorna ploča</a>.</p>
 			<p><strong>Linkovi.</strong> Gumb <em>Linkovi</em> vodi na popis dodatnih izvora na dnu stranice. Kvadratić pokraj njega uključuje prikaz linkova ispod svake karte. Tipka <kbd>L</kbd> otvara isti popis u prozoru preko stranice, pa je dostupan i s nadzorne ploče.</p>
-			<p><strong>Upute.</strong> Ovaj tekst otvaraju link <em>Upute</em> u podnožju i tipka <kbd>H</kbd>. Otvara se u prozoru preko stranice, pa se upute mogu čitati uz karte. Zatvara se natpisom <em>Zatvori</em> ili tipkom <kbd>Esc</kbd>. Ikona stranice lijevo od naslova vodi na početnu stranicu, kao i u dijalogu <em>Karte</em>. Link koji završava s <code>#upute</code> otvara upute odmah pri učitavanju stranice.</p>
-			<p><strong>Povijest promjena.</strong> Datum zadnje promjene u podnožju (npr. 2026-10-05) i tipka <kbd>C</kbd> otvaraju popis promjena na stranici, po datumima. Otvara se u prozoru preko stranice, kao i upute, a link koji završava s <code>#promjene</code> otvara ga odmah pri učitavanju stranice.</p>
+			<p><strong>Upute.</strong> Ovaj tekst otvaraju link <em>Upute</em> u podnožju i tipka <kbd>H</kbd>. Otvara se u prozoru preko stranice, pa se upute mogu čitati uz karte. Zatvara se natpisom <em>Zatvori</em> ili tipkom <kbd>Esc</kbd>. Ikona stranice lijevo od naslova vodi na početnu stranicu, kao i u dijalogu <em>Karte</em>. Link koji završava s <code>#manual</code> otvara upute odmah pri učitavanju stranice.</p>
+			<p><strong>Povijest promjena.</strong> Datum zadnje promjene u podnožju (npr. 2026-10-05) i tipka <kbd>C</kbd> otvaraju popis promjena na stranici, po datumima. Otvara se u prozoru preko stranice, kao i upute, a link koji završava s <code>#changelog</code> otvara ga odmah pri učitavanju stranice.</p>
 			<h2 id="dijalog-karte">Dijalog Karte</h2>
 			<p>Gumb <strong>Karte</strong> (ili tipka <kbd>K</kbd>) otvara dijalog u kojem se bira što se prikazuje. Kad gumb na stranici nije dostupan, dijalog se otvara s <a href="#pločica-karte">pločice Karte</a> na vrhu ekrana.</p>
 			<p>Dok je dijalog otvoren, stranica iza njega je malo zatamnjena i ne reagira. Klik izvan dijaloga samo ga zatvara — neće usput otvoriti link ni pomaknuti prozor.</p>

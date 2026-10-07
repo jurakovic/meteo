@@ -37,9 +37,9 @@ Buttons in an interactive map's bar:
 
 **Linkovi** (links). The *Linkovi* button leads to a list of further sources at the bottom of the page. The checkbox beside it shows links under every map. The <kbd>L</kbd> key opens the same list in a window over the page, so it can be reached from the dashboard too.
 
-**Upute** (manual). This text is opened by the *Upute* link in the footer and the <kbd>H</kbd> key. It opens in a window over the page, so it can be read beside the maps. It is closed with *Zatvori* (close) or the <kbd>Esc</kbd> key. The site's icon left of the title leads to the home page, as in the *Karte* dialog. A link ending in `#upute` opens the manual as soon as the page loads.
+**Upute** (manual). This text is opened by the *Upute* link in the footer and the <kbd>H</kbd> key. It opens in a window over the page, so it can be read beside the maps. It is closed with *Zatvori* (close) or the <kbd>Esc</kbd> key. The site's icon left of the title leads to the home page, as in the *Karte* dialog. A link ending in `#manual` opens the manual as soon as the page loads.
 
-**Povijest promjena** (changelog). The date of the last change in the footer (e.g. 2026-10-05) and the <kbd>C</kbd> key open the list of changes to the site, by date. It opens in a window over the page, as the manual does, and a link ending in `#promjene` opens it as soon as the page loads.
+**Povijest promjena** (changelog). The date of the last change in the footer (e.g. 2026-10-05) and the <kbd>C</kbd> key open the list of changes to the site, by date. It opens in a window over the page, as the manual does, and a link ending in `#changelog` opens it as soon as the page loads.
 
 ## The Karte dialog
 

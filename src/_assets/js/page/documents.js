@@ -20,9 +20,9 @@ import { setDialogVisible, toggleDialog } from './dialog.js';
 const DOCUMENTS = [
 	// H for help: the letters name the thing, as R, G and S do, and ? would
 	// need Shift on one layout and AltGr on the next
-	{ feature: 'manual', dialogId: 'manualDialog', hash: 'upute', keys: ['h', 'H'] },
+	{ feature: 'manual', dialogId: 'manualDialog', hash: 'manual', keys: ['h', 'H'] },
 	// C for changelog
-	{ feature: 'changelog', dialogId: 'changelogDialog', hash: 'promjene', keys: ['c', 'C'] }
+	{ feature: 'changelog', dialogId: 'changelogDialog', hash: 'changelog', keys: ['c', 'C'] }
 ];
 
 // a document switched off (features.js) has its entries hidden by the class
