@@ -1,7 +1,7 @@
 
 > AI-generated content.
 
-## 2026-10-07
+## 2026-10-07 (#46)
 - added the links ("Linkovi") in a window, opened with the L key, so they can be reached from the dashboard too
 - added Meteoalarm to the links under the storm forecasts
 - every synoptic chart (ČHMÚ, DHMZ, DWD) now links to both of the others
