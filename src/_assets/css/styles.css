@@ -230,12 +230,6 @@ img {
 	padding-top: 115%;
 }
 
-/* a widget frame in a slide: the slide's aspect sizes the box */
-.if3 {
-	position: relative;
-	overflow: hidden;
-}
-
 .vid1 {
 	position: relative;
 	width: 100%;
@@ -2217,18 +2211,6 @@ body.fs-lock {
 		/* the slide is the slideshow's width, not its image's, so an image that
 		   fails to load leaves a map-sized box (INTERNALS.md, Map descriptors) */
 		width: 100%;
-	}
-
-	/* a slide with a widget frame stays laid out, unseen, under the one
-	   showing: the widget takes its height from the frame once, as it loads,
-	   so a frame loaded at no size would stay squashed */
-	.slide.framed:not(.active) {
-		display: block;
-		position: absolute;
-		top: 0;
-		left: 0;
-		width: 100%;
-		visibility: hidden;
 	}
 
 		.slide > .placeholder {

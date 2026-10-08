@@ -45,18 +45,18 @@
 		{.if1{padding-top:110%}}.overlay{position:absolute;top:0;left:0;width:100%;height:100%}.overlay .hint{opacity:0;transition:opacity .3s ease;
 		pointer-events:none;position:absolute;top:5%;transform:translateX(-50%);background-color:#000;padding:6px 12px}@media (max-width:800px){
 		.overlay .hint{top:10%;min-width:65%}}.overlay:hover .hint{opacity:.6}.if2{position:relative;width:100%;overflow:hidden;padding-top:115%}
-		.if3{position:relative;overflow:hidden}.vid1{position:relative;width:100%;overflow:hidden;padding-top:67%}iframe,video{position:absolute;top
-		:0;left:0;bottom:0;right:0;width:100%;height:100%;border:none}.scaled-iframe{transform:scale(.9);width:calc(100% / .9);height:
-		calc(100% / .9);transform-origin:0 0}@media (max-width:800px){.scaled-iframe{transform:scale(.6);width:calc(100% / .6);height:
-		calc(100% / .6);transform-origin:0 0}}.radartitle.fullscreen{position:fixed;top:0;left:var(--snap-l,0);right:var(--snap-r,0);z-index:
-		var(--z-fullscreen-bar);display:flex;align-items:center;justify-content:center}.radartitle.fullscreen .center{transform:none;left:auto}
-		.radartitle.fullscreen .left,.radartitle.fullscreen .right{top:50%;transform:translateY(-50%)}.if1.fullscreen{position:fixed;top:23px;left:
-		var(--snap-l,0);right:var(--snap-r,0);width:auto;bottom:0;padding-top:0;z-index:var(--z-fullscreen)}body.fs-lock{overflow:hidden}
-		@media (max-width:800px){.radartitle.fullscreen{height:32px}.if1.fullscreen{top:32px}.radartitle .right-cluster{gap:14px}
-		.radartitle.fullscreen .left{margin-left:10px}.radartitle.fullscreen .right{margin-right:10px}}.dup-btn,.grp-btn,.po-btn,.rl-btn{display:
-		none}.map-gap{display:flex;align-items:center;justify-content:center;gap:6px;box-sizing:border-box;padding:8px;background-color:
-		var(--c-surface);color:var(--c-muted)}.map-gap a{cursor:pointer}@media (min-width:801px) and (hover:hover) and (pointer:fine){.po-btn{
-		display:inline}.dup-btn{display:inline}.radartitle.fullscreen .dup-btn,.radartitle.fullscreen .po-btn{display:none}
+		.vid1{position:relative;width:100%;overflow:hidden;padding-top:67%}iframe,video{position:absolute;top:0;left:0;bottom:0;right:0;width:100%;
+		height:100%;border:none}.scaled-iframe{transform:scale(.9);width:calc(100% / .9);height:calc(100% / .9);transform-origin:0 0}
+		@media (max-width:800px){.scaled-iframe{transform:scale(.6);width:calc(100% / .6);height:calc(100% / .6);transform-origin:0 0}}
+		.radartitle.fullscreen{position:fixed;top:0;left:var(--snap-l,0);right:var(--snap-r,0);z-index:var(--z-fullscreen-bar);display:flex;
+		align-items:center;justify-content:center}.radartitle.fullscreen .center{transform:none;left:auto}.radartitle.fullscreen .left,
+		.radartitle.fullscreen .right{top:50%;transform:translateY(-50%)}.if1.fullscreen{position:fixed;top:23px;left:var(--snap-l,0);right:
+		var(--snap-r,0);width:auto;bottom:0;padding-top:0;z-index:var(--z-fullscreen)}body.fs-lock{overflow:hidden}@media (max-width:800px){
+		.radartitle.fullscreen{height:32px}.if1.fullscreen{top:32px}.radartitle .right-cluster{gap:14px}.radartitle.fullscreen .left{margin-left:
+		10px}.radartitle.fullscreen .right{margin-right:10px}}.dup-btn,.grp-btn,.po-btn,.rl-btn{display:none}.map-gap{display:flex;align-items:
+		center;justify-content:center;gap:6px;box-sizing:border-box;padding:8px;background-color:var(--c-surface);color:var(--c-muted)}.map-gap a{
+		cursor:pointer}@media (min-width:801px) and (hover:hover) and (pointer:fine){.po-btn{display:inline}.dup-btn{display:inline}
+		.radartitle.fullscreen .dup-btn,.radartitle.fullscreen .po-btn{display:none}
 		.map-block.popout .radartitle:not(.fullscreen)>a:not(.left):not(.right){display:inline-block;max-width:100%;overflow:hidden;text-overflow:
 		ellipsis;white-space:nowrap;vertical-align:top;transform:translateX(var(--title-shift,0))}
 		.map-block.popout .radartitle:not(.fullscreen)>a.center{transform:translateX(calc(-50% + var(--title-shift,0)))}
@@ -223,28 +223,28 @@
 		.changelog-dialog .dialog-body h2{margin:16px 0 4px;font-size:14px}.changelog-dialog .dialog-body h2:first-child{margin-top:8px}
 		.changelog-dialog .dialog-body ul{margin:4px 0}.changelog-dialog .changelog-intro{margin:8px 0 0;color:var(--c-muted);font-size:11px;
 		font-style:italic}.maps-empty{padding:20px 0;font-size:13px;font-style:italic;opacity:.6}.slideshow{position:relative;display:flex;
-		justify-content:center}.slide{display:none}.slide.active{display:block;width:100%}.slide.framed:not(.active){display:block;position:absolute
-		;top:0;left:0;width:100%;visibility:hidden}.slide>.placeholder{width:100%}.slide>.placeholder>img{margin-inline:auto}
-		.slide>.placeholder.vector>img{width:100%}.next,.prev{cursor:pointer;position:absolute;align-content:center;top:0;bottom:0;width:15%;padding
-		:16px;color:transparent;opacity:.7;font-weight:700;font-size:36px;transition:color .6s ease,background-image .6s ease;user-select:none}.prev
-		{left:0;text-align:left}.prev:hover{background-image:linear-gradient(to left,transparent,rgba(0,0,0,.6));color:#fff;text-decoration:none}
-		.prev.shorter{top:23px}.next{right:0;text-align:right}.next:hover{background-image:linear-gradient(to right,transparent,rgba(0,0,0,.6));
-		color:#fff;text-decoration:none}.next.shorter{top:23px}.fade{animation-name:fade;animation-duration:1s}@keyframes fade{from{opacity:.6}to{
-		opacity:1}}@media (max-width:800px){.next,.prev{padding:12px;font-size:20px}.next.shorter,.prev.shorter{top:23px}}.indicators-container{
-		display:grid;grid-template-columns:repeat(3,1fr);gap:4px;width:100%}.indicator{height:3px;background-color:#4e5264;transition:
-		background-color .3s}.indicator.active{background-color:var(--c-accent)}@media (max-width:800px){.indicator{height:2px}}.expandable{position
-		:relative;justify-content:center;margin-top:10px;margin-bottom:4px;font-family:inherit;color:#fff;background-color:var(--c-control);cursor:
-		pointer;width:100%;height:24px;border:none;outline:0}.expandable:hover{background-color:var(--c-control-hover)}.expandable .arrow{position:
-		absolute;right:10px;top:2px;font-size:14px}.links{font-size:14px;display:grid;grid-template-columns:25% 45% 30%;gap:0;max-height:0;overflow:
-		hidden;transition:max-height .3s ease-out}.links .item{padding:5px;margin:0 2px}.links .item:not(:last-child){border-right:1px solid #fff}
-		.links p{margin-top:0;text-align:left}@media (max-width:800px){.links{grid-template-columns:1fr}.links .item{margin:5px 0;border-right:
-		none!important}}.links-dialog .links{max-height:none;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:0 16px;padding:6px 10px
-		10px}.links-dialog .links .item{margin:0;border-right:none}.page-foot{position:sticky;top:100%;margin-top:8px}.footer-top{background:
-		var(--c-chip);color:#fff;text-align:center;padding:8px}@media (max-width:800px){.footer-top{display:grid;grid-template-rows:auto auto;
-		grid-auto-flow:column;grid-auto-columns:1fr;text-align:left}.footer-top .changelog-link,.footer-top .manual-link{display:contents}
-		.footer-top a{display:block;padding:4px 0}.footer-top .sep{display:none}}footer{background:var(--c-control);color:#fff;text-align:center;
-		padding:8px}.progress-container{position:fixed;left:0;top:0;width:100%;height:3px;z-index:var(--z-progress);background-color:#5c5c5c80}
-		.progress-bar{width:0;height:100%;background-color:var(--c-accent);transition:width .3s ease-in-out}
+		justify-content:center}.slide{display:none}.slide.active{display:block;width:100%}.slide>.placeholder{width:100%}.slide>.placeholder>img{
+		margin-inline:auto}.slide>.placeholder.vector>img{width:100%}.next,.prev{cursor:pointer;position:absolute;align-content:center;top:0;bottom:
+		0;width:15%;padding:16px;color:transparent;opacity:.7;font-weight:700;font-size:36px;transition:color .6s ease,background-image .6s ease;
+		user-select:none}.prev{left:0;text-align:left}.prev:hover{background-image:linear-gradient(to left,transparent,rgba(0,0,0,.6));color:#fff;
+		text-decoration:none}.prev.shorter{top:23px}.next{right:0;text-align:right}.next:hover{background-image:
+		linear-gradient(to right,transparent,rgba(0,0,0,.6));color:#fff;text-decoration:none}.next.shorter{top:23px}.fade{animation-name:fade;
+		animation-duration:1s}@keyframes fade{from{opacity:.6}to{opacity:1}}@media (max-width:800px){.next,.prev{padding:12px;font-size:20px}
+		.next.shorter,.prev.shorter{top:23px}}.indicators-container{display:grid;grid-template-columns:repeat(3,1fr);gap:4px;width:100%}.indicator{
+		height:3px;background-color:#4e5264;transition:background-color .3s}.indicator.active{background-color:var(--c-accent)}
+		@media (max-width:800px){.indicator{height:2px}}.expandable{position:relative;justify-content:center;margin-top:10px;margin-bottom:4px;
+		font-family:inherit;color:#fff;background-color:var(--c-control);cursor:pointer;width:100%;height:24px;border:none;outline:0}
+		.expandable:hover{background-color:var(--c-control-hover)}.expandable .arrow{position:absolute;right:10px;top:2px;font-size:14px}.links{
+		font-size:14px;display:grid;grid-template-columns:25% 45% 30%;gap:0;max-height:0;overflow:hidden;transition:max-height .3s ease-out}
+		.links .item{padding:5px;margin:0 2px}.links .item:not(:last-child){border-right:1px solid #fff}.links p{margin-top:0;text-align:left}
+		@media (max-width:800px){.links{grid-template-columns:1fr}.links .item{margin:5px 0;border-right:none!important}}.links-dialog .links{
+		max-height:none;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:0 16px;padding:6px 10px 10px}.links-dialog .links .item{margin
+		:0;border-right:none}.page-foot{position:sticky;top:100%;margin-top:8px}.footer-top{background:var(--c-chip);color:#fff;text-align:center;
+		padding:8px}@media (max-width:800px){.footer-top{display:grid;grid-template-rows:auto auto;grid-auto-flow:column;grid-auto-columns:1fr;
+		text-align:left}.footer-top .changelog-link,.footer-top .manual-link{display:contents}.footer-top a{display:block;padding:4px 0}
+		.footer-top .sep{display:none}}footer{background:var(--c-control);color:#fff;text-align:center;padding:8px}.progress-container{position:
+		fixed;left:0;top:0;width:100%;height:3px;z-index:var(--z-progress);background-color:#5c5c5c80}.progress-bar{width:0;height:100%;
+		background-color:var(--c-accent);transition:width .3s ease-in-out}
 	</style>
 	<script>
 		(()=>{var e="dialog-toggled",t="map-config-changed",r="features-changed",a="map-fullscreen";function n(e,t){
@@ -256,44 +256,43 @@
 		return[...t.querySelectorAll(e)]}function c(e,t=document){return t.querySelector(e)}function d(){
 		return"1"===new URLSearchParams(window.location.search).get("debug")}function m(...e){d()&&console.log(...e)}
 		var h=window.matchMedia("(min-width: 801px) and (hover: hover) and (pointer: fine)");function p(){return window.innerWidth<800}var u=0
-		;function w(e=!1){(e||window.innerWidth!==u)&&(u=window.innerWidth,l("iframe[data-zoom-hr-desktop]").forEach(e=>g(e)))}function f(e){
-		return document.getElementById(e)}function g(e){if(m(`Updating iframe src for ${e.id}`),
-		!e.hasAttribute("data-src-hr"))return void(e.src=e.getAttribute("data-src"));const t=e.getAttribute("data-zoom-mode")
+		;function w(e=!1){(e||window.innerWidth!==u)&&(u=window.innerWidth,l("iframe[data-zoom-hr-desktop]").forEach(e=>f(e)))}function g(e){
+		return document.getElementById(e)}function f(e){m(`Updating iframe src for ${e.id}`);const t=e.getAttribute("data-zoom-mode")
 		;let r="eu"===t?e.getAttribute("data-src-eu"):e.getAttribute("data-src-hr");if(p()){
 		const a="eu"===t?"data-zoom-eu-desktop":"data-zoom-hr-desktop",n="eu"===t?"data-zoom-eu-mobile":"data-zoom-hr-mobile"
-		;r=r.replace(e.getAttribute(a),e.getAttribute(n))}e.src=r}var y={hidden:"[X]",exit:"[X]",reset:"[R]",fullscreen:"[R]"};function v(e){
-		return document.querySelector(`a[data-frame-id="${e}"]`)}function b(e,t){const r=v(e);r&&(m(`gate ${e}: ${t}`),r.dataset.state=t,
-		r.textContent=y[t],"hidden"===t?r.style.display="none":r.style.removeProperty("display"))}function k(e){
-		return document.getElementById(e).parentElement.querySelector(".overlay")}function E(e){k(e).style.display="none",b(e,"exit")}
-		function x(e,t){const r="hr"===t.getAttribute("data-mode")?"eu":"hr",a=f(e);a.setAttribute("data-zoom-mode",r),g(a),
-		t.setAttribute("data-mode",r),t.textContent="hr"===r?"[HR]":"[EU]","reset"===function(e){const t=v(e)
-		;return t?t.dataset.state||"hidden":null}(e)&&b(e,"hidden")}var z=new WeakMap;function S(e){e.classList.remove("fullscreen")
+		;r=r.replace(e.getAttribute(a),e.getAttribute(n))}e.src=r}var v={hidden:"[X]",exit:"[X]",reset:"[R]",fullscreen:"[R]"};function y(e){
+		return document.querySelector(`a[data-frame-id="${e}"]`)}function k(e,t){const r=y(e);r&&(m(`gate ${e}: ${t}`),r.dataset.state=t,
+		r.textContent=v[t],"hidden"===t?r.style.display="none":r.style.removeProperty("display"))}function b(e){
+		return document.getElementById(e).parentElement.querySelector(".overlay")}function E(e){b(e).style.display="none",k(e,"exit")}
+		function x(e,t){const r="hr"===t.getAttribute("data-mode")?"eu":"hr",a=g(e);a.setAttribute("data-zoom-mode",r),f(a),
+		t.setAttribute("data-mode",r),t.textContent="hr"===r?"[HR]":"[EU]","reset"===function(e){const t=y(e)
+		;return t?t.dataset.state||"hidden":null}(e)&&k(e,"hidden")}var z=new WeakMap;function A(e){e.classList.remove("fullscreen")
 		;const t=e.previousElementSibling;t.classList.remove("fullscreen");const r=t.querySelector(".fs-btn");r&&(r.textContent="[ ]"),
 		l(".if1.fullscreen").some(e=>!e.closest(".map-block.snapped"))||document.body.classList.remove("fs-lock"),n(a);const o=!1===z.get(e)
 		;z.delete(e);const i=c(".overlay",e);i&&(o?i.style.display="none":i.removeAttribute("style")),
-		b(e.querySelector("iframe").id,o?"exit":"reset")}var A=new WeakMap;function L(){const e=p();l(".hint").forEach(t=>{
+		k(e.querySelector("iframe").id,o?"exit":"reset")}var S=new WeakMap;function j(){const e=p();l(".hint").forEach(t=>{
 		t.textContent=e?"Dvostruki dodir za pristup interaktivnoj karti":"Dvostruki klik za pristup interaktivnoj karti"})}
-		var _="mapConfig",R="showLinksBottom",j=new Map;function M(e){try{return JSON.parse(j.has(e)?j.get(e):localStorage.getItem(e))}catch{
-		return null}}function H(e,t){const r=JSON.stringify(t);try{localStorage.setItem(e,r),j.delete(e)}catch{j.set(e,r)}}function C(e){
-		const t=e&&e.maps&&"object"==typeof e.maps?e.maps:{};return new Set(Object.keys(t).filter(e=>t[e]&&!1===t[e].enabled))}function D(){
-		return M(_)}var W=new Set;var I={telemetry:!1};function T(e){const t=e&&e.features&&"object"==typeof e.features?e.features:{}
-		;return Object.fromEntries(Object.keys(I).map(e=>{const r=t[e]&&t[e].enabled;return[e,"boolean"==typeof r?r:I[e]]}))}var O=null
-		;function V(e){return O||(O=T(D())),!!O[e]}var F="https://meteo-data.jurakovic.workers.dev/t",P=new Map,B=0,U="",N=!1,Z=!1;function q(){
-		return!!U&&(V("telemetry")||d())}function $(e,t=""){if(!q())return;const r=JSON.stringify([e,String(t)]);P.set(r,(P.get(r)||0)+1),
-		m("telemetry:",e,t)}function X(e,t){!q()||B>=5||(B++,$("error",`${String(e).slice(0,160)} @ ${t}`))}function Y(e,t=!1){
+		var L="mapConfig",R="showLinksBottom",H=new Map;function M(e){try{return JSON.parse(H.has(e)?H.get(e):localStorage.getItem(e))}catch{
+		return null}}function C(e,t){const r=JSON.stringify(t);try{localStorage.setItem(e,r),H.delete(e)}catch{H.set(e,r)}}function D(e){
+		const t=e&&e.maps&&"object"==typeof e.maps?e.maps:{};return new Set(Object.keys(t).filter(e=>t[e]&&!1===t[e].enabled))}function _(){
+		return M(L)}var W=new Set;var I={telemetry:!1};function T(e){const t=e&&e.features&&"object"==typeof e.features?e.features:{}
+		;return Object.fromEntries(Object.keys(I).map(e=>{const r=t[e]&&t[e].enabled;return[e,"boolean"==typeof r?r:I[e]]}))}var V=null
+		;function O(e){return V||(V=T(_())),!!V[e]}var F="https://meteo-data.jurakovic.workers.dev/t",B=new Map,P=0,N="",Z=!1,U=!1;function q(){
+		return!!N&&(O("telemetry")||d())}function $(e,t=""){if(!q())return;const r=JSON.stringify([e,String(t)]);B.set(r,(B.get(r)||0)+1),
+		m("telemetry:",e,t)}function X(e,t){!q()||P>=5||(P++,$("error",`${String(e).slice(0,160)} @ ${t}`))}function Y(e,t=!1){
 		const r=e.target instanceof Element?e.target.closest('a, button, summary, [role="button"], input[type="checkbox"], input[type="radio"], [data-track]'):null
 		;if(!r||r.closest("[data-action]"))return;const[a,n]=function(e){const t=e.getAttribute("data-track");if(t)return["click",t]
 		;const r="A"===e.tagName?e.getAttribute("href"):null;if(r){if(r.startsWith("#"))return["link",r];const e=new URL(r,window.location.href)
 		;return["link",e.origin===window.location.origin?e.pathname:e.hostname]}const a=e.classList[0]
-		;return["click",e.tagName.toLowerCase()+(a?`.${a}`:"")]}(r);t&&"link"!==a||$(a,n)}function K(){!Z&&q()&&(Z=!0,$("view"))}function Q(){
-		const e=function(){if(!P.size)return null;const e=[...P].map(([e,t])=>{const[r,a]=JSON.parse(e);return{name:r,value:a,n:t}})
-		;return P.clear(),e.sort((e,t)=>Number("error"===t.name)-Number("error"===e.name)),{page:U,events:e}}();if(!e)return
-		;const t=N&&V("telemetry");m(t?"telemetry: sent":`telemetry: not sent (${N?"switched off":"not the live site"})`,e),
+		;return["click",e.tagName.toLowerCase()+(a?`.${a}`:"")]}(r);t&&"link"!==a||$(a,n)}function Q(){!U&&q()&&(U=!0,$("view"))}function K(){
+		const e=function(){if(!B.size)return null;const e=[...B].map(([e,t])=>{const[r,a]=JSON.parse(e);return{name:r,value:a,n:t}})
+		;return B.clear(),e.sort((e,t)=>Number("error"===t.name)-Number("error"===e.name)),{page:N,events:e}}();if(!e)return
+		;const t=Z&&O("telemetry");m(t?"telemetry: sent":`telemetry: not sent (${Z?"switched off":"not the live site"})`,e),
 		t&&navigator.sendBeacon(F,JSON.stringify(e))}function J(e,t,r){return Math.min(Math.max(e,t),Math.max(t,r))}function G(e){
 		return Math.round(1e4*e)/1e4}var ee=0;function te(e){ee=e}function re(){return document.documentElement.clientWidth-ee}function ae(){
 		return document.documentElement.clientHeight}var ne=["n","ne","e","se","s","sw","w","nw"];var oe=120;function ie(){return l(".dialog")}
 		function se(){return ie().find(e=>!e.hidden)||null}function le(){return!!se()}function ce(e){return e.getAttribute("data-dialog-key")}
-		function de(e){const t=ce(e);t&&function(e){j.delete(e);try{localStorage.removeItem(e)}catch{}}(t)}function me(){
+		function de(e){const t=ce(e);t&&function(e){H.delete(e);try{localStorage.removeItem(e)}catch{}}(t)}function me(){
 		return Math.max(500,re()-16)}function he(){return Math.max(oe,ae()-16)}function pe(e,t,r,a,n){a=J(a,500,me()),
 		e.style.width=`${Math.round(a)}px`,e.style.maxWidth="none",e.style.right="auto",e.style.margin="0",null===n?(e.style.height="",
 		e.style.maxHeight=`${Math.round(Math.max(oe,ae()-Math.max(0,r)-8))}px`):(e.style.maxHeight="none",
@@ -302,7 +301,7 @@
 		["left","top","width","height","maxWidth","maxHeight","right","margin"].forEach(t=>e.style[t]="")}function we(e){if(!e||e.hidden)return
 		;const t=h.matches?function(e){const t=ce(e);if(!t)return null;const r=M(t)
 		;return r&&"object"==typeof r&&Number.isFinite(r.left)&&Number.isFinite(r.top)&&r.width>0?{left:r.left,top:r.top,width:r.width,
-		height:r.height>0?r.height:null}:null}(e):null;t?pe(e,t.left*re(),t.top*ae(),t.width,t.height):ue(e)}function fe(e){
+		height:r.height>0?r.height:null}:null}(e):null;t?pe(e,t.left*re(),t.top*ae(),t.width,t.height):ue(e)}function ge(e){
 		e.addEventListener("pointerdown",t=>{if(0!==t.button||!h.matches)return
 		;const r=t.target.closest(".po-h"),a=!r&&t.target.closest(".dialog-head")&&!t.target.closest("a, button, input");if(!r&&!a)return
 		;t.preventDefault();const n=e.getBoundingClientRect(),o=r?r.dataset.dir:null,i=e.style.height?n.height:null;let s=!1;!function(e,t,r,a){
@@ -316,14 +315,14 @@
 		;return e.includes("e")&&(n=t.width+r),e.includes("w")&&(n=t.width-r),e.includes("s")&&(o=t.height+a),e.includes("n")&&(o=t.height-a),{w:n,
 		h:o}}(o,n,t,r);a=J(a,500,me()),l=J(l,oe,he()),pe(e,o.includes("w")?n.right-a:n.left,o.includes("n")?n.bottom-l:n.top,a,l)},()=>{
 		s&&function(e){const t=ce(e);if(!t)return;const r=e.getBoundingClientRect(),a={left:G(r.left/re()),top:G(r.top/ae()),
-		width:Math.round(r.width)};e.style.height&&(a.height=Math.round(r.height)),H(t,a)}(e)})}),e.addEventListener("dblclick",t=>{
-		h.matches&&t.target.closest(".dialog-head")&&!t.target.closest("a, button, input")&&(ue(e),de(e))})}function ge(t,r){n(e,{panel:t,visible:r
-		})}function ye(e,t){t&&ie().forEach(t=>{t===e||t.hidden||(t.hidden=!0,ge(t,!1))}),e.hidden=!t,function(){const e=le()
+		width:Math.round(r.width)};e.style.height&&(a.height=Math.round(r.height)),C(t,a)}(e)})}),e.addEventListener("dblclick",t=>{
+		h.matches&&t.target.closest(".dialog-head")&&!t.target.closest("a, button, input")&&(ue(e),de(e))})}function fe(t,r){n(e,{panel:t,visible:r
+		})}function ve(e,t){t&&ie().forEach(t=>{t===e||t.hidden||(t.hidden=!0,fe(t,!1))}),e.hidden=!t,function(){const e=le()
 		;if(e&&!document.documentElement.classList.contains("dialog-gutter")){const e=window.innerWidth-document.documentElement.clientWidth
 		;e>0&&(te(e),document.documentElement.classList.add("dialog-gutter"))}else e||(te(0),
 		document.documentElement.classList.remove("dialog-gutter"));document.body.classList.toggle("dialog-open",e);const t=c(".dialog-backdrop")
-		;t&&(t.hidden=!e,e&&t.classList.remove("dialog-spent"))}(),t&&we(e),ge(e,t)}function ve(e){e&&ye(e,e.hidden)}function be(){const e=se()
-		;return e&&ye(e,!1),!!e}function ke(e,t){
+		;t&&(t.hidden=!e,e&&t.classList.remove("dialog-spent"))}(),t&&we(e),fe(e,t)}function ye(e){e&&ve(e,e.hidden)}function ke(){const e=se()
+		;return e&&ve(e,!1),!!e}function be(e,t){
 		const r=e.getAttribute("data-slideshow-id"),a=e.querySelectorAll(".slide"),n=document.querySelectorAll(`.indicators-container[data-slideshow-id="${r}"] .indicator`)
 		;let o=t;o>a.length&&(o=1),o<1&&(o=a.length),e.setAttribute("data-current-slide",o),a.forEach(e=>e.classList.remove("active")),
 		a[o-1].classList.add("active"),n.forEach(e=>e.classList.remove("active")),n[o-1].classList.add("active"),function(e){
@@ -339,26 +338,26 @@
 		0===e.touches.length&&(t=!1)})})}(e),function(e){let t=null;e.addEventListener("mousedown",e=>{t={x:e.clientX,y:e.clientY}}),
 		e.addEventListener("mouseup",r=>{t&&(xe(e,t,{x:r.clientX,y:r.clientY}),t=null)}),e.addEventListener("mouseleave",()=>{t=null})}(e)})}
 		function xe(e,t,r){Math.abs(r.x-t.x)>Math.abs(r.y-t.y)&&function(e,t,r){const a=r-t;if(Math.abs(a)>50){
-		const t=parseInt(e.getAttribute("data-current-slide"));ke(e,t+(a>0?-1:1))}}(e,t.x,r.x)}var ze=new Map,Se=[]
-		;function Ae(e,{run:t,keys:r=[],keyWhen:a=()=>!0,keepDefault:n=!1,capture:o=!1}){const i={id:e,run:t,keys:r,keyWhen:a,keepDefault:n,
-		capture:o};ze.set(e,i),r.length&&Se.push(i)}function Le(e,t=null,r=null){!1!==e.run(t,r)&&$("command",e.id)}function _e(e){
+		const t=parseInt(e.getAttribute("data-current-slide"));be(e,t+(a>0?-1:1))}}(e,t.x,r.x)}var ze=new Map,Ae=[]
+		;function Se(e,{run:t,keys:r=[],keyWhen:a=()=>!0,keepDefault:n=!1,capture:o=!1}){const i={id:e,run:t,keys:r,keyWhen:a,keepDefault:n,
+		capture:o};ze.set(e,i),r.length&&Ae.push(i)}function je(e,t=null,r=null){!1!==e.run(t,r)&&$("command",e.id)}function Le(e){
 		const t=document.getElementById(e);t&&t.scrollIntoView({behavior:"smooth",block:"start"})}function Re(e){
 		const t=e.scrollWidth-e.clientWidth,r=e.scrollLeft;e.classList.toggle("can-scroll-left",r>1),
-		e.classList.toggle("can-scroll-right",t>1&&r<t-1)}function je(){l(".links-bottom").forEach(Re)}var Me=0,He=0;function Ce(){
+		e.classList.toggle("can-scroll-right",t>1&&r<t-1)}function He(){l(".links-bottom").forEach(Re)}var Me=0,Ce=0;function De(){
 		l("img.lazy").forEach(e=>{e.src=e.getAttribute("data-src"),e.classList.remove("lazy")}),Ee(),w(!0),
-		l(".if1 .overlay:not([data-tap]), .if3 .overlay:not([data-tap])").forEach(e=>{e.setAttribute("data-tap","");const t=e.dataset.frameId
-		;let r=0,a=!1;e.addEventListener("dblclick",()=>E(t)),e.addEventListener("touchstart",e=>{e.touches.length>1&&(a=!0)}),
-		e.addEventListener("touchend",e=>{if(a)return void(0===e.touches.length&&(a=!1,r=0));const n=(new Date).getTime(),o=n-r;o>0&&o<200&&(E(t),
-		e.preventDefault()),r=n});const n=e.querySelector(".hint");let o=0,i=0;e.addEventListener("touchstart",e=>{
-		1===e.touches.length&&(i=e.touches[0].clientX,o=e.touches[0].clientY)}),e.addEventListener("touchend",e=>{if(!n)return
+		l(".if1 .overlay:not([data-tap])").forEach(e=>{e.setAttribute("data-tap","");const t=e.dataset.frameId;let r=0,a=!1
+		;e.addEventListener("dblclick",()=>E(t)),e.addEventListener("touchstart",e=>{e.touches.length>1&&(a=!0)}),e.addEventListener("touchend",e=>{
+		if(a)return void(0===e.touches.length&&(a=!1,r=0));const n=(new Date).getTime(),o=n-r;o>0&&o<200&&(E(t),e.preventDefault()),r=n})
+		;const n=e.querySelector(".hint");let o=0,i=0;e.addEventListener("touchstart",e=>{1===e.touches.length&&(i=e.touches[0].clientX,
+		o=e.touches[0].clientY)}),e.addEventListener("touchend",e=>{if(!n)return
 		;const t=Math.abs(e.changedTouches[0].clientX-i),r=Math.abs(e.changedTouches[0].clientY-o);t<10&&r<10&&(n.style.opacity="0.6",
-		clearTimeout(A.get(n)),A.set(n,setTimeout(()=>n.style.removeProperty("opacity"),2e3)))})}),L(),l(".links-bottom").forEach(e=>{
-		e.addEventListener("scroll",()=>Re(e),{passive:!0})}),je(),function(){
-		const e=document.querySelectorAll("img"),t=c(".progress-bar"),r=c(".progress-container"),a=new Set(e),n=++Me;if(clearTimeout(He),
+		clearTimeout(S.get(n)),S.set(n,setTimeout(()=>n.style.removeProperty("opacity"),2e3)))})}),j(),l(".links-bottom").forEach(e=>{
+		e.addEventListener("scroll",()=>Re(e),{passive:!0})}),He(),function(){
+		const e=document.querySelectorAll("img"),t=c(".progress-bar"),r=c(".progress-container"),a=new Set(e),n=++Me;if(clearTimeout(Ce),
 		t.style.width="0",r.style.removeProperty("display"),0===e.length)return void(r.style.display="none");const o=o=>{
-		Me===n&&a.delete(o)&&(t.style.width=(e.length-a.size)/e.length*100+"%",0===a.size&&(He=setTimeout(()=>{r.style.display="none"},500)))}
+		Me===n&&a.delete(o)&&(t.style.width=(e.length-a.size)/e.length*100+"%",0===a.size&&(Ce=setTimeout(()=>{r.style.display="none"},500)))}
 		;e.forEach(e=>{e.addEventListener("load",()=>o(e)),e.addEventListener("error",()=>{m(`Error loading image: ${e.src}`),
-		e.removeAttribute("src"),o(e)}),e.complete&&e.dispatchEvent(new Event("load"))})}()}var De=0;var We=[{text:"Windy",
+		e.removeAttribute("src"),o(e)}),e.complete&&e.dispatchEvent(new Event("load"))})}()}var _e=0;var We=[{text:"Windy",
 		href:"https://www.windy.com/-Weather-radar-radar?radar,44.5,16.5,7"},{text:"Zoom Earth",
 		href:"https://zoom.earth/maps/radar/#view=44.5,16.5,7z"},{text:"meteoblue",
 		href:"https://www.meteoblue.com/en/weather/maps/croatia_croatia_3202326#map=radar~radarMapEU~none~none~none&coords=6/44.5/16.5"},{
@@ -381,22 +380,22 @@
 		text:"Ventusky",href:"https://www.ventusky.com/?p=47.5;17.5;4&l=satellite&w=off"},{text:"Sat24",
 		href:"https://www.sat24.com/en-gb/continent/eu/hd"},{text:"I'm Weather",
 		href:"https://imweather.com/?model=nowcast&element=satellite&run=&member=&level=&lat=47.5000&lng=17.5000&z=4.2"},{text:"Wetterzentrale",
-		href:"https://www.wetterzentrale.de/en/reanalysis.php?map=1&model=sat&var=404&nmaps=32"}],Oe=[{text:"Windy",
+		href:"https://www.wetterzentrale.de/en/reanalysis.php?map=1&model=sat&var=404&nmaps=32"}],Ve=[{text:"Windy",
 		href:"https://www.windy.com/-Temperature-temp?temp,44.5,16.5,7"},{text:"Zoom Earth",
 		href:"https://zoom.earth/maps/temperature/#view=44.5,16.5,7z/model=icon"},{text:"meteoblue",
 		href:"https://www.meteoblue.com/en/weather/maps/croatia_croatia_3202326#map=temperature~daily-max~auto~2%20m%20above%20gnd~none&coords=6/44.5/16.5"
 		},{text:"Ventusky",href:"https://www.ventusky.com/?p=44.49;16.50;6&l=temperature-2m&w=off"},{text:"Vrijeme&Radar",
 		href:"https://www.vrijemeradar.hr/vremenski-radar/zagreb/18138691?center=44.5,16.5&zoom=7&layer=tr&tz=Europe%2FZagreb"},{text:"Meteoradar",
 		href:"https://www.meteoradar.co.uk/en-gb/country/hr/maps/temperature"},{text:"Meteociel",
-		href:"https://www.meteociel.fr/observations-meteo/temperatures.php?region=it"},{text:"Pljusak",href:"https://pljusak.com/karta.php"}],Ve=[{
+		href:"https://www.meteociel.fr/observations-meteo/temperatures.php?region=it"},{text:"Pljusak",href:"https://pljusak.com/karta.php"}],Oe=[{
 		text:"ESSL",href:"https://weather.essl.org/storm/"},{text:"ASTORP",href:"https://rawinsonde.com/ASTORP/ESTOFEX.html"},{text:"ESTOFEX",
 		href:"https://www.estofex.org"},{text:"ESWD",href:"https://www.eswd.eu"},{text:"Meteoalarm",href:"https://meteoalarm.org/en/live/region/HR"
 		}],Fe=[{text:"ČHMÚ",href:"https://www.chmi.cz/predpoved-pocasi/synopticka-situace"},{text:"DHMZ",
 		href:"https://meteo.hr/prognoze.php?section=prognoze_model&param=web_fronte_sutra12"},{text:"DWD",
-		href:"https://www.dwd.de/EN/ourservices/hobbymet_wcharts_europe/hobbyeuropecharts.html"}];function Pe(e,t){return e.filter(e=>e.text!==t)}
-		function Be(e,t){return{id:`dhmz-${e}`,category:"radar",name:`DHMZ | MRC ${t}`,type:"slideshow",
+		href:"https://www.dwd.de/EN/ourservices/hobbymet_wcharts_europe/hobbyeuropecharts.html"}];function Be(e,t){return e.filter(e=>e.text!==t)}
+		function Pe(e,t){return{id:`dhmz-${e}`,category:"radar",name:`DHMZ | MRC ${t}`,type:"slideshow",
 		titleHref:`https://meteo.hr/podaci.php?section=podaci_mjerenja&param=radari&el=${e}&acto=anim`,maxWidth:720,aspect:"720 / 751",
-		slides:[`https://vrijeme.hr/anim_${e}.gif`,`https://vrijeme.hr/${e}-stat.png`]}}var Ue=[{id:"neverin-radar-hr",category:"radar",
+		slides:[`https://vrijeme.hr/anim_${e}.gif`,`https://vrijeme.hr/${e}-stat.png`]}}var Ne=[{id:"neverin-radar-hr",category:"radar",
 		name:"Neverin | Radar | Hrvatska",type:"slideshow",titleHref:"https://www.neverin.hr/radar/",aspect:"880 / 640",startSlide:2,
 		slides:["https://maps.neverin.hr/radar/latest/hr/latest.webp","https://maps.neverin.hr/radar/latest/hr/anim.webp","https://maps.neverin.hr/radar/latest/hr/anim_6h.webp"],
 		links:We},{id:"neverin-satelit-hr",category:"satelit",name:"Neverin | Satelit | Hrvatska",type:"slideshow",
@@ -418,13 +417,13 @@
 		srcHr:"https://embed.windy.com/embed2.html?lat=44.5&lon=16.56&zoom=7&level=surface&overlay=radar&menu=&message=true&marker=&calendar=&pressure=&type=map&location=coordinates&detail=&detailLat=45.798&detailLon=15.936&metricWind=m%2Fs&metricTemp=%C2%B0C&radarRange=-1",
 		zoomHrDesktop:"&zoom=7",zoomHrMobile:"&zoom=6",
 		srcEu:"https://embed.windy.com/embed2.html?lat=48.0&lon=10.00&zoom=5&level=surface&overlay=radar&menu=&message=true&marker=&calendar=&pressure=&type=map&location=coordinates&detail=&detailLat=45.798&detailLon=15.936&metricWind=m%2Fs&metricTemp=%C2%B0C&radarRange=-1",
-		zoomEuDesktop:"&zoom=5",zoomEuMobile:"&zoom=3",links:Pe(We,"Windy")},{id:"dhmz-radar",category:"radar",name:"DHMZ | Radar | Hrvatska",
+		zoomEuDesktop:"&zoom=5",zoomEuMobile:"&zoom=3",links:Be(We,"Windy")},{id:"dhmz-radar",category:"radar",name:"DHMZ | Radar | Hrvatska",
 		type:"slideshow",titleHref:"https://meteo.hr/podaci.php?section=podaci_mjerenja&param=radari&el=kompozit&acto=anim",maxWidth:720,
 		aspect:"720 / 751",slides:["https://vrijeme.hr/anim_kompozit.gif","https://vrijeme.hr/kompozit-stat.png"],links:We},{id:"meteociel-temp",
 		category:"temperatura",name:"Meteociel.fr | Temperatura",type:"slideshow",maxWidth:768,slides:[{title:{text:"Meteociel.fr | Temperatura",
 		href:"https://www.meteociel.fr/observations-meteo/temperatures.php?region=it"},img:"https://www.meteociel.fr/cartes_obs/temp_it.png",
 		aspect:"1"},{title:{text:"Meteociel.fr | Temperatura",href:"https://www.meteociel.fr/observations-meteo/temperatures.php?region=eur2"},
-		img:"https://www.meteociel.com/cartes_obs/temp_eur2.png",aspect:"1"}],links:Pe(Oe,"Meteociel")},{id:"blitzortung",category:"munje",
+		img:"https://www.meteociel.com/cartes_obs/temp_eur2.png",aspect:"1"}],links:Be(Ve,"Meteociel")},{id:"blitzortung",category:"munje",
 		name:"Blitzortung.org | Munje",type:"iframe",frameId:"blitzortung",titleHref:"https://map.blitzortung.org/#6/44.5/16.5",
 		srcHr:"https://map.blitzortung.org/index.php?interactive=1&NavigationControl=1&FullScreenControl=0&Cookies=0&InfoDiv=0&MenuButtonDiv=0&ScaleControl=0&CirclesRangeValue=1&LinksCheckboxChecked=0&LinksRangeValue=0&MapStyle=1&MapStyleRangeValue=3&Advertisment=0#6/44.5/16.5",
 		zoomHrDesktop:"#6/",zoomHrMobile:"#5/",
@@ -434,13 +433,13 @@
 		text:"Neverin",href:"https://www.neverin.hr/munje/"}]},{id:"essl",category:"nevrijeme",name:"ESSL | Prognoza nevremena",type:"slideshow",
 		titleHref:"https://stormforecast.eu",maxWidth:900,aspect:"900 / 600",startSlide:2,
 		slides:["https://meteo-data.jurakovic.workers.dev/essl/img1.png","https://meteo-data.jurakovic.workers.dev/essl/img2.png","https://meteo-data.jurakovic.workers.dev/essl/img3.png"],
-		links:Pe(Ve,"ESSL")},{id:"astorp",category:"nevrijeme",name:"ASTORP | Prognoza nevremena",type:"slideshow",
+		links:Be(Oe,"ESSL")},{id:"astorp",category:"nevrijeme",name:"ASTORP | Prognoza nevremena",type:"slideshow",
 		titleHref:"https://rawinsonde.com/ASTORP/ESTOFEX.html",aspect:"1048 / 850",
 		slides:["https://rawinsonde.com/ASTORP/Results/ESTOFEX_DAY_1.jpg","https://rawinsonde.com/ASTORP/Results/ESTOFEX_DAY_2.jpg","https://rawinsonde.com/ASTORP/Results/ESTOFEX_DAY_3.jpg","https://rawinsonde.com/ASTORP/Results/ESTOFEX_DAY_4.jpg","https://rawinsonde.com/ASTORP/Results/ESTOFEX_DAY_5.jpg","https://rawinsonde.com/ASTORP/Results/ESTOFEX_DAY_6.jpg","https://rawinsonde.com/ASTORP/Results/ESTOFEX_DAY_7.jpg"],
-		links:Pe(Ve,"ASTORP")},{id:"estofex",category:"nevrijeme",name:"ESTOFEX | Prognoza nevremena",type:"slideshow",
+		links:Be(Oe,"ASTORP")},{id:"estofex",category:"nevrijeme",name:"ESTOFEX | Prognoza nevremena",type:"slideshow",
 		titleHref:"https://www.estofex.org",maxWidth:800,aspect:"1",
 		slides:["https://meteo-data.jurakovic.workers.dev/estofex/img1.png","https://meteo-data.jurakovic.workers.dev/estofex/img2.png"],
-		links:Pe(Ve,"ESTOFEX")},{id:"eumetnet",category:"radar",name:"EUMETNET",type:"iframe-basic",
+		links:Be(Oe,"ESTOFEX")},{id:"eumetnet",category:"radar",name:"EUMETNET",type:"iframe-basic",
 		titleHref:"https://www.eumetnet.eu/observations/opera-radar-animation/",src:"https://cdn.fmi.fi/demos/eumetnet-web-site-radar-animator/",
 		links:Ie},{id:"meteociel-satelit",category:"satelit",name:"Meteociel.fr | Satelit",type:"slideshow",maxWidth:768,slides:[{title:{
 		text:"Meteociel.fr | Satelit",
@@ -456,20 +455,20 @@
 		href:"https://www.chmi.cz/predpoved-pocasi/synopticka-situace"},
 		img:"https://intranet.chmi.cz/files/portal/docs/meteo/om/evropa/preba/preba60.gif",aspect:"760 / 435"},{title:{
 		href:"https://www.chmi.cz/predpoved-pocasi/synopticka-situace"},
-		img:"https://intranet.chmi.cz/files/portal/docs/meteo/om/evropa/preba/preba84.gif",aspect:"760 / 435"}],links:Pe(Fe,"ČHMÚ")},{
+		img:"https://intranet.chmi.cz/files/portal/docs/meteo/om/evropa/preba/preba84.gif",aspect:"760 / 435"}],links:Be(Fe,"ČHMÚ")},{
 		id:"neverin-kamera",category:"kamera",name:"Neverin | Kamera | Zagreb",title:"Neverin | Kamera | Zagreb-Remetinečki rotor",type:"image",
 		titleHref:"https://www.neverin.hr/kamere/",aspect:"1280 / 720",img:"https://webcams.neverin.hr/7332072588/latest.jpg"},{
-		id:"meteoblue-prognoza",category:"prognoza",name:"meteoblue | Prognoza",type:"slideshow",slides:[{title:{
+		id:"meteoblue-prognoza",category:"prognoza",name:"meteoblue | Prognoza",type:"slideshow",eagerSlides:!0,slides:[{title:{
 		text:"meteoblue | Prognoza | Zagreb",href:"https://www.meteoblue.com/en/weather/week/zagreb_croatia_3186886"},
-		frame:"https://www.meteoblue.com/en/weather/widget/meteogram/zagreb_croatia_3186886?geoloc=fixed&temperature_units=CELSIUS&windspeed_units=KILOMETER_PER_HOUR&precipitation_units=MILLIMETER&forecast_days=5&layout=dark&autowidth=auto&user_key=d6c944dcfa23c1de&embed_key=a4c8e80861792d46&sig=b9e5dc2debd7b0ebee1cfa142badc1fc601ae61d0a6b866b54ed49cc7fe3bb16",
-		aspect:"1700 / 1300"},{title:{text:"meteoblue | Prognoza | Split",href:"https://www.meteoblue.com/en/weather/week/split_croatia_3190261"},
-		frame:"https://www.meteoblue.com/en/weather/widget/meteogram/split_croatia_3190261?geoloc=fixed&temperature_units=CELSIUS&windspeed_units=KILOMETER_PER_HOUR&precipitation_units=MILLIMETER&forecast_days=5&layout=dark&autowidth=auto&user_key=d6c944dcfa23c1de&embed_key=8ccaeab9f63d36ea&sig=84e416503549d427b4828b819e65423881bcb37c65a878bbd69e1078c206e252",
-		aspect:"1700 / 1300"},{title:{text:"meteoblue | Prognoza | Rijeka",href:"https://www.meteoblue.com/en/weather/week/rijeka_croatia_3191648"},
-		frame:"https://www.meteoblue.com/en/weather/widget/meteogram/rijeka_croatia_3191648?geoloc=fixed&temperature_units=CELSIUS&windspeed_units=KILOMETER_PER_HOUR&precipitation_units=MILLIMETER&forecast_days=5&layout=dark&autowidth=auto&user_key=d6c944dcfa23c1de&embed_key=9f589d2836e95ef7&sig=beb60bab997ab12c27a10f416692c3d63cfc69ab3256f3845efd149133f5a165",
-		aspect:"1700 / 1300"},{title:{text:"meteoblue | Prognoza | Osijek",href:"https://www.meteoblue.com/en/weather/week/osijek_croatia_3193935"},
-		frame:"https://www.meteoblue.com/en/weather/widget/meteogram/osijek_croatia_3193935?geoloc=fixed&temperature_units=CELSIUS&windspeed_units=KILOMETER_PER_HOUR&precipitation_units=MILLIMETER&forecast_days=5&layout=dark&autowidth=auto&user_key=d6c944dcfa23c1de&embed_key=0ee635437c5c5bd7&sig=d67d7c23ac5b46618e806c8009cd5ff3bea5280d801fc3dd2791b77c8a2c8965",
-		aspect:"1700 / 1300"}],links:[{text:"DHMZ",href:"https://meteo.hr"},{text:"HRT Vrijeme",href:"https://vrijeme-i-promet.hrt.hr/vrijeme/"},{
-		text:"Pljusak",href:"https://pljusak.com/karta.php"},{text:"Neverin",href:"https://www.neverin.hr/prognoza/zagreb/"},{text:"Yr.no",
+		img:"https://meteo-data.jurakovic.workers.dev/meteoblue/meteogram/zagreb.png",aspect:"1700 / 1300"},{title:{
+		text:"meteoblue | Prognoza | Split",href:"https://www.meteoblue.com/en/weather/week/split_croatia_3190261"},
+		img:"https://meteo-data.jurakovic.workers.dev/meteoblue/meteogram/split.png",aspect:"1700 / 1300"},{title:{
+		text:"meteoblue | Prognoza | Rijeka",href:"https://www.meteoblue.com/en/weather/week/rijeka_croatia_3191648"},
+		img:"https://meteo-data.jurakovic.workers.dev/meteoblue/meteogram/rijeka.png",aspect:"1700 / 1300"},{title:{
+		text:"meteoblue | Prognoza | Osijek",href:"https://www.meteoblue.com/en/weather/week/osijek_croatia_3193935"},
+		img:"https://meteo-data.jurakovic.workers.dev/meteoblue/meteogram/osijek.png",aspect:"1700 / 1300"}],links:[{text:"DHMZ",
+		href:"https://meteo.hr"},{text:"HRT Vrijeme",href:"https://vrijeme-i-promet.hrt.hr/vrijeme/"},{text:"Pljusak",
+		href:"https://pljusak.com/karta.php"},{text:"Neverin",href:"https://www.neverin.hr/prognoza/zagreb/"},{text:"Yr.no",
 		href:"https://www.yr.no/en/details/table/2-3186886/Croatia/City%20of%20Zagreb/Zagreb"},{text:"Wetterzentrale",
 		href:"https://www.wetterzentrale.de/en/show_diagrams.php?geoid=54032&model=ecm&var=93&run=6&lid=OP&bw=1"}]},{id:"yr-prognoza",
 		category:"prognoza",name:"Yr | Prognoza",type:"slideshow",eagerSlides:!0,vector:!0,slides:[{title:{text:"Yr | Prognoza | Zagreb",
@@ -483,18 +482,18 @@
 		img:"https://www.yr.no/en/content/2-3193935/meteogram.svg?mode=dark",aspect:"782 / 391"}]},{id:"ventusky",category:"radar",name:"Ventusky",
 		type:"iframe",frameId:"ventusky",scaled:!0,loading:"eager",titleHref:"https://www.ventusky.com/?p=44.5;16.5;6&l=radar&w=off",
 		srcHr:"https://embed.ventusky.com/?p=44.5;16.5;6&l=radar&w=off",zoomHrDesktop:";6&",zoomHrMobile:";6&",
-		srcEu:"https://embed.ventusky.com/?p=48.0;10.0;4&l=radar&w=off",zoomEuDesktop:";4&",zoomEuMobile:";3&",links:Pe(We,"Ventusky")},{
+		srcEu:"https://embed.ventusky.com/?p=48.0;10.0;4&l=radar&w=off",zoomEuDesktop:";4&",zoomEuMobile:";3&",links:Be(We,"Ventusky")},{
 		id:"rainviewer",category:"radar",name:"Rain Viewer",type:"iframe",frameId:"rainViewer",scaled:!0,
 		titleHref:"https://www.rainviewer.com/map.html?loc=44.5,16.5,6&oCS=1&c=5&lm=1&layer=radar&sm=1&sn=2&ts=1",
 		srcHr:"https://www.rainviewer.com/map.html?loc=44.8,16.5,6.3&oCS=1&c=5&lm=1&layer=radar&sm=1&sn=2&ts=1",zoomHrDesktop:",6.3&",
 		zoomHrMobile:",5.8&",srcEu:"https://www.rainviewer.com/map.html?loc=48.0,10.0,4.0&oCS=1&c=5&lm=1&layer=radar&sm=1&sn=2&ts=1",
-		zoomEuDesktop:",4.0&",zoomEuMobile:",3.2&",links:Pe(We,"Rain Viewer")},{id:"weatherandradar",category:"radar",name:"Vrijeme&Radar",
+		zoomEuDesktop:",4.0&",zoomEuMobile:",3.2&",links:Be(We,"Rain Viewer")},{id:"weatherandradar",category:"radar",name:"Vrijeme&Radar",
 		type:"iframe",frameId:"weatherAndRadar",scaled:!0,
 		titleHref:"https://www.vrijemeradar.hr/vremenski-radar/zagreb/18138691?center=44.5,16.5&zoom=7&layer=wr&tz=Europe%2FZagreb",
 		srcHr:"https://radar.wo-cloud.com/pwa/?center=44.5,16.5&zoom=7.2&tz=Europe/Zagreb&tf=HH:mm&tempunit=celsius&windunit=kph&showShareButton=false&lang=en-US&placemarkName=Zagreb&desktop=true&fadeTop=true",
 		zoomHrDesktop:"&zoom=7.2",zoomHrMobile:"&zoom=6.8",
 		srcEu:"https://radar.wo-cloud.com/pwa/?center=48.0,10.0&zoom=5.0&tz=Europe/Zagreb&tf=HH:mm&tempunit=celsius&windunit=kph&showShareButton=false&lang=en-US&placemarkName=Zagreb&desktop=true&fadeTop=true",
-		zoomEuDesktop:"&zoom=5.0",zoomEuMobile:"&zoom=4.0",links:Pe(We,"Vrijeme&Radar")},{id:"meteo-si",category:"radar",name:"meteo.si",
+		zoomEuDesktop:"&zoom=5.0",zoomEuMobile:"&zoom=4.0",links:Be(We,"Vrijeme&Radar")},{id:"meteo-si",category:"radar",name:"meteo.si",
 		type:"slideshow",titleHref:"https://meteo.arso.gov.si/met/sl/weather/observ/radar/",maxWidth:821,aspect:"821 / 660",
 		slides:["https://meteo.arso.gov.si/uploads/probase/www/observ/radar/si0-rm-anim.gif?nocache","https://meteo.arso.gov.si/uploads/probase/www/observ/radar/si0-rm.gif?nocache"],
 		links:We},{id:"idokep-radar-eu",category:"radar",name:"Időkép | Radar | Europa",type:"image",titleHref:"https://www.idokep.eu/ceu/radar",
@@ -514,113 +513,109 @@
 		name:"Wetterzentrale | Temperatura",type:"image",
 		titleHref:"https://www.wetterzentrale.de/en/topkarten.php?map=17&model=ecm&var=5&run=6&time=0&lid=OP&h=1&mv=0&tr=1",aspect:"959 / 741",
 		img:"https://www.wetterzentrale.de/en/create_gif.php?model=ECM&member=OP&var=5&map=IT&run=06&speed=250&times=0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47",
-		alt:"Wetterzentrale Temperatura",links:Oe},{id:"dhmz-sinopticka",category:"sinoptika",name:"DHMZ | Sinoptička karta",type:"image",
+		alt:"Wetterzentrale Temperatura",links:Ve},{id:"dhmz-sinopticka",category:"sinoptika",name:"DHMZ | Sinoptička karta",type:"image",
 		titleHref:"https://meteo.hr/prognoze.php?section=prognoze_model&param=web_fronte_sutra12",maxWidth:720,aspect:"1",
-		img:"https://prognoza.hr/web_fronte_sutra12.jpg",links:Pe(Fe,"DHMZ")},{id:"dwd-sinopticka",category:"sinoptika",
+		img:"https://prognoza.hr/web_fronte_sutra12.jpg",links:Be(Fe,"DHMZ")},{id:"dwd-sinopticka",category:"sinoptika",
 		name:"DWD | Sinoptička karta",type:"slideshow",titleHref:"https://www.dwd.de/EN/ourservices/hobbymet_wcharts_europe/hobbyeuropecharts.html",
 		maxWidth:800,aspect:"800 / 653",
 		slides:["https://www.dwd.de/DWD/wetter/wv_spez/hobbymet/wetterkarten/ico_tkboden_na_v36.png","https://www.dwd.de/DWD/wetter/wv_spez/hobbymet/wetterkarten/ico_tkboden_na_036.png","https://www.dwd.de/DWD/wetter/wv_spez/hobbymet/wetterkarten/ico_tkboden_na_048.png","https://www.dwd.de/DWD/wetter/wv_spez/hobbymet/wetterkarten/ico_tkboden_na_060.png","https://www.dwd.de/DWD/wetter/wv_spez/hobbymet/wetterkarten/ico_tkboden_na_084.png","https://www.dwd.de/DWD/wetter/wv_spez/hobbymet/wetterkarten/ico_tkboden_na_108.png"],
-		links:Pe(Fe,"DWD")
-		},Be("puntijarka","Puntijarka"),Be("bilogora","Bilogora"),Be("gradiste","Gradište"),Be("goli","Goli"),Be("debeljak","Debeljak"),Be("uljenje","Uljenje")],Ne=new Map(Ue.map(e=>[e.id,e]))
-		;function Ze(e){return Ne.get(e)||null}
+		links:Be(Fe,"DWD")
+		},Pe("puntijarka","Puntijarka"),Pe("bilogora","Bilogora"),Pe("gradiste","Gradište"),Pe("goli","Goli"),Pe("debeljak","Debeljak"),Pe("uljenje","Uljenje")],Ze=new Map(Ne.map(e=>[e.id,e]))
+		;function Ue(e){return Ze.get(e)||null}
 		var qe=["neverin-radar-hr","neverin-satelit-hr","neverin-radar-eu","neverin-satelit-eu","windy","dhmz-radar","meteociel-temp","blitzortung","essl","astorp","estofex","eumetnet","meteociel-satelit","dwd-sinopticka","neverin-kamera","meteoblue-prognoza","yr-prognoza"],$e={
-		slideshow:{build:function(e,t,r={}){const a=e.id+Je(t),n=e.startSlide||1,o=e.slides.some(e=>"string"!=typeof e),s=i("div",{
+		slideshow:{build:function(e,t,r={}){const a=e.id+Ke(t),n=e.startSlide||1,o=e.slides.some(e=>"string"!=typeof e),s=i("div",{
 		class:o?"slideshow":"slideshow placeholder","data-slideshow-id":a,"data-current-slide":n,"data-dynamic-width":e.dynamicWidth?"":void 0,
-		style:(Ge(e)+(o?"":` aspect-ratio: ${e.aspect};`)).trim()||void 0});e.slides.forEach((t,l)=>{
-		const c=l===n-1,d=o?t:null,m=d?d.img:t,h=d&&d.frame?(p=d.frame,{gate:i("a",{"data-frame-id":u=`${a}Frame${l+1}`,"data-action":"gate",
-		style:"display:none",text:"[X]"}),body:[i("iframe",{id:u,src:p,"data-src":p,class:"scaled-iframe",frameborder:"0",scrolling:"no",
-		sandbox:"allow-same-origin allow-scripts allow-popups allow-popups-to-escape-sandbox"}),i("div",{class:"overlay","data-frame-id":u
-		},[i("span",{class:"hint",text:"Dvostruki klik za pristup interaktivnoj karti"})])]}):null;var p,u;const w=h?null:c||e.eagerSlides?i("img",{
-		src:m}):i("img",{"data-src":m,class:"lazy"}),f=i("div",{class:"slide fade"+(h?" framed":"")+(c?" active":"")});if(d){
-		const t=d.maxWidth||e.maxWidth,a={text:d.title.text||e.name,href:d.title.href},n=[...!e.titleHref&&tt(r)||[],...h?[h.gate]:[]]
-		;f.appendChild(et(a,{},n)),f.appendChild(i("div",{class:h?"if3 placeholder":e.vector?"placeholder vector":"placeholder",
-		style:`${t?`max-width: ${t}px; `:""}aspect-ratio: ${d.aspect};`},h?h.body:[w]))}else f.appendChild(w);s.appendChild(f)});const l=i("a",{
+		style:(Je(e)+(o?"":` aspect-ratio: ${e.aspect};`)).trim()||void 0});e.slides.forEach((t,a)=>{
+		const l=a===n-1,c=o?t:null,d=c?c.img:t,m=l||e.eagerSlides?i("img",{src:d}):i("img",{"data-src":d,class:"lazy"}),h=i("div",{
+		class:"slide fade"+(l?" active":"")});if(c){const t=c.maxWidth||e.maxWidth,a={text:c.title.text||e.name,href:c.title.href}
+		;h.appendChild(Ge(a,{},e.titleHref?null:et(r))),h.appendChild(i("div",{class:e.vector?"placeholder vector":"placeholder",
+		style:`${t?`max-width: ${t}px; `:""}aspect-ratio: ${c.aspect};`},[m]))}else h.appendChild(m);s.appendChild(h)});const l=i("a",{
 		class:"prev"+(o?" shorter":""),"data-action":"slide","data-step":"-1",html:"&#10094;"}),c=i("a",{class:"next"+(o?" shorter":""),
 		"data-action":"slide","data-step":"1",html:"&#10095;"});s.appendChild(l),s.appendChild(c);const d=i("div",{class:"indicators-container",
-		"data-slideshow-id":a,style:`${Ge(e)} grid-template-columns: repeat(${e.slides.length}, 1fr);`.trim()});return e.slides.forEach((e,t)=>{
-		d.appendChild(i("span",{class:"indicator"+(t===n-1?" active":"")}))}),[e.titleHref?rt(e,r):null,s,d]},freeAspect:!1,fullscreen:!1,
-		reload:function(e){Xe(e),Ye(e)}},image:{build:function(e,t,r={}){return[rt(e,r),i("div",{class:"placeholder",
-		style:`${Ge(e)} aspect-ratio: ${e.aspect};`.trim()},[i("img",{src:e.img,alt:e.alt})])]},freeAspect:!1,fullscreen:!1,reload:Xe},video:{
-		build:function(e,t,r={}){const a=i("video",{controls:""},[i("source",{type:"video/mp4",src:e.src})]);a.muted=!0,a.autoplay=!0,a.loop=!0
-		;const n=`${Ge(e)}${e.aspect?` aspect-ratio: ${e.aspect};`:""}`.trim();return[rt(e,r),i("div",{class:"placeholder",style:n||void 0
+		"data-slideshow-id":a,style:`${Je(e)} grid-template-columns: repeat(${e.slides.length}, 1fr);`.trim()});return e.slides.forEach((e,t)=>{
+		d.appendChild(i("span",{class:"indicator"+(t===n-1?" active":"")}))}),[e.titleHref?tt(e,r):null,s,d]},freeAspect:!1,fullscreen:!1,reload:Xe
+		},image:{build:function(e,t,r={}){return[tt(e,r),i("div",{class:"placeholder",style:`${Je(e)} aspect-ratio: ${e.aspect};`.trim()},[i("img",{
+		src:e.img,alt:e.alt})])]},freeAspect:!1,fullscreen:!1,reload:Xe},video:{build:function(e,t,r={}){const a=i("video",{controls:""
+		},[i("source",{type:"video/mp4",src:e.src})]);a.muted=!0,a.autoplay=!0,a.loop=!0
+		;const n=`${Je(e)}${e.aspect?` aspect-ratio: ${e.aspect};`:""}`.trim();return[tt(e,r),i("div",{class:"placeholder",style:n||void 0
 		},[i("div",{class:"vid1"},[a])])]},freeAspect:!1,fullscreen:!1,reload:function(e){e.querySelectorAll("video").forEach(e=>{
-		e.querySelectorAll("source[src]").forEach(e=>{e.src=Ke(e.getAttribute("src"))}),e.load()})}},iframe:{build:function(e,t,r={}){
-		const a=e.frameId+Je(t),n=a[0].toUpperCase()+a.slice(1),o=i("a",{class:"left zoom-btn","data-mode":"hr","data-action":"zoom","data-frame":a,
+		e.querySelectorAll("source[src]").forEach(e=>{e.src=Ye(e.getAttribute("src"))}),e.load()})}},iframe:{build:function(e,t,r={}){
+		const a=e.frameId+Ke(t),n=a[0].toUpperCase()+a.slice(1),o=i("a",{class:"left zoom-btn","data-mode":"hr","data-action":"zoom","data-frame":a,
 		text:"[HR]"}),s=i("a",{class:"fs-btn","data-action":"fullscreen","data-frame":a,text:"[ ]"}),l=i("div",{class:"radartitle"},[o,i("a",{
-		class:"center",href:e.titleHref,target:"_blank",rel:"nofollow",text:e.name}),i("span",{class:"right right-cluster"},[...tt(r,!0)||[],i("a",{
+		class:"center",href:e.titleHref,target:"_blank",rel:"nofollow",text:e.name}),i("span",{class:"right right-cluster"},[...et(r,!0)||[],i("a",{
 		id:`reset${n}Frame`,"data-frame-id":a,"data-action":"gate",style:"display:none",text:"[X]"}),s])]),c=i("div",{class:"if1 placeholder"
 		},[i("iframe",{id:a,class:e.scaled?"scaled-iframe":void 0,loading:e.loading||"lazy",frameborder:"0","data-src-hr":e.srcHr,
 		"data-zoom-hr-desktop":e.zoomHrDesktop,"data-zoom-hr-mobile":e.zoomHrMobile,"data-src-eu":e.srcEu,"data-zoom-eu-desktop":e.zoomEuDesktop,
 		"data-zoom-eu-mobile":e.zoomEuMobile}),i("div",{class:"overlay",id:`overlay${n}Frame`,"data-frame-id":a},[i("span",{class:"hint",
 		text:"Dvostruki klik za pristup interaktivnoj karti"})])]);return[l,c]},freeAspect:!0,fullscreen:!0,reload:null},"iframe-basic":{
-		build:function(e,t,r={}){return[rt(e,r),i("div",{class:"if2 placeholder"},[i("iframe",{loading:"lazy",src:e.src,frameborder:"0",
-		scrolling:"no"})])]},freeAspect:!0,fullscreen:!1,reload:Ye}};function Xe(e){e.querySelectorAll("img[src]").forEach(e=>{
-		e.src=Ke(e.getAttribute("src"))})}function Ye(e){e.querySelectorAll("iframe[src]").forEach(e=>{e.src=e.getAttribute("src")})}function Ke(e){
-		const t=e.replace(/([?&])_r=\d+(&|$)/,(e,t,r)=>r?t:"");return`${t}${t.includes("?")?"&":"?"}_r=${Date.now()}`}var Qe="#";function Je(e){
-		const t=function(e){const t=Number(String(e).split(Qe)[1]);return t>1?t:1}(e);return t>1?`Copy${t}`:""}function Ge(e){
-		return e.maxWidth?`max-width: ${e.maxWidth}px;`:""}function et(e,t={},r=null){return i("div",{class:"radartitle",style:Ge(t)||void 0
+		build:function(e,t,r={}){return[tt(e,r),i("div",{class:"if2 placeholder"},[i("iframe",{loading:"lazy",src:e.src,frameborder:"0",
+		scrolling:"no"})])]},freeAspect:!0,fullscreen:!1,reload:function(e){e.querySelectorAll("iframe[src]").forEach(e=>{
+		e.src=e.getAttribute("src")})}}};function Xe(e){e.querySelectorAll("img[src]").forEach(e=>{e.src=Ye(e.getAttribute("src"))})}function Ye(e){
+		const t=e.replace(/([?&])_r=\d+(&|$)/,(e,t,r)=>r?t:"");return`${t}${t.includes("?")?"&":"?"}_r=${Date.now()}`}var Qe="#";function Ke(e){
+		const t=function(e){const t=Number(String(e).split(Qe)[1]);return t>1?t:1}(e);return t>1?`Copy${t}`:""}function Je(e){
+		return e.maxWidth?`max-width: ${e.maxWidth}px;`:""}function Ge(e,t={},r=null){return i("div",{class:"radartitle",style:Je(t)||void 0
 		},[i("a",{href:e.href,target:"_blank",rel:"nofollow",text:e.text}),r&&r.length?i("span",{class:"right right-cluster"},r):null])}
-		function tt(e,t=!1){return e.titleButtons?e.titleButtons(t):null}function rt(e,t){return et({text:e.title||e.name,href:e.titleHref},e,tt(t))
-		}function at(e,t,r={}){e.replaceChildren(),t.length?t.forEach(t=>function(e,t,r={}){const a=i("div",{class:"map-block","data-map-id":t.id,
+		function et(e,t=!1){return e.titleButtons?e.titleButtons(t):null}function tt(e,t){return Ge({text:e.title||e.name,href:e.titleHref},e,et(t))
+		}function rt(e,t,r={}){e.replaceChildren(),t.length?t.forEach(t=>function(e,t,r={}){const a=i("div",{class:"map-block","data-map-id":t.id,
 		"data-inst":t.id},function(e,t=e.id,r={}){const a=$e[e.type];return a?a.build(e,t,r):[]}(t,t.id,r)),n=i("div",{class:"map-entry"},[a])
-		;t.links&&t.links.length&&n.appendChild(function(e){const t=i("div",{class:"links-bottom",style:Ge(e)||void 0})
+		;t.links&&t.links.length&&n.appendChild(function(e){const t=i("div",{class:"links-bottom",style:Je(e)||void 0})
 		;return e.links.forEach((e,r)=>{r>0&&t.appendChild(document.createTextNode(" · ")),t.appendChild(i("a",{href:e.href,target:"_blank",
 		rel:"nofollow",text:e.text}))}),t}(t));return e.appendChild(n),a}(e,t,r)):e.appendChild(i("div",{class:"map-entry"},[i("div",{
-		class:"maps-empty",text:'Nema odabranih karata. Odaberite ih pod "Karte".'})]))}var nt=!1;function ot(){
-		const e=document.querySelector("[data-maps]");if(!e)return!1;nt=!0;const t=qe.map(Ze).filter(e=>{return e&&(t=e.id,!W.has(t));var t
+		class:"maps-empty",text:'Nema odabranih karata. Odaberite ih pod "Karte".'})]))}var at=!1;function nt(){
+		const e=document.querySelector("[data-maps]");if(!e)return!1;at=!0;const t=qe.map(Ue).filter(e=>{return e&&(t=e.id,!W.has(t));var t
 		}),r=t.map(e=>e.id);return(!r.length||function(e){return[...e.querySelectorAll(":scope > .map-entry > .map-block")].map(e=>e.dataset.mapId)
-		}(e).join()!==r.join())&&(at(e,t),!0)}var it,st={manual:!0,changelog:!0},lt=[{feature:"manual",dialogId:"manualDialog",hash:"manual",
-		keys:["h","H"]},{feature:"changelog",dialogId:"changelogDialog",hash:"changelog",keys:["c","C"]}];function ct(e){try{
-		return decodeURIComponent(e.slice(1))}catch{return e.slice(1)}}function dt({feature:t,dialogId:r,hash:a,keys:n}){
-		const i=document.getElementById(r);if(!i||!st[t])return;const s=i.querySelector(".dialog-close")
-		;s&&s.addEventListener("click",()=>ye(i,!1)),i.addEventListener("click",e=>{const t=e.target.closest('a[href^="#"]')
+		}(e).join()!==r.join())&&(rt(e,t),!0)}var ot,it={manual:!0,changelog:!0},st=[{feature:"manual",dialogId:"manualDialog",hash:"manual",
+		keys:["h","H"]},{feature:"changelog",dialogId:"changelogDialog",hash:"changelog",keys:["c","C"]}];function lt(e){try{
+		return decodeURIComponent(e.slice(1))}catch{return e.slice(1)}}function ct({feature:t,dialogId:r,hash:a,keys:n}){
+		const i=document.getElementById(r);if(!i||!it[t])return;const s=i.querySelector(".dialog-close")
+		;s&&s.addEventListener("click",()=>ve(i,!1)),i.addEventListener("click",e=>{const t=e.target.closest('a[href^="#"]')
 		;t&&i.contains(t)&&(e.preventDefault(),function(e,t){const r=e.querySelector(".dialog-body"),a=e.querySelector(`[id="${CSS.escape(t)}"]`)
-		;r&&a&&(r.scrollTop+=a.getBoundingClientRect().top-r.getBoundingClientRect().top)}(i,ct(t.getAttribute("href"))))}),
-		o(e,({panel:e,visible:t})=>{e===i&&(!function(e,t){const r=new URL(window.location.href);t!==(ct(r.hash)===e)&&(r.hash=t?e:"",
-		history.replaceState(null,"",t?r.href:r.href.replace(/#$/,"")))}(a,t),t&&(i.querySelector(".dialog-body").scrollTop=0))}),Ae(t,{keys:n,
-		run:()=>ve(i)});const l=()=>{const e=ct(window.location.hash)===a;e!==!i.hidden&&ye(i,e)};window.addEventListener("hashchange",l),l()}
-		it="landing",((N="jurakovic.github.io"===window.location.hostname&&"function"==typeof navigator.sendBeacon)||d())&&(U=it,
-		m(`telemetry: counting on ${it}; a report is logged every 10 s and when the page is hidden`+(N?V("telemetry")?`, and sent to ${F}`:", not sent while switched off":", not sent off the live site")),
-		K(),o(r,()=>{V("telemetry")?K():d()||P.clear()}),window.addEventListener("error",e=>X(e.message,`${e.lineno}:${e.colno}`)),
+		;r&&a&&(r.scrollTop+=a.getBoundingClientRect().top-r.getBoundingClientRect().top)}(i,lt(t.getAttribute("href"))))}),
+		o(e,({panel:e,visible:t})=>{e===i&&(!function(e,t){const r=new URL(window.location.href);t!==(lt(r.hash)===e)&&(r.hash=t?e:"",
+		history.replaceState(null,"",t?r.href:r.href.replace(/#$/,"")))}(a,t),t&&(i.querySelector(".dialog-body").scrollTop=0))}),Se(t,{keys:n,
+		run:()=>ye(i)});const l=()=>{const e=lt(window.location.hash)===a;e!==!i.hidden&&ve(i,e)};window.addEventListener("hashchange",l),l()}
+		ot="landing",((Z="jurakovic.github.io"===window.location.hostname&&"function"==typeof navigator.sendBeacon)||d())&&(N=ot,
+		m(`telemetry: counting on ${ot}; a report is logged every 10 s and when the page is hidden`+(Z?O("telemetry")?`, and sent to ${F}`:", not sent while switched off":", not sent off the live site")),
+		Q(),o(r,()=>{O("telemetry")?Q():d()||B.clear()}),window.addEventListener("error",e=>X(e.message,`${e.lineno}:${e.colno}`)),
 		window.addEventListener("unhandledrejection",e=>X(e.reason&&e.reason.message||e.reason,"promise")),
 		window.addEventListener("click",e=>Y(e),!0),window.addEventListener("auxclick",e=>{1===e.button&&Y(e,!0)},!0),
-		document.addEventListener("visibilitychange",()=>{"hidden"===document.visibilityState&&Q()}),setInterval(Q,d()?1e4:18e4)),W=C(D()),O=T(D()),
+		document.addEventListener("visibilitychange",()=>{"hidden"===document.visibilityState&&K()}),setInterval(K,d()?1e4:18e4)),W=D(_()),V=T(_()),
 		fetch("https://meteo-data.jurakovic.workers.dev/config.json",{cache:"no-cache"}).then(e=>e.ok?e.json():Promise.reject(e.status)).then(e=>{
-		H(_,e);const a=T(e),o=Object.keys(a).some(e=>a[e]!==V(e));O=a,o&&n(r);const i=C(e);var s,l;l=W,
-		(s=i).size===l.size&&[...s].every(e=>l.has(e))||(W=i,n(t))}).catch(()=>{}),lt.forEach(({feature:e})=>{
-		st[e]||document.documentElement.classList.add(`no-${e}`)}),Ae("top",{run:()=>{window.scrollTo({top:0,behavior:"smooth"})}}),Ae("links",{
-		run:()=>_e("links")}),Ae("links-bottom",{run:e=>function(e){document.body.classList.toggle("show-links-bottom",e.checked),
-		H(R,e.checked?1:0),je()}(e)}),Ae("slide",{run:e=>{return t=e.closest(".slideshow"),r=Number(e.dataset.step),
-		void ke(t,parseInt(t.getAttribute("data-current-slide"))+r);var t,r}}),Ae("zoom",{run:e=>x(e.dataset.frame,e)}),Ae("fullscreen",{
+		C(L,e);const a=T(e),o=Object.keys(a).some(e=>a[e]!==O(e));V=a,o&&n(r);const i=D(e);var s,l;l=W,
+		(s=i).size===l.size&&[...s].every(e=>l.has(e))||(W=i,n(t))}).catch(()=>{}),st.forEach(({feature:e})=>{
+		it[e]||document.documentElement.classList.add(`no-${e}`)}),Se("top",{run:()=>{window.scrollTo({top:0,behavior:"smooth"})}}),Se("links",{
+		run:()=>Le("links")}),Se("links-bottom",{run:e=>function(e){document.body.classList.toggle("show-links-bottom",e.checked),
+		C(R,e.checked?1:0),He()}(e)}),Se("slide",{run:e=>{return t=e.closest(".slideshow"),r=Number(e.dataset.step),
+		void be(t,parseInt(t.getAttribute("data-current-slide"))+r);var t,r}}),Se("zoom",{run:e=>x(e.dataset.frame,e)}),Se("fullscreen",{
 		run:e=>function(e,t){m(`toggleFullscreen: ${e}`);const r=document.getElementById(e).parentElement
-		;if(r.classList.contains("fullscreen"))return void S(r);const o=r.querySelector(".overlay");z.set(r,!o||"none"!==o.style.display),
+		;if(r.classList.contains("fullscreen"))return void A(r);const o=r.querySelector(".overlay");z.set(r,!o||"none"!==o.style.display),
 		r.classList.add("fullscreen"),r.previousElementSibling.classList.add("fullscreen"),
 		r.closest(".map-block.snapped")||document.body.classList.add("fs-lock"),n(a),t.textContent="[-]",o&&(o.style.display="none"),
-		b(e,"fullscreen")}(e.dataset.frame,e)}),Ae("gate",{run:e=>function(e){const t=e.dataset.frameId;switch(e.dataset.state){case"exit":
-		k(t).removeAttribute("style"),b(t,"reset");break;case"reset":g(f(t)),b(t,"hidden");break;case"fullscreen":g(f(t))}}(e)}),Ae("dialog-close",{
-		keys:["Escape"],keyWhen:()=>le(),keepDefault:!0,run:()=>be()}),Ae("fullscreen-exit",{keys:["Escape"],keyWhen:()=>!le(),keepDefault:!0,
-		run:()=>function(){const e=c(".if1.fullscreen");return!!e&&(S(e),!0)}()}),document.addEventListener("click",e=>{
-		const t=e.target,r=t.closest&&t.closest("[data-action]"),a=r&&ze.get(r.dataset.action);a&&Le(a,r,e)}),
+		k(e,"fullscreen")}(e.dataset.frame,e)}),Se("gate",{run:e=>function(e){const t=e.dataset.frameId;switch(e.dataset.state){case"exit":
+		b(t).removeAttribute("style"),k(t,"reset");break;case"reset":f(g(t)),k(t,"hidden");break;case"fullscreen":f(g(t))}}(e)}),Se("dialog-close",{
+		keys:["Escape"],keyWhen:()=>le(),keepDefault:!0,run:()=>ke()}),Se("fullscreen-exit",{keys:["Escape"],keyWhen:()=>!le(),keepDefault:!0,
+		run:()=>function(){const e=c(".if1.fullscreen");return!!e&&(A(e),!0)}()}),document.addEventListener("click",e=>{
+		const t=e.target,r=t.closest&&t.closest("[data-action]"),a=r&&ze.get(r.dataset.action);a&&je(a,r,e)}),
 		document.addEventListener("keydown",e=>{if(e.altKey||e.ctrlKey||e.metaKey||function(e){const t=e
 		;return!!t&&"function"==typeof t.matches&&t.matches('input:not([type="radio"]):not([type="checkbox"]), textarea, [contenteditable]')
-		}(e.target))return;const t=Se.find(t=>t.keys.includes(e.key)&&t.keyWhen(e));t&&(t.keepDefault||e.preventDefault(),
-		t.capture&&e.stopPropagation(),Le(t,null,e))},!0),window.addEventListener("resize",()=>{clearTimeout(De),De=setTimeout(()=>{w(),L(),je()
-		},200)}),o(t,()=>{nt&&ot()&&Ce()}),s(ot),s(function(){ie().forEach(e=>{!function(e){
+		}(e.target))return;const t=Ae.find(t=>t.keys.includes(e.key)&&t.keyWhen(e));t&&(t.keepDefault||e.preventDefault(),
+		t.capture&&e.stopPropagation(),je(t,null,e))},!0),window.addEventListener("resize",()=>{clearTimeout(_e),_e=setTimeout(()=>{w(),j(),He()
+		},200)}),o(t,()=>{at&&nt()&&De()}),s(nt),s(function(){ie().forEach(e=>{!function(e){
 		e.querySelectorAll(":scope > .po-h").forEach(e=>e.remove()),ne.forEach(t=>{const r=document.createElement("div")
-		;r.className=`po-h po-h-${t}`,r.dataset.dir=t,e.appendChild(r)})}(e),fe(e)}),function(){const e=c(".dialog-backdrop")
-		;e&&e.addEventListener("pointerdown",t=>{if(!le())return;t.preventDefault(),be(),e.hidden=!1,e.classList.add("dialog-spent");let r=0
+		;r.className=`po-h po-h-${t}`,r.dataset.dir=t,e.appendChild(r)})}(e),ge(e)}),function(){const e=c(".dialog-backdrop")
+		;e&&e.addEventListener("pointerdown",t=>{if(!le())return;t.preventDefault(),ke(),e.hidden=!1,e.classList.add("dialog-spent");let r=0
 		;const a=()=>{clearTimeout(r),e.classList.remove("dialog-spent"),e.hidden=!le(),document.removeEventListener("click",n,!0),
 		document.removeEventListener("pointerup",o),document.removeEventListener("pointercancel",a)},n=e=>{e.stopPropagation(),e.preventDefault(),
 		a()},o=()=>{r=setTimeout(a,400)};document.addEventListener("click",n,!0),document.addEventListener("pointerup",o),
-		document.addEventListener("pointercancel",a)})}(),window.addEventListener("resize",()=>we(se()))}),s(function(){lt.forEach(dt)}),
+		document.addEventListener("pointercancel",a)})}(),window.addEventListener("resize",()=>we(se()))}),s(function(){st.forEach(ct)}),
 		s(function(){const e=document.getElementById("linksDialog");if(!e)return;const t=e.querySelector(".dialog-close")
-		;t&&t.addEventListener("click",()=>ye(e,!1)),Ae("links-dialog",{keys:["l","L"],run:()=>{e.hidden&&function(e){
+		;t&&t.addEventListener("click",()=>ve(e,!1)),Se("links-dialog",{keys:["l","L"],run:()=>{e.hidden&&function(e){
 		const t=c(".maps-foot .links"),r=e.querySelector(".dialog-body");if(!t||!r)return;const a=t.cloneNode(!0);a.removeAttribute("style"),
-		a.removeAttribute("data-include-html"),r.replaceChildren(a)}(e),ve(e)}})}),s(function(){!function(){
+		a.removeAttribute("data-include-html"),r.replaceChildren(a)}(e),ye(e)}})}),s(function(){!function(){
 		const e=document.querySelector(".links-toggle");e&&(e.checked=1===M(R),document.body.classList.toggle("show-links-bottom",e.checked))}(),
-		Ce(),function(){const e=c(".expandable"),t=c(".links");e.addEventListener("click",()=>{const r=e.querySelector(".arrow")
+		De(),function(){const e=c(".expandable"),t=c(".links");e.addEventListener("click",()=>{const r=e.querySelector(".arrow")
 		;if(t.style.maxHeight)return t.style.maxHeight="",void(r.textContent="▼");t.style.maxHeight=`${t.scrollHeight}px`,r.textContent="▲",
-		setTimeout(()=>{document.documentElement.style.scrollBehavior="auto",document.body.style.scrollBehavior="auto",_e("links"),setTimeout(()=>{
+		setTimeout(()=>{document.documentElement.style.scrollBehavior="auto",document.body.style.scrollBehavior="auto",Le("links"),setTimeout(()=>{
 		document.documentElement.style.scrollBehavior="smooth",document.body.style.scrollBehavior="smooth"},50)},310)})}()})})();
 	</script>
 	<script async src="https://www.googletagmanager.com/gtag/js?id=G-233EMZJM16"></script>
@@ -1024,60 +1019,36 @@
 				<div class="map-entry">
 					<div class="map-block" data-map-id="meteoblue-prognoza" data-inst="meteoblue-prognoza">
 						<div class="slideshow" data-slideshow-id="meteoblue-prognoza" data-current-slide="1">
-							<div class="slide fade framed active">
+							<div class="slide fade active">
 								<div class="radartitle">
 									<a href="https://www.meteoblue.com/en/weather/week/zagreb_croatia_3186886" target="_blank" rel="nofollow">meteoblue | Prognoza | Zagreb</a>
-									<span class="right right-cluster">
-										<a data-frame-id="meteoblue-prognozaFrame1" data-action="gate" style="display:none">[X]</a>
-									</span>
 								</div>
-								<div class="if3 placeholder" style="aspect-ratio: 1700 / 1300;">
-									<iframe id="meteoblue-prognozaFrame1" src="https://www.meteoblue.com/en/weather/widget/meteogram/zagreb_croatia_3186886?geoloc=fixed&amp;temperature_units=CELSIUS&amp;windspeed_units=KILOMETER_PER_HOUR&amp;precipitation_units=MILLIMETER&amp;forecast_days=5&amp;layout=dark&amp;autowidth=auto&amp;user_key=d6c944dcfa23c1de&amp;embed_key=a4c8e80861792d46&amp;sig=b9e5dc2debd7b0ebee1cfa142badc1fc601ae61d0a6b866b54ed49cc7fe3bb16" data-src="https://www.meteoblue.com/en/weather/widget/meteogram/zagreb_croatia_3186886?geoloc=fixed&amp;temperature_units=CELSIUS&amp;windspeed_units=KILOMETER_PER_HOUR&amp;precipitation_units=MILLIMETER&amp;forecast_days=5&amp;layout=dark&amp;autowidth=auto&amp;user_key=d6c944dcfa23c1de&amp;embed_key=a4c8e80861792d46&amp;sig=b9e5dc2debd7b0ebee1cfa142badc1fc601ae61d0a6b866b54ed49cc7fe3bb16" class="scaled-iframe" frameborder="0" scrolling="no" sandbox="allow-same-origin allow-scripts allow-popups allow-popups-to-escape-sandbox"></iframe>
-									<div class="overlay" data-frame-id="meteoblue-prognozaFrame1">
-										<span class="hint">Dvostruki klik za pristup interaktivnoj karti</span>
-									</div>
+								<div class="placeholder" style="aspect-ratio: 1700 / 1300;">
+									<img src="https://meteo-data.jurakovic.workers.dev/meteoblue/meteogram/zagreb.png">
 								</div>
 							</div>
-							<div class="slide fade framed">
+							<div class="slide fade">
 								<div class="radartitle">
 									<a href="https://www.meteoblue.com/en/weather/week/split_croatia_3190261" target="_blank" rel="nofollow">meteoblue | Prognoza | Split</a>
-									<span class="right right-cluster">
-										<a data-frame-id="meteoblue-prognozaFrame2" data-action="gate" style="display:none">[X]</a>
-									</span>
 								</div>
-								<div class="if3 placeholder" style="aspect-ratio: 1700 / 1300;">
-									<iframe id="meteoblue-prognozaFrame2" src="https://www.meteoblue.com/en/weather/widget/meteogram/split_croatia_3190261?geoloc=fixed&amp;temperature_units=CELSIUS&amp;windspeed_units=KILOMETER_PER_HOUR&amp;precipitation_units=MILLIMETER&amp;forecast_days=5&amp;layout=dark&amp;autowidth=auto&amp;user_key=d6c944dcfa23c1de&amp;embed_key=8ccaeab9f63d36ea&amp;sig=84e416503549d427b4828b819e65423881bcb37c65a878bbd69e1078c206e252" data-src="https://www.meteoblue.com/en/weather/widget/meteogram/split_croatia_3190261?geoloc=fixed&amp;temperature_units=CELSIUS&amp;windspeed_units=KILOMETER_PER_HOUR&amp;precipitation_units=MILLIMETER&amp;forecast_days=5&amp;layout=dark&amp;autowidth=auto&amp;user_key=d6c944dcfa23c1de&amp;embed_key=8ccaeab9f63d36ea&amp;sig=84e416503549d427b4828b819e65423881bcb37c65a878bbd69e1078c206e252" class="scaled-iframe" frameborder="0" scrolling="no" sandbox="allow-same-origin allow-scripts allow-popups allow-popups-to-escape-sandbox"></iframe>
-									<div class="overlay" data-frame-id="meteoblue-prognozaFrame2">
-										<span class="hint">Dvostruki klik za pristup interaktivnoj karti</span>
-									</div>
+								<div class="placeholder" style="aspect-ratio: 1700 / 1300;">
+									<img src="https://meteo-data.jurakovic.workers.dev/meteoblue/meteogram/split.png">
 								</div>
 							</div>
-							<div class="slide fade framed">
+							<div class="slide fade">
 								<div class="radartitle">
 									<a href="https://www.meteoblue.com/en/weather/week/rijeka_croatia_3191648" target="_blank" rel="nofollow">meteoblue | Prognoza | Rijeka</a>
-									<span class="right right-cluster">
-										<a data-frame-id="meteoblue-prognozaFrame3" data-action="gate" style="display:none">[X]</a>
-									</span>
 								</div>
-								<div class="if3 placeholder" style="aspect-ratio: 1700 / 1300;">
-									<iframe id="meteoblue-prognozaFrame3" src="https://www.meteoblue.com/en/weather/widget/meteogram/rijeka_croatia_3191648?geoloc=fixed&amp;temperature_units=CELSIUS&amp;windspeed_units=KILOMETER_PER_HOUR&amp;precipitation_units=MILLIMETER&amp;forecast_days=5&amp;layout=dark&amp;autowidth=auto&amp;user_key=d6c944dcfa23c1de&amp;embed_key=9f589d2836e95ef7&amp;sig=beb60bab997ab12c27a10f416692c3d63cfc69ab3256f3845efd149133f5a165" data-src="https://www.meteoblue.com/en/weather/widget/meteogram/rijeka_croatia_3191648?geoloc=fixed&amp;temperature_units=CELSIUS&amp;windspeed_units=KILOMETER_PER_HOUR&amp;precipitation_units=MILLIMETER&amp;forecast_days=5&amp;layout=dark&amp;autowidth=auto&amp;user_key=d6c944dcfa23c1de&amp;embed_key=9f589d2836e95ef7&amp;sig=beb60bab997ab12c27a10f416692c3d63cfc69ab3256f3845efd149133f5a165" class="scaled-iframe" frameborder="0" scrolling="no" sandbox="allow-same-origin allow-scripts allow-popups allow-popups-to-escape-sandbox"></iframe>
-									<div class="overlay" data-frame-id="meteoblue-prognozaFrame3">
-										<span class="hint">Dvostruki klik za pristup interaktivnoj karti</span>
-									</div>
+								<div class="placeholder" style="aspect-ratio: 1700 / 1300;">
+									<img src="https://meteo-data.jurakovic.workers.dev/meteoblue/meteogram/rijeka.png">
 								</div>
 							</div>
-							<div class="slide fade framed">
+							<div class="slide fade">
 								<div class="radartitle">
 									<a href="https://www.meteoblue.com/en/weather/week/osijek_croatia_3193935" target="_blank" rel="nofollow">meteoblue | Prognoza | Osijek</a>
-									<span class="right right-cluster">
-										<a data-frame-id="meteoblue-prognozaFrame4" data-action="gate" style="display:none">[X]</a>
-									</span>
 								</div>
-								<div class="if3 placeholder" style="aspect-ratio: 1700 / 1300;">
-									<iframe id="meteoblue-prognozaFrame4" src="https://www.meteoblue.com/en/weather/widget/meteogram/osijek_croatia_3193935?geoloc=fixed&amp;temperature_units=CELSIUS&amp;windspeed_units=KILOMETER_PER_HOUR&amp;precipitation_units=MILLIMETER&amp;forecast_days=5&amp;layout=dark&amp;autowidth=auto&amp;user_key=d6c944dcfa23c1de&amp;embed_key=0ee635437c5c5bd7&amp;sig=d67d7c23ac5b46618e806c8009cd5ff3bea5280d801fc3dd2791b77c8a2c8965" data-src="https://www.meteoblue.com/en/weather/widget/meteogram/osijek_croatia_3193935?geoloc=fixed&amp;temperature_units=CELSIUS&amp;windspeed_units=KILOMETER_PER_HOUR&amp;precipitation_units=MILLIMETER&amp;forecast_days=5&amp;layout=dark&amp;autowidth=auto&amp;user_key=d6c944dcfa23c1de&amp;embed_key=0ee635437c5c5bd7&amp;sig=d67d7c23ac5b46618e806c8009cd5ff3bea5280d801fc3dd2791b77c8a2c8965" class="scaled-iframe" frameborder="0" scrolling="no" sandbox="allow-same-origin allow-scripts allow-popups allow-popups-to-escape-sandbox"></iframe>
-									<div class="overlay" data-frame-id="meteoblue-prognozaFrame4">
-										<span class="hint">Dvostruki klik za pristup interaktivnoj karti</span>
-									</div>
+								<div class="placeholder" style="aspect-ratio: 1700 / 1300;">
+									<img src="https://meteo-data.jurakovic.workers.dev/meteoblue/meteogram/osijek.png">
 								</div>
 							</div>
 							<a class="prev shorter" data-action="slide" data-step="-1">❮</a>

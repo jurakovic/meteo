@@ -55,29 +55,6 @@ function buildMapTitleBar(map, options) {
 	return buildTitleBar({ text: map.title || map.name, href: map.titleHref }, map, titleButtons(options));
 }
 
-// a slide's widget frame, behind the same gate as an interactive map
-// (page/iframe.js); data-src is the address [R] goes back to
-/** @param {string} src @param {string} frameId */
-function buildSlideFrame(src, frameId) {
-	return {
-		gate: el('a', { 'data-frame-id': frameId, 'data-action': 'gate', style: 'display:none', text: '[X]' }),
-		body: [
-			el('iframe', {
-				id: frameId,
-				src,
-				'data-src': src,
-				class: 'scaled-iframe',
-				frameborder: '0',
-				scrolling: 'no',
-				sandbox: 'allow-same-origin allow-scripts allow-popups allow-popups-to-escape-sandbox'
-			}),
-			el('div', { class: 'overlay', 'data-frame-id': frameId }, [
-				el('span', { class: 'hint', text: 'Dvostruki klik za pristup interaktivnoj karti' })
-			])
-		]
-	};
-}
-
 /** @param {import('./catalog.js').CatalogMap} map @param {string} inst @param {import('./render.js').RenderOptions} [options] */
 export function buildSlideshow(map, inst, options = {}) {
 	const slideshowId = map.id + instSuffix(inst);
@@ -96,22 +73,20 @@ export function buildSlideshow(map, inst, options = {}) {
 		const active = i === start - 1;
 		const titledSlide = titled ? /** @type {import('./catalog.js').TitledSlide} */ (slide) : null;
 		const url = titledSlide ? titledSlide.img : /** @type {string} */ (slide);
-		const frame = titledSlide && titledSlide.frame ? buildSlideFrame(titledSlide.frame, `${slideshowId}Frame${i + 1}`) : null;
-		const img = frame ? null : (active || map.eagerSlides)
+		const img = (active || map.eagerSlides)
 			? el('img', { src: url })
 			: el('img', { 'data-src': url, class: 'lazy' });
-		const slideDiv = el('div', { class: 'slide fade' + (frame ? ' framed' : '') + (active ? ' active' : '') });
+		const slideDiv = el('div', { class: 'slide fade' + (active ? ' active' : '') });
 		if (titledSlide) {
 			const width = titledSlide.maxWidth || map.maxWidth;
 			// a slide may omit its title text to inherit the map name (its href still differs per slide);
 			// without a map-level title bar the slide bars carry the pop-out button instead
 			const title = { text: titledSlide.title.text || map.name, href: titledSlide.title.href };
-			const buttons = [...((!map.titleHref && titleButtons(options)) || []), ...(frame ? [frame.gate] : [])];
-			slideDiv.appendChild(buildTitleBar(title, {}, buttons));
+			slideDiv.appendChild(buildTitleBar(title, {}, map.titleHref ? null : titleButtons(options)));
 			slideDiv.appendChild(el('div', {
-				class: frame ? 'if3 placeholder' : map.vector ? 'placeholder vector' : 'placeholder',
+				class: map.vector ? 'placeholder vector' : 'placeholder',
 				style: `${width ? `max-width: ${width}px; ` : ''}aspect-ratio: ${titledSlide.aspect};`
-			}, frame ? frame.body : [img]));
+			}, [img]));
 		} else {
 			slideDiv.appendChild(img);
 		}

@@ -14,7 +14,7 @@ import { buildBasicIframe, buildIframe, buildImage, buildSlideshow, buildVideo }
 //   interactive map, which is live already and would only lose its pan and
 //   zoom (its bar has the [X]/[R] gate button instead)
 export const MAP_TYPES = {
-	slideshow: { build: buildSlideshow, freeAspect: false, fullscreen: false, reload: reloadSlides },
+	slideshow: { build: buildSlideshow, freeAspect: false, fullscreen: false, reload: reloadImages },
 	image: { build: buildImage, freeAspect: false, fullscreen: false, reload: reloadImages },
 	video: { build: buildVideo, freeAspect: false, fullscreen: false, reload: reloadVideos },
 	iframe: { build: buildIframe, freeAspect: true, fullscreen: true, reload: null },
@@ -31,12 +31,6 @@ export function mapTypeOf(mapId) {
 // images are re-fetched past the cache by a fresh query parameter
 function reloadImages(block) {
 	block.querySelectorAll('img[src]').forEach(img => { img.src = freshUrl(img.getAttribute('src')); });
-}
-
-// a slide may hold a widget frame in place of its image
-function reloadSlides(block) {
-	reloadImages(block);
-	reloadFrame(block);
 }
 
 function reloadVideos(block) {
