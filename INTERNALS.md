@@ -143,7 +143,7 @@ Every map is one object (`CatalogMap`) with:
 
 | type | notes |
 |---|---|
-| `slideshow` | `slides` is an array of image URLs, or of `{ title, img, aspect }` objects when each slide has its own title bar (`title.text` may be left out to use the map's `name`, when only the `href` differs). A titled slide may give a `frame`, a widget page shown in place of its image (meteoblue's meteograms; below). `startSlide` (1-based) loads at once, the rest lazily unless `eagerSlides`. `dynamicWidth` sizes the container to the active slide, and only works on titled slideshows: `updateSlideshowWidth()` reads the active slide's `.placeholder`, which untitled slides do not have |
+| `slideshow` | `slides` is an array of image URLs, or of `{ title, img, aspect }` objects when each slide has its own title bar (`title.text` may be left out to use the map's `name`, when only the `href` differs). A titled slide may give a `frame`, a widget page shown in place of its image (meteoblue's meteograms; below). `vector` marks images that are drawings (Yr's SVG meteograms), which fill the slide's width rather than stopping at their natural size. `startSlide` (1-based) loads at once, the rest lazily unless `eagerSlides`. `dynamicWidth` sizes the container to the active slide, and only works on titled slideshows: `updateSlideshowWidth()` reads the active slide's `.placeholder`, which untitled slides do not have |
 | `image` | a single `img`, optional `alt` |
 | `video` | an mp4 `src`; without an `aspect` the `.vid1` padding gives the box its shape |
 | `iframe` | an interactive map with the HR/EU zoom switch, the overlay gate and a fullscreen; `frameId` plus `srcHr`/`srcEu` and the four `zoom*` marker strings that `setIframeSrc()` (`page/iframe.js`) swaps for a phone |

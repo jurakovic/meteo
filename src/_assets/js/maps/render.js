@@ -109,7 +109,7 @@ export function buildSlideshow(map, inst, options = {}) {
 			const buttons = [...((!map.titleHref && titleButtons(options)) || []), ...(frame ? [frame.gate] : [])];
 			slideDiv.appendChild(buildTitleBar(title, {}, buttons));
 			slideDiv.appendChild(el('div', {
-				class: frame ? 'if3 placeholder' : 'placeholder',
+				class: frame ? 'if3 placeholder' : map.vector ? 'placeholder vector' : 'placeholder',
 				style: `${width ? `max-width: ${width}px; ` : ''}aspect-ratio: ${titledSlide.aspect};`
 			}, frame ? frame.body : [img]));
 		} else {

@@ -2242,6 +2242,11 @@ body.fs-lock {
 				margin-inline: auto;
 			}
 
+			/* a drawing has no natural size to stay under: it fills the width */
+			.slide > .placeholder.vector > img {
+				width: 100%;
+			}
+
 .prev, .next {
 	cursor: pointer;
 	position: absolute;

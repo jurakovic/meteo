@@ -29,6 +29,7 @@
  * @property {number} [startSlide] slideshow: the one shown first, from 1
  * @property {boolean} [eagerSlides] slideshow: load every slide at once
  * @property {boolean} [dynamicWidth] slideshow: the width follows the slide
+ * @property {boolean} [vector] slideshow: its images are drawings, which fill the width at any size
  * @property {string} [img] image: its address
  * @property {string} [alt] image: its text
  * @property {string} [src] video, basic frame: its address
@@ -430,6 +431,36 @@ export const MAP_CATALOG = [
 		]
 	},
 	{
+		id: 'yr-prognoza',
+		category: 'prognoza',
+		name: 'Yr | Prognoza',
+		type: 'slideshow',
+		eagerSlides: true,
+		vector: true,
+		slides: [
+			{
+				title: { text: 'Yr | Prognoza | Zagreb', href: 'https://www.yr.no/en/forecast/graph/2-3186886/Croatia/City%20of%20Zagreb/Zagreb' },
+				img: 'https://www.yr.no/en/content/2-3186886/meteogram.svg?mode=dark',
+				aspect: '782 / 391'
+			},
+			{
+				title: { text: 'Yr | Prognoza | Split', href: 'https://www.yr.no/en/forecast/graph/2-3190261/Croatia/Split-Dalmatia%20County/Town%20of%20Split/Split' },
+				img: 'https://www.yr.no/en/content/2-3190261/meteogram.svg?mode=dark',
+				aspect: '782 / 391'
+			},
+			{
+				title: { text: 'Yr | Prognoza | Rijeka', href: 'https://www.yr.no/en/forecast/graph/2-3191648/Croatia/Primorje-Gorski%20Kotar%20County/Town%20of%20Rijeka/Rijeka' },
+				img: 'https://www.yr.no/en/content/2-3191648/meteogram.svg?mode=dark',
+				aspect: '782 / 391'
+			},
+			{
+				title: { text: 'Yr | Prognoza | Osijek', href: 'https://www.yr.no/en/forecast/graph/2-3193935/Croatia/County%20of%20Osijek-Baranja/City%20of%20Osijek/Osijek' },
+				img: 'https://www.yr.no/en/content/2-3193935/meteogram.svg?mode=dark',
+				aspect: '782 / 391'
+			}
+		]
+	},
+	{
 		id: 'ventusky',
 		category: 'radar',
 		name: 'Ventusky',
@@ -607,5 +638,5 @@ export function catalogMap(id) {
 export const DEFAULT_MAPS = [
 	'neverin-radar-hr', 'neverin-satelit-hr', 'neverin-radar-eu', 'neverin-satelit-eu',
 	'windy', 'dhmz-radar', 'meteociel-temp', 'blitzortung', 'essl', 'astorp', 'estofex',
-	'eumetnet', 'meteociel-satelit', 'dwd-sinopticka', 'neverin-kamera', 'meteoblue-prognoza'
+	'eumetnet', 'meteociel-satelit', 'dwd-sinopticka', 'neverin-kamera', 'meteoblue-prognoza', 'yr-prognoza'
 ];
