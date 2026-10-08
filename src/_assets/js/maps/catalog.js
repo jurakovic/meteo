@@ -578,6 +578,16 @@ export const MAP_CATALOG = [
 		]
 	},
 	{
+		id: 'meteoalarm',
+		category: 'nevrijeme',
+		name: 'Meteoalarm',
+		type: 'image',
+		titleHref: 'https://meteoalarm.org/en/live/region/HR',
+		aspect: '1',
+		img: 'https://assets.meteoalarm.org/snapshots/europe.png',
+		links: except(STORM_LINKS, 'Meteoalarm')
+	},
+	{
 		id: 'wetterzentrale-temp',
 		category: 'temperatura',
 		name: 'Wetterzentrale | Temperatura',

@@ -206,7 +206,7 @@ test.describe('settings dialog', () => {
 		expect(link).toContain(`${paths.customize}?v=`);
 
 		await page.goto(link);
-		expect(await shownMapIds(page)).toEqual(['essl', 'estofex', 'blitzortung', 'istramet-munje', 'blitzortung-karta']);
+		expect(await shownMapIds(page)).toEqual(['essl', 'estofex', 'blitzortung', 'istramet-munje', 'blitzortung-karta', 'meteoalarm']);
 		expect(await storedJson(page, 'mapPrefs')).toBeNull(); // a shared view never writes the recipient's own
 
 		// a saved preset travels with its name, which the recipient can save under

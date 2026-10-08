@@ -28,7 +28,7 @@ export const MAP_PRESETS = [
 	},
 	{
 		id: 'nevrijeme', name: 'Nevrijeme',
-		maps: ['essl', 'astorp', 'estofex', 'blitzortung', 'istramet-munje', 'blitzortung-karta']
+		maps: ['essl', 'astorp', 'estofex', 'blitzortung', 'istramet-munje', 'blitzortung-karta', 'meteoalarm']
 	},
 	{ id: 'sve', name: 'Sve', maps: MAP_CATALOG.map(map => map.id) },
 	{ id: 'nista', name: 'Ništa', maps: [] }
