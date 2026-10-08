@@ -11,10 +11,10 @@ test.describe('landing page', () => {
 
 	test('shows the fixed list of maps', async ({ page }) => {
 		await expect(page.locator('.map-block[data-map-id="neverin-radar-hr"]').first()).toBeVisible();
-		await expect(page.locator('.slideshow')).toHaveCount(13);
+		await expect(page.locator('.slideshow')).toHaveCount(12);
 		await expect(page.locator('iframe#windy')).toHaveAttribute('src', /embed\.windy\.com.*zoom=7/);
 		// the default view, drawn from the catalog, without the widgets
-		await expect(page.locator('.map-block')).toHaveCount(17);
+		await expect(page.locator('.map-block')).toHaveCount(16);
 		await expect(page.locator('.po-btn, .dup-btn, .grp-btn, .rl-btn')).toHaveCount(0);
 	});
 
@@ -41,11 +41,14 @@ test.describe('landing page', () => {
 		await expect(slideshow.locator('.slide.active img')).toHaveAttribute('src', /anim_6h/);
 	});
 
-	test('a vector slideshow\'s image fills its slide, past its natural size', async ({ page }) => {
-		// Yr's meteogram at its own size, narrower than the column
+	test('a vector slideshow\'s image fills its slide, past its natural size', async ({ page, paths }) => {
+		// Yr's meteogram at its own size, narrower than the column; it is in
+		// the customize page's Više preset, the last map there
 		const svg = '<svg xmlns="http://www.w3.org/2000/svg" width="782" height="391"><rect width="782" height="391" fill="#3a6"/></svg>';
 		await page.route(url => url.hostname === 'www.yr.no', route => route.fulfill({ contentType: 'image/svg+xml', body: svg }));
-		await page.reload();
+		const v = await page.evaluate(() => btoa(JSON.stringify({ preset: 'vise' })));
+		await page.goto(`${paths.customize}?v=${v}`);
+		await expect(page.locator('.map-block').last()).toHaveAttribute('data-map-id', 'yr-prognoza');
 		const slide = page.locator('.slideshow[data-slideshow-id="yr-prognoza"] .slide.active');
 		await expect(slide.locator('img')).toHaveJSProperty('complete', true);
 		const [img, box, natural] = await slide.locator('.placeholder').evaluate(p => [p.firstElementChild.clientWidth, p.clientWidth, p.firstElementChild.naturalWidth]);
@@ -156,7 +159,7 @@ test.describe('landing page as built', () => {
 
 		test('carries the default maps in its markup', async ({ page, paths }) => {
 			await page.goto(paths.landing);
-			await expect(page.locator('.map-block')).toHaveCount(17);
+			await expect(page.locator('.map-block')).toHaveCount(16);
 			await expect(page.locator('.slideshow[data-slideshow-id="neverin-radar-hr"] .slide.active img')).toBeVisible();
 			await expect(page.locator('iframe#windy')).toBeAttached();
 		});
@@ -199,7 +202,7 @@ test.describe('landing page as built', () => {
 			await page.goto(`http://meteo.test:${server.address().port}/meteo/`);
 			await expect.poll(() => page.evaluate(() => localStorage.getItem('mapConfig'))).toContain('chmi-sinopticka');
 			await expect(page.locator('.progress-container')).toBeHidden();
-			await expect(page.locator('.map-block')).toHaveCount(17);
+			await expect(page.locator('.map-block')).toHaveCount(16);
 			expect(await page.evaluate(() => window.rowsRemoved)).toBe(0);
 		});
 	});

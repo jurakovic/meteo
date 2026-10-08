@@ -15,7 +15,7 @@ export const MAP_PRESETS = [
 			'ventusky', 'rainviewer', 'weatherandradar', 'meteo-si', 'idokep-radar-eu',
 			'idokep-satelit-eu', 'istramet-munje', 'blitzortung-karta', 'wetterzentrale-temp',
 			'dhmz-sinopticka', 'chmi-sinopticka', 'dhmz-puntijarka', 'dhmz-bilogora', 'dhmz-gradiste', 'dhmz-goli',
-			'dhmz-debeljak', 'dhmz-uljenje'
+			'dhmz-debeljak', 'dhmz-uljenje', 'yr-prognoza'
 		]
 	},
 	{

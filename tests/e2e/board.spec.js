@@ -58,7 +58,7 @@ test.describe('dashboard', () => {
 	test('a big list tiles too', async ({ page }) => {
 		await enterBoard(page);
 		const boxes = await widgetBoxes(page);
-		expect(boxes).toHaveLength(17);
+		expect(boxes).toHaveLength(16);
 		for (let i = 0; i < boxes.length; i++)
 			for (let j = i + 1; j < boxes.length; j++) expect(overlaps(boxes[i], boxes[j])).toBe(false);
 	});

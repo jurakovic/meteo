@@ -522,7 +522,7 @@
 		links:Be(Fe,"DWD")
 		},Pe("puntijarka","Puntijarka"),Pe("bilogora","Bilogora"),Pe("gradiste","Gradište"),Pe("goli","Goli"),Pe("debeljak","Debeljak"),Pe("uljenje","Uljenje")],Ze=new Map(Ne.map(e=>[e.id,e]))
 		;function Ue(e){return Ze.get(e)||null}
-		var qe=["neverin-radar-hr","neverin-satelit-hr","neverin-radar-eu","neverin-satelit-eu","windy","dhmz-radar","meteociel-temp","blitzortung","essl","astorp","estofex","eumetnet","meteociel-satelit","dwd-sinopticka","neverin-kamera","meteoblue-prognoza","yr-prognoza"],$e={
+		var qe=["neverin-radar-hr","neverin-satelit-hr","neverin-radar-eu","neverin-satelit-eu","windy","dhmz-radar","meteociel-temp","blitzortung","essl","astorp","estofex","eumetnet","meteociel-satelit","dwd-sinopticka","neverin-kamera","meteoblue-prognoza"],$e={
 		slideshow:{build:function(e,t,r={}){const a=e.id+Ke(t),n=e.startSlide||1,o=e.slides.some(e=>"string"!=typeof e),s=i("div",{
 		class:o?"slideshow":"slideshow placeholder","data-slideshow-id":a,"data-current-slide":n,"data-dynamic-width":e.dynamicWidth?"":void 0,
 		style:(Je(e)+(o?"":` aspect-ratio: ${e.aspect};`)).trim()||void 0});e.slides.forEach((t,a)=>{
@@ -1062,52 +1062,6 @@
 						</div>
 					</div>
 					<div class="links-bottom"><a href="https://meteo.hr" target="_blank" rel="nofollow">DHMZ</a> · <a href="https://vrijeme-i-promet.hrt.hr/vrijeme/" target="_blank" rel="nofollow">HRT Vrijeme</a> · <a href="https://pljusak.com/karta.php" target="_blank" rel="nofollow">Pljusak</a> · <a href="https://www.neverin.hr/prognoza/zagreb/" target="_blank" rel="nofollow">Neverin</a> · <a href="https://www.yr.no/en/details/table/2-3186886/Croatia/City%20of%20Zagreb/Zagreb" target="_blank" rel="nofollow">Yr.no</a> · <a href="https://www.wetterzentrale.de/en/show_diagrams.php?geoid=54032&amp;model=ecm&amp;var=93&amp;run=6&amp;lid=OP&amp;bw=1" target="_blank" rel="nofollow">Wetterzentrale</a></div>
-				</div>
-				<div class="map-entry">
-					<div class="map-block" data-map-id="yr-prognoza" data-inst="yr-prognoza">
-						<div class="slideshow" data-slideshow-id="yr-prognoza" data-current-slide="1">
-							<div class="slide fade active">
-								<div class="radartitle">
-									<a href="https://www.yr.no/en/forecast/graph/2-3186886/Croatia/City%20of%20Zagreb/Zagreb" target="_blank" rel="nofollow">Yr | Prognoza | Zagreb</a>
-								</div>
-								<div class="placeholder vector" style="aspect-ratio: 782 / 391;">
-									<img src="https://www.yr.no/en/content/2-3186886/meteogram.svg?mode=dark">
-								</div>
-							</div>
-							<div class="slide fade">
-								<div class="radartitle">
-									<a href="https://www.yr.no/en/forecast/graph/2-3190261/Croatia/Split-Dalmatia%20County/Town%20of%20Split/Split" target="_blank" rel="nofollow">Yr | Prognoza | Split</a>
-								</div>
-								<div class="placeholder vector" style="aspect-ratio: 782 / 391;">
-									<img src="https://www.yr.no/en/content/2-3190261/meteogram.svg?mode=dark">
-								</div>
-							</div>
-							<div class="slide fade">
-								<div class="radartitle">
-									<a href="https://www.yr.no/en/forecast/graph/2-3191648/Croatia/Primorje-Gorski%20Kotar%20County/Town%20of%20Rijeka/Rijeka" target="_blank" rel="nofollow">Yr | Prognoza | Rijeka</a>
-								</div>
-								<div class="placeholder vector" style="aspect-ratio: 782 / 391;">
-									<img src="https://www.yr.no/en/content/2-3191648/meteogram.svg?mode=dark">
-								</div>
-							</div>
-							<div class="slide fade">
-								<div class="radartitle">
-									<a href="https://www.yr.no/en/forecast/graph/2-3193935/Croatia/County%20of%20Osijek-Baranja/City%20of%20Osijek/Osijek" target="_blank" rel="nofollow">Yr | Prognoza | Osijek</a>
-								</div>
-								<div class="placeholder vector" style="aspect-ratio: 782 / 391;">
-									<img src="https://www.yr.no/en/content/2-3193935/meteogram.svg?mode=dark">
-								</div>
-							</div>
-							<a class="prev shorter" data-action="slide" data-step="-1">❮</a>
-							<a class="next shorter" data-action="slide" data-step="1">❯</a>
-						</div>
-						<div class="indicators-container" data-slideshow-id="yr-prognoza" style="grid-template-columns: repeat(4, 1fr);">
-							<span class="indicator active"></span>
-							<span class="indicator"></span>
-							<span class="indicator"></span>
-							<span class="indicator"></span>
-						</div>
-					</div>
 				</div>
 			</div>
 
