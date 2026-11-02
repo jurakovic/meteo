@@ -1,6 +1,9 @@
 
 > Generirano korištenjem AI-ja.
 
+## 2026-11-02
+- ESSL prognoza nevremena dohvaća se s nove adrese ESSL-a (weather.essl.org), pa je opet aktualna; njezin naslov također vodi tamo
+
 ## 2026-10-07 (#46)
 - dodani "Linkovi" u prozoru, otvaraju se tipkom L, pa su dostupni i s nadzorne ploče
 - dodan Meteoalarm u linkove ispod prognoza nevremena

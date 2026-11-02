@@ -1,6 +1,9 @@
 
 > AI-generated content.
 
+## 2026-11-02
+- the ESSL storm forecast is fetched from ESSL's new address (weather.essl.org), so it is current again; its title links there too
+
 ## 2026-10-07 (#46)
 - added the links ("Linkovi") in a window, opened with the L key, so they can be reached from the dashboard too
 - added Meteoalarm to the links under the storm forecasts

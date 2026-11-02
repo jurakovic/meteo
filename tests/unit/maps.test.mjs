@@ -23,6 +23,20 @@ test('every preset names only maps in the catalog', () => {
 	}
 });
 
+test('maps that link to each other: a title goes where the others\' links do', () => {
+	const groups = [['essl', 'astorp', 'estofex'], ['dhmz-sinopticka', 'dwd-sinopticka']];
+	for (const ids of groups) {
+		const maps = ids.map(catalogMap);
+		for (const map of maps) {
+			const source = map.name.split(' | ')[0]; // the link text, as in 'ESSL | Prognoza nevremena'
+			for (const other of maps.filter(m => m !== map)) {
+				const link = other.links.find(l => l.text === source);
+				assert.equal(link?.href, map.titleHref, `${other.id} → ${source}`);
+			}
+		}
+	}
+});
+
 test('find folds case and diacritics, đ included, and every term must hit', () => {
 	assert.equal(foldText('ČHMÚ Đakovo'), 'chmu dakovo');
 	assert.deepEqual(findTerms('  Neverin   RADAR '), ['neverin', 'radar']);
