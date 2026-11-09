@@ -1,6 +1,9 @@
 
 > Generirano korištenjem AI-ja.
 
+## 2026-11-09
+- iz sinoptičkih karata DWD-a uklonjena prognoza za 48 sati, jer je DWD više ne objavljuje
+
 ## 2026-11-02
 - ESSL prognoza nevremena dohvaća se s nove adrese ESSL-a (weather.essl.org), pa je opet aktualna; njezin naslov također vodi tamo
 

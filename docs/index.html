@@ -508,7 +508,7 @@
 		img:"https://prognoza.hr/web_fronte_sutra12.jpg",links:Be(Oe,"DHMZ")},{id:"dwd-sinopticka",category:"sinoptika",
 		name:"DWD | Sinoptička karta",type:"slideshow",titleHref:"https://www.dwd.de/EN/ourservices/hobbymet_wcharts_europe/hobbyeuropecharts.html",
 		maxWidth:800,aspect:"800 / 653",
-		slides:["https://www.dwd.de/DWD/wetter/wv_spez/hobbymet/wetterkarten/ico_tkboden_na_v36.png","https://www.dwd.de/DWD/wetter/wv_spez/hobbymet/wetterkarten/ico_tkboden_na_036.png","https://www.dwd.de/DWD/wetter/wv_spez/hobbymet/wetterkarten/ico_tkboden_na_048.png","https://www.dwd.de/DWD/wetter/wv_spez/hobbymet/wetterkarten/ico_tkboden_na_060.png","https://www.dwd.de/DWD/wetter/wv_spez/hobbymet/wetterkarten/ico_tkboden_na_084.png","https://www.dwd.de/DWD/wetter/wv_spez/hobbymet/wetterkarten/ico_tkboden_na_108.png"],
+		slides:["https://www.dwd.de/DWD/wetter/wv_spez/hobbymet/wetterkarten/ico_tkboden_na_v36.png","https://www.dwd.de/DWD/wetter/wv_spez/hobbymet/wetterkarten/ico_tkboden_na_036.png","https://www.dwd.de/DWD/wetter/wv_spez/hobbymet/wetterkarten/ico_tkboden_na_060.png","https://www.dwd.de/DWD/wetter/wv_spez/hobbymet/wetterkarten/ico_tkboden_na_084.png","https://www.dwd.de/DWD/wetter/wv_spez/hobbymet/wetterkarten/ico_tkboden_na_108.png"],
 		links:Be(Oe,"DWD")
 		},Ne("puntijarka","Puntijarka"),Ne("bilogora","Bilogora"),Ne("gradiste","Gradište"),Ne("goli","Goli"),Ne("debeljak","Debeljak"),Ne("uljenje","Uljenje")],Ze=new Map(Pe.map(e=>[e.id,e]))
 		;function Ue(e){return Ze.get(e)||null}
@@ -971,9 +971,6 @@
 								<img data-src="https://www.dwd.de/DWD/wetter/wv_spez/hobbymet/wetterkarten/ico_tkboden_na_036.png" class="lazy">
 							</div>
 							<div class="slide fade">
-								<img data-src="https://www.dwd.de/DWD/wetter/wv_spez/hobbymet/wetterkarten/ico_tkboden_na_048.png" class="lazy">
-							</div>
-							<div class="slide fade">
 								<img data-src="https://www.dwd.de/DWD/wetter/wv_spez/hobbymet/wetterkarten/ico_tkboden_na_060.png" class="lazy">
 							</div>
 							<div class="slide fade">
@@ -985,9 +982,8 @@
 							<a class="prev" data-action="slide" data-step="-1">❮</a>
 							<a class="next" data-action="slide" data-step="1">❯</a>
 						</div>
-						<div class="indicators-container" data-slideshow-id="dwd-sinopticka" style="max-width: 800px; grid-template-columns: repeat(6, 1fr);">
+						<div class="indicators-container" data-slideshow-id="dwd-sinopticka" style="max-width: 800px; grid-template-columns: repeat(5, 1fr);">
 							<span class="indicator active"></span>
-							<span class="indicator"></span>
 							<span class="indicator"></span>
 							<span class="indicator"></span>
 							<span class="indicator"></span>
@@ -1544,6 +1540,10 @@
 		</div>
 		<div class="dialog-body">
 						<p class="changelog-intro">Generirano korištenjem AI-ja.</p>
+			<h2>2026-11-09</h2>
+			<ul>
+			<li>iz sinoptičkih karata DWD-a uklonjena prognoza za 48 sati, jer je DWD više ne objavljuje</li>
+			</ul>
 			<h2>2026-11-02</h2>
 			<ul>
 			<li>ESSL prognoza nevremena dohvaća se s nove adrese ESSL-a (weather.essl.org), pa je opet aktualna; njezin naslov također vodi tamo</li>
@@ -1809,7 +1809,7 @@
 			<span class="sep">·</span>
 			<a href="/meteo/customize/">Prilagodi <span class="new-tag">novo</span></a>
 			<span class="manual-link"><span class="sep">·</span> <a data-action="manual">Upute <span class="new-tag">novo</span></a></span>
-			<span class="changelog-link"><span class="sep">·</span> <a data-action="changelog" title="Povijest promjena (C)"><time class="updated" datetime="2026-11-02">2026-11-02</time> <span class="new-tag">novo</span></a></span>
+			<span class="changelog-link"><span class="sep">·</span> <a data-action="changelog" title="Povijest promjena (C)"><time class="updated" datetime="2026-11-09">2026-11-09</time> <span class="new-tag">novo</span></a></span>
 		</nav>
 		<footer>
 			<a href="https://jurakovic.github.io">Projekti</a>

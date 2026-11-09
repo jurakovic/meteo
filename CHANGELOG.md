@@ -1,6 +1,9 @@
 
 > AI-generated content.
 
+## 2026-11-09
+- removed the 48-hour forecast from the DWD synoptic charts, as DWD no longer publishes it
+
 ## 2026-11-02
 - the ESSL storm forecast is fetched from ESSL's new address (weather.essl.org), so it is current again; its title links there too
 
